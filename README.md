@@ -14,16 +14,16 @@ https://www.youtube.com/watch?v=kamDP5FA6Bg
 Steps to compile and run an example:
 1. Run VS Code
 2. Go to the main menu -> "Open Folder"
-3. Locate the \_Vector06c_Dev\_Projects\Test01\ folder, then hit "Open"
+3. Locate the \Vector06c_Dev\_Projects\Test01\ folder, then hit "Open"
 4. Sift+Ctrl+B to compile the run a code example.
 
 Link to update Emu80 emulator
 https://emu80.org/distr/
-Extract it to \_Vector06c_Dev\Emu80\
+Extract it to \Vector06c_Dev\Emu80\
 
 Link to update TASM Assembler
 https://emu80.org/distr/
-Extract it to \_Vector06c_Dev\Tasm32\
+Extract it to \Vector06c_Dev\Tasm32\
 
 Tasm manual
 https://www.mikrocontroller.net/atta...67/TASMMAN.pdf
@@ -47,16 +47,16 @@ https://www.youtube.com/watch?v=kamDP5FA6Bg
 Шаги для компиляции и запуска примера.
 1. Run VS Code
 2. Идите в главное меню -> "Open Folder"
-3. Откройте \_Vector06c_Dev\_Projects\Test01\ папку, затем нажмите "Open"
+3. Откройте \Vector06c_Dev\_Projects\Test01\ папку, затем нажмите "Open"
 4. Нажмите Sift+Ctrl+B для компиляции и запукска примера.
 
 Ссылка для обновления Emu80 эмулятора
 https://emu80.org/distr/
-Extract it to \_Vector06c_Dev\Emu80\
+Extract it to \Vector06c_Dev\Emu80\
 
 Ссылка для обновления TASM Assembler
 https://emu80.org/distr/
-Extract it to \_Vector06c_Dev\Tasm32\
+Extract it to \Vector06c_Dev\Tasm32\
 
 Документация по Tasm
 https://www.mikrocontroller.net/atta...67/TASMMAN.pdf
