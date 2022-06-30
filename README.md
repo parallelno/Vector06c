@@ -3,7 +3,7 @@ Vector06c (КР580ВМ80 / i8080 ) simple dev env, and code snippets. TASM + Vis
 
 To get a complete setup you want to install TASM_Assembler extantion for Visual Studio Code:
 1. Run VS Code
-2. Hit "Extensions" button (4 squares icon) on the left side
+2. Hit the "Extensions" (4 squares icon) on the left side
 3. Search for TASM_Assembler extantion
 4. Hit Install button
 
@@ -14,7 +14,7 @@ https://www.youtube.com/watch?v=kamDP5FA6Bg
 Steps to compile and run an example:
 1. Run VS Code
 2. Go to the main menu -> "Open Folder"
-3. locate \_Vector06c_Dev\_Projects\Test01\ folder, then hit "Open"
+3. Locate the \_Vector06c_Dev\_Projects\Test01\ folder, then hit "Open"
 4. Sift+Ctrl+B to compile the run a code example.
 
 Link to update Emu80 emulator
