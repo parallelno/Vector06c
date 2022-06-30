@@ -1,0 +1,619 @@
+0001   0100             		.org 100h
+0002   0100 F3          		di
+0003   0101             ; ---
+0004   0101             start:
+0005   0101 AF          		xra	a
+0006   0102 D3 10       		out	10h
+0007   0104 31 00 01    		lxi	sp,100h
+0008   0107 3E C3       		mvi	a,0C3h
+0009   0109 32 00 00    		sta	0
+0010   010C 21 3E 01    		lxi	h,Restart
+0011   010F 22 01 00    		shld	1
+0012   0112             
+0013   0112 CD 72 04    		call	Cls
+0014   0115 3E C9       		mvi	a,0C9h
+0015   0117 32 38 00    		sta	38h
+0016   011A FB          		ei
+0017   011B 76          		hlt
+0018   011C 21 A2 04    		lxi	h, colors+15
+0019   011F             colorset:
+0020   011F             
+0021   011F 3E 88       		mvi	a, 88h
+0022   0121 D3 00       		out	0
+0023   0123 0E 0F       		mvi	c, 15
+0024   0125 79          colorset1:	mov	a, c
+0025   0126 D3 02       		out	2
+0026   0128 7E          		mov	a, m
+0027   0129 D3 0C       		out	0Ch
+0028   012B 2B          		dcx	h
+0029   012C D3 0C       		out	0Ch
+0030   012E D3 0C       		out	0Ch
+0031   0130 0D          		dcr	c
+0032   0131 D3 0C       		out	0Ch
+0033   0133 D3 0C       		out	0Ch
+0034   0135 D3 0C       		out	0Ch
+0035   0137 F2 25 01    		jp	colorset1
+0036   013A 3E FF       		mvi	a,255
+0037   013C D3 03       		out	3
+0038   013E             
+0039   013E             
+0040   013E             Restart:
+0041   013E CD 72 04    		call	Cls
+0042   0141             
+0043   0141 CD ED 02    		call SetPixelModeOR
+0044   0144             		
+0045   0144             ;рамка по краю		
+0046   0144 21 00 00    		lxi h,00000h
+0047   0147 22 DF 02    		shld line_x0
+0048   014A 21 FF 00    		lxi h,00FFh
+0049   014D 22 E1 02    		shld line_x1
+0050   0150 CD 10 03    		call line
+0051   0153 21 00 00    		lxi h,00000h
+0052   0156 22 DF 02    		shld line_x0
+0053   0159 21 00 FF    		lxi h,0FF00h
+0054   015C 22 E1 02    		shld line_x1
+0055   015F CD 10 03    		call line
+0056   0162             		
+0057   0162 21 FF FF    		lxi h,0FFFFh
+0058   0165 22 DF 02    		shld line_x0
+0059   0168 21 FF 00    		lxi h,00FFh
+0060   016B 22 E1 02    		shld line_x1
+0061   016E CD 10 03    		call line
+0062   0171 21 FF FF    		lxi h,0FFFFh
+0063   0174 22 DF 02    		shld line_x0
+0064   0177 21 00 FF    		lxi h,0FF00h
+0065   017A 22 E1 02    		shld line_x1
+0066   017D CD 10 03    		call line
+0067   0180             
+0068   0180             ;внутреняя рамка
+0069   0180 21 10 10    		lxi h,01010h
+0070   0183 22 DF 02    		shld line_x0
+0071   0186 21 F0 10    		lxi h,010F0h
+0072   0189 22 E1 02    		shld line_x1
+0073   018C CD 10 03    		call line
+0074   018F 21 10 10    		lxi h,01010h
+0075   0192 22 DF 02    		shld line_x0
+0076   0195 21 10 F0    		lxi h,0F010h
+0077   0198 22 E1 02    		shld line_x1
+0078   019B CD 10 03    		call line
+0079   019E             
+0080   019E 21 F0 F0    		lxi h,0F0F0h
+0081   01A1 22 DF 02    		shld line_x0
+0082   01A4 21 10 F0    		lxi h,0F010h
+0083   01A7 22 E1 02    		shld line_x1
+0084   01AA CD 10 03    		call line
+0085   01AD 21 F0 F0    		lxi h,0F0F0h
+0086   01B0 22 DF 02    		shld line_x0
+0087   01B3 21 F0 10    		lxi h,010F0h
+0088   01B6 22 E1 02    		shld line_x1
+0089   01B9 CD 10 03    		call line
+0090   01BC             
+0091   01BC             ;уголки		
+0092   01BC 21 08 08    		lxi h,00808h
+0093   01BF 22 DF 02    		shld line_x0
+0094   01C2 21 08 09    		lxi h,00908h
+0095   01C5 22 E1 02    		shld line_x1
+0096   01C8 CD 10 03    		call line
+0097   01CB 21 08 08    		lxi h,00808h
+0098   01CE 22 DF 02    		shld line_x0
+0099   01D1 21 09 08    		lxi h,00809h
+0100   01D4 22 E1 02    		shld line_x1
+0101   01D7 CD 10 03    		call line
+0102   01DA             
+0103   01DA 21 F8 F8    		lxi h,0F8F8h
+0104   01DD 22 DF 02    		shld line_x0
+0105   01E0 21 F7 F8    		lxi h,0F8F7h
+0106   01E3 22 E1 02    		shld line_x1
+0107   01E6 CD 10 03    		call line
+0108   01E9 21 F8 F8    		lxi h,0F8F8h
+0109   01EC 22 DF 02    		shld line_x0
+0110   01EF 21 F8 F7    		lxi h,0F7F8h
+0111   01F2 22 E1 02    		shld line_x1
+0112   01F5 CD 10 03    		call line
+0113   01F8             		
+0114   01F8 21 F8 08    		lxi h,008F8h
+0115   01FB 22 DF 02    		shld line_x0
+0116   01FE 21 F8 09    		lxi h,009F8h
+0117   0201 22 E1 02    		shld line_x1
+0118   0204 CD 10 03    		call line
+0119   0207 21 F8 08    		lxi h,008F8h
+0120   020A 22 DF 02    		shld line_x0
+0121   020D 21 F7 08    		lxi h,008F7h
+0122   0210 22 E1 02    		shld line_x1
+0123   0213 CD 10 03    		call line
+0124   0216             
+0125   0216 21 08 F8    		lxi h,0F808h
+0126   0219 22 DF 02    		shld line_x0
+0127   021C 21 09 F8    		lxi h,0F809h
+0128   021F 22 E1 02    		shld line_x1
+0129   0222 CD 10 03    		call line
+0130   0225 21 08 F8    		lxi h,0F808h
+0131   0228 22 DF 02    		shld line_x0
+0132   022B 21 08 F7    		lxi h,0F708h
+0133   022E 22 E1 02    		shld line_x1
+0134   0231 CD 10 03    		call line
+0135   0234             
+0136   0234             ;точки
+0137   0234 21 20 20    		lxi h,02020h
+0138   0237 22 DF 02    		shld line_x0
+0139   023A 22 E1 02    		shld line_x1
+0140   023D CD 10 03    		call line
+0141   0240             
+0142   0240 21 20 DF    		lxi h,0DF20h
+0143   0243 22 DF 02    		shld line_x0
+0144   0246 22 E1 02    		shld line_x1
+0145   0249 CD 10 03    		call line
+0146   024C             
+0147   024C 21 DF 20    		lxi h,020DFh
+0148   024F 22 DF 02    		shld line_x0
+0149   0252 22 E1 02    		shld line_x1
+0150   0255 CD 10 03    		call line
+0151   0258             
+0152   0258 21 DF DF    		lxi h,0DFDFh
+0153   025B 22 DF 02    		shld line_x0
+0154   025E 22 E1 02    		shld line_x1
+0155   0261 CD 10 03    		call line
+0156   0264             		
+0157   0264 21 85 02    		lxi h,circl
+0158   0267             circloop:
+0159   0267 E5          		push h
+0160   0268 21 80 80    		lxi h,8080h
+0161   026B 22 DF 02    		shld line_x0
+0162   026E E1          		pop h
+0163   026F 7E          		mov a,m
+0164   0270 B7          		ora a
+0165   0271 CA A6 02    		jz benchmark
+0166   0274 32 E1 02    		sta line_x1
+0167   0277 23          		inx h
+0168   0278 7E          		mov a,m
+0169   0279 32 E2 02    		sta line_y1
+0170   027C 23          		inx h
+0171   027D E5          		push h
+0172   027E CD 10 03    		call line
+0173   0281 E1          		pop h
+0174   0282 C3 67 02    		jmp circloop
+0175   0285             
+0176   0285             circl:
+0177   0285 E4 80       		.db 228,128
+0178   0287 DC A6       		.db 220,166
+0179   0289 C7 C7       		.db 199,199
+0180   028B A6 DC       		.db 166,220
+0181   028D 80 E4       		.db 128,228
+0182   028F 5A DC       		.db 90,220
+0183   0291 39 C7       		.db 57,199
+0184   0293 24 A6       		.db 36,166
+0185   0295 1C 80       		.db 28,128
+0186   0297 24 5A       		.db 36,90
+0187   0299 39 39       		.db 57,57
+0188   029B 5A 24       		.db 90,36
+0189   029D 80 1C       		.db 128,28
+0190   029F A6 24       		.db 166,36
+0191   02A1 C7 39       		.db 199,57
+0192   02A3 DC 5A       		.db 220,90
+0193   02A5 00          		.db 0
+0194   02A6             
+0195   02A6             benchmark
+0196   02A6 DB 01       		in 1
+0197   02A8 07          		rlc
+0198   02A9 D2 B4 02    		jnc benchmark_go
+0199   02AC 07          		rlc
+0200   02AD D2 B4 02    		jnc benchmark_go
+0201   02B0 07          		rlc
+0202   02B1 DA A6 02    		jc benchmark
+0203   02B4             
+0204   02B4             benchmark_go
+0205   02B4 CD E7 02    		call SetPixelModeXOR
+0206   02B7             
+0207   02B7 CD 7F 04    		call rnd16
+0208   02BA 22 DD 02    		shld line_tail
+0209   02BD             foreva:
+0210   02BD 2A DD 02    		lhld line_tail
+0211   02C0 22 DF 02    		shld line_x0
+0212   02C3             
+0213   02C3 CD 7F 04    		call rnd16
+0214   02C6 54          		mov d, h
+0215   02C7 5D          		mov e, l
+0216   02C8 13          		inx d
+0217   02C9 7A          		mov a, d
+0218   02CA B3          		ora e
+0219   02CB CA DA 02    		jz foreva_nomoar
+0220   02CE 22 E1 02    		shld line_x1
+0221   02D1 22 DD 02    		shld line_tail
+0222   02D4             
+0223   02D4 CD 10 03    		call line
+0224   02D7 C3 BD 02    		jmp foreva
+0225   02DA             foreva_nomoar
+0226   02DA C3 3E 01    		jmp Restart
+0227   02DD             
+0228   02DD 00 00       line_tail:	.dw 0
+0229   02DF             
+0230   02DF             		; аргументы line()
+0231   02DF 64          line_x0		.db 100
+0232   02E0 37          line_y0		.db 55
+0233   02E1 00          line_x1		.db 0
+0234   02E2 32          line_y1		.db 50 
+0235   02E3             
+0236   02E3             		; эти четыре байта должны идти в таком порядке, а то
+0237   02E3 00          line_y		.db 0
+0238   02E4 00          line_x		.db 0
+0239   02E5 00          line_dx 	.db 0
+0240   02E6 00          line_dy		.db 0
+0241   02E7             
+0242   02E7             SetPixelModeXOR:
+0243   02E7 21 AE A9    		lxi h,0A9AEh		;A9 - xra c; AE - xra m
+0244   02EA C3 F0 02    		jmp SetPixelModeOR1
+0245   02ED             		
+0246   02ED             SetPixelModeOR:
+0247   02ED 21 B6 B1    		lxi h,0B1B6h		;B1 - ora c; B6 - ora m
+0248   02F0             SetPixelModeOR1:
+0249   02F0 7D          		mov a,l
+0250   02F1 32 49 04    		sta SetPixelMode_g3
+0251   02F4 32 60 04    		sta SetPixelMode_g4
+0252   02F7 32 D1 03    		sta SetPixelMode_s3
+0253   02FA 7C          		mov a,h
+0254   02FB 32 3B 04    		sta SetPixelMode_g1
+0255   02FE 32 37 04    		sta SetPixelMode_g2
+0256   0301 32 B1 03    		sta SetPixelMode_s1
+0257   0304 32 BA 03    		sta SetPixelMode_s2
+0258   0307 C9          		ret
+0259   0308             		
+0260   0308             PixelMask:
+0261   0308 80          		.db 10000000b
+0262   0309 40          		.db 01000000b
+0263   030A 20          		.db 00100000b
+0264   030B 10          		.db 00010000b
+0265   030C 08          		.db 00001000b
+0266   030D 04          		.db 00000100b
+0267   030E 02          		.db 00000010b
+0268   030F 01          		.db 00000001b
+0269   0310             line:		; вычислить line_dx, line_dy и приращение Y
+0270   0310             		; line_dx >= 0, line_dy >= 0, line1_mod_yinc ? [-1,1]
+0271   0310             
+0272   0310             		; вычисление расстояния по X (dx)
+0273   0310             		; проверить, что x0 <= x1
+0274   0310 3A DF 02    		lda line_x0
+0275   0313 32 E4 02    		sta line_x
+0276   0316 47          		mov b, a		;b = x0
+0277   0317 3A E1 02    		lda line_x1
+0278   031A 90          		sub b			;a = x1 - x0
+0279   031B D2 38 03    		jnc line_x_positive     ;если x0 <= x1, то переход
+0280   031E             
+0281   031E             		;если x0 > x1, то пришли сюда
+0282   031E 2F          		cma
+0283   031F 3C          		inr a			; -(x1-x0)=x0-x1
+0284   0320 32 E5 02    		sta line_dx		; сохранили |dx|
+0285   0323 2A DF 02    		lhld line_x0
+0286   0326 EB          		xchg
+0287   0327 2A E1 02    		lhld line_x1
+0288   032A 22 DF 02    		shld line_x0
+0289   032D 7D          		mov a,l
+0290   032E 32 E4 02    		sta line_x
+0291   0331 EB          		xchg
+0292   0332 22 E1 02    		shld line_x1
+0293   0335 C3 3B 03    		jmp line_calc_dy
+0294   0338             		
+0295   0338             line_x_positive:
+0296   0338 32 E5 02    		sta line_dx		; сохранили |dx|
+0297   033B             
+0298   033B             		; вычисление расстояния по Y (dy)
+0299   033B             line_calc_dy:
+0300   033B             		; если y0 <= y1
+0301   033B 3A E0 02    		lda line_y0
+0302   033E 32 E3 02    		sta line_y
+0303   0341 47          		mov b, a		;b = y0
+0304   0342 3A E2 02    		lda line_y1
+0305   0345 90          		sub b			;a = y1 - y0
+0306   0346 D2 53 03    		jnc line_y_positive	;если y0 <= y1, то переход
+0307   0349             
+0308   0349             		;если y0 > y1, то пришли сюда
+0309   0349 2F          		cma
+0310   034A 3C          		inr a			; -(y1-y0)= y0 - y1
+0311   034B 32 E6 02    		sta line_dy		; сохранили |dy|
+0312   034E             		
+0313   034E             		; приращение y = -1
+0314   034E 3E 2D       		mvi a, 02Dh 		; dcr l
+0315   0350 C3 58 03    		jmp set_line1_mod_yinc
+0316   0353             
+0317   0353             line_y_positive:
+0318   0353 32 E6 02    		sta line_dy	        ; y1 - y0
+0319   0356 3E 2C       		mvi a, 02Ch 		; inr l
+0320   0358             set_line1_mod_yinc:
+0321   0358 32 58 04    		sta line1_mod_yinc_g
+0322   035B 32 C9 03    		sta line1_mod_yinc_s1
+0323   035E 32 B8 03    		sta line1_mod_yinc_s2
+0324   0361             
+0325   0361             line_check_gs:
+0326   0361             		; проверяем крутизну склона:
+0327   0361             		; dy >= 0, dx >= 0
+0328   0361             		;  	dy <= dx 	?	пологий
+0329   0361             		;	dy > dx 	?	крутой
+0330   0361 2A E5 02    		lhld line_dx 	                ; l = dx, h = dy
+0331   0364 7D          		mov a, l 
+0332   0365 BC          		cmp h				;если dy<=dx
+0333   0366 D2 E3 03    		jnc  line_gentle	        ;то склон пологий
+0334   0369             		
+0335   0369             		; крутой склон
+0336   0369             		; начальное значение D
+0337   0369             		; D = 2 * dx - dy
+0338   0369 3A E6 02    		lda line_dy
+0339   036C 2F          		cma
+0340   036D 5F          		mov e,a
+0341   036E 16 FF       		mvi d,0FFh
+0342   0370 13          		inx d				; de = -dy
+0343   0371             
+0344   0371 2A E5 02    		lhld line_dx
+0345   0374 26 00       		mvi h,0
+0346   0376 29          		dad h
+0347   0377 22 87 03    		shld line1_mod_dx_s+1		; сохранить 2*dx константой
+0348   037A             		; сохранить 2*dx константой
+0349   037A 7D          		mov a,l
+0350   037B 32 BF 03    		sta line1_mod_dx_sLo+1		; сохранить 2*dx константой
+0351   037E 7C          		mov a,h
+0352   037F 32 C3 03    		sta line1_mod_dx_sHi+1		; сохранить 2*dx константой
+0353   0382             
+0354   0382 19          		dad d				; hl = 2 * dx - dy
+0355   0383 E5          		push h				; поместить в стек значение D = 2 * dx - dy
+0356   0384 EB          		xchg				; hl = -dy
+0357   0385             		
+0358   0385 29          		dad h				; hl = -2*dy
+0359   0386             line1_mod_dx_s:
+0360   0386 11 00 00    		lxi d,0				; de = 2*dx
+0361   0389 19          		dad d 				; hl = 2 * dx - 2 * dy
+0362   038A             		; сохранить как конст
+0363   038A 7D          		mov a,l
+0364   038B 32 D6 03    		sta line1_mod_dxdy_sLo+1
+0365   038E 7C          		mov a,h
+0366   038F 32 DA 03    		sta line1_mod_dxdy_sHi+1
+0367   0392             
+0368   0392 2A E3 02    		lhld line_y	;h=x; l=y
+0369   0395 EB          		xchg		;d=x; e=y
+0370   0396 3E 07       		mvi a,111b
+0371   0398 A2          		ana d
+0372   0399 C6 08       		adi PixelMask&255
+0373   039B 6F          		mov l,a
+0374   039C 3E 03       		mvi a,PixelMask>>8
+0375   039E CE 00       		aci 0
+0376   03A0 67          		mov h,a			; hl - адрес маски в PixelMask
+0377   03A1 4E          		mov c,m 		; начальное значение маски пикселя
+0378   03A2             		
+0379   03A2 3E F8       		mvi a,11111000b
+0380   03A4 A2          		ana d
+0381   03A5 0F          		rrc
+0382   03A6 0F          		rrc 
+0383   03A7 37          		stc 
+0384   03A8 1F          		rar 
+0385   03A9 EB          		xchg 		        ; l=y
+0386   03AA 67          		mov h,a		        ; h=старший байт экранного адреса
+0387   03AB D1          		pop d			; de = 2 * dx - dy
+0388   03AC             
+0389   03AC 3A E6 02    		lda line_dy
+0390   03AF 47          		mov b,a
+0391   03B0             
+0392   03B0             		;------ крутой цикл (s/steep) -----
+0393   03B0             line1_loop_s:	; <--- точка входа в крутой цикл --->
+0394   03B0 7E          		mov a,m
+0395   03B1             SetPixelMode_s1:
+0396   03B1 A9          		xra c
+0397   03B2 77          		mov m,a	 		; записать в память результат с измененным пикселем
+0398   03B3             
+0399   03B3             		; if D > 0
+0400   03B3 AF          		xra a
+0401   03B4 B2          		ora d
+0402   03B5 F2 C9 03    		jp line1_then_s
+0403   03B8             line1_else_s: 	; else от if D > 0
+0404   03B8             line1_mod_yinc_s2:
+0405   03B8 2C          		inr l			; y = y +/- 1
+0406   03B9 7E          		mov a,m
+0407   03BA             SetPixelMode_s2:
+0408   03BA A9          		xra c
+0409   03BB 77          		mov m,a	 		; записать в память результат с измененным пикселем
+0410   03BC 05          		dcr b
+0411   03BD C8          		rz
+0412   03BE             line1_mod_dx_sLo:
+0413   03BE 3E 00       		mvi a,0		        ; изменяемый код (2*dx) младший байт
+0414   03C0 83          		add e
+0415   03C1 5F          		mov e,a
+0416   03C2             line1_mod_dx_sHi:
+0417   03C2 3E 00       		mvi a,0		        ; изменяемый код (2*dx) старший байт
+0418   03C4 8A          		adc d
+0419   03C5 57          		mov d,a
+0420   03C6             		;в итоге de = de + 2*dx
+0421   03C6 FA B8 03    		jm line1_else_s
+0422   03C9             
+0423   03C9             line1_then_s:
+0424   03C9             line1_mod_yinc_s1:
+0425   03C9 2C          		inr l			; y = y +/- 1
+0426   03CA 79          		mov a,c
+0427   03CB 0F          		rrc 			; xincLo
+0428   03CC 4F          		mov c,a
+0429   03CD D2 D1 03    		jnc $+4
+0430   03D0 24          		inr h			; xincHi
+0431   03D1             SetPixelMode_s3:
+0432   03D1 AE          		xra m
+0433   03D2 77          		mov m,a	 		; записать в память результат с измененным пикселем
+0434   03D3 05          		dcr b
+0435   03D4 C8          		rz
+0436   03D5             line1_mod_dxdy_sLo:
+0437   03D5 3E 00       		mvi a,0			; изменяемый код: 2*(dx-dy) младший байт
+0438   03D7 83          		add e
+0439   03D8 5F          		mov e,a
+0440   03D9             line1_mod_dxdy_sHi:
+0441   03D9 3E 00       		mvi a,0			; изменяемый код: 2*(dx-dy) старший байт
+0442   03DB 8A          		adc d
+0443   03DC 57          		mov d,a
+0444   03DD             		;в итоге de = de + 2*(dx-dy)
+0445   03DD FA B8 03    		jm line1_else_s
+0446   03E0 C3 C9 03    		jmp line1_then_s
+0447   03E3             		; --- конец тела крутого цикла ---
+0448   03E3             
+0449   03E3             		
+0450   03E3             line_gentle:
+0451   03E3             		; склон пологий
+0452   03E3             		; начальное значение D
+0453   03E3             		; D = 2 * dy - dx
+0454   03E3 3A E5 02    		lda line_dx
+0455   03E6 2F          		cma
+0456   03E7 5F          		mov e,a
+0457   03E8 16 FF       		mvi d,0FFh
+0458   03EA 13          		inx d				; de = -dx
+0459   03EB             
+0460   03EB 2A E6 02    		lhld line_dy
+0461   03EE 26 00       		mvi h,0
+0462   03F0 29          		dad h
+0463   03F1 22 01 04    		shld line1_mod_dy_g+1		; сохранить 2*dy константой
+0464   03F4             		; сохранить 2*dy константой
+0465   03F4 7D          		mov a,l
+0466   03F5 32 4E 04    		sta line1_mod_dy_gLo+1
+0467   03F8 7C          		mov a,h
+0468   03F9 32 52 04    		sta line1_mod_dy_gHi+1
+0469   03FC             
+0470   03FC             
+0471   03FC 19          		dad d				; hl = 2 * dy - dx
+0472   03FD E5          		push h				; поместить в стек значение D = 2 * dy - dx
+0473   03FE EB          		xchg				; hl = -dx
+0474   03FF             		
+0475   03FF 29          		dad h				; hl = -2*dx
+0476   0400             line1_mod_dy_g:
+0477   0400 11 00 00    		lxi d,0
+0478   0403 19          		dad d 				; hl = 2 * dy - 2 * dx
+0479   0404 7D          		mov a,l
+0480   0405 32 65 04    		sta line1_mod_dydx_gLo+1        ; сохранить как конст
+0481   0408 7C          		mov a,h
+0482   0409 32 69 04    		sta line1_mod_dydx_gHi+1        ; сохранить как конст
+0483   040C             		
+0484   040C D1          		pop d				; de = 2 * dy - dx
+0485   040D             
+0486   040D             		; основной цикл рисования линии
+0487   040D             		; версия для пологого склона (_g)
+0488   040D 2A E4 02    		lhld line_x	;l=x h=dx
+0489   0410 4D          		mov c,l		;c=x
+0490   0411 44          		mov b,h		;line_dx
+0491   0412 3A E3 02    		lda line_y	;a=y
+0492   0415 32 31 04    		sta line_yx_g+1
+0493   0418             
+0494   0418             		; подготовить начальное значение регистра c
+0495   0418 3E 07       		mvi a, 111b 		; сначала вычисляем смещение 
+0496   041A A1          		ana c 			; пикселя в PixelMask (с = x)
+0497   041B C6 08       		adi PixelMask&255
+0498   041D 6F          		mov l,a
+0499   041E 3E 03       		mvi a,PixelMask>>8
+0500   0420 CE 00       		aci 0
+0501   0422 67          		mov h,a			; hl - адрес маски в PixelMask
+0502   0423 3E F8       		mvi a,11111000b
+0503   0425 A1          		ana c
+0504   0426 0F          		rrc
+0505   0427 0F          		rrc
+0506   0428 37          		stc
+0507   0429 1F          		rar
+0508   042A 32 32 04    		sta line_yx_g+2	; 0x80 | (x >> 3), l = y
+0509   042D             
+0510   042D AF          		xra a
+0511   042E B8          		cmp b		        ;dx=0?
+0512   042F 4E          		mov c,m			; маска
+0513   0430             line_yx_g:
+0514   0430 21 00 00    		lxi h, 0                ; hl указывает в экран
+0515   0433 C2 3A 04    		jnz line1_loop_g	;если dx<>0, то переход на обычное рисование линии
+0516   0436             ;если dx=0, то ставим одну точку
+0517   0436 7E          		mov a,m
+0518   0437             SetPixelMode_g2:
+0519   0437 A9          		xra c
+0520   0438 77          		mov m,a 		; записать в память
+0521   0439 C9          		ret
+0522   043A             
+0523   043A             		;------ пологий цикл (g/gentle) -----
+0524   043A             line1_loop_g:	; <--- точка входа в пологий цикл --->
+0525   043A 7E          		mov a,m
+0526   043B             SetPixelMode_g1:
+0527   043B A9          		xra c
+0528   043C 77          		mov m,a 		; записать в память
+0529   043D             
+0530   043D             		; if D > 0
+0531   043D AF          		xra a
+0532   043E B2          		ora d
+0533   043F F2 58 04    		jp line1_then_g
+0534   0442             line1_else_g: 	; else от if D > 0
+0535   0442 79          		mov a,c
+0536   0443 0F          		rrc 			; сдвинуть вправо (следующий X)
+0537   0444 4F          		mov c,a			; сохраняем текущее значение маски
+0538   0445 D2 49 04    		jnc $+4 		; если не провернулся через край
+0539   0448 24          		inr h			;line_x += 1
+0540   0449             SetPixelMode_g3:
+0541   0449 AE          		xra m
+0542   044A 77          		mov m,a 		; записать в память
+0543   044B 05          		dcr b			; dx -= 1
+0544   044C C8          		rz
+0545   044D             
+0546   044D             line1_mod_dy_gLo:
+0547   044D 3E 00       		mvi a,0		        ; изменяемый код (2*dy) младший байт
+0548   044F 83          		add e
+0549   0450 5F          		mov e,a
+0550   0451             line1_mod_dy_gHi:
+0551   0451 3E 00       		mvi a,0		        ; изменяемый код (2*dy) старший байт
+0552   0453 8A          		adc d
+0553   0454 57          		mov d,a
+0554   0455             		;в итоге de= de + 2*dy
+0555   0455 FA 42 04    		jm line1_else_g
+0556   0458             
+0557   0458             line1_then_g:
+0558   0458             line1_mod_yinc_g:
+0559   0458 2C          		inr l			; изменяемый код: line_y += yinc или line_y -= yinc
+0560   0459 79          		mov a,c
+0561   045A 0F          		rrc 			; сдвинуть вправо (следующий X)
+0562   045B 4F          		mov c,a			; сохраняем текущее значение маски
+0563   045C D2 60 04    		jnc $+4 		; если не провернулся через край
+0564   045F 24          		inr h			;line_x += 1
+0565   0460             SetPixelMode_g4:
+0566   0460 AE          		xra m
+0567   0461 77          		mov m,a 		; записать в память
+0568   0462 05          		dcr b			; dx -= 1
+0569   0463 C8          		rz
+0570   0464             line1_mod_dydx_gLo:
+0571   0464 3E 00       		mvi a,0		        ; изменяемый код: 2*(dy-dx) младший байт
+0572   0466 83          		add e
+0573   0467 5F          		mov e,a
+0574   0468             line1_mod_dydx_gHi:
+0575   0468 3E 00       		mvi a,0		        ; изменяемый код: 2*(dy-dx) старший байт
+0576   046A 8A          		adc d
+0577   046B 57          		mov d,a
+0578   046C             		;в итоге de = de + 2*(dy-dx)
+0579   046C FA 42 04    		jm line1_else_g
+0580   046F C3 58 04    		jmp line1_then_g
+0581   0472             		; --- конец тела пологого цикла ---
+0582   0472             
+0583   0472             		; --- конец line() ---
+0584   0472             		
+0585   0472             Cls:
+0586   0472 21 00 80    		lxi	h,08000h
+0587   0475 1E 00       		mvi	e,0
+0588   0477 AF          		xra	a
+0589   0478             ClrScr:
+0590   0478 73          		mov	m,e
+0591   0479 23          		inx	h
+0592   047A BC          		cmp	h
+0593   047B C2 78 04    		jnz	ClrScr
+0594   047E C9          		ret
+0595   047F             
+0596   047F             		; выход:
+0597   047F             		; HL - число от 1 до 65535
+0598   047F             rnd16:
+0599   047F 21 FF FF    		lxi h,65535
+0600   0482 29          		dad h
+0601   0483 22 80 04    		shld rnd16+1
+0602   0486 D0          		rnc
+0603   0487 3E 01       		mvi a,00000001b ;перевернул 80h - 10000000b
+0604   0489 AD          		xra l
+0605   048A 6F          		mov l,a
+0606   048B 3E 68       		mvi a,01101000b	;перевернул 16h - 00010110b
+0607   048D AC          		xra h
+0608   048E 67          		mov h,a
+0609   048F 22 80 04    		shld rnd16+1
+0610   0492 C9          		ret
+0611   0493             
+0612   0493             colors:
+0613   0493 00 09 12 1B 		.db 00000000b,00001001b,00010010b,00011011b,00100100b,00101101b,00110110b,00111111b
+0613   0497 24 2D 36 3F 
+0614   049B FF 09 12 1B 		.db 11111111b,00001001b,00010010b,00011011b,00100100b,00101101b,00110110b,00111111b
+0614   049F 24 2D 36 3F 
+0615   04A3             
+0616   04A3             		.end
+tasm: Number of errors = 0
