@@ -17,10 +17,12 @@ Steps to compile and run an example:
 3. locate \_Vector06c_Dev\_Projects\Test01\ folder, then hit "Open"
 4. Sift+Ctrl+B to compile the run a code example.
 
-[https://emu80.org/distr/](Link to update Emu80 emulator)
+Link to update Emu80 emulator
+https://emu80.org/distr/
 Extract it to \_Vector06c_Dev\Emu80\
 
-[https://emu80.org/distr/](Link to update TASM Assembler)
+Link to update TASM Assembler
+https://emu80.org/distr/
 Extract it to \_Vector06c_Dev\Tasm32\
 
 Tasm manual
@@ -32,11 +34,9 @@ https://zx-pk.ru/threads/34480-programmirovanie.html?p=1157038&viewfull=1#post11
 ========================================================================
 Простая настроенная среда разработки для Вектор 06Ц (КР580ВМ80 / i8080 ) и примеры кода. TASM32 + Visual Studio Code + Emu80
 
-Для полной настроки нужно установить "TASM_Assembler" дополнение для Visual Studio Code.
-
-Для того чтобы заверщить настройку нужно установить TASM_Assembler расширение для Visual Studio Code:
+Для завершения настроки нужно установить "TASM_Assembler" дополнение для Visual Studio Code.
 1. Запустите VS Code
-2. Надмите на "Extensions" кнопку (иконка с 4 квадратиками) на левой стороне
+2. Нажмите на "Extensions" кнопку (иконка с 4 квадратиками) на левой стороне
 3. Ищите TASM_Assembler расширение
 4. Нажмите Install кнопку
 
@@ -44,19 +44,19 @@ https://zx-pk.ru/threads/34480-programmirovanie.html?p=1157038&viewfull=1#post11
 https://github.com/Jeff-Birt/TASM_vs...or_VS_Code.pdf
 https://www.youtube.com/watch?v=kamDP5FA6Bg
 
-Для компиляции и запуска примера в эмуляторе.
-1. Запустить VS Code
-2. mainMenu -> openFolder \_Vector06c_Dev\_Projects\Test01\
-3. Sift+Ctrl+B для запуска и эмуляции примера
+Шаги для компиляции и запуска примера.
+1. Run VS Code
+2. Идите в главное меню -> "Open Folder"
+3. Откройте \_Vector06c_Dev\_Projects\Test01\ папку, затем нажмите "Open"
+4. Нажмите Sift+Ctrl+B для компиляции и запукска примера.
 
-Для обновления TASM32 и Emu80:
-Скачать Tasm32 и положить в папку \_Vector06c_Dev\Tasm32\ т.е. TASM.exe должен быть доступен так tasmDev\Tasm32\TASM.exe
-Скачать Emu80 и положить в папку \_Vector06c_Dev\Emu80 т.е. TASM.exe должен быть доступен так tasmDev\Emu80\TASM.exe
-
-Ассемблер Tasm32
-https://www.ticalc.org/archives/file...250/25051.html
-Эмулятор Emu80
+Ссылка для обновления Emu80 эмулятора
 https://emu80.org/distr/
+Extract it to \_Vector06c_Dev\Emu80\
+
+Ссылка для обновления TASM Assembler
+https://emu80.org/distr/
+Extract it to \_Vector06c_Dev\Tasm32\
 
 Документация по Tasm
 https://www.mikrocontroller.net/atta...67/TASMMAN.pdf
