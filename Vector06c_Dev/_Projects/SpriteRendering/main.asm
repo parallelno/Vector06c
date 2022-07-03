@@ -2104,22 +2104,17 @@ DrawSprite_parallelno:
 			MOV		H, B			; (8)
 			MOV		L, C			; (8)
 			SPHL					; (8)
-			; calculate a line start X for 1st, 2nd, 3rd screen buffs
+			; D, E, A are initial X for 
+			; the 1st, the 2nd, the 3rd screen buff
 			XCHG					; (4)
 			MOV		D, H			; (8)
-			MVI		A, 20h			; (8)
+			MVI		A, 20H			; (8)
 			ADD 	D				; (4)
 			MOV 	E, A			; (8)
 			ADI 	20H				; (8)
-
-			INR 	D
-			INR 	D
-
-			; HL - screen address
-			; SP - sprite data
-			; D - 1st screen buff X + 2
-			; E - 2nd screen buff X
-			; A - 3rd screen buff X			
+			INR 	D				; (8)
+			INR 	D				; (8)
+									; (124) total
 
 ; screen format
 ; DRAW_FORWARD_LINE_PARALLELNO1
@@ -2128,11 +2123,17 @@ DrawSprite_parallelno:
 ; 3rd screen buff : 7 -> 8 -> 9
 ; y--
 ; DRAW_BACKWARD_LINE_PARALLELNO1
-; 1st screen buff : 12 <- 11 <- 10
+; 3nd screen buff : 12 <- 11 <- 10
 ; 2nd screen buff : 13 -> 14 -> 15
-; 3rd screen buff : 18 <- 17 <- 16
+; 1st screen buff : 18 <- 17 <- 16
 ; y--
 ; repeat
+
+; HL - 1st screen buff XY
+; SP - sprite data
+; D - 1st screen buff X + 2
+; E - 2nd screen buff X
+; A - 3rd screen buff X		
 
 #DEFINE 	DRAW_FORWARD_LINE_PARALLELNO1	\
 #DEFCONT \	POP B\ MOV M,C\ INR H\ MOV M,B\ INR H\ POP B\ MOV M,C
