@@ -8,7 +8,7 @@ To get a complete setup you want to install TASM_Assembler extantion for Visual 
 4. Hit Install button
 
 Installation process overview
-https://github.com/Jeff-Birt/TASM_vs...or_VS_Code.pdf
+https://github.com/Jeff-Birt/TASM_vsCode_Extension/blob/main/Using_the_Telemark_Assembler_for_VS_Code.pdf
 https://www.youtube.com/watch?v=kamDP5FA6Bg
 
 Steps to compile and run an example:
