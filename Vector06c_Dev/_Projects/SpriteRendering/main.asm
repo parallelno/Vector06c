@@ -99,7 +99,7 @@ Start:
 
 			LXI		H, SPRITE_SCR_ADDR_5
 			SHLD	testDrawScrAddr
-			LXI		H, DrawSprite_parallelno
+			LXI		H, DrawSprite_parallelno2
 			SHLD	testDrawSub
 			LXI		H, RES_SCR_ADDR_5
 			SHLD	testDrawResScrAddr
@@ -269,9 +269,11 @@ Interruption2:
 			SHLD	_return + 1
 			POP		H
 			SHLD	_restoreHL + 1
-			LXI		H, 0
+			PUSH    PSW
+			LXI		H, 2
 			DAD		SP
 			SHLD	_restoreSP + 1
+			POP     PSW
 			PUSH	B
 			
 			LXI		SP, STACK_TEMP_ADDR
@@ -2105,7 +2107,7 @@ DrawSprite_parallelno:
 			MOV		L, C			; (8)
 			SPHL					; (8)
 			; D, E, A are initial X for 
-			; the 1st, the 2nd, the 3rd screen buff
+			; the 1st, the 2nd, the 3rd screen buffs
 			XCHG					; (4)
 			MOV		D, H			; (8)
 			MVI		A, 20H			; (8)
@@ -2169,6 +2171,95 @@ DrawSprite_parallelno:
 			DRAW_BACKWARD_LINE_PARALLELNO1	\ DCR L
 			DRAW_FORWARD_LINE_PARALLELNO1	\ DCR L
 			DRAW_BACKWARD_LINE_PARALLELNO1
+
+_restoreSP:	LXI		SP, TEMP_ADDR	; restore SP (12)
+			RET
+
+;----------------------------------------------------------------
+; draw a sprite (24x24 pixels)
+; author: parallelno
+; method: zig-zag
+; in:
+; BC	sprite data
+; DE	screen address (x,y)
+
+			.MODULE DS_parallelno2
+DrawSprite_parallelno2:
+			; store SP
+			LXI		H, 0			; (12)
+			DAD		SP				; (12)
+			SHLD	_restoreSP + 1	; (20)
+			; SP = BC
+			MOV		H, B			; (8)
+			MOV		L, C			; (8)
+			SPHL					; (8)
+			; D, E, A are initial X for 
+			; the 1st, the 2nd, the 3rd screen buffs
+			XCHG					; (4)
+			;MOV		H, D			; (8)
+			MVI		A, 2			; (8)
+			ADD 	H				; (4)
+			MOV 	D, A			; (8)
+			ADI     20H             ; (8)
+			MOV     E, A            ; (8)
+			ADI 	20H				; (8)
+			;INR 	D				;    (8)
+			;INR 	D				;    (8)
+									; (108) total
+
+; screen format
+; DRAW_FORWARD_LINE_PARALLELNO1
+; 1st screen buff : 1 -> 2 -> 3
+; 2nd screen buff : 4 <- 5 <- (6)
+; 3rd screen buff : 7 <- 8 <- (9)
+; y--
+; DRAW_BACKWARD_LINE_PARALLELNO1
+; 3nd screen buff : 12 -> 11 -> 10
+; 2nd screen buff : 13 <- 14 <- (15)
+; 1st screen buff : 18 <- 17 <- (16)
+; y--
+; repeat
+
+; HL - 1st screen buff XY
+; SP - sprite data
+; D - 1st screen buff X + 2
+; E - 2nd screen buff X + 2
+; A - 3rd screen buff X + 2
+
+#DEFINE 	DRAW_FORWARD_LINE_PARALLELNO2	\
+#DEFCONT \	POP B\ MOV M,C\ INR H\ MOV M,B\ INR H\ POP B\ MOV M,C
+#DEFCONT \	MOV H,E\ MOV M,B\ DCR H\ POP B\ MOV M,C\ DCR H\ MOV M,B
+#DEFCONT \	MOV H,A\ POP B\ MOV M,C\ DCR H\ MOV M,B\ DCR H\ POP B\ MOV M,C
+
+#DEFINE 	DRAW_BACKWARD_LINE_PARALLELNO2	\
+#DEFCONT \	MOV M,B\ INR H\ POP B\ MOV M,C\ INR H\ MOV M,B
+#DEFCONT \	MOV H,E\ POP B\ MOV M,C\ DCR H\ MOV M,B\ DCR H\ POP B\ MOV M,C
+#DEFCONT \	MOV H,D\ MOV M,B\ DCR H\ POP B\ MOV M,C\ DCR H\ MOV M,B
+
+			DRAW_FORWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_BACKWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_FORWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_BACKWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_FORWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_BACKWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_FORWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_BACKWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_FORWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_BACKWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_FORWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_BACKWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_FORWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_BACKWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_FORWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_BACKWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_FORWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_BACKWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_FORWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_BACKWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_FORWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_BACKWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_FORWARD_LINE_PARALLELNO2	\ DCR L
+			DRAW_BACKWARD_LINE_PARALLELNO2
 
 _restoreSP:	LXI		SP, TEMP_ADDR	; restore SP (12)
 			RET
