@@ -11,7 +11,6 @@
 ; actual data at the addresses dataPointer-1, dataPointer-2, to not let
 ; the "PUSH PC" corrupts the data before BC pair gets it.
 
-			.function Interruption2F
 Interruption2:
 			; restore the Stack
 			XTHL
@@ -30,14 +29,33 @@ Interruption2:
 			PUSH	D
 
 			; common interruption logic
-			; MVI		A, PORT0_OUT_OUT
-			; OUT		0
-			; LDA  	1					; borderColorIdx
-			; OUT		2
-			; LDA		vScroll
-			; OUT		3
 
-            ; end common interruption logic
+			MVI A, PORT0_OUT_IN
+			OUT 0
+			XRA A
+			OUT 3
+			IN 2
+			inr a
+			STA anyKeyPressed
+			MVI a, $fe
+			OUT 3
+			IN 2
+
+			; todo: test. delete the next line
+			;mvi a, KEY_RIGHT
+
+			sta keyCode
+			mvi a, PORT0_OUT_OUT
+			OUT 0
+			lda borderColorIdx
+			OUT 2
+			lda scrOffsetY
+			OUT 3
+			
+			lxi h, interruptionCounter
+			inr m
+
+			; end common interruption logic
 			POP		D
 			POP		B
 			POP		PSW
@@ -45,13 +63,12 @@ Interruption2:
 @restoreSP:	LXI		SP, TEMP_ADDR
 			EI
 @return:	JMP		TEMP_ADDR
-			.endfunction
+			.closelabels
 
 
 ;----------------------------------------------------------------
 ; Common interruption sub
-;
-			.function Interruption1F
+/*
 Interruption1:
 			PUSH	PSW
 			PUSH	B
@@ -59,12 +76,29 @@ Interruption1:
 			PUSH	H
 
 			; common interruption logic
+	MVI A, PORT0_OUT_IN
+	OUT 0
+	XRA A
+	OUT 3
+	IN 2
+	STA anyKeyPressed
+	MVI A,$FE
+	OUT 3
+	IN 2
+	STA keyCode
 
-            ; end common interruption logic
+	mvi a, PORT0_OUT_OUT
+	OUT 0
+	lda borderColorIdx
+	OUT 2
+	lda scrOffsetY
+	OUT 3
+			; end common interruption logic
 			POP		H
 			POP		D
 			POP		B
 			POP		PSW
 			EI
 			RET
-			.endfunction
+			.closelabels
+*/

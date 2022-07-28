@@ -1,0 +1,150 @@
+0001   0000             ; https://github.com/ivagorRetrocomp/DeZX/blob/main/ZX2/8080/dzx2.asm
+0002   0000             ; -----------------------------------------------------------------------------
+0003   0000             ; ZX2 8080 decoder by Ivan Gorodetsky
+0004   0000             ; Based on ZX2 z80 decoder by Einar Saukas
+0005   0000             ;
+0006   0000             ; v1 (2021-03-18) - 68-79 bytes forward / 68-78 bytes backward
+0007   0000             ; v2 (2021-08-16) - 67-78 bytes forward / 67-77 bytes backward
+0008   0000             ; v3 (2021-08-19) - 66-78 bytes forward / 66-77 bytes backward (-1 byte with -y option)
+0009   0000             ; v4 (2021-08-20) - 66-78 bytes forward / 65-77 bytes backward (-1 byte with {-y and -b options})
+0010   0000             ; v5 (2022-05-06) - 66-78 bytes forward / 65-77 bytes backward (slightly faster with -y option)
+0011   0000             ;
+0012   0000             ; ZX2_X_SKIP_INCREMENT (compressor -x option) - -4 bytes
+0013   0000             ; ZX2_Y_LIMIT_LENGTH (compressor -y option) - -7 bytes
+0014   0000             ; ZX2_Z_IGNORE_DEFAULT (compressor -z option) - -1 byte
+0015   0000             ; BACKWARD (compressor -b option) - -1 byte
+0016   0000             ; -----------------------------------------------------------------------------
+0017   0000             ; Parameters (forward):
+0018   0000             ;   HL: source address (compressed data)
+0019   0000             ;   BC: destination address (decompressing)
+0020   0000             ;
+0021   0000             ; Parameters (backward):
+0022   0000             ;   HL: last source address (compressed data)
+0023   0000             ;   BC: last destination address (decompressing)
+0024   0000             ; -----------------------------------------------------------------------------
+0025   0100             			.org	$0100
+0026   0100             #define BACKWARD
+0027   0100             #define ZX2_X_SKIP_INCREMENT
+0028   0100             #define ZX2_Y_LIMIT_LENGTH
+0029   0100             #define ZX2_Z_IGNORE_DEFAULT 
+0030   0100             
+0031   0100             #ifdef BACKWARD
+0032   0100             #define NEXT_HL dcx h
+0033   0100             #define NEXT_BC dcx b
+0034   0100~            #else
+0035   0100~            #define NEXT_HL inx h
+0036   0100~            #define NEXT_BC inx b
+0037   0100             #endif
+0038   0100             
+0039   0100             dzx2:
+0040   0100             #ifdef BACKWARD
+0041   0100             #ifdef ZX2_Z_IGNORE_DEFAULT 
+0042   0100 16 00       		mvi d,0
+0043   0102~            #else
+0044   0102~            		lxi d,1
+0045   0102             #endif
+0046   0102~            #else
+0047   0102~            #ifdef ZX2_Z_IGNORE_DEFAULT 
+0048   0102~            		mvi d,0FFh
+0049   0102~            #else
+0050   0102~            		lxi d,0FFFFh
+0051   0102~            #endif
+0052   0102             #endif
+0053   0102 D5          		push d
+0054   0103 3E 80       		mvi a,080h
+0055   0105             dzx2n_literals:
+0056   0105 CD 25 01    		call dzx2n_elias
+0057   0108 CD 36 01    		call ldir
+0058   010B DA 1C 01    		jc dzx2n_new_offset
+0059   010E             dzx2n_reuse:
+0060   010E CD 25 01    		call dzx2n_elias
+0061   0111             dzx2n_copy:
+0062   0111 E3          		xthl
+0063   0112 E5          		push h
+0064   0113 09          		dad b
+0065   0114 CD 36 01    		call ldir
+0066   0117 E1          		pop h
+0067   0118 E3          		xthl
+0068   0119 D2 05 01    		jnc dzx2n_literals
+0069   011C             dzx2n_new_offset:
+0070   011C D1          		pop d
+0071   011D 5E          		mov e,m
+0072   011E 1C          		inr e
+0073   011F C8          		rz
+0074   0120 2B          		NEXT_HL
+0075   0121 D5          		push d
+0076   0122             #ifdef ZX2_X_SKIP_INCREMENT
+0077   0122 C3 0E 01    		jmp dzx2n_reuse
+0078   0125~            #else
+0079   0125~            		call dzx2n_elias
+0080   0125~            #ifdef ZX2_Y_LIMIT_LENGTH
+0081   0125~            		inr d
+0082   0125~            #else
+0083   0125~            		inx d
+0084   0125~            #endif
+0085   0125~            		jmp dzx2n_copy
+0086   0125             #endif
+0087   0125             dzx2n_elias:
+0088   0125             #ifdef ZX2_Y_LIMIT_LENGTH
+0089   0125             #ifdef BACKWARD
+0090   0125 14          		inr d							
+0091   0126~            #else
+0092   0126~            		mvi d,1
+0093   0126             #endif
+0094   0126~            #else
+0095   0126~            #ifdef BACKWARD
+0096   0126~            		mvi e,1
+0097   0126~            #else
+0098   0126~            		lxi d,1
+0099   0126~            #endif
+0100   0126             #endif
+0101   0126             dzx2n_elias_loop:	
+0102   0126 87          		add a
+0103   0127 C2 2D 01    		jnz dzx2n_elias_skip
+0104   012A 7E          		mov a,m
+0105   012B 2B          		NEXT_HL
+0106   012C 17          		ral
+0107   012D             #ifdef ZX2_Y_LIMIT_LENGTH
+0108   012D             dzx2n_elias_skip:
+0109   012D 5F          		mov e,a
+0110   012E D0          		rnc
+0111   012F EB          		xchg\ dad h\ xchg
+0111   0130 29          
+0111   0131 EB          
+0112   0132 7B          		mov a,e
+0113   0133 C3 26 01    		jmp dzx2n_elias_loop
+0114   0136             ldir:
+0115   0136 7E          		mov a,m
+0116   0137 02          		stax b
+0117   0138 2B          		NEXT_HL
+0118   0139 0B          		NEXT_BC
+0119   013A 15          		dcr d
+0120   013B C2 36 01    		jnz ldir
+0121   013E 87          		add a
+0122   013F~            #else		
+0123   013F~            dzx2n_elias_skip:
+0124   013F~            		rnc
+0125   013F~            		xchg\ dad h\ xchg
+0125   013F~            		xchg\ dad h\ xchg
+0125   013F~            		xchg\ dad h\ xchg
+0126   013F~            		add a
+0127   013F~            		jnc dzx2n_elias_loop
+0128   013F~            		inr e
+0129   013F~            		jmp dzx2n_elias_loop
+0130   013F~            ldir:
+0131   013F~            		push psw
+0132   013F~            ldir_loop:
+0133   013F~            		mov a,m
+0134   013F~            		stax b
+0135   013F~            		NEXT_HL
+0136   013F~            		NEXT_BC
+0137   013F~            		dcx d
+0138   013F~            		mov a,e
+0139   013F~            		ora d
+0140   013F~            		jnz ldir_loop
+0141   013F~            		pop psw
+0142   013F             #endif
+0143   013F 87          		add a
+0144   0140 C9          		ret
+0145   0141             
+0146   0141             		.endtasm: Number of errors = 0

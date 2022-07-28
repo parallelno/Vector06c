@@ -1,5 +1,6 @@
 .include "globals.asm"
-            .org	$100
+
+			.org	$100
 StartInit:
 			DI
 			; dismount a quasi-disk
@@ -17,10 +18,6 @@ StartInit:
 			LXI		SP, STACK_ADDR
 
 			EI
-			HLT
-			CALL	SetPalette
-   			; clear the screen
-			LXI		B, $0000
-			LXI     D, SCR_MEM_LEN / 32
-			CALL	MemReset
+			call ClearScr
             JMP     Start
+

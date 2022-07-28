@@ -1,0 +1,52 @@
+.include "levels/level01.dasm"
+
+
+TILE_WIDTH = 16
+TILE_WIDTH_B = 2
+TILE_HEIGHT = 16
+ROOM_WIDTH = 16
+ROOM_HEIGHT = 15
+ROOM_X = 0
+ROOM_Y = $FF - ROOM_HEIGHT
+ROOM_SCR_ADDR = $80 + ROOM_X + ROOM_Y
+
+
+; tile set name     - amount:
+; stop              - 1 (%00000), no more tiles in a line
+; wall				- 14
+; floor				- 4
+; shield on wall	- 1
+; chains on wall	- 2
+; web				- 2
+; bone piles		- 2
+; doors				- 14
+; water				- 9 (49)
+
+; list of adresses of compressed levels 
+levelsAddr:		.word TEMP_ADDR, 0
+
+; current level index in levelsAddr
+levelIdx:
+				.byte 0
+; current room index in roomsAddr of the current level
+roomIdx:
+				.byte 0
+
+; the address table to tile graphics
+roomTilesAddr:
+				.storage TILE_WIDTH * TILE_HEIGHT * 2
+
+; roomData:
+; %DDDDDfff for every tile
+; fff    - function
+; ddddd - argument
+; 0 - no collision, no functions
+; fff == 0 and ddddd != 0, means collision
+; fff == 1, gold, d - money
+; fff == 2, key, d - room id
+; fff == 3, d == 0, slow
+; fff == 3, d != 0, d= damage
+; fff == 4, go to 0-31 roomId
+; fff == 4, go to 32-63 roomId
+roomData:
+			.storage TILE_WIDTH * TILE_HEIGHT
