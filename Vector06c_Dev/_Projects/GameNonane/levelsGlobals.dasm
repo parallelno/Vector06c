@@ -30,23 +30,23 @@ levelIdx:
 				.byte 0
 ; current room index in roomsAddr of the current level
 roomIdx:
-				.byte 0
+				.byte 0 ; 0 - 127
 
 ; the address table to tile graphics
 roomTilesAddr:
-				.storage TILE_WIDTH * TILE_HEIGHT * 2
+				.storage ROOM_WIDTH * ROOM_HEIGHT * 2
 
 ; roomData:
 ; %DDDDDfff for every tile
 ; fff    - function
 ; ddddd - argument
-; 0 - no collision, no functions
-; fff == 0 and ddddd != 0, means collision
+; fff == 0, d==0 - no collision
+; fff == $fff, d==$fffff - collision
 ; fff == 1, gold, d - money
-; fff == 2, key, d - room id
-; fff == 3, d == 0, slow
-; fff == 3, d != 0, d= damage
-; fff == 4, go to 0-31 roomId
-; fff == 4, go to 32-63 roomId
-roomData:
-			.storage TILE_WIDTH * TILE_HEIGHT
+; fff == 2, key, d - room id 
+; fff == 3, d == 0, d = slow
+; fff == 3, d != 0, d = damage
+; fff == 4, go to 0-31 roomId, %1100 (12) - go to the roomId=1 room, %100 (4) - go to the roomId=0 room
+; fff == 5, go to 32-63 roomId
+roomTilesData:
+			.storage ROOM_WIDTH * ROOM_HEIGHT

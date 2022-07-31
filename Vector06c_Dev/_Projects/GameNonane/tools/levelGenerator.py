@@ -2,18 +2,33 @@ from PIL import Image
 import json
 import common
 
-def RoomToAsm(roomJ, roomPath, remapIdxs):
+def RoomTilesToAsm(roomJ, roomPath, remapIdxs):
 	asm = "; " + roomPath + "\n"
 	labelPrefix = roomPath.split("/")[-1].split("\\")[-1].split(".")[0]
 	asm += labelPrefix + ":\n"
-	width = roomJ["layers"][0]["width"]
-	height = roomJ["layers"][0]["height"]
+	width = roomJ["width"]
+	height = roomJ["height"]
+	size = width * height
 
-	for i, tidx in enumerate(roomJ["layers"][0]["data"]):
+	for i, tidx in enumerate(roomJ["data"]):
 		if i % width == 0 : asm += "			.byte "
 		asm += str(remapIdxs[tidx]) + ", "
 		if i % width == width-1 : asm += "\n"
-	return asm
+	return asm, size
+
+def RoomTilesDataToAsm(roomJ, roomPath):
+	asm = "; " + roomPath + "\n"
+	labelPrefix = roomPath.split("/")[-1].split("\\")[-1].split(".")[0]
+	asm += labelPrefix + "_tilesData:\n"
+	width = roomJ["width"]
+	height = roomJ["height"]
+	size = width * height
+
+	for i, tidx in enumerate(roomJ["data"]):
+		if i % width == 0 : asm += "			.byte "
+		asm += str(tidx) + ", "
+		if i % width == width-1 : asm += "\n"
+	return asm, size
 
 def RoomTilesAddrToAsm(roomJ, roomPath, remapIdxs):
 	asm = "; " + roomPath + "\n"
@@ -131,6 +146,12 @@ def GetListOfTiles(remapIdxs):
 	asm += "\n"
 	return asm, size
 
+def StartPosToAsm(levelJ):
+	asm = ("startPos:\n			.byte " + 
+	str(levelJ["startPos"]["y"]) + ", " + 
+	str(levelJ["startPos"]["x"]) + "\n")
+	return asm, 2
+
 #=====================================================
 
 
@@ -143,7 +164,10 @@ with open(levelJPath, "rb") as file:
 pngPath = str(levelJ["png"])
 image = Image.open(pngPath)
 asm, colors = common.PaletteToAsm(image, levelJ, pngPath)
-dataSize = 16
+dataSize = len(colors)
+asmStartPos, size = StartPosToAsm(levelJ)
+asm += asmStartPos
+dataSize += size
 image = common.RemapColors(image, colors)
 
 roomPaths = levelJ["rooms"]
@@ -168,12 +192,18 @@ dataSize += size
 # every room data
 for i, roomJ in enumerate(roomsJ):
 	#asm += RoomTilesAddrToAsm(roomJ, roomPaths[i]['file'], remapIdxs)
-	asm += RoomToAsm(roomJ, roomPaths[i]['file'], remapIdxs)
+	asmRT, size = RoomTilesToAsm(roomJ["layers"][0], roomPaths[i]['file'], remapIdxs)
+	asm += asmRT
+	dataSize += size
+	asmRTD, size = RoomTilesDataToAsm(roomJ["layers"][1], roomPaths[i]['file'])
+	asm += asmRTD
+	dataSize += size
 
 # tile art data to asm
 asmT, size = TilesToAsm(roomsJ[0], image, pngPath, remapIdxs)
 asm += asmT
 dataSize += size
+
 
 # save asm
 with open(asmLevelPath, "w") as file:

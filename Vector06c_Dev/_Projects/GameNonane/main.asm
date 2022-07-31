@@ -22,7 +22,7 @@ Start:
 			
 @mainLoop:
 			;call Menu
-			call InitGame
+			call GameInit
 
 			jmp @mainLoop
 			.closelabels

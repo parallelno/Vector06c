@@ -5,19 +5,19 @@
 .include "levelsGlobals.dasm"
 .include "levels.asm"
 
-InitGame:
-			call 	InitLevels
-			call	InitLevel
-			call	initRoom
-			call	DrawRoom
+GameInit:
+			call LevelsInit
+			call LevelInit
+			call RoomInit
+			call RoomDraw
 
-			mvi		a, 0
-			lda		interruptionCounter
+			xra a
+			sta interruptionCounter
 @gameLoop:
 			
-			call	GameUpdate
-			call	GameDraw
-			jmp		@gameLoop
+			call GameUpdate
+			call GameDraw
+			jmp	 @gameLoop
 
 GameUpdate:
 			lda interruptionCounter
@@ -26,7 +26,7 @@ GameUpdate:
 			hlt
 			ret
 @updateLoop:
-			call	UpdateHero
+			call HeroUpdate
 
 			lda keyCode
 			sta keyCode+1
@@ -39,7 +39,7 @@ GameUpdate:
 			
 
 GameDraw:
-			call	DrawHero
+			call	HeroDraw
 			ret
 			.closelabels
 			

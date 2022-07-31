@@ -1,7 +1,7 @@
 ;================================================================
 ;	initialization levels data every game start
 ;
-InitLevels:	
+LevelsInit:	
 			xra a
 			sta levelIdx
 			ret
@@ -9,27 +9,31 @@ InitLevels:
 ;================================================================
 ;	initialization level data every game start
 ;
-InitLevel:
+LevelInit:
 			hlt
-			xra a
-			sta roomIdx
 			lxi		h, palette_sprites+15
             call	SetPalette
 			mvi		a, 1
 			sta borderColorIdx
+			xra a
+			sta roomIdx	
+			lhld startPos
+			call HeroSetPos
 			ret
 			.closelabels
 
-InitRoom:
-			call InitRoomTiles
+RoomInit:
+			call HeroStop
+			call RoomInitTiles
+			call RoomInitTilesData
 			ret
 			
-InitRoomTiles:
+RoomInitTiles:
 			lda roomIdx
+			rlc
 			mov c, a
 			mvi b, 0
 			lxi h, roomsAddr
-			dad b
 			dad b
 			mov e, m
 			inx h
@@ -41,7 +45,7 @@ InitRoomTiles:
 			; bc - current room tile graphics table
 			; a - counter
 			
-@initRoomTilesLoop:
+@loop:
 			; get the tile index into de
 			push psw
 			mov e, m
@@ -64,11 +68,27 @@ InitRoomTiles:
 			pop psw
 			; repeat if it's not done
 			dcr a
-			jnz @initRoomTilesLoop
+			jnz @loop
 			ret
 			.closelabels
 
-DrawRoom:
+; hl - packed tiles data addr
+;
+RoomInitTilesData:
+			lxi d, roomTilesData
+			mvi c, ROOM_WIDTH * ROOM_HEIGHT
+@loop:
+			mov a, M
+			stax d
+			inx H
+			inx D
+			dcr c
+			jnz @loop
+			ret
+			.closelabels
+
+RoomDraw:
+			call ClearScr
 			; TODO: clean this func. add a description, comments, and constants
 			; set Y
 			mvi e, $ff - 16
@@ -103,5 +123,77 @@ DrawRoom:
 			mov e, a
 			jnc @newLine
 
-			RET
+			ret
+			.closelabels
+
+; TODO: optimize to not check when the hero do not move ouside tile
+; bc - posXY
+; return: collidedTilesData. it's a list with collided tiles data
+;
+collidedTilesData:
+			.byte 0, 0, 0, 0,
+CheckTilesCollision:
+			; clear only the last 2 bytes, because the first one will be overwritten anyway
+			lxi h, 0
+			shld collidedTilesData+2
+			
+			mvi d, $0f
+			; check if we have to check bottom tiles
+			mov a, c
+            ana d
+			cpi 14
+			mvi a, $eb	; opcode "xchg,"
+			jc @check
+			; do not check bottom tiles
+			mvi a, $c9		; opcode "ret"
+@check:
+			sta @checkBottomTiles
+						
+			; get tileY
+			mov a, c
+			cma
+			rrc_(4)
+			ana d
+			mov e, a
+
+			; get tileX
+			mov a, b
+			dcr a
+			rrc_(4)
+			ana d
+			; get the offset in the tile map table
+			mvi d, ROOM_WIDTH
+@loop:
+			dcr e
+			jz @afterloop
+			add d
+			jmp @loop
+@afterloop			
+			mov c, a
+			mvi b, 0
+			lxi h, roomTilesData
+			dad b
+			; get data of a tile where a top-left pixel of a sprite drawn
+			mov e, m
+			mov a, e 
+			; get data of a tile where a top-right pixel of a sprite drawn
+			inx h
+			mov d, m
+			ora d
+			xchg
+			shld collidedTilesData
+@checkBottomTiles:			
+			xchg
+			; get data of a tile where a bottom-left pixel of a sprite drawn
+			mvi c, ROOM_WIDTH-1
+			dad b
+			mov e, m
+			ora e
+			; get data of a tile where a bottom-right pixel of a sprite drawn
+			inx h
+			mov d, m
+			ora d
+			xchg
+			shld collidedTilesData+2
+			ret
 			.closelabels
