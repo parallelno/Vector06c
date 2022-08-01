@@ -1,4 +1,4 @@
-python tools/charGenerator.py
+python tools/charGenerator.py -i "sources/hero.json" -o "chars/hero.dasm"
 python tools/levelGenerator.py
 
 @echo off

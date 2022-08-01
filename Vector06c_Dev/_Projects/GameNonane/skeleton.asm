@@ -1,12 +1,12 @@
 .include "drawSprite2.asm"
 ; data
-.include "chars/hero.dasm"
+.include "chars/skeleton.dasm"
 
 ; the first screen buffer X
 HERO_X_SCR_ADDR	= $a0
 HERO_START_POS_X = 100
 HERO_START_POS_Y = 170
-HERO_RUN_SPEED = $0100 ; it's a dword, low byte is a subpixel speed
+HERO_RUN_SPEED = $0060 ; it's a dword, low byte is a subpixel speed
 
 ROT_TIMER_0p125 = %0000_0001 ; that timer is rotated to the right.
 ROT_TIMER_0p25	= %0001_0001 ; it will trigger something when the lowest bit is 1
@@ -77,11 +77,11 @@ HeroUpdate:
 			ora a
 			jz @setAnimIdleL
 
-			lxi h, hero_idle_r
+			lxi h, skeleton_idle_r
 			shld HeroDrawAnimAddr+1
 			jmp HeroMove
 @setAnimIdleL
-			lxi h, hero_idle_l
+			lxi h, skeleton_idle_l
 			shld HeroDrawAnimAddr+1
 			jmp HeroMove
 
@@ -99,7 +99,7 @@ HeroUpdate:
 			mvi a, 1
 			sta heroDirX
 			lxi h, GetHeroSpriteAddr
-			lxi h, hero_run_r0
+			lxi h, skeleton_run_r0
 			shld HeroDrawAnimAddr+1
 			lxi h, GetHeroSpriteAddr
 			shld HeroDrawSpriteAddrFunc+1
@@ -117,7 +117,7 @@ HeroUpdate:
 
 			xra a
 			sta heroDirX
-			lxi h, hero_run_l0
+			lxi h, skeleton_run_l0
 			shld HeroDrawAnimAddr+1
 			lxi h, GetHeroSpriteAddr
 			shld HeroDrawSpriteAddrFunc+1	
@@ -140,11 +140,11 @@ HeroUpdate:
 			ora a
 			jz @setAnimRunUL
 
-			lxi h, hero_run_r0
+			lxi h, skeleton_run_r0
 			shld HeroDrawAnimAddr+1
 			jmp HeroMove
 @setAnimRunUL:
-			lxi h, hero_run_l0
+			lxi h, skeleton_run_l0
 			shld HeroDrawAnimAddr+1
 			jmp HeroMove
 @setAnimRunD:
@@ -164,11 +164,11 @@ HeroUpdate:
 			lda heroDirX
 			ora a
 			jz @setAnimRunDL
-			lxi h, hero_run_r0
+			lxi h, skeleton_run_r0
 			shld HeroDrawAnimAddr+1		
 			jmp HeroMove
 @setAnimRunDL:
-			lxi h, hero_run_l0
+			lxi h, skeleton_run_l0
 			shld HeroDrawAnimAddr+1
 			jmp HeroMove
 
@@ -302,7 +302,7 @@ HeroDraw:
 			sta heroCleanFrameIdx2
 			xchg
 HeroDrawAnimAddr:
-			lxi h, hero_idle_r
+			lxi h, skeleton_idle_r
 HeroDrawSpriteAddrFunc:			
 			call GetHeroSpriteAddr
 

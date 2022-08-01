@@ -1,4 +1,4 @@
-.include "globals.asm"
+.include "globalConsts.asm"
 
 			.org	$100
 StartInit:

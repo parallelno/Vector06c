@@ -1,5 +1,6 @@
-python tools/charGenerator.py
-python tools/levelGenerator.py
+python tools/charGenerator.py -i sources/hero.json -o chars/hero.dasm
+python tools/charGenerator.py -i sources/skeleton.json -o chars/skeleton.dasm
+python tools/levelGenerator.py -i sources/level01.json -o levels/level01.dasm
 
 @echo off
 

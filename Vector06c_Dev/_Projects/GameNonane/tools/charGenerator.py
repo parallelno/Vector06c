@@ -1,3 +1,4 @@
+import string
 from PIL import Image
 import json
 import common
@@ -102,9 +103,17 @@ def CharToAsm(charJ, image):
 	return asm
 
 #=====================================================
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--input", help = "Input file")
+parser.add_argument("-o", "--output", help = "Output file")
+args = parser.parse_args()
 
-charJPath = "sources/hero.json"
-asmCharPath = "chars/hero.dasm"
+if not args.output and not args.input:
+	print("-i and -o command-line parameters needed. Use -h for help.")
+	exit()
+charJPath = args.input
+asmCharPath = args.output
 
 with open(charJPath, "rb") as file:
 	charJ = json.load(file)

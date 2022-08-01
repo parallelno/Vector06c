@@ -11,14 +11,19 @@ LevelsInit:
 ;
 LevelInit:
 			hlt
-			lxi		h, palette_sprites+15
+			lxi		h, palette_sprites_tiles_lv01+15
             call	SetPalette
 			mvi		a, 1
 			sta borderColorIdx
 			xra a
 			sta roomIdx	
 			lhld startPos
+			
 			call HeroSetPos
+			call GetHeroScrAddr
+			mov a, c
+			shld heroCleanScrAddr
+			sta heroCleanFrameIdx2			
 			ret
 			.closelabels
 

@@ -1,5 +1,6 @@
 .include "drawTile.asm"
-.include "hero.asm"
+;.include "hero.asm"
+.include "skeleton.asm"
 
 ; data
 .include "levelsGlobals.dasm"

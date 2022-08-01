@@ -1,16 +1,5 @@
 .include "levels/level01.dasm"
 
-
-TILE_WIDTH = 16
-TILE_WIDTH_B = 2
-TILE_HEIGHT = 16
-ROOM_WIDTH = 16
-ROOM_HEIGHT = 15
-ROOM_X = 0
-ROOM_Y = $FF - ROOM_HEIGHT
-ROOM_SCR_ADDR = $80 + ROOM_X + ROOM_Y
-
-
 ; tile set name     - amount:
 ; stop              - 1 (%00000), no more tiles in a line
 ; wall				- 14
@@ -41,12 +30,12 @@ roomTilesAddr:
 ; fff    - function
 ; ddddd - argument
 ; fff == 0, d==0 - no collision
-; fff == $fff, d==$fffff - collision
-; fff == 1, gold, d - money
+; fff == 1, chest. d == 0 is a chest monster, d>0 means getting money
 ; fff == 2, key, d - room id 
-; fff == 3, d == 0, d = slow
-; fff == 3, d != 0, d = damage
+; fff == 3, monster spawn, d - monster Id
 ; fff == 4, go to 0-31 roomId, %1100 (12) - go to the roomId=1 room, %100 (4) - go to the roomId=0 room
 ; fff == 5, go to 32-63 roomId
+; fff == 6, d != 0, d = damage
+; fff == 7, d==%11111 - collision
 roomTilesData:
 			.storage ROOM_WIDTH * ROOM_HEIGHT

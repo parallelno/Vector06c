@@ -153,7 +153,17 @@ def StartPosToAsm(levelJ):
 	return asm, 2
 
 #=====================================================
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--input", help = "Input file")
+parser.add_argument("-o", "--output", help = "Output file")
+args = parser.parse_args()
 
+if not args.output and not args.input:
+	print("-i and -o command-line parameters needed. Use -h for help.")
+	exit()
+levelJPath = args.input
+asmLevelPath = args.output
 
 levelJPath = "sources/level01.json"
 asmLevelPath = "levels/level01.dasm"
