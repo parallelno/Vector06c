@@ -1,9 +1,12 @@
+.include "drawSprite2.asm"
+
 ; hl - animation addr, for example hero_idle_r
 ; c - idx in the animation
 ; return: 
 ; bc - sprite addr
 ; a - width marker. 0 - means a sprite width is 2 bytes , != 0 means 3 bytes
 GetSpriteAddr:
+            mov a, c
 			mvi b, 0
 			dad b
 			mov c, m
@@ -14,6 +17,7 @@ GetSpriteAddr:
 ; this's a special version of GetSpriteAddr for a vertical movement
 ; hl - animation addr, for example hero_idle_r
 ; c - idx in the animation
+; e - pos Y
 ; return: 
 ; bc - sprire addr
 ; a - width marker. 0 - means a sprite width is 2 bytes , != 0 means 3 bytes
@@ -35,7 +39,7 @@ GetSpriteAddrRunV:
 
 ; hl - addr to posX, posY words.
 ; return:
-; hl - sprite screen addr
+; de - sprite screen addr
 ; c - idx in the animaion
 ; uses: a
 GetSpriteScrAddr:
@@ -54,6 +58,6 @@ GetSpriteScrAddr:
 			inx h
 			inx h
 			; copying posY
-			mov l, m
-			mov	h, a
+			mov e, m
+			mov	d, a
 			ret

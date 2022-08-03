@@ -14,17 +14,25 @@ GameInit:
 
 			xra a
 			sta interruptionCounter
-@gameLoop:
-			
-			call GameUpdate
+@gameLoop:		
+			call GameUpdate	
 			call GameDraw
+
 			jmp	 @gameLoop
 
 GameUpdate:
 			lda interruptionCounter
 			ora a
 			jnz	@updateLoop
+
+; TEST /////////////////////////////////
+			BORDER_LINE(1)
+; TEST /////////////////////////////////
+
 			hlt
+; TEST /////////////////////////////////
+			BORDER_LINE(9)
+; TEST /////////////////////////////////				
 			ret
 @updateLoop:
 			call HeroUpdate
@@ -41,7 +49,7 @@ GameUpdate:
 			
 
 GameDraw:
-			call HeroDraw
+			call HeroDraw			
 			call MonstersDraw
 			ret
 			.closelabels

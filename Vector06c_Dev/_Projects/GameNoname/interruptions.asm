@@ -40,11 +40,8 @@ Interruption2:
 			MVI a, $fe
 			OUT 3
 			IN 2
-
-			; todo: test. delete the next line
-			;mvi a, KEY_RIGHT
-
 			sta keyCode
+			
 			mvi a, PORT0_OUT_OUT
 			OUT 0
 			lda borderColorIdx
@@ -64,7 +61,6 @@ Interruption2:
 			EI
 @return:	JMP		TEMP_ADDR
 			.closelabels
-
 
 ;----------------------------------------------------------------
 ; Common interruption sub

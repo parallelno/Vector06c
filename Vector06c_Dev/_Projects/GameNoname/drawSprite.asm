@@ -1,7 +1,10 @@
+; input:
 ; hl - scr addr
 ; a - width
 ; a == 0, 2 bytes
 ; a != 0, 3 bytes
+; used:
+; bc, de
 
 			.macro CleanSpriteVLine()
 		.loop 14

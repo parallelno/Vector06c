@@ -1,4 +1,3 @@
-;.include "drawSprite2.asm"
 .include "chars/skeleton.dasm"
 
 ; the first screen buffer X
@@ -211,54 +210,61 @@ SkeletonMoveFuncRet:
 			dcr c
 			jnz MonsterMoveLoop
 			ret
-			.closelabels
+			.closelabels		
 */
-;	hl - monster data addr
-;
+
 SkeletonDraw:
-			; convert monster id into @posX, monsterCleanScrAddr, monsterCleanFrameIdx2
+			; convert monster id into the offset in the monstersRoomData array
+			; and store it into bc
 			lxi h, monsterRoomDataAddrOffsets
 			dad b
 			mov c, m
-			lxi h, monsterCleanScrAddr
-			dad b
-			shld @cleanScrAddrLoad+1
-			shld @cleanScrAddrSave+1
-			lxi h, monsterCleanFrameIdx2
-			dad b
-			shld @cleanFrameLoad+1
-			shld @cleanFrameSave+1
-			lxi h, monsterPosX+1
-			dad b
-			shld @posX+1
-
 			lxi h, monsterRedrawTimer
+			; hl - pointer to monsterRedrawTimer
 			dad b
+			; a <- (monsterRedrawTimer)
 			mov a, m
 			rrc
 			mov m, a
 			rnc
-@cleanScrAddrLoad:
-			lhld monsterCleanScrAddr
-@cleanFrameLoad:
-			lda monsterCleanFrameIdx2
-			call CleanSprite
 
-@posX:
-			lxi h, monsterPosX+1
-			
-			call GetSpriteScrAddr
-			mov a, c
-@cleanScrAddrSave:
-			shld monsterCleanScrAddr
-@cleanFrameSave:
-			sta monsterCleanFrameIdx2
+			; de <- (monsterCleanScrAddr)
+			inx h
+			mov e, m
+			inx h
+			mov d, m
+
+			; a <- (monsterCleanFrameIdx2)
+			inx h
+			mov a, m
+			push h
+			push h
 			xchg
-MonsterDrawAnimAddr:
-			lxi h, skeleton_idle_r
-MonsterDrawSpriteAddrFunc:			
+
+			call CleanSprite
+			pop h
+
+			; hl - monsterPosX+1 addr
+			inx h
+			inx h
+			call GetSpriteScrAddr
+
+			; move pointer back to monsterCleanFrameIdx2 addr
+			pop h
+			; save frame idx to monsterCleanFrameIdx2 addr
+			mov m, c
+ 			; move pointer back to monsterCleanScrAddr+1 addr
+			dcx h
+			; save the addr returned by GetSpriteScrAddr into monsterCleanScrAddr backwards
+			mov m, d
+			dcx h
+			mov m, e
+;MonsterDrawAnimAddr:
+			lxi h, skeleton_idle_r ; 316
+;MonsterDrawSpriteAddrFunc:
 			call GetSpriteAddr
 
 			ora a
 			jz DrawSprite16x15
 			jmp	DrawSprite24x15
+			.closelabels

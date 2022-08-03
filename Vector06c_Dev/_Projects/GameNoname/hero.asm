@@ -1,10 +1,8 @@
-.include "drawSprite2.asm"
-; data
 .include "chars/hero.dasm"
 
 ; the first screen buffer X
-HERO_START_POS_X = 160
-HERO_START_POS_Y = 190
+HERO_START_POS_X = 220
+HERO_START_POS_Y = 220
 HERO_RUN_SPEED = $0100 ; it's a dword, low byte is a subpixel speed
 
 ; save heroX, heroY, heroSpeedX, heroSpeedY data layout because it is a struct
@@ -24,7 +22,7 @@ heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, 0, 0 ; hero uses these fu
 HeroInit:
 			lxi h, heroX+1
 			call GetSpriteScrAddr
-			;xchg
+			xchg
 			mov a, c
 			shld heroCleanScrAddr
 			sta heroCleanFrameIdx2
@@ -289,13 +287,13 @@ HeroDraw:
 
 			lxi h, heroX+1
 			call GetSpriteScrAddr
-			;xchg
+			xchg
 			mov a, c
 			shld heroCleanScrAddr
 			sta heroCleanFrameIdx2
 			xchg
 HeroDrawAnimAddr:
-			lxi h, hero_idle_r
+			lxi h, hero_idle_r ; 208
 HeroDrawSpriteAddrFunc:			
 			call GetSpriteAddr
 
