@@ -18,12 +18,8 @@ LevelInit:
 			xra a
 			sta roomIdx	
 			lhld startPos
-			
 			call HeroSetPos
-			call GetHeroScrAddr
-			mov a, c
-			shld heroCleanScrAddr
-			sta heroCleanFrameIdx2			
+			call HeroInit	
 			ret
 			.closelabels
 
@@ -91,6 +87,22 @@ RoomInitTilesData:
 			jnz @loop
 			ret
 			.closelabels
+
+LevelUpdate:
+			lda levelCommand
+			ora a
+			rz
+			cpi LEVEL_COMMAND_LOAD_DRAW_ROOM
+			; load a new room
+			call RoomInit
+			call RoomDraw
+			call HeroInit
+			xra a
+			lda	interruptionCounter
+
+			xra a
+			sta levelCommand
+			ret
 
 RoomDraw:
 			call ClearScr

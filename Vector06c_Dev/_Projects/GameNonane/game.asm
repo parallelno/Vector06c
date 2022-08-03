@@ -1,9 +1,9 @@
-.include "drawTile.asm"
-;.include "hero.asm"
-.include "skeleton.asm"
+.include "levelsGlobalData.dasm"
 
-; data
-.include "levelsGlobals.dasm"
+.include "drawTile.asm"
+.include "sprite.asm"
+.include "hero.asm"
+.include "monsters.asm"
 .include "levels.asm"
 
 GameInit:
@@ -28,6 +28,7 @@ GameUpdate:
 			ret
 @updateLoop:
 			call HeroUpdate
+			call LevelUpdate
 
 			lda keyCode
 			sta keyCode+1
@@ -40,7 +41,8 @@ GameUpdate:
 			
 
 GameDraw:
-			call	HeroDraw
+			call HeroDraw
+			call MonstersDraw
 			ret
 			.closelabels
 			

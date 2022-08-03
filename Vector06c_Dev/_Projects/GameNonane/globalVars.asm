@@ -9,3 +9,8 @@ scrOffsetY:
 			.byte 255
 interruptionCounter:
 			.byte 0
+
+
+; used for the movement
+charTempX:	.word 0 ; temporal X
+charTempY:	.word 0 ; temporal Y

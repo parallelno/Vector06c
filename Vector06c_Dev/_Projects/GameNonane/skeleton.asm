@@ -1,46 +1,23 @@
-.include "drawSprite2.asm"
-; data
+;.include "drawSprite2.asm"
 .include "chars/skeleton.dasm"
 
 ; the first screen buffer X
-HERO_X_SCR_ADDR	= $a0
-HERO_START_POS_X = 100
-HERO_START_POS_Y = 170
-HERO_RUN_SPEED = $0060 ; it's a dword, low byte is a subpixel speed
+;HERO_X_SCR_ADDR	= $a0
+;HERO_START_POS_X = 100
+;HERO_START_POS_Y = 170
+;HERO_RUN_SPEED = $0060 ; it's a dword, low byte is a subpixel speed
 
-ROT_TIMER_0p125 = %0000_0001 ; that timer is rotated to the right.
-ROT_TIMER_0p25	= %0001_0001 ; it will trigger something when the lowest bit is 1
-ROT_TIMER_0p5	= %0101_0101 ; this value means that something will happen every second frame
-ROT_TIMER_0p75	= %1101_1101
-ROT_TIMER_1p0	= %1111_1111
-;ROT_TIMER_ONCE	= %0000_0011 ; draw just once. useful for idle anims
-;ROT_TIMER_NOP	= %0000_0000 ; no draw
-
-; save heroX, heroY, heroSpeedX, heroSpeedY data layout because it is a struct
-heroX:				.word HERO_START_POS_X * 256 + 0
-heroY:				.word HERO_START_POS_Y * 256 + 0
-heroSpeedX:			.word 0
-heroSpeedY:			.word 0
-heroTempX:			.word 0 ; temporal X
-heroTempY:			.word 0 ; temporal Y
-
-heroDirX:			.byte 1 ; 1-right, 0-left
-heroCleanScrAddr:	.word (HERO_X_SCR_ADDR + HERO_START_POS_X / 8) * 256 + HERO_START_POS_Y
-heroCleanFrameIdx2:	.byte 0 ; frame id * 2
-heroRedrawTimer:	.byte 0 ; 0101_0101 means redraw on every second frame, 0000_0001 means redraw on very 8 frame.
-
-heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport
-
-HeroStop:
+/*
+MonsterStop:
 			lxi h, 0
-			shld heroSpeedX	
+			shld heroSpeedX
 			shld heroSpeedY
 			shld keyCode
 			ret
 			.closelabels
 
 ; hl - posXY
-HeroSetPos:
+MonsterSetPos:
 			mov a, h
 			sta heroX+1
 			mov a, l
@@ -51,12 +28,14 @@ HeroSetPos:
 			.macro CHECK_HERO_REDRAW(timer)
 			lxi h, keyCode+1
 			cmp m
-			jz HeroMove
+			jz MonsterMove
 			mvi a, timer
 			sta heroRedrawTimer
 			.endmacro		
-			
-HeroUpdate:
+*/			
+SkeletonUpdate:
+			ret
+/*
 			lda keyCode
 
 			; if no key pressed, play idle
@@ -70,20 +49,20 @@ HeroUpdate:
 			shld heroSpeedX
 			shld heroSpeedY
 
-			lxi h, GetHeroSpriteAddr
-			shld HeroDrawSpriteAddrFunc+1
+			lxi h, GetMonsterSpriteAddr
+			shld MonsterDrawSpriteAddrFunc+1
 
 			lda heroDirX
 			ora a
 			jz @setAnimIdleL
 
 			lxi h, skeleton_idle_r
-			shld HeroDrawAnimAddr+1
-			jmp HeroMove
+			shld MonsterDrawAnimAddr+1
+			jmp MonsterMove
 @setAnimIdleL
 			lxi h, skeleton_idle_l
-			shld HeroDrawAnimAddr+1
-			jmp HeroMove
+			shld MonsterDrawAnimAddr+1
+			jmp MonsterMove
 
 @setAnimRunR:
 			cpi KEY_RIGHT
@@ -98,12 +77,12 @@ HeroUpdate:
 
 			mvi a, 1
 			sta heroDirX
-			lxi h, GetHeroSpriteAddr
+			lxi h, GetMonsterSpriteAddr
 			lxi h, skeleton_run_r0
-			shld HeroDrawAnimAddr+1
-			lxi h, GetHeroSpriteAddr
-			shld HeroDrawSpriteAddrFunc+1
-			jmp HeroMove
+			shld MonsterDrawAnimAddr+1
+			lxi h, GetMonsterSpriteAddr
+			shld MonsterDrawSpriteAddrFunc+1
+			jmp MonsterMove
 @setAnimRunL:
 			cpi KEY_LEFT
 			jnz @setAnimRunU
@@ -118,10 +97,10 @@ HeroUpdate:
 			xra a
 			sta heroDirX
 			lxi h, skeleton_run_l0
-			shld HeroDrawAnimAddr+1
-			lxi h, GetHeroSpriteAddr
-			shld HeroDrawSpriteAddrFunc+1	
-			jmp HeroMove
+			shld MonsterDrawAnimAddr+1
+			lxi h, GetMonsterSpriteAddr
+			shld MonsterDrawSpriteAddrFunc+1	
+			jmp MonsterMove
 @setAnimRunU:
 			cpi KEY_UP
 			jnz @setAnimRunD
@@ -133,20 +112,20 @@ HeroUpdate:
 			lxi h, HERO_RUN_SPEED
 			shld heroSpeedY
 
-			lxi h, GetHeroRunVSpriteAddr
-			shld HeroDrawSpriteAddrFunc+1
+			lxi h, GetMonsterRunVSpriteAddr
+			shld MonsterDrawSpriteAddrFunc+1
 
 			lda heroDirX
 			ora a
 			jz @setAnimRunUL
 
 			lxi h, skeleton_run_r0
-			shld HeroDrawAnimAddr+1
-			jmp HeroMove
+			shld MonsterDrawAnimAddr+1
+			jmp MonsterMove
 @setAnimRunUL:
 			lxi h, skeleton_run_l0
-			shld HeroDrawAnimAddr+1
-			jmp HeroMove
+			shld MonsterDrawAnimAddr+1
+			jmp MonsterMove
 @setAnimRunD:
 			cpi KEY_DOWN
 			rnz
@@ -158,21 +137,21 @@ HeroUpdate:
 			lxi h, $ffff - HERO_RUN_SPEED + 1
 			shld heroSpeedY		
 
-			lxi h, GetHeroRunVSpriteAddr
-			shld HeroDrawSpriteAddrFunc+1
+			lxi h, GetMonsterRunVSpriteAddr
+			shld MonsterDrawSpriteAddrFunc+1
 			
 			lda heroDirX
 			ora a
 			jz @setAnimRunDL
 			lxi h, skeleton_run_r0
-			shld HeroDrawAnimAddr+1		
-			jmp HeroMove
+			shld MonsterDrawAnimAddr+1		
+			jmp MonsterMove
 @setAnimRunDL:
 			lxi h, skeleton_run_l0
-			shld HeroDrawAnimAddr+1
-			jmp HeroMove
+			shld MonsterDrawAnimAddr+1
+			jmp MonsterMove
 
-HeroMove:
+MonsterMove:
 			; apply the hero speed
 			lhld heroX
 			xchg
@@ -204,12 +183,12 @@ HeroMove:
 			; handle collided tiles data
 			lxi h, collidedTilesData
 			mvi c, 4
-HeroMoveLoop:
+SkeletonMoveLoop:
 			mov a, m
 			push h	
 			; extract a function
 			ani %00000111
-			jz HeroMoveFuncRet
+			jz MonsterMoveFuncRet
 			dcr a ; we do not need to handle funcId == 0
 			rlc
 			mov e, a
@@ -226,130 +205,60 @@ HeroMoveLoop:
 			mov d, m
 			xchg
 			pchl
-HeroMoveFuncRet:
+SkeletonMoveFuncRet:
 			pop h
 			inx h
 			dcr c
-			jnz HeroMoveLoop
+			jnz MonsterMoveLoop
 			ret
 			.closelabels
+*/
+;	hl - monster data addr
+;
+SkeletonDraw:
+			; convert monster id into @posX, monsterCleanScrAddr, monsterCleanFrameIdx2
+			lxi h, monsterRoomDataAddrOffsets
+			dad b
+			mov c, m
+			lxi h, monsterCleanScrAddr
+			dad b
+			shld @cleanScrAddrLoad+1
+			shld @cleanScrAddrSave+1
+			lxi h, monsterCleanFrameIdx2
+			dad b
+			shld @cleanFrameLoad+1
+			shld @cleanFrameSave+1
+			lxi h, monsterPosX+1
+			dad b
+			shld @posX+1
 
-; a - roomId
-HeroMoveTeleport:
-			pop h
-			; update a room id to teleport there
-			sta roomIdx
-			; is the teleport of the left or right side?
-			lda heroX+1
-			cpi (ROOM_WIDTH - 2 ) * TILE_WIDTH
-			jnc @teleportLR
-			cpi TILE_WIDTH + 2
-			jc @teleportLR
-			; is the teleport of the top or bottom side?
-			mvi c, 2
-			lda heroY+1
-			cpi (ROOM_HEIGHT - 2 ) * TILE_WIDTH
-			jnc @teleportB
-			cpi TILE_HEIGHT * 2 + 2
-			jc @teleportT
-			jmp @donotMoveHero
-
-@teleportLR
-			; if the hero is on the right, move him to the left and vice versa
-			lda heroX+1
-			cma
-			sui 14
-			sta heroX+1
-			jmp @donotMoveHero
-
-			; if the hero is on the top, move him down vice versa
-@teleportB:
-			mvi c, 0
-@teleportT:
-			lda heroY+1
-			cma
-			sub c
-			sta heroY+1
-			jmp @donotMoveHero			
-
-@donotMoveHero
-			; load a new room
-			call RoomInit
-			call RoomDraw
-			call GetHeroScrAddr
-			mov a, c
-			shld heroCleanScrAddr
-			sta heroCleanFrameIdx2
-			xra a
-			lda	interruptionCounter
-			ret
-			.closelabels
-
-HeroDraw:	
-			lxi h, heroRedrawTimer
+			lxi h, monsterRedrawTimer
+			dad b
 			mov a, m
 			rrc
 			mov m, a
 			rnc
-
-			lhld heroCleanScrAddr
-			lda heroCleanFrameIdx2
+@cleanScrAddrLoad:
+			lhld monsterCleanScrAddr
+@cleanFrameLoad:
+			lda monsterCleanFrameIdx2
 			call CleanSprite
 
-			call GetHeroScrAddr
+@posX:
+			lxi h, monsterPosX+1
+			
+			call GetSpriteScrAddr
 			mov a, c
-			shld heroCleanScrAddr
-			sta heroCleanFrameIdx2
+@cleanScrAddrSave:
+			shld monsterCleanScrAddr
+@cleanFrameSave:
+			sta monsterCleanFrameIdx2
 			xchg
-HeroDrawAnimAddr:
+MonsterDrawAnimAddr:
 			lxi h, skeleton_idle_r
-HeroDrawSpriteAddrFunc:			
-			call GetHeroSpriteAddr
+MonsterDrawSpriteAddrFunc:			
+			call GetSpriteAddr
 
 			ora a
 			jz DrawSprite16x15
 			jmp	DrawSprite24x15
-
-GetHeroSpriteAddr:
-			mvi b, 0
-			dad b
-			mov c, m
-			inx h
-			mov b, m
-			ret
-
-GetHeroRunVSpriteAddr:
-			mov a, e
-			ani	%0000011
-			rlc
-			rlc
-			rlc
-			add c
-			mov c, a
-			mvi b, 0
-			dad b
-			mov c, m
-			inx h
-			mov b, m
-			ani %110
-			ret	
-
-GetHeroScrAddr:
-			; convert XY to screen addr + frame idx
-			lxi h, heroX+1
-			mov		a, m
-			; extract the anim frame idx
-			ani		%0000110
-			mov 	c, a
-			; extract the hero X screen addr
-			mov		a, m
-			rrc
-			rrc
-			rrc
-			ani		%00011111
-			adi		HERO_X_SCR_ADDR
-			inx h
-			inx h
-			mov l, m
-			mov	h, a
-			ret

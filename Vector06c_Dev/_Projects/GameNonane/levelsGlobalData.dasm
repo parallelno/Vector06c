@@ -25,7 +25,7 @@ roomIdx:
 roomTilesAddr:
 				.storage ROOM_WIDTH * ROOM_HEIGHT * 2
 
-; roomData:
+; tile data which stored in roomTilesData
 ; %DDDDDfff for every tile
 ; fff    - function
 ; ddddd - argument
@@ -39,3 +39,9 @@ roomTilesAddr:
 ; fff == 7, d==%11111 - collision
 roomTilesData:
 			.storage ROOM_WIDTH * ROOM_HEIGHT
+
+; command that are handled by the level update func
+LEVEL_COMMAND_NONE = 0
+LEVEL_COMMAND_LOAD_DRAW_ROOM = 1
+levelCommand:
+			.byte LEVEL_COMMAND_NONE
