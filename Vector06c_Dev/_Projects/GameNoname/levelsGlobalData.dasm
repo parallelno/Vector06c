@@ -32,11 +32,14 @@ roomTilesAddr:
 ; fff == 0, d==0 - no collision
 ; fff == 1, chest. d == 0 is a chest monster, d>0 means getting money
 ; fff == 2, key, d - room id 
-; fff == 3, monster spawn, d - monster Id
+; fff == 3, monster spawn, d - monster Id, (skeleton id = 0 (3), vampire id = 1 (7), flame id = 2 (11), knight id = 3 (15) )
 ; fff == 4, go to 0-31 roomId, %1100 (12) - go to the roomId=1 room, %100 (4) - go to the roomId=0 room
 ; fff == 5, go to 32-63 roomId
 ; fff == 6, d != 0, d = damage
 ; fff == 7, d==%11111 - collision
+
+roomFuncTable:		.word 0, 0, MonstersSpawn, 0, 0, 0, 0, 0 ; this functions are used when the room initialized. check levels.asm RoomInitTilesData func
+
 roomTilesData:
 			.storage ROOM_WIDTH * ROOM_HEIGHT
 

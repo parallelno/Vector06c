@@ -1,6 +1,5 @@
 ;----------------------------------------------------------------
 ; draw an RLE compressed picture
-; author: parallelno
 ; in: hl - sprite data
 ; use: A, HL, de, B
 

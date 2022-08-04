@@ -25,14 +25,14 @@ GameUpdate:
 			ora a
 			jnz	@updateLoop
 
-; TEST /////////////////////////////////
+; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 			BORDER_LINE(1)
-; TEST /////////////////////////////////
+; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 			hlt
-; TEST /////////////////////////////////
+; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 			BORDER_LINE(9)
-; TEST /////////////////////////////////				
+; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 			ret
 @updateLoop:
 			call HeroUpdate

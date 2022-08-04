@@ -5,19 +5,18 @@ HERO_START_POS_X = 220
 HERO_START_POS_Y = 220
 HERO_RUN_SPEED = $0100 ; it's a dword, low byte is a subpixel speed
 
-; save heroX, heroY, heroSpeedX, heroSpeedY data layout because it is a struct
+; this's a struct. do not change the layout
+heroData:
+heroDirX:			.byte 1 ; 1-right, 0-left
+heroRedrawTimer:	.byte 0 ; 0101_0101 means redraw on every second frame, 0000_0001 means redraw on very 8 frame.
+heroCleanScrAddr:	.word (SPRITE_X_SCR_ADDR + HERO_START_POS_X / 8) * 256 + HERO_START_POS_Y
+heroCleanFrameIdx2:	.byte 0 ; frame id * 2
 heroX:				.word HERO_START_POS_X * 256 + 0
 heroY:				.word HERO_START_POS_Y * 256 + 0
 heroSpeedX:			.word 0
 heroSpeedY:			.word 0
 
-heroDirX:			.byte 1 ; 1-right, 0-left
-heroCleanScrAddr:	.word (SPRITE_X_SCR_ADDR + HERO_START_POS_X / 8) * 256 + HERO_START_POS_Y
-heroCleanFrameIdx2:	.byte 0 ; frame id * 2
-heroRedrawTimer:	.byte 0 ; 0101_0101 means redraw on every second frame, 0000_0001 means redraw on very 8 frame.
-
 heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, 0, 0 ; hero uses these funcs to handle the tile data. more info is in levelGlobalData.dasm->roomTilesData 
-
 
 HeroInit:
 			lxi h, heroX+1
@@ -182,8 +181,8 @@ HeroMove:
 			dad d
 			mov c, h
 			shld charTempY
-			; check collided tiles data
-			call CheckTilesCollision
+			; check hero pos against the toom collision tiles
+			call CheckRoomTilesCollision
 			; check if any tiles collide
 			
 			cpi $ff
@@ -198,35 +197,40 @@ HeroMove:
 			ret
 @collides:
 			; handle collided tiles data
-			lxi h, collidedTilesData
+			lxi h, collidedRoomTilesData
 			mvi c, 4
-HeroMoveLoop:
-			mov a, m
-			push h	
-			; extract a function
-			ani %00000111
-			jz HeroMoveFuncRet
-			dcr a ; we do not need to handle funcId == 0
-			rlc
-			mov e, a
-			mvi d, 0
-			; extract a func argument
-			mov a, m
-			rrc_(3)
-			ani %00011111
+@loop:
+// 			mov a, m
+// 			push h	
+// 			; extract a function
+// 			ani %00000111
+// 			; if it's %000, that means it is an empty tile and we can skip it.
+// 			jz HeroMoveFuncRet
+// 			dcr a ; we do not need to handle funcId == 0
+// 			rlc
+// 			mov e, a
+// 			mvi d, 0
+// 			; extract a func argument
+// 			mov a, m
+// 			rrc_(3)
+// 			ani %00011111
 
-			lxi h, heroFuncTable
-			dad d
-			mov e, m
-			inx h
-			mov d, m
-			xchg
-			pchl
-HeroMoveFuncRet:
-			pop h
+// 			lxi h, heroFuncTable
+// 			dad d
+// 			mov e, m
+// 			inx h
+// 			mov d, m
+// 			xchg
+// 			lxi d, @funcReturnAddr
+// 			push d
+// 			pchl
+// @funcReturnAddr:
+// 			pop h
+			TILE_DATA_HANDLE_FUNC_CALL(heroFuncTable)
+
 			inx h
 			dcr c
-			jnz HeroMoveLoop
+			jnz @loop
 			ret
 			.closelabels
 
@@ -250,7 +254,7 @@ HeroMoveTeleport:
 			jc @teleportT
 			jmp @donotMoveHero
 
-@teleportLR
+@teleportLR:
 			; if the hero is on the right, move him to the left and vice versa
 			lda heroX+1
 			cma
@@ -268,9 +272,11 @@ HeroMoveTeleport:
 			sta heroY+1
 			jmp @donotMoveHero	
 
-@donotMoveHero
+@donotMoveHero:
 			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
 			sta levelCommand
+			; bypassing the HeroMove:@loop because if it's teleport we do not need to handle the rest of the colllided tiles.
+			pop b
 			ret
 			.closelabels
 

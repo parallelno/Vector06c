@@ -11,9 +11,9 @@ LevelsInit:
 ;
 LevelInit:
 			hlt
-			lxi		h, palette_sprites_tiles_lv01+15
-            call	SetPalette
-			mvi		a, 1
+			lxi h, palette_sprites_tiles_lv01+15
+            call SetPalette
+			mvi a, 1
 			sta borderColorIdx
 			xra a
 			sta roomIdx	
@@ -73,16 +73,21 @@ RoomInitTiles:
 			ret
 			.closelabels
 
+; copy the packed tiles data. 
+; it also analizes the tiles data and initializes monsters and feeds up the monster pool if there is any monster in the room, etc
 ; hl - packed tiles data addr
-;
+; 
 RoomInitTilesData:
 			lxi d, roomTilesData
 			mvi c, ROOM_WIDTH * ROOM_HEIGHT
 @loop:
-			mov a, M
+			mov a, m
+			
+			;TILE_DATA_HANDLE_FUNC_CALL()
+
 			stax d
-			inx H
-			inx D
+			inx h
+			inx d
 			dcr c
 			jnz @loop
 			ret
@@ -145,14 +150,14 @@ RoomDraw:
 
 ; TODO: optimize to not check when the hero do not move ouside tile
 ; bc - posXY
-; return: collidedTilesData. it's a list with collided tiles data
+; return: collidedRoomTilesData. it's a list with collided tiles data
 ;
-collidedTilesData:
+collidedRoomTilesData:
 			.byte 0, 0, 0, 0,
-CheckTilesCollision:
+CheckRoomTilesCollision:
 			; clear only the last 2 bytes, because the first one will be overwritten anyway
 			lxi h, 0
-			shld collidedTilesData+2
+			shld collidedRoomTilesData+2
 			
 			mvi d, $0f
 			; check if we have to check bottom tiles
@@ -198,7 +203,7 @@ CheckTilesCollision:
 			mov d, m
 			ora d
 			xchg
-			shld collidedTilesData
+			shld collidedRoomTilesData
 @checkBottomTiles:			
 			xchg
 			; get data of a tile where a bottom-left pixel of a sprite drawn
@@ -211,6 +216,6 @@ CheckTilesCollision:
 			mov d, m
 			ora d
 			xchg
-			shld collidedTilesData+2
+			shld collidedRoomTilesData+2
 			ret
 			.closelabels
