@@ -11,9 +11,7 @@
 PORT0_OUT_OUT			= $88
 PORT0_OUT_IN			= $8a
 
-JMP_OPCODE				= $0C3
-
-RESTART_ADDR 			= 0000
+RESTART_ADDR 			= $0000
 INT_ADDR	 			= $0038
 STACK_ADDR				= $7F80
 STACK_TEMP_ADDR			= $8000 ; is used for iterruption2
@@ -57,5 +55,6 @@ ROT_TIMER_1p0	= %1111_1111
 SPRITE_X_SCR_ADDR = $a0
 
 ; opcodes
-OPCODE_XCHG     = $eb
-OPCODE_RET      = $c9
+OPCODE_XCHG = $eb
+OPCODE_RET  = $c9
+OPCODE_JMP	= $C3

@@ -36,6 +36,7 @@ GameUpdate:
 			ret
 @updateLoop:
 			call HeroUpdate
+			call MonstersUpdate
 			call LevelUpdate
 
 			lda keyCode

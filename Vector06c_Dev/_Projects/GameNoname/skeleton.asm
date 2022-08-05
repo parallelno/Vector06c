@@ -1,217 +1,135 @@
 .include "chars/skeleton.dasm"
 
-; the first screen buffer X
-;HERO_X_SCR_ADDR	= $a0
-;HERO_START_POS_X = 100
-;HERO_START_POS_Y = 170
-;HERO_RUN_SPEED = $0060 ; it's a dword, low byte is a subpixel speed
+SKELETON_RUN_SPEED		= $80
 
-/*
-MonsterStop:
-			lxi h, 0
-			shld heroSpeedX
-			shld heroSpeedY
-			shld keyCode
+SkeletonInit:
+            ; convert monster id into the offset in the monstersRoomData array
+			; and store it into bc
+			lxi h, monsterRoomDataAddrOffsets
+			dad b
+			mov c, m
+			lxi h, monsterAnimAddr
+			dad b
+
+			mvi m, < skeleton_run_r0
+			inx h
+			mvi m, > skeleton_run_r0
+
+			lxi h, monsterSpeedX
+			dad b
+			mvi m, SKELETON_RUN_SPEED
+			;inx h
+			;inx h
+			;mvi m, 20
+
 			ret
 			.closelabels
 
-; hl - posXY
-MonsterSetPos:
-			mov a, h
-			sta heroX+1
-			mov a, l
-			sta heroY+1
-			ret
-			.closelabels
-
-			.macro CHECK_HERO_REDRAW(timer)
-			lxi h, keyCode+1
-			cmp m
-			jz MonsterMove
-			mvi a, timer
-			sta heroRedrawTimer
-			.endmacro		
-*/			
-SkeletonUpdate:
-			ret
-/*
-			lda keyCode
-
-			; if no key pressed, play idle
-			cpi $ff
-			jnz @setAnimRunR
-			
-			; if it's the same key as the prev frame, return
-			CHECK_HERO_REDRAW(ROT_TIMER_0p125)
-
-			lxi h, 0
-			shld heroSpeedX
-			shld heroSpeedY
-
-			lxi h, GetMonsterSpriteAddr
-			shld MonsterDrawSpriteAddrFunc+1
-
-			lda heroDirX
-			ora a
-			jz @setAnimIdleL
-
-			lxi h, skeleton_idle_r
-			shld MonsterDrawAnimAddr+1
-			jmp MonsterMove
-@setAnimIdleL
-			lxi h, skeleton_idle_l
-			shld MonsterDrawAnimAddr+1
-			jmp MonsterMove
-
-@setAnimRunR:
-			cpi KEY_RIGHT
-			jnz @setAnimRunL
-			
-			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
-
-			lxi h, HERO_RUN_SPEED
-			shld heroSpeedX
-			lxi h, 0
-			shld heroSpeedY
-
-			mvi a, 1
-			sta heroDirX
-			lxi h, GetMonsterSpriteAddr
-			lxi h, skeleton_run_r0
-			shld MonsterDrawAnimAddr+1
-			lxi h, GetMonsterSpriteAddr
-			shld MonsterDrawSpriteAddrFunc+1
-			jmp MonsterMove
-@setAnimRunL:
-			cpi KEY_LEFT
-			jnz @setAnimRunU
-
-			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
-
-			lxi h, $ffff - HERO_RUN_SPEED + 1
-			shld heroSpeedX
-			lxi h, 0
-			shld heroSpeedY
-
-			xra a
-			sta heroDirX
-			lxi h, skeleton_run_l0
-			shld MonsterDrawAnimAddr+1
-			lxi h, GetMonsterSpriteAddr
-			shld MonsterDrawSpriteAddrFunc+1	
-			jmp MonsterMove
-@setAnimRunU:
-			cpi KEY_UP
-			jnz @setAnimRunD
-
-			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
-
-			lxi h, 0
-			shld heroSpeedX
-			lxi h, HERO_RUN_SPEED
-			shld heroSpeedY
-
-			lxi h, GetMonsterRunVSpriteAddr
-			shld MonsterDrawSpriteAddrFunc+1
-
-			lda heroDirX
-			ora a
-			jz @setAnimRunUL
-
-			lxi h, skeleton_run_r0
-			shld MonsterDrawAnimAddr+1
-			jmp MonsterMove
-@setAnimRunUL:
-			lxi h, skeleton_run_l0
-			shld MonsterDrawAnimAddr+1
-			jmp MonsterMove
-@setAnimRunD:
-			cpi KEY_DOWN
-			rnz
-
-			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
-
-			lxi h, 0
-			shld heroSpeedX
-			lxi h, $ffff - HERO_RUN_SPEED + 1
-			shld heroSpeedY		
-
-			lxi h, GetMonsterRunVSpriteAddr
-			shld MonsterDrawSpriteAddrFunc+1
-			
-			lda heroDirX
-			ora a
-			jz @setAnimRunDL
-			lxi h, skeleton_run_r0
-			shld MonsterDrawAnimAddr+1		
-			jmp MonsterMove
-@setAnimRunDL:
-			lxi h, skeleton_run_l0
-			shld MonsterDrawAnimAddr+1
-			jmp MonsterMove
-
-MonsterMove:
-			; apply the hero speed
-			lhld heroX
-			xchg
-			lhld heroSpeedX
-			dad d
-			mov b, h
-			shld heroTempX
-			lhld heroY
-			xchg
-			lhld heroSpeedY
-			dad d
-			mov c, h
-			shld heroTempY
-			; check collided tiles data
-			call CheckTilesCollision
-			; check if any tiles collide
-			
-			cpi $ff
-			rz ; return if any of the tiles were collision
-			ora a ; if all the tiles data == 0, means no collision.
-			jnz @collides
-@updatePos:			
-			lhld heroTempX
-			shld heroX
-			lhld heroTempY
-			shld heroY
-			ret
-@collides:
-			; handle collided tiles data
-			lxi h, collidedTilesData
-			mvi c, 4
-SkeletonMoveLoop:
-			mov a, m
-			push h	
-			; extract a function
-			ani %00000111
-			jz MonsterMoveFuncRet
-			dcr a ; we do not need to handle funcId == 0
-			rlc
-			mov e, a
-			mvi d, 0
-			; extract a func argument
-			mov a, m
-			rrc_(3)
-			ani %00011111
-
-			lxi h, heroFuncTable
-			dad d
+SkeletonUpdate:            
+            ; convert monster id into the offset in the monstersRoomData array
+			; and store it into bc
+			lxi h, monsterRoomDataAddrOffsets
+			dad b
+			mov c, m
+			mov h, b
+			mov l, c
+			shld @tileDataOffset+1
+			lxi h, monsterPosX
+			dad b
+			shld @posXYaddr+1
+			; bc <- (posX)
+			mov c, m
+			inx h
+			mov b, m
+			inx h
+			; stack <- (posY)
 			mov e, m
 			inx h
 			mov d, m
-			xchg
-			pchl
-SkeletonMoveFuncRet:
-			pop h
 			inx h
-			dcr c
-			jnz MonsterMoveLoop
+			push d
+			; de <- (speedX)
+			mov e, m
+			inx h
+			mov d, m
+			inx h
+			; calc new posX and store it to tempX
+			xchg
+			dad b
+			; a <- x for checking collision
+			mov a, h
+			shld charTempX
+			xchg
+			; de <- (speedY)
+			mov e, m
+			inx h
+			mov d, m
+			; calc new posY and store it to tempY
+			xchg
+			pop b
+			dad b
+			shld charTempY
+
+			mov b, a
+			mov c, h
+			; check hero pos against the room collision tiles
+			call CheckRoomTilesCollision
+			; check if any tiles collide
+			
+			cpi $ff
+			jz @collides
+			ora a ; if all the tiles data == 0, means no collision.
+			jnz @collides
+@updatePos:			
+            lhld charTempX
+			xchg
+@posXYaddr:
+            lxi h, TEMP_ADDR
+			mov m, e
+			inx h
+			mov m, d
+			inx h
+			xchg
+			lhld charTempY
+			xchg
+			mov m, e
+			inx h
+			mov m, d
 			ret
-			.closelabels		
-*/
+@collides:
+@tileDataOffset:
+            lxi b, TEMP_ADDR
+			lxi h, monsterSpeedX
+			dad b
+			mov a, M
+			cma
+			inr A
+			mov m, a
+			inx h
+			mov a, m
+			cma
+			mov m, a
+			ora A
+			jz @setAnimRunR
+
+			lxi h, monsterAnimAddr
+			dad b
+			mvi m, < skeleton_run_l0
+			inx h
+			mvi m, > skeleton_run_l0
+			ret
+@setAnimRunR:
+			lxi h, monsterAnimAddr
+			dad b
+			mvi m, < skeleton_run_r0
+			inx h
+			mvi m, > skeleton_run_r0
+
+            ret
+@handleTileData:
+            ret
+			.closelabels
+			
 
 SkeletonDraw:
 			; convert monster id into the offset in the monstersRoomData array
@@ -259,8 +177,14 @@ SkeletonDraw:
 			mov m, d
 			dcx h
 			mov m, e
-;MonsterDrawAnimAddr:
-			lxi h, skeleton_idle_r ; 316
+			; get the anim addr
+			;lxi h, skeleton_idle_r ; 316
+			dcx h
+			dcx h
+			mov a, m
+			dcx h
+			mov l, m
+			mov h, a
 ;MonsterDrawSpriteAddrFunc:
 			call GetSpriteAddr
 

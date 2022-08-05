@@ -20,6 +20,7 @@ heroSpeedY:			.word 0
 heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, 0, 0 ; hero uses these funcs to handle the tile data. more info is in levelGlobalData.dasm->roomTilesData 
 
 HeroInit:
+            call HeroStop
 			lxi h, heroX+1
 			call GetSpriteScrAddr
 			xchg
@@ -258,7 +259,7 @@ HeroMove:
 			dad d
 			mov c, h
 			shld charTempY
-			; check hero pos against the toom collision tiles
+			; check hero pos against the room collision tiles
 			call CheckRoomTilesCollision
 			; check if any tiles collide
 			

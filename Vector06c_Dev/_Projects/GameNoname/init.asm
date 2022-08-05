@@ -7,7 +7,7 @@ StartInit:
 			XRA		A
 			out		$10
 			; set entry points of a restart, and an interruption
-			MVI		A, JMP_OPCODE
+			MVI		A, OPCODE_JMP
 			STA		RESTART_ADDR
 			STA		INT_ADDR
 			LXI		H, StartInit

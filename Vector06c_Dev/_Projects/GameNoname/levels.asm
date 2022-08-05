@@ -24,10 +24,10 @@ LevelInit:
 			.closelabels
 
 RoomInit:
-			call HeroStop
 			call MonstersClearRoomData
 			call RoomInitTiles
 			call RoomInitTilesData
+			call MonstersInit
 			ret
 			
 RoomInitTiles:
@@ -88,12 +88,21 @@ LevelsTileDataCopy:
 ; return:
 ; a - tile data that will be saved into the room tile data array
 LevelsMonstersSpawn:
-			; get the monster update func addr
-			lxi h, monstersUpdateDrawFuncs
+			; get the monster funcs addr
+			lxi h, monstersFuncs
 			rlc
 			mov e, a
 			mvi d, 0
 			dad d
+			; get the monster init func addr
+			mov e, m
+			inx h
+			mov d, m
+			inx h
+			xchg
+			shld @storeInitFunc+1
+			xchg			
+			; get the monster update func addr
 			mov e, m
 			inx h
 			mov d, m
@@ -123,7 +132,7 @@ LevelsMonstersSpawn:
 
 			; loop monstersUpdateFunc to find an empty slot
 			; check only high byte if it's zero
-			lxi h, monstersUpdateFunc + 1
+			lxi h, monstersInitFunc + 1
 			; c - doubled counter. 
 			; it is used to get a draw func addr as well as a room sprite data addr
 			; b = 0 for "dad b" below
@@ -131,7 +140,7 @@ LevelsMonstersSpawn:
 @loop:		
 			mov a, m
 			ora a
-			jz @storeUpdateFunc
+			jz @storeInitFunc
 			inx h
 			inx h
 			inr c
@@ -142,16 +151,25 @@ LevelsMonstersSpawn:
 			; return if there is no room for a new monster
 			jmp @tileDataToZero
 
-@storeUpdateFunc:
+@storeInitFunc:
 			lxi d, TEMP_ADDR
-			; store a monster update func addr backwards from high byte to low
+			; store a monster init func addr backwards from high byte to low
 			mov m, d
 			dcx h
 			mov m, e
+
+			; store a monster update func addr
+			lxi h, monstersUpdateFunc
+			dad b
+@storeUpdateFunc:
+			lxi d, TEMP_ADDR
+			mov m, e
+			inx h
+			mov m, d
+
 			; store a monster draw func addr
 			lxi h, monstersDrawFunc
 			dad b
-			
 @storeDrawFunc:
 			lxi d, TEMP_ADDR
 			mov m, e
@@ -239,6 +257,7 @@ LevelUpdate:
 			ora a
 			rz
 			cpi LEVEL_COMMAND_LOAD_DRAW_ROOM
+			jnz @nextCommandCheck
 			; load a new room
 			call RoomInit
 			call RoomDraw
@@ -249,6 +268,8 @@ LevelUpdate:
 			xra a
 			sta levelCommand
 			ret
+@nextCommandCheck:
+            ret
 
 RoomDraw:
 			call ClearScr
