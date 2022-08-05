@@ -1,9 +1,10 @@
 .include "chars/hero.dasm"
 
 ; the first screen buffer X
-HERO_START_POS_X = 220
-HERO_START_POS_Y = 220
-HERO_RUN_SPEED = $0100 ; it's a dword, low byte is a subpixel speed
+HERO_START_POS_X	= 220
+HERO_START_POS_Y	= 220
+HERO_RUN_SPEED		= $0100 ; it's a dword, low byte is a subpixel speed
+HERO_RUN_SPEED_D	= $00b5 ; for diagonal moves
 
 ; this's a struct. do not change the layout
 heroData:
@@ -44,13 +45,13 @@ HeroSetPos:
 			ret
 			.closelabels
 
-			.macro CHECK_HERO_REDRAW(timer)
+.macro CHECK_HERO_REDRAW(timer)
 			lxi h, keyCode+1
 			cmp m
 			jz HeroMove
 			mvi a, timer
 			sta heroRedrawTimer
-			.endmacro		
+.endmacro		
 			
 HeroUpdate:
 			lda keyCode
@@ -83,7 +84,7 @@ HeroUpdate:
 
 @setAnimRunR:
 			cpi KEY_RIGHT
-			jnz @setAnimRunL
+			jnz @setAnimRunRU
 			
 			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
 
@@ -99,9 +100,47 @@ HeroUpdate:
 			lxi h, GetSpriteAddr
 			shld HeroDrawSpriteAddrFunc+1
 			jmp HeroMove
+
+@setAnimRunRU:
+			cpi KEY_RIGHT_UP
+			jnz @setAnimRunRD
+			
+			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
+
+			lxi h, HERO_RUN_SPEED_D
+			shld heroSpeedX
+			shld heroSpeedY
+
+			mvi a, 1
+			sta heroDirX
+			lxi h, hero_run_r0
+			shld HeroDrawAnimAddr+1
+			lxi h, GetSpriteAddr
+			shld HeroDrawSpriteAddrFunc+1
+			jmp HeroMove
+
+@setAnimRunRD:
+			cpi KEY_RIGHT_DOWN
+			jnz @setAnimRunL
+			
+			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
+
+			lxi h, HERO_RUN_SPEED_D
+			shld heroSpeedX
+			lxi h, $ffff - HERO_RUN_SPEED_D + 1
+			shld heroSpeedY
+
+			mvi a, 1
+			sta heroDirX
+			lxi h, hero_run_r0
+			shld HeroDrawAnimAddr+1
+			lxi h, GetSpriteAddr
+			shld HeroDrawSpriteAddrFunc+1
+			jmp HeroMove			
+
 @setAnimRunL:
 			cpi KEY_LEFT
-			jnz @setAnimRunU
+			jnz @setAnimRunLU
 
 			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
 
@@ -117,6 +156,44 @@ HeroUpdate:
 			lxi h, GetSpriteAddr
 			shld HeroDrawSpriteAddrFunc+1	
 			jmp HeroMove
+
+@setAnimRunLU:
+			cpi KEY_LEFT_UP
+			jnz @setAnimRunLD
+
+			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
+
+			lxi h, $ffff - HERO_RUN_SPEED_D + 1
+			shld heroSpeedX
+			lxi h, HERO_RUN_SPEED_D
+			shld heroSpeedY
+
+			xra a
+			sta heroDirX
+			lxi h, hero_run_l0
+			shld HeroDrawAnimAddr+1
+			lxi h, GetSpriteAddr
+			shld HeroDrawSpriteAddrFunc+1	
+			jmp HeroMove
+
+@setAnimRunLD:
+			cpi KEY_LEFT_DOWN
+			jnz @setAnimRunU
+
+			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
+
+			lxi h, $ffff - HERO_RUN_SPEED_D + 1
+			shld heroSpeedX
+			shld heroSpeedY
+
+			xra a
+			sta heroDirX
+			lxi h, hero_run_l0
+			shld HeroDrawAnimAddr+1
+			lxi h, GetSpriteAddr
+			shld HeroDrawSpriteAddrFunc+1	
+			jmp HeroMove
+
 @setAnimRunU:
 			cpi KEY_UP
 			jnz @setAnimRunD
@@ -133,12 +210,12 @@ HeroUpdate:
 
 			lda heroDirX
 			ora a
-			jz @setAnimRunUL
+			jz @setAnimRunUfaceL
 
 			lxi h, hero_run_r0
 			shld HeroDrawAnimAddr+1
 			jmp HeroMove
-@setAnimRunUL:
+@setAnimRunUfaceL:
 			lxi h, hero_run_l0
 			shld HeroDrawAnimAddr+1
 			jmp HeroMove
@@ -158,14 +235,14 @@ HeroUpdate:
 			
 			lda heroDirX
 			ora a
-			jz @setAnimRunDL
+			jz @setAnimRunDfaceL
 			lxi h, hero_run_r0
 			shld HeroDrawAnimAddr+1		
 			jmp HeroMove
-@setAnimRunDL:
+@setAnimRunDfaceL:
 			lxi h, hero_run_l0
 			shld HeroDrawAnimAddr+1
-			jmp HeroMove
+			;jmp HeroMove
 
 HeroMove:
 			; apply the hero speed
@@ -195,37 +272,12 @@ HeroMove:
 			lhld charTempY
 			shld heroY
 			ret
+			
 @collides:
 			; handle collided tiles data
 			lxi h, collidedRoomTilesData
 			mvi c, 4
 @loop:
-// 			mov a, m
-// 			push h	
-// 			; extract a function
-// 			ani %00000111
-// 			; if it's %000, that means it is an empty tile and we can skip it.
-// 			jz HeroMoveFuncRet
-// 			dcr a ; we do not need to handle funcId == 0
-// 			rlc
-// 			mov e, a
-// 			mvi d, 0
-// 			; extract a func argument
-// 			mov a, m
-// 			rrc_(3)
-// 			ani %00011111
-
-// 			lxi h, heroFuncTable
-// 			dad d
-// 			mov e, m
-// 			inx h
-// 			mov d, m
-// 			xchg
-// 			lxi d, @funcReturnAddr
-// 			push d
-// 			pchl
-// @funcReturnAddr:
-// 			pop h
 			TILE_DATA_HANDLE_FUNC_CALL(heroFuncTable)
 
 			inx h

@@ -37,7 +37,7 @@ GetSpriteAddrRunV:
 			ani %110
 			ret
 
-; hl - addr to posX, posY words.
+; hl - addr to posX+1
 ; return:
 ; de - sprite screen addr
 ; c - idx in the animaion
@@ -50,9 +50,7 @@ GetSpriteScrAddr:
 			mov 	c, a
 			; extract the hero X screen addr
 			mov		a, m
-			rrc
-			rrc
-			rrc
+			rrc_(3)
 			ani		%00011111
 			adi		SPRITE_X_SCR_ADDR
 			inx h

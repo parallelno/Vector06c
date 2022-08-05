@@ -16,15 +16,16 @@ LevelInit:
 			mvi a, 1
 			sta borderColorIdx
 			xra a
-			sta roomIdx	
+			sta roomIdx
 			lhld startPos
 			call HeroSetPos
-			call HeroInit	
+			call HeroInit
 			ret
 			.closelabels
 
 RoomInit:
 			call HeroStop
+			call MonstersClearRoomData
 			call RoomInitTiles
 			call RoomInitTilesData
 			ret
@@ -42,19 +43,18 @@ RoomInitTiles:
 			xchg
 			lxi b, roomTilesAddr
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
-			; hl - current room tile indexes for tilesAddr list
+			; hl - current room tile indexes
 			; bc - current room tile graphics table
 			; a - counter
-			
 @loop:
-			; get the tile index into de
+			; de gets the tile index
 			push psw
 			mov e, m
 			mvi d, 0
 			inx h
 			push h
 			lxi h, tilesAddr
-			; get the tile graphics ponter into hl
+			; hl gets the tile graphics ponter
 			dad d
 			dad d
 			; copy the tile graphics addr to the current room tile graphics table
@@ -73,22 +73,163 @@ RoomInitTiles:
 			ret
 			.closelabels
 
+; input:
+; b - tile data			
+; return:
+; a - tile data that will be saved into the room tile data array
+LevelsTileDataCopy:
+            ; just return the same tile data
+            mov a, b
+			ret
+			.closelabels
+; input:
+; c - tile number idx in the room data array. it starts from left-top corner to right-bottom
+; a - monster id
+; return:
+; a - tile data that will be saved into the room tile data array
+LevelsMonstersSpawn:
+			; get the monster update func addr
+			lxi h, monstersUpdateDrawFuncs
+			rlc
+			mov e, a
+			mvi d, 0
+			dad d
+			mov e, m
+			inx h
+			mov d, m
+			inx h
+			xchg
+			shld @storeUpdateFunc+1
+			xchg
+			; get the monster draw func addr
+			mov e, m
+			inx h
+			mov d, m
+			xchg
+			shld @storeDrawFunc+1
+			; convert tile idx into the posX
+			mov a, c
+			; posX = tile idx % ROOM_WIDTH * TILE_WIDTH
+			ani %00001111
+			rlc_(4)
+			sta @savePosX+1
+			; convert tile idx into the posY
+			mov a, c
+			; posY = tile idx % ROOM_WIDTH * TILE_WIDTH
+			ani %11110000
+			cma
+			sui TILE_HEIGHT
+			sta @savePosY+1
+
+			; loop monstersUpdateFunc to find an empty slot
+			; check only high byte if it's zero
+			lxi h, monstersUpdateFunc + 1
+			; c - doubled counter. 
+			; it is used to get a draw func addr as well as a room sprite data addr
+			; b = 0 for "dad b" below
+			lxi b, 0
+@loop:		
+			mov a, m
+			ora a
+			jz @storeUpdateFunc
+			inx h
+			inx h
+			inr c
+			inr c
+			mov a, c
+			cpi MONSTERS_MAX * 2
+			jnz @loop
+			; return if there is no room for a new monster
+			jmp @tileDataToZero
+
+@storeUpdateFunc:
+			lxi d, TEMP_ADDR
+			; store a monster update func addr backwards from high byte to low
+			mov m, d
+			dcx h
+			mov m, e
+			; store a monster draw func addr
+			lxi h, monstersDrawFunc
+			dad b
+			
+@storeDrawFunc:
+			lxi d, TEMP_ADDR
+			mov m, e
+			inx h
+			mov m, d
+
+			; divide the offset by 2 because the monsterRoomDataAddrOffsets contains bytes
+			mov a, c
+			rrc
+			mov c, a
+			; get the posX+1 addr
+			lxi h, monsterRoomDataAddrOffsets
+			dad b
+			mov c, m
+			lxi h, monsterPosX+1
+			dad b
+@savePosX:
+			mvi m, TEMP_BYTE
+			inx h
+			inx h
+
+@savePosY:
+			mvi m, TEMP_BYTE
+
+			; init monsterCleanScrAddr
+			lxi h, monsterPosX+1
+			dad b
+			push b
+			call GetSpriteScrAddr
+			mov a, c
+			pop b
+			lxi h, monsterCleanScrAddr
+			dad b
+			mov m, e
+			inx h
+			mov m, d
+			inx h
+			mov m, a
+
+			; store monsterRedrawTimer
+			lxi h, monsterRedrawTimer
+			dad b
+@rndDraw:	; make monsterRedrawTimer for every spawned monster different to balance the cpu load
+			mvi a, 4
+			mov m, a
+			rlc
+			sta @rndDraw+1
+
+@tileDataToZero:	
+			; replace tile data with an empty tile
+            xra a
+			ret
+			.closelabels
+			
 ; copy the packed tiles data. 
 ; it also analizes the tiles data and initializes monsters and feeds up the monster pool if there is any monster in the room, etc
+; input:
 ; hl - packed tiles data addr
-; 
+; de - room tiles data
+; uses:
+; a, c
+
 RoomInitTilesData:
 			lxi d, roomTilesData
-			mvi c, ROOM_WIDTH * ROOM_HEIGHT
+			mvi c, 0
 @loop:
-			mov a, m
-			
-			;TILE_DATA_HANDLE_FUNC_CALL()
-
+			mov b, m
+			push d
+			push b
+			TILE_DATA_HANDLE_FUNC_CALL(roomFuncTable)
+			pop b
+			pop d
 			stax d
 			inx h
 			inx d
-			dcr c
+			inr c
+			mvi a, ROOM_WIDTH * ROOM_HEIGHT
+			cmp c
 			jnz @loop
 			ret
 			.closelabels
@@ -113,43 +254,44 @@ RoomDraw:
 			call ClearScr
 			; TODO: clean this func. add a description, comments, and constants
 			; set Y
-			mvi e, $ff - 16
+			mvi e, $ff - TILE_HEIGHT
 			; set a pointer to the first item in the list of addrs of tile graphics
 			lxi h, roomTilesAddr
 @newLine
-			; reset the X
+			; reset the X. it's an high byte of the first screen buffer addr
 			mvi d, $80
 @loop:
 			; DE - screen addr
 			; HL - tile graphics addr
 			; A - counter
-			mov c, M
-			inx H
-			mov b, M
-			inx H
-			push D
+			mov c, m
+			inx h
+			mov b, m
+			inx h
+			push d
 			push h
 			call DrawTile16x16
 			pop h
-			pop D
+			pop d
 
-			inr D
-			inr D
-			; repeat if X != $a0 (end of the)
+			inr d
+			inr d
+			; repeat if x reaches the high byte of the second screen buffer addr
 			mvi a, $a0
 			cmp d
 			jnz @loop
 
 			mov a, e
-			sui 16
+			; move posY down to the next tile line
+			sui TILE_HEIGHT
 			mov e, a
 			jnc @newLine
-
 			ret
 			.closelabels
 
 ; TODO: optimize to not check when the hero do not move ouside tile
-; bc - posXY
+; b - char posX
+; c - char posY
 ; return: collidedRoomTilesData. it's a list with collided tiles data
 ;
 collidedRoomTilesData:
@@ -159,38 +301,34 @@ CheckRoomTilesCollision:
 			lxi h, 0
 			shld collidedRoomTilesData+2
 			
-			mvi d, $0f
+			; mask
+			mvi d, %00001111
 			; check if we have to check bottom tiles
 			mov a, c
             ana d
 			cpi 14
-			mvi a, $eb	; opcode "xchg,"
+			mvi a, OPCODE_XCHG
 			jc @check
 			; do not check bottom tiles
-			mvi a, $c9		; opcode "ret"
+			mvi a, OPCODE_RET
 @check:
 			sta @checkBottomTiles
-						
-			; get tileY
+
+			; get the index in the tile map table
+			; use the char posY
 			mov a, c
 			cma
-			rrc_(4)
-			ana d
-			mov e, a
+			sui TILE_HEIGHT
+			ani %11110000
+			mov c, a
 
-			; get tileX
+			; use the char posX
 			mov a, b
 			dcr a
 			rrc_(4)
 			ana d
-			; get the offset in the tile map table
-			mvi d, ROOM_WIDTH
-@loop:
-			dcr e
-			jz @afterloop
-			add d
-			jmp @loop
-@afterloop			
+			add c
+
 			mov c, a
 			mvi b, 0
 			lxi h, roomTilesData

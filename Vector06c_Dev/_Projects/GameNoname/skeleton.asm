@@ -240,13 +240,13 @@ SkeletonDraw:
 			push h
 			push h
 			xchg
-
+			; TODO: do not clean sprite if it wasn't moving
 			call CleanSprite
 			pop h
 
 			; hl - monsterPosX+1 addr
 			inx h
-			inx h
+			inx h		
 			call GetSpriteScrAddr
 
 			; move pointer back to monsterCleanFrameIdx2 addr

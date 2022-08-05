@@ -1,7 +1,8 @@
-
+; uses:
+; hl, a
 ClearScr:
 			lxi h, $8000
-			xra A
+			xra a
 @loop:
 			mov m, a
 			inx h
@@ -9,6 +10,24 @@ ClearScr:
 			jnz @loop
 			ret
 			.closelabels
+; clear the buffer
+; input:
+; hl - addr to clear
+; bc - length
+; uses:
+; a
+ClearMem:
+@loop:
+			xra a
+			mov m, a
+			inx h
+			dcx b
+			ora c
+			ora b
+			jnz @loop
+			ret
+			.closelabels
+
 
 INIT_COLOR_IDX = 15
 ; Set palette

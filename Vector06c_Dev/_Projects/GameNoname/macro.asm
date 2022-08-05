@@ -1,37 +1,58 @@
-		.macro RRC_(i)
+.macro RRC_(i)
 			.loop i
-			RRC
+			rrc
 			.endloop
-		.endmacro
+.endmacro
 
-		.macro PUSH_B(i)
+.macro RLC_(i)
 			.loop i
-			PUSH B
+			rlc
 			.endloop
-		.endmacro
+.endmacro
 
-		.macro INR_D(i)
+.macro PUSH_B(i)
 			.loop i
-			INR D
+			push B
 			.endloop
-		.endmacro
+.endmacro
 
-		.macro BORDER_LINE(borderColorIdx = 1)
+.macro INR_D(i)
+			.loop i
+			inr D
+			.endloop
+.endmacro
+
+.macro DCX_H(i)
+			.loop i
+			dcx h
+			.endloop
+.endmacro
+
+
+.macro BORDER_LINE(borderColorIdx = 1)
 			mvi a, PORT0_OUT_OUT
 			OUT 0
 			mvi a, borderColorIdx
 			OUT 2
 			lda scrOffsetY
 			OUT 3
-		.endmacro
+.endmacro
 
-		.macro TILE_DATA_HANDLE_FUNC_CALL(funcTable)
+; gets DDDDDfff from (hl), extracts fff which is a func idx in the funcTable
+; call that func with DDDDD as an argument
+; input:
+; hl - addr to the tile data
+; keeps hl unchanged
+; a - tile data func argument
+; uses:
+; de
+.macro TILE_DATA_HANDLE_FUNC_CALL(funcTable)
 			mov a, m
 			push h	
 			; extract a function
 			ani %00000111
 			; if it's %000, that means it is an empty tile and we can skip it.
-			rz
+			jz @funcReturnAddr
 			dcr a ; we do not need to handle funcId == 0
 			rlc
 			mov e, a
@@ -52,5 +73,5 @@
 			pchl
 @funcReturnAddr:
 			pop h		
-		.endmacro
+.endmacro
 		

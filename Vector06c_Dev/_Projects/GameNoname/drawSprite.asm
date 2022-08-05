@@ -1,18 +1,19 @@
+; clear a N*15 pxs square on the screen, 
+; where: 
+; N = 16 pxs if a = 0
+; N = 24 pxs if a != 0
 ; input:
 ; hl - scr addr
-; a - width
-; a == 0, 2 bytes
-; a != 0, 3 bytes
+; a - width marker
 ; used:
 ; bc, de
-
-			.macro CleanSpriteVLine()
+.macro CleanSpriteVLine()
 		.loop 14
 			mov m, b
 			dcr l
 		.endloop
 			mov m, b
-			.endmacro
+.endmacro
 			
 CleanSprite:
 			ora a
@@ -66,7 +67,7 @@ Clear8x16Loop:
 			mov d, a
 
 			ret
-		.closelabels
+			.closelabels
 			
 ;----------------------------------------------------------------
 ; draw a sprite (16x15 pixels)
@@ -88,7 +89,7 @@ Clear8x16Loop:
 ; y--
 ; repeat
 
-			.macro DRAW_EVEN_LINE_16(_moveOneLineDown = true)
+.macro DRAW_EVEN_LINE_16(_moveOneLineDown = true)
 			POP B		; 1st screen space 
 			MOV M,C
 			INR H
@@ -103,12 +104,12 @@ Clear8x16Loop:
 			MOV M,C
 			DCR H
 			MOV M,B
-			.if _moveOneLineDown == true
+		.if _moveOneLineDown == true
 			DCR	L
-			.endif
-			.endmacro
+		.endif
+.endmacro
 
-			.macro DRAW_ODD_LINE_16(_moveOneLineDown = true)
+.macro DRAW_ODD_LINE_16(_moveOneLineDown = true)
 			POP B		; 3rd screen space 
 			MOV M,C
 			INR H
@@ -123,18 +124,18 @@ Clear8x16Loop:
 			MOV M,C
 			DCR H
 			MOV M,B
-			.if _moveOneLineDown == true
-			DCR	L
-			.endif			
-			.endmacro
+		.if _moveOneLineDown == true
+			dcr	l
+		.endif			
+.endmacro
 
-			.macro DrawSprite16_M(height)
+.macro DrawSprite16_M(height)
 		.loop (height - 1) / 2
 			DRAW_EVEN_LINE_16()	
 			DRAW_ODD_LINE_16()
 		.endloop
 			DRAW_EVEN_LINE_16(false)
-			.endmacro
+.endmacro
 
 DrawSprite16x15:
 			DrawSprite16Height = 15
@@ -165,8 +166,9 @@ DrawSprite16x15:
 
 			DrawSprite16_M(DrawSprite16Height)
 			
-@restoreSP:	LXI		SP, TEMP_ADDR	; restore SP (12)
-			RET
+@restoreSP:	
+			lxi		sp, TEMP_ADDR	; restore SP (12)
+			ret
 			.closelabels
 
 ;----------------------------------------------------------------
@@ -189,7 +191,7 @@ DrawSprite16x15:
 ; y--
 ; repeat
 
-			.macro DRAW_EVEN_LINE_24(_moveOneLineDown = true)
+.macro DRAW_EVEN_LINE_24(_moveOneLineDown = true)
 			POP B		; 1st screen space 
 			MOV M,C
 			INR H
@@ -212,12 +214,12 @@ DrawSprite16x15:
 			DCR H
 			POP B
 			MOV M,C
-			.if _moveOneLineDown == true
+		.if _moveOneLineDown == true
 			DCR	L
-			.endif
-			.endmacro
+		.endif
+.endmacro
 
-			.macro DRAW_ODD_LINE_24(_moveOneLineDown = true)
+.macro DRAW_ODD_LINE_24(_moveOneLineDown = true)
 			MOV M,B		; 3rd screen space 
 			INR H
 			POP B
@@ -239,10 +241,10 @@ DrawSprite16x15:
 			MOV M,C
 			DCR H
 			MOV M,B
-			.if _moveOneLineDown == true
+		.if _moveOneLineDown == true
 			DCR	L
-			.endif			
-			.endmacro
+		.endif			
+.endmacro
 
 DrawSprite24x15:
 			DrawSprite24Height = 15
@@ -281,7 +283,8 @@ DrawSprite24x15:
 
 			DrawSprite24_M(DrawSprite24Height)
 
-@restoreSP:	LXI		SP, TEMP_ADDR	; restore SP (12)
-			RET
+@restoreSP:	
+			lxi sp, TEMP_ADDR	; restore SP (12)
+			ret
 			.closelabels
 

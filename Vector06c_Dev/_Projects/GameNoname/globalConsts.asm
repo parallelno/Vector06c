@@ -18,14 +18,21 @@ INT_ADDR	 			= $0038
 STACK_ADDR				= $7F80
 STACK_TEMP_ADDR			= $8000 ; is used for iterruption2
 
+BYTE_LEN                = 1
+WORD_LEN                = 2
+
 TEMP_ADDR				= $0000
 TEMP_BYTE				= $00
 TEMP_WORD				= $0000
 
 ; key codes
 KEY_LEFT				= %11101111
+KEY_LEFT_UP				= %11001111
+KEY_LEFT_DOWN			= %01101111
 KEY_UP					= %11011111
 KEY_RIGHT				= %10111111
+KEY_RIGHT_UP			= %10011111
+KEY_RIGHT_DOWN			= %00111111
 KEY_DOWN				= %01111111
 
 ; levels
@@ -48,3 +55,7 @@ ROT_TIMER_1p0	= %1111_1111
 ;ROT_TIMER_NOP	= %0000_0000 ; no draw
 
 SPRITE_X_SCR_ADDR = $a0
+
+; opcodes
+OPCODE_XCHG     = $eb
+OPCODE_RET      = $c9
