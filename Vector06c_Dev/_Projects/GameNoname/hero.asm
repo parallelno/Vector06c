@@ -246,13 +246,13 @@ HeroUpdate:
 			;jmp HeroMove
 
 HeroMove:
-			; apply the hero speed
-			lhld heroX
+			; apply the hero speed (call addr 4685)
+			lhld heroX ; 2c09, data addr 29fe
 			xchg
 			lhld heroSpeedX
 			dad d
 			mov b, h
-			shld charTempX
+			shld charTempX ; 12a
 			lhld heroY
 			xchg
 			lhld heroSpeedY
@@ -264,7 +264,7 @@ HeroMove:
 			; check if any tiles collide
 			
 			cpi $ff
-			rz ; return if any of the tiles were collision
+			jz @tempCheck;rz ; return if any of the tiles were collision
 			ora a ; if all the tiles data == 0, means no collision.
 			jnz @collides
 @updatePos:			
@@ -273,6 +273,10 @@ HeroMove:
 			lhld charTempY
 			shld heroY
 			ret
+@tempCheck: 
+lhld charTempX
+ret
+
 			
 @collides:
 			; handle collided tiles data
@@ -311,7 +315,7 @@ HeroMoveTeleport:
 			; if the hero is on the right, move him to the left and vice versa
 			lda heroX+1
 			cma
-			sui 14
+			sui 15
 			sta heroX+1
 			jmp @donotMoveHero
 

@@ -1,16 +1,5 @@
 .include "levels/level01.dasm"
 
-; tile set name     - amount:
-; stop              - 1 (%00000), no more tiles in a line
-; wall				- 14
-; floor				- 4
-; shield on wall	- 1
-; chains on wall	- 2
-; web				- 2
-; bone piles		- 2
-; doors				- 14
-; water				- 9 (49)
-
 ; list of adresses of compressed levels 
 levelsAddr:		.word TEMP_ADDR, 0
 
@@ -19,7 +8,7 @@ levelIdx:
 				.byte 0
 ; current room index in roomsAddr of the current level
 roomIdx:
-				.byte 0 ; 0 - 127
+				.byte 0 ; 0 - 127 ; find why it says it's <128
 
 ; the address table to tile graphics
 roomTilesAddr:

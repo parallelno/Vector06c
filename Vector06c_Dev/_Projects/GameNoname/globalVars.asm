@@ -7,8 +7,10 @@ borderColorIdx:
 			.byte 0
 scrOffsetY:
 			.byte 255
-interruptionCounter:
-			.byte 0
+interruptionCounter: 
+; the first byte is used to check how many interruptions happened since the last uppdate
+; the second is just a timer for a simple rnd
+			.word 0
 
 
 ; used for the movement

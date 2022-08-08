@@ -20,8 +20,8 @@
 		{"x": 240,	"y" : 256}
 	],
 	"startPos" : {
-		"x" : 100,
-		"y" : 140
+		"x" : 48,
+		"y" : 190
 	},
 	"rooms" : [
 		{"file" : "sources/lv01_room00.tmj"},

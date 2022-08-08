@@ -1,3 +1,13 @@
+; return : 
+; a - random byte
+Rnd8:
+			lda interruptionCounter+1
+			adc a
+			ral
+			xri %00101101
+			sta interruptionCounter+1
+			ret
+
 ; uses:
 ; hl, a
 ClearScr:
@@ -34,23 +44,24 @@ INIT_COLOR_IDX = 15
 ; in: hl - the addr of the last item in the palette
 ; use: hl, b, a
 SetPalette:
-			MVI		A, PORT0_OUT_OUT
-			OUT		0
-			MVI		B, INIT_COLOR_IDX
+			hlt
+			mvi	a, PORT0_OUT_OUT
+			out	0
+			mvi	b, INIT_COLOR_IDX
 
-@loop:		MOV		A, B
-			OUT		2
-			MOV		A,M
-			OUT     $0C
-	PUSH PSW
-	POP  PSW
-	PUSH PSW
-	POP  PSW
-	dcx h
-	DCR  b
-	OUT     $0C
+@loop:		mov	a, b
+			out	2
+			mov a, m
+			out $0c
+			push psw
+			pop psw
+			push psw
+			pop psw
+			dcx h
+			dcr b
+			out $0c
 
-			JP		@loop
+			jp	@loop
 			ret
 			.closelabels
 

@@ -10,7 +10,6 @@ LevelsInit:
 ;	initialization level data every game start
 ;
 LevelInit:
-			hlt
 			lxi h, palette_sprites_tiles_lv01+15
             call SetPalette
 			mvi a, 1
@@ -329,12 +328,27 @@ CheckRoomTilesCollision:
             ana d
 			cpi 14
 			mvi a, OPCODE_XCHG
-			jc @check
+			jc @checkBottom
 			; do not check bottom tiles
 			mvi a, OPCODE_RET
-@check:
+@checkBottom:
 			sta @checkBottomTiles
+			; check if we need to check up-right and bottom-right tiles
+			mov a, b
+			ana d
+			jnz @ckeckRight
+			; do not check right tiles
+			mvi a, OPCODE_MOV_D_B
+			sta @checkRightUpTile
+			mvi a, OPCODE_RET
+			sta @checkRightBottomTile
+			jmp @check
+@ckeckRight:
+			mvi a, OPCODE_MOV_D_M
+			sta @checkRightUpTile
+			sta @checkRightBottomTile
 
+@check:
 			; get the index in the tile map table
 			; use the char posY
 			mov a, c
@@ -345,7 +359,6 @@ CheckRoomTilesCollision:
 
 			; use the char posX
 			mov a, b
-			dcr a
 			rrc_(4)
 			ana d
 			add c
@@ -356,13 +369,14 @@ CheckRoomTilesCollision:
 			dad b
 			; get data of a tile where a top-left pixel of a sprite drawn
 			mov e, m
-			mov a, e 
 			; get data of a tile where a top-right pixel of a sprite drawn
 			inx h
+@checkRightUpTile:
 			mov d, m
-			ora d
 			xchg
 			shld collidedRoomTilesData
+			mov a, l
+			ora h
 @checkBottomTiles:			
 			xchg
 			; get data of a tile where a bottom-left pixel of a sprite drawn
@@ -372,6 +386,7 @@ CheckRoomTilesCollision:
 			ora e
 			; get data of a tile where a bottom-right pixel of a sprite drawn
 			inx h
+@checkRightBottomTile:
 			mov d, m
 			ora d
 			xchg

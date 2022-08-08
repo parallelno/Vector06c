@@ -1,6 +1,7 @@
 .include "chars/skeleton.dasm"
 
-SKELETON_RUN_SPEED		= $80
+SKELETON_RUN_SPEED		= $0080
+SKELETON_RUN_SPEED_D	= $ffff - $80 + 1
 
 SkeletonInit:
             ; convert monster id into the offset in the monstersRoomData array
@@ -96,22 +97,66 @@ SkeletonUpdate:
 			inx h
 			mov m, d
 			ret
+
 @collides:
 @tileDataOffset:
+			; get speedX addr
             lxi b, TEMP_ADDR
 			lxi h, monsterSpeedX
 			dad b
-			mov a, M
-			cma
-			inr A
+
+            call Rnd8
+			cpi $40
+			jc @speedXp
+			cpi $80
+			jc @speedXn
+			cpi $c0
+			jc @speedYp
+@speedYn:
+			xra a
 			mov m, a
 			inx h
-			mov a, m
-			cma
 			mov m, a
-			ora A
+			inx h
+			mvi m, < SKELETON_RUN_SPEED_D
+			inx h
+			mvi m, > SKELETON_RUN_SPEED_D
+			jmp @setAnim
+@speedYp:
+			xra a
+			mov m, a
+			inx h
+			mov m, a
+			inx h
+			mvi m, < SKELETON_RUN_SPEED
+			inx h
+			mvi m, > SKELETON_RUN_SPEED
+			jmp @setAnim
+@speedXn:
+			xra a
+			mvi m, < SKELETON_RUN_SPEED_D
+			inx h
+			mvi m, > SKELETON_RUN_SPEED_D
+			inx h
+			mov m, a
+			inx h
+			mov m, a
+			mvi a, > SKELETON_RUN_SPEED_D
+			jmp @setAnim
+@speedXp:
+			xra a
+			mvi m, < SKELETON_RUN_SPEED
+			inx h
+			mvi m, > SKELETON_RUN_SPEED
+			inx h
+			mov m, a
+			inx h
+			mov m, a
+			mvi a, > SKELETON_RUN_SPEED
+@setAnim:
+			ora a
 			jz @setAnimRunR
-
+@setAnimRunL:
 			lxi h, monsterAnimAddr
 			dad b
 			mvi m, < skeleton_run_l0
@@ -128,8 +173,7 @@ SkeletonUpdate:
             ret
 @handleTileData:
             ret
-			.closelabels
-			
+			.closelabels			
 
 SkeletonDraw:
 			; convert monster id into the offset in the monstersRoomData array
@@ -178,15 +222,13 @@ SkeletonDraw:
 			dcx h
 			mov m, e
 			; get the anim addr
-			;lxi h, skeleton_idle_r ; 316
 			dcx h
 			dcx h
 			mov a, m
 			dcx h
 			mov l, m
 			mov h, a
-;MonsterDrawSpriteAddrFunc:
-			call GetSpriteAddr
+			call GetSpriteAddrRunV
 
 			ora a
 			jz DrawSprite16x15

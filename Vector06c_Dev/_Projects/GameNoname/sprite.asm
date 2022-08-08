@@ -24,9 +24,7 @@ GetSpriteAddr:
 GetSpriteAddrRunV:
 			mov a, e
 			ani	%0000011
-			rlc
-			rlc
-			rlc
+			rlc_(3)
 			add c
 			mov c, a
 			mvi b, 0

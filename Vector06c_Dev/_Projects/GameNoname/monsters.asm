@@ -1,7 +1,7 @@
 .include "skeleton.asm"
 
 ; max monsters amount in the room
-MONSTERS_MAX = 5
+MONSTERS_MAX = 10
 
 ; all different monsters update and draw funcs has to be listed here for a room tile data init
 monstersFuncs:
@@ -53,13 +53,12 @@ monstersRoomSpriteData:
 
 MONSTER_INIT_POS_X			.var 120
 MONSTER_INIT_POS_X_OFFSET	.var 24
-MONSTER_REDRAW_TIMER_V		.var 4
 ; sprite data struc start.
 monsterDirX:			.byte 1 ; 1-right, 0-left
 monsterState:           .byte 0 ; 0 - idle
 monsterStateCounter:    .byte 40
 monsterAnimAddr:        .word 0
-monsterRedrawTimer:		.byte MONSTER_REDRAW_TIMER_V ; 0101_0101 means redraw on every second frame, 0000_0001 means redraw on very 8 frame.
+monsterRedrawTimer:		.byte 0 ; 0101_0101 means redraw on every second frame, 0000_0001 means redraw on very 8 frame.
 monsterCleanScrAddr:	.word (SPRITE_X_SCR_ADDR + HERO_START_POS_X / 8 - 1) * 256 + HERO_START_POS_Y
 monsterCleanFrameIdx2:	.byte 0 ; frame id * 2
 monsterPosX:			.word MONSTER_INIT_POS_X * 256 + 0
@@ -70,17 +69,15 @@ monsterSpeedY:			.word 0
 
 ; the same structs for the rest of the monsters in the current room
 .loop MONSTERS_MAX - 1
-	MONSTER_INIT_POS_X = MONSTER_INIT_POS_X + MONSTER_INIT_POS_X_OFFSET
-	MONSTER_REDRAW_TIMER_V = MONSTER_REDRAW_TIMER_V * 2
-	.byte 1
 	.byte 0
-	.byte 40
+	.byte 0
+	.byte 0
 	.word 0
-	.byte MONSTER_REDRAW_TIMER_V
-	.word (SPRITE_X_SCR_ADDR + HERO_START_POS_X / 8 ) * 256 + HERO_START_POS_Y
 	.byte 0
-	.word MONSTER_INIT_POS_X * 256 + 0
-	.word 160 * 256 + 0
+	.word 0
+	.byte 0
+	.word 0
+	.word 0
 	.word 0
 	.word 0
 .endloop
