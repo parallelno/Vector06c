@@ -1,14 +1,32 @@
+
+.macro RND_TEST()
+RND_TEST_ST_ADDR = $8000
+@addr:	
+		lxi h, RND_TEST_ST_ADDR
+		push h
+		call Random
+		pop h
+		mov m, a
+		inx h
+		mov a, h
+		cpi $a0
+		jnz @cont
+		lxi h, RND_TEST_ST_ADDR
+@cont:
+		shld @addr+1
+.endmacro
+
 .macro INTERRUPTION_MAIN_LOGIC()
 			; interruption logic
 
-			MVI A, PORT0_OUT_IN
+			MVI a, PORT0_OUT_IN
 			OUT 0
-			XRA A
+			XRA a
 			OUT 3
 			IN 2
 			inr a
 			sta anyKeyPressed
-			MVI a, $fe
+			mvi a, $fe
 			OUT 3
 			IN 2
 			sta keyCode
@@ -21,9 +39,6 @@
 			OUT 3
 			
 			lxi h, interruptionCounter
-			inr m
-			; inc globaltimer
-			inx h
 			inr m
 .endmacro
 
@@ -60,6 +75,7 @@ Interruption2:
 			push d
 
 			INTERRUPTION_MAIN_LOGIC()
+			;RND_TEST()
 
 			pop d
 			pop b

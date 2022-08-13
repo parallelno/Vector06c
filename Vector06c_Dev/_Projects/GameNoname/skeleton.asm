@@ -102,10 +102,12 @@ SkeletonUpdate:
 @tileDataOffset:
 			; get speedX addr
             lxi b, TEMP_ADDR
+
+            call Random
+			
 			lxi h, monsterSpeedX
 			dad b
 
-            call Rnd8
 			cpi $40
 			jc @speedXp
 			cpi $80
@@ -230,7 +232,8 @@ SkeletonDraw:
 			mov h, a
 			call GetSpriteAddrRunV
 
-			ora a
-			jz DrawSprite16x15
-			jmp	DrawSprite24x15
+			;ora a
+			;jz DrawSprite16x15
+			;jmp	DrawSprite24x15
+			jmp DrawSpriteV
 			.closelabels

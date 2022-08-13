@@ -6,6 +6,8 @@
 .include "monsters.asm"
 .include "levels.asm"
 
+;.include "testDrawSpriteVSpeed.asm"
+
 GameInit:
 			call LevelsInit
 			call LevelInit
@@ -52,6 +54,7 @@ GameUpdate:
 GameDraw:
 			call HeroDraw			
 			call MonstersDraw
+			;call TestDrawSpriteVSpeed
 			ret
 			.closelabels
 			

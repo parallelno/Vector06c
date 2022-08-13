@@ -1,4 +1,5 @@
 import string
+from xmlrpc.client import Boolean
 from PIL import Image
 import json
 import common
@@ -70,6 +71,12 @@ def CharToAsm(charJ, image):
 		y = sprite["y"]
 		width = sprite["width"]
 		height = sprite["height"]
+		offsetX = 0
+		if sprite.get("offsetX") is not None:
+			offsetX = sprite["offsetX"]
+		offsetY = 0
+		if sprite.get("offsetY") is not None:
+			offsetY = sprite["offsetY"]
 
 		# get a sprite as a color index 2d array
 		spriteImg = []
@@ -97,6 +104,13 @@ def CharToAsm(charJ, image):
 		# two empty bytes prior every to support a stack renderer
 		asm += "			.byte 0,0\n"
 		asm += labelPrefix + "_" + spriteName + ":\n"
+
+		if addSize:
+			widthPacked = width//8 - 1
+			offsetXPacked = offsetX//8
+			widthOffsetXpacked = widthPacked << 1 | offsetXPacked | offsetY << 3
+			asm += "			.byte " + str( height ) + ", " +  str( widthOffsetXpacked ) + "\n"
+		
 		#asm += "			.byte " + str(mask) + "\n"
 		asm += common.BytesToAsm(data)
 
@@ -105,9 +119,14 @@ def CharToAsm(charJ, image):
 #=====================================================
 import argparse
 parser = argparse.ArgumentParser()
+parser.add_argument("-s", "--size", help = "Size and a screen addr are included in the sprite data", type = Boolean)
 parser.add_argument("-i", "--input", help = "Input file")
 parser.add_argument("-o", "--output", help = "Output file")
 args = parser.parse_args()
+
+addSize = False
+if args.size :
+	addSize = True
 
 if not args.output and not args.input:
 	print("-i and -o command-line parameters needed. Use -h for help.")

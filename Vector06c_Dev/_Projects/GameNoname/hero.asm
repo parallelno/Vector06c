@@ -360,6 +360,7 @@ HeroDrawAnimAddr:
 HeroDrawSpriteAddrFunc:			
 			call GetSpriteAddr
 
-			ora a
-			jz DrawSprite16x15
-			jmp	DrawSprite24x15
+			;ora a
+			;jz DrawSprite16x15
+			;jmp	DrawSprite24x15
+			jmp	DrawSpriteV

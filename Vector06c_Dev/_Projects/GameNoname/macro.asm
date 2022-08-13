@@ -1,3 +1,9 @@
+.macro HLT_(i)
+			.loop i
+			hlt
+			.endloop
+.endmacro
+
 .macro RRC_(i)
 			.loop i
 			rrc

@@ -1,12 +1,4 @@
-; return : 
-; a - random byte
-Rnd8:
-			lda interruptionCounter+1
-			adc a
-			ral
-			xri %00101101
-			sta interruptionCounter+1
-			ret
+.include "rnd.asm"
 
 ; uses:
 ; hl, a

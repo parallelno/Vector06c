@@ -24,8 +24,6 @@
 		"y" : 190
 	},
 	"rooms" : [
-		{"file" : "sources/lv01_room00.tmj"},
-		{"file" : "sources/lv01_room01.tmj"},
-		{"file" : "sources/lv01_room02.tmj"}
+		{"file" : "sources/lv01_room_empty.tmj"}
 	]
 }

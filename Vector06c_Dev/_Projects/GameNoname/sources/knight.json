@@ -1,5 +1,5 @@
 {
-	"png" : "sources/sprites_hero.png",
+	"png" : "sources/sprites_knight.png",
 	"palette" :	[
 		{"x": 0,	"y" : 0},
 		{"x": 16,	"y" : 0},

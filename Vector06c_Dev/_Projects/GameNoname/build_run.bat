@@ -1,5 +1,10 @@
-python tools/charGenerator.py -i sources/hero.json -o chars/hero.dasm
-python tools/charGenerator.py -i sources/skeleton.json -o chars/skeleton.dasm
+python tools/charGenerator.py -s True -i sources/hero.json -o chars/hero.dasm
+python tools/charGenerator.py -s True -i sources/skeleton.json -o chars/skeleton.dasm
+python tools/charGenerator.py -s True -i sources/burnerV.json -o chars/burnerV.dasm
+python tools/charGenerator.py -s True -i sources/knightV.json -o chars/knightV.dasm
+python tools/charGenerator.py -s True -i sources/vampireV.json -o chars/vampireV.dasm
+python tools/charGenerator.py -s True -i sources/scythe.json -o chars/scythe.dasm
+
 python tools/levelGenerator.py -i sources/level01.json -o levels/level01.dasm
 
 @echo off
