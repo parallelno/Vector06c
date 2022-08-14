@@ -273,6 +273,7 @@ HeroMove:
 			lhld charTempY
 			shld heroY
 			ret
+; TODO: handle this case
 @tempCheck: 
 lhld charTempX
 ret
@@ -359,8 +360,4 @@ HeroDrawAnimAddr:
 			lxi h, hero_idle_r ; 208
 HeroDrawSpriteAddrFunc:			
 			call GetSpriteAddr
-
-			;ora a
-			;jz DrawSprite16x15
-			;jmp	DrawSprite24x15
 			jmp	DrawSpriteV

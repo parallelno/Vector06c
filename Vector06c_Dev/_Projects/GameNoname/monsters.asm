@@ -99,7 +99,7 @@ MonstersClearRoomData:
 			dcx h
 			mov e, m
 			dcx h
-			xra A
+			xra a
 			ora d
 			jz @skip
 			push h

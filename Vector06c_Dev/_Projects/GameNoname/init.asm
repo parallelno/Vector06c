@@ -2,22 +2,22 @@
 
 			.org	$100
 StartInit:
-			DI
+			di
 			; dismount a quasi-disk
-			XRA		A
+			xra		a
 			out		$10
 			; set entry points of a restart, and an interruption
-			MVI		A, OPCODE_JMP
+			mvi		a, OPCODE_JMP
 			STA		RESTART_ADDR
 			STA		INT_ADDR
-			LXI		H, StartInit
-			SHLD 	RESTART_ADDR + 1
-			LXI		H, Interruption2
-			SHLD	INT_ADDR + 1
+			lxi		h, StartInit
+			shld 	RESTART_ADDR + 1
+			lxi		h, Interruption2
+			shld	INT_ADDR + 1
 			; stack init
-			LXI		SP, STACK_ADDR
+			lxi		sp, STACK_ADDR
 
-			EI
+			ei
 			call ClearScr
-            JMP     Start
+            jmp     Start
 

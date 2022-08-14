@@ -64,67 +64,79 @@ DrawSpriteV2:
 			inr a
 			mov l, a
 
+			; save h
+			shld @restoreH+1
+			lxi h, @stopTbl
+			mvi d, 0
+			; TODO: (height - 1)*2 in the script. because there is no height = 0
+			; then remove mul below and the first addr in the addr table
+			mov a, c
+			dcr a
+			rlc
+			mov e, a
+			dad d
+			mov e, M
+			inx h
+			mov d, M
+			xchg
+			; hl has the addr where we need to store jmp @restore
+			shld @restore+1
+			;mov a, M
+			;sta @restore1+1
+			mvi m, OPCODE_JMP
+			inx h
+			;mov a, m
+			;sta @restore2+1
+			mvi m, <@restore
+			inx h
+			;mov a, M
+			;sta @restore3+1
+			mvi m, >@restore
+			; restore h
+@restoreH:  lxi h, TEMP_ADDR
+
 			; save high screen byte to restore X
 			mvi a, 2
 			add h
-			sta @oddScr1+1
-			adi $20
 			mov d, a
 			adi $20
-			; dy counter
-			mov e, c
+			mov e, a
+			adi $20
 
-@evenScr1:	pop b
-			mov m, c
-			inr h
-			mov m, b
-			inr h
-			pop b
-			mov m, c
-@evenScr2:  mov h, d
-			mov m, b
-			dcr h
-			pop b
-			mov m, c
-			dcr h
-			mov m, b
-@evenScr3:	mov h, a
-			pop b
-			mov m, c
-			dcr h
-			mov m, b
-			dcr h
-			pop b
-			mov m, c
-			dcr l			
-			dcr e
-			jz DrawSpriteV_restoreSP
+			DRAW_EVEN_LINE_24()
+@D01:		DRAW_ODD_LINE_24()						
+@D02:		DRAW_EVEN_LINE_24()			
+@D03:		DRAW_ODD_LINE_24()			
+@D04:		DRAW_EVEN_LINE_24()
+@D05:		DRAW_ODD_LINE_24()			
+@D06:		DRAW_EVEN_LINE_24()
+@D07:		DRAW_ODD_LINE_24()			
 
-@oddScr3:	mov m, b
-			inr h
-			pop b
-			mov m, c
-			inr h
-			mov m, b
-@oddScr2:	mov h, d
-			pop b
-			mov m, c
-			dcr h
-			mov m, b
-			dcr h
-			pop b
-			mov m, c
-@oddScr1:	mvi h, TEMP_BYTE
-			mov m, b
-			dcr h
-			pop b
-			mov m, c
-			dcr h
-			mov m, b
-			dcr l
-			dcr e
-			jnz @evenScr1
+@D08:		DRAW_EVEN_LINE_24()
+@D09:		DRAW_ODD_LINE_24()			
+@D10:		DRAW_EVEN_LINE_24()
+@D11:		DRAW_ODD_LINE_24()			
+@D12:		DRAW_EVEN_LINE_24()
+@D13:		DRAW_ODD_LINE_24()			
+@D14:		DRAW_EVEN_LINE_24(False)
+
+@D15:		jmp @restore
+
+@restore:
+			lxi h, TEMP_ADDR
+@restore1:
+			mvi m, TEMP_BYTE
+			inx h
+@restore2:
+			mvi m, TEMP_BYTE
+			inx h
+@restore3:
+			mvi m, TEMP_BYTE
 			jmp DrawSpriteV_restoreSP
+
+@stopTbl:
+            .word @D01, @D02, @D03, @D04, @D05, @D06, @D07, @D08, 
+			.word @D09, @D10, @D11, @D12, @D13, @D14, @D15
 ;------------------------------------------------
 DrawSpriteV2_width16:
 			; get offsetY and apply it to X

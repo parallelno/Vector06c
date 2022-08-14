@@ -25,20 +25,20 @@ Random:
 ; the best quality with a still good speed.
 Random:
 			lxi h, 1       ; seed must not be 0
-			mov a,h
+			mov a, h
 			rar
-			mov a,l
+			mov a, l
 			rar
 			xra h
-			mov h,a
-			mov a,l
+			mov h, a
+			mov a, l
 			rar
-			mov a,h
+			mov a, h
 			rar
 			xra l
-			mov l,a
+			mov l, a
 			xra h
-			mov h,a
+			mov h, a
 			shld Random+1		; 116
 			ret
 		

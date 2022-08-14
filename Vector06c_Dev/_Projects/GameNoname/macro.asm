@@ -18,13 +18,13 @@
 
 .macro PUSH_B(i)
 			.loop i
-			push B
+			push b
 			.endloop
 .endmacro
 
 .macro INR_D(i)
 			.loop i
-			inr D
+			inr d
 			.endloop
 .endmacro
 
@@ -37,11 +37,11 @@
 
 .macro BORDER_LINE(borderColorIdx = 1)
 			mvi a, PORT0_OUT_OUT
-			OUT 0
+			out 0
 			mvi a, borderColorIdx
-			OUT 2
+			out 2
 			lda scrOffsetY
-			OUT 3
+			out 3
 .endmacro
 
 ; gets DDDDDfff from (hl), extracts fff which is a func idx in the funcTable

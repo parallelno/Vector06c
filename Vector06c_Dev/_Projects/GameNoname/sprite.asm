@@ -61,8 +61,8 @@ GetSpriteScrAddr:
 
 ; clear a N*15 pxs square on the screen, 
 ; where: 
-; N = 16 pxs if a = 0
-; N = 24 pxs if a != 0
+; 16 pxs width if a = 0
+; 24 pxs width if a != 0
 ; input:
 ; hl - scr addr
 ; a - width marker
@@ -70,13 +70,13 @@ GetSpriteScrAddr:
 ; bc, de
 		
 CleanSprite:
-			ora a
 			mvi c, 2
 			mvi b, 0
 			
-			jz @init
+			ora a
+			jz @width16
 			inr c
-@init:		
+@width16:		
 			mov a, l
 			sta @restoreY+1
 			mov d, h

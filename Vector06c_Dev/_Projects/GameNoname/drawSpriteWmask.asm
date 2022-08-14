@@ -49,17 +49,17 @@ Clear8x16Loop:
 			stax d
 			dcr e
 		.endloop
-			stax D
+			stax d
 			mvi a, 15
 			add e
 			mov e, a
 			mvi a, 32
-			add D
+			add d
 			mov d, a
 			dcr b
 			jnz Clear8x16Loop
 			mvi a, -32-32-32
-			add D
+			add d
 			mov d, a
 
 			ret
@@ -70,7 +70,7 @@ Clear8x16Loop:
 ; in:
 ; BC	sprite data
 ; DE	screen address (x,y)
-; use: A, HL, SP
+; use: A, HL, sp
 
 ; screen format
 ; DRAW_EVEN_LINE()
@@ -119,7 +119,7 @@ Clear8x16Loop:
 			POP_B_OR_M_BACKWARD_16()
 
 			.if _moveOneLineDown == true
-			dcr	L
+			dcr	l
 			.endif
 			.endmacro
 
@@ -132,7 +132,7 @@ Clear8x16Loop:
 			POP_B_OR_M_BACKWARD_16()
 
 			.if _moveOneLineDown == true
-			dcr	L
+			dcr	l
 			.endif
 			.endmacro
 
@@ -146,34 +146,34 @@ Clear8x16Loop:
 
 DrawSprite16x15:
 			DrawSprite16Height = 15
-			; store SP
-			LXI		H, 0			; (12)
-			DAD		SP				; (12)
-			SHLD	@restoreSP + 1	; (20)
-			; SP = BC
-			mov		H, B			; (8)
-			mov		L, C			; (8)
-			SPHL					; (8)
-			; D, E, A are initial X for 
+			; store sp
+			lxi		h, $0000			; (12)
+			dad		sp				; (12)
+			shld	@restoreSP + 1	; (20)
+			; sp = BC
+			mov		h, b			; (8)
+			mov		l, c			; (8)
+			sphl					; (8)
+			; D, e, a are initial X for 
 			; the 1st, the 2nd, the 3rd screen buffs
-			XCHG					; (4)
-			MVI		A, 1			; (8)
-			ADD 	H				; (4)
-			mov 	D, A			; (8)
-			ADI     $20             ; (8)
-			mov     E, A            ; (8)
-			;ADI 	$20				; (8)
+			xchg					; (4)
+			mvi		a, 1			; (8)
+			add 	h				; (4)
+			mov 	d, a			; (8)
+			adi     $20             ; (8)
+			mov     e, a            ; (8)
+			;adi 	$20				; (8)
 									; (108) total
 
 ; HL - 1st screen buff XY
-; SP - sprite data
+; sp - sprite data
 ; D - 1st screen buff X + 1
 ; E - 2nd screen buff X + 1
 ; A - 3rd screen buff X + 1
 
 			DrawSprite16_M(DrawSprite16Height)
 			
-@restoreSP:	LXI		SP, TEMP_ADDR	; restore SP (12)
+@restoreSP:	lxi		sp, TEMP_ADDR	; restore sp (12)
 			RET
 			.closelabels
 
@@ -182,7 +182,7 @@ DrawSprite16x15:
 ; in:
 ; BC	sprite data
 ; DE	screen address (x,y)
-; use: A, HL, SP
+; use: A, HL, sp
 
 ; screen format
 ; DRAW_EVEN_LINE()
@@ -202,11 +202,11 @@ DrawSprite16x15:
 			mov a, c
 			ora m			
 			mov m, a
-			INR H
+			inr h
 			mov a, b
 			ora m			
 			mov m, a
-			INR H
+			inr h
 			pop b
 			mov a, c
 			ora m			
@@ -215,12 +215,12 @@ DrawSprite16x15:
 			mov a, b
 			ora m			
 			mov m, a
-			dcr H
+			dcr h
 			pop b
 			mov a, c
 			ora m
 			mov m, a
-			dcr H
+			dcr h
 			mov a, b
 			ora m			
 			mov m, a
@@ -231,17 +231,17 @@ DrawSprite16x15:
 			mov a, c
 			ora m			
 			mov m, a
-			dcr H
+			dcr h
 			mov a, b
 			ora m			
 			mov m, a
-			dcr H
+			dcr h
 			pop b
 			mov a, c
 			ora m			
 			mov m, a
 			.if _moveOneLineDown == true
-			dcr	L
+			dcr	l
 			.endif
 			.endmacro
 
@@ -249,12 +249,12 @@ DrawSprite16x15:
 			mov a, b		; 3rd screen space
 			ora m			
 			mov m, a	
-			INR H
+			inr h
 			pop b
 			mov a, c
 			ora m			
 			mov m, a
-			INR H
+			inr h
 			mov a, b
 			ora m			
 			mov m, a
@@ -281,34 +281,34 @@ DrawSprite16x15:
 			mov a, c
 			ora m			
 			mov m, a
-			dcr H
+			dcr h
 			mov a, b
 			ora m			
 			mov m, a
 			.if _moveOneLineDown == true
-			dcr	L
+			dcr	l
 			.endif			
 			.endmacro
 
 DrawSprite24x15:
 			DrawSprite24Height = 15
-			; store SP
-			LXI		H, 0			; (12)
-			DAD		SP				; (12)
-			SHLD	@restoreSP + 1	; (20)
-			; SP = BC
-			mov		H, B			; (8)
-			mov		L, C			; (8)
-			SPHL					; (8)
-			; D, E, A are initial X for 
+			; store sp
+			lxi		h, $0000			; (12)
+			dad		sp				; (12)
+			shld	@restoreSP + 1	; (20)
+			; sp = BC
+			mov		h, b			; (8)
+			mov		l, c			; (8)
+			sphl					; (8)
+			; D, e, a are initial X for 
 			; the 1st, the 2nd, the 3rd screen buffs
-			XCHG					; (4)
-			MVI		A, 2			; (8)
-			ADD 	H				; (4)
-			mov 	D, A			; (8)
-			ADI     $20             ; (8)
-			mov     E, A            ; (8)
-			;ADI 	$20				; (8)
+			xchg					; (4)
+			mvi		a, 2			; (8)
+			add 	h				; (4)
+			mov 	d, a			; (8)
+			adi     $20             ; (8)
+			mov     e, a            ; (8)
+			;adi 	$20				; (8)
 									; (108) total
 
 			.macro DrawSprite24_M(height)
@@ -320,14 +320,14 @@ DrawSprite24x15:
 			.endmacro									
 
 ; HL - 1st screen buff XY
-; SP - sprite data
+; sp - sprite data
 ; D - 1st screen buff X + 2
 ; E - 2nd screen buff X + 2
 ; A - 3rd screen buff X + 2
 
 			DrawSprite24_M(DrawSprite24Height)
 
-@restoreSP:	LXI		SP, TEMP_ADDR	; restore SP (12)
+@restoreSP:	lxi		sp, TEMP_ADDR	; restore sp (12)
 			RET
 			.closelabels
 

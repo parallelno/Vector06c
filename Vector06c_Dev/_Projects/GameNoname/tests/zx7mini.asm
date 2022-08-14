@@ -29,10 +29,10 @@ lenval:
 		push h
 		mov a,e
 		sbb m
-		mov l,a
+		mov l, a
 		mov a,d
 		sbi 0           ; 42
-		mov h,a
+		mov h, a
 ldir:
 		mov a,m
 		stax d

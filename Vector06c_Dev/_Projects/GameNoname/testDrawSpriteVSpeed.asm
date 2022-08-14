@@ -58,8 +58,8 @@ TestDrawSpriteVSpeed:
 			DRAW_SPRITE_V_FUNC(burnerV_idle_r, $afff - 16*4, TestDrawSpriteVSpeedAnimIdx+5)
 			DRAW_SPRITE_V_FUNC(burnerV_idle_r, $b2ff - 16*4, TestDrawSpriteVSpeedAnimIdx+6)
 */
-
-; 75%, 68%
+/*
+; 75%, 68%, 69%
 			DRAW_SPRITE_V_FUNC(burnerV_idle_r, $a0ff - 16*4, TestDrawSpriteVSpeedAnimIdx, DrawSpriteV2)
 			DRAW_SPRITE_V_FUNC(burnerV_idle_r, $a3ff - 16*4, TestDrawSpriteVSpeedAnimIdx+1, DrawSpriteV2)
 			DRAW_SPRITE_V_FUNC(burnerV_idle_r, $a6ff - 16*4, TestDrawSpriteVSpeedAnimIdx+2, DrawSpriteV2)
@@ -67,8 +67,8 @@ TestDrawSpriteVSpeed:
 			DRAW_SPRITE_V_FUNC(burnerV_idle_r, $acff - 16*4, TestDrawSpriteVSpeedAnimIdx+4, DrawSpriteV2)
 			DRAW_SPRITE_V_FUNC(burnerV_idle_r, $afff - 16*4, TestDrawSpriteVSpeedAnimIdx+5, DrawSpriteV2)
 			DRAW_SPRITE_V_FUNC(burnerV_idle_r, $b2ff - 16*4, TestDrawSpriteVSpeedAnimIdx+6, DrawSpriteV2)
+*/
 
-/*
 ; 88%, 78%
 			DRAW_SPRITE_V_FUNC(scythe_run_rn, $a0ff - 16*5, TestDrawSpriteVSpeedAnimIdx, DrawSpriteV2)
 			DRAW_SPRITE_V_FUNC(scythe_run_ln, $a3ff - 16*5, TestDrawSpriteVSpeedAnimIdx+1, DrawSpriteV2)
@@ -84,7 +84,7 @@ TestDrawSpriteVSpeed:
 			DRAW_SPRITE_V_FUNC(scythe_run_ln, $a3ff - 16*6, TestDrawSpriteVSpeedAnimIdx+11, DrawSpriteV2)
 			DRAW_SPRITE_V_FUNC(scythe_run_un, $a6ff - 16*6, TestDrawSpriteVSpeedAnimIdx+12, DrawSpriteV2)
 			DRAW_SPRITE_V_FUNC(scythe_run_dn, $a9ff - 16*6, TestDrawSpriteVSpeedAnimIdx+13, DrawSpriteV2)
-*/
+
 			;hlt_(25)
 
 			ret

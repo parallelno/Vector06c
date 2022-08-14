@@ -231,9 +231,5 @@ SkeletonDraw:
 			mov l, m
 			mov h, a
 			call GetSpriteAddrRunV
-
-			;ora a
-			;jz DrawSprite16x15
-			;jmp	DrawSprite24x15
 			jmp DrawSpriteV
 			.closelabels

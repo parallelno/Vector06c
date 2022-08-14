@@ -42,20 +42,20 @@ dzx0_copy:
 		jnc dzx0_literals
 dzx0_new_offset:
 		call dzx0_elias
-		mov h,a
+		mov h, a
 		pop psw
 		xra a
 		sub l
 		rz
 		push h
 		rar			; 44
-        mov h,a
+        mov h, a
 		ldax d
 		rar
-        mov l,a
+        mov l, a
 		inx d
 		xthl
-		mov a,h
+		mov a, h
 		lxi h,1
 		cnc dzx0_elias_backtrack
 		inx h
@@ -84,7 +84,7 @@ dzx0_ldir1:
 		inx d			; 80
 		inx b
 		dcx h
-		mov a,h
+		mov a, h
 		ora l
 		jnz dzx0_ldir1
 		pop psw

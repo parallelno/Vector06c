@@ -24,12 +24,12 @@ DrawRLE:
 @nextLine:
             ; de - screen addr
 			mov a, m
-			ora A
+			ora a
 			rz       ; if repeat x == 0, stop  
 			mov d, a
-			inx H
+			inx h
 			mov e, m
-			inx H
+			inx h
 @nextChunk:
 			; a - repeat code
 			mov a, m
@@ -43,7 +43,7 @@ DrawRLE:
 			; a - data, b - counter
 @nextUniqueByte:
 			mov a, m
-			inx H
+			inx h
 			stax d
 			inr e
 			dcr b
@@ -52,17 +52,17 @@ DrawRLE:
 
 @dupBytes:
             mov a, m
-			inx H
+			inx h
 			ora a ; if data = 0, do not draw, just advance L
 			jz @skipBytes
 
-			XCHG
+			xchg
 @nextDupByte:
 			mov m, a
 			inr l
 			dcr b
 			jnz @nextDupByte
-			XCHG
+			xchg
 			jmp @nextChunk
 @skipBytes:
 			; if a == 0, do not draw, just advance to the pos

@@ -3,7 +3,7 @@
 ; in:
 ; BC	sprite data
 ; DE	screen address (x,y)
-; use: A, HL, SP
+; use: A, HL, sp
 
 ; screen format
 ; 1st screen buff : draw 16 bites down, step one byte right, draw 16 bytes up.
@@ -12,73 +12,73 @@
 ; 4rd screen buff : same
 		
 DrawTile16x16:
-			; store SP
-			LXI		H, 0			; (12)
-			DAD		SP				; (12)
-			SHLD	@restoreSP + 1	; (20)
-			; SP = BC
-			MOV		H, B			; (8)
-			MOV		L, C			; (8)
+			; store sp
+			lxi		h, $0000			; (12)
+			dad		sp				; (12)
+			shld	@restoreSP + 1	; (20)
+			; sp = BC
+			mov		h, b			; (8)
+			mov		l, c			; (8)
 			; A contains a bit mask xxxxECA8, where the "8" bit says if a sprite needs to draw in $8000 buffer, the "A" bit in charge of $A000 buffer etc.
-			MOV		A, M			; (8)
+			mov		a, m			; (8)
 			; think how to make HL=HL+3 faster
-			INX		H				; (8)
-			INX		H				; (8)
-			INX		H				; (8)
-			SPHL					; (8)
-			XCHG					; (4)
-			MOV		E, A			; (8)
-			MVI		D, 4			; (8)
+			INX		h				; (8)
+			INX		h				; (8)
+			INX		h				; (8)
+			sphl					; (8)
+			xchg					; (4)
+			mov		e, a			; (8)
+			mvi		d, 4			; (8)
 									; (120) total
 
 ; HL - 1st screen buff XY
-; SP - sprite data
+; sp - sprite data
 ; E - contains a bit mask xxxxECA8, where the "8" bit says if a sprite needs to draw in $8000 buffer, the "A" bit in charge of $A000 buffer etc.
 ; D - counter of screen buffers
 @loop:
-			MOV		A, E
-			RRC
-			MOV		E, A
-			JNC		@doNotDraw
+			mov		a, e
+			rrc
+			mov		e, a
+			jnc		@doNotDraw
 
 			DRAW_TILE_16x16_LINE()
 
 @doNotDraw:	
-			MVI		A, 32
-			ADD		H
-			MOV		H, A
+			mvi		a, 32
+			add		h
+			mov		h, a
 
-			DCR		D
+			dcr		d
 			JNZ		@loop
 
-@restoreSP:	LXI		SP, TEMP_ADDR	; restore SP (12)
+@restoreSP:	lxi		sp, TEMP_ADDR	; restore sp (12)
 			RET
 			.closelabels
 			
 			.macro DRAW_TILE_16x16_LINE()
 		.loop 7
-			POP B					; (12)
-			MOV M,C					; (8)
-			DCR L					; (8)
-			MOV M,B					; (8)
-			DCR L					; (8)
+			pop b					; (12)
+			mov m, c					; (8)
+			dcr l					; (8)
+			mov m, b					; (8)
+			dcr l					; (8)
 		.endloop
-			POP B					; (12)
-			MOV M,C					; (8)
-			DCR L					; (8)
-			MOV M,B					; (8)
+			pop b					; (12)
+			mov m, c					; (8)
+			dcr l					; (8)
+			mov m, b					; (8)
 
-			INR H					; (8)
+			inr h					; (8)
 		.loop 7
-			POP B					; (12)
-			MOV M,C					; (8)
-			INR L					; (8)
-			MOV M,B					; (8)
-			INR L					; (8)
+			pop b					; (12)
+			mov m, c					; (8)
+			INR l					; (8)
+			mov m, b					; (8)
+			INR l					; (8)
 		.endloop
-			POP B					; (12)
-			MOV M,C					; (8)
-			INR L					; (8)
-			MOV M,B					; (8)
-			DCR H					; (8) (704)		
+			pop b					; (12)
+			mov m, c					; (8)
+			INR l					; (8)
+			mov m, b					; (8)
+			dcr h					; (8) (704)		
 			.endmacro
