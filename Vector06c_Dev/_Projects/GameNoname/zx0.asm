@@ -12,11 +12,19 @@
 ; Parameters (forward):
 ;   DE: source address (compressed data)
 ;   BC: destination address (decompressing)
+;
+; Parameters (backward):
+;   DE: last source address (compressed data)
+;   BC: last destination address (decompressing)
 ; -----------------------------------------------------------------------------
 ; compress forward with <-c> option (<-classic> for salvador)
 ;
+; compress backward with <-b -c> options (<-b -classic> for salvador)
+;
 ; Compile with The Telemark Assembler (TASM) 3.2
 ; -----------------------------------------------------------------------------
+
+;#define BACKWARD
 
 dzx0:
 		lxi h, $0FFFF

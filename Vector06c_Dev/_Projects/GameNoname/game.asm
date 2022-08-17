@@ -1,4 +1,10 @@
-.include "levelsGlobalData.dasm"
+.include "levelsGlobalData.asm"
+
+.include "ramDiskBank0_addr0Labels.asm"
+.include "ramDiskBank0_addr8000Labels.asm"
+
+.include "generated\\sprites\\heroAnim.dasm"
+.include "generated\\sprites\\skeletonAnim.dasm"
 
 .include "drawTile.asm"
 .include "sprite.asm"
@@ -45,7 +51,7 @@ GameUpdate:
 			sta keyCode+1
 
 			lxi h, interruptionCounter
-			dcr M
+			dcr m
 			jnz @updateLoop
 			ret
 			.closelabels

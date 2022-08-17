@@ -28,30 +28,47 @@
 			.endloop
 .endmacro
 
+.macro INX_H(i)
+			.loop i
+			inx h
+			.endloop
+.endmacro
+
 .macro DCX_H(i)
 			.loop i
 			dcx h
 			.endloop
 .endmacro
 
+; mount the ram-disk
+.macro RAM_DISK_ON(_command = RAM_DISK0_B0_STACK)
+			mvi a, _command
+			out $10
+.endmacro
 
-.macro BORDER_LINE(borderColorIdx = 1)
+; dismount the ram-disk
+.macro RAM_DISK_OFF()
+			xra a
+			out $10
+.endmacro
+
+.macro BORDER_LINE(_borderColorIdx = 1)
 			mvi a, PORT0_OUT_OUT
 			out 0
-			mvi a, borderColorIdx
+			mvi a, _borderColorIdx
 			out 2
 			lda scrOffsetY
 			out 3
 .endmacro
 
 ; gets DDDDDfff from (hl), extracts fff which is a func idx in the funcTable
-; call that func with DDDDD as an argument
+; call that func with DDDDD stored in A, B = tileData, C - tileIdx
 ; input:
 ; hl - addr to the tile data
 ; keeps hl unchanged
-; a - tile data func argument
-; uses:
-; de
+; use:
+; de, a
+; bc - depends on the func in the funcTable
 .macro TILE_DATA_HANDLE_FUNC_CALL(funcTable)
 			mov a, m
 			push h	

@@ -1,12 +1,12 @@
 from PIL import Image
 
-def PaletteToAsm(image, charJ, path):
+def PaletteToAsm(image, charJ, path, labelPrefix = ""):
 	# usially there are color tiles in top row in the image.
 	paletteCoords = charJ["palette"]
 	colors = {}
-	labelPrefix = path.split("/")[-1].split("\\")[-1].split(".")[0]
+	labelPostfix = path.split("/")[-1].split("\\")[-1].split(".")[0]
 	asm = "; " + path + "\n"
-	asm += "palette_" + labelPrefix + ":\n"
+	asm += labelPrefix + "_palette_" + labelPostfix + ":\n"
 	palette = image.getpalette()
 
 	for i, pos in enumerate(paletteCoords):

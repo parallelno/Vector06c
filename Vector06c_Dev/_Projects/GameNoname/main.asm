@@ -1,11 +1,3 @@
-;-------------------------------------------------
-;|                                               |
-;|     Sprite Rendering Speed Test		         |
-;|     											 |
-;|     Original ver. 2020						 |
-;|     by KTSerg aka Sergey Cherkozianov		 |
-;-------------------------------------------------
-
 ;.setting "OmitUnusedFunctions", true
 
 .include "macro.asm"
@@ -15,10 +7,12 @@
 .include "utils.asm"
 .include "interruptions.asm"
 
+.include "ramDisk.asm"
 .include "game.asm"
 
 Start:
-			
+			call RamDiskInit
+
 @mainLoop:
 			;call Menu
 			call GameInit

@@ -1,6 +1,6 @@
 /*
 ; 8-bit pseudo rnd. it uses 256 bytes of a main program as a seed.
-; uses:
+; use:
 ; hl
 ; out:
 ; a - random number

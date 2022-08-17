@@ -10,13 +10,15 @@ LevelsInit:
 ;	initialization level data every game start
 ;
 LevelInit:
-			lxi h, palette_sprites_tiles_lv01+15
-            call SetPalette
+			lxi d, level01_palette_sprites_tiles_lv01
+            call SetPaletteFromRamDisk
 			mvi a, 1
 			sta borderColorIdx
 			xra a
 			sta roomIdx
-			lhld startPos
+			
+			lxi d, level01_startPos
+			call GetWordFromRamDisk
 			call HeroSetPos
 			call HeroInit
 			ret
@@ -34,12 +36,19 @@ RoomInitTiles:
 			rlc
 			mov c, a
 			mvi b, 0
-			lxi h, roomsAddr
+			lxi h, level01_roomsAddr
 			dad b
-			mov e, m
-			inx h
-			mov d, m
+			
 			xchg
+			call GetWordFromRamDisk
+			mov d, b
+			mov e, c
+
+			lxi b, roomTilesData ; the tile data buffer is used as a temp buffer
+			mvi a, ROOM_WIDTH * ROOM_HEIGHT / 2
+			call CopyDataFromRamDisk
+
+			lxi h, roomTilesData
 			lxi b, roomTilesAddr
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
 			; hl - current room tile indexes
@@ -52,16 +61,22 @@ RoomInitTiles:
 			mvi d, 0
 			inx h
 			push h
-			lxi h, tilesAddr
+			lxi h, level01_tilesAddr
 			; hl gets the tile graphics ponter
 			dad d
 			dad d
+
 			; copy the tile graphics addr to the current room tile graphics table
-			mov a, m
+			push b
+			xchg
+			call GetWordFromRamDisk
+			mov a, c
+			mov e, b
+			pop b
+
 			stax b
-			inx h
 			inx b
-			mov a, m
+			mov a, e
 			stax b
 			inx b
 			pop h
@@ -73,12 +88,12 @@ RoomInitTiles:
 			.closelabels
 
 ; input:
-; b - tile data			
+; b - tile data
 ; return:
 ; a - tile data that will be saved into the room tile data array
 LevelsTileDataCopy:
             ; just return the same tile data
-            mov a, b
+			mov a, b
 			ret
 			.closelabels
 ; input:
@@ -218,35 +233,48 @@ LevelsMonstersSpawn:
 			sta @rndDraw+1
 
 @tileDataToZero:	
-			; replace tile data with an empty tile
+			; replace the tile data with an empty tile
             xra a
 			ret
 			.closelabels
 			
-; copy the packed tiles data. 
+; copy the tiles data. 
 ; it also analizes the tiles data and initializes monsters and feeds up the monster pool if there is any monster in the room, etc
-; input:
-; hl - packed tiles data addr
-; de - room tiles data
-; uses:
-; a, c
+; use:
+; all
 
 RoomInitTilesData:
-			lxi d, roomTilesData
+			; copy the tiles data from the ram-disk
+			lda roomIdx
+			rlc
+			mov c, a
+			mvi b, 0
+			lxi h, level01_roomsAddr
+			dad b
+			
+			xchg
+			call GetWordFromRamDisk
+			lxi h, ROOM_WIDTH * ROOM_HEIGHT + 2 ; tiles data is stored right after the tile addr tbl plus 2 safety bytes
+			dad b
+
+			xchg
+			lxi b, roomTilesData
+			mvi a, ROOM_WIDTH * ROOM_HEIGHT / 2
+			call CopyDataFromRamDisk
+
+			; handle the tile data calling tile data funcs
+			lxi h, roomTilesData
 			mvi c, 0
 @loop:
 			mov b, m
-			push d
 			push b
 			TILE_DATA_HANDLE_FUNC_CALL(roomFuncTable)
 			pop b
-			pop d
-			stax d
+			mov m, a
 			inx h
-			inx d
 			inr c
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
-			cmp c
+			cmp c			
 			jnz @loop
 			ret
 			.closelabels
@@ -278,7 +306,7 @@ RoomDraw:
 			; set a pointer to the first item in the list of addrs of tile graphics
 			lxi h, roomTilesAddr
 @newLine
-			; reset the X. it's an high byte of the first screen buffer addr
+			; reset the X. it's a high byte of the first screen buffer addr
 			mvi d, $80
 @loop:
 			; DE - screen addr
@@ -294,6 +322,7 @@ RoomDraw:
 			pop h
 			pop d
 
+			; x = x + 2
 			inr d
 			inr d
 			; repeat if x reaches the high byte of the second screen buffer addr

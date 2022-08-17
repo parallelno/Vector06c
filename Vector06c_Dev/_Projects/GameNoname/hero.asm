@@ -1,4 +1,3 @@
-.include "chars/hero.dasm"
 
 ; the first screen buffer X
 HERO_START_POS_X	= 220
@@ -37,11 +36,15 @@ HeroStop:
 			ret
 			.closelabels
 
-; hl - posXY
+; input:
+; b - posX
+; c - posY
+; use:
+; a
 HeroSetPos:
-			mov a, h
+			mov a, b
 			sta heroX+1
-			mov a, l
+			mov a, c
 			sta heroY+1
 			ret
 			.closelabels
@@ -292,6 +295,9 @@ ret
 			ret
 			.closelabels
 
+; load a new room with roomId, move the hero to an
+; appropriate position based on his current posXY
+; input:
 ; a - roomId
 HeroMoveTeleport:
 			pop h

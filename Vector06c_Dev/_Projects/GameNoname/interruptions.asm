@@ -69,6 +69,7 @@ Interruption2:
 			pop psw
 			shld @restoreSP + 1
 			push b
+			; todo: try to use ram disk bank 3 to not damage the ram-disk data
 			lxi sp, STACK_TEMP_ADDR
 			push psw
 			push b

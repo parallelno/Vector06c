@@ -1,4 +1,3 @@
-.include "chars/skeleton.dasm"
 
 SKELETON_RUN_SPEED		= $0080
 SKELETON_RUN_SPEED_D	= $ffff - $80 + 1

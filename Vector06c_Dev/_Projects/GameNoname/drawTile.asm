@@ -1,10 +1,13 @@
 ;----------------------------------------------------------------
 ; draw a tile (16x16 pixels)
-; in:
-; BC	sprite data
-; DE	screen address (x,y)
-; use: A, HL, sp
+; input:
+; bc	tile data addr
+; de	screen addr (x,y)
+; use: a, hl, sp
 
+; tile graphics format:
+; .byte - a bit mask xxxxECA8, where the "8" bit says if a sprite needs to draw in $8000 buffer, the "A" bit in charge of $A000 buffer etc.
+; .byte 4 - needs for a counter
 ; screen format
 ; 1st screen buff : draw 16 bites down, step one byte right, draw 16 bytes up.
 ; 2nd screen buff : same
@@ -13,23 +16,20 @@
 		
 DrawTile16x16:
 			; store sp
-			lxi		h, $0000			; (12)
+			lxi		h, $0000		; (12)
 			dad		sp				; (12)
 			shld	@restoreSP + 1	; (20)
 			; sp = BC
 			mov		h, b			; (8)
 			mov		l, c			; (8)
-			; A contains a bit mask xxxxECA8, where the "8" bit says if a sprite needs to draw in $8000 buffer, the "A" bit in charge of $A000 buffer etc.
-			mov		a, m			; (8)
-			; think how to make HL=HL+3 faster
-			INX		h				; (8)
-			INX		h				; (8)
-			INX		h				; (8)
+			RAM_DISK_ON()
 			sphl					; (8)
+			; get a mask and a counter
+			pop b					; (12)
 			xchg					; (4)
-			mov		e, a			; (8)
-			mvi		d, 4			; (8)
-									; (120) total
+			mov		e, c			; (8)
+			mov		d, b			; (8)
+									; (100) total
 
 ; HL - 1st screen buff XY
 ; sp - sprite data
@@ -49,13 +49,14 @@ DrawTile16x16:
 			mov		h, a
 
 			dcr		d
-			JNZ		@loop
+			jnz		@loop
 
 @restoreSP:	lxi		sp, TEMP_ADDR	; restore sp (12)
-			RET
+			RAM_DISK_OFF()
+			ret
 			.closelabels
 			
-			.macro DRAW_TILE_16x16_LINE()
+.macro DRAW_TILE_16x16_LINE()
 		.loop 7
 			pop b					; (12)
 			mov m, c					; (8)
@@ -81,4 +82,4 @@ DrawTile16x16:
 			INR l					; (8)
 			mov m, b					; (8)
 			dcr h					; (8) (704)		
-			.endmacro
+.endmacro

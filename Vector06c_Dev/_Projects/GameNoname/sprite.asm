@@ -40,7 +40,7 @@ GetSpriteAddrRunV:
 ; return:
 ; de - sprite screen addr
 ; c - idx in the animaion
-; uses: a
+; use: a
 GetSpriteScrAddr:
 			; convert XY to screen addr + frame idx
 			mov		a, m
@@ -66,7 +66,7 @@ GetSpriteScrAddr:
 ; input:
 ; hl - scr addr
 ; a - width marker
-; uses:
+; use:
 ; bc, de
 		
 CleanSprite:
