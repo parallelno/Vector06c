@@ -1,22 +1,24 @@
 ;.setting "OmitUnusedFunctions", true
 
-.include "macro.asm"
-.include "init.asm"
-.include "globalVars.asm"
+;.include "macro.asm"
+;.include "init.asm"
+;.include "globalVars.asm"
 ; subs
-.include "utils.asm"
-.include "interruptions.asm"
+;.include "utils.asm"
+;.include "interruptions.asm"
 
-.include "ramDisk.asm"
-.include "game.asm"
+;.include "ramDisk.asm"
+;.include "game.asm"
 
 Start:
-			call RamDiskInit
+			.include "music.asm"
+			call StartTestMusic
+			;call RamDiskInit
 
 @mainLoop:
-			;call Menu
-			call GameInit
+					;call Menu
+			;call GameInit
 
-			jmp @mainLoop
-			.closelabels
+			;jmp @mainLoop
+			;.closelabels
 			.end

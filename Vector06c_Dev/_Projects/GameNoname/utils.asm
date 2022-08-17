@@ -57,7 +57,7 @@ SetPalette:
 			ret
 			.closelabels
 
-; Set palette copied from the ram-disk
+; Set palette copied from the ram-disk no blocking interruptions
 ; input: 
 ; de - the addr of the first item in the palette
 ; use: 
@@ -111,7 +111,7 @@ SetPaletteFromRamDisk:
 			ret
 			.closelabels
 
-; Read a word from the ram-disk
+; Read a word from the ram-disk no blocking interruptions
 ; input: 
 ; de - data addr in the ram-disk
 ; use: 
@@ -134,7 +134,7 @@ GetWordFromRamDisk:
 			ret
 			.closelabels
 
-; Read copy data (max 512) from the ram-disk to ram
+; Read copy data (max 512) from the ram-disk to ram no blocking interruptions
 ; input: 
 ; de - data addr in the ram-disk
 ; bc - destination addr
