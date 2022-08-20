@@ -1,83 +1,103 @@
-; Song title: EA at feb 2018 (YM+ABC)
-; compressed into 14 buffers each for every register
-; This example is decompressing and playing 14 parallel streams.
-; Only one task is executed each frame. 16 bytes are decoded at a time.
-; frame time: 5-20 lines
+; info/credits:
+; music has to be compressed into 14 buffers each for every register
+; this player decompresses and plays 14 parallel streams.
+; Only one task is executed each frame that decompresses 16 bytes for one of the ay registers.
+; cpu load: 5-20 of 312 scanlines per a frame
 ; Compressed data size 2310 bytes (uncompressed 61586)
-; code by svofski 2022
+; original player code made by svofski 2022
+; original zx0 decompression code made by ivagor 2022
+
+; to cook data for this plyer: 
+;   1. extract each register data from a music track
+;   2. zx0 -c -w 256 regData
+;   3. combine all all of the compressed regData
+;   4. add a header that is an word array with addresses of all of regData
+;   5. compress it as zx0 -c regData
+
+; Special thanks to Vortex Tracker 2.5
+; EA at feb 2018 (YM+ABC)
+; Created by Sergey Bulba's AY-3-8910/12 Emulator v2.9
+
 
 ; total number of scheduled tasks
-SOUND_TASKS		= 14
+ZX0_PLAYER_TASKS		= 14
 ; task stack size 
-TASK_STACK_SIZE = 16
+ZX0_PLAYER_STACK_SIZE = 16
 
 StartTestMusic:
 			xra a
 			out $10	
 			mvi a, $c9
 			sta $38
-
-brutal_restart:                
 			lxi sp, $100
 
-			call TasksInit
-			call SchedulerInit
-
-			; set bufferIdx SOUND_TASKS bytes prior to the init unpacking addr (0),
-			; to let zx0 unpack data for SOUND_TASKS number of regs
-			; that means the music will be delayed SOUND_TASKS frames
-			mvi a, -SOUND_TASKS
-			sta @bufferIdx
-			mvi a, -1
-			sta @currendTaskId
-
-; synced with interruptions				
+			call Zx0PlayerInit
 @loop:
 			ei
 			hlt
 
-			lxi h, @currendTaskId
+			call Zx0PlayerUpdate
+			jmp @loop
+
+Zx0PlayerInit: 
+			call Zx0PlayerTasksInit
+			call Zx0PlayerSchedulerInit
+
+			; set bufferIdx ZX0_PLAYER_TASKS bytes prior to the init unpacking addr (0),
+			; to let zx0 unpack data for ZX0_PLAYER_TASKS number of regs
+			; that means the music will be ZX0_PLAYER_TASKS number of frames delayed
+			mvi a, -ZX0_PLAYER_TASKS
+			sta Zx0PlayerBufferIdx
+			mvi a, -1
+			sta Zx0PlayerTaskId
+			ret
+			.closelabels
+
+; should be synced with interruptions				
+Zx0PlayerUpdate:
+			lxi h, Zx0PlayerTaskId
 			mov a, m
 			inr a
 			ani $f
 			mov m, a
-			cpi SOUND_TASKS
+			cpi ZX0_PLAYER_TASKS
 			jnc @skip
-			call SchedulerUpdate
+			call Zx0PlayerSchedulerUpdate
 @skip:
-			lxi h, @bufferIdx
+			lxi h, Zx0PlayerBufferIdx
 			inr m
-			call AYsendData
-			jmp @loop
+			call Zx0PlayerAYUpdate
+			ret
+			.closelabels
 
 ; bufferN[bufferIdx] data will be send to AY for each register accordingly
-@bufferIdx:    
+Zx0PlayerBufferIdx:    
 			.byte TEMP_BYTE
-@currendTaskId:  
+Zx0PlayerTaskId:  
 			.byte TEMP_BYTE
 			.closelabels
 
 ;==========================================
-; create a dzx0 tasks
+; create a Zx0PlayerUnpack tasks
 ;
-TasksInit:
+Zx0PlayerTasksInit:
 			di
 			lxi h, 0
 			dad sp
 			shld @restoreSp+1
 
-			lxi sp, taskStack13 + TASK_STACK_SIZE
-			lxi d, ayRegDataPtrs + SOUND_TASKS * WORD_LEN
-			; b = 0, c = a stack counter * 2
-			lxi b, (SOUND_TASKS - 1) * WORD_LEN
+			lxi sp, Zx0PlayerTaskStack13 + ZX0_PLAYER_STACK_SIZE
+			lxi d, Zx0PlayerAyRegDataPtrs + ZX0_PLAYER_TASKS * WORD_LEN
+			; b = 0, c = a task counter * 2
+			lxi b, (ZX0_PLAYER_TASKS - 1) * WORD_LEN
 @loop:
 			; store zx0 entry point to a task stack
-			lxi h, dzx0
+			lxi h, Zx0PlayerUnpack
 			push h
 			; store the buffer addr to a task stack
 			mov a, c
 			rrc
-			adi >buffer00
+			adi >Zx0PlayerBuffer00
 			mov h, a
 			mov l, b
 			push h
@@ -89,8 +109,8 @@ TasksInit:
 			mov e, m
 			push d
 			xchg
-			; store taskSP to taskSPs
-			lxi h, taskSPs
+			; store taskSP to Zx0PlayerTaskSPs
+			lxi h, Zx0PlayerTaskSPs
 			dad b
 			shld @storeTaskSP+1
 			; move sp back 4 bytes to skip storing HL, PSW because zx0 doesnt use them to init
@@ -99,7 +119,7 @@ TasksInit:
 @storeTaskSP:
 			shld TEMP_ADDR
 			; move SP to the previous task stack end
-			lxi h, $ffff - TASK_STACK_SIZE + WORD_LEN * 3 + 1
+			lxi h, $ffff - ZX0_PLAYER_STACK_SIZE + WORD_LEN * 3 + 1
 			dad sp
 
 			sphl
@@ -112,21 +132,21 @@ TasksInit:
 			.closelabels
 
 ; Set the current task stack pointer to the first task stack pointer
-SchedulerInit:
-			lxi h, taskSPs
-			shld currentTaskSPp
+Zx0PlayerSchedulerInit:
+			lxi h, Zx0PlayerTaskSPs
+			shld Zx0PlayerCurrentTaskSPp
 			ret
 			.closelabels
 
-; call dzx0 for the current task
-SchedulerUpdate: 
+; call Zx0PlayerUnpack for the current task
+Zx0PlayerSchedulerUpdate: 
 			lxi h, 0
 			dad sp
-			shld schedulerRestoreSp+1
-			lhld currentTaskSPp
+			shld Zx0PlayerSchedulerRestoreSp+1
+			lhld Zx0PlayerCurrentTaskSPp
 			mov e, m 
 			inx h 
-			mov d, m ; de = &taskSPs[n]
+			mov d, m ; de = &Zx0PlayerTaskSPs[n]
 			xchg
 			sphl
 			; restore a task context and return into it
@@ -134,11 +154,11 @@ SchedulerUpdate:
 			pop h
 			pop d
 			pop b
-			ret      ; return to dzx0
+			ret      ; return to Zx0PlayerUnpack
 
-; dzx0 task calls this after unpacking 16 bytes.
+; Zx0PlayerUnpack task calls this after unpacking 16 bytes.
 ; it stores all the registers of the current task
-StoreTaskContext:     
+Zx0PlayerSchedulerStoreTaskContext:     
 			push b
 			push d
 			push h
@@ -147,22 +167,22 @@ StoreTaskContext:
 			lxi h, 0 
 			dad sp
 			xchg
-			lhld currentTaskSPp
+			lhld Zx0PlayerCurrentTaskSPp
 			mov m, e 
 			inx h 
 			mov m, d 
 			inx h
-			mvi a, <taskSPsEnd
+			mvi a, <Zx0PlayerTaskSPsEnd
 			cmp l
 			jnz @storeNextTaskSp
-			mvi a, >taskSPsEnd
+			mvi a, >Zx0PlayerTaskSPsEnd
 			cmp h
 			jnz @storeNextTaskSp
-			; (currentTaskSPp) = taskSPs[0]
-			lxi h, taskSPs
+			; (Zx0PlayerCurrentTaskSPp) = Zx0PlayerTaskSPs[0]
+			lxi h, Zx0PlayerTaskSPs
 @storeNextTaskSp:
-			shld currentTaskSPp
-schedulerRestoreSp:
+			shld Zx0PlayerCurrentTaskSPp
+Zx0PlayerSchedulerRestoreSp:
 			lxi sp, TEMP_ADDR
 			ret
 			.closelabels
@@ -171,26 +191,24 @@ schedulerRestoreSp:
 ; DE: source address (compressed data)
 ; BC: destination address (decompressing)
 ; unpack every 16 bytes into a current task circular buffer, 
-; then call StoreTaskContext
-dzx0:
+; then call Zx0PlayerSchedulerStoreTaskContext
+Zx0PlayerUnpack:
 		lxi h, $ffff
 		push h
 		inx h
 		mvi a, $80
 @dzx0literals:
 		call @dzx0Elias
-		;call @dzx0Ldir
 		push psw
 @dzx0Ldir1:
 		ldax d
 		stax b
 		inx d					
-		;inx b
 		inr c 		; to stay inside the circular buffer
 		; check if it's time to
 		mvi a, $0f
 		ana c
-		cz StoreTaskContext 
+		cz Zx0PlayerSchedulerStoreTaskContext 
 
 		dcx h
 		mov a, h
@@ -198,7 +216,6 @@ dzx0:
 		jnz @dzx0Ldir1
 		pop psw
 		add a
-		;ret
 
 		jc @dzx0newOffset
 		call @dzx0Elias
@@ -209,20 +226,18 @@ dzx0:
 		dad b
 		mov h, b ; to stay inside the circular buffer
 		xchg
-		;call @dzx0ldirFromBuff
+
 @dzx0ldirFromBuff:
 		push psw
 @dzx0ldirFromBuff1:
 		ldax d
 		stax b
-		;inx d
 		inr e		; to stay inside the circular buffer				
-		;inx b
 		inr c 		; to stay inside the circular buffer
 		; check if it's time to
 		mvi a, $0f
 		ana c
-		cz StoreTaskContext 
+		cz Zx0PlayerSchedulerStoreTaskContext 
 
 		dcx h
 		mov a, h
@@ -231,7 +246,6 @@ dzx0:
 		mvi h, 0	; ----------- ???
 		pop psw
 		add a
-		;ret				
 
 		xchg
 		pop h
@@ -244,8 +258,7 @@ dzx0:
 		pop psw
 		xra a
 		sub l
-		;rz
-		jz @dzx0exit			;	<---- exit?
+		jz @dzx0exit
 		push h
 		rar
         mov h, a
@@ -260,7 +273,6 @@ dzx0:
 		inx h
 		jmp @dzx0copy
 
-; vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 @dzx0Elias:
 		inr l
 @dzx0eliasLoop:	
@@ -278,147 +290,29 @@ dzx0:
 		jmp @dzx0Elias
 
 @dzx0exit:
-		jmp brutal_restart		
+		; restore sp
+		lhld Zx0PlayerSchedulerRestoreSp+1
+		sphl
+		; pop Zx0PlayerSchedulerUpdate return addr
+		pop psw
+		; reset the current music
+		call Zx0PlayerInit
+		; return to func that called Zx0PlayerUpdate
+		ret
 		.closelabels
-; ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-/*
-; Parameters (forward):
-; DE: source address (compressed data)
-; BC: destination address (decompressing)
-; unpack every 16 bytes into a current task circular buffer, 
-; then call StoreTaskContext
-dzx0:
-		lxi h,$ffff            ; tos=-1 offset?
-		push h
-		inx h
-		mvi a,$80
-dzx0_literals:  ; Literal (copy next N bytes from compressed file)
-		call dzx0_elias         ; hl = read_interlaced_elias_gamma(FALSE)
-;		call dzx0_ldir          ; for (i = 0; i < length; i++) write_byte(read_byte()
-		push psw
-dzx0_ldir1:
-		ldax d
-		stax b
-		inx d
-		inr c           ; stay within circular buffer
-
-		; yield every 16 bytes
-		mvi a, 15
-		ana c
-		cz StoreTaskContext
-		dcx h
-		mov a,h
-		ora l
-		jnz dzx0_ldir1
-		pop psw
-		add a
-
-		jc dzx0_new_offset      ; if (read_bit()) goto COPY_FROM_NEW_OFFSET
-	
-		; COPY_FROM_LAST_OFFSET
-		call dzx0_elias         ; hl = read_interlaced_elias_gamma(FALSE) 
-dzx0_copy:
-		xchg                    ; hl = src, de = length
-		xthl                    ; ex (sp), hl:
-								; tos = src
-								; hl = -1
-		push h                  ; push -1
-		dad b                   ; h = -1 + dst
-		mov h, b                ; stay in the buffer!
-		xchg                    ; de = dst + offset, hl = length
-;		call dzx0_ldir          ; for (i = 0; i < length; i++) write_byte(dst[-offset+i]) 
-		push psw
-dzx0_ldir_from_buf:
-		ldax d
-		stax b
-		inr e
-		inr c                   ; stay within circular buffer
 		
-		; yield every 16 bytes
-		mvi a, 15
-		ana c
-		cz StoreTaskContext 
-		dcx h
-		mov a,h
-		ora l
-		jnz dzx0_ldir_from_buf
-		mvi h,0
-		pop psw
-		add a
-								; de = de + length
-								; hl = 0
-								; a, carry = a + a 
-		xchg                    ; de = 0, hl = de + length .. discard dst
-		pop h                   ; hl = old offset
-		xthl                    ; offset = hl, hl = src
-		xchg                    ; de = src, hl = 0?
-		jnc dzx0_literals       ; if (!read_bit()) goto COPY_LITERALS
-		
-		; COPY_FROM_NEW_OFFSET
-		; Copy from new offset (repeat N bytes from new offset)
-dzx0_new_offset:
-		call dzx0_elias         ; hl = read_interlaced_elias_gamma()
-		mov h,a                 ; h = a
-		pop psw                 ; drop offset from stack
-		xra a                   ; a = 0
-		sub l                   ; l == 0?
-		;rz                      ; return
-		jz dzx0_ded
-		push h                  ; offset = new offset
-		; last_offset = last_offset*128-(read_byte()>>1);
-		rar
-		mov h,a            ; h = hi(last_offset*128)
-		ldax d                  ; read_byte()
-		rar
-		mov l,a            ; l = read_byte()>>1
-		inx d                   ; src++
-		xthl                    ; offset = hl, hl = old offset
-		
-		mov a,h                 
-		lxi h,1                
-		cnc dzx0_elias_backtrack
-		inx h
-		jmp dzx0_copy
-dzx0_elias:
-		inr l
-dzx0_elias_loop:	
-		add a
-		jnz dzx0_elias_skip
-		ldax d
-		inx d
-		ral
-dzx0_elias_skip:
-		rc
-dzx0_elias_backtrack:
-		dad h
-		add a
-		jnc dzx0_elias_loop
-		jmp dzx0_elias
-dzx0_ldir:
-		push psw
-		mov a, b
-		cmp d
-		jz dzx0_ldir_from_buf
-
-		; reached the end, just restart the scheduler
-dzx0_ded:
-		jmp brutal_restart
-		;call StoreTaskContext
-		;jmp dzx0_ded
-*/
-				
-; Send from buffers to AY regs
-; m = line number 
+; Send buffers data to AY regs
+; input:
+; hl = bufferIdx
 ; reg13 (envelope shape) data = $ff means don't send data to reg13
 ; AY-3-8910 ports
 AY_PORT_REG  = $15
 AY_PORT_DATA = $14
 
-AYsendData:       
-			mvi e, SOUND_TASKS - 1
+Zx0PlayerAYUpdate:       
+			mvi e, ZX0_PLAYER_TASKS - 1
 			mov c, m                
-			mvi b, (>buffer00) + SOUND_TASKS - 1
+			mvi b, (>Zx0PlayerBuffer00) + ZX0_PLAYER_TASKS - 1
 				
 			ldax b
 			cpi $ff
@@ -434,62 +328,50 @@ AYsendData:
 			jp @sendData
 			ret
 			.closelabels
-;
-; SONG DATA
-; see ym6break.py for details
-;
-; recipe: 
-;   1. extract each register as a separate stream
-;   2. salvador -classic -w 256 register_stream
-;   3. make .bytestrings etc
 
-; Special for Vortex Tracker 2.5
-; EA at feb 2018 (YM+ABC)
-; Created by Sergey Bulba's AY-3-8910/12 Emulator v2.9
-; array of task stack pointers. taskSPs[i] = taskSP
-
-taskSPs: .storage WORD_LEN * SOUND_TASKS;  
-taskSPsEnd     = *
+; array of task stack pointers. Zx0PlayerTaskSPs[i] = taskSP
+Zx0PlayerTaskSPs: .storage WORD_LEN * ZX0_PLAYER_TASKS;  
+Zx0PlayerTaskSPsEnd     = *
 
 ; task stacks          
-taskStack00: .storage TASK_STACK_SIZE
-taskStack01: .storage TASK_STACK_SIZE
-taskStack02: .storage TASK_STACK_SIZE
-taskStack03: .storage TASK_STACK_SIZE
-taskStack04: .storage TASK_STACK_SIZE
-taskStack05: .storage TASK_STACK_SIZE
-taskStack06: .storage TASK_STACK_SIZE
-taskStack07: .storage TASK_STACK_SIZE
-taskStack08: .storage TASK_STACK_SIZE
-taskStack09: .storage TASK_STACK_SIZE
-taskStack10: .storage TASK_STACK_SIZE
-taskStack11: .storage TASK_STACK_SIZE
-taskStack12: .storage TASK_STACK_SIZE
-taskStack13: .storage TASK_STACK_SIZE
+Zx0PlayerTaskStack00: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack01: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack02: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack03: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack04: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack05: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack06: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack07: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack08: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack09: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack10: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack11: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack12: .storage ZX0_PLAYER_STACK_SIZE
+Zx0PlayerTaskStack13: .storage ZX0_PLAYER_STACK_SIZE
 
-ayRegDataPtrs:
-			.word ayRegData00, ayRegData01, ayRegData02, ayRegData03, ayRegData04, ayRegData05, ayRegData06, ayRegData07, 
-			.word ayRegData08, ayRegData09, ayRegData10, ayRegData11, ayRegData12, ayRegData13
-
-; a pointer to a current task sp. *currentTaskSPp = taskSPs[currentTask]
-currentTaskSPp: .word TEMP_ADDR;
+; a pointer to a current task sp. *Zx0PlayerCurrentTaskSPp = Zx0PlayerTaskSPs[currentTask]
+Zx0PlayerCurrentTaskSPp: .word TEMP_ADDR;
 
 ; buffers for unpacking the streams, must be aligned to 256 byte boundary
 .align $100
-buffer00 : .storage $100
-buffer01 : .storage $100      
-buffer02 : .storage $100
-buffer03 : .storage $100    
-buffer04 : .storage $100
-buffer05 : .storage $100
-buffer06 : .storage $100
-buffer07 : .storage $100
-buffer08 : .storage $100
-buffer09 : .storage $100
-buffer10 : .storage $100
-buffer11 : .storage $100     
-buffer12 : .storage $100
-buffer13 : .storage $100
+Zx0PlayerBuffer00 : .storage $100
+Zx0PlayerBuffer01 : .storage $100      
+Zx0PlayerBuffer02 : .storage $100
+Zx0PlayerBuffer03 : .storage $100    
+Zx0PlayerBuffer04 : .storage $100
+Zx0PlayerBuffer05 : .storage $100
+Zx0PlayerBuffer06 : .storage $100
+Zx0PlayerBuffer07 : .storage $100
+Zx0PlayerBuffer08 : .storage $100
+Zx0PlayerBuffer09 : .storage $100
+Zx0PlayerBuffer10 : .storage $100
+Zx0PlayerBuffer11 : .storage $100     
+Zx0PlayerBuffer12 : .storage $100
+Zx0PlayerBuffer13 : .storage $100
+
+Zx0PlayerAyRegDataPtrs:
+			.word ayRegData00, ayRegData01, ayRegData02, ayRegData03, ayRegData04, ayRegData05, ayRegData06, ayRegData07, 
+			.word ayRegData08, ayRegData09, ayRegData10, ayRegData11, ayRegData12, ayRegData13
 
 ayRegData00: .byte $79,$8e,$1c,$ef,$fa,$54,$26,$b2,$65,$1c,$15,$19,$85,$9f,$3e,$fc,$47,$2e,$02,$fa,$55,$09,$85,$b2,$65,$1c,$46,$61,$9f,$3e,$fc,$51,$9b,$0e,$9c,$6f,$21,$50,$79,$d0,$04,$79,$fb,$a6,$32,$e5,$9c,$65,$1c,$b2,$01,$e0,$d0,$47,$9a,$fb,$1f,$be,$7c,$60,$3e,$fc,$9f,$1e,$d0,$05,$73,$20,$02,$a8,$1c,$8e,$43,$81,$a0,$47,$9a,$fb,$32,$e5,$9c,$60,$65,$1c,$b2,$1e,$d7,$b8,$9c,$d0,$5e,$a0,$51,$e6,$fb,$1f,$be,$7c,$98,$3e,$fc,$9f,$07,$ae,$d7,$7c,$d0,$17,$95,$a0,$72,$20,$68,$0e,$5a,$0e,$07,$85,$d0,$e0,$a0,$51,$e6,$fb,$32,$e5,$9c,$89,$65,$1c,$a5,$b2,$fc,$e9,$f4,$ae,$9c,$d0,$17,$94,$a0,$79,$fb,$a2,$1f,$be,$7c,$3e,$fc,$69,$9f,$7f,$e9,$f4,$2b,$7c,$85,$d0,$e5,$a0,$5c,$95,$20,$78,$a0,$14,$79,$fb,$a2,$32,$e5,$9c,$65,$1c,$69,$b2,$7f,$e9,$f4,$2b,$9c,$85,$d0,$e5,$a0,$1e,$fb,$68,$1f,$be,$7c,$9a,$3e,$fc,$9f,$5f,$e9,$ca,$f4,$7c,$e1,$d0,$79,$a0,$57,$25,$20,$5e,$a0,$05,$1e,$fb,$68,$32,$e5,$9c,$9a,$65,$1c,$b2,$5f,$e9,$ca,$f4,$9c,$e1,$d0,$79,$a0,$47,$9a,$fb,$1f,$be,$7c,$26,$3e,$fc,$97,$9f,$f2,$e9,$f4,$b8,$7c,$d0,$5e,$a0,$55,$c9,$20,$57,$81,$a0,$47,$9a,$fb,$32,$e5,$9c,$26,$65,$1c,$97,$b2,$f2,$e9,$f4,$b8,$9c,$d0,$5e,$a0,$51,$e6,$fb,$1f,$be,$7c,$89,$3e,$fc,$a5,$9f,$fc,$e9,$f4,$ae,$7c,$d0,$17,$95,$a0,$72,$20,$55,$e0,$a0,$51,$e6,$fb,$32,$e5,$9c,$89,$65,$1c,$a5,$b2,$fc,$e9,$f4,$ae,$9c,$d0,$17,$94,$a0,$79,$fb,$a2,$1f,$be,$7c,$3e,$fc,$69,$9f,$7f,$e9,$f4,$2b,$7c,$85,$d0,$e5,$a0,$5c,$95,$20,$78,$a0,$14,$79,$fb,$a2,$32,$e5,$9c,$65,$1c,$69,$b2,$7f,$e9,$f4,$2b,$9c,$85,$d0,$e5,$a0,$1e,$fb,$68,$1f,$be,$7c,$9a,$3e,$fc,$9f,$5f,$e9,$ca,$f4,$7c,$e1,$d0,$79,$a0,$57,$00,$00,$80
 ayRegData01: .byte $79,$00,$01,$00,$fa,$55,$28,$01,$55,$68,$00,$05,$56,$85,$01,$47,$25,$80,$56,$0f,$02,$03,$04,$05,$d0,$00,$0f,$ed,$80,$fa,$e0,$d0,$57,$34,$50,$57,$f9,$0f,$ff,$a0,$10,$3e,$03,$fa,$03,$f8,$a0,$d0,$5e,$a0,$55,$c9,$20,$57,$d4,$a0,$43,$e0,$c3,$fa,$3f,$a0,$85,$d0,$e5,$a0,$5c,$95,$20,$7d,$a0,$44,$3e,$c3,$fa,$03,$f8,$a0,$d0,$5e,$a0,$55,$c9,$20,$57,$d4,$a0,$43,$e0,$c3,$fa,$3f,$a0,$85,$d0,$e5,$a0,$5c,$95,$20,$7d,$a0,$44,$3e,$c3,$fa,$03,$f8,$a0,$d0,$5e,$a0,$55,$c9,$20,$57,$d4,$a0,$43,$e0,$c3,$fa,$3f,$a0,$85,$d0,$e5,$a0,$5c,$95,$20,$7d,$a0,$44,$3e,$c3,$fa,$03,$f8,$a0,$d0,$5e,$a0,$55,$c9,$80,$55,$c0,$00,$20
