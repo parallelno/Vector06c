@@ -30,7 +30,7 @@ dzx0:
 		lxi h, $0FFFF
 		push h
 		inx h
-		mvi a,$080
+		mvi a,$80
 dzx0_literals:
 		call dzx0_elias
 		call dzx0_ldir
