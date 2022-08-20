@@ -22,6 +22,18 @@
 			.endloop
 .endmacro
 
+.macro PUSH_H(i)
+			.loop i
+			push h
+			.endloop
+.endmacro
+
+.macro POP_H(i)
+			.loop i
+			pop h
+			.endloop
+.endmacro
+
 .macro INR_D(i)
 			.loop i
 			inr d

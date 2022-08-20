@@ -1,5 +1,3 @@
-.include "globalConsts.asm"
-
 			.org	$100
 StartInit:
 			di

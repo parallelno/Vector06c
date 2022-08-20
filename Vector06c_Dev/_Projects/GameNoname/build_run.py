@@ -1,8 +1,79 @@
 from tools.build import *
+""""
+# combine all songs in the order: song0_byte0, song1_byte0, ...., song0_byte1, song1_byte1, etc.
+song = "song"
+combData= []
+allData = []
+for i in range(14):
+	with open(f"{song}{i:02d}.bin.unpack", "rb") as file:
+		data = file.read()
+		allData.append(data)
+for i in range(len(allData[0])):
+	for di in range(len(allData)):
+		combData.append(allData[di][i])
+with open(f"songComb.bin.unpack", "wb") as file:
+	file.write(bytearray(combData))
+# compress it with lz77
+RunCommand(f"tools\lz77.py -c 1 -i songComb.bin.unpack -o songComb.bin.lz77")
+# compress it with zx0
+if os.path.isfile(f"songComb.bin.zx0"):
+	os.remove(f"songComb.bin.zx0")
+RunCommand(f"tools\zx0.exe -c songComb.bin.lz77 songComb.bin.zx0")
 
-RunCommand("del *.lst *.obj *.rom", "del temp files", False)
+# the result is worse than each regData compressed with lz77, combined into one file, then zx0:
+# Lz77: codeType: 0, original data size: 53760, compressed lz77: 37701
+# ZX0 v2.2: File compressed from 37701 to 4880 bytes! (delta 2)
+"""
+"""
+song = "song"
+unpackedChannelLen = 4000
 
+for i in range(14):
+	RunCommand(f"..\\..\\retroassembler\\retroassembler.exe -C=8080 \
+			{song}{i:02d}.asm {song}{i:02d}.bin")
+	if os.path.isfile(f"{song}{i:02d}.bin.unpack"):
+		os.remove(f"{song}{i:02d}.bin.unpack")
+	RunCommand(f"tools\dzx0.exe -c {song}{i:02d}.bin {song}{i:02d}.bin.unpack")
+	
+	# cutting unpacked song to the range of [0:unpackedChannelLen)
+	# if os.path.isfile(f"{song}{i:02d}.bin"):
+	# 	os.remove(f"{song}{i:02d}.bin")
+	# with open(f"{song}{i:02d}.bin.unpack", "rb") as file:
+	# 	data = file.read()
+	# 	newData = data[0:unpackedChannelLen]
+	#	with open(f"{song}{i:02d}.bin.unpack.cut", "wb") as fBinCut:
+	#	 	fBinCut.write(newData)
 
+	# use lz77 compression to support the game song player
+	RunCommand(f"tools\lz77.py -c 1 -i {song}{i:02d}.bin.unpack -o {song}{i:02d}.bin.lz77")
+# link all lz77 compressed songs and compile
+RunCommand(f"..\\..\\retroassembler\\retroassembler.exe -C=8080 \
+		songLz77.asm songLz77.bin")
+# then pack them
+if os.path.isfile(f"songLz77.bin.zx0"):
+	os.remove(f"songLz77.bin.zx0")
+RunCommand(f"tools\zx0.exe -c songLz77.bin songLz77.bin.zx0")
+
+# to compare my apprach with double compressed zx0 approach do the next
+# link all zx0 compressed songs and compile
+RunCommand(f"..\\..\\retroassembler\\retroassembler.exe -C=8080 \
+		songZx0.asm songZx0.bin")
+# then pack them.
+if os.path.isfile(f"songZx0.bin.zx0"):
+	os.remove(f"songZx0.bin.zx0")
+RunCommand(f"tools\zx0.exe -c songZx0.bin songZx0.bin.zx0")
+
+# result:
+# lz77 cccppppp  each regData + zx0
+# File compressed from 15147 to 1624 bytes! (delta 2)
+# lz77 ccccpppp  each regData + zx0
+# File compressed from 13022 to 1368 bytes! (delta 2)
+# zx0 -c 256 each regData + zx0
+# File compressed from 2310 to 1658 bytes! (delta 2)
+
+exit()
+
+"""
 animSpriteExportUpdated = IsFileUpdated("tools\\animSpriteExport.py")
 levelExportUpdated = IsFileUpdated("tools\\levelExport.py")
 
@@ -76,6 +147,7 @@ else:
 	print(f"zx0: {bank0_seg1_path}bin wasn't updated. No need to compress.")
 
 ######################################################################################
+
 # game rom
 mainAsm = "main"
 romPath = "rom\\"
