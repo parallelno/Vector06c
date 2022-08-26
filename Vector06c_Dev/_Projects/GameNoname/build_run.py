@@ -1,4 +1,5 @@
 from tools.build import *
+
 """"
 # combine all songs in the order: song0_byte0, song1_byte0, ...., song0_byte1, song1_byte1, etc.
 song = "song"
@@ -14,7 +15,7 @@ for i in range(len(allData[0])):
 with open(f"songComb.bin.unpack", "wb") as file:
 	file.write(bytearray(combData))
 # compress it with lz77
-RunCommand(f"tools\lz77.py -c 1 -i songComb.bin.unpack -o songComb.bin.lz77")
+RunCommand(f"tools\\lz77.py -c 1 -i songComb.bin.unpack -o songComb.bin.lz77")
 # compress it with zx0
 if os.path.isfile(f"songComb.bin.zx0"):
 	os.remove(f"songComb.bin.zx0")
@@ -74,9 +75,6 @@ RunCommand(f"tools\zx0.exe -c songZx0.bin songZx0.bin.zx0")
 exit()
 
 """
-animSpriteExportUpdated = IsFileUpdated("tools\\animSpriteExport.py")
-levelExportUpdated = IsFileUpdated("tools\\levelExport.py")
-
 ######################################################################################
 # sprites to ramDisk
 
@@ -87,18 +85,19 @@ knightPath = "sprites\\knight"
 vampirePath = "sprites\\vampire"
 scythePath = "sprites\\scythe"
 
-level01Path = "levels\\level01"
+animSpriteExportUpdated = IsFileUpdated("tools\\animSpriteExport.py")
 
 anySpritesUpdated = False
-anySpritesUpdated = anySpritesUpdated | ExportAminSprites(heroPath, animSpriteExportUpdated)
-anySpritesUpdated = anySpritesUpdated | ExportAminSprites(skeletonPath, animSpriteExportUpdated)
-anySpritesUpdated = anySpritesUpdated | ExportAminSprites(burnerPath, animSpriteExportUpdated)
-anySpritesUpdated = anySpritesUpdated | ExportAminSprites(knightPath, animSpriteExportUpdated)
-anySpritesUpdated = anySpritesUpdated | ExportAminSprites(vampirePath, animSpriteExportUpdated)
-anySpritesUpdated = anySpritesUpdated | ExportAminSprites(scythePath, animSpriteExportUpdated)
+anySpritesUpdated |= ExportAminSprites(heroPath, animSpriteExportUpdated)
+anySpritesUpdated |= ExportAminSprites(skeletonPath, animSpriteExportUpdated)
+anySpritesUpdated |= ExportAminSprites(burnerPath, animSpriteExportUpdated)
+anySpritesUpdated |= ExportAminSprites(knightPath, animSpriteExportUpdated)
+anySpritesUpdated |= ExportAminSprites(vampirePath, animSpriteExportUpdated)
+anySpritesUpdated |= ExportAminSprites(scythePath, animSpriteExportUpdated)
 
 bank0_seg0_path = "ramDiskBank0_addr0"
 bank0_seg1_path = "ramDiskBank0_addr8000"
+bank1_screen_path = "ramDiskBank1_addrA000"
 
 if anySpritesUpdated:
 	RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank0_seg0_path + 
@@ -120,13 +119,18 @@ else:
 
 ######################################################################################
 # levels to ramDisk
+
+level01Path = "levels\\level01"
+
+levelExportUpdated = IsFileUpdated("tools\\levelExport.py")
+
 anyLevelsUpdated = False
-anyLevelsUpdated = anyLevelsUpdated | IsFileUpdated("sources\\levels\\level01_room00.tmj")
-anyLevelsUpdated = anyLevelsUpdated | IsFileUpdated("sources\\levels\\level01_room01.tmj")
-anyLevelsUpdated = anyLevelsUpdated | IsFileUpdated("sources\\levels\\level01_room02.tmj")
+anyLevelsUpdated |= IsFileUpdated("sources\\levels\\level01_room00.tmj")
+anyLevelsUpdated |= IsFileUpdated("sources\\levels\\level01_room01.tmj")
+anyLevelsUpdated |= IsFileUpdated("sources\\levels\\level01_room02.tmj")
 
 anyLevelsUpdated = ExportLevel(level01Path, levelExportUpdated | anyLevelsUpdated)
-anyLevelsUpdated = anyLevelsUpdated | IsFileUpdated(bank0_seg1_path + ".dasm")
+anyLevelsUpdated |= IsFileUpdated(bank0_seg1_path + ".dasm")
 
 if anyLevelsUpdated:
 	RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank0_seg1_path + 
@@ -147,7 +151,32 @@ else:
 	print(f"zx0: {bank0_seg1_path}bin wasn't updated. No need to compress.")
 
 ######################################################################################
+# music to ram-disk
+musicExportUpdated = IsFileUpdated("tools\\ay6Export.py")
 
+song01 = "song01"
+musicInFolder = "sources\\music\\"
+musicOutFolder = "generated\\music\\"
+
+anyMusicUpdated = False
+anyMusicUpdated |= IsFileUpdated(musicInFolder + song01 + ".ym")
+anyMusicUpdated |= IsFileUpdated(bank1_screen_path + ".dasm")
+
+if musicExportUpdated or anyMusicUpdated:
+	RunCommand(f"tools\\ay6Export.py -i " + musicInFolder + song01 + ".ym" + " -o " + musicOutFolder + song01 + ".dasm")
+	# compile dasm to get bin + labels
+	RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank1_screen_path + 
+			".dasm generated\\bin\\" + bank1_screen_path + ".bin >" + bank1_screen_path + "Labels.asm")
+	
+	ExportLabels(bank1_screen_path + "Labels.asm")
+
+	print(f"retroassembler: {bank1_screen_path} got compiled.")
+	print(f"ExportLabels: {bank1_screen_path}Labels.asm got compiled.")
+
+	# compress music bin
+	RunCommand("del generated\\bin\\" + bank1_screen_path + ".bin.zx0")
+	RunCommand("tools\zx0 -c generated\\bin\\" + bank1_screen_path + ".bin generated\\bin\\" + bank1_screen_path + ".bin.zx0")
+######################################################################################
 # game rom
 mainAsm = "main"
 romPath = "rom\\"

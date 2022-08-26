@@ -1,0 +1,1596 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: basslight.basse_already
+msgid "Already initialized/paused/whatever"
+msgstr ""
+
+#: basslight.basse_cantcratefile
+msgid "Couldn't create the file"
+msgstr ""
+
+#: basslight.basse_cantfindsnddrv
+msgid "Can't find a free sound driver"
+msgstr ""
+
+#: basslight.basse_cantgetchan
+msgid "Can't get a free channel"
+msgstr ""
+
+#: basslight.basse_cantopenfile
+msgid "Can't open the file"
+msgstr ""
+
+#: basslight.basse_chanfileend
+msgid "The channel/file has ended"
+msgstr ""
+
+#: basslight.basse_codec
+msgid "Codec is not available/supported"
+msgstr ""
+
+#: basslight.basse_connectiontimedout
+msgid "Connection timedout"
+msgstr ""
+
+#: basslight.basse_decodchan
+msgid "The channel is/isn't a \"decoding channel\""
+msgstr ""
+
+#: basslight.basse_devicebusy
+msgid "The device is busy"
+msgstr ""
+
+#: basslight.basse_directxver
+msgid "A sufficient DirectX version is not installed"
+msgstr ""
+
+#: basslight.basse_effectsnotenabled
+msgid "Effects are not enabled"
+msgstr ""
+
+#: basslight.basse_illegaldevice
+msgid "Illegal device number"
+msgstr ""
+
+#: basslight.basse_illegalparam
+msgid "An illegal parameter was specified"
+msgstr ""
+
+#: basslight.basse_illegalsamplerate
+msgid "Illegal sample rate"
+msgstr ""
+
+#: basslight.basse_illegaltype
+msgid "An illegal type was specified"
+msgstr ""
+
+#: basslight.basse_invalidhnd
+msgid "Invalid handle"
+msgstr ""
+
+#: basslight.basse_invalidpos
+msgid "Invalid position"
+msgstr ""
+
+#: basslight.basse_mem
+msgid "Memory error"
+msgstr ""
+
+#: basslight.basse_modnoseqdata
+msgid "The MOD music has no sequence data"
+msgstr ""
+
+#: basslight.basse_no3d
+msgid "No 3D support"
+msgstr ""
+
+#: basslight.basse_noeax
+msgid "No EAX support"
+msgstr ""
+
+#: basslight.basse_nohardvoices
+msgid "No hardware voices available"
+msgstr ""
+
+#: basslight.basse_noinit
+msgid "BASS_Init has not been successfully called"
+msgstr ""
+
+#: basslight.basse_nointernet
+msgid "No internet connection could be opened"
+msgstr ""
+
+#: basslight.basse_nostart
+msgid "BASS_Start has not been successfully called"
+msgstr ""
+
+#: basslight.basse_notfilestream
+msgid "The stream is not a file stream"
+msgstr ""
+
+#: basslight.basse_notplaying
+msgid "Not playing"
+msgstr ""
+
+#: basslight.basse_ok
+msgid "All is OK"
+msgstr ""
+
+#: basslight.basse_reqdatanotavail
+msgid "Requested data is not available"
+msgstr ""
+
+#: basslight.basse_samplebuflost
+msgid "The sample buffer was lost"
+msgstr ""
+
+#: basslight.basse_unavailspeaker
+msgid "Unavailable speaker"
+msgstr ""
+
+#: basslight.basse_unknown
+msgid "Unknown error"
+msgstr ""
+
+#: basslight.basse_unsupfileformat
+msgid "Unsupported file format"
+msgstr ""
+
+#: basslight.basse_unsupsmpformat
+msgid "Unsupported sample format"
+msgstr ""
+
+#: basslight.basse_version
+msgid "Invalid BASS version"
+msgstr ""
+
+#: cdviamci.mes_mcierrorn
+msgid "MCI error #"
+msgstr ""
+
+#: cdviamci.mes_nocdfound
+msgid "No CD drives found"
+msgstr ""
+
+#: cdviamci.mes_specifiedcdnotfound
+msgid "Specified CD drive not found"
+msgstr ""
+
+#: findplitem.frmfndplitmanywhere
+msgid "Anywhere"
+msgstr ""
+
+#: findplitem.frmfndplitmauthorname
+msgid "Author name"
+msgstr ""
+
+#: findplitem.frmfndplitmfilename
+msgctxt "findplitem.frmfndplitmfilename"
+msgid "File name"
+msgstr ""
+
+#: findplitem.frmfndplitmmusictitle
+msgid "Music title"
+msgstr ""
+
+#: languages.ayemul_apptitle
+msgid "AY-3-8910, AY-3-8912 and YM2149F Emulator, Player, Converter and Music Ripper"
+msgstr ""
+
+#: languages.mes_analisisoffile
+msgid "Analisis of file"
+msgstr ""
+
+#: languages.mes_averager
+msgid "Averager"
+msgstr ""
+
+#: languages.mes_ayemulfmtloaderror
+msgid "Ay_Emul.fmt loading error in line"
+msgstr ""
+
+#: languages.mes_ayemulremoved
+msgid "Ay_Emul data is removed from your system"
+msgstr ""
+
+#: languages.mes_begin
+msgctxt "languages.mes_begin"
+msgid "Begin"
+msgstr ""
+
+#: languages.mes_cantcalcstpaddr
+msgid "Can't calculate STP init address"
+msgstr ""
+
+#: languages.mes_cantcreatedestfolder
+msgid "Can not create destination folder"
+msgstr ""
+
+#: languages.mes_cantextracttrknum
+msgid "Can't extract track number from CDA file name"
+msgstr ""
+
+#: languages.mes_cantopen
+msgid "Can't open"
+msgstr ""
+
+#: languages.mes_closebye
+msgid "Close the program and delete Ay_Emul folder to complete uninstall. See you!"
+msgstr ""
+
+#: languages.mes_damagedfileicedepack
+msgid "Error: damaged file - SNDH ICE depacking"
+msgstr ""
+
+#: languages.mes_excregadm
+msgid "(excepting restoring file registration data, administrator rights needed)"
+msgstr ""
+
+#: languages.mes_existsoverwrite
+msgid "exists. Overwrite?"
+msgstr ""
+
+#: languages.mes_file
+msgctxt "languages.mes_file"
+msgid "File"
+msgstr ""
+
+#: languages.mes_fileopenerror
+msgid "FileOpen error"
+msgstr ""
+
+#: languages.mes_filereaderror
+msgid "FileRead error"
+msgstr ""
+
+#: languages.mes_fileseekerror
+msgid "FileSeek error"
+msgstr ""
+
+#: languages.mes_fir
+msgid "FIR"
+msgstr ""
+
+#: languages.mes_invalidlzh
+msgid "LZH compressed data is not valid"
+msgstr ""
+
+#: languages.mes_milisec
+msgid "ms"
+msgstr ""
+
+#: languages.mes_nosongplaying
+msgid "no song playing..."
+msgstr ""
+
+#: languages.mes_notay_emul20skin
+msgid "is not AY-3-8910/12 Emulator v2.0 Skin File"
+msgstr ""
+
+#: languages.mes_notfoundordenied
+msgid "not found or access denied"
+msgstr ""
+
+#: languages.mes_novaliddestformixer
+msgid "No valid destinations for selected mixer device"
+msgstr ""
+
+#: languages.mes_novolumecontrolsfound
+msgid "No volume controls found for selected destination"
+msgstr ""
+
+#: languages.mes_openfilesfromfolder
+msgid "Open files from folder:"
+msgstr ""
+
+#: languages.mes_pts
+msgid "pts"
+msgstr ""
+
+#: languages.mes_readafterendofdata
+msgid "Read after end of data"
+msgstr ""
+
+#: languages.mes_readafterendoffile
+msgid "Read after end of file"
+msgstr ""
+
+#: languages.mes_recursesubfolders
+msgid "Recurse subfolders"
+msgstr ""
+
+#: languages.mes_searchstringnotfound
+msgid "Search string not found"
+msgstr ""
+
+#: languages.mes_searchtunesinfiles
+msgid "Search for tunes in files"
+msgstr ""
+
+#: languages.mes_seekafterendoffile
+msgid "Seek after end of file"
+msgstr ""
+
+#: languages.mes_selectcontrol
+msgid "Select control:"
+msgstr ""
+
+#: languages.mes_selectdestination
+msgid "Select destination:"
+msgstr ""
+
+#: languages.mes_selectfolder
+msgid "Select folder"
+msgstr ""
+
+#: languages.mes_selectmixerdivice
+msgid "Select mixer device:"
+msgstr ""
+
+#: languages.mes_stop
+msgid "Stop"
+msgstr ""
+
+#: languages.mes_systemvolctrlsnotdetected
+msgid "System volume controls not detected"
+msgstr ""
+
+#: languages.mes_tosmallst11
+msgid "ST11 block is too small in AY-file"
+msgstr ""
+
+#: languages.mes_tracklength
+msgid "Track length"
+msgstr ""
+
+#: languages.mes_unhandlederroraddfile
+msgid "Unhandled error during adding file"
+msgstr ""
+
+#: languages.mes_unsupportedayheader
+msgid "Unsupported AY-file header"
+msgstr ""
+
+#: languages.mes_unsupportedaymheader
+msgid "Unsupported AYM-file header"
+msgstr ""
+
+#: languages.mes_unsupportedaymrevision
+msgid "Unsupported AYM-file revision"
+msgstr ""
+
+#: languages.mes_unsupportedaytype
+msgid "Unsupported AY-file type"
+msgstr ""
+
+#: languages.mes_unsupportedepsgctype
+msgid "Unsupported EPSG-file computer type"
+msgstr ""
+
+#: languages.mes_unsupportedpsgheader
+msgid "Unsupported PSG-file header"
+msgstr ""
+
+#: languages.mes_unsupportedpsgversion
+msgid "Unsupported PSG-file version"
+msgstr ""
+
+#: languages.mes_unsupportedvtxheader
+msgid "Unsupported VTX-file header"
+msgstr ""
+
+#: languages.mes_unsupportedymheader
+msgid "Unsupported YM-file header"
+msgstr ""
+
+#: languages.mes_unsuptsstruct
+msgid "Unsupported TS-file structure"
+msgstr ""
+
+#: languages.mes_userinterrupted
+msgid "Interrupted because of user wish."
+msgstr ""
+
+#: languages.mes_winversion
+msgid "Supported in Windows version only"
+msgstr ""
+
+#: languages.sndh_convertedby
+msgid "Converted by"
+msgstr ""
+
+#: languages.sndh_rippedby
+msgid "Ripped by"
+msgstr ""
+
+#: languages.tit_appicon
+msgid "Application icon"
+msgstr ""
+
+#: languages.tit_author
+msgid "Author:"
+msgstr ""
+
+#: languages.tit_bassicon
+msgid "BASS files icon"
+msgstr ""
+
+#: languages.tit_icon
+msgid "Icon"
+msgstr ""
+
+#: languages.tit_musicicon
+msgid "Music files icon"
+msgstr ""
+
+#: languages.tit_playlisticon
+msgid "Playlists icon"
+msgstr ""
+
+#: languages.tit_skinicon
+msgid "Skin files icon"
+msgstr ""
+
+#: languages.tit_startmenuicon
+msgid "'Start' menu icon"
+msgstr ""
+
+#: languages.tit_trayicon
+msgid "Tray icon"
+msgstr ""
+
+#: languages.t_allfiles
+msgid "All files"
+msgstr ""
+
+#: languages.t_allsupfiles
+msgid "All supported types"
+msgstr ""
+
+#: players.er_erbadfilestructure
+msgid "Bad file structure"
+msgstr ""
+
+#: players.er_erbasserror
+msgid "Error calling BASS library"
+msgstr ""
+
+#: players.er_erfilenotfound
+msgid "File not found"
+msgstr ""
+
+#: players.er_erflsaddrnotdetected
+msgid "Address of compilation is not detected: not FLS-file"
+msgstr ""
+
+#: players.er_erlzhdataisnotvalid
+msgid "LZH data is not valid"
+msgstr ""
+
+#: players.er_erreadingfile
+msgid "Error reading file"
+msgstr ""
+
+#: taboutbox.caption
+msgid "About program"
+msgstr ""
+
+#: tfrmfndplitm.button1.caption
+msgid "Find next"
+msgstr ""
+
+#: tfrmfndplitm.button2.caption
+msgid "Find all"
+msgstr ""
+
+#: tfrmfndplitm.button3.caption
+msgctxt "tfrmfndplitm.button3.caption"
+msgid "Close"
+msgstr ""
+
+#: tfrmfndplitm.caption
+msgid "Find playlist item"
+msgstr ""
+
+#: tfrmfndplitm.groupbox1.caption
+msgid "Search string"
+msgstr ""
+
+#: tfrmfndplitm.radiogroup1.caption
+msgid "Search area"
+msgstr ""
+
+#: tfrmjptime.button1.caption
+msgid "Jump"
+msgstr ""
+
+#: tfrmjptime.button2.caption
+msgctxt "tfrmjptime.button2.caption"
+msgid "Cancel"
+msgstr ""
+
+#: tfrmjptime.caption
+msgid "Jump to time"
+msgstr ""
+
+#: tfrmjptime.label1.caption
+msgid "Minutes:Seconds"
+msgstr ""
+
+#: tfrmmixer.atarimonochk.caption
+msgctxt "tfrmmixer.atarimonochk.caption"
+msgid "Mono"
+msgstr ""
+
+#: tfrmmixer.atarimonochk.hint
+msgid "Force mono mode for sound driver"
+msgstr ""
+
+#: tfrmmixer.atariymmonochk.caption
+msgid "YM mono"
+msgstr ""
+
+#: tfrmmixer.atariymmonochk.hint
+msgid "Force mono for sound chip channels"
+msgstr ""
+
+#: tfrmmixer.ayemusheet.caption
+msgid "AY Emulation"
+msgstr ""
+
+#: tfrmmixer.ayoverflowlbl.hint
+msgid "Warning: AY-3-8910/YM2149F output levels can overflow"
+msgstr ""
+
+#: tfrmmixer.basssheet.caption
+msgid "BASS v2.4 (optional)"
+msgstr ""
+
+#: tfrmmixer.buff.caption
+msgid "Buffers"
+msgstr ""
+
+#: tfrmmixer.button1.caption
+msgctxt "tfrmmixer.button1.caption"
+msgid "Restore"
+msgstr ""
+
+#: tfrmmixer.button2.caption
+msgctxt "tfrmmixer.button2.caption"
+msgid "Close"
+msgstr ""
+
+#: tfrmmixer.button3.caption
+msgid "Select"
+msgstr ""
+
+#: tfrmmixer.button4.caption
+msgid "Autodetect"
+msgstr ""
+
+#: tfrmmixer.caption
+msgid "Mixer"
+msgstr ""
+
+#: tfrmmixer.checkbox1.caption
+msgctxt "tfrmmixer.checkbox1.caption"
+msgid "Get from list"
+msgstr ""
+
+#: tfrmmixer.checkbox10.caption
+msgid "Linear scale (as is)"
+msgstr ""
+
+#: tfrmmixer.checkbox11.caption
+msgid "Hann window"
+msgstr ""
+
+#: tfrmmixer.checkbox12.caption
+msgid "Seek to first \"Note On\" MIDI-event"
+msgstr ""
+
+#: tfrmmixer.checkbox13.caption
+msgid "Remove DC bias"
+msgstr ""
+
+#: tfrmmixer.checkbox2.caption
+msgctxt "tfrmmixer.checkbox2.caption"
+msgid "Get from list"
+msgstr ""
+
+#: tfrmmixer.checkbox3.caption
+msgctxt "tfrmmixer.checkbox3.caption"
+msgid "Get from list"
+msgstr ""
+
+#: tfrmmixer.checkbox39.caption
+msgid "Save volume position"
+msgstr ""
+
+#: tfrmmixer.checkbox8.caption
+msgctxt "tfrmmixer.checkbox8.caption"
+msgid "Get from list"
+msgstr ""
+
+#: tfrmmixer.checkbox9.caption
+msgctxt "tfrmmixer.checkbox9.caption"
+msgid "Get from list"
+msgstr ""
+
+#: tfrmmixer.dmaoverflowlbl.hint
+msgid "Warning: DMA-Sound+AY-3-8910/YM2149F output levels can overflow"
+msgstr ""
+
+#: tfrmmixer.groupbox1.caption
+msgctxt "tfrmmixer.groupbox1.caption"
+msgid "Chip type"
+msgstr ""
+
+#: tfrmmixer.groupbox10.caption
+msgctxt "tfrmmixer.groupbox10.caption"
+msgid "Device"
+msgstr ""
+
+#: tfrmmixer.groupbox11.caption
+msgid "Visualization"
+msgstr ""
+
+#: tfrmmixer.groupbox12.caption
+msgid "Resampler"
+msgstr ""
+
+#: tfrmmixer.groupbox13.caption
+msgctxt "tfrmmixer.groupbox13.caption"
+msgid "Device"
+msgstr ""
+
+#: tfrmmixer.groupbox14.caption
+msgid "Connection parameters"
+msgstr ""
+
+#: tfrmmixer.groupbox15.caption
+msgid "MC68000 frequency"
+msgstr ""
+
+#: tfrmmixer.groupbox16.caption
+msgid "Atari ST emulation (SNDH)"
+msgstr ""
+
+#: tfrmmixer.groupbox2.caption
+msgctxt "tfrmmixer.groupbox2.caption"
+msgid "Sound chip frequency"
+msgstr ""
+
+#: tfrmmixer.groupbox3.caption
+msgid "Sample rate"
+msgstr ""
+
+#: tfrmmixer.groupbox4.caption
+msgid "Bit rate"
+msgstr ""
+
+#: tfrmmixer.groupbox5.caption
+msgid "Channels"
+msgstr ""
+
+#: tfrmmixer.groupbox7.caption
+msgid "Interrupt frequency"
+msgstr ""
+
+#: tfrmmixer.groupbox8.caption
+msgid "YM5, YM6, SNDH (MFP Timer)"
+msgstr ""
+
+#: tfrmmixer.groupbox9.caption
+msgid "Z80 frequency"
+msgstr ""
+
+#: tfrmmixer.kusil.caption
+msgctxt "tfrmmixer.kusil.caption"
+msgid "Channels amplification"
+msgstr ""
+
+#: tfrmmixer.label1.caption
+msgid "TStates per frame"
+msgstr ""
+
+#: tfrmmixer.label10.caption
+msgid "Number of FFT koef.:"
+msgstr ""
+
+#: tfrmmixer.label12.caption
+msgid "User-Agent (empty to fill all parameters from BASS):"
+msgstr ""
+
+#: tfrmmixer.label16.caption
+msgctxt "tfrmmixer.label16.caption"
+msgid "Left"
+msgstr ""
+
+#: tfrmmixer.label17.caption
+msgctxt "tfrmmixer.label17.caption"
+msgid "Right"
+msgstr ""
+
+#: tfrmmixer.label18.caption
+msgctxt "tfrmmixer.label18.caption"
+msgid "Left"
+msgstr ""
+
+#: tfrmmixer.label19.caption
+msgctxt "tfrmmixer.label19.caption"
+msgid "Right"
+msgstr ""
+
+#: tfrmmixer.label2.caption
+msgid "AmpMin/AmpMax ="
+msgstr ""
+
+#: tfrmmixer.label20.caption
+msgctxt "tfrmmixer.label20.caption"
+msgid "Left"
+msgstr ""
+
+#: tfrmmixer.label21.caption
+msgctxt "tfrmmixer.label21.caption"
+msgid "Right"
+msgstr ""
+
+#: tfrmmixer.label22.caption
+msgctxt "tfrmmixer.label22.caption"
+msgid "Hz"
+msgstr ""
+
+#: tfrmmixer.label23.caption
+msgctxt "tfrmmixer.label23.caption"
+msgid "Hz"
+msgstr ""
+
+#: tfrmmixer.label24.caption
+msgctxt "tfrmmixer.label24.caption"
+msgid "Hz"
+msgstr ""
+
+#: tfrmmixer.label25.caption
+msgctxt "tfrmmixer.label25.caption"
+msgid "Hz"
+msgstr ""
+
+#: tfrmmixer.label26.caption
+msgctxt "tfrmmixer.label26.caption"
+msgid "Hz"
+msgstr ""
+
+#: tfrmmixer.label27.caption
+msgctxt "tfrmmixer.label27.caption"
+msgid "Hz"
+msgstr ""
+
+#: tfrmmixer.label28.caption
+msgid "user:pass@server:port (empty string for system settings):"
+msgstr ""
+
+#: tfrmmixer.label3.caption
+msgid "Current volume control:"
+msgstr ""
+
+#: tfrmmixer.label4.caption
+msgid "Total length"
+msgstr ""
+
+#: tfrmmixer.label5.caption
+msgid "Buffer length"
+msgstr ""
+
+#: tfrmmixer.label6.caption
+msgctxt "tfrmmixer.label6.caption"
+msgid "Number of buffers"
+msgstr ""
+
+#: tfrmmixer.label7.caption
+msgid "Interrupt offset"
+msgstr ""
+
+#: tfrmmixer.label8.caption
+msgid "Preamp"
+msgstr ""
+
+#: tfrmmixer.label9.caption
+msgid "Beeper"
+msgstr ""
+
+#: tfrmmixer.mosheet.caption
+msgid "MIDIOut"
+msgstr ""
+
+#: tfrmmixer.proxychk.caption
+msgid "Use proxy"
+msgstr ""
+
+#: tfrmmixer.radiobutton11.caption
+msgid "16 bit"
+msgstr ""
+
+#: tfrmmixer.radiobutton12.caption
+msgid "8 bit"
+msgstr ""
+
+#: tfrmmixer.radiobutton13.caption
+msgctxt "tfrmmixer.radiobutton13.caption"
+msgid "Stereo"
+msgstr ""
+
+#: tfrmmixer.radiobutton14.caption
+msgctxt "tfrmmixer.radiobutton14.caption"
+msgid "Mono"
+msgstr ""
+
+#: tfrmmixer.radiobutton16.caption
+msgctxt "tfrmmixer.radiobutton16.caption"
+msgid "Another"
+msgstr ""
+
+#: tfrmmixer.radiobutton20.caption
+msgctxt "tfrmmixer.radiobutton20.caption"
+msgid "Another"
+msgstr ""
+
+#: tfrmmixer.radiobutton25.caption
+msgctxt "tfrmmixer.radiobutton25.caption"
+msgid "Another"
+msgstr ""
+
+#: tfrmmixer.radiobutton26.caption
+msgid "FIR-filter"
+msgstr ""
+
+#: tfrmmixer.radiobutton27.caption
+msgctxt "tfrmmixer.radiobutton27.caption"
+msgid "Another"
+msgstr ""
+
+#: tfrmmixer.radiobutton28.caption
+msgid "averager"
+msgstr ""
+
+#: tfrmmixer.radiobutton31.caption
+msgctxt "tfrmmixer.radiobutton31.caption"
+msgid "Another"
+msgstr ""
+
+#: tfrmmixer.radiobutton7.caption
+msgctxt "tfrmmixer.radiobutton7.caption"
+msgid "Another"
+msgstr ""
+
+#: tfrmmixer.speedbutton2.caption
+msgid "Stop playing"
+msgstr ""
+
+#: tfrmmixer.speedbutton3.caption
+msgid "Helper"
+msgstr ""
+
+#: tfrmmixer.trackbar8.hint
+msgid "Length of one buffer"
+msgstr ""
+
+#: tfrmmixer.trackbar9.hint
+msgctxt "tfrmmixer.trackbar9.hint"
+msgid "Number of buffers"
+msgstr ""
+
+#: tfrmmixer.tsoverflowlbl.hint
+msgid "Warning: Turbo Sound output levels can overflow"
+msgstr ""
+
+#: tfrmmixer.volumesheet.caption
+msgid "Global Volume Control"
+msgstr ""
+
+#: tfrmmixer.wosheet.caption
+msgid "Digital Sound"
+msgstr ""
+
+#: tfrmmxhlp.button1.caption
+msgid "Set"
+msgstr ""
+
+#: tfrmmxhlp.button2.caption
+msgctxt "tfrmmxhlp.button2.caption"
+msgid "Cancel"
+msgstr ""
+
+#: tfrmmxhlp.caption
+msgid "Mixer Amplifier Helper"
+msgstr ""
+
+#: tfrmmxhlp.chansrg.caption
+msgid "AY-3-8910/YM2149F Channels Allocation"
+msgstr ""
+
+#: tfrmmxhlp.tsdmachg.caption
+msgid "Leave space for additional device"
+msgstr ""
+
+#: tfrmpliedit.button1.caption
+msgid "Load"
+msgstr ""
+
+#: tfrmpliedit.button2.caption
+msgctxt "tfrmpliedit.button2.caption"
+msgid "Save"
+msgstr ""
+
+#: tfrmpliedit.button4.caption
+msgctxt "tfrmpliedit.button4.caption"
+msgid "Cancel"
+msgstr ""
+
+#: tfrmpliedit.caption
+msgid "List's Item Adjusting"
+msgstr ""
+
+#: tfrmpliedit.groupbox1.caption
+msgid "Information"
+msgstr ""
+
+#: tfrmpliedit.groupbox2.caption
+msgid "Playing"
+msgstr ""
+
+#: tfrmpliedit.groupbox3.caption
+msgid "Chip"
+msgstr ""
+
+#: tfrmpliedit.groupbox4.caption
+msgid "Chip frequency"
+msgstr ""
+
+#: tfrmpliedit.groupbox5.caption
+msgid "Player frequency"
+msgstr ""
+
+#: tfrmpliedit.groupbox6.caption
+msgid "Number of channels"
+msgstr ""
+
+#: tfrmpliedit.groupbox7.caption
+msgctxt "tfrmpliedit.groupbox7.caption"
+msgid "Channels amplification"
+msgstr ""
+
+#: tfrmpliedit.groupbox8.caption
+msgid "Default list settings"
+msgstr ""
+
+#: tfrmpliedit.groupbox9.caption
+msgctxt "tfrmpliedit.groupbox9.caption"
+msgid "File"
+msgstr ""
+
+#: tfrmpliedit.label1.caption
+msgctxt "tfrmpliedit.label1.caption"
+msgid "Author"
+msgstr ""
+
+#: tfrmpliedit.label11.caption
+msgid "Specific"
+msgstr ""
+
+#: tfrmpliedit.label12.caption
+msgid "Type"
+msgstr ""
+
+#: tfrmpliedit.label13.caption
+msgid "Offset"
+msgstr ""
+
+#: tfrmpliedit.label14.caption
+msgid "Address"
+msgstr ""
+
+#: tfrmpliedit.label16.caption
+msgid "Time"
+msgstr ""
+
+#: tfrmpliedit.label17.caption
+msgid "Length"
+msgstr ""
+
+#: tfrmpliedit.label18.caption
+msgid "Loop"
+msgstr ""
+
+#: tfrmpliedit.label2.caption
+msgctxt "tfrmpliedit.label2.caption"
+msgid "Title"
+msgstr ""
+
+#: tfrmpliedit.label3.caption
+msgctxt "tfrmpliedit.label3.caption"
+msgid "Program"
+msgstr ""
+
+#: tfrmpliedit.label4.caption
+msgctxt "tfrmpliedit.label4.caption"
+msgid "Tracker"
+msgstr ""
+
+#: tfrmpliedit.label5.caption
+msgid "Computer"
+msgstr ""
+
+#: tfrmpliedit.label6.caption
+msgid "Date"
+msgstr ""
+
+#: tfrmpliedit.label7.caption
+msgid "Comment:"
+msgstr ""
+
+#: tfrmpliedit.radiobutton10.caption
+msgctxt "tfrmpliedit.radiobutton10.caption"
+msgid "Stereo"
+msgstr ""
+
+#: tfrmpliedit.radiobutton11.caption
+msgctxt "tfrmpliedit.radiobutton11.caption"
+msgid "Mono"
+msgstr ""
+
+#: tfrmpliedit.radiobutton12.caption
+msgctxt "tfrmpliedit.radiobutton12.caption"
+msgid "Another"
+msgstr ""
+
+#: tfrmpliedit.radiobutton13.caption
+msgctxt "tfrmpliedit.radiobutton13.caption"
+msgid "Standard"
+msgstr ""
+
+#: tfrmpliedit.radiobutton14.caption
+msgctxt "tfrmpliedit.radiobutton14.caption"
+msgid "Default"
+msgstr ""
+
+#: tfrmpliedit.radiobutton15.caption
+msgctxt "tfrmpliedit.radiobutton15.caption"
+msgid "Default"
+msgstr ""
+
+#: tfrmpliedit.radiobutton16.caption
+msgctxt "tfrmpliedit.radiobutton16.caption"
+msgid "Default"
+msgstr ""
+
+#: tfrmpliedit.radiobutton17.caption
+msgctxt "tfrmpliedit.radiobutton17.caption"
+msgid "Default"
+msgstr ""
+
+#: tfrmpliedit.radiobutton18.caption
+msgctxt "tfrmpliedit.radiobutton18.caption"
+msgid "Default"
+msgstr ""
+
+#: tfrmpliedit.radiobutton7.caption
+msgctxt "tfrmpliedit.radiobutton7.caption"
+msgid "Another"
+msgstr ""
+
+#: tfrmpliedit.radiobutton9.caption
+msgctxt "tfrmpliedit.radiobutton9.caption"
+msgid "Another"
+msgstr ""
+
+#: tfrmplst.byauthorsort.caption
+msgid "Sort by author"
+msgstr ""
+
+#: tfrmplst.byfilenamesort.caption
+msgid "Sort by file name"
+msgstr ""
+
+#: tfrmplst.byfiletype1.caption
+msgid "Sort by file type"
+msgstr ""
+
+#: tfrmplst.bytitlesort.caption
+msgid "Sort by title"
+msgstr ""
+
+#: tfrmplst.caption
+msgid "Playlist"
+msgstr ""
+
+#: tfrmplst.deduplicate1.caption
+msgid "Deduplicate"
+msgstr ""
+
+#: tfrmplst.finditem1.caption
+msgid "Find item..."
+msgstr ""
+
+#: tfrmplst.menuconvert.caption
+msgid "Convert to"
+msgstr ""
+
+#: tfrmplst.menuitemadjusting.caption
+msgid "Item adjusting..."
+msgstr ""
+
+#: tfrmplst.menuopenineditor.caption
+msgid "Open in editor"
+msgstr ""
+
+#: tfrmplst.menusaveas.caption
+msgid "Save as..."
+msgstr ""
+
+#: tfrmplst.randomsort.caption
+msgid "Sort randomly"
+msgstr ""
+
+#: tfrmplst.speedbutton1.caption
+msgid "Add items"
+msgstr ""
+
+#: tfrmplst.speedbutton2.caption
+msgid "Clear list"
+msgstr ""
+
+#: tfrmplst.speedbutton3.caption
+msgid "Save list"
+msgstr ""
+
+#: tfrmplst.speedbutton4.caption
+msgid "List tools"
+msgstr ""
+
+#: tfrmprbox.button1.caption
+msgid "Abort current operation"
+msgstr ""
+
+#: tfrmprbox.button2.caption
+msgid "Switch off tunes finder"
+msgstr ""
+
+#: tfrmprbox.caption
+msgid "Searching for tunes"
+msgstr ""
+
+#: tfrmselvolctrl.button2.caption
+msgctxt "tfrmselvolctrl.button2.caption"
+msgid "Cancel"
+msgstr ""
+
+#: tfrmtools.alluserschk.caption
+msgid "For all users (Administrator rights needed)"
+msgstr ""
+
+#: tfrmtools.button1.caption
+msgctxt "tfrmtools.button1.caption"
+msgid "Choose..."
+msgstr ""
+
+#: tfrmtools.button10.caption
+msgid "Add"
+msgstr ""
+
+#: tfrmtools.button11.caption
+msgid "Remove"
+msgstr ""
+
+#: tfrmtools.button12.caption
+msgctxt "tfrmtools.button12.caption"
+msgid "Choose..."
+msgstr ""
+
+#: tfrmtools.button13.caption
+msgctxt "tfrmtools.button13.caption"
+msgid "Standard"
+msgstr ""
+
+#: tfrmtools.button14.caption
+msgctxt "tfrmtools.button14.caption"
+msgid "Save"
+msgstr ""
+
+#: tfrmtools.button15.caption
+msgctxt "tfrmtools.button15.caption"
+msgid "All/None"
+msgstr ""
+
+#: tfrmtools.button16.caption
+msgctxt "tfrmtools.button16.caption"
+msgid "Apply"
+msgstr ""
+
+#: tfrmtools.button17.caption
+msgctxt "tfrmtools.button17.caption"
+msgid "All/None"
+msgstr ""
+
+#: tfrmtools.button2.caption
+msgctxt "tfrmtools.button2.caption"
+msgid "Choose..."
+msgstr ""
+
+#: tfrmtools.button3.caption
+msgctxt "tfrmtools.button3.caption"
+msgid "Begin"
+msgstr ""
+
+#: tfrmtools.button4.caption
+msgctxt "tfrmtools.button4.caption"
+msgid "Close"
+msgstr ""
+
+#: tfrmtools.button5.caption
+msgctxt "tfrmtools.button5.caption"
+msgid "All/None"
+msgstr ""
+
+#: tfrmtools.button6.caption
+msgctxt "tfrmtools.button6.caption"
+msgid "All/None"
+msgstr ""
+
+#: tfrmtools.button7.caption
+msgid "Uninstall"
+msgstr ""
+
+#: tfrmtools.button8.caption
+msgid "Register"
+msgstr ""
+
+#: tfrmtools.button9.caption
+msgid "Unregister"
+msgstr ""
+
+#: tfrmtools.caption
+msgid "Tools"
+msgstr ""
+
+#: tfrmtools.checkbox12.caption
+msgid "ST 1.1-1.3 uncompiled"
+msgstr ""
+
+#: tfrmtools.checkbox13.caption
+msgid "ST Pro uncompiled"
+msgstr ""
+
+#: tfrmtools.checkbox29.caption
+msgid "Enabled"
+msgstr ""
+
+#: tfrmtools.checkbox38.caption
+msgid "Automatically save current"
+msgstr ""
+
+#: tfrmtools.checkbox40.caption
+msgid "Save windows position"
+msgstr ""
+
+#: tfrmtools.checkbox41.caption
+msgid "Kill on exit"
+msgstr ""
+
+#: tfrmtools.checkbox42.caption
+msgid "Kill on nothing"
+msgstr ""
+
+#: tfrmtools.checkbox57.caption
+msgid "Do not check modules integrity (faster)"
+msgstr ""
+
+#: tfrmtools.fidotools.caption
+msgid "Track descriptor"
+msgstr ""
+
+#: tfrmtools.ftyptools.caption
+msgid "Application registration"
+msgstr ""
+
+#: tfrmtools.gentools.caption
+msgid "General"
+msgstr ""
+
+#: tfrmtools.groupbox1.caption
+msgctxt "tfrmtools.groupbox1.caption"
+msgid "Other"
+msgstr ""
+
+#: tfrmtools.groupbox10.caption
+msgid "'Start' menu"
+msgstr ""
+
+#: tfrmtools.groupbox11.caption
+msgid "Icon on system tray"
+msgstr ""
+
+#: tfrmtools.groupbox12.caption
+msgid "Current Skin"
+msgstr ""
+
+#: tfrmtools.groupbox13.caption
+msgid "Folder with music"
+msgstr ""
+
+#: tfrmtools.groupbox2.caption
+msgid "Playlist colors and font"
+msgstr ""
+
+#: tfrmtools.groupbox3.caption
+msgid "Search for tunes"
+msgstr ""
+
+#: tfrmtools.groupbox4.caption
+msgid "Modules editor path"
+msgstr ""
+
+#: tfrmtools.groupbox5.caption
+msgid "Priority"
+msgstr ""
+
+#: tfrmtools.groupbox6.caption
+msgid "Language"
+msgstr ""
+
+#: tfrmtools.groupbox7.caption
+msgid "Default code page"
+msgstr ""
+
+#: tfrmtools.groupbox8.caption
+msgid "Code page"
+msgstr ""
+
+#: tfrmtools.label1.caption
+msgid "Text"
+msgstr ""
+
+#: tfrmtools.label10.caption
+msgid "Suffix"
+msgstr ""
+
+#: tfrmtools.label11.caption
+msgid "Nothing"
+msgstr ""
+
+#: tfrmtools.label12.caption
+msgid "Back"
+msgstr ""
+
+#: tfrmtools.label13.caption
+msgid "SelText"
+msgstr ""
+
+#: tfrmtools.label14.caption
+msgid "SelBack"
+msgstr ""
+
+#: tfrmtools.label15.caption
+msgid "Play Text"
+msgstr ""
+
+#: tfrmtools.label16.caption
+msgid "Play Back"
+msgstr ""
+
+#: tfrmtools.label17.caption
+msgid "Play SelText"
+msgstr ""
+
+#: tfrmtools.label18.caption
+msgid "Error Text"
+msgstr ""
+
+#: tfrmtools.label19.caption
+msgid "Err SelText"
+msgstr ""
+
+#: tfrmtools.label2.caption
+msgctxt "tfrmtools.label2.caption"
+msgid "File name"
+msgstr ""
+
+#: tfrmtools.label20.caption
+msgid "Visualization period, ms"
+msgstr ""
+
+#: tfrmtools.label3.caption
+msgid "Source files:"
+msgstr ""
+
+#: tfrmtools.label4.caption
+msgid "Work folder:"
+msgstr ""
+
+#: tfrmtools.label5.caption
+msgid "Work report:"
+msgstr ""
+
+#: tfrmtools.label6.caption
+msgid "Skin's author"
+msgstr ""
+
+#: tfrmtools.label7.caption
+msgid "Comment"
+msgstr ""
+
+#: tfrmtools.label8.caption
+msgctxt "tfrmtools.label8.caption"
+msgid "File name"
+msgstr ""
+
+#: tfrmtools.label9.caption
+msgid "Prefix"
+msgstr ""
+
+#: tfrmtools.radiobutton10.caption
+msgid "minimize"
+msgstr ""
+
+#: tfrmtools.radiobutton3.caption
+msgid "idle"
+msgstr ""
+
+#: tfrmtools.radiobutton4.caption
+msgid "normal"
+msgstr ""
+
+#: tfrmtools.radiobutton5.caption
+msgid "high"
+msgstr ""
+
+#: tfrmtools.radiobutton8.caption
+msgid "never"
+msgstr ""
+
+#: tfrmtools.radiobutton9.caption
+msgid "always"
+msgstr ""
+
+#: tfrmtools.searchtool.caption
+msgid "Searching for tunes in files"
+msgstr ""
+
+#: tfrmtools.speedbutton1.caption
+msgid "Choose font..."
+msgstr ""
+
+#: theadereditor.btapply.caption
+msgctxt "theadereditor.btapply.caption"
+msgid "Apply"
+msgstr ""
+
+#: theadereditor.btrestore.caption
+msgctxt "theadereditor.btrestore.caption"
+msgid "Restore"
+msgstr ""
+
+#: theadereditor.caption
+msgid "Information in the file header"
+msgstr ""
+
+#: theadereditor.chanallocbox.caption
+msgid "Channels allocation"
+msgstr ""
+
+#: theadereditor.chtypebox.caption
+msgctxt "theadereditor.chtypebox.caption"
+msgid "Chip type"
+msgstr ""
+
+#: theadereditor.frqbox.caption
+msgctxt "theadereditor.frqbox.caption"
+msgid "Sound chip frequency"
+msgstr ""
+
+#: theadereditor.label1.caption
+msgctxt "theadereditor.label1.caption"
+msgid "Hz"
+msgstr ""
+
+#: theadereditor.label2.caption
+msgctxt "theadereditor.label2.caption"
+msgid "Hz"
+msgstr ""
+
+#: theadereditor.label3.caption
+msgctxt "theadereditor.label3.caption"
+msgid "Hz"
+msgstr ""
+
+#: theadereditor.label4.caption
+msgctxt "theadereditor.label4.caption"
+msgid "Hz"
+msgstr ""
+
+#: theadereditor.label5.caption
+msgctxt "theadereditor.label5.caption"
+msgid "Hz"
+msgstr ""
+
+#: theadereditor.label6.caption
+msgctxt "theadereditor.label6.caption"
+msgid "Hz"
+msgstr ""
+
+#: theadereditor.lbauthor.caption
+msgctxt "theadereditor.lbauthor.caption"
+msgid "Author"
+msgstr ""
+
+#: theadereditor.lbprogram.caption
+msgctxt "theadereditor.lbprogram.caption"
+msgid "Program"
+msgstr ""
+
+#: theadereditor.lbtitle.caption
+msgctxt "theadereditor.lbtitle.caption"
+msgid "Title"
+msgstr ""
+
+#: theadereditor.lbtotvbls.caption
+msgid "Total VBLs"
+msgstr ""
+
+#: theadereditor.lbtracker.caption
+msgctxt "theadereditor.lbtracker.caption"
+msgid "Tracker"
+msgstr ""
+
+#: theadereditor.lbyear.caption
+msgid "Year"
+msgstr ""
+
+#: theadereditor.otherbox.caption
+msgid "Other information"
+msgstr ""
+
+#: theadereditor.rbfrqother.caption
+msgctxt "theadereditor.rbfrqother.caption"
+msgid "Other"
+msgstr ""
+
+#: theadereditor.rbplfrqother.caption
+msgctxt "theadereditor.rbplfrqother.caption"
+msgid "Other"
+msgstr ""
+
+#: theadereditor.songinfobox.caption
+msgid "Information about song"
+msgstr ""
+
+#: theadereditor.vblfrqbox.caption
+msgid "VBL frequency"
+msgstr ""
+
+#: theadereditor.vblloopbox.caption
+msgid "Loop VBL"
+msgstr ""
+
+#: tseldirdlg.button2.caption
+msgctxt "tseldirdlg.button2.caption"
+msgid "Cancel"
+msgstr ""
+
+#: tseldirdlg.playlistgb.caption
+msgid "Playlist files"
+msgstr ""
+
+#: tseldirdlg.radiobutton1.caption
+msgid "Include playlists"
+msgstr ""
+
+#: tseldirdlg.radiobutton2.caption
+msgid "Exclude playlists"
+msgstr ""
+
+#: tseldirdlg.radiobutton3.caption
+msgid "Only playlists"
+msgstr ""
+

@@ -1,0 +1,4 @@
+.setting "ShowLabelsAfterCompiling", true
+.org $a000
+
+.include "generated\\music\\song01.dasm"

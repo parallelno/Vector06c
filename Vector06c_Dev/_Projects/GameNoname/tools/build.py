@@ -1,6 +1,6 @@
-import datetime
 import os
 import sqlite3
+from tools.common import *
 
 buildDBPath = "generated\\build.db"
 SEGMENT_0000_7F00_ADDR = 0x0000
@@ -65,22 +65,6 @@ def IsFileUpdated(path, _buildDBPath = buildDBPath):
 	con.commit()
 	con.close()
 	return modified
-
-def RunCommand(command, comment = "", echo = True):
-	# TODO: fix echo off
-	if comment != "" : 
-		print(comment)
-	if echo: 
-		os.system("@echo on")
-	else:
-		os.system("@echo off")
-
-	os.system(command)
-	
-	if echo: 
-		os.system("@echo on")
-	else:
-		os.system("@echo off")
 
 def ExportLabels(path):
 	with open(path, "rb") as file:

@@ -128,7 +128,7 @@ addSize = False
 if args.size :
 	addSize = True
 
-if not args.input and  not args.outputAnim and not args.outputSprite:
+if not args.input or not args.outputAnim or not args.outputSprite:
 	print("-i, -oa, and -os command-line parameters are required. Use -h for help.")
 	exit()
 charJPath = args.input

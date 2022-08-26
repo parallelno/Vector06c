@@ -99,7 +99,7 @@ DrawSpriteV2:
 			mov m, c
 			dcr l			
 			dcr e
-			jz DrawSpriteV_restoreSP
+			jz DrawSpriteV_ramDiskOff
 
 @oddScr3:	mov m, b
 			inr h
@@ -125,7 +125,7 @@ DrawSpriteV2:
 			dcr l
 			dcr e
 			jnz @evenScr1
-			jmp DrawSpriteV_restoreSP
+			jmp DrawSpriteV_ramDiskOff
 ;------------------------------------------------
 DrawSpriteV2_width16:
 			; get offsetY and apply it to X
@@ -162,7 +162,7 @@ DrawSpriteV2_width16:
 			mov m, b
 			dcr l			
 			dcr e
-			jz DrawSpriteV_restoreSP
+			jz DrawSpriteV_ramDiskOff
 
 @oddScr3:	pop b
 			mov m, c
@@ -181,7 +181,7 @@ DrawSpriteV2_width16:
 			dcr	l
 			dcr e
 			jnz @evenScr1
-			jmp DrawSpriteV_restoreSP
+			jmp DrawSpriteV_ramDiskOff
 ;-------------------------------------------------
 DrawSpriteV2_width8:
 			; get offsetY and apply it to X
@@ -208,7 +208,7 @@ DrawSpriteV2_width8:
 			mov m, c
 			dcr l
 			dcr e
-			jz DrawSpriteV_restoreSP
+			jz DrawSpriteV_ramDiskOff
 @oddScr3:	
 			mov m, b
 @oddScr2:	mov h, d
@@ -219,7 +219,7 @@ DrawSpriteV2_width8:
 			dcr	l
 			dcr e
 			jnz @evenScr1
-			jmp DrawSpriteV_restoreSP
+			jmp DrawSpriteV_ramDiskOff
 
 ; =============================================
 ; Draw a dx*15 sprite in three consiquence screen buffs with offsetX
@@ -303,9 +303,10 @@ DrawSpriteV_width24:
 			DRAW_ODD_LINE_24()			
 			DRAW_EVEN_LINE_24(False)
 
-DrawSpriteV_restoreSP:	
+DrawSpriteV_ramDiskOff:
+			RAM_DISK_OFF()
+DrawSpriteV_restoreSP:
 			lxi		sp, TEMP_ADDR	; restore sp (12)
-			RAM_DISK_OFF()	
 			ret
 ;-------------------------------------------------------------
 DrawSpriteV_width16:
@@ -334,7 +335,7 @@ DrawSpriteV_width16:
 			DRAW_ODD_LINE_16()
 			DRAW_EVEN_LINE_16(false)
 			
-			jmp DrawSpriteV_restoreSP
+			jmp DrawSpriteV_ramDiskOff
 ;-------------------------------------------------------------
 DrawSpriteV_width8:
 			; save high screen byte to restore X
@@ -361,7 +362,7 @@ DrawSpriteV_width8:
 			DRAW_ODD_LINE_8()
 			DRAW_EVEN_LINE_8(false)
 
-			jmp DrawSpriteV_restoreSP
+			jmp DrawSpriteV_ramDiskOff
 			.closelabels
 
 .macro DRAW_EVEN_LINE_8(_moveDown = true)

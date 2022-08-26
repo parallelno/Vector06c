@@ -30,19 +30,6 @@ def RoomTilesDataToAsm(roomJ, roomPath):
 		if i % width == width-1 : asm += "\n"
 	return asm, size
 
-def RoomTilesAddrToAsm(roomJ, roomPath, remapIdxs):
-	asm = "; " + roomPath + "\n"
-	labelPrefix = roomPath.split("/")[-1].split("\\")[-1].split(".")[0]
-	asm += "addr_" + labelPrefix + ":\n"
-	width = roomJ["layers"][0]["width"]
-	height = roomJ["layers"][0]["height"]
-
-	for i, tidx in enumerate(roomJ["layers"][0]["data"]):
-		if i % width == 0 : asm += "			.word "
-		asm += "tile" + str(remapIdxs[tidx]) + ", "
-		if i % width == width-1 : asm += "\n"
-	return asm
-
 def TileData(bytes0, bytes1, bytes2, bytes3):
 	allBytes = [bytes0, bytes1, bytes2, bytes3]
 	# data structure description is in drawTile.asm
@@ -132,10 +119,13 @@ def GetListOfRooms(roomPaths, labelPrefix):
 	size = 0
 	asm = "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 	asm += labelPrefix + "_roomsAddr:\n			.word "
-	for roomPathP in roomPaths:
+	for i, roomPathP in enumerate(roomPaths):
 		roomPath = roomPathP['file']
 		labelPrefix = roomPath.split("/")[-1].split("\\")[-1].split(".")[0]
 		asm += labelPrefix + ", "
+		if i != len(roomPaths)-1:
+			# two safety fytes
+			asm += "0, "
 		size += 2
 	asm += "\n"
 	return asm, size
@@ -144,8 +134,11 @@ def GetListOfTiles(remapIdxs, levelAsmName, pngLabelPrefix):
 	size = 0
 	asm = "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 	asm += levelAsmName + "_tilesAddr:\n			.word "
-	for tidx in remapIdxs:
+	for i, tidx in enumerate(remapIdxs):
 		asm += pngLabelPrefix + "_tile" + str(remapIdxs[tidx]) + ", "
+		if i != len(remapIdxs)-1:
+			# two safety fytes
+			asm += "0, "
 		size += 2
 	asm += "\n"
 	return asm, size
@@ -164,7 +157,7 @@ parser.add_argument("-i", "--input", help = "Input file")
 parser.add_argument("-o", "--output", help = "Output file")
 args = parser.parse_args()
 
-if not args.output and not args.input:
+if not args.output or not args.input:
 	print("-i and -o command-line parameters needed. Use -h for help.")
 	exit()
 levelJPath = args.input

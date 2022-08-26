@@ -1,21 +1,3 @@
-
-.macro RND_TEST()
-RND_TEST_ST_ADDR = $8000
-@addr:	
-		lxi h, RND_TEST_ST_ADDR
-		push h
-		call Random
-		pop h
-		mov m, a
-		inx h
-		mov a, h
-		cpi $a0
-		jnz @cont
-		lxi h, RND_TEST_ST_ADDR
-@cont:
-		shld @addr+1
-.endmacro
-
 .macro INTERRUPTION_MAIN_LOGIC()
 			; interruption logic
 
@@ -37,50 +19,62 @@ RND_TEST_ST_ADDR = $8000
 			out 2
 			lda scrOffsetY
 			out 3
-			
+
 			lxi h, interruptionCounter
 			inr m
 .endmacro
 
 ;----------------------------------------------------------------
 ; The interruption sub which supports stack manipulations in 
-; the main program without stopping it.
+; the main program without di/ei.
 
-; If the main program is doing "pop RP" operation to read the data, 
-; and an interruption happens, then i8080 performs "push PC" corrupting 
-; the data sp is pointing to. The interruption sub below restores the 
-; corrupted data using the BC register pair. To make it work the main
-; program has to use only pop B when it reads the stack data. Also the
-; data read by stack has to have two extra bytes 0,0 in back of the
-; actual data at the addresses dataPointer-1, dataPointer-2, to not let
-; the "push PC" corrupts the data before BC pair gets it.
+; If the main program is doing "pop RP" operation to read some data, 
+; and an interruption happens, then i8080 performs "push PC" 
+; corrupting the data where sp was pointing to. The interruption sub 
+; below restores the corrupted data using BC register pair. To make
+; it works the main program has to use only pop B when it needs to
+; use the stack to manipulate the data, also the data read by stack
+; has to have two extra bytes 0,0 stored in front of the actual data
+; to not let the "push PC" corrupts the data before BC pair gets it.
 
 Interruption2:
-			; restore the Stack
+			; get the return addr which this interruption call stored into the stack
 			xthl
 			shld @return + 1
 			pop h
 			shld @restoreHL + 1
-			lxi h, 2
-			; store AF bcause dad psw change it
+			; store psw as the first element in the interruption stack
+			; because the following dad psw corrupts it
 			push psw
+			pop h
+			shld STACK_INTERRUPTION_ADDR-2
+			
+			lxi h, 0
 			dad sp
-			; restore AF
-			pop psw
 			shld @restoreSP + 1
+
+			; restore two bytes that were corrupted by this interruption call
 			push b
-			; todo: try to use ram disk bank 3 to not damage the ram-disk data
-			lxi sp, STACK_TEMP_ADDR
-			push psw
+			; dismount ram disks to not damage the ram-disk data with the interruption stack
+			RAM_DISK_OFF_NO_RESTORE()
+			lxi sp, STACK_INTERRUPTION_ADDR-2
 			push b
 			push d
 
+			call GCPlayerUpdate
+
 			INTERRUPTION_MAIN_LOGIC()
-			;RND_TEST()
 
 			pop d
 			pop b
 			pop psw
+			mov l, a
+			; restore the ramd-disk mode
+			; ramDiskMode doesn't guarantee that a ram-disk is in this mode already. that mode could be applied only after the next command in the main program
+			RAM_DISK_RESTORE()
+			; restore A
+			mov a, l
+
 @restoreHL:	lxi		h, TEMP_ADDR
 @restoreSP:	lxi		sp, TEMP_ADDR
 			ei

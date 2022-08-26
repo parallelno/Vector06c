@@ -12,8 +12,6 @@
 .include "monsters.asm"
 .include "levels.asm"
 
-;.include "testDrawSpriteVSpeed.asm"
-
 GameInit:
 			call LevelsInit
 			call LevelInit
@@ -22,9 +20,22 @@ GameInit:
 
 			xra a
 			sta interruptionCounter
-@gameLoop:		
-			call GameUpdate	
+			hlt
+@gameLoop:
+			call GCPlayerStartCheck
+			// di
+			// call GCPlayerUpdate
+			// ei
+			call GameUpdate
 			call GameDraw
+
+; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+			BORDER_LINE(1)
+; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			;hlt
+; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+			BORDER_LINE(9)
+; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 			jmp	 @gameLoop
 
@@ -32,16 +43,8 @@ GameUpdate:
 			lda interruptionCounter
 			ora a
 			jnz	@updateLoop
-
-; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-			BORDER_LINE(1)
-; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-			hlt
-; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-			BORDER_LINE(9)
-; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 			ret
+
 @updateLoop:
 			call HeroUpdate
 			call MonstersUpdate
@@ -60,7 +63,6 @@ GameUpdate:
 GameDraw:
 			call HeroDraw			
 			call MonstersDraw
-			;call TestDrawSpriteVSpeed
 			ret
 			.closelabels
 			

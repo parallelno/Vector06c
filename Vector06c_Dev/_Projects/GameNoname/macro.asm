@@ -51,19 +51,47 @@
 			dcx h
 			.endloop
 .endmacro
-
-; mount the ram-disk
-.macro RAM_DISK_ON(_command = RAM_DISK0_B0_STACK)
+;================================== ALL RAM_DISK_* macros has to be placed right BEFORE lxi sp, *, and sphl! ;==================================
+; mount the ram-disk w/o storing mode
+.macro RAM_DISK_ON_NO_RESTORE()
 			mvi a, _command
 			out $10
 .endmacro
-
+; restore the ram-disk mode
+.macro RAM_DISK_RESTORE()
+			lda ramDiskMode
+			out $10
+.endmacro
+; mount the ram-disk
+.macro RAM_DISK_ON(_command = RAM_DISK0_B0_STACK)
+			mvi a, _command
+			;di
+			sta ramDiskMode
+			out $10
+			;ei
+.endmacro
+; mount the ram-disk
+; a - ram disk activation command
+.macro RAM_DISK_ON_BANK()
+			;di
+			sta ramDiskMode
+			out $10
+			;ei
+.endmacro
 ; dismount the ram-disk
 .macro RAM_DISK_OFF()
 			xra a
+			;di
+			sta ramDiskMode			
+			out $10
+			;ei
+.endmacro
+; dismount the ram-disk w/o storing mode
+.macro RAM_DISK_OFF_NO_RESTORE()
+			xra a
 			out $10
 .endmacro
-
+;================================== ALL RAM_DISK_* macros has to be placed right BEFORE lxi sp, *, and sphl! ;==================================
 .macro BORDER_LINE(_borderColorIdx = 1)
 			mvi a, PORT0_OUT_OUT
 			out 0

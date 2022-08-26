@@ -1,4 +1,5 @@
 from PIL import Image
+import os
 
 def PaletteToAsm(image, charJ, path, labelPrefix = ""):
 	# usially there are color tiles in top row in the image.
@@ -107,3 +108,23 @@ def BytesToAsm(data):
 	for i, byte in enumerate(data):
 		asm += str(byte) + ","
 	return asm + "\n"
+
+def RunCommand(command, comment = "", echo = True):
+	# TODO: fix echo off
+	if comment != "" : 
+		print(comment)
+	if echo: 
+		os.system("@echo on")
+	else:
+		os.system("@echo off")
+
+	os.system(command)
+	
+	if echo: 
+		os.system("@echo on")
+	else:
+		os.system("@echo off")
+
+def DeleteFile(path):
+	if os.path.isfile(f"{path}"):
+		os.remove(f"{path}")

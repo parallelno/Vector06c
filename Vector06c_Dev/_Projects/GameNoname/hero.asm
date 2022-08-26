@@ -277,6 +277,7 @@ HeroMove:
 			shld heroY
 			ret
 ; TODO: handle this case
+; for example, slide a hero along the walls if he moves along the diagonal directions
 @tempCheck: 
 lhld charTempX
 ret
@@ -339,7 +340,9 @@ HeroMoveTeleport:
 @donotMoveHero:
 			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
 			sta levelCommand
-			; bypassing the HeroMove:@loop because if it's teleport we do not need to handle the rest of the colllided tiles.
+			; bypassing the HeroMove:@loop because the hero is teleporting
+			; so we don't need to handle the rest of the colllided tiles.
+			; we return to the func that called HeroUpdate
 			pop b
 			ret
 			.closelabels

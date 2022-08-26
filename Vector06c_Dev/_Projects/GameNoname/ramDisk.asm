@@ -2,44 +2,60 @@ toBank0addr0:
 .incbin "generated\\bin\\ramDiskBank0_addr0.bin.zx0"
 toBank0addr8000:
 .incbin "generated\\bin\\ramDiskBank0_addr8000.bin.zx0"
+;toBank1addrA000:
+;.incbin "generated\\bin\\ramDiskBank1_addrA000.bin.zx0"
 
 ; ram-disk data has to keep the range from STACK_MIN_ADDR to STACK_TEMP_ADDR-1 not used. 
 ; it can be corrupted by the interruption func
 
 RamDiskInit:
 			lxi b, $8000
+			lxi h, $8000
 			lxi d, toBank0addr0
+			mvi a, RAM_DISK0_B0_STACK
 			call UnpackToRamDisk
 			
-			lxi b, $0000
+			lxi b, $8000
+			lxi h, $0000
 			lxi d, toBank0addr8000
+			mvi a, RAM_DISK0_B0_STACK
 			call UnpackToRamDisk		
+
+			;lxi b, $a000
+			;lxi h, $0000
+			;lxi d, toBank1addrA000
+			;mvi a, RAM_DISK0_B1_STACK
+			;call UnpackToRamDisk	
 
 			ret
 			.closelabels
 
 ;========================================
 ; unpack data into $8000 (32K max)
-; copy unpaacked data into ram-disk
+; copy unpacked data into ram-disk
+; it copies 32k
 ; input: 
+; bc - unpacked data addr
 ; de - packed data addr
-; bc - the destination addr in the ram_disk + $8000 (because it copies the data backward)
+; hl - the destination addr in the ram_disk + $8000 (because it copies 32k data backward)
+; a - ram-disk activation command
 ; use:
 ; bc, hl, a
 UnpackToRamDisk:
 			di
-			push b
-			lxi b, $8000
+			push h
+			push psw
 			call dzx0
 			; restore the destination addr
+			pop psw
 			pop d
 			; store sp
 			lxi h, $0000
 			dad sp
 			shld @restoreSp+1
 			; copy unpacked data into the ram_disk
-			RAM_DISK_ON()
 			xchg
+			RAM_DISK_ON_BANK()			
 			sphl
 			; TODO: copy only necessary length of data
 			lxi h, $ffff ; unpacked data screen addr + $7fff (because it copies the data backward)

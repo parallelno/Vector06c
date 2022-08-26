@@ -12,11 +12,11 @@ level01_startPos:
 
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
 level01_roomsAddr:
-			.word level01_room00, level01_room01, level01_room02, 
+			.word level01_room00, 0, level01_room01, 0, level01_room02, 
 
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
 level01_tilesAddr:
-			.word sprites_tiles_lv01_tile0, sprites_tiles_lv01_tile1, sprites_tiles_lv01_tile2, sprites_tiles_lv01_tile3, sprites_tiles_lv01_tile4, sprites_tiles_lv01_tile5, sprites_tiles_lv01_tile6, sprites_tiles_lv01_tile7, sprites_tiles_lv01_tile8, sprites_tiles_lv01_tile9, sprites_tiles_lv01_tile10, sprites_tiles_lv01_tile11, sprites_tiles_lv01_tile12, 
+			.word sprites_tiles_lv01_tile0, 0, sprites_tiles_lv01_tile1, 0, sprites_tiles_lv01_tile2, 0, sprites_tiles_lv01_tile3, 0, sprites_tiles_lv01_tile4, 0, sprites_tiles_lv01_tile5, 0, sprites_tiles_lv01_tile6, 0, sprites_tiles_lv01_tile7, 0, sprites_tiles_lv01_tile8, 0, sprites_tiles_lv01_tile9, 0, sprites_tiles_lv01_tile10, 0, sprites_tiles_lv01_tile11, 0, sprites_tiles_lv01_tile12, 
 
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
 ; sources\levels\level01_room00.tmj

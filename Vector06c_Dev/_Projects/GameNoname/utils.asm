@@ -105,13 +105,13 @@ SetPaletteFromRamDisk:
 			mov a, e
 			cpi PALETTE_COLORS
 			jnz	@loop
-
-@restoreSp: lxi sp, TEMP_ADDR
+			
 			RAM_DISK_OFF()
+@restoreSp: lxi sp, TEMP_ADDR
 			ret
 			.closelabels
 
-; Read a word from the ram-disk no blocking interruptions
+; Read a word from the ram-disk w/o blocking interruptions
 ; input: 
 ; de - data addr in the ram-disk
 ; use: 
@@ -128,9 +128,9 @@ GetWordFromRamDisk:
 			RAM_DISK_ON()
 			sphl
 			pop b ; bc has to be used when interruptions is on
-
-@restoreSp: lxi sp, TEMP_ADDR
+			
 			RAM_DISK_OFF()
+@restoreSp: lxi sp, TEMP_ADDR
 			ret
 			.closelabels
 
@@ -150,8 +150,8 @@ CopyDataFromRamDisk:
 			xchg
 			mov e, a
 			RAM_DISK_ON()
-			mov a, e
 			sphl
+			mov a, e
 			mov l, c
 			mov h, b
 @loop:
@@ -162,8 +162,8 @@ CopyDataFromRamDisk:
 			inx h
 			dcr a
 			jnz @loop
-
-@restoreSp: lxi sp, TEMP_ADDR
+			
 			RAM_DISK_OFF()
+@restoreSp: lxi sp, TEMP_ADDR
 			ret
 			.closelabels

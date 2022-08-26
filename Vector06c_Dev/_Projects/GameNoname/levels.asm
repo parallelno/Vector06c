@@ -33,6 +33,9 @@ RoomInit:
 			
 RoomInitTiles:
 			lda roomIdx
+			; double the room index to get an address offset in the level01_roomsAddr array
+			rlc
+			; double it again because there are two safety bytes in front of every room pointer
 			rlc
 			mov c, a
 			mvi b, 0
@@ -61,9 +64,13 @@ RoomInitTiles:
 			mvi d, 0
 			inx h
 			push h
-			lxi h, level01_tilesAddr
+			; double the tile index to get a tile graphics pointer
+			xchg
+			dad h
+			; double it again because there are two safety bytes in front every pointer
+			dad h
+			lxi d, level01_tilesAddr
 			; hl gets the tile graphics ponter
-			dad d
 			dad d
 
 			; copy the tile graphics addr to the current room tile graphics table
@@ -227,7 +234,7 @@ LevelsMonstersSpawn:
 			lxi h, monsterRedrawTimer
 			dad b
 @rndDraw:	; make monsterRedrawTimer for every spawned monster different to balance the cpu load
-			mvi a, 4
+			mvi a, %1000100
 			mov m, a
 			rlc
 			sta @rndDraw+1
@@ -242,10 +249,12 @@ LevelsMonstersSpawn:
 ; it also analizes the tiles data and initializes monsters and feeds up the monster pool if there is any monster in the room, etc
 ; use:
 ; all
-
 RoomInitTilesData:
 			; copy the tiles data from the ram-disk
 			lda roomIdx
+			; double a room index to get a room pointer
+			rlc
+			; double it again because there are two safety bytes in front of every pointer
 			rlc
 			mov c, a
 			mvi b, 0
@@ -291,7 +300,7 @@ LevelUpdate:
 			call HeroInit
 			xra a
 			lda	interruptionCounter
-
+			; reset the command
 			xra a
 			sta levelCommand
 			ret

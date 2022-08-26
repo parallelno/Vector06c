@@ -14,8 +14,8 @@ PORT0_OUT_IN			= $8a
 RESTART_ADDR 			= $0000
 INT_ADDR	 			= $0038
 STACK_MIN_ADDR          = $7f00
-STACK_ADDR				= $7F80
-STACK_TEMP_ADDR			= $8000 ; is used for iterruption2
+STACK_MAIN_PROGRAM_ADDR	= $8000
+STACK_INTERRUPTION_ADDR	= $7F80 ; it is used for iterruption2 func
 
 BYTE_LEN                = 1
 WORD_LEN                = 2
@@ -67,6 +67,7 @@ SEGMENT_0000_7F00_SIZE_MAX = 2 ^ 31 - 256 ; because an interruption can corrupt 
 SEGMENT_8000_0000_SIZE_MAX = 2 ^ 31
 
 ; opcodes
+OPCODE_NOP  = 0
 OPCODE_XCHG = $eb
 OPCODE_RET  = $c9
 OPCODE_JMP	= $C3
@@ -75,3 +76,4 @@ OPCODE_MOV_E_A = $5f
 OPCODE_MOV_D_B = $50
 OPCODE_MOV_D_M = $56
 OPCODE_MOV_D_A = $57
+OPCODE_STC = $37
