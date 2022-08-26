@@ -16,10 +16,10 @@ GCPlayerStartCheck:
 			lda GCPlayerUpdate
 			ora a
 			rz
-			call GCPlayerMute
+			;call GCPlayerMute
 			call GCPlayerTasksInit
 			call GCPlayerSchedulerInit
-			call GCPlayerClearBuffers
+			;call GCPlayerClearBuffers
 
 			; set bufferIdx GC_PLAYER_TASKS bytes prior to the init unpacking addr (0),
 			; to let zx0 unpack data for GC_PLAYER_TASKS number of regs

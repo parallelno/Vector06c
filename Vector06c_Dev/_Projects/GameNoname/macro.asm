@@ -51,9 +51,9 @@
 			dcx h
 			.endloop
 .endmacro
-;================================== ALL RAM_DISK_* macros has to be placed right BEFORE lxi sp, *, and sphl! ;==================================
+; has to be placed right BEFORE lxi sp, addr, and sphl
 ; mount the ram-disk w/o storing mode
-.macro RAM_DISK_ON_NO_RESTORE()
+.macro RAM_DISK_ON_NO_RESTORE(_command)
 			mvi a, _command
 			out $10
 .endmacro
@@ -63,28 +63,25 @@
 			out $10
 .endmacro
 ; mount the ram-disk
+; has to be placed right BEFORE lxi sp, addr, and sphl
 .macro RAM_DISK_ON(_command = RAM_DISK0_B0_STACK)
 			mvi a, _command
-			;di
 			sta ramDiskMode
 			out $10
-			;ei
 .endmacro
 ; mount the ram-disk
+; has to be placed right BEFORE lxi sp, addr, and sphl
 ; a - ram disk activation command
 .macro RAM_DISK_ON_BANK()
-			;di
 			sta ramDiskMode
 			out $10
-			;ei
 .endmacro
 ; dismount the ram-disk
+; has to be right after lxi sp, ADDR or sphl in the main program
 .macro RAM_DISK_OFF()
 			xra a
-			;di
 			sta ramDiskMode			
 			out $10
-			;ei
 .endmacro
 ; dismount the ram-disk w/o storing mode
 .macro RAM_DISK_OFF_NO_RESTORE()

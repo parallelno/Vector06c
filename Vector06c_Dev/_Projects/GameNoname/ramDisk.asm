@@ -70,8 +70,8 @@ UnpackToRamDisk:
 			cmp e
 			jnz @loop
 
-			RAM_DISK_OFF()
 @restoreSp: lxi sp, TEMP_ADDR
+			RAM_DISK_OFF()
 			ei
 			ret
 			.closelabels

@@ -51,8 +51,8 @@ DrawTile16x16:
 			dcr		d
 			jnz		@loop
 
-			RAM_DISK_OFF()
 @restoreSP:	lxi		sp, TEMP_ADDR	; restore sp (12)
+			RAM_DISK_OFF()
 			ret
 			.closelabels
 			

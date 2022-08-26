@@ -106,8 +106,8 @@ SetPaletteFromRamDisk:
 			cpi PALETTE_COLORS
 			jnz	@loop
 			
-			RAM_DISK_OFF()
 @restoreSp: lxi sp, TEMP_ADDR
+			RAM_DISK_OFF()
 			ret
 			.closelabels
 
@@ -129,8 +129,8 @@ GetWordFromRamDisk:
 			sphl
 			pop b ; bc has to be used when interruptions is on
 			
-			RAM_DISK_OFF()
 @restoreSp: lxi sp, TEMP_ADDR
+			RAM_DISK_OFF()
 			ret
 			.closelabels
 
@@ -163,7 +163,7 @@ CopyDataFromRamDisk:
 			dcr a
 			jnz @loop
 			
-			RAM_DISK_OFF()
 @restoreSp: lxi sp, TEMP_ADDR
+			RAM_DISK_OFF()
 			ret
 			.closelabels

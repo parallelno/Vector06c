@@ -55,6 +55,7 @@ Interruption2:
 
 			; restore two bytes that were corrupted by this interruption call
 			push b
+
 			; dismount ram disks to not damage the ram-disk data with the interruption stack
 			RAM_DISK_OFF_NO_RESTORE()
 			lxi sp, STACK_INTERRUPTION_ADDR-2
