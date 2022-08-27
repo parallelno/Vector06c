@@ -2,38 +2,40 @@ toBank0addr0:
 .incbin "generated\\bin\\ramDiskBank0_addr0.bin.zx0"
 toBank0addr8000:
 .incbin "generated\\bin\\ramDiskBank0_addr8000.bin.zx0"
-;toBank1addrA000:
-;.incbin "generated\\bin\\ramDiskBank1_addrA000.bin.zx0"
+toBank1addrA000:
+.incbin "generated\\bin\\ramDiskBank1_addrA000.bin.zx0"
 
 ; ram-disk data has to keep the range from STACK_MIN_ADDR to STACK_TEMP_ADDR-1 not used. 
 ; it can be corrupted by the interruption func
 
 RamDiskInit:
+			; unpack sprites to the ram-disk
 			lxi b, $8000
 			lxi h, $8000
 			lxi d, toBank0addr0
 			mvi a, RAM_DISK0_B0_STACK
 			call UnpackToRamDisk
-			
+			; unpack tiles and levels to the ram-disk
 			lxi b, $8000
 			lxi h, $0000
 			lxi d, toBank0addr8000
 			mvi a, RAM_DISK0_B0_STACK
 			call UnpackToRamDisk		
-
-			;lxi b, $a000
-			;lxi h, $0000
-			;lxi d, toBank1addrA000
-			;mvi a, RAM_DISK0_B1_STACK
-			;call UnpackToRamDisk	
+			
+			; unpack music to the ram-disk
+			lxi b, $a000
+			lxi h, $0000
+			lxi d, toBank1addrA000
+			mvi a, RAM_DISK0_B1_STACK
+			call UnpackToRamDisk
 
 			ret
 			.closelabels
 
 ;========================================
-; unpack data into $8000 (32K max)
-; copy unpacked data into ram-disk
-; it copies 32k
+; unpack the data on the screen to
+; BC addr (32K max), then copies a buffer 
+; from $8000-$ffff (32K) into the ram-disk.
 ; input: 
 ; bc - unpacked data addr
 ; de - packed data addr

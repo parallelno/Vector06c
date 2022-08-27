@@ -300,6 +300,7 @@ ret
 ; appropriate position based on his current posXY
 ; input:
 ; a - roomId
+; TODO: fix the issue that hero can't teleport if he touches a wall nearby
 HeroMoveTeleport:
 			pop h
 			; update a room id to teleport there

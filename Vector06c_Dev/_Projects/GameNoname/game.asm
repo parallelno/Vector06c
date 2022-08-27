@@ -1,10 +1,5 @@
 .include "levelsGlobalData.asm"
 
-.include "ramDiskBank0_addr0Labels.asm"
-.include "ramDiskBank0_addr8000Labels.asm"
-
-.include "generated\\sprites\\heroAnim.dasm"
-.include "generated\\sprites\\skeletonAnim.dasm"
 
 .include "drawTile.asm"
 .include "sprite.asm"
@@ -22,17 +17,14 @@ GameInit:
 			sta interruptionCounter
 			hlt
 @gameLoop:
-			call GCPlayerStartCheck
-			// di
-			// call GCPlayerUpdate
-			// ei
+			call GCPlayerStartRepeat
 			call GameUpdate
 			call GameDraw
 
 ; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 			BORDER_LINE(1)
 ; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-			;hlt
+			hlt
 ; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 			BORDER_LINE(9)
 ; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

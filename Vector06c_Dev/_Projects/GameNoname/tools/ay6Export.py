@@ -107,6 +107,33 @@ with open(outPath, "w") as fileInc:
 	fileInc.write(f'GCP_TEMP_ADDR = 0\n')
 	fileInc.write(f'GC_PLAYER_TASKS = 14\n')
 	fileInc.write(f'GC_PLAYER_STACK_SIZE = 16\n')
+
+	# song's credits
+	fileInc.write(f'; {comment1}\n; {comment2}\n; {comment3}\n')
+	# redData ptrs. 
+	fileInc.write(f'GCPlayerAyRegDataPtrs: .word ')
+	for i, _ in enumerate(regData[0:14]):
+		fileInc.write(f'ayRegData{i:02d}, ')
+	fileInc.write(f'\n')
+
+	for i, c in enumerate(regData[0:14]):
+		binFile = fileName + ("%02d" % i) + ".bin"
+		zx0File = fileName + ("%02d" % i) + ".zx0"
+		with open(binFile, "wb") as f:
+			f.write(c)
+		
+		common.DeleteFile(zx0File)
+		common.RunCommand(f"tools\\zx0salvador.exe -v -classic -w 256 {binFile} {zx0File}")
+
+		with open(zx0File, "rb") as f:
+			dbname = "ayRegData" + ("%02d" % i)
+			data = f.read()
+			fileInc.write(f'{dbname}: .byte ' +  ",".join("$%02x" % x for x in data) + "\n")
+		if cleanTmp:
+			print("AY6 Exporter: clean up tmp resources")
+			common.DeleteFile(binFile)
+			common.DeleteFile(zx0File)
+	
 	fileInc.write(f'; array of task stack pointers. GCPlayerTaskSPs[i] = taskSP\n')
 	fileInc.write(f'GCPlayerTaskSPs: .storage GCP_WORD_LEN * GC_PLAYER_TASKS\n')
 	fileInc.write(f'GCPlayerTaskSPsEnd     = *\n')
@@ -145,29 +172,3 @@ with open(outPath, "w") as fileInc:
 	fileInc.write(f'GCPlayerBuffer11 : .storage $100\n') 
 	fileInc.write(f'GCPlayerBuffer12 : .storage $100\n')
 	fileInc.write(f'GCPlayerBuffer13 : .storage $100\n')
-
-	# song's credits
-	fileInc.write(f'; {comment1}\n; {comment2}\n; {comment3}\n')
-	# redData ptrs. 
-	fileInc.write(f'GCPlayerAyRegDataPtrs: .word ')
-	for i, _ in enumerate(regData[0:14]):
-		fileInc.write(f'ayRegData{i:02d}, ')
-	fileInc.write(f'\n')
-
-	for i, c in enumerate(regData[0:14]):
-		binFile = fileName + ("%02d" % i) + ".bin"
-		zx0File = fileName + ("%02d" % i) + ".zx0"
-		with open(binFile, "wb") as f:
-			f.write(c)
-		
-		common.DeleteFile(zx0File)
-		common.RunCommand(f"tools\\zx0salvador.exe -v -classic -w 256 {binFile} {zx0File}")
-
-		with open(zx0File, "rb") as f:
-			dbname = "ayRegData" + ("%02d" % i)
-			data = f.read()
-			fileInc.write(f'{dbname}: .byte ' +  ",".join("$%02x" % x for x in data) + "\n")
-		if cleanTmp:
-			print("AY6 Exporter: clean up tmp resources")
-			common.DeleteFile(binFile)
-			common.DeleteFile(zx0File)
