@@ -347,17 +347,51 @@ HeroMoveTeleport:
 			pop b
 			ret
 			.closelabels
+/*
+HeroClear:
+			lda heroRedrawTimer
+			rrc
+			rnc
 
-HeroDraw:	
+			lhld heroCleanScrAddr
+			xchg
+			lda heroCleanFrameIdx2
+			jmp CleanSpriteSP
+*/
+HeroRedrawTimerUpdate:
 			lxi h, heroRedrawTimer
 			mov a, m
 			rrc
 			mov m, a
+			ret
+
+; c - flag
+;	flag=OPCODE_RC to draw a sprite with Y>MONSTER_DRAW_Y_THRESHOLD, 
+;	flag=OPCODE_RNC to draw a sprite with Y<=MONSTER_DRAW_Y_THRESHOLD, 
+HeroDraw:
+			lda heroRedrawTimer
+			rrc
 			rnc
 
+			; TODO: consider for not using sta @checkY
+			; store a flag
+			mov a, c
+			sta @checkY
+
 			lhld heroCleanScrAddr
+			xchg
 			lda heroCleanFrameIdx2
-			call CleanSprite
+			mov c, a
+
+			; to support two-interations rendering
+			mvi a, MONSTER_DRAW_Y_THRESHOLD
+			cmp e
+@checkY
+			; replaced with RNC to draw sprites above MONSTER_DRAW_Y_THRESHOLD
+			; replaced with RC to draw sprites below MONSTER_DRAW_Y_THRESHOLD
+			nop
+			mov a, c
+			call CleanSpriteSP
 
 			lxi h, heroX+1
 			call GetSpriteScrAddr
@@ -365,9 +399,11 @@ HeroDraw:
 			mov a, c
 			shld heroCleanScrAddr
 			sta heroCleanFrameIdx2
+
+			mov a, c
 			xchg
 HeroDrawAnimAddr:
 			lxi h, hero_idle_r ; 208
-HeroDrawSpriteAddrFunc:			
+HeroDrawSpriteAddrFunc:
 			call GetSpriteAddr
-			jmp	DrawSpriteV
+			jmp	DrawSpriteVM

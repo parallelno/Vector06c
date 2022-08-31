@@ -17,17 +17,35 @@ GameInit:
 			sta interruptionCounter
 			hlt
 @gameLoop:
+			;call GameDraw
+; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv			
+			BORDER_LINE(6)
+; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			mvi c, HERO_DRAW_BOTTOM
+			call HeroDraw
+; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv			
+			BORDER_LINE(0)
+; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^						
+			call MonstersDrawBottom
+
+
 			call GCPlayerStartRepeat
 			call GameUpdate
-			call GameDraw
+
+; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv			
+			BORDER_LINE(0)
+; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^						
+			call MonstersDrawTop
+; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv			
+			BORDER_LINE(6)
+; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			mvi c, HERO_DRAW_TOP
+			call HeroDraw
+			call HeroRedrawTimerUpdate	
 
 ; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 			BORDER_LINE(1)
-; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 			hlt
-; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-			BORDER_LINE(9)
-; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 			jmp	 @gameLoop
 
@@ -38,8 +56,17 @@ GameUpdate:
 			ret
 
 @updateLoop:
+; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv			
+			BORDER_LINE(4)
+; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^	
 			call HeroUpdate
+; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv			
+			BORDER_LINE(2)
+; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^				
 			call MonstersUpdate
+; TEST vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv			
+			BORDER_LINE(3)
+; TEST ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^				
 			call LevelUpdate
 
 			lda keyCode
@@ -53,8 +80,9 @@ GameUpdate:
 			
 
 GameDraw:
-			call HeroDraw			
-			call MonstersDraw
+
+
+
 			ret
 			.closelabels
 			

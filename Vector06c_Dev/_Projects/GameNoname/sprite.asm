@@ -1,5 +1,4 @@
-;.include "drawSprite.asm"
-.include "drawSpriteV.asm"
+.include "drawSprite.asm"
 
 ; hl - animation addr, for example hero_idle_r
 ; c - idx in the animation
@@ -15,7 +14,8 @@ GetSpriteAddr:
 			mov b, m
 			ret
 
-; this's a special version of GetSpriteAddr for a vertical movement
+; this's a special version of GetSpriteAddr for a vertical & horizontal movement.
+; input:
 ; hl - animation addr, for example hero_idle_r
 ; c - idx in the animation
 ; e - pos Y
@@ -36,6 +36,7 @@ GetSpriteAddrRunV:
 			ani %110
 			ret
 
+; in:
 ; hl - addr to posX+1 (high byte in 16-bit pos)
 ; return:
 ; de - sprite screen addr
@@ -60,6 +61,7 @@ GetSpriteScrAddr:
 			ret
 
 ; clear a N*15 pxs square on the screen, 
+; it clears 3 screen buffers from hl addr and further
 ; where: 
 ; 16 pxs width if a = 0
 ; 24 pxs width if a != 0
@@ -68,7 +70,7 @@ GetSpriteScrAddr:
 ; a - width marker
 ; use:
 ; bc, de
-		
+
 CleanSprite:
 			mvi c, 2
 			mvi b, 0
@@ -103,4 +105,77 @@ CleanSprite:
 			dcr l
 		.endloop
 			mov m, b
-.endmacro			
+.endmacro
+
+
+; clear a N*16 pxs square on the screen, 
+; it uses PUSH!
+; it clears 3 screen buffers from hl addr and further
+
+; input:
+; de - scr addr
+; a - flag
+;		flag=0, 16 pxs width
+;		flag!=0, 24 pxs width
+
+; use:
+; bc, hl, sp
+
+CleanSpriteSP:
+			di
+			lxi h, 0
+			dad sp
+			shld @restoreSP+1
+
+			xchg
+			; to prevent clearing below the sprite
+			inr l
+			inr l
+
+			lxi b, 0
+			lxi d, $2000
+
+			; replaced with OPCODE_NOP if with == 24
+			; replaced with OPCODE_NOP if with == 24
+			ora a
+			jz @width16
+@width8:
+			sphl
+			PUSH_B(8)
+			dad d
+			sphl
+			PUSH_B(8)
+			dad d
+			sphl
+			PUSH_B(8)
+
+			mov a, h
+			sui $20*2-1
+			mov h, a
+@width16:
+			sphl
+			PUSH_B(8)
+			dad d
+			sphl
+			PUSH_B(8)
+			dad d
+			sphl
+			PUSH_B(8)
+
+			mov a, h
+			sui $20*2-1
+			mov h, a			
+@width24:
+			sphl
+			PUSH_B(8)
+			dad d
+			sphl
+			PUSH_B(8)
+			dad d
+			sphl
+			PUSH_B(8)
+@restoreSP:
+			lxi sp, TEMP_ADDR
+			ei
+			ret
+			.closelabels

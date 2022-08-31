@@ -1,7 +1,8 @@
 
 SKELETON_RUN_SPEED		= $0080
 SKELETON_RUN_SPEED_D	= $ffff - $80 + 1
-
+; in:
+; bc - monster idx*2
 SkeletonInit:
             ; convert monster id into the offset in the monstersRoomData array
 			; and store it into bc
@@ -18,13 +19,12 @@ SkeletonInit:
 			lxi h, monsterSpeedX
 			dad b
 			mvi m, SKELETON_RUN_SPEED
-			;inx h
-			;inx h
-			;mvi m, 20
 
 			ret
 			.closelabels
 
+; in:
+; bc - monster idx*2
 SkeletonUpdate:            
             ; convert monster id into the offset in the monstersRoomData array
 			; and store it into bc
@@ -72,7 +72,7 @@ SkeletonUpdate:
 
 			mov b, a
 			mov c, h
-			; check hero pos against the room collision tiles
+			; check the monster pos against the room collision tiles
 			call CheckRoomTilesCollision
 			; check if any tiles collide
 			
@@ -176,7 +176,18 @@ SkeletonUpdate:
             ret
 			.closelabels			
 
+; draw & clear sprite
+; in:
+; bc - monster idx*2
+; a - flag
+;	flag=OPCODE_RC to draw a sprite with Y>MONSTER_DRAW_Y_THRESHOLD, 
+;	flag=OPCODE_RNC to draw a sprite with Y<=MONSTER_DRAW_Y_THRESHOLD, 
 SkeletonDraw:
+/*
+			; check the flag
+			ora a
+			jnz @draw
+@clear:
 			; convert monster id into the offset in the monstersRoomData array
 			; and store it into bc
 			lxi h, monsterRoomDataAddrOffsets
@@ -188,7 +199,6 @@ SkeletonDraw:
 			; a <- (monsterRedrawTimer)
 			mov a, m
 			rrc
-			mov m, a
 			rnc
 
 			; de <- (monsterCleanScrAddr)
@@ -200,20 +210,47 @@ SkeletonDraw:
 			; a <- (monsterCleanFrameIdx2)
 			inx h
 			mov a, m
-			push h
-			push h
-			xchg
+			;xchg
 			; TODO: do not clean sprite if it wasn't moving
-			call CleanSprite
-			pop h
+			jmp CleanSpriteSP
+*/
+@draw:
+			; TODO: after removing call CleanSprite that func needs an optimization pass
+			; store a flag
+			sta @checkY
+			; convert monster id into the offset in the monstersRoomData array
+			; and store it into bc
+			lxi h, monsterRoomDataAddrOffsets
+			dad b
+			mov c, m
+			lxi h, monsterRedrawTimer
+			; hl - pointer to monsterRedrawTimer
+			dad b
+			; a <- (monsterRedrawTimer)
+			mov a, m
+			rrc
+			rnc
+
+			inx h
+			inx h
+			inx h
+			push h
 
 			; hl - monsterPosX+1 addr
 			inx h
 			inx h		
 			call GetSpriteScrAddr
-
 			; move pointer back to monsterCleanFrameIdx2 addr
 			pop h
+			
+			; to support two-interations rendering
+			mvi a, MONSTER_DRAW_Y_THRESHOLD
+			cmp e
+@checkY
+			; replaced with RNC to draw sprites above MONSTER_DRAW_Y_THRESHOLD
+			; replaced with RC to draw sprites below MONSTER_DRAW_Y_THRESHOLD
+			nop
+
 			; save frame idx to monsterCleanFrameIdx2 addr
 			mov m, c
  			; move pointer back to monsterCleanScrAddr+1 addr
@@ -222,6 +259,7 @@ SkeletonDraw:
 			mov m, d
 			dcx h
 			mov m, e
+
 			; get the anim addr
 			dcx h
 			dcx h
@@ -230,5 +268,5 @@ SkeletonDraw:
 			mov l, m
 			mov h, a
 			call GetSpriteAddrRunV
-			jmp DrawSpriteV
+			jmp DrawSpriteVM
 			.closelabels

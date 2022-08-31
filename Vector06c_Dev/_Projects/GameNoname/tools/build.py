@@ -12,12 +12,15 @@ SEGMENT_8000_0000_SIZE_MAX = 2 ** 31
 def DelBuildDB():
 	RunCommand("del " + buildDBPath, "Build DB was deleted")
 
-def ExportAminSprites(sourcePath, exporterUpdated, sourceFolder = "sources\\", generatedFolder = "generated\\"):
+def ExportAminSprites(sourcePath, exporterUpdated, mask = False, sourceFolder = "sources\\", generatedFolder = "generated\\"):
 	jsonExt = ".json"
 	if IsFileUpdated(sourceFolder + sourcePath + jsonExt) or exporterUpdated:
-		RunCommand("python tools\\animSpriteExport.py -s True -i " + sourceFolder + sourcePath + jsonExt + 
+		command = ("python tools\\animSpriteExport.py -s True" + 
+			" -m " + str(mask) +
+			" -i " + sourceFolder + sourcePath + jsonExt +
 			" -oa " + generatedFolder + sourcePath + "Anim.dasm " + 
 			" -os " + generatedFolder + sourcePath + "Sprites.dasm")
+		RunCommand(command)
 		print("animSpriteExport: " + sourceFolder + sourcePath + jsonExt + " got exported.")
 		return True
 	else:

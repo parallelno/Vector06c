@@ -2,6 +2,7 @@
 
 .include "macro.asm"
 .include "globalConsts.asm"
+; init.asm should be the first code inclusion
 .include "init.asm"
 .include "globalVars.asm"
 
@@ -29,6 +30,4 @@ Start:
 
 			jmp @mainLoop
 			.closelabels
-
-;.include "gigachad16Player.asm"
 			.end

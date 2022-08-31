@@ -91,9 +91,12 @@ MonstersClearRoomData:
 			ret
 			.closelabels		
 
-.macro MONSTERS_FUNCS_HANDLER(funcs)
+MONSTERS_FUNCS_NO_PARAM = $ff
+
+.macro MONSTERS_FUNCS_HANDLER(funcs, flag, noRet = false)
 			lxi h, funcs + (MONSTERS_MAX-1) * 2 + 1
-			lxi b, MONSTERS_MAX-1 ; b=0 needs in the monsterDraw func
+			; bc - monster idx, used in a func
+			lxi b, MONSTERS_MAX-1
 @loop:
 			mov d, m
 			dcx h
@@ -107,6 +110,9 @@ MonstersClearRoomData:
 			xchg
 			lxi d, @funcReturnAddr
 			push d
+		.if flag != MONSTERS_FUNCS_NO_PARAM
+			mvi a, flag
+		.endif
 			pchl ; call a monster update func
 @funcReturnAddr:
 			pop b
@@ -114,16 +120,104 @@ MonstersClearRoomData:
 @skip:
 			dcr c
 			jp @loop
+		.if noRet == false
 			ret
+		.endif
 			.closelabels
 .endfunction
 
 MonstersInit:
-            MONSTERS_FUNCS_HANDLER(monstersInitFunc)
+            MONSTERS_FUNCS_HANDLER(monstersInitFunc, MONSTERS_FUNCS_NO_PARAM)
 
 MonstersUpdate:
-            MONSTERS_FUNCS_HANDLER(monstersUpdateFunc)
+            MONSTERS_FUNCS_HANDLER(monstersUpdateFunc, MONSTERS_FUNCS_NO_PARAM)
 
-MonstersDraw:
-            MONSTERS_FUNCS_HANDLER(monstersDrawFunc)
+; think of reusing this func as a macro to replace MONSTERS_FUNCS_HANDLER in the monstersDraw func
+; in:
+; a - flag
+;	flag=OPCODE_JC to draw a sprite with Y>MONSTER_DRAW_Y_THRESHOLD, 
+;	flag=OPCODE_JNC to draw a sprite with Y<=MONSTER_DRAW_Y_THRESHOLD, 
+MonstersClear:
+			sta @checkY
+			lxi h, monsterRedrawTimer
+			mvi c, MONSTERS_MAX
+@loop:
+			mov a, m
+			inx h			
+			rrc
+			jnc @skip
+
+			; de <- (monsterCleanScrAddr)
+			mov e, m
+
+			; to support two-interations rendering
+			mvi a, MONSTER_DRAW_Y_THRESHOLD
+			cmp e
+@checkY
+			; replaced with jnc to erase sprites above MONSTER_DRAW_Y_THRESHOLD
+			; replaced with jc to erase sprites below MONSTER_DRAW_Y_THRESHOLD
+			jnc @skip
+
+			inx h
+			mov d, m
+
+			; a <- (monsterCleanFrameIdx2)
+			inx h
+			mov a, m
 			
+			push h
+			push b
+
+			; get anim addr
+			lxi b, $ffff-5+1
+			dad b
+
+			
+			; c = monsterCleanFrameIdx2
+			mov c, a
+
+			mov a, m
+			inx h
+			mov h, m
+			mov l, a
+			call GetSpriteAddrRunV
+			call EraseSpriteV
+
+			pop b
+			pop h
+			lxi d, MONSTERS_ROOM_SPRITE_DATA_LEN-3
+			jmp @next
+@skip:
+			lxi d, MONSTERS_ROOM_SPRITE_DATA_LEN-1
+@next:
+			dad d
+			dcr c
+			jnz @loop
+			ret
+			.closelabels
+
+MONSTERS_DRAW_TOP = OPCODE_RNC
+MONSTERS_DRAW_BOTTOM = OPCODE_RC
+NO_RET = true
+MonstersDrawBottom:
+			mvi a, OPCODE_JC
+			call MonstersClear
+			MONSTERS_FUNCS_HANDLER(monstersDrawFunc, MONSTERS_DRAW_BOTTOM)
+
+MonstersDrawTop:			
+			mvi a, OPCODE_JNC
+			call MonstersClear						
+			MONSTERS_FUNCS_HANDLER(monstersDrawFunc, MONSTERS_DRAW_TOP, NO_RET)
+
+@MonstersRedrawTimerUpdate:
+			lxi h, monsterRedrawTimer
+			lxi d, MONSTERS_ROOM_SPRITE_DATA_LEN	
+			mvi c, MONSTERS_MAX
+@loop:
+			mov a, m
+			rrc
+			mov m, a
+			dad d
+			dcr c
+			jnz @loop
+			ret

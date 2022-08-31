@@ -7,7 +7,7 @@
 ; offsetY is 0-31 pixels down
 ; it uses sp to read the sprite data
 
-; input:
+; in:
 ; bc	sprite data
 ; de	screen address (in the $8000 screen buffer)
 ; use: a, hl, sp
@@ -238,7 +238,7 @@ DrawSpriteV2_width8:
 ; offsetX is 0-1 bytes
 ; it uses sp to read the sprite data
 
-; input:
+; in:
 ; bc	sprite data
 ; de	screen address (in the $8000 screen buffer)
 ; use: a, hl, sp

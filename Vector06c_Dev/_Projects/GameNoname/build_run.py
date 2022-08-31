@@ -77,6 +77,7 @@ exit()
 """
 ######################################################################################
 # sprites to ramDisk
+bank0_seg0_path = "ramDiskBank0_addr0"
 
 heroPath = "sprites\\hero"
 skeletonPath = "sprites\\skeleton"
@@ -88,16 +89,14 @@ scythePath = "sprites\\scythe"
 animSpriteExportUpdated = IsFileUpdated("tools\\animSpriteExport.py")
 
 anySpritesUpdated = False
-anySpritesUpdated |= ExportAminSprites(heroPath, animSpriteExportUpdated)
-anySpritesUpdated |= ExportAminSprites(skeletonPath, animSpriteExportUpdated)
-anySpritesUpdated |= ExportAminSprites(burnerPath, animSpriteExportUpdated)
-anySpritesUpdated |= ExportAminSprites(knightPath, animSpriteExportUpdated)
-anySpritesUpdated |= ExportAminSprites(vampirePath, animSpriteExportUpdated)
-anySpritesUpdated |= ExportAminSprites(scythePath, animSpriteExportUpdated)
+anySpritesUpdated |= ExportAminSprites(heroPath, animSpriteExportUpdated, True)
+anySpritesUpdated |= ExportAminSprites(skeletonPath, animSpriteExportUpdated, True)
+anySpritesUpdated |= ExportAminSprites(burnerPath, animSpriteExportUpdated, True)
+anySpritesUpdated |= ExportAminSprites(knightPath, animSpriteExportUpdated, True)
+anySpritesUpdated |= ExportAminSprites(vampirePath, animSpriteExportUpdated, True)
+anySpritesUpdated |= ExportAminSprites(scythePath, animSpriteExportUpdated, True)
 
-bank0_seg0_path = "ramDiskBank0_addr0"
-bank0_seg1_path = "ramDiskBank0_addr8000"
-bank1_screen_path = "ramDiskBank1_addrA000"
+anySpritesUpdated |= IsFileUpdated(bank0_seg0_path + ".dasm")
 
 if anySpritesUpdated:
 	RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank0_seg0_path + 
@@ -119,6 +118,7 @@ else:
 
 ######################################################################################
 # levels to ramDisk
+bank0_seg1_path = "ramDiskBank0_addr8000"
 
 level01Path = "levels\\level01"
 
@@ -152,6 +152,8 @@ else:
 
 ######################################################################################
 # music to ram-disk
+bank1_screen_path = "ramDiskBank1_addrA000"
+
 musicExportUpdated = IsFileUpdated("tools\\ay6Export.py")
 
 song01 = "song01"

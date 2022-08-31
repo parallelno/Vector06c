@@ -5,8 +5,8 @@ toBank0addr8000:
 toBank1addrA000:
 .incbin "generated\\bin\\ramDiskBank1_addrA000.bin.zx0"
 
-; ram-disk data has to keep the range from STACK_MIN_ADDR to STACK_TEMP_ADDR-1 not used. 
-; it can be corrupted by the interruption func
+; ram-disk data has to keep the range from STACK_MIN_ADDR to STACK_MAIN_PROGRAM_ADDR-1 not used. 
+; it can be corrupted by the subroutines which manipulate the stack
 
 RamDiskInit:
 			; unpack sprites to the ram-disk

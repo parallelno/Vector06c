@@ -53,6 +53,12 @@ ROT_TIMER_1p0	= %1111_1111
 ;ROT_TIMER_ONCE	= %0000_0011 ; draw just once. useful for idle anims
 ;ROT_TIMER_NOP	= %0000_0000 ; no draw
 
+; to support monster two-interations rendering.
+; the first interation draws sprites with Y>MONSTER_DRAW_Y_THRESHOLD
+; the second one draws sprites with Y<=MONSTER_DRAW_Y_THRESHOLD
+; that is to avoid tearing happens when a screen ray catchs up the place where a sprite is being rendering.
+MONSTER_DRAW_Y_THRESHOLD = 160 
+
 SPRITE_X_SCR_ADDR = $a0
 
 RAM_DISK0_B0_STACK  = %00011100
@@ -76,10 +82,17 @@ SEGMENT_8000_0000_SIZE_MAX = 2 ^ 31
 OPCODE_NOP  = 0
 OPCODE_XCHG = $eb
 OPCODE_RET  = $c9
+OPCODE_RC  = $d8
+OPCODE_RNC  = $d0
 OPCODE_JMP	= $C3
+OPCODE_JC	= $DA
+OPCODE_JNC	= $D2
 OPCODE_MOV_E_M = $5e
 OPCODE_MOV_E_A = $5f
 OPCODE_MOV_D_B = $50
 OPCODE_MOV_D_M = $56
 OPCODE_MOV_D_A = $57
 OPCODE_STC = $37
+
+HERO_DRAW_TOP = OPCODE_RNC
+HERO_DRAW_BOTTOM = OPCODE_RC
