@@ -1,0 +1,1638 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: basslight.basse_already
+msgctxt "basslight.basse_already"
+msgid "Already initialized/paused/whatever"
+msgstr "Уже проинициализировано/приостановлено/тому подобное"
+
+#: basslight.basse_cantcratefile
+msgctxt "basslight.basse_cantcratefile"
+msgid "Couldn't create the file"
+msgstr "Не удалось создать файл"
+
+#: basslight.basse_cantfindsnddrv
+msgctxt "basslight.basse_cantfindsnddrv"
+msgid "Can't find a free sound driver"
+msgstr "Не удаётся найти свободный звуковой драйвер"
+
+#: basslight.basse_cantgetchan
+msgctxt "basslight.basse_cantgetchan"
+msgid "Can't get a free channel"
+msgstr "Не удаётся получить свободный канал"
+
+#: basslight.basse_cantopenfile
+msgctxt "basslight.basse_cantopenfile"
+msgid "Can't open the file"
+msgstr "Не удаётся открыть файл"
+
+#: basslight.basse_chanfileend
+msgctxt "basslight.basse_chanfileend"
+msgid "The channel/file has ended"
+msgstr "Канал/файл закончился"
+
+#: basslight.basse_codec
+msgctxt "basslight.basse_codec"
+msgid "Codec is not available/supported"
+msgstr "Кодек не доступен/не поддерживается"
+
+#: basslight.basse_connectiontimedout
+msgctxt "basslight.basse_connectiontimedout"
+msgid "Connection timedout"
+msgstr "Время на соединение вышло"
+
+#: basslight.basse_decodchan
+msgctxt "basslight.basse_decodchan"
+msgid "The channel is/isn't a \"decoding channel\""
+msgstr "Канал декодируемый/не декодируемый"
+
+#: basslight.basse_devicebusy
+msgctxt "basslight.basse_devicebusy"
+msgid "The device is busy"
+msgstr "Устройство занято"
+
+#: basslight.basse_directxver
+msgctxt "basslight.basse_directxver"
+msgid "A sufficient DirectX version is not installed"
+msgstr "Необходимая версия DirectX не установлена"
+
+#: basslight.basse_effectsnotenabled
+msgctxt "basslight.basse_effectsnotenabled"
+msgid "Effects are not enabled"
+msgstr "Эффекты не разрешены"
+
+#: basslight.basse_illegaldevice
+msgctxt "basslight.basse_illegaldevice"
+msgid "Illegal device number"
+msgstr "Недопустимый номер устройства"
+
+#: basslight.basse_illegalparam
+msgctxt "basslight.basse_illegalparam"
+msgid "An illegal parameter was specified"
+msgstr "Передан недопустимый параметр"
+
+#: basslight.basse_illegalsamplerate
+msgctxt "basslight.basse_illegalsamplerate"
+msgid "Illegal sample rate"
+msgstr "Недопустимая частота сэмплов"
+
+#: basslight.basse_illegaltype
+msgctxt "basslight.basse_illegaltype"
+msgid "An illegal type was specified"
+msgstr "Указан недопустимый тип"
+
+#: basslight.basse_invalidhnd
+msgctxt "basslight.basse_invalidhnd"
+msgid "Invalid handle"
+msgstr "Недопустимый дескриптор"
+
+#: basslight.basse_invalidpos
+msgctxt "basslight.basse_invalidpos"
+msgid "Invalid position"
+msgstr "Недопустимая позиция"
+
+#: basslight.basse_mem
+msgctxt "basslight.basse_mem"
+msgid "Memory error"
+msgstr "Ошибка памяти"
+
+#: basslight.basse_modnoseqdata
+msgctxt "basslight.basse_modnoseqdata"
+msgid "The MOD music has no sequence data"
+msgstr "В музыке MOD нет данных последовательности"
+
+#: basslight.basse_no3d
+msgctxt "basslight.basse_no3d"
+msgid "No 3D support"
+msgstr "Нет поддержки 3D"
+
+#: basslight.basse_noeax
+msgctxt "basslight.basse_noeax"
+msgid "No EAX support"
+msgstr "Нет поддержки EAX"
+
+#: basslight.basse_nohardvoices
+msgctxt "basslight.basse_nohardvoices"
+msgid "No hardware voices available"
+msgstr "Не доступны аппаратные голоса"
+
+#: basslight.basse_noinit
+msgctxt "basslight.basse_noinit"
+msgid "BASS_Init has not been successfully called"
+msgstr "Успешного вызова BASS_Init не было"
+
+#: basslight.basse_nointernet
+msgctxt "basslight.basse_nointernet"
+msgid "No internet connection could be opened"
+msgstr "Не открылось интернет-соединение"
+
+#: basslight.basse_nostart
+msgctxt "basslight.basse_nostart"
+msgid "BASS_Start has not been successfully called"
+msgstr "Успешного вызова BASS_Start не было"
+
+#: basslight.basse_notfilestream
+msgctxt "basslight.basse_notfilestream"
+msgid "The stream is not a file stream"
+msgstr "Данный поток не является файловым"
+
+#: basslight.basse_notplaying
+msgctxt "basslight.basse_notplaying"
+msgid "Not playing"
+msgstr "Нет воспроизведения"
+
+#: basslight.basse_ok
+msgctxt "basslight.basse_ok"
+msgid "All is OK"
+msgstr "Ошибок нет"
+
+#: basslight.basse_reqdatanotavail
+msgctxt "basslight.basse_reqdatanotavail"
+msgid "Requested data is not available"
+msgstr "Запрошенные данные не доступны"
+
+#: basslight.basse_samplebuflost
+msgctxt "basslight.basse_samplebuflost"
+msgid "The sample buffer was lost"
+msgstr "Буффер сэмплов был утерян"
+
+#: basslight.basse_unavailspeaker
+msgctxt "basslight.basse_unavailspeaker"
+msgid "Unavailable speaker"
+msgstr "Недоступный динамик"
+
+#: basslight.basse_unknown
+msgctxt "basslight.basse_unknown"
+msgid "Unknown error"
+msgstr "Неизвестная ошибка"
+
+#: basslight.basse_unsupfileformat
+msgctxt "basslight.basse_unsupfileformat"
+msgid "Unsupported file format"
+msgstr "Не поддерживаемый формат файла"
+
+#: basslight.basse_unsupsmpformat
+msgctxt "basslight.basse_unsupsmpformat"
+msgid "Unsupported sample format"
+msgstr "Не поддерживаемый формат сэмплов"
+
+#: basslight.basse_version
+msgctxt "basslight.basse_version"
+msgid "Invalid BASS version"
+msgstr "Неверная версия BASS"
+
+#: cdviamci.mes_mcierrorn
+msgid "MCI error #"
+msgstr "Ошибка MCI №"
+
+#: cdviamci.mes_nocdfound
+msgid "No CD drives found"
+msgstr "CD приводов не найдено"
+
+#: cdviamci.mes_specifiedcdnotfound
+msgid "Specified CD drive not found"
+msgstr "Указанный CD привод не найден"
+
+#: findplitem.frmfndplitmanywhere
+msgid "Anywhere"
+msgstr "Везде"
+
+#: findplitem.frmfndplitmauthorname
+msgid "Author name"
+msgstr "Имя автора"
+
+#: findplitem.frmfndplitmfilename
+msgctxt "findplitem.frmfndplitmfilename"
+msgid "File name"
+msgstr "Имя файла"
+
+#: findplitem.frmfndplitmmusictitle
+msgid "Music title"
+msgstr "Название музыки"
+
+#: languages.ayemul_apptitle
+msgid "AY-3-8910, AY-3-8912 and YM2149F Emulator, Player, Converter and Music Ripper"
+msgstr "Эмулятор AY-3-8910, AY-3-8912 and YM2149F: проигрывание, конвертирование и поиск музыки"
+
+#: languages.mes_analisisoffile
+msgid "Analisis of file"
+msgstr "Анализ файла"
+
+#: languages.mes_averager
+msgctxt "languages.mes_averager"
+msgid "Averager"
+msgstr "Усреднение"
+
+#: languages.mes_ayemulfmtloaderror
+msgid "Ay_Emul.fmt loading error in line"
+msgstr "Ошибка загрузки Ay_Emul.fmt в строке"
+
+#: languages.mes_ayemulremoved
+msgid "Ay_Emul data is removed from your system"
+msgstr "Данные Ay_Emul удалены из Вашей системы"
+
+#: languages.mes_begin
+msgctxt "languages.mes_begin"
+msgid "Begin"
+msgstr "Начать"
+
+#: languages.mes_cantcalcstpaddr
+msgid "Can't calculate STP init address"
+msgstr "Не удалось вычислить адрес компиляции STP"
+
+#: languages.mes_cantcreatedestfolder
+msgid "Can not create destination folder"
+msgstr "Не удалось создать папку назначения"
+
+#: languages.mes_cantextracttrknum
+msgid "Can't extract track number from CDA file name"
+msgstr "Не удалось определить номер дорожки из имени CDA-файла"
+
+#: languages.mes_cantopen
+msgid "Can't open"
+msgstr "Не удалось открыть"
+
+#: languages.mes_closebye
+msgctxt "languages.mes_closebye"
+msgid "Close the program and delete Ay_Emul folder to complete uninstall. See you!"
+msgstr "Закройте программу и удалите папку с Ay_Emul для завершения деинсталляции. Увидимся!"
+
+#: languages.mes_damagedfileicedepack
+msgid "Error: damaged file - SNDH ICE depacking"
+msgstr "Ошибка: файл повреждён - распаковка SNDH ICE"
+
+#: languages.mes_excregadm
+msgid "(excepting restoring file registration data, administrator rights needed)"
+msgstr "(за исключением восстановления данных о регистрации файлов, нужны права администратора)"
+
+#: languages.mes_existsoverwrite
+msgid "exists. Overwrite?"
+msgstr "существует. Перезаписать?"
+
+#: languages.mes_file
+msgctxt "languages.mes_file"
+msgid "File"
+msgstr "Файл"
+
+#: languages.mes_fileopenerror
+msgid "FileOpen error"
+msgstr "Ошибка FileOpen"
+
+#: languages.mes_filereaderror
+msgid "FileRead error"
+msgstr "Ошибка FileRead"
+
+#: languages.mes_fileseekerror
+msgid "FileSeek error"
+msgstr "Ошибка FileSeek"
+
+#: languages.mes_fir
+msgid "FIR"
+msgstr "КИХ"
+
+#: languages.mes_invalidlzh
+msgid "LZH compressed data is not valid"
+msgstr "сжатые данные LZH не корректны"
+
+#: languages.mes_milisec
+msgid "ms"
+msgstr "мс"
+
+#: languages.mes_nosongplaying
+msgid "no song playing..."
+msgstr "ничего не воспроизводится..."
+
+#: languages.mes_notay_emul20skin
+msgid "is not AY-3-8910/12 Emulator v2.0 Skin File"
+msgstr "не является файлом обшивки AY-3-8910/12 Emulator v2.0"
+
+#: languages.mes_notfoundordenied
+msgid "not found or access denied"
+msgstr "не найден или доступ запрещён"
+
+#: languages.mes_novaliddestformixer
+msgid "No valid destinations for selected mixer device"
+msgstr "У выбранного микшера нет подходящих выходов"
+
+#: languages.mes_novolumecontrolsfound
+msgid "No volume controls found for selected destination"
+msgstr "У выбранного выхода нет регуляторов"
+
+#: languages.mes_openfilesfromfolder
+msgid "Open files from folder:"
+msgstr "Открыть файлы из папки:"
+
+#: languages.mes_pts
+msgid "pts"
+msgstr "тчк"
+
+#: languages.mes_readafterendofdata
+msgid "Read after end of data"
+msgstr "Чтение за пределами данных"
+
+#: languages.mes_readafterendoffile
+msgid "Read after end of file"
+msgstr "Чтение за пределами файла"
+
+#: languages.mes_recursesubfolders
+msgid "Recurse subfolders"
+msgstr "Вложенные папки"
+
+#: languages.mes_searchstringnotfound
+msgid "Search string not found"
+msgstr "Искомая строка не найдена"
+
+#: languages.mes_searchtunesinfiles
+msgid "Search for tunes in files"
+msgstr "Поиск в файлах"
+
+#: languages.mes_seekafterendoffile
+msgid "Seek after end of file"
+msgstr "Позиционирование за пределы файла"
+
+#: languages.mes_selectcontrol
+msgid "Select control:"
+msgstr "Выберите регулятор:"
+
+#: languages.mes_selectdestination
+msgid "Select destination:"
+msgstr "Выберите выход:"
+
+#: languages.mes_selectfolder
+msgid "Select folder"
+msgstr "Выберите папку"
+
+#: languages.mes_selectmixerdivice
+msgid "Select mixer device:"
+msgstr "Выберите регулятор громкости"
+
+#: languages.mes_stop
+msgid "Stop"
+msgstr "Стоп"
+
+#: languages.mes_systemvolctrlsnotdetected
+msgid "System volume controls not detected"
+msgstr "Системные регуляторы громкости не обнаружены"
+
+#: languages.mes_tosmallst11
+msgid "ST11 block is too small in AY-file"
+msgstr "Блок ST11 слишком мал в AY-файле"
+
+#: languages.mes_tracklength
+msgid "Track length"
+msgstr "Длина трека"
+
+#: languages.mes_unhandlederroraddfile
+msgid "Unhandled error during adding file"
+msgstr "Необработанная ошибка во время добавления файла"
+
+#: languages.mes_unsupportedayheader
+msgid "Unsupported AY-file header"
+msgstr "Не поддерживаемый заголовок AY-файла"
+
+#: languages.mes_unsupportedaymheader
+msgid "Unsupported AYM-file header"
+msgstr "Не поддерживаемый заголовок AYM-файла"
+
+#: languages.mes_unsupportedaymrevision
+msgid "Unsupported AYM-file revision"
+msgstr "Не поддерживаемая ревизия AYM-файла"
+
+#: languages.mes_unsupportedaytype
+msgid "Unsupported AY-file type"
+msgstr "Не поддерживаемый тип AY-файла"
+
+#: languages.mes_unsupportedepsgctype
+msgid "Unsupported EPSG-file computer type"
+msgstr "Не поддерживаемый тип компьютера EPSG-файла"
+
+#: languages.mes_unsupportedpsgheader
+msgid "Unsupported PSG-file header"
+msgstr "Не поддерживаемый заголовок PSG-файла"
+
+#: languages.mes_unsupportedpsgversion
+msgid "Unsupported PSG-file version"
+msgstr "Не поддерживаемая версия PSG-файла"
+
+#: languages.mes_unsupportedvtxheader
+msgid "Unsupported VTX-file header"
+msgstr "Не поддерживаемый заголовок VTX-файла"
+
+#: languages.mes_unsupportedymheader
+msgid "Unsupported YM-file header"
+msgstr "Не поддерживаемый заголовок YM-файла"
+
+#: languages.mes_unsuptsstruct
+msgid "Unsupported TS-file structure"
+msgstr "Не поддерживаемая структура TS-файла"
+
+#: languages.mes_userinterrupted
+msgid "Interrupted because of user wish."
+msgstr "Прервано по запросу пользователя."
+
+#: languages.mes_winversion
+msgctxt "languages.mes_winversion"
+msgid "Supported in Windows version only"
+msgstr "Только в Windows-версии"
+
+#: languages.sndh_convertedby
+msgid "Converted by"
+msgstr "Конвертировал"
+
+#: languages.sndh_rippedby
+msgid "Ripped by"
+msgstr "Выдрал"
+
+#: languages.tit_appicon
+msgid "Application icon"
+msgstr "Для приложения"
+
+#: languages.tit_author
+msgid "Author:"
+msgstr "Автор:"
+
+#: languages.tit_bassicon
+msgid "BASS files icon"
+msgstr "Файлы BASS"
+
+#: languages.tit_icon
+msgid "Icon"
+msgstr "Значок"
+
+#: languages.tit_musicicon
+msgid "Music files icon"
+msgstr "Для музыки"
+
+#: languages.tit_playlisticon
+msgid "Playlists icon"
+msgstr "Для плейлистов"
+
+#: languages.tit_skinicon
+msgid "Skin files icon"
+msgstr "Для обшивок"
+
+#: languages.tit_startmenuicon
+msgid "'Start' menu icon"
+msgstr "Меню \"Пуск\""
+
+#: languages.tit_trayicon
+msgid "Tray icon"
+msgstr "Панель задач"
+
+#: languages.t_allfiles
+msgctxt "languages.t_allfiles"
+msgid "All files"
+msgstr "Все файлы"
+
+#: languages.t_allsupfiles
+msgid "All supported types"
+msgstr "Все допустимые типы"
+
+#: players.er_erbadfilestructure
+msgid "Bad file structure"
+msgstr "Неправильная структура файла"
+
+#: players.er_erbasserror
+msgid "Error calling BASS library"
+msgstr "Ошибка вызова библиотеки BASS"
+
+#: players.er_erfilenotfound
+msgid "File not found"
+msgstr "Файл не найден"
+
+#: players.er_erflsaddrnotdetected
+msgid "Address of compilation is not detected: not FLS-file"
+msgstr "Не удалось определить адрес компиляции: не FLS-файл"
+
+#: players.er_erlzhdataisnotvalid
+msgid "LZH data is not valid"
+msgstr "Данные в LZH ошибочные"
+
+#: players.er_erreadingfile
+msgid "Error reading file"
+msgstr "Ошибка во время чтения файла"
+
+#: taboutbox.caption
+msgid "About program"
+msgstr "О программе"
+
+#: tfrmfndplitm.button1.caption
+msgid "Find next"
+msgstr "Найти далее"
+
+#: tfrmfndplitm.button2.caption
+msgid "Find all"
+msgstr "Найти все"
+
+#: tfrmfndplitm.button3.caption
+msgctxt "tfrmfndplitm.button3.caption"
+msgid "Close"
+msgstr "Закрыть"
+
+#: tfrmfndplitm.caption
+msgid "Find playlist item"
+msgstr "Найти элемент списка"
+
+#: tfrmfndplitm.groupbox1.caption
+msgid "Search string"
+msgstr "Строка для поиска"
+
+#: tfrmfndplitm.radiogroup1.caption
+msgid "Search area"
+msgstr "Область поиска"
+
+#: tfrmjptime.button1.caption
+msgid "Jump"
+msgstr "Перейти"
+
+#: tfrmjptime.button2.caption
+msgctxt "tfrmjptime.button2.caption"
+msgid "Cancel"
+msgstr "Отмена"
+
+#: tfrmjptime.caption
+msgid "Jump to time"
+msgstr "Перейти на время"
+
+#: tfrmjptime.label1.caption
+msgid "Minutes:Seconds"
+msgstr "Минуты:Секунды"
+
+#: tfrmmixer.atarimonochk.caption
+msgctxt "tfrmmixer.atarimonochk.caption"
+msgid "Mono"
+msgstr "Моно"
+
+#: tfrmmixer.atarimonochk.hint
+msgid "Force mono mode for sound driver"
+msgstr "Включать моно режим звукового драйвера"
+
+#: tfrmmixer.atariymmonochk.caption
+msgid "YM mono"
+msgstr "YM моно"
+
+#: tfrmmixer.atariymmonochk.hint
+msgid "Force mono for sound chip channels"
+msgstr "Выбирать раскладку \"Моно\" для выходов сопроцессора"
+
+#: tfrmmixer.ayemusheet.caption
+msgid "AY Emulation"
+msgstr "Эмуляция AY"
+
+#: tfrmmixer.ayoverflowlbl.hint
+msgid "Warning: AY-3-8910/YM2149F output levels can overflow"
+msgstr "Предупреждение: выходные уровни AY-3-8910/YM2149F могут переполниться"
+
+#: tfrmmixer.basssheet.caption
+msgid "BASS v2.4 (optional)"
+msgstr "BASS v2.4 (при наличии)"
+
+#: tfrmmixer.buff.caption
+msgid "Buffers"
+msgstr "Буферы"
+
+#: tfrmmixer.button1.caption
+msgctxt "tfrmmixer.button1.caption"
+msgid "Restore"
+msgstr "Восстановить"
+
+#: tfrmmixer.button2.caption
+msgctxt "TFRMMIXER.BUTTON2.CAPTION"
+msgid "Close"
+msgstr "Закрыть"
+
+#: tfrmmixer.button3.caption
+msgid "Select"
+msgstr "Выбрать"
+
+#: tfrmmixer.button4.caption
+msgid "Autodetect"
+msgstr "Автоопределение"
+
+#: tfrmmixer.caption
+msgid "Mixer"
+msgstr "Микшер"
+
+#: tfrmmixer.checkbox1.caption
+msgctxt "tfrmmixer.checkbox1.caption"
+msgid "Get from list"
+msgstr "Брать из списка"
+
+#: tfrmmixer.checkbox10.caption
+msgid "Linear scale (as is)"
+msgstr "Линейная шкала (без корректировки)"
+
+#: tfrmmixer.checkbox11.caption
+msgid "Hann window"
+msgstr "Окно Ханна"
+
+#: tfrmmixer.checkbox12.caption
+msgid "Seek to first \"Note On\" MIDI-event"
+msgstr "Перемотать до первой ноты"
+
+#: tfrmmixer.checkbox13.caption
+msgid "Remove DC bias"
+msgstr "Убирать \"постоянку\""
+
+#: tfrmmixer.checkbox2.caption
+msgctxt "TFRMMIXER.CHECKBOX2.CAPTION"
+msgid "Get from list"
+msgstr "Брать из списка"
+
+#: tfrmmixer.checkbox3.caption
+msgctxt "TFRMMIXER.CHECKBOX3.CAPTION"
+msgid "Get from list"
+msgstr "Брать из списка"
+
+#: tfrmmixer.checkbox39.caption
+msgid "Save volume position"
+msgstr "Запоминать уровень громкости"
+
+#: tfrmmixer.checkbox8.caption
+msgctxt "TFRMMIXER.CHECKBOX8.CAPTION"
+msgid "Get from list"
+msgstr "Брать из списка"
+
+#: tfrmmixer.checkbox9.caption
+msgctxt "TFRMMIXER.CHECKBOX9.CAPTION"
+msgid "Get from list"
+msgstr "Брать из списка"
+
+#: tfrmmixer.dmaoverflowlbl.hint
+msgid "Warning: DMA-Sound+AY-3-8910/YM2149F output levels can overflow"
+msgstr "Предупреждение: выходные уровни DMA-Sound+AY-3-8910/YM2149F могут переполниться"
+
+#: tfrmmixer.groupbox1.caption
+msgctxt "tfrmmixer.groupbox1.caption"
+msgid "Chip type"
+msgstr "Тип микросхемы"
+
+#: tfrmmixer.groupbox10.caption
+msgctxt "tfrmmixer.groupbox10.caption"
+msgid "Device"
+msgstr "Устройство"
+
+#: tfrmmixer.groupbox11.caption
+msgid "Visualization"
+msgstr "Визуализация"
+
+#: tfrmmixer.groupbox12.caption
+msgid "Resampler"
+msgstr "Передискретизация"
+
+#: tfrmmixer.groupbox13.caption
+msgctxt "TFRMMIXER.GROUPBOX13.CAPTION"
+msgid "Device"
+msgstr "Устройство"
+
+#: tfrmmixer.groupbox14.caption
+msgid "Connection parameters"
+msgstr "Параметры соединения"
+
+#: tfrmmixer.groupbox15.caption
+msgid "MC68000 frequency"
+msgstr "Частота MC68000"
+
+#: tfrmmixer.groupbox16.caption
+msgid "Atari ST emulation (SNDH)"
+msgstr "Эмуляция Atari ST (SNDH)"
+
+#: tfrmmixer.groupbox2.caption
+msgctxt "tfrmmixer.groupbox2.caption"
+msgid "Sound chip frequency"
+msgstr "Частота микросхемы"
+
+#: tfrmmixer.groupbox3.caption
+msgid "Sample rate"
+msgstr "Частота сэмплов"
+
+#: tfrmmixer.groupbox4.caption
+msgid "Bit rate"
+msgstr "Бит на сэмпл"
+
+#: tfrmmixer.groupbox5.caption
+msgid "Channels"
+msgstr "Каналы"
+
+#: tfrmmixer.groupbox7.caption
+msgid "Interrupt frequency"
+msgstr "Частота прерываний"
+
+#: tfrmmixer.groupbox8.caption
+msgid "YM5, YM6, SNDH (MFP Timer)"
+msgstr "YM5, YM6, SNDH (таймер MFP)"
+
+#: tfrmmixer.groupbox9.caption
+msgid "Z80 frequency"
+msgstr "Частота Z80"
+
+#: tfrmmixer.kusil.caption
+msgctxt "tfrmmixer.kusil.caption"
+msgid "Channels amplification"
+msgstr "Усиление каналов"
+
+#: tfrmmixer.label1.caption
+msgid "TStates per frame"
+msgstr "Тиков на кадр"
+
+#: tfrmmixer.label10.caption
+msgid "Number of FFT koef.:"
+msgstr "Количество коэф. FFT"
+
+#: tfrmmixer.label12.caption
+msgid "User-Agent (empty to fill all parameters from BASS):"
+msgstr "User-Agent (если пусто, будет заполнено BASS):"
+
+#: tfrmmixer.label16.caption
+msgctxt "tfrmmixer.label16.caption"
+msgid "Left"
+msgstr "Левый"
+
+#: tfrmmixer.label17.caption
+msgctxt "tfrmmixer.label17.caption"
+msgid "Right"
+msgstr "Правый"
+
+#: tfrmmixer.label18.caption
+msgctxt "TFRMMIXER.LABEL18.CAPTION"
+msgid "Left"
+msgstr "Левый"
+
+#: tfrmmixer.label19.caption
+msgctxt "TFRMMIXER.LABEL19.CAPTION"
+msgid "Right"
+msgstr "Правый"
+
+#: tfrmmixer.label2.caption
+msgid "AmpMin/AmpMax ="
+msgstr "УрМин/УрМакс ="
+
+#: tfrmmixer.label20.caption
+msgctxt "TFRMMIXER.LABEL20.CAPTION"
+msgid "Left"
+msgstr "Левый"
+
+#: tfrmmixer.label21.caption
+msgctxt "TFRMMIXER.LABEL21.CAPTION"
+msgid "Right"
+msgstr "Правый"
+
+#: tfrmmixer.label22.caption
+msgctxt "tfrmmixer.label22.caption"
+msgid "Hz"
+msgstr "Гц"
+
+#: tfrmmixer.label23.caption
+msgctxt "TFRMMIXER.LABEL23.CAPTION"
+msgid "Hz"
+msgstr "Гц"
+
+#: tfrmmixer.label24.caption
+msgctxt "TFRMMIXER.LABEL24.CAPTION"
+msgid "Hz"
+msgstr "Гц"
+
+#: tfrmmixer.label25.caption
+msgctxt "TFRMMIXER.LABEL25.CAPTION"
+msgid "Hz"
+msgstr "Гц"
+
+#: tfrmmixer.label26.caption
+msgctxt "TFRMMIXER.LABEL26.CAPTION"
+msgid "Hz"
+msgstr "Гц"
+
+#: tfrmmixer.label27.caption
+msgctxt "TFRMMIXER.LABEL27.CAPTION"
+msgid "Hz"
+msgstr "Гц"
+
+#: tfrmmixer.label28.caption
+msgid "user:pass@server:port (empty string for system settings):"
+msgstr "user:pass@server:port (пустo – использовать системные)"
+
+#: tfrmmixer.label3.caption
+msgid "Current volume control:"
+msgstr "Текущий регулятор громкости"
+
+#: tfrmmixer.label4.caption
+msgid "Total length"
+msgstr "Общая длина"
+
+#: tfrmmixer.label5.caption
+msgid "Buffer length"
+msgstr "Длина буфера"
+
+#: tfrmmixer.label6.caption
+msgctxt "tfrmmixer.label6.caption"
+msgid "Number of buffers"
+msgstr "Количество буферов"
+
+#: tfrmmixer.label7.caption
+msgid "Interrupt offset"
+msgstr "Смещение прерывания"
+
+#: tfrmmixer.label8.caption
+msgid "Preamp"
+msgstr "Общее"
+
+#: tfrmmixer.label9.caption
+msgid "Beeper"
+msgstr ""
+
+#: tfrmmixer.mosheet.caption
+msgid "MIDIOut"
+msgstr "Выход MIDI"
+
+#: tfrmmixer.proxychk.caption
+msgid "Use proxy"
+msgstr "Использовать прокси"
+
+#: tfrmmixer.radiobutton11.caption
+msgid "16 bit"
+msgstr "16 бит"
+
+#: tfrmmixer.radiobutton12.caption
+msgid "8 bit"
+msgstr "8 бит"
+
+#: tfrmmixer.radiobutton13.caption
+msgctxt "tfrmmixer.radiobutton13.caption"
+msgid "Stereo"
+msgstr "Стерео"
+
+#: tfrmmixer.radiobutton14.caption
+msgctxt "TFRMMIXER.RADIOBUTTON14.CAPTION"
+msgid "Mono"
+msgstr "Моно"
+
+#: tfrmmixer.radiobutton16.caption
+msgctxt "TFRMMIXER.RADIOBUTTON16.CAPTION"
+msgid "Another"
+msgstr "Другая"
+
+#: tfrmmixer.radiobutton20.caption
+msgctxt "TFRMMIXER.RADIOBUTTON20.CAPTION"
+msgid "Another"
+msgstr "Другая"
+
+#: tfrmmixer.radiobutton25.caption
+msgctxt "TFRMMIXER.RADIOBUTTON25.CAPTION"
+msgid "Another"
+msgstr "Другая"
+
+#: tfrmmixer.radiobutton26.caption
+msgid "FIR-filter"
+msgstr "КИХ-фильтр"
+
+#: tfrmmixer.radiobutton27.caption
+msgctxt "TFRMMIXER.RADIOBUTTON27.CAPTION"
+msgid "Another"
+msgstr "Другая"
+
+#: tfrmmixer.radiobutton28.caption
+msgctxt "tfrmmixer.radiobutton28.caption"
+msgid "averager"
+msgstr "усреднение"
+
+#: tfrmmixer.radiobutton31.caption
+msgctxt "tfrmmixer.radiobutton31.caption"
+msgid "Another"
+msgstr "Другая"
+
+#: tfrmmixer.radiobutton7.caption
+msgctxt "tfrmmixer.radiobutton7.caption"
+msgid "Another"
+msgstr "Другая"
+
+#: tfrmmixer.speedbutton2.caption
+msgid "Stop playing"
+msgstr "Остановить проигрывание"
+
+#: tfrmmixer.speedbutton3.caption
+msgid "Helper"
+msgstr "Помощник"
+
+#: tfrmmixer.trackbar8.hint
+msgid "Length of one buffer"
+msgstr "Длина одного буфера"
+
+#: tfrmmixer.trackbar9.hint
+msgctxt "TFRMMIXER.TRACKBAR9.HINT"
+msgid "Number of buffers"
+msgstr "Количество буферов"
+
+#: tfrmmixer.tsoverflowlbl.hint
+msgid "Warning: Turbo Sound output levels can overflow"
+msgstr "Предупреждение: выходные уровни Turbo Sound могут переполниться"
+
+#: tfrmmixer.volumesheet.caption
+msgid "Global Volume Control"
+msgstr "Регулятор громкости"
+
+#: tfrmmixer.wosheet.caption
+msgid "Digital Sound"
+msgstr "Цифровой звук"
+
+#: tfrmmxhlp.button1.caption
+msgid "Set"
+msgstr "Установить"
+
+#: tfrmmxhlp.button2.caption
+msgctxt "tfrmmxhlp.button2.caption"
+msgid "Cancel"
+msgstr "Отмена"
+
+#: tfrmmxhlp.caption
+msgid "Mixer Amplifier Helper"
+msgstr "Помощник расчета усилителя микшера"
+
+#: tfrmmxhlp.chansrg.caption
+msgid "AY-3-8910/YM2149F Channels Allocation"
+msgstr "Расположение каналов AY-3-8910/YM2149F"
+
+#: tfrmmxhlp.tsdmachg.caption
+msgid "Leave space for additional device"
+msgstr "Учесть дополнительное устройство"
+
+#: tfrmpliedit.button1.caption
+msgid "Load"
+msgstr "Загрузить"
+
+#: tfrmpliedit.button2.caption
+msgctxt "tfrmpliedit.button2.caption"
+msgid "Save"
+msgstr "Сохранить"
+
+#: tfrmpliedit.button4.caption
+msgctxt "tfrmpliedit.button4.caption"
+msgid "Cancel"
+msgstr "Отмена"
+
+#: tfrmpliedit.caption
+msgid "List's Item Adjusting"
+msgstr "Настройки элемента списка"
+
+#: tfrmpliedit.groupbox1.caption
+msgid "Information"
+msgstr "Информация"
+
+#: tfrmpliedit.groupbox2.caption
+msgid "Playing"
+msgstr "Проигрывание"
+
+#: tfrmpliedit.groupbox3.caption
+msgid "Chip"
+msgstr "Микросхема"
+
+#: tfrmpliedit.groupbox4.caption
+msgid "Chip frequency"
+msgstr "Частота микросхемы"
+
+#: tfrmpliedit.groupbox5.caption
+msgid "Player frequency"
+msgstr "Частота проигрывателя"
+
+#: tfrmpliedit.groupbox6.caption
+msgid "Number of channels"
+msgstr "Число каналов"
+
+#: tfrmpliedit.groupbox7.caption
+msgctxt "tfrmpliedit.groupbox7.caption"
+msgid "Channels amplification"
+msgstr "Усиление каналов"
+
+#: tfrmpliedit.groupbox8.caption
+msgid "Default list settings"
+msgstr "Общие настройки списка"
+
+#: tfrmpliedit.groupbox9.caption
+msgctxt "tfrmpliedit.groupbox9.caption"
+msgid "File"
+msgstr "Файл"
+
+#: tfrmpliedit.label1.caption
+msgctxt "tfrmpliedit.label1.caption"
+msgid "Author"
+msgstr "Автор"
+
+#: tfrmpliedit.label11.caption
+msgid "Specific"
+msgstr "Особен."
+
+#: tfrmpliedit.label12.caption
+msgid "Type"
+msgstr "Тип"
+
+#: tfrmpliedit.label13.caption
+msgid "Offset"
+msgstr "Смещение"
+
+#: tfrmpliedit.label14.caption
+msgid "Address"
+msgstr "Адрес"
+
+#: tfrmpliedit.label16.caption
+msgid "Time"
+msgstr "Время"
+
+#: tfrmpliedit.label17.caption
+msgid "Length"
+msgstr "Длина"
+
+#: tfrmpliedit.label18.caption
+msgid "Loop"
+msgstr "Цикл"
+
+#: tfrmpliedit.label2.caption
+msgctxt "tfrmpliedit.label2.caption"
+msgid "Title"
+msgstr "Название"
+
+#: tfrmpliedit.label3.caption
+msgctxt "tfrmpliedit.label3.caption"
+msgid "Program"
+msgstr "Программа"
+
+#: tfrmpliedit.label4.caption
+msgctxt "tfrmpliedit.label4.caption"
+msgid "Tracker"
+msgstr "Редактор"
+
+#: tfrmpliedit.label5.caption
+msgid "Computer"
+msgstr "Платформа"
+
+#: tfrmpliedit.label6.caption
+msgid "Date"
+msgstr "Дата"
+
+#: tfrmpliedit.label7.caption
+msgid "Comment:"
+msgstr "Комментарий:"
+
+#: tfrmpliedit.radiobutton10.caption
+msgctxt "tfrmpliedit.radiobutton10.caption"
+msgid "Stereo"
+msgstr "Стерео"
+
+#: tfrmpliedit.radiobutton11.caption
+msgctxt "tfrmpliedit.radiobutton11.caption"
+msgid "Mono"
+msgstr "Моно"
+
+#: tfrmpliedit.radiobutton12.caption
+msgctxt "tfrmpliedit.radiobutton12.caption"
+msgid "Another"
+msgstr "Другое"
+
+#: tfrmpliedit.radiobutton13.caption
+msgctxt "tfrmpliedit.radiobutton13.caption"
+msgid "Standard"
+msgstr "Стандарт"
+
+#: tfrmpliedit.radiobutton14.caption
+msgctxt "tfrmpliedit.radiobutton14.caption"
+msgid "Default"
+msgstr "По умолчанию"
+
+#: tfrmpliedit.radiobutton15.caption
+msgctxt "TFRMPLIEDIT.RADIOBUTTON15.CAPTION"
+msgid "Default"
+msgstr "По умолчанию"
+
+#: tfrmpliedit.radiobutton16.caption
+msgctxt "TFRMPLIEDIT.RADIOBUTTON16.CAPTION"
+msgid "Default"
+msgstr "По умолчанию"
+
+#: tfrmpliedit.radiobutton17.caption
+msgctxt "TFRMPLIEDIT.RADIOBUTTON17.CAPTION"
+msgid "Default"
+msgstr "По умолчанию"
+
+#: tfrmpliedit.radiobutton18.caption
+msgctxt "TFRMPLIEDIT.RADIOBUTTON18.CAPTION"
+msgid "Default"
+msgstr "По умолчанию"
+
+#: tfrmpliedit.radiobutton7.caption
+msgctxt "tfrmpliedit.radiobutton7.caption"
+msgid "Another"
+msgstr "Другая"
+
+#: tfrmpliedit.radiobutton9.caption
+msgctxt "TFRMPLIEDIT.RADIOBUTTON9.CAPTION"
+msgid "Another"
+msgstr "Другая"
+
+#: tfrmplst.byauthorsort.caption
+msgid "Sort by author"
+msgstr "Сортировать по автору"
+
+#: tfrmplst.byfilenamesort.caption
+msgid "Sort by file name"
+msgstr "Сортировать по имени файла"
+
+#: tfrmplst.byfiletype1.caption
+msgid "Sort by file type"
+msgstr "Сортировка по типу файла"
+
+#: tfrmplst.bytitlesort.caption
+msgid "Sort by title"
+msgstr "Сортировка по названию"
+
+#: tfrmplst.caption
+msgid "Playlist"
+msgstr "Список проигрывания"
+
+#: tfrmplst.deduplicate1.caption
+msgid "Deduplicate"
+msgstr "Убрать дубли"
+
+#: tfrmplst.finditem1.caption
+msgid "Find item..."
+msgstr "Найти элемент..."
+
+#: tfrmplst.menuconvert.caption
+msgid "Convert to"
+msgstr "Конвертировать в"
+
+#: tfrmplst.menuitemadjusting.caption
+msgid "Item adjusting..."
+msgstr "Настройка элемента..."
+
+#: tfrmplst.menuopenineditor.caption
+msgid "Open in editor"
+msgstr "Открыть в редакторе"
+
+#: tfrmplst.menusaveas.caption
+msgid "Save as..."
+msgstr "Сохранить как..."
+
+#: tfrmplst.randomsort.caption
+msgid "Sort randomly"
+msgstr "Перемешать"
+
+#: tfrmplst.speedbutton1.caption
+msgid "Add items"
+msgstr "Добавить"
+
+#: tfrmplst.speedbutton2.caption
+msgid "Clear list"
+msgstr "Очистить"
+
+#: tfrmplst.speedbutton3.caption
+msgid "Save list"
+msgstr "Сохранить"
+
+#: tfrmplst.speedbutton4.caption
+msgid "List tools"
+msgstr "Инструменты"
+
+#: tfrmprbox.button1.caption
+msgid "Abort current operation"
+msgstr "Прервать текущую операцию"
+
+#: tfrmprbox.button2.caption
+msgid "Switch off tunes finder"
+msgstr "Выключить поиск модулей"
+
+#: tfrmprbox.caption
+msgid "Searching for tunes"
+msgstr "Поиск модулей"
+
+#: tfrmselvolctrl.button2.caption
+msgctxt "tfrmselvolctrl.button2.caption"
+msgid "Cancel"
+msgstr "Отмена"
+
+#: tfrmtools.alluserschk.caption
+msgid "For all users (Administrator rights needed)"
+msgstr "Для всех пользователей (требуются права администратора)"
+
+#: tfrmtools.button1.caption
+msgctxt "TFRMTOOLS.BUTTON1.CAPTION"
+msgid "Choose..."
+msgstr "Обзор..."
+
+#: tfrmtools.button10.caption
+msgid "Add"
+msgstr "Добавить"
+
+#: tfrmtools.button11.caption
+msgid "Remove"
+msgstr "Убрать"
+
+#: tfrmtools.button12.caption
+msgctxt "tfrmtools.button12.caption"
+msgid "Choose..."
+msgstr "Обзор..."
+
+#: tfrmtools.button13.caption
+msgctxt "TFRMTOOLS.BUTTON13.CAPTION"
+msgid "Standard"
+msgstr "Стандарт"
+
+#: tfrmtools.button14.caption
+msgctxt "TFRMTOOLS.BUTTON14.CAPTION"
+msgid "Save"
+msgstr "Сохранить"
+
+#: tfrmtools.button15.caption
+msgctxt "TFRMTOOLS.BUTTON15.CAPTION"
+msgid "All/None"
+msgstr "Всё/Ничего"
+
+#: tfrmtools.button16.caption
+msgctxt "TFRMTOOLS.BUTTON16.CAPTION"
+msgid "Apply"
+msgstr "Применить"
+
+#: tfrmtools.button17.caption
+msgctxt "TFRMTOOLS.BUTTON17.CAPTION"
+msgid "All/None"
+msgstr "Всё/Ничего"
+
+#: tfrmtools.button2.caption
+msgctxt "tfrmtools.button2.caption"
+msgid "Choose..."
+msgstr "Обзор..."
+
+#: tfrmtools.button3.caption
+msgctxt "TFRMTOOLS.BUTTON3.CAPTION"
+msgid "Begin"
+msgstr "Начать"
+
+#: tfrmtools.button4.caption
+msgctxt "TFRMTOOLS.BUTTON4.CAPTION"
+msgid "Close"
+msgstr "Закрыть"
+
+#: tfrmtools.button5.caption
+msgctxt "tfrmtools.button5.caption"
+msgid "All/None"
+msgstr "Всё/Ничего"
+
+#: tfrmtools.button6.caption
+msgctxt "TFRMTOOLS.BUTTON6.CAPTION"
+msgid "All/None"
+msgstr "Всё/Ничего"
+
+#: tfrmtools.button7.caption
+msgid "Uninstall"
+msgstr "Деинсталлировать"
+
+#: tfrmtools.button8.caption
+msgid "Register"
+msgstr "Зарегистрировать"
+
+#: tfrmtools.button9.caption
+msgid "Unregister"
+msgstr "Разрегистрировать"
+
+#: tfrmtools.caption
+msgid "Tools"
+msgstr "Инструменты"
+
+#: tfrmtools.checkbox12.caption
+msgid "ST 1.1-1.3 uncompiled"
+msgstr ""
+
+#: tfrmtools.checkbox13.caption
+msgid "ST Pro uncompiled"
+msgstr ""
+
+#: tfrmtools.checkbox29.caption
+msgid "Enabled"
+msgstr "Включено"
+
+#: tfrmtools.checkbox38.caption
+msgid "Automatically save current"
+msgstr "Автоматически запоминать текущую"
+
+#: tfrmtools.checkbox40.caption
+msgid "Save windows position"
+msgstr "Запоминать положение окон"
+
+#: tfrmtools.checkbox41.caption
+msgid "Kill on exit"
+msgstr "Удалять на выходе"
+
+#: tfrmtools.checkbox42.caption
+msgid "Kill on nothing"
+msgstr "Удалять при молчании"
+
+#: tfrmtools.checkbox57.caption
+msgid "Do not check modules integrity (faster)"
+msgstr "Не проверять целостность модулей (быстрее)"
+
+#: tfrmtools.fidotools.caption
+msgid "Track descriptor"
+msgstr "Информация о треке"
+
+#: tfrmtools.ftyptools.caption
+msgid "Application registration"
+msgstr "Регистрация приложения"
+
+#: tfrmtools.gentools.caption
+msgid "General"
+msgstr "Общие"
+
+#: tfrmtools.groupbox1.caption
+msgctxt "TFRMTOOLS.GROUPBOX1.CAPTION"
+msgid "Other"
+msgstr "Другие"
+
+#: tfrmtools.groupbox10.caption
+msgid "'Start' menu"
+msgstr "Меню \"Пуск\""
+
+#: tfrmtools.groupbox11.caption
+msgid "Icon on system tray"
+msgstr "Значок на панели задач"
+
+#: tfrmtools.groupbox12.caption
+msgid "Current Skin"
+msgstr "Текущая обшивка"
+
+#: tfrmtools.groupbox13.caption
+msgid "Folder with music"
+msgstr "Папка с музыкой"
+
+#: tfrmtools.groupbox2.caption
+msgid "Playlist colors and font"
+msgstr "Цвета и шрифт в плейлисте"
+
+#: tfrmtools.groupbox3.caption
+msgid "Search for tunes"
+msgstr "Искать модули"
+
+#: tfrmtools.groupbox4.caption
+msgid "Modules editor path"
+msgstr "Путь к редактору модулей"
+
+#: tfrmtools.groupbox5.caption
+msgid "Priority"
+msgstr "Приоритет"
+
+#: tfrmtools.groupbox6.caption
+msgid "Language"
+msgstr "Language (язык)"
+
+#: tfrmtools.groupbox7.caption
+msgid "Default code page"
+msgstr "Кодировка (умолч.)"
+
+#: tfrmtools.groupbox8.caption
+msgid "Code page"
+msgstr "Кодировка"
+
+#: tfrmtools.label1.caption
+msgid "Text"
+msgstr "Текст"
+
+#: tfrmtools.label10.caption
+msgid "Suffix"
+msgstr "Окончание"
+
+#: tfrmtools.label11.caption
+msgid "Nothing"
+msgstr "Молчание"
+
+#: tfrmtools.label12.caption
+msgid "Back"
+msgstr "Фон"
+
+#: tfrmtools.label13.caption
+msgid "SelText"
+msgstr "ВыдТекст"
+
+#: tfrmtools.label14.caption
+msgid "SelBack"
+msgstr "ВыдФон"
+
+#: tfrmtools.label15.caption
+msgid "Play Text"
+msgstr "Проигр. текст"
+
+#: tfrmtools.label16.caption
+msgid "Play Back"
+msgstr "Проигр. фон"
+
+#: tfrmtools.label17.caption
+msgid "Play SelText"
+msgstr "Проигр. ВыдТекст"
+
+#: tfrmtools.label18.caption
+msgid "Error Text"
+msgstr "Текст ошибки"
+
+#: tfrmtools.label19.caption
+msgid "Err SelText"
+msgstr "ВыдТекст ош."
+
+#: tfrmtools.label2.caption
+msgctxt "tfrmtools.label2.caption"
+msgid "File name"
+msgstr "Имя файла"
+
+#: tfrmtools.label20.caption
+msgid "Visualization period, ms"
+msgstr "Период визуализации, мс"
+
+#: tfrmtools.label3.caption
+msgid "Source files:"
+msgstr "Исходные файлы:"
+
+#: tfrmtools.label4.caption
+msgid "Work folder:"
+msgstr "Рабочая папка:"
+
+#: tfrmtools.label5.caption
+msgid "Work report:"
+msgstr "Протокол работы:"
+
+#: tfrmtools.label6.caption
+msgid "Skin's author"
+msgstr "Автор обшивки"
+
+#: tfrmtools.label7.caption
+msgid "Comment"
+msgstr "Комментарий"
+
+#: tfrmtools.label8.caption
+msgctxt "TFRMTOOLS.LABEL8.CAPTION"
+msgid "File name"
+msgstr "Имя файла"
+
+#: tfrmtools.label9.caption
+msgid "Prefix"
+msgstr "Префикс"
+
+#: tfrmtools.radiobutton10.caption
+msgid "minimize"
+msgstr "сворачивать"
+
+#: tfrmtools.radiobutton3.caption
+msgid "idle"
+msgstr "низкий"
+
+#: tfrmtools.radiobutton4.caption
+msgid "normal"
+msgstr "обычный"
+
+#: tfrmtools.radiobutton5.caption
+msgid "high"
+msgstr "высокий"
+
+#: tfrmtools.radiobutton8.caption
+msgid "never"
+msgstr "никогда"
+
+#: tfrmtools.radiobutton9.caption
+msgid "always"
+msgstr "всегда"
+
+#: tfrmtools.searchtool.caption
+msgid "Searching for tunes in files"
+msgstr "Поиск модулей в файлах"
+
+#: tfrmtools.speedbutton1.caption
+msgid "Choose font..."
+msgstr "Выбрать шрифт..."
+
+#: theadereditor.btapply.caption
+msgctxt "theadereditor.btapply.caption"
+msgid "Apply"
+msgstr "Применить"
+
+#: theadereditor.btrestore.caption
+msgctxt "THEADEREDITOR.BTRESTORE.CAPTION"
+msgid "Restore"
+msgstr "Восстановить"
+
+#: theadereditor.caption
+msgid "Information in the file header"
+msgstr "Информация в заголовке файла"
+
+#: theadereditor.chanallocbox.caption
+msgid "Channels allocation"
+msgstr "Распределение каналов"
+
+#: theadereditor.chtypebox.caption
+msgctxt "THEADEREDITOR.CHTYPEBOX.CAPTION"
+msgid "Chip type"
+msgstr "Тип микросхемы"
+
+#: theadereditor.frqbox.caption
+msgctxt "THEADEREDITOR.FRQBOX.CAPTION"
+msgid "Sound chip frequency"
+msgstr "Частота сопроцессора"
+
+#: theadereditor.label1.caption
+msgctxt "THEADEREDITOR.LABEL1.CAPTION"
+msgid "Hz"
+msgstr "Гц"
+
+#: theadereditor.label2.caption
+msgctxt "THEADEREDITOR.LABEL2.CAPTION"
+msgid "Hz"
+msgstr "Гц"
+
+#: theadereditor.label3.caption
+msgctxt "THEADEREDITOR.LABEL3.CAPTION"
+msgid "Hz"
+msgstr "Гц"
+
+#: theadereditor.label4.caption
+msgctxt "THEADEREDITOR.LABEL4.CAPTION"
+msgid "Hz"
+msgstr "Гц"
+
+#: theadereditor.label5.caption
+msgctxt "THEADEREDITOR.LABEL5.CAPTION"
+msgid "Hz"
+msgstr "Гц"
+
+#: theadereditor.label6.caption
+msgctxt "THEADEREDITOR.LABEL6.CAPTION"
+msgid "Hz"
+msgstr "Гц"
+
+#: theadereditor.lbauthor.caption
+msgctxt "theadereditor.lbauthor.caption"
+msgid "Author"
+msgstr "Автор"
+
+#: theadereditor.lbprogram.caption
+msgctxt "theadereditor.lbprogram.caption"
+msgid "Program"
+msgstr "Программа"
+
+#: theadereditor.lbtitle.caption
+msgctxt "theadereditor.lbtitle.caption"
+msgid "Title"
+msgstr "Название"
+
+#: theadereditor.lbtotvbls.caption
+msgid "Total VBLs"
+msgstr "Количество квантов"
+
+#: theadereditor.lbtracker.caption
+msgctxt "theadereditor.lbtracker.caption"
+msgid "Tracker"
+msgstr "Редактор"
+
+#: theadereditor.lbyear.caption
+msgid "Year"
+msgstr "Год"
+
+#: theadereditor.otherbox.caption
+msgid "Other information"
+msgstr "Прочая информация"
+
+#: theadereditor.rbfrqother.caption
+msgctxt "theadereditor.rbfrqother.caption"
+msgid "Other"
+msgstr "Другая"
+
+#: theadereditor.rbplfrqother.caption
+msgctxt "THEADEREDITOR.RBPLFRQOTHER.CAPTION"
+msgid "Other"
+msgstr "Другая"
+
+#: theadereditor.songinfobox.caption
+msgid "Information about song"
+msgstr "Информация о песне"
+
+#: theadereditor.vblfrqbox.caption
+msgid "VBL frequency"
+msgstr "Частота прерываний"
+
+#: theadereditor.vblloopbox.caption
+msgid "Loop VBL"
+msgstr "Квант цикла"
+
+#: tseldirdlg.button2.caption
+msgctxt "TSELDIRDLG.BUTTON2.CAPTION"
+msgid "Cancel"
+msgstr "Отмена"
+
+#: tseldirdlg.playlistgb.caption
+msgctxt "tseldirdlg.playlistgb.caption"
+msgid "Playlist files"
+msgstr "Списки проигрывания"
+
+#: tseldirdlg.radiobutton1.caption
+msgid "Include playlists"
+msgstr "Включать плейлисты"
+
+#: tseldirdlg.radiobutton2.caption
+msgid "Exclude playlists"
+msgstr "Исключать плейлисты"
+
+#: tseldirdlg.radiobutton3.caption
+msgid "Only playlists"
+msgstr "Только плейлисты"
+

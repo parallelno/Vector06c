@@ -1,0 +1,31 @@
+{
+	"png" : "sources\\levels\\art\\sprites_tiles_lv01.png",
+	"palette" :
+	[ 
+		{"x": 0,	"y" : 256},
+		{"x": 16,	"y" : 256},
+		{"x": 32,	"y" : 256},
+		{"x": 48,	"y" : 256},
+		{"x": 64,	"y" : 256},
+		{"x": 80,	"y" : 256},
+		{"x": 96,	"y" : 256},
+		{"x": 112,	"y" : 256},
+		{"x": 128,	"y" : 256},
+		{"x": 144,	"y" : 256},
+		{"x": 160,	"y" : 256},
+		{"x": 176,	"y" : 256},
+		{"x": 192,	"y" : 256},
+		{"x": 208,	"y" : 256},
+		{"x": 224,	"y" : 256},
+		{"x": 240,	"y" : 256}
+	],
+	"startPos" : {
+		"x" : 48,
+		"y" : 190
+	},
+	"rooms" : [
+		{"file" : "sources\\levels\\level01_room00.tmj"},
+		{"file" : "sources\\levels\\level01_room01.tmj"},
+		{"file" : "sources\\levels\\level01_room02.tmj"}
+	]
+}

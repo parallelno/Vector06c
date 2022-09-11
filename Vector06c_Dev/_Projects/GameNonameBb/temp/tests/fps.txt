@@ -1,0 +1,37 @@
+========================================
+every frame draw:
+hero W/O clean
+16 pxls - 21
+24 pxls - 28
+
+hero With clean
+16 pxls - 33
+24 pxls - 46
+==========================================
+sprite height reduced to 15
+hero W/O clean
+16 pxls - 20
+24 pxls - 26
+
+hero With clean
+16 pxls - 32
+24 pxls - 44
+===========================
+OR-mode with the screen
+hero W/O clean
+16 pxls - 29
+24 pxls - 41
+
+hero With clean
+16 pxls - 41
+24 pxls - 59
+===========================
+draw every second frame
+hero With clean
+16 pxls - 23
+24 pxls - 32
+===========================
+draw every third frame
+hero With clean
+16 pxls - ?
+24 pxls - ?
