@@ -55,7 +55,7 @@ GameDraw:
 			inr m
 
 			BORDER_LINE(5)
-			call HeroErase
+			call HeroErase2
 
 			BORDER_LINE(6)
 			call HeroDraw

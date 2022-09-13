@@ -1,16 +1,7 @@
-from xmlrpc.client import Boolean, boolean
+from xmlrpc.client import Boolean
 from PIL import Image
 import json
-import tools.common as common
-
-def BytesToAsmTiled(data):
-	asm = ""
-	for tile in data:
-		asm += "			.byte "
-		for b in tile:
-			asm += str(b) + ","
-		asm += "\n"
-	return asm
+import common
 
 def MaskData(maskBytes, w, h ):
 	# sprite data structure description is in drawSprite.asm
@@ -30,46 +21,6 @@ def MaskData(maskBytes, w, h ):
 				i = y*width+x
 				data.append(maskBytes[i])
 	return data
-
-# from left-bottom corner by columns all the data for the first scr buff
-# then the same for each other scr buffs
-# sprite data structure description is in drawSprite.asm
-# sprite uses only 3 out of 4 screen buffers.
-# the width is devided by 8 because there is 8 pixels per a byte
-def SpriteDataBB(bytes1, bytes2, bytes3, w, h, maskBytes = None):
-	bytesAll = [bytes1, bytes2, bytes3]
-	width = w // 8
-	data = []
-	for bytes in bytesAll:
-		scrBuff = []
-		for x in range(width):
-			for y in reversed(range(0, h)):
-				i = y*width + x
-				scrBuff.append(bytes[i])
-				if maskBytes:
-					scrBuff.append(maskBytes[i])
-		data.append(scrBuff)
-	return data	
-
-# tiles 8*8pxs for 3 scr fuffers
-def SpriteDataTiled(bytes1, bytes2, bytes3, w, h, maskBytes = None):
-	# sprite data structure description is in drawSprite.asm
-	# sprite uses only 3 out of 4 screen buffers.
-	# the width is devided by 8 because there is 8 pixels per a byte
-	bytesAll = [bytes1, bytes2, bytes3]
-	width = w // 8
-	data = []
-	for x in range(width):
-		for y in range(0, h, 8):
-			tile = []
-			for bytes in bytesAll:
-				for dy in range(8):
-					i = y*width + x
-					tile.append(bytes[i])
-					if maskBytes:
-						tile.append(maskBytes[i])
-			data.append(tile)
-	return data	
 
 def SpriteData(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 	# sprite data structure description is in drawSprite.asm
@@ -135,7 +86,7 @@ def AnimsToAsm(charJ, charJPath):
 		asm += "\n"
 	return asm
 
-def SpritesToAsm(charJPath, charJ, image, addSize, addMask):
+def SpritesToAsm(charJ, image, addSize, addMask):
 	labelPrefix = charJPath.split("/")[-1].split("\\")[-1].split(".")[0]
 	spritesJ = charJ["sprites"]
 	asm = labelPrefix + "_sprites:"
@@ -190,12 +141,11 @@ def SpritesToAsm(charJPath, charJ, image, addSize, addMask):
 						maskImg.append(0)
 		
 			maskBytes = common.CombineBitsToBytes(maskImg)
-			#maskData = MaskData(maskBytes, width, height)
+			maskData = MaskData(maskBytes, width, height)
 
 		# to support a sprite render function
-		#data = SpriteData(bytes1, bytes2, bytes3, width, height, maskBytes)
-		#data = SpriteDataTiled(bytes1, bytes2, bytes3, width, height, maskBytes)
-		data = SpriteDataBB(bytes1, bytes2, bytes3, width, height, maskBytes)
+		data = SpriteData(bytes1, bytes2, bytes3, width, height, maskBytes)
+		#data = SpriteData(bytes1, bytes2, bytes3, width, height)
 
 		asm += "\n"
 		# two empty bytes prior every to support a stack renderer
@@ -205,38 +155,14 @@ def SpritesToAsm(charJPath, charJ, image, addSize, addMask):
 		if addSize:
 			widthPacked = width//8 - 1
 			offsetXPacked = offsetX//8
-			asm += "			.byte " + str( offsetY ) + ", " +  str( offsetXPacked ) + "; offsetY, offsetX\n"
-			asm += "			.byte " + str( height ) + ", " +  str( widthPacked ) + "; height, width\n"
+			widthOffsetXpacked = widthPacked << 1 | offsetXPacked | offsetY << 3
+			asm += "			.byte " + str( height ) + ", " +  str( widthOffsetXpacked ) + "; height, widthOffsetXpacked\n"
 		
-		asm += BytesToAsmTiled(data) 
+		asm += common.BytesToAsm(data)
 
 	return asm
 
-def Export(addSize : bool, addMask : bool, charJPath, asmAnimPath, asmSpritePath):
-
-	with open(charJPath, "rb") as file:
-		charJ = json.load(file)
-	
-	pngPath = str(charJ["png"])
-	image = Image.open(pngPath)
-	
-	_, colors = common.PaletteToAsm(image, charJ, charJPath)
-	
-	image = common.RemapColors(image, colors)
-	
-	asm = "; " + charJPath + "\n"
-	asmAnims = asm + AnimsToAsm(charJ, charJPath)
-	asmSprites = asm + SpritesToAsm(charJPath, charJ, image, addSize, addMask)
-	
-	# save asm
-	with open(asmAnimPath, "w") as file:
-		file.write(asmAnims)
-	
-	with open(asmSpritePath, "w") as file:
-		file.write(asmSprites)
-
 #=====================================================
-"""
 import argparse
 
 parser = argparse.ArgumentParser()
@@ -261,7 +187,6 @@ if not args.input or not args.outputAnim or not args.outputSprite:
 charJPath = args.input
 asmAnimPath = args.outputAnim
 asmSpritePath = args.outputSprite
-"""
 '''
 addSize = True
 addMask = True
@@ -270,5 +195,24 @@ asmAnimPath = ""
 asmSpritePath = ""
 '''
 
+with open(charJPath, "rb") as file:
+	charJ = json.load(file)
 
+pngPath = str(charJ["png"])
+image = Image.open(pngPath)
+
+_, colors = common.PaletteToAsm(image, charJ, charJPath)
+
+image = common.RemapColors(image, colors)
+
+asm = "; " + charJPath + "\n"
+asmAnims = asm + AnimsToAsm(charJ, charJPath)
+asmSprites = asm + SpritesToAsm(charJ, image, addSize, addMask)
+
+# save asm
+with open(asmAnimPath, "w") as file:
+	file.write(asmAnims)
+
+with open(asmSpritePath, "w") as file:
+	file.write(asmSprites) 
 

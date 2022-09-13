@@ -59,14 +59,14 @@ MONSTER_INIT_POS_X_OFFSET	.var 24
 monsterDirX:			.byte 1 ; 1-right, 0-left
 monsterState:           .byte 0 ; 0 - idle
 monsterStateCounter:    .byte 40
-monsterAnimAddr:        .word 0
+monsterAnimAddr:        .word TEMP_ADDR
 monsterRedrawTimer:		.byte 0 ; 0101_0101 means redraw on every second frame, 0000_0001 means redraw on very 8 frame.
-monsterEraseScrAddr:	.word (SPRITE_X_SCR_ADDR + HERO_START_POS_X / 8 - 1) * 256 + HERO_START_POS_Y
-monsterEraseFrameIdx2:	.byte 0 ; frame id * 2
-monsterPosX:			.word MONSTER_INIT_POS_X * 256 + 0
-monsterPosY:			.word 160 * 256 + 0
-monsterSpeedX:			.word 0
-monsterSpeedY:			.word 0
+monsterEraseScrAddr:	.word TEMP_WORD
+monsterEraseFrameIdx2:	.byte TEMP_BYTE
+monsterPosX:			.word TEMP_WORD
+monsterPosY:			.word TEMP_WORD
+monsterSpeedX:			.word TEMP_WORD
+monsterSpeedY:			.word TEMP_WORD
 ; sprite data struct end
 
 ; the same structs for the rest of the monsters in the current room

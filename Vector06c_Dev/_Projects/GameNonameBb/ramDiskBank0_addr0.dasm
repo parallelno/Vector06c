@@ -4,6 +4,6 @@
 .include "generated\\sprites\\heroSprites.dasm"
 .include "generated\\sprites\\skeletonSprites.dasm"
 .include "generated\\sprites\\knightSprites.dasm"
-.include "generated\\sprites\\scytheSprites.dasm"
+;.include "generated\\sprites\\scytheSprites.dasm"
 ;.include "generated\\sprites\\burnerSprites.dasm"
 ;.include "generated\\sprites\\vampireSprites.dasm"

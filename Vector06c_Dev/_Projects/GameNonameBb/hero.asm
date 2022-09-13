@@ -1,34 +1,37 @@
 
 ; the first screen buffer X
-HERO_START_POS_X	= 220
-HERO_START_POS_Y	= 220
 HERO_RUN_SPEED		= $0100 ; it's a dword, low byte is a subpixel speed
 HERO_RUN_SPEED_D	= $00b5 ; for diagonal moves
 
 ; this's a struct. do not change the layout
 heroData:
 heroDirX:			.byte 1 ; 1-right, 0-left
-heroRedrawTimer:	.byte 0 ; 0101_0101 means redraw on every second frame, 0000_0001 means redraw on very 8 frame.
-heroEraseScrAddr:	.word (SPRITE_X_SCR_ADDR + HERO_START_POS_X / 8) * 256 + HERO_START_POS_Y
-heroEraseWidthHeight:	.byte 0 ; frame id * 2
-heroX:				.word HERO_START_POS_X * 256 + 0
-heroY:				.word HERO_START_POS_Y * 256 + 0
-heroSpeedX:			.word 0
-heroSpeedY:			.word 0
+heroEraseScrAddr:	.word TEMP_ADDR
+heroEraseScrAddrOld .word TEMP_ADDR
+heroEraseWH:		.word TEMP_WORD ; (width<<8 | height)
+heroX:				.word TEMP_WORD
+heroY:				.word TEMP_WORD
+heroSpeedX:			.word TEMP_WORD
+heroSpeedY:			.word TEMP_WORD
 
-heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, 0, 0 ; hero uses these funcs to handle the tile data. more info is in levelGlobalData.dasm->roomTilesData 
+; hero uses these funcs to handle the tile data. more info is in levelGlobalData.dasm->roomTilesData 
+heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, 0, 0 
 
 HeroInit:
             call HeroStop
+			; heroData access
 			lxi h, heroX+1
 			call GetSpriteScrAddr
 			xchg
 			shld heroEraseScrAddr
-			mvi a, %10000000 | 15
-			sta heroEraseWidthHeight
+			shld heroEraseScrAddrOld
+			; 16x15 size
+			lxi h, 2<<8 | 15
+			shld heroEraseWH
 			ret
 			.closelabels
 HeroStop:
+			; heroData access
 			lxi h, 0
 			shld heroSpeedX	
 			shld heroSpeedY
@@ -42,6 +45,7 @@ HeroStop:
 ; use:
 ; a
 HeroSetPos:
+			; heroData access
 			mov a, b
 			sta heroX+1
 			mov a, c
@@ -49,12 +53,10 @@ HeroSetPos:
 			ret
 			.closelabels
 
-.macro CHECK_HERO_REDRAW(timer)
+.macro CHECK_HERO_PREV_KEY()
 			lxi h, keyCode+1
 			cmp m
 			jz HeroMove
-			mvi a, timer
-			sta heroRedrawTimer
 .endmacro		
 			
 HeroUpdate:
@@ -65,8 +67,9 @@ HeroUpdate:
 			jnz @setAnimRunR
 			
 			; if it's the same key as the prev frame, return
-			CHECK_HERO_REDRAW(ROT_TIMER_0p125)
+			CHECK_HERO_PREV_KEY()
 
+			; heroData access
 			lxi h, 0
 			shld heroSpeedX
 			shld heroSpeedY
@@ -90,7 +93,7 @@ HeroUpdate:
 			cpi KEY_RIGHT
 			jnz @setAnimRunRU
 			
-			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
+			CHECK_HERO_PREV_KEY()
 
 			lxi h, HERO_RUN_SPEED
 			shld heroSpeedX
@@ -109,7 +112,7 @@ HeroUpdate:
 			cpi KEY_RIGHT_UP
 			jnz @setAnimRunRD
 			
-			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
+			CHECK_HERO_PREV_KEY()
 
 			lxi h, HERO_RUN_SPEED_D
 			shld heroSpeedX
@@ -127,7 +130,7 @@ HeroUpdate:
 			cpi KEY_RIGHT_DOWN
 			jnz @setAnimRunL
 			
-			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
+			CHECK_HERO_PREV_KEY()
 
 			lxi h, HERO_RUN_SPEED_D
 			shld heroSpeedX
@@ -146,7 +149,7 @@ HeroUpdate:
 			cpi KEY_LEFT
 			jnz @setAnimRunLU
 
-			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
+			CHECK_HERO_PREV_KEY()
 
 			lxi h, $ffff - HERO_RUN_SPEED + 1
 			shld heroSpeedX
@@ -165,7 +168,7 @@ HeroUpdate:
 			cpi KEY_LEFT_UP
 			jnz @setAnimRunLD
 
-			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
+			CHECK_HERO_PREV_KEY()
 
 			lxi h, $ffff - HERO_RUN_SPEED_D + 1
 			shld heroSpeedX
@@ -184,7 +187,7 @@ HeroUpdate:
 			cpi KEY_LEFT_DOWN
 			jnz @setAnimRunU
 
-			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
+			CHECK_HERO_PREV_KEY()
 
 			lxi h, $ffff - HERO_RUN_SPEED_D + 1
 			shld heroSpeedX
@@ -202,7 +205,7 @@ HeroUpdate:
 			cpi KEY_UP
 			jnz @setAnimRunD
 
-			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
+			CHECK_HERO_PREV_KEY()
 
 			lxi h, 0
 			shld heroSpeedX
@@ -227,7 +230,7 @@ HeroUpdate:
 			cpi KEY_DOWN
 			rnz
 
-			CHECK_HERO_REDRAW(ROT_TIMER_0p5)
+			CHECK_HERO_PREV_KEY()
 
 			lxi h, 0
 			shld heroSpeedX
@@ -249,6 +252,7 @@ HeroUpdate:
 			;jmp HeroMove
 
 HeroMove:
+			; heroData access
 			; apply the hero speed (call addr 4685)
 			lhld heroX ; 2c09, data addr 29fe
 			xchg
@@ -282,7 +286,6 @@ HeroMove:
 lhld charTempX
 ret
 
-			
 @collides:
 			; handle collided tiles data
 			lxi h, collidedRoomTilesData
@@ -302,6 +305,7 @@ ret
 ; a - roomId
 ; TODO: fix the issue that hero can't teleport if he touches a wall nearby
 HeroMoveTeleport:
+			; heroData access
 			pop h
 			; update a room id to teleport there
 			sta roomIdx
@@ -328,7 +332,7 @@ HeroMoveTeleport:
 			sta heroX+1
 			jmp @donotMoveHero
 
-			; if the hero is on the top, move him down vice versa
+			; if the hero is on the top, move him down and vice versa
 @teleportB:
 			mvi c, 0
 @teleportT:
@@ -348,18 +352,31 @@ HeroMoveTeleport:
 			ret
 			.closelabels
 			
-HeroErase:
-			; TODO: update initializations of heroEraseScrAddr and heroEraseWidthHeight 
+HeroErase2:
+			; heroData access
+			; TODO: update initializations of heroEraseScrAddr and heroEraseWH 
 			; when the level starts, and hero teleports
 			; TODO: erease only that is outside of the updated hero pos
 			lhld heroEraseScrAddr
 			xchg
-			lxi h, heroEraseWidthHeight
+			lhld heroEraseWH
+			jmp EraseSpriteSP2
+			.closelabels
+/*			
+HeroErase:
+			; heroData access
+			; TODO: update initializations of heroEraseScrAddr and heroEraseWH 
+			; when the level starts, and hero teleports
+			; TODO: erease only that is outside of the updated hero pos
+			lhld heroEraseScrAddr
+			xchg
+			lxi h, heroEraseWH
 			mov c, m
 			jmp EraseSpriteSP
-			.closelabels
-
+			.closelabels			
+*/
 HeroDraw:
+			; heroData access
 			lxi h, heroX+1
 			call GetSpriteScrAddr
 
@@ -369,17 +386,22 @@ HeroDrawSpriteAddrFunc:
 			call GetSpriteAddr
 			; TODO: consiider using an unrolled loop in DrawSpriteVM for sprites 15 pxs tall
 			; TODO: draw hero first, and do not have mask in its gfx data
-			call DrawSpriteVM
+			call DrawSpriteVM2
 
 			; store an old scr addr, width, and height
 			shld heroEraseScrAddr
-			lxi h, heroEraseWidthHeight
-			mov m, c
+			xchg
+			shld heroEraseWH
 			ret
 
 HeroCopyToScr:
-			; store an old scr addr, width, and height
-			lxi h, heroEraseWidthHeight
+			lhld heroEraseScrAddr
+			xchg
+			lhld heroEraseWH
+			jmp CopySpriteToScrV2
+
+			; restore an old scr addr, width, and height
+			lxi h, heroEraseWH
 			mov c, m
 			lhld heroEraseScrAddr
 			xchg
@@ -390,7 +412,7 @@ HeroCopyToScr:
 			mov a, m
 			ora a
 			; if heroSpeedY > 0, make a copying region taller by heroSpeedY
-			jp CopySpriteToScrV
+			jp CopySpriteToScrV2
 			; if heroSpeedY < 0, make a copying region taller by abs(heroSpeedY)
 			cma
 			inr a
@@ -401,4 +423,4 @@ HeroCopyToScr:
 			mov e, a
 			mov a, b
 
-			jmp CopySpriteToScrV
+			jmp CopySpriteToScrV2

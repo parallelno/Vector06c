@@ -1,8 +1,6 @@
 import os
 import sqlite3
-import tools.common as common
-import tools.animSpriteExport as animSpriteExport
-
+from tools.common import *
 
 buildDBPath = "generated\\build.db"
 SEGMENT_0000_7F00_ADDR = 0x0000
@@ -12,26 +10,17 @@ SEGMENT_0000_7F00_SIZE_MAX = 2 ** 31 - 256 # because an interruption can corrupt
 SEGMENT_8000_0000_SIZE_MAX = 2 ** 31
 
 def DelBuildDB():
-	common.RunCommand("del " + buildDBPath, "Build DB was deleted")
+	RunCommand("del " + buildDBPath, "Build DB was deleted")
 
 def ExportAminSprites(sourcePath, exporterUpdated, mask = False, sourceFolder = "sources\\", generatedFolder = "generated\\"):
 	jsonExt = ".json"
 	if IsFileUpdated(sourceFolder + sourcePath + jsonExt) or exporterUpdated:
-		"""
 		command = ("python tools\\animSpriteExport.py -s True" + 
 			" -m " + str(mask) +
 			" -i " + sourceFolder + sourcePath + jsonExt +
 			" -oa " + generatedFolder + sourcePath + "Anim.dasm " + 
 			" -os " + generatedFolder + sourcePath + "Sprites.dasm")
 		RunCommand(command)
-		"""
-		animSpriteExport.Export(
-			True, 
-			True, 
-			sourceFolder + sourcePath + jsonExt, 
-			generatedFolder + sourcePath + "Anim.dasm", 
-			generatedFolder + sourcePath + "Sprites.dasm")
-
 		print("animSpriteExport: " + sourceFolder + sourcePath + jsonExt + " got exported.")
 		return True
 	else:
@@ -41,7 +30,7 @@ def ExportAminSprites(sourcePath, exporterUpdated, mask = False, sourceFolder = 
 def ExportLevel(sourcePath, exporterUpdated, sourceFolder = "sources\\", generatedFolder = "generated\\"):
 	jsonExt = ".json"
 	if (IsFileUpdated(sourceFolder + sourcePath + jsonExt) or exporterUpdated):
-		common.RunCommand("python tools\\levelExport.py -i " + sourceFolder + sourcePath + jsonExt + 
+		RunCommand("python tools\\levelExport.py -i " + sourceFolder + sourcePath + jsonExt + 
 			" -o " + generatedFolder + sourcePath + ".dasm")
 		print("levelExport: " + sourceFolder + sourcePath + jsonExt + " got exported.")
 		return True
