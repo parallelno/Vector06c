@@ -10,7 +10,6 @@
 ; debug
 SHOW_CPU_HIGHLOAD_ON_BORDER = false
 
-
 ; interuptions per sec
 INTS_PER_SEC			= 50
 
@@ -104,6 +103,7 @@ OPCODE_MOV_D_B = $50
 OPCODE_MOV_D_M = $56
 OPCODE_MOV_D_A = $57
 OPCODE_MOV_M_B = $70
+OPCODE_MOV_M_A = $77
 OPCODE_POP_B = $C1
 OPCODE_STC	= $37
 

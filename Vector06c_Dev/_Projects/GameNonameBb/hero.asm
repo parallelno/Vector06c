@@ -26,7 +26,7 @@ HeroInit:
 			shld heroEraseScrAddr
 			shld heroEraseScrAddrOld
 			; 16x15 size
-			lxi h, 2<<8 | 15
+			lxi h, 1<<8 | 15
 			shld heroEraseWH
 			ret
 			.closelabels
@@ -386,7 +386,7 @@ HeroDrawSpriteAddrFunc:
 			call GetSpriteAddr
 			; TODO: consiider using an unrolled loop in DrawSpriteVM for sprites 15 pxs tall
 			; TODO: draw hero first, and do not have mask in its gfx data
-			call DrawSpriteVM2
+			call DrawSpriteVM
 
 			; store an old scr addr, width, and height
 			shld heroEraseScrAddr

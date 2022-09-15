@@ -36,6 +36,7 @@ def MaskData(maskBytes, w, h ):
 # sprite data structure description is in drawSprite.asm
 # sprite uses only 3 out of 4 screen buffers.
 # the width is devided by 8 because there is 8 pixels per a byte
+
 def SpriteDataBB(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 	bytesAll = [bytes1, bytes2, bytes3]
 	width = w // 8
@@ -49,8 +50,8 @@ def SpriteDataBB(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 				if maskBytes:
 					scrBuff.append(maskBytes[i])
 		data.append(scrBuff)
-	return data	
-
+	return data
+	
 # tiles 8*8pxs for 3 scr fuffers
 def SpriteDataTiled(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 	# sprite data structure description is in drawSprite.asm
@@ -78,7 +79,7 @@ def SpriteData(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 	width = w // 8
 	#mask = 0
 	data = []
-	for y in range(h):
+	for y in reversed(range(h)):
 		evenLine = y % 2 == 0
 		if evenLine:
 			for x in range(width):
@@ -113,7 +114,7 @@ def SpriteData(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 					data.append(maskBytes[i])				
 				data.append(bytes1[i])
 
-	return data
+	return [data]
 
 def AnimsToAsm(charJ, charJPath):
 	asm = ""
@@ -193,9 +194,9 @@ def SpritesToAsm(charJPath, charJ, image, addSize, addMask):
 			#maskData = MaskData(maskBytes, width, height)
 
 		# to support a sprite render function
-		#data = SpriteData(bytes1, bytes2, bytes3, width, height, maskBytes)
+		data = SpriteData(bytes1, bytes2, bytes3, width, height, maskBytes)
 		#data = SpriteDataTiled(bytes1, bytes2, bytes3, width, height, maskBytes)
-		data = SpriteDataBB(bytes1, bytes2, bytes3, width, height, maskBytes)
+		#data = SpriteDataBB(bytes1, bytes2, bytes3, width, height, maskBytes)
 
 		asm += "\n"
 		# two empty bytes prior every to support a stack renderer

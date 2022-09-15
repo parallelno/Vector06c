@@ -117,6 +117,7 @@ EraseSpriteSP2:
 .macro EREASE_SPRITE_SP_COL(nextColumn = true)
 	col .var 0
 	.loop 3
+			col = col+1
 			sphl
 			PUSH_B(8)
 		.if nextColumn == true || col < 3
@@ -279,48 +280,43 @@ CopySpriteToScrV:
 ;		11 - 32pxs
 ; l - height
 CopySpriteToScrV2:
-			mov a, h
-			sta @restoreWidth+1
+			; adjust initial Y
+			inr e
+
 			; set up a copy routine
 			mov a, l
-			rlc_(2)
+			rlc
 			mov l, a
+			mov a, h
 			mvi h, 0
-			lxi b, @copyRoutineAddrs-8; -8 because this func doesn't support height=0 and height=1
+			lxi b, @copyRoutineAddrs-8
 			dad b
-			; adjust initial Y
-			
-			; get offsetY
-			inr e
-			; it has to be even, because a copy routine adjust Y up even times always
-			mov a, m
-			ani %11111110
-			inx h
-			sta @moveYDown+1
-			; if a height is an odd number,
-			; do not draw the last pixel in every column
-			mov a, m
-			inx h
-			sta @h04+3
-			; init a copy sequence
 			mov b, m
 			inx h
 			mov h, m
 			mov l, b
-			shld @copyRoutine+1
+			pchl
 
+@h04
+@h05
+@h06
+@h07
+@h08
+@h09
+@h10
+@h11
+@h12
+@h13
+@h14
+@h15:
 			; store sp
 			lxi h, 0
 			dad	sp
 			shld RestoreSP + 1
 
-			xchg
-			
-@restoreWidth:
-			mvi d, TEMP_BYTE
-@nextScrCol:
-			mvi e, 3
-@nextScrBuff:			
+			xchg			
+			mov d, a
+@nextColumn:
 			RAM_DISK_ON(RAM_DISK0_B2_STACK_B2_AF_RAM)
 			mov b, m
 			dcr l
@@ -331,66 +327,52 @@ CopySpriteToScrV2:
 			mov m, b
 			inr l
 			sphl
-@copyRoutine:
-			jmp TEMP_ADDR
-@h20:       COPY_SPRITE_TO_SCR_PB()		
-@h18:       COPY_SPRITE_TO_SCR_PB()		
-@h16:		COPY_SPRITE_TO_SCR_PB()
-@h14:		COPY_SPRITE_TO_SCR_PB()
-@h12:		COPY_SPRITE_TO_SCR_PB()
-@h10:		COPY_SPRITE_TO_SCR_PB()
-@h08:		COPY_SPRITE_TO_SCR_PB()
-@h06:		COPY_SPRITE_TO_SCR_PB()
-@h04:		COPY_SPRITE_TO_SCR_PB(false)
-@h02:
+			COPY_SPRITE_TO_SCR_PB()
+			COPY_SPRITE_TO_SCR_PB()
+			COPY_SPRITE_TO_SCR_PB()
+			COPY_SPRITE_TO_SCR_PB()
+			COPY_SPRITE_TO_SCR_PB()
+			COPY_SPRITE_TO_SCR_PB()
+			COPY_SPRITE_TO_SCR_PB(false)
+
 			; assign SP to prevent screen data corruption
-			; when we use MOV with BC (mov b, m and mov c, m) commands
-			; corruption might happen because we fill up B and C with 
+			; when we use mov b, m and mov c, m commands.
+			; a corruption might happen because we fill up B and C with 
 			; more than one command
 			lxi sp, STACK_INTERRUPTION_ADDR
 @moveYDown:
 			; advance Y down and to the next scr buff
-			lxi b, $1f00 ; the low byte will be overwritten
+			lxi b, $2000-13
 			dad b
-			dcr e
-			jnz @nextScrBuff
+			jnc @nextColumn
 			; advance Y to the next column
 			mvi a, -$20*3+1
 			add h
 			mov h, a
 			dcr d
-			jp @nextScrCol
+			jp @nextColumn
 			jmp RestoreSP
 
 @copyRoutineAddrs:
-			.word OPCODE_NOP <<8		| <(-00), @h02 ; height = 2
-			.word OPCODE_NOP <<8		| <(-01), @h04 ; height = 3
-			.word OPCODE_MOV_M_B <<8	| <(-02), @h04 ; height = 4
-			.word OPCODE_NOP <<8		| <(-03), @h06 ; height = 5
-			.word OPCODE_MOV_M_B <<8	| <(-04), @h06 ; height = 6
-			.word OPCODE_NOP <<8		| <(-05), @h08 ; height = 7
-			.word OPCODE_MOV_M_B <<8	| <(-06), @h08 ; height = 8
-			.word OPCODE_NOP <<8		| <(-07), @h10 ; height = 9
-			.word OPCODE_MOV_M_B <<8 	| <(-08), @h10 ; height = 10
-			.word OPCODE_NOP <<8		| <(-09), @h12 ; height = 11
-			.word OPCODE_MOV_M_B <<8 	| <(-10), @h12 ; height = 12
-			.word OPCODE_NOP <<8		| <(-11), @h14 ; height = 13
-			.word OPCODE_MOV_M_B <<8 	| <(-12), @h14 ; height = 14
-			.word OPCODE_NOP <<8	 	| <(-13), @h16 ; height = 15
-			.word OPCODE_MOV_M_B <<8 	| <(-14), @h16 ; height = 16
-			.word OPCODE_NOP <<8 		| <(-15), @h18 ; height = 17
-			.word OPCODE_MOV_M_B <<8 	| <(-16), @h18 ; height = 18
-			.word OPCODE_NOP <<8 		| <(-17), @h20 ; height = 19
-			.word OPCODE_MOV_M_B <<8	| <(-18), @h20 ; height = 20
+			.word @h04
+			.word @h05
+			.word @h06
+			.word @h07
+			.word @h08
+			.word @h09
+			.word @h10
+			.word @h11
+			.word @h12
+			.word @h13
+			.word @h14
+			.word @h15
 
-.macro COPY_SPRITE_TO_SCR_PB(moveUp = true, second = true)
+.macro COPY_SPRITE_TO_SCR_PB(secondByte = true)
 			pop b
 			mov m, c
-		.if second == true
+		.if secondByte == true
 			inr l
 			mov m, b
-		.endif
-		.if moveUp == true
 			inr l
 		.endif
 .endmacro

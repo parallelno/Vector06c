@@ -22,8 +22,8 @@ GameInit:
 			call GameUpdate
 			call GameDraw
 
-			BORDER_LINE(1)
-			;hlt
+			DEBUG_BORDER_LINE(1)
+			DEBUG_HLT()
 			jmp	 @gameLoop
 
 GameUpdate:
@@ -34,11 +34,11 @@ GameUpdate:
 @updateLoop:
 			; TODO: consider having update in the interruption
 			; every second frame (25fps)
-			BORDER_LINE(4)
+			DEBUG_BORDER_LINE(4)
 			call HeroUpdate
-			BORDER_LINE(2)
+			DEBUG_BORDER_LINE(2)
 			call MonstersUpdate
-			BORDER_LINE(3)
+			DEBUG_BORDER_LINE(3)
 			call LevelUpdate
 
 			lda keyCode
@@ -54,16 +54,16 @@ GameDraw:
 			lxi h, gameDrawsPerInt
 			inr m
 
-			BORDER_LINE(5)
+			DEBUG_BORDER_LINE(5)
 			call HeroErase2
 
-			BORDER_LINE(6)
+			DEBUG_BORDER_LINE(6)
 			call HeroDraw
 
-			BORDER_LINE(0)
+			DEBUG_BORDER_LINE(0)
 			;call MonstersDraw
 
-			BORDER_LINE(7)
+			DEBUG_BORDER_LINE(7)
 			call HeroCopyToScr
 
 			ret

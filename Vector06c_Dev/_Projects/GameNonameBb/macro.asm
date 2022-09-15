@@ -95,7 +95,7 @@
 			out $10
 .endmacro
 ;================================== ALL RAM_DISK_* macros has to be placed right BEFORE lxi sp, *, and sphl! ;==================================
-.macro BORDER_LINE(_borderColorIdx = 1)
+.macro DEBUG_BORDER_LINE(_borderColorIdx = 1)
 		.if SHOW_CPU_HIGHLOAD_ON_BORDER
 			mvi a, PORT0_OUT_OUT
 			out 0
@@ -106,6 +106,11 @@
 		.endif
 .endmacro
 
+.macro DEBUG_HLT()
+		.if SHOW_CPU_HIGHLOAD_ON_BORDER
+			hlt
+		.endif
+.endmacro
 ; gets DDDDDfff from (hl), extracts fff which is a func idx in the funcTable
 ; call that func with DDDDD stored in A, B = tileData, C - tileIdx
 ; input:
