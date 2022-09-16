@@ -29,9 +29,9 @@ RoomInit:
 			call RoomInitTiles
 			call RoomInitTilesData
 			call MonstersInit
-			lxi b, $8000 / 32
+			lxi b, $6000 / 32
 			lxi d, $0000
-			mvi a, RAM_DISK0_B2_STACK_B2_AF_RAM
+			mvi a, RAM_DISK0_B2_STACK
 			call ClearRamDisk
 			ret
 			

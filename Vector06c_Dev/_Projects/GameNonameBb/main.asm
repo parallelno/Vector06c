@@ -13,6 +13,7 @@
 .include "ramDiskBank0_addr0Labels.asm"
 .include "ramDiskBank0_addr8000Labels.asm"
 .include "ramDiskBank1_addrA000Labels.asm"
+.include "ramDiskBank2_addr8000Labels.asm"
 
 .include "generated\\sprites\\heroAnim.dasm"
 .include "generated\\sprites\\skeletonAnim.dasm"

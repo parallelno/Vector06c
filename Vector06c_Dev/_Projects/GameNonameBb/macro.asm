@@ -94,6 +94,13 @@
 			xra a
 			out $10
 .endmacro
+
+.macro CALL_RAM_DISK_FUNC(funcAddr, _command)
+			RAM_DISK_ON(_command)
+			call funcAddr
+			RAM_DISK_OFF()
+.endmacro
+
 ;================================== ALL RAM_DISK_* macros has to be placed right BEFORE lxi sp, *, and sphl! ;==================================
 .macro DEBUG_BORDER_LINE(_borderColorIdx = 1)
 		.if SHOW_CPU_HIGHLOAD_ON_BORDER

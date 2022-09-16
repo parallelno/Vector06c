@@ -268,5 +268,5 @@ SkeletonDraw:
 			mov l, m
 			mov h, a
 			call GetSpriteAddrRunV
-			jmp DrawSpriteVM
+			;jmp DrawSpriteVM
 			.closelabels

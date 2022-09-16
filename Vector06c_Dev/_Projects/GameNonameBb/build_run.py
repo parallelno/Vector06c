@@ -43,7 +43,7 @@ else:
 	print(f"zx0: {bank0_seg0_path}bin wasn't updated. No need to compress.")
 
 ######################################################################################
-# levels to ramDisk
+# levels to the ramDisk
 bank0_seg1_path = "ramDiskBank0_addr8000"
 
 level01Path = "levels\\level01"
@@ -77,7 +77,7 @@ else:
 	print(f"zx0: {bank0_seg1_path}bin wasn't updated. No need to compress.")
 
 ######################################################################################
-# music to ram-disk
+# music to the ram-disk
 bank1_screen_path = "ramDiskBank1_addrA000"
 
 musicForceExport = forceExport | IsFileUpdated("tools\\ay6Export.py")
@@ -92,7 +92,7 @@ anyMusicUpdated |= IsFileUpdated(bank1_screen_path + ".dasm")
 
 if musicForceExport or anyMusicUpdated:
 	common.RunCommand(f"tools\\ay6Export.py -i " + musicInFolder + song01 + ".ym" + " -o " + musicOutFolder + song01 + ".dasm")
-	# compile dasm to get bin + labels
+	# compile dasm to get a bin + labels
 	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank1_screen_path + 
 			".dasm generated\\bin\\" + bank1_screen_path + ".bin >" + bank1_screen_path + "Labels.asm")
 	
@@ -104,6 +104,32 @@ if musicForceExport or anyMusicUpdated:
 	# compress music bin
 	common.RunCommand("del generated\\bin\\" + bank1_screen_path + ".bin.zx0")
 	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank1_screen_path + ".bin generated\\bin\\" + bank1_screen_path + ".bin.zx0")
+######################################################################################
+# utils in the same bank where the backbuffer of the ram-disk
+bank2_seg1_path = "ramDiskBank2_addr8000"
+
+utilsForceExport = forceExport #| IsFileUpdated("tools\\ay6Export.py")
+
+utilsOutFolder = "generated\\code\\"
+
+anyCodeUpdated = False
+anyCodeUpdated |= IsFileUpdated("spriteRD.asm")
+anyCodeUpdated |= IsFileUpdated("drawSpriteRD.asm")
+anyCodeUpdated |= IsFileUpdated(bank2_seg1_path + ".asm")
+
+if utilsForceExport or anyCodeUpdated:
+	# compile asm to get a bin + labels
+	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank2_seg1_path + 
+			".asm generated\\bin\\" + bank2_seg1_path + ".bin >" + bank2_seg1_path + "Labels.asm")
+	
+	ExportLabels(bank2_seg1_path + "Labels.asm", True) 
+
+	print(f"retroassembler: {bank2_seg1_path} got compiled.")
+	print(f"ExportLabels: {bank2_seg1_path}Labels.asm got compiled.")
+
+	# compress utils bin
+	common.RunCommand("del generated\\bin\\" + bank2_seg1_path + ".bin.zx0")
+	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank2_seg1_path + ".bin generated\\bin\\" + bank2_seg1_path + ".bin.zx0")
 ######################################################################################
 # game rom
 mainAsm = "main"

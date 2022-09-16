@@ -80,7 +80,7 @@ def IsFileUpdated(path, _buildDBPath = buildDBPath):
 	con.close()
 	return modified
 
-def ExportLabels(path):
+def ExportLabels(path, externalsOnly = False):
 	with open(path, "rb") as file:
 		lines = file.readlines()
 		
@@ -89,7 +89,8 @@ def ExportLabels(path):
 	for line in lines:
 		lineStr = line.decode('ascii')
 		if getAllNextLines:
-			labels += lineStr#[0: -1]
+			if not externalsOnly or (externalsOnly and lineStr[0:2] == "__"):
+				labels += lineStr
 			continue
 
 		if lineStr.find("Segment: Code") != -1:

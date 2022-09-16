@@ -352,17 +352,6 @@ HeroMoveTeleport:
 			ret
 			.closelabels
 			
-HeroErase2:
-			; heroData access
-			; TODO: update initializations of heroEraseScrAddr and heroEraseWH 
-			; when the level starts, and hero teleports
-			; TODO: erease only that is outside of the updated hero pos
-			lhld heroEraseScrAddr
-			xchg
-			lhld heroEraseWH
-			jmp EraseSpriteSP2
-			.closelabels
-/*			
 HeroErase:
 			; heroData access
 			; TODO: update initializations of heroEraseScrAddr and heroEraseWH 
@@ -370,11 +359,11 @@ HeroErase:
 			; TODO: erease only that is outside of the updated hero pos
 			lhld heroEraseScrAddr
 			xchg
-			lxi h, heroEraseWH
-			mov c, m
-			jmp EraseSpriteSP
-			.closelabels			
-*/
+			lhld heroEraseWH
+			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK0_B2_STACK_B2_8AF_RAM)
+			ret
+			.closelabels
+
 HeroDraw:
 			; heroData access
 			lxi h, heroX+1
@@ -386,7 +375,8 @@ HeroDrawSpriteAddrFunc:
 			call GetSpriteAddr
 			; TODO: consiider using an unrolled loop in DrawSpriteVM for sprites 15 pxs tall
 			; TODO: draw hero first, and do not have mask in its gfx data
-			call DrawSpriteVM
+			;call DrawSpriteVM
+			CALL_RAM_DISK_FUNC(__DrawSpriteVM, RAM_DISK0_B0_STACK_B2_8AF_RAM)
 
 			; store an old scr addr, width, and height
 			shld heroEraseScrAddr
