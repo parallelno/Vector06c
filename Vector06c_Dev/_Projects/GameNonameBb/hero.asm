@@ -441,28 +441,3 @@ HeroCopyToScr:
 			mov l, a
 			; hl - width, height
 			jmp CopySpriteToScrV
-
-			; restore an old scr addr, width, and height
-			lxi h, heroEraseWH
-			mov c, m
-			lhld heroEraseScrAddr
-			xchg
-
-			; TODO: replace heroSpeedY with DY in the code below
-			; DY = Y - prevY
-			lxi h, heroSpeedY+1
-			mov a, m
-			ora a
-			; if heroSpeedY > 0, make a copying region taller by heroSpeedY
-			jp CopySpriteToScrV
-			; if heroSpeedY < 0, make a copying region taller by abs(heroSpeedY)
-			cma
-			inr a
-			mov b, a
-			; if heroSpeedY < 0, move a copying region up by abs(speedY)
-			; to clear the screen behind a sprite
-			add e
-			mov e, a
-			mov a, b
-
-			jmp CopySpriteToScrV

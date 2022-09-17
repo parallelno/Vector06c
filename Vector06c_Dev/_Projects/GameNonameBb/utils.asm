@@ -1,18 +1,7 @@
 .include "rnd.asm"
 .include "zx0.asm"
-; use:
-; hl, a
-ClearScr:
-			lxi h, $8000
-			xra a
-@loop:
-			mov m, a
-			inx h
-			cmp h
-			jnz @loop
-			ret
-			.closelabels
-; clear the buffer
+
+; clear a memory buffer
 ; input:
 ; hl - addr to clear
 ; bc - length
@@ -30,16 +19,18 @@ ClearMem:
 			ret
 			.closelabels
 
-; clear ram-disk memory
+; clear a memory buffer using stack operations
+; can be used to clear ram-disk memory as well
 ; input:
 ; de - the last addr of a erased buffer + 1
-; bc - length/32
+; bc - length/32 - 1
 ; a - ram disk activation command
+; 		a = 0 to clear the main memory
 ; use:
 ; hl
 ; TODO: move it to the ram-disk like __DrawSpriteVM and __EraseSpriteSP
 
-ClearRamDisk:
+ClearMemSP:
 			lxi h, 0
 			dad sp
 			shld RestoreSP + 1
@@ -50,11 +41,11 @@ ClearRamDisk:
 			mov d, b
 			; safety bytes
 			lxi b, 0
+			mvi a, $ff
 @loop:
 			push_b(16)
 			dcx d
-			mov a, d
-			ora e
+			cmp d
 			jnz @loop
 			jmp RestoreSP
 			.closelabels

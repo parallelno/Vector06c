@@ -44,7 +44,8 @@ DrawTile16x16:
 			DRAW_TILE_16x16_LINE()
 
 @doNotDraw:	
-			mvi		a, 32
+			; move X to the next scr buff
+			mvi		a, $20
 			add		h
 			mov		h, a
 
@@ -60,26 +61,26 @@ DrawTile16x16:
 		.loop 7
 			pop b					; (12)
 			mov m, c					; (8)
-			dcr l					; (8)
+			inr l					; (8)
 			mov m, b					; (8)
-			dcr l					; (8)
+			inr l					; (8)
 		.endloop
 			pop b					; (12)
 			mov m, c					; (8)
-			dcr l					; (8)
+			inr l					; (8)
 			mov m, b					; (8)
 
 			inr h					; (8)
 		.loop 7
 			pop b					; (12)
 			mov m, c					; (8)
-			INR l					; (8)
+			dcr l					; (8)
 			mov m, b					; (8)
-			INR l					; (8)
+			dcr l					; (8)
 		.endloop
 			pop b					; (12)
 			mov m, c					; (8)
-			INR l					; (8)
+			dcr l					; (8)
 			mov m, b					; (8)
 			dcr h					; (8) (704)		
 .endmacro

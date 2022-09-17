@@ -57,6 +57,8 @@
 			dcx h
 			.endloop
 .endmacro
+
+;================================== ALL RAM_DISK_* macros has to be placed BEFORE lxi sp, *, and sphl! ;==================================
 ; has to be placed right BEFORE lxi sp, addr, and sphl
 ; mount the ram-disk w/o storing mode
 .macro RAM_DISK_ON_NO_RESTORE(_command)
@@ -83,25 +85,25 @@
 			out $10
 .endmacro
 ; dismount the ram-disk
-; has to be right after lxi sp, ADDR or sphl in the main program
+; has to be in the main program only and be placed after lxi sp, ADDR or sphl
 .macro RAM_DISK_OFF()
 			xra a
 			sta ramDiskMode			
 			out $10
 .endmacro
 ; dismount the ram-disk w/o storing mode
+; should be used inside the interruption call or with disabled interruptions
 .macro RAM_DISK_OFF_NO_RESTORE()
 			xra a
 			out $10
 .endmacro
-
+;==================================================================================================
 .macro CALL_RAM_DISK_FUNC(funcAddr, _command)
 			RAM_DISK_ON(_command)
 			call funcAddr
 			RAM_DISK_OFF()
 .endmacro
 
-;================================== ALL RAM_DISK_* macros has to be placed right BEFORE lxi sp, *, and sphl! ;==================================
 .macro DEBUG_BORDER_LINE(_borderColorIdx = 1)
 		.if SHOW_CPU_HIGHLOAD_ON_BORDER
 			mvi a, PORT0_OUT_OUT

@@ -1,6 +1,3 @@
-.include "macro.asm"
-.include "globalConsts.asm"
-.include "drawSpriteRD.asm"
 
 ; sharetable chunk of code to restore SP and 
 ; return a couple of parameters within HL, C
@@ -21,7 +18,6 @@ RestoreSP_ramDisk:
 restoreRet_ramDisk:
 			jmp TEMP_ADDR
 			.closelabels
-
 
 ; clear a N*16 pxs square on the screen,
 ; it clears 3 screen buffers from de addr and further

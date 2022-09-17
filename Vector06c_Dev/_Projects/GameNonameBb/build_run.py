@@ -108,11 +108,12 @@ if musicForceExport or anyMusicUpdated:
 # utils in the same bank where the backbuffer of the ram-disk
 bank2_seg1_path = "ramDiskBank2_addr8000"
 
-utilsForceExport = forceExport #| IsFileUpdated("tools\\ay6Export.py")
+utilsForceExport = forceExport
 
 utilsOutFolder = "generated\\code\\"
 
 anyCodeUpdated = False
+anyCodeUpdated |= IsFileUpdated("utilsRD.asm")
 anyCodeUpdated |= IsFileUpdated("spriteRD.asm")
 anyCodeUpdated |= IsFileUpdated("drawSpriteRD.asm")
 anyCodeUpdated |= IsFileUpdated(bank2_seg1_path + ".asm")
@@ -122,7 +123,7 @@ if utilsForceExport or anyCodeUpdated:
 	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank2_seg1_path + 
 			".asm generated\\bin\\" + bank2_seg1_path + ".bin >" + bank2_seg1_path + "Labels.asm")
 	
-	ExportLabels(bank2_seg1_path + "Labels.asm", True) 
+	ExportLabels(bank2_seg1_path + "Labels.asm", True)
 
 	print(f"retroassembler: {bank2_seg1_path} got compiled.")
 	print(f"ExportLabels: {bank2_seg1_path}Labels.asm got compiled.")
