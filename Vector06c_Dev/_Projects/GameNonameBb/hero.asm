@@ -8,7 +8,8 @@ heroData:
 heroDirX:			.byte 1 ; 1-right, 0-left
 heroEraseScrAddr:	.word TEMP_ADDR
 heroEraseScrAddrOld .word TEMP_ADDR
-heroEraseWH:		.word TEMP_WORD ; (width<<8 | height)
+heroEraseWH:		.word TEMP_WORD
+heroEraseWHOld:		.word TEMP_WORD
 heroX:				.word TEMP_WORD
 heroY:				.word TEMP_WORD
 heroSpeedX:			.word TEMP_WORD
@@ -28,6 +29,7 @@ HeroInit:
 			; 16x15 size
 			lxi h, 1<<8 | 15
 			shld heroEraseWH
+			shld heroEraseWHOld
 			ret
 			.closelabels
 HeroStop:
@@ -385,10 +387,60 @@ HeroDrawSpriteAddrFunc:
 			ret
 
 HeroCopyToScr:
+			; get the min(h, d), min(e,l)
+			lhld heroEraseScrAddrOld
+			xchg
 			lhld heroEraseScrAddr
+			mov a, h
+			cmp d
+			jc @keepCurrentX
+			mov h, d
+@keepCurrentX:
+			mov a, l
+			cmp e 
+			jc @keepCurrentY 
+			mov l, e 
+@keepCurrentY:
+			; hl - a scr addr to copy
+			push h
+			; de - an old sprite scr addr
+			lhld heroEraseWHOld
+			dad d
+			push h
+			lhld heroEraseScrAddr
+			; store as old
+			shld heroEraseScrAddrOld
 			xchg
 			lhld heroEraseWH
-			jmp CopySpriteToScrV2
+			; store as old
+			shld heroEraseWHOld
+			dad d
+			; hl - current sprite top-right corner scr addr
+			; de - old sprite top-right corner scr addr
+			pop d
+			; get the max(h, d), max(e,l)
+			mov a, h
+			cmp d 
+			jnc @keepOldTLX
+			mov h, d
+@keepOldTLX:
+			mov a, l
+			cmp e 
+			jnc @keepOldTLY
+			mov l, e
+@keepOldTLY:
+			; hl - top-right corner scr addr to copy
+			; de - a scr addr to copy
+			pop d
+			; calc width and height
+			mov a, h
+			sub d 
+			mov h, a
+			mov a, l 
+			sub e
+			mov l, a
+			; hl - width, height
+			jmp CopySpriteToScrV
 
 			; restore an old scr addr, width, and height
 			lxi h, heroEraseWH
@@ -402,7 +454,7 @@ HeroCopyToScr:
 			mov a, m
 			ora a
 			; if heroSpeedY > 0, make a copying region taller by heroSpeedY
-			jp CopySpriteToScrV2
+			jp CopySpriteToScrV
 			; if heroSpeedY < 0, make a copying region taller by abs(heroSpeedY)
 			cma
 			inr a
@@ -413,4 +465,4 @@ HeroCopyToScr:
 			mov e, a
 			mov a, b
 
-			jmp CopySpriteToScrV2
+			jmp CopySpriteToScrV

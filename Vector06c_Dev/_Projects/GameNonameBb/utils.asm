@@ -37,6 +37,8 @@ ClearMem:
 ; a - ram disk activation command
 ; use:
 ; hl
+; TODO: move it to the ram-disk like __DrawSpriteVM and __EraseSpriteSP
+
 ClearRamDisk:
 			lxi h, 0
 			dad sp

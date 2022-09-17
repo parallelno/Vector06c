@@ -72,7 +72,7 @@ GetSpriteScrAddr:
 ;		10 - 24pxs,
 ;		11 - 32pxs
 ; l - height
-CopySpriteToScrV2:
+CopySpriteToScrV:
 			; adjust initial Y
 			inr e
 
@@ -137,14 +137,18 @@ CopySpriteToScrV2:
 			.word @h20
 			.word @h20
 
-.macro COPY_SPRITE_TO_SCR_PB(secondByte = true)
+.macro COPY_SPRITE_TO_SCR_PB(moveUp = true)
 			pop b
 			mov m, c
-		.if secondByte == true
 			inr l
 			mov m, b
+		.if moveUp == true
 			inr l
 		.endif
+.endmacro
+.macro COPY_SPRITE_TO_SCR_B()
+			pop b
+			mov m, c
 .endmacro
 .macro COPY_SPRITE_TO_SCR(height)
 			xchg
@@ -162,13 +166,20 @@ nextColumn:
 			mov m, b
 			inr l
 			sphl
+			
+			heightOdd = (height / 2)*2 != height
+	.if heightOdd
 		.loop height / 2 - 1
 			COPY_SPRITE_TO_SCR_PB()
 		.endloop
-		heightOdd = (height / 2)*2 != height
-		.if heightOdd
+			COPY_SPRITE_TO_SCR_B()
+	.endif
+	.if heightOdd == false
+		.loop height / 2 - 2
+			COPY_SPRITE_TO_SCR_PB()
+		.endloop
 			COPY_SPRITE_TO_SCR_PB(false)
-		.endif
+	.endif
 
 			; assign SP to prevent screen data corruption
 			; when we use mov b, m and mov c, m commands.
