@@ -15,6 +15,11 @@ interruptionCounter:
 ramDiskMode:
 			.byte 0
 
+currentFps:
+			.byte 0
+gameDrawsPerInt:
+			.byte 0
+
 ; used for the movement
 charTempX:	.word 0 ; temporal X
 charTempY:	.word 0 ; temporal Y

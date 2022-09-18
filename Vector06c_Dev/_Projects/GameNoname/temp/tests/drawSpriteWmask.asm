@@ -3,7 +3,7 @@
 ; a == 0, 2 bytes
 ; a != 0, 3 bytes
 
-			.macro CleanSpriteVLine()
+			.macro EraseSpriteVLine()
 		.loop 14
 			mov m, b
 			dcr l
@@ -11,7 +11,7 @@
 			mov m, b
 			.endmacro
 			
-CleanSprite:
+EraseSprite:
 			ora a
 			mvi c, 2
 			mvi b, 0
@@ -25,7 +25,7 @@ CleanSprite:
 			mvi e, $20
 		
 @loop:
-			CleanSpriteVLine()
+			EraseSpriteVLine()
 @restoreY
 			mvi l, TEMP_BYTE
 			mov a, e

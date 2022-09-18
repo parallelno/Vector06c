@@ -305,7 +305,7 @@ ret
 ; appropriate position based on his current posXY
 ; input:
 ; a - roomId
-; TODO: fix the issue that hero can't teleport if he touches a wall nearby
+; TODO: fix the issue that hero can't teleport if he touches a wall nearby (top exit)
 HeroMoveTeleport:
 			; heroData access
 			pop h
@@ -314,19 +314,18 @@ HeroMoveTeleport:
 			; is the teleport of the left or right side?
 			lda heroX+1
 			cpi (ROOM_WIDTH - 2 ) * TILE_WIDTH
-			jnc @teleportLR
+			jnc @teleportLeftRight
 			cpi TILE_WIDTH + 2
-			jc @teleportLR
+			jc @teleportLeftRight
 			; is the teleport of the top or bottom side?
-			mvi c, 2
 			lda heroY+1
-			cpi (ROOM_HEIGHT - 2 ) * TILE_WIDTH
-			jnc @teleportB
+			cpi (ROOM_HEIGHT - 3 ) * TILE_WIDTH
+			jnc @teleportTopBottom
 			cpi TILE_HEIGHT * 2 + 2
-			jc @teleportT
+			jc @teleportTopBottom
 			jmp @donotMoveHero
 
-@teleportLR:
+@teleportLeftRight:
 			; if the hero is on the right, move him to the left and vice versa
 			lda heroX+1
 			cma
@@ -335,12 +334,10 @@ HeroMoveTeleport:
 			jmp @donotMoveHero
 
 			; if the hero is on the top, move him down and vice versa
-@teleportB:
-			mvi c, 0
-@teleportT:
+@teleportTopBottom:
 			lda heroY+1
 			cma
-			sub c
+			sui 30
 			sta heroY+1
 			jmp @donotMoveHero	
 

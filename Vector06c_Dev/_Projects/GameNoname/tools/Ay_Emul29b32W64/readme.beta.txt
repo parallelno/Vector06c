@@ -980,7 +980,7 @@ v2.9 beta 15:
   it in single task button mode) for Playlist and Mixer windows
 
 14 March 2016
-- Cleanup code for easy migrating to Lazarus 1.6 + FPC 3.0.0 (Win9x is still
+- Eraseup code for easy migrating to Lazarus 1.6 + FPC 3.0.0 (Win9x is still
   supported in theory)
 
 15 March 2016

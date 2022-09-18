@@ -48,11 +48,11 @@ def TileData(bytes0, bytes1, bytes2, bytes3):
 		mask += 8
 
 		x = 0
-		for y in range(16):
+		for y in reversed(range(16)):
 			byte = bytes[y * 2 + x]
 			data.append(byte)
 		x = 1
-		for y in reversed(range(16)):
+		for y in range(16):
 			byte = bytes[y * 2 + x]
 			data.append(byte)
 

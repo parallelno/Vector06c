@@ -29,9 +29,17 @@ RoomInit:
 			call RoomInitTiles
 			call RoomInitTilesData
 			call MonstersInit
+			; erase $a000-$ffff buffer in the ram-disk
+			lxi d, $0000
+			lxi b, $6000 / 128 - 1
+			CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK0_B2_STACK_B2_8AF_RAM)
 			ret
 			
+
+; it copies the tile idxs of the current room into roomTilesData as a temp storrage
+; then it converts idxs into tile gfx addrs
 RoomInitTiles:
+			; copy the tiles idxs from the ram-disk to the roomTilesData buffer
 			lda roomIdx
 			; double the room index to get an address offset in the level01_roomsAddr array
 			rlc
@@ -51,6 +59,7 @@ RoomInitTiles:
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT / 2
 			call CopyDataFromRamDisk
 
+			; convert tile idxs into tile gfx addrs
 			lxi h, roomTilesData
 			lxi b, roomTilesAddr
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
@@ -64,10 +73,10 @@ RoomInitTiles:
 			mvi d, 0
 			inx h
 			push h
-			; double the tile index to get a tile graphics pointer
 			xchg
+			; double the tile index to get a tile graphics pointer
 			dad h
-			; double it again because there are two safety bytes in front every pointer
+			; double it again because there are two safety bytes in front of every pointer
 			dad h
 			lxi d, level01_tilesAddr
 			; hl gets the tile graphics ponter
@@ -93,7 +102,53 @@ RoomInitTiles:
 			jnz @loop
 			ret
 			.closelabels
+			
+; copy the tiles data of the current room into the main memory
+; then it analizes the tiles data and calls monster init funcs, 
+; feeds up the monster pool if there is any monster in the room
+;
+RoomInitTilesData:
+			; copy the tiles data from the ram-disk
+			lda roomIdx
+			; double a room index to get a room pointer
+			rlc
+			; double it again because there are two safety bytes in front of every pointer
+			rlc
+			mov c, a
+			mvi b, 0
+			lxi h, level01_roomsAddr
+			dad b
+			
+			xchg
+			call GetWordFromRamDisk
+			lxi h, ROOM_WIDTH * ROOM_HEIGHT + 2 ; tiles data is stored right after the tile addr tbl plus 2 safety bytes
+			dad b
 
+			xchg
+			lxi b, roomTilesData
+			mvi a, ROOM_WIDTH * ROOM_HEIGHT / 2
+			call CopyDataFromRamDisk
+
+			; handle the tile data calling tile data funcs
+			lxi h, roomTilesData
+			mvi c, 0
+@loop:
+			mov b, m
+			push b
+			TILE_DATA_HANDLE_FUNC_CALL(roomFuncTable)
+			pop b
+			mov m, a
+			inx h
+			inr c
+			mvi a, ROOM_WIDTH * ROOM_HEIGHT
+			cmp c			
+			jnz @loop
+			ret
+			.closelabels
+
+
+; this is a handler of the RoomInitTilesData
+; it copies the tile data byte into the roomTilesData as it is
 ; input:
 ; b - tile data
 ; return:
@@ -103,6 +158,11 @@ LevelsTileDataCopy:
 			mov a, b
 			ret
 			.closelabels
+
+; this is a handler of the RoomInitTilesData
+; it spawns a monster according to the argument which is a part of the tile data byte. 
+; for the details on tile data format see levelsGlobalData.asm->tile data format
+; then it stores zero into the roomTilesData
 ; input:
 ; c - tile number idx in the room data array. it starts from left-top corner to right-bottom
 ; a - monster id
@@ -215,14 +275,14 @@ LevelsMonstersSpawn:
 @savePosY:
 			mvi m, TEMP_BYTE
 
-			; init monsterCleanScrAddr
+			; init monsterEraseScrAddr
 			lxi h, monsterPosX+1
 			dad b
 			push b
 			call GetSpriteScrAddr
 			mov a, c
 			pop b
-			lxi h, monsterCleanScrAddr
+			lxi h, monsterEraseScrAddr
 			dad b
 			mov m, e
 			inx h
@@ -243,50 +303,7 @@ LevelsMonstersSpawn:
 			; replace the tile data with an empty tile
             xra a
 			ret
-			.closelabels
-			
-; copy the tiles data. 
-; it also analizes the tiles data and initializes monsters and feeds up the monster pool if there is any monster in the room, etc
-; use:
-; all
-RoomInitTilesData:
-			; copy the tiles data from the ram-disk
-			lda roomIdx
-			; double a room index to get a room pointer
-			rlc
-			; double it again because there are two safety bytes in front of every pointer
-			rlc
-			mov c, a
-			mvi b, 0
-			lxi h, level01_roomsAddr
-			dad b
-			
-			xchg
-			call GetWordFromRamDisk
-			lxi h, ROOM_WIDTH * ROOM_HEIGHT + 2 ; tiles data is stored right after the tile addr tbl plus 2 safety bytes
-			dad b
-
-			xchg
-			lxi b, roomTilesData
-			mvi a, ROOM_WIDTH * ROOM_HEIGHT / 2
-			call CopyDataFromRamDisk
-
-			; handle the tile data calling tile data funcs
-			lxi h, roomTilesData
-			mvi c, 0
-@loop:
-			mov b, m
-			push b
-			TILE_DATA_HANDLE_FUNC_CALL(roomFuncTable)
-			pop b
-			mov m, a
-			inx h
-			inr c
-			mvi a, ROOM_WIDTH * ROOM_HEIGHT
-			cmp c			
-			jnz @loop
-			ret
-			.closelabels
+			.closelabels			
 
 LevelUpdate:
 			lda levelCommand
@@ -308,14 +325,22 @@ LevelUpdate:
             ret
 
 RoomDraw:
-			call ClearScr
-			; TODO: clean this func. add a description, comments, and constants
-			; set Y
-			mvi e, $ff - TILE_HEIGHT
+			; clear the screen
+			lxi d, $0000
+			lxi b, $8000 / 32 - 1
+			xra a
+			call ClearMemSP
+			; TODO: make the code below work to use __ClearMemSP instead of ClearMemSP
+			; lxi d, $0000
+			; lxi b, $8000 / 128
+			;CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK0_B2_8AF_RAM)
+
+			; set y = 0
+			mvi e, 0
 			; set a pointer to the first item in the list of addrs of tile graphics
 			lxi h, roomTilesAddr
 @newLine
-			; reset the X. it's a high byte of the first screen buffer addr
+			; reset the x. it's a high byte of the first screen buffer addr
 			mvi d, $80
 @loop:
 			; DE - screen addr
@@ -339,15 +364,16 @@ RoomDraw:
 			cmp d
 			jnz @loop
 
-			mov a, e
-			; move posY down to the next tile line
-			sui TILE_HEIGHT
+			; move posY up to the next tile line
+			mvi a, TILE_HEIGHT
+			add e
 			mov e, a
-			jnc @newLine
+			cpi ROOM_HEIGHT * TILE_HEIGHT
+			jc @newLine
 			ret
 			.closelabels
 
-; TODO: optimize to not check when the hero do not move ouside tile
+; TODO: optimize. do not check if the hero still inside the same tiles
 ; b - char posX
 ; c - char posY
 ; return: collidedRoomTilesData. it's a list with collided tiles data
@@ -364,9 +390,9 @@ CheckRoomTilesCollision:
 			; check if we have to check bottom tiles
 			mov a, c
             ana d
-			cpi 14
+			cpi 2
 			mvi a, OPCODE_XCHG
-			jc @checkBottom
+			jnc @checkBottom
 			; do not check bottom tiles
 			mvi a, OPCODE_RET
 @checkBottom:
@@ -390,8 +416,6 @@ CheckRoomTilesCollision:
 			; get the index in the tile map table
 			; use the char posY
 			mov a, c
-			cma
-			sui TILE_HEIGHT
 			ani %11110000
 			mov c, a
 

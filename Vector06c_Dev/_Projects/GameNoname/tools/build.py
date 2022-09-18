@@ -1,6 +1,8 @@
 import os
 import sqlite3
-from tools.common import *
+import tools.common as common
+import tools.animSpriteExport as animSpriteExport
+
 
 buildDBPath = "generated\\build.db"
 SEGMENT_0000_7F00_ADDR = 0x0000
@@ -10,17 +12,26 @@ SEGMENT_0000_7F00_SIZE_MAX = 2 ** 31 - 256 # because an interruption can corrupt
 SEGMENT_8000_0000_SIZE_MAX = 2 ** 31
 
 def DelBuildDB():
-	RunCommand("del " + buildDBPath, "Build DB was deleted")
+	common.RunCommand("del " + buildDBPath, "Build DB was deleted")
 
 def ExportAminSprites(sourcePath, exporterUpdated, mask = False, sourceFolder = "sources\\", generatedFolder = "generated\\"):
 	jsonExt = ".json"
 	if IsFileUpdated(sourceFolder + sourcePath + jsonExt) or exporterUpdated:
+		"""
 		command = ("python tools\\animSpriteExport.py -s True" + 
 			" -m " + str(mask) +
 			" -i " + sourceFolder + sourcePath + jsonExt +
 			" -oa " + generatedFolder + sourcePath + "Anim.dasm " + 
 			" -os " + generatedFolder + sourcePath + "Sprites.dasm")
 		RunCommand(command)
+		"""
+		animSpriteExport.Export(
+			True, 
+			True, 
+			sourceFolder + sourcePath + jsonExt, 
+			generatedFolder + sourcePath + "Anim.dasm", 
+			generatedFolder + sourcePath + "Sprites.dasm")
+
 		print("animSpriteExport: " + sourceFolder + sourcePath + jsonExt + " got exported.")
 		return True
 	else:
@@ -30,7 +41,7 @@ def ExportAminSprites(sourcePath, exporterUpdated, mask = False, sourceFolder = 
 def ExportLevel(sourcePath, exporterUpdated, sourceFolder = "sources\\", generatedFolder = "generated\\"):
 	jsonExt = ".json"
 	if (IsFileUpdated(sourceFolder + sourcePath + jsonExt) or exporterUpdated):
-		RunCommand("python tools\\levelExport.py -i " + sourceFolder + sourcePath + jsonExt + 
+		common.RunCommand("python tools\\levelExport.py -i " + sourceFolder + sourcePath + jsonExt + 
 			" -o " + generatedFolder + sourcePath + ".dasm")
 		print("levelExport: " + sourceFolder + sourcePath + jsonExt + " got exported.")
 		return True
@@ -69,7 +80,7 @@ def IsFileUpdated(path, _buildDBPath = buildDBPath):
 	con.close()
 	return modified
 
-def ExportLabels(path):
+def ExportLabels(path, externalsOnly = False):
 	with open(path, "rb") as file:
 		lines = file.readlines()
 		
@@ -78,7 +89,8 @@ def ExportLabels(path):
 	for line in lines:
 		lineStr = line.decode('ascii')
 		if getAllNextLines:
-			labels += lineStr#[0: -1]
+			if not externalsOnly or (externalsOnly and lineStr[0:2] == "__"):
+				labels += lineStr
 			continue
 
 		if lineStr.find("Segment: Code") != -1:

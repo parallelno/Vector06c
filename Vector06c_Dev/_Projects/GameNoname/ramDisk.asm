@@ -4,6 +4,8 @@ toBank0addr8000:
 .incbin "generated\\bin\\ramDiskBank0_addr8000.bin.zx0"
 toBank1addrA000:
 .incbin "generated\\bin\\ramDiskBank1_addrA000.bin.zx0"
+toBank2addr8000:
+.incbin "generated\\bin\\ramDiskBank2_addr8000.bin.zx0"
 
 ; ram-disk data has to keep the range from STACK_MIN_ADDR to STACK_MAIN_PROGRAM_ADDR-1 not used. 
 ; it can be corrupted by the subroutines which manipulate the stack
@@ -27,6 +29,13 @@ RamDiskInit:
 			lxi h, $0000
 			lxi d, toBank1addrA000
 			mvi a, RAM_DISK0_B1_STACK
+			call UnpackToRamDisk
+
+			; unpack utils to the ram-disk
+			lxi b, $8000
+			lxi h, $0000
+			lxi d, toBank2addr8000
+			mvi a, RAM_DISK0_B2_STACK
 			call UnpackToRamDisk
 
 			ret

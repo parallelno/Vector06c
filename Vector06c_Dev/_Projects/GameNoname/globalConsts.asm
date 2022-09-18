@@ -7,6 +7,12 @@
 ; SEC - seconds
 ; RES - result
 
+; debug
+SHOW_CPU_HIGHLOAD_ON_BORDER = false
+
+; interuptions per sec
+INTS_PER_SEC			= 50
+
 ; consts
 PORT0_OUT_OUT			= $88
 PORT0_OUT_IN			= $8a
@@ -14,7 +20,7 @@ PORT0_OUT_IN			= $8a
 RESTART_ADDR 			= $0000
 INT_ADDR	 			= $0038
 STACK_MIN_ADDR          = $7f00
-STACK_MAIN_PROGRAM_ADDR	= $8000
+STACK_MAIN_PROGRAM_ADDR	= $8000-2 ; because erease funcs can let interruption func erases $7ffe, @7fff bytes.
 STACK_INTERRUPTION_ADDR	= $7F80 ; it is used for iterruption2 func
 
 BYTE_LEN                = 1
@@ -69,8 +75,14 @@ RAM_DISK0_B0_RAM = %00100011
 RAM_DISK0_B1_RAM = %00100010
 RAM_DISK0_B2_RAM = %00100001
 RAM_DISK0_B3_RAM = %00100000
-
+; to copy music to ram-disk, to play music
 RAM_DISK0_B1_STACK_RAM = %00111010
+; to render sprites back buff
+RAM_DISK0_B0_STACK_B2_8AF_RAM = %11111101
+; to erase sprites
+RAM_DISK0_B2_STACK_B2_8AF_RAM = %11110101
+; to erase the screen
+RAM_DISK0_B2_8AF_RAM = %11100001
 
 SEGMENT_0000_7F00_ADDR = 0x0000
 SEGMENT_8000_0000_ADDR = 0x8000
@@ -82,7 +94,7 @@ SEGMENT_8000_0000_SIZE_MAX = 2 ^ 31
 OPCODE_NOP  = 0
 OPCODE_XCHG = $eb
 OPCODE_RET  = $c9
-OPCODE_RC  = $d8
+OPCODE_RC	= $d8
 OPCODE_RNC  = $d0
 OPCODE_JMP	= $C3
 OPCODE_JC	= $DA
@@ -92,7 +104,10 @@ OPCODE_MOV_E_A = $5f
 OPCODE_MOV_D_B = $50
 OPCODE_MOV_D_M = $56
 OPCODE_MOV_D_A = $57
-OPCODE_STC = $37
+OPCODE_MOV_M_B = $70
+OPCODE_MOV_M_A = $77
+OPCODE_POP_B = $C1
+OPCODE_STC	= $37
 
 HERO_DRAW_TOP = OPCODE_RNC
 HERO_DRAW_BOTTOM = OPCODE_RC

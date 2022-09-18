@@ -1,12 +1,13 @@
 .include "drawSprite.asm"
 
+; input:
 ; hl - animation addr, for example hero_idle_r
 ; c - idx in the animation
-; return: 
+; return:
 ; bc - sprite addr
 ; a - width marker. 0 - means a sprite width is 2 bytes , != 0 means 3 bytes
 GetSpriteAddr:
-            mov a, c
+			mov a, c
 			mvi b, 0
 			dad b
 			mov c, m
@@ -19,7 +20,7 @@ GetSpriteAddr:
 ; hl - animation addr, for example hero_idle_r
 ; c - idx in the animation
 ; e - pos Y
-; return: 
+; return:
 ; bc - sprire addr
 ; a - width marker. 0 - means a sprite width is 2 bytes , != 0 means 3 bytes
 GetSpriteAddrRunV:
@@ -36,7 +37,7 @@ GetSpriteAddrRunV:
 			ani %110
 			ret
 
-; in:
+; input:
 ; hl - addr to posX+1 (high byte in 16-bit pos)
 ; return:
 ; de - sprite screen addr
@@ -59,123 +60,142 @@ GetSpriteScrAddr:
 			mov e, m
 			mov	d, a
 			ret
-
-; clear a N*15 pxs square on the screen, 
-; it clears 3 screen buffers from hl addr and further
-; where: 
-; 16 pxs width if a = 0
-; 24 pxs width if a != 0
-; input:
-; hl - scr addr
-; a - width marker
-; use:
-; bc, de
-
-CleanSprite:
-			mvi c, 2
-			mvi b, 0
+			.closelabels
 			
-			ora a
-			jz @width16
-			inr c
-@width16:		
+
+; copy a sprite from the back buff to the screen
+; in:
+; de - scr addr
+; h - width
+;		00 - 8pxs,
+;		01 - 16pxs,
+;		10 - 24pxs,
+;		11 - 32pxs
+; l - height
+CopySpriteToScrV:
+			; adjust initial Y
+			inr e
+
+			; set up a copy routine
 			mov a, l
-			sta @restoreY+1
-			mov d, h
-			mvi e, $20
-		
-@loop:
-			CleanSpriteVLine(15)
-@restoreY
-			mvi l, TEMP_BYTE
-			mov a, e
+			rlc
+			mov c, a
+			mov a, h
+			mvi b, 0
+
+			; store sp
+			lxi h, 0
+			dad	sp
+			shld RestoreSP + 1
+
+			; continue setting up a copy routine
+			lxi h, @copyRoutineAddrs-8
+			dad b
+			mov b, m
+			inx h
+			mov h, m
+			mov l, b
+			pchl
+
+@h04:
+@h05:		COPY_SPRITE_TO_SCR(5)
+@h06:		COPY_SPRITE_TO_SCR(6)
+@h07:		COPY_SPRITE_TO_SCR(7)
+@h08:		COPY_SPRITE_TO_SCR(8)
+@h09:
+@h10:
+@h11:
+@h12:
+@h13:		COPY_SPRITE_TO_SCR(13)
+@h14:		COPY_SPRITE_TO_SCR(14)
+@h15:		COPY_SPRITE_TO_SCR(15)
+@h16:		COPY_SPRITE_TO_SCR(16)
+@h17:		COPY_SPRITE_TO_SCR(17)
+@h18:		COPY_SPRITE_TO_SCR(18)
+@h19:		COPY_SPRITE_TO_SCR(19)
+@h20:		COPY_SPRITE_TO_SCR(20)
+
+@copyRoutineAddrs:
+			.word @h04
+			.word @h05
+			.word @h06
+			.word @h07
+			.word @h08
+			.word @h09
+			.word @h10
+			.word @h11
+			.word @h12
+			.word @h13
+			.word @h14
+			.word @h15
+			.word @h16
+			.word @h17
+			.word @h18
+			.word @h19
+			.word @h20
+			.word @h20
+			.word @h20
+			.word @h20
+
+.macro COPY_SPRITE_TO_SCR_PB(moveUp = true)
+			pop b
+			mov m, c
+			inr l
+			mov m, b
+		.if moveUp == true
+			inr l
+		.endif
+.endmacro
+.macro COPY_SPRITE_TO_SCR_B()
+			pop b
+			mov m, c
+.endmacro
+.macro COPY_SPRITE_TO_SCR(height)
+			xchg
+			mov d, a
+nextColumn:
+			RAM_DISK_ON(RAM_DISK0_B2_STACK_B2_8AF_RAM)
+			; read without a stack operations because
+			; we need fill up BC prior to use POP B
+			mov b, m
+			dcr l
+			mov c, m
+			RAM_DISK_ON(RAM_DISK0_B2_STACK)
+			mov m, c
+			inr l
+			mov m, b
+			inr l
+			sphl
+			
+			heightOdd = (height / 2)*2 != height
+	.if heightOdd
+		.loop height / 2 - 1
+			COPY_SPRITE_TO_SCR_PB()
+		.endloop
+			COPY_SPRITE_TO_SCR_B()
+	.endif
+	.if heightOdd == false
+		.loop height / 2 - 2
+			COPY_SPRITE_TO_SCR_PB()
+		.endloop
+			COPY_SPRITE_TO_SCR_PB(false)
+	.endif
+
+			; assign SP to prevent screen data corruption
+			; when we use mov b, m and mov c, m commands.
+			; a corruption might happen because we fill up B and C with
+			; more than one command
+			lxi sp, STACK_INTERRUPTION_ADDR
+			; advance Y down and to the next scr buff
+			lxi b, $2000-height+2
+			dad b
+			jnc nextColumn
+			; advance Y to the next column
+			mvi a, -$20*3+1
 			add h
 			mov h, a
-			jnc @loop
-			inr d
-			mov h, d
-			dcr c
-			jnz @loop
-			ret
-			.closelabels
-
-.macro CleanSpriteVLine(_dy)
-		.loop _dy-1
-			mov m, b
-			dcr l
-		.endloop
-			mov m, b
+			dcr d
+			jp nextColumn
+			jmp RestoreSP
 .endmacro
-
-
-; clear a N*16 pxs square on the screen, 
-; it uses PUSH!
-; it clears 3 screen buffers from hl addr and further
-
-; input:
-; de - scr addr
-; a - flag
-;		flag=0, 16 pxs width
-;		flag!=0, 24 pxs width
-
-; use:
-; bc, hl, sp
-
-CleanSpriteSP:
-			di
-			lxi h, 0
-			dad sp
-			shld @restoreSP+1
-
-			xchg
-			; to prevent clearing below the sprite
-			inr l
-			inr l
-
-			lxi b, 0
-			lxi d, $2000
-
-			; replaced with OPCODE_NOP if with == 24
-			; replaced with OPCODE_NOP if with == 24
-			ora a
-			jz @width16
-@width8:
-			sphl
-			PUSH_B(8)
-			dad d
-			sphl
-			PUSH_B(8)
-			dad d
-			sphl
-			PUSH_B(8)
-
-			mov a, h
-			sui $20*2-1
-			mov h, a
-@width16:
-			sphl
-			PUSH_B(8)
-			dad d
-			sphl
-			PUSH_B(8)
-			dad d
-			sphl
-			PUSH_B(8)
-
-			mov a, h
-			sui $20*2-1
-			mov h, a			
-@width24:
-			sphl
-			PUSH_B(8)
-			dad d
-			sphl
-			PUSH_B(8)
-			dad d
-			sphl
-			PUSH_B(8)
-@restoreSP:
-			lxi sp, TEMP_ADDR
-			ei
-			ret
 			.closelabels

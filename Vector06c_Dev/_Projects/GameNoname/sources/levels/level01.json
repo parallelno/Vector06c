@@ -21,7 +21,7 @@
 	],
 	"startPos" : {
 		"x" : 48,
-		"y" : 190
+		"y" : 160
 	},
 	"rooms" : [
 		{"file" : "sources\\levels\\level01_room00.tmj"},

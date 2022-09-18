@@ -1,6 +1,5 @@
 .macro INTERRUPTION_MAIN_LOGIC()
-			; interruption logic
-
+			; keyboard check
 			mvi a, PORT0_OUT_IN
 			out 0
 			xra a
@@ -12,16 +11,31 @@
 			out 3
 			IN 2
 			sta keyCode
-			
+			; a border color, scrolling set up
 			mvi a, PORT0_OUT_OUT
 			out 0
-			lda borderColorIdx
-			out 2
+			;lda borderColorIdx
+			;out 2
 			lda scrOffsetY
 			out 3
-
+			; used in the main program to keep the update synced with interuption
 			lxi h, interruptionCounter
 			inr m
+
+			; fps update
+@secCounter:
+			mvi a, INTS_PER_SEC
+			dcr a
+			jnz @skipSavingFps
+			lxi h, gameDrawsPerInt
+			mov a, m
+			sta currentFps
+			mvi m, 0
+			call DrawFps
+			mvi a, INTS_PER_SEC
+@skipSavingFps:
+			sta @secCounter+1
+			
 .endmacro
 
 ;----------------------------------------------------------------
@@ -62,15 +76,15 @@ Interruption2:
 			push b
 			push d
 
-			call GCPlayerUpdate
 
+			call GCPlayerUpdate
 			INTERRUPTION_MAIN_LOGIC()
 
 			pop d
 			pop b
 			pop psw
 			mov l, a
-			; restore the ramd-disk mode
+			; restore the ram-disk mode
 			; ramDiskMode doesn't guarantee that a ram-disk is in this mode already. that mode could be applied only after the next command in the main program
 			RAM_DISK_RESTORE()
 			; restore A

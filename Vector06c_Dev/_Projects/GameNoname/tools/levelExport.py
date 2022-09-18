@@ -10,10 +10,13 @@ def RoomTilesToAsm(roomJ, roomPath, remapIdxs):
 	height = roomJ["height"]
 	size = width * height
 
-	for i, tidx in enumerate(roomJ["data"]):
-		if i % width == 0 : asm += "			.byte "
-		asm += str(remapIdxs[tidx]) + ", "
-		if i % width == width-1 : asm += "\n"
+	for y in reversed(range(height)):
+		asm += "			.byte "
+		for x in range(width):
+			i = y*width + x
+			tidx = roomJ["data"][i]
+			asm += str(remapIdxs[tidx]) + ", "
+		asm += "\n"
 	return asm, size
 
 def RoomTilesDataToAsm(roomJ, roomPath):
@@ -24,10 +27,13 @@ def RoomTilesDataToAsm(roomJ, roomPath):
 	height = roomJ["height"]
 	size = width * height
 
-	for i, tidx in enumerate(roomJ["data"]):
-		if i % width == 0 : asm += "			.byte "
-		asm += str(tidx) + ", "
-		if i % width == width-1 : asm += "\n"
+	for y in reversed(range(height)):
+		asm += "			.byte "
+		for x in range(width):
+			i = y*width + x
+			tidx = roomJ["data"][i]
+			asm += str(tidx) + ", "
+		asm += "\n"
 	return asm, size
 
 def TileData(bytes0, bytes1, bytes2, bytes3):
@@ -42,11 +48,11 @@ def TileData(bytes0, bytes1, bytes2, bytes3):
 		mask += 8
 
 		x = 0
-		for y in range(16):
+		for y in reversed(range(16)):
 			byte = bytes[y * 2 + x]
 			data.append(byte)
 		x = 1
-		for y in reversed(range(16)):
+		for y in range(16):
 			byte = bytes[y * 2 + x]
 			data.append(byte)
 

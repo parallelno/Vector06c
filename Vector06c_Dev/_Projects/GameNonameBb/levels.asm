@@ -390,9 +390,9 @@ CheckRoomTilesCollision:
 			; check if we have to check bottom tiles
 			mov a, c
             ana d
-			cpi 14
+			cpi 2
 			mvi a, OPCODE_XCHG
-			jc @checkBottom
+			jnc @checkBottom
 			; do not check bottom tiles
 			mvi a, OPCODE_RET
 @checkBottom:
@@ -416,8 +416,6 @@ CheckRoomTilesCollision:
 			; get the index in the tile map table
 			; use the char posY
 			mov a, c
-			cma
-			sui TILE_HEIGHT
 			ani %11110000
 			mov c, a
 

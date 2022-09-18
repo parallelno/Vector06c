@@ -201,21 +201,21 @@ SkeletonDraw:
 			rrc
 			rnc
 
-			; de <- (monsterCleanScrAddr)
+			; de <- (monsterEraseScrAddr)
 			inx h
 			mov e, m
 			inx h
 			mov d, m
 
-			; a <- (monsterCleanFrameIdx2)
+			; a <- (monsterEraseFrameIdx2)
 			inx h
 			mov a, m
 			;xchg
 			; TODO: do not clean sprite if it wasn't moving
-			jmp CleanSpriteSP
+			jmp EraseSpriteSP
 */
 @draw:
-			; TODO: after removing call CleanSprite that func needs an optimization pass
+			; TODO: after removing call EraseSprite that func needs an optimization pass
 			; store a flag
 			sta @checkY
 			; convert monster id into the offset in the monstersRoomData array
@@ -240,7 +240,7 @@ SkeletonDraw:
 			inx h
 			inx h		
 			call GetSpriteScrAddr
-			; move pointer back to monsterCleanFrameIdx2 addr
+			; move pointer back to monsterEraseFrameIdx2 addr
 			pop h
 			
 			; to support two-interations rendering
@@ -251,11 +251,11 @@ SkeletonDraw:
 			; replaced with RC to draw sprites below MONSTER_DRAW_Y_THRESHOLD
 			nop
 
-			; save frame idx to monsterCleanFrameIdx2 addr
+			; save frame idx to monsterEraseFrameIdx2 addr
 			mov m, c
- 			; move pointer back to monsterCleanScrAddr+1 addr
+ 			; move pointer back to monsterEraseScrAddr+1 addr
 			dcx h
-			; save the addr returned by GetSpriteScrAddr into monsterCleanScrAddr backwards
+			; save the addr returned by GetSpriteScrAddr into monsterEraseScrAddr backwards
 			mov m, d
 			dcx h
 			mov m, e
@@ -268,5 +268,5 @@ SkeletonDraw:
 			mov l, m
 			mov h, a
 			call GetSpriteAddrRunV
-			jmp DrawSpriteVM
+			;jmp DrawSpriteVM
 			.closelabels
