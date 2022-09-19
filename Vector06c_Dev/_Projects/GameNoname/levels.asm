@@ -208,8 +208,6 @@ LevelsMonstersSpawn:
 			mov a, c
 			; posY = tile idx % ROOM_WIDTH * TILE_WIDTH
 			ani %11110000
-			cma
-			sui TILE_HEIGHT
 			sta @savePosY+1
 
 			; loop monstersUpdateFunc to find an empty slot
@@ -298,13 +296,12 @@ LevelsMonstersSpawn:
 			; store monsterEraseWH
 			mvi m, 15
 			inx h
-			mvi m, 2
+			mvi m, 1
 			inx h
 			; store monsterEraseWHOld
 			mvi m, 15
 			inx h
-			mvi m, 2
-			;inx h
+			mvi m, 1
 
 @tileDataToZero:
 			; replace the tile data with an empty tile
