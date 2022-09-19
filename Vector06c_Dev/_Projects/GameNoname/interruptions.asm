@@ -27,7 +27,7 @@
 			mvi a, INTS_PER_SEC
 			dcr a
 			jnz @skipSavingFps
-			lxi h, gameDrawsPerInt
+			lxi h, gameDrawsCounter
 			mov a, m
 			sta currentFps
 			mvi m, 0

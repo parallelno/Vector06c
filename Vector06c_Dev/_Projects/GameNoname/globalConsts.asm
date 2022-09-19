@@ -1,11 +1,13 @@
 ; prefixes
 ; ADDR - address
+; BUF - buffer
 ; INT - interruption
-; SCR - screen
+; SCR - screen buffer
 ; MEM - memory
 ; LEN - length
 ; SEC - seconds
 ; RES - result
+; PTR - pointer
 
 ; debug
 SHOW_CPU_HIGHLOAD_ON_BORDER = false
@@ -51,6 +53,7 @@ ROOM_Y = $FF - ROOM_HEIGHT
 ROOM_SCR_ADDR = $80 + ROOM_X + ROOM_Y
 
 ; sprite
+/*
 ROT_TIMER_0p125 = %0000_0001 ; that timer is rotated to the right.
 ROT_TIMER_0p25	= %0001_0001 ; it will trigger something when the lowest bit is 1
 ROT_TIMER_0p5	= %0101_0101 ; this value means that something will happen every second frame
@@ -58,12 +61,7 @@ ROT_TIMER_0p75	= %1101_1101
 ROT_TIMER_1p0	= %1111_1111
 ;ROT_TIMER_ONCE	= %0000_0011 ; draw just once. useful for idle anims
 ;ROT_TIMER_NOP	= %0000_0000 ; no draw
-
-; to support monster two-interations rendering.
-; the first interation draws sprites with Y>MONSTER_DRAW_Y_THRESHOLD
-; the second one draws sprites with Y<=MONSTER_DRAW_Y_THRESHOLD
-; that is to avoid tearing happens when a screen ray catchs up the place where a sprite is being rendering.
-MONSTER_DRAW_Y_THRESHOLD = 160 
+*/
 
 SPRITE_X_SCR_ADDR = $a0
 
@@ -108,6 +106,3 @@ OPCODE_MOV_M_B = $70
 OPCODE_MOV_M_A = $77
 OPCODE_POP_B = $C1
 OPCODE_STC	= $37
-
-HERO_DRAW_TOP = OPCODE_RNC
-HERO_DRAW_BOTTOM = OPCODE_RC

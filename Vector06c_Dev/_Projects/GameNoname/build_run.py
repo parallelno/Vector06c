@@ -105,12 +105,12 @@ if musicForceExport or anyMusicUpdated:
 	common.RunCommand("del generated\\bin\\" + bank1_screen_path + ".bin.zx0")
 	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank1_screen_path + ".bin generated\\bin\\" + bank1_screen_path + ".bin.zx0")
 ######################################################################################
-# utils in the same bank where the backbuffer of the ram-disk
+# codeLib is in the same bank where a backbuffer is
 bank2_seg1_path = "ramDiskBank2_addr8000"
 
-utilsForceExport = forceExport
+codeLibForceExport = forceExport
 
-utilsOutFolder = "generated\\code\\"
+codeLibOutFolder = "generated\\code\\"
 
 anyCodeUpdated = False
 anyCodeUpdated |= IsFileUpdated("utilsRD.asm")
@@ -118,7 +118,7 @@ anyCodeUpdated |= IsFileUpdated("spriteRD.asm")
 anyCodeUpdated |= IsFileUpdated("drawSpriteRD.asm")
 anyCodeUpdated |= IsFileUpdated(bank2_seg1_path + ".asm")
 
-if utilsForceExport or anyCodeUpdated:
+if codeLibForceExport or anyCodeUpdated:
 	# compile asm to get a bin + labels
 	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank2_seg1_path + 
 			".asm generated\\bin\\" + bank2_seg1_path + ".bin >" + bank2_seg1_path + "Labels.asm")
@@ -128,7 +128,7 @@ if utilsForceExport or anyCodeUpdated:
 	print(f"retroassembler: {bank2_seg1_path} got compiled.")
 	print(f"ExportLabels: {bank2_seg1_path}Labels.asm got compiled.")
 
-	# compress utils bin
+	# compress codeLib bin
 	common.RunCommand("del generated\\bin\\" + bank2_seg1_path + ".bin.zx0")
 	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank2_seg1_path + ".bin generated\\bin\\" + bank2_seg1_path + ".bin.zx0")
 ######################################################################################

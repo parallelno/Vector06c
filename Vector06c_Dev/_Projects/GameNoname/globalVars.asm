@@ -17,7 +17,7 @@ ramDiskMode:
 
 currentFps:
 			.byte 0
-gameDrawsPerInt:
+gameDrawsCounter:
 			.byte 0
 
 ; used for the movement

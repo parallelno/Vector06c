@@ -1,61 +1,73 @@
 .macro HLT_(i)
-			.loop i
+		.loop i
 			hlt
-			.endloop
+		.endloop
 .endmacro
 
 .macro RRC_(i)
-			.loop i
+		.loop i
 			rrc
-			.endloop
+		.endloop
 .endmacro
 
 .macro RAL_(i)
-			.loop i
+		.loop i
 			ral
-			.endloop
+		.endloop
 .endmacro
 
 .macro RLC_(i)
-			.loop i
+		.loop i
 			rlc
-			.endloop
+		.endloop
 .endmacro
 
 .macro PUSH_B(i)
-			.loop i
+		.loop i
 			push b
-			.endloop
+		.endloop
 .endmacro
 
 .macro PUSH_H(i)
-			.loop i
+		.loop i
 			push h
-			.endloop
+		.endloop
 .endmacro
 
 .macro POP_H(i)
-			.loop i
+		.loop i
 			pop h
-			.endloop
+		.endloop
 .endmacro
 
 .macro INR_D(i)
-			.loop i
+		.loop i
 			inr d
-			.endloop
+		.endloop
 .endmacro
 
 .macro INX_H(i)
-			.loop i
+		.loop i
 			inx h
-			.endloop
+		.endloop
 .endmacro
 
 .macro DCX_H(i)
-			.loop i
+		.loop i
 			dcx h
-			.endloop
+		.endloop
+.endmacro
+
+.macro INR_L(i)
+		.loop i
+			inr l
+		.endloop
+.endmacro
+
+.macro INR_H(i)
+		.loop i
+			inr h
+		.endloop
 .endmacro
 
 ;================================== ALL RAM_DISK_* macros has to be placed BEFORE lxi sp, *, and sphl! ;==================================

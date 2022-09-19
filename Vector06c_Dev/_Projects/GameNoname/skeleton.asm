@@ -19,7 +19,6 @@ SkeletonInit:
 			lxi h, monsterSpeedX
 			dad b
 			mvi m, SKELETON_RUN_SPEED
-
 			ret
 			.closelabels
 
@@ -176,97 +175,43 @@ SkeletonUpdate:
             ret
 			.closelabels			
 
-; draw & clear sprite
+; draw sprite and save erase scr addr
 ; in:
 ; bc - monster idx*2
-; a - flag
-;	flag=OPCODE_RC to draw a sprite with Y>MONSTER_DRAW_Y_THRESHOLD, 
-;	flag=OPCODE_RNC to draw a sprite with Y<=MONSTER_DRAW_Y_THRESHOLD, 
 SkeletonDraw:
-/*
-			; check the flag
-			ora a
-			jnz @draw
-@clear:
 			; convert monster id into the offset in the monstersRoomData array
 			; and store it into bc
 			lxi h, monsterRoomDataAddrOffsets
 			dad b
 			mov c, m
-			lxi h, monsterRedrawTimer
-			; hl - pointer to monsterRedrawTimer
+
+			lxi h, monsterPosX+1
 			dad b
-			; a <- (monsterRedrawTimer)
-			mov a, m
-			rrc
-			rnc
-
-			; de <- (monsterEraseScrAddr)
-			inx h
-			mov e, m
-			inx h
-			mov d, m
-
-			; a <- (monsterEraseFrameIdx2)
-			inx h
-			mov a, m
-			;xchg
-			; TODO: do not clean sprite if it wasn't moving
-			jmp EraseSpriteSP
-*/
-@draw:
-			; TODO: after removing call EraseSprite that func needs an optimization pass
-			; store a flag
-			sta @checkY
-			; convert monster id into the offset in the monstersRoomData array
-			; and store it into bc
-			lxi h, monsterRoomDataAddrOffsets
-			dad b
-			mov c, m
-			lxi h, monsterRedrawTimer
-			; hl - pointer to monsterRedrawTimer
-			dad b
-			; a <- (monsterRedrawTimer)
-			mov a, m
-			rrc
-			rnc
-
-			inx h
-			inx h
-			inx h
-			push h
-
-			; hl - monsterPosX+1 addr
-			inx h
-			inx h		
 			call GetSpriteScrAddr
-			; move pointer back to monsterEraseFrameIdx2 addr
-			pop h
-			
-			; to support two-interations rendering
-			mvi a, MONSTER_DRAW_Y_THRESHOLD
-			cmp e
-@checkY
-			; replaced with RNC to draw sprites above MONSTER_DRAW_Y_THRESHOLD
-			; replaced with RC to draw sprites below MONSTER_DRAW_Y_THRESHOLD
-			nop
-
-			; save frame idx to monsterEraseFrameIdx2 addr
-			mov m, c
- 			; move pointer back to monsterEraseScrAddr+1 addr
-			dcx h
-			; save the addr returned by GetSpriteScrAddr into monsterEraseScrAddr backwards
-			mov m, d
-			dcx h
-			mov m, e
+			mov a, c
 
 			; get the anim addr
-			dcx h
-			dcx h
-			mov a, m
-			dcx h
-			mov l, m
-			mov h, a
+			lxi b, $ffff - 12 ;monsterAnimAddr
+			dad b
+			mov b, m
+			inx h
+			push h
+			mov h, m
+			mov l, b
+			mov c, a
 			call GetSpriteAddrRunV
-			;jmp DrawSpriteVM
+			CALL_RAM_DISK_FUNC(__DrawSpriteVM, RAM_DISK0_B0_STACK_B2_8AF_RAM)
+			pop h
+			inx h
+			; store an old scr addr, width, and height
+			; hl - ptr to monsterEraseScrAddr
+			mov m, c
+			inx h
+			mov m, b
+			; hl - ptr to monsterEraseWH
+			inx_h(3)
+			mov m, e
+			inx h
+			mov m, d
+			ret
 			.closelabels

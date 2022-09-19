@@ -7,7 +7,7 @@ HERO_RUN_SPEED_D	= $00b5 ; for diagonal moves
 heroData:
 heroDirX:			.byte 1 ; 1-right, 0-left
 heroEraseScrAddr:	.word TEMP_ADDR
-heroEraseScrAddrOld .word TEMP_ADDR
+heroEraseScrAddrOld	.word TEMP_ADDR
 heroEraseWH:		.word TEMP_WORD
 heroEraseWHOld:		.word TEMP_WORD
 heroX:				.word TEMP_WORD
@@ -19,7 +19,7 @@ heroSpeedY:			.word TEMP_WORD
 heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, 0, 0 
 
 HeroInit:
-            call HeroStop
+			call HeroStop
 			; heroData access
 			lxi h, heroX+1
 			call GetSpriteScrAddr
@@ -378,7 +378,10 @@ HeroDrawSpriteAddrFunc:
 			CALL_RAM_DISK_FUNC(__DrawSpriteVM, RAM_DISK0_B0_STACK_B2_8AF_RAM)
 
 			; store an old scr addr, width, and height
-			shld heroEraseScrAddr
+			lxi h, heroEraseScrAddr
+			mov m, c
+			inx h
+			mov m, b
 			xchg
 			shld heroEraseWH
 			ret

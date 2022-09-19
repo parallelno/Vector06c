@@ -3,7 +3,7 @@
 ; return a couple of parameters within HL, C
 DrawSpriteRet_ramDisk:
 drawSpriteScrAddr_ramDisk:
-			lxi h, TEMP_ADDR
+			lxi b, TEMP_ADDR
 drawSpriteWidthHeight_ramDisk:
 ; d - width
 ;		00 - 8pxs,

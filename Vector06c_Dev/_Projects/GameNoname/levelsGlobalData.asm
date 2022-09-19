@@ -30,7 +30,8 @@ roomTilesAddr:
 ; fff == 7, d != %11111, ???
 
 ; this functions are used when the room initialized. check levels.asm RoomInitTilesData func
-roomFuncTable:		.word LevelsTileDataCopy, LevelsTileDataCopy, LevelsMonstersSpawn, LevelsTileDataCopy, LevelsTileDataCopy, LevelsTileDataCopy, LevelsTileDataCopy
+roomFuncTable:		
+			.word LevelsTileDataCopy, LevelsTileDataCopy, LevelsMonstersSpawn, LevelsTileDataCopy, LevelsTileDataCopy, LevelsTileDataCopy, LevelsTileDataCopy
 
 roomTilesData:
 			.storage ROOM_WIDTH * ROOM_HEIGHT

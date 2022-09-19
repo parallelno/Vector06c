@@ -1,7 +1,7 @@
 ;================================================================
 ;	initialization levels data every game start
 ;
-LevelsInit:	
+LevelsInit:
 			xra a
 			sta levelIdx
 			ret
@@ -16,7 +16,7 @@ LevelInit:
 			sta borderColorIdx
 			xra a
 			sta roomIdx
-			
+
 			lxi d, level01_startPos
 			call GetWordFromRamDisk
 			call HeroSetPos
@@ -29,12 +29,13 @@ RoomInit:
 			call RoomInitTiles
 			call RoomInitTilesData
 			call MonstersInit
-			; erase $a000-$ffff buffer in the ram-disk
+			; erase back buffer
+			; $a000-$ffff in the ram-disk
 			lxi d, $0000
 			lxi b, $6000 / 128 - 1
 			CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK0_B2_STACK_B2_8AF_RAM)
 			ret
-			
+
 
 ; it copies the tile idxs of the current room into roomTilesData as a temp storrage
 ; then it converts idxs into tile gfx addrs
@@ -49,7 +50,7 @@ RoomInitTiles:
 			mvi b, 0
 			lxi h, level01_roomsAddr
 			dad b
-			
+
 			xchg
 			call GetWordFromRamDisk
 			mov d, b
@@ -102,9 +103,9 @@ RoomInitTiles:
 			jnz @loop
 			ret
 			.closelabels
-			
+
 ; copy the tiles data of the current room into the main memory
-; then it analizes the tiles data and calls monster init funcs, 
+; then it analizes the tiles data and calls monster init funcs,
 ; feeds up the monster pool if there is any monster in the room
 ;
 RoomInitTilesData:
@@ -118,7 +119,7 @@ RoomInitTilesData:
 			mvi b, 0
 			lxi h, level01_roomsAddr
 			dad b
-			
+
 			xchg
 			call GetWordFromRamDisk
 			lxi h, ROOM_WIDTH * ROOM_HEIGHT + 2 ; tiles data is stored right after the tile addr tbl plus 2 safety bytes
@@ -141,7 +142,7 @@ RoomInitTilesData:
 			inx h
 			inr c
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
-			cmp c			
+			cmp c
 			jnz @loop
 			ret
 			.closelabels
@@ -160,7 +161,7 @@ LevelsTileDataCopy:
 			.closelabels
 
 ; this is a handler of the RoomInitTilesData
-; it spawns a monster according to the argument which is a part of the tile data byte. 
+; it spawns a monster according to the argument which is a part of the tile data byte.
 ; for the details on tile data format see levelsGlobalData.asm->tile data format
 ; then it stores zero into the roomTilesData
 ; input:
@@ -182,7 +183,7 @@ LevelsMonstersSpawn:
 			inx h
 			xchg
 			shld @storeInitFunc+1
-			xchg			
+			xchg
 			; get the monster update func addr
 			mov e, m
 			inx h
@@ -214,11 +215,11 @@ LevelsMonstersSpawn:
 			; loop monstersUpdateFunc to find an empty slot
 			; check only high byte if it's zero
 			lxi h, monstersInitFunc + 1
-			; c - doubled counter. 
+			; c - doubled counter.
 			; it is used to get a draw func addr as well as a room sprite data addr
 			; b = 0 for "dad b" below
 			lxi b, 0
-@loop:		
+@loop:
 			mov a, m
 			ora a
 			jz @storeInitFunc
@@ -284,26 +285,32 @@ LevelsMonstersSpawn:
 			pop b
 			lxi h, monsterEraseScrAddr
 			dad b
+			; store monsterEraseScrAddr
 			mov m, e
 			inx h
 			mov m, d
 			inx h
-			mov m, a
+			; store monsterEraseScrAddrOld
+			mov m, e
+			inx h
+			mov m, d
+			inx h
+			; store monsterEraseWH
+			mvi m, 15
+			inx h
+			mvi m, 2
+			inx h
+			; store monsterEraseWHOld
+			mvi m, 15
+			inx h
+			mvi m, 2
+			;inx h
 
-			; store monsterRedrawTimer
-			lxi h, monsterRedrawTimer
-			dad b
-@rndDraw:	; make monsterRedrawTimer for every spawned monster different to balance the cpu load
-			mvi a, %1000100
-			mov m, a
-			rlc
-			sta @rndDraw+1
-
-@tileDataToZero:	
+@tileDataToZero:
 			; replace the tile data with an empty tile
             xra a
 			ret
-			.closelabels			
+			.closelabels
 
 LevelUpdate:
 			lda levelCommand
@@ -384,7 +391,7 @@ CheckRoomTilesCollision:
 			; clear only the last 2 bytes, because the first one will be overwritten anyway
 			lxi h, 0
 			shld collidedRoomTilesData+2
-			
+
 			; mask
 			mvi d, %00001111
 			; check if we have to check bottom tiles
@@ -439,7 +446,7 @@ CheckRoomTilesCollision:
 			shld collidedRoomTilesData
 			mov a, l
 			ora h
-@checkBottomTiles:			
+@checkBottomTiles:
 			xchg
 			; get data of a tile where a bottom-left pixel of a sprite drawn
 			mvi c, ROOM_WIDTH-1
