@@ -88,45 +88,90 @@ MonsterCopyToScr:
 			lxi h, monsterRoomDataAddrOffsets
 			dad b
 			mov c, m
-/*
-			lxi h, monsterEraseScrAddrOld+1
-			mov d, m
-			dcx h
-			mov e, m
-			dcx h
-			mov b, m
-			dcx h
-			mov c, m
-			; de - heroEraseScrAddrOld
-			; bc - heroEraseScrAddr
-			; hl - ptr to heroEraseScrAddr
-			; get the min(b, d), min(c, e)
-			mov a, b
-			cmp d
-			jc @keepCurrentX
-			mov b, d
-@keepCurrentX:
-			mov a, c
-			cmp e
-			jc @keepCurrentY 
-			mov c, e
-@keepCurrentY:
-			; bc - a scr addr to copy
-			push b
-			mov e, b 
-			*/
-			; for tests
+
+			; read monsterEraseScrAddr
 			lxi h, monsterEraseScrAddr
 			dad b
+			mov c, m
+			inx h
+			mov b, m
+			inx h
+			; read monsterEraseScrAddrOld
 			mov e, m
 			inx h
 			mov d, m
-			inx_h(3)
-			mov a, m
+			; store monsterEraseScrAddr temp
+			xchg
+			shld @oldTopRightConner+1
+			xchg
+			; store monsterEraseScrAddr to monsterEraseScrAddrOld
+			mov m, b
+			dcx h
+			mov m, c
+			; bc - heroEraseScrAddr
+			; de - heroEraseScrAddrOld
+			; hl - ptr to monsterEraseScrAddrOld
+			; get min(b, d), min(c, e)
+			mov a, d
+			cmp b
+			jc @keepOldX
+			mov d, b
+@keepOldX:
+			mov a, e
+			cmp c
+			jc @keepOldY 
+			mov e, c
+@keepOldY:
+			; tmp store a scr addr to copy
+			push d
+			; bc - monsterEraseScrAddr
+			; calc top-right corner addr (heroEraseScrAddr + monsterEraseWH)
+			inx_h(2)
+			mov d, b
+			mov e, c
+			; bc - monsterEraseWH
+			mov c, m
 			inx h
-			mov h, m			
+			mov b, m
+			inx h
+			xchg
+			dad b
+			xchg
+			; bc - monsterEraseWHOld
+			; store monsterEraseWH to monsterEraseWHOld
+			mov a, m
+			mov m, c
+			mov c, a
+			inx h
+			mov a, m
+			mov m, b
+			mov b, a
+			; calc old top-right corner addr (heroEraseScrAddrOld + monsterEraseWHOld)
+@oldTopRightConner:
+			lxi h, TEMP_WORD
+			dad b
+			; hl - heroEraseScrAddrOld + monsterEraseWHOld
+			; de - heroEraseScrAddr + monsterEraseWH
+			; get max(h, d), max(l, e)
+			mov a, h
+			cmp d
+			jnc @keepOldTRX
+			mov h, d
+@keepOldTRX:
+			mov a, l
+			cmp e
+			jnc @keepOldTRY 
+			mov l, e
+@keepOldTRY:
+			; hl - top-right corner scr addr to copy
+			; de - a scr addr to copy
+			pop d
+			; calc width and height
+			mov a, h
+			sub d 
+			mov h, a
+			mov a, l 
+			sub e
 			mov l, a
-			inr_l(2)
-			dcr e
 			; hl - width, height
 			jmp CopySpriteToScrV

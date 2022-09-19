@@ -387,7 +387,7 @@ HeroDrawSpriteAddrFunc:
 			ret
 
 HeroCopyToScr:
-			; get the min(h, d), min(e,l)
+			; get min(h, d), min(e,l)
 			lhld heroEraseScrAddrOld
 			xchg
 			lhld heroEraseScrAddr
@@ -421,14 +421,14 @@ HeroCopyToScr:
 			; get the max(h, d), max(e,l)
 			mov a, h
 			cmp d 
-			jnc @keepOldTLX
+			jnc @keepCurrentTRX
 			mov h, d
-@keepOldTLX:
+@keepCurrentTRX:
 			mov a, l
 			cmp e 
-			jnc @keepOldTLY
+			jnc @keepCurrentTRY
 			mov l, e
-@keepOldTLY:
+@keepCurrentTRY:
 			; hl - top-right corner scr addr to copy
 			; de - a scr addr to copy
 			pop d
