@@ -191,12 +191,9 @@ def SpritesToAsm(charJPath, charJ, image, addSize, addMask):
 						maskImg.append(0)
 		
 			maskBytes = common.CombineBitsToBytes(maskImg)
-			#maskData = MaskData(maskBytes, width, height)
 
 		# to support a sprite render function
 		data = SpriteData(bytes1, bytes2, bytes3, width, height, maskBytes)
-		#data = SpriteDataTiled(bytes1, bytes2, bytes3, width, height, maskBytes)
-		#data = SpriteDataBB(bytes1, bytes2, bytes3, width, height, maskBytes)
 
 		asm += "\n"
 		# two empty bytes prior every to support a stack renderer

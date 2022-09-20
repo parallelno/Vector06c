@@ -375,7 +375,7 @@ HeroDrawSpriteAddrFunc:
 			; TODO: consiider using an unrolled loop in DrawSpriteVM for sprites 15 pxs tall
 			; TODO: draw hero first, and do not have mask in its gfx data
 			;call DrawSpriteVM
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, RAM_DISK0_B0_STACK_B2_8AF_RAM)
+			CALL_RAM_DISK_FUNC(__DrawSpriteV, RAM_DISK0_B0_STACK_B2_8AF_RAM)
 
 			; store an old scr addr, width, and height
 			lxi h, heroEraseScrAddr

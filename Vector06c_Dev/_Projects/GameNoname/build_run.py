@@ -15,7 +15,7 @@ scythePath = "sprites\\scythe"
 animForceExport = forceExport | IsFileUpdated("tools\\animSpriteExport.py")
 
 anySpritesUpdated = False 
-anySpritesUpdated |= ExportAminSprites(heroPath, animForceExport, True)
+anySpritesUpdated |= ExportAminSprites(heroPath, animForceExport, False)
 anySpritesUpdated |= ExportAminSprites(skeletonPath, animForceExport, True)
 anySpritesUpdated |= ExportAminSprites(burnerPath, animForceExport, True)
 anySpritesUpdated |= ExportAminSprites(knightPath, animForceExport, True)

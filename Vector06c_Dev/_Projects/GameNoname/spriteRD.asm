@@ -2,6 +2,8 @@
 ; sharetable chunk of code to restore SP and 
 ; return a couple of parameters within HL, C
 DrawSpriteRet_ramDisk:
+RestoreSP_ramDisk:
+			lxi sp, TEMP_ADDR
 drawSpriteScrAddr_ramDisk:
 			lxi b, TEMP_ADDR
 drawSpriteWidthHeight_ramDisk:
@@ -12,8 +14,6 @@ drawSpriteWidthHeight_ramDisk:
 ;		11 - 32pxs,
 ; e - height
 			lxi d, TEMP_WORD
-RestoreSP_ramDisk:
-			lxi sp, TEMP_ADDR
 			;RAM_DISK_OFF()
 restoreRet_ramDisk:
 			jmp TEMP_ADDR

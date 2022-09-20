@@ -62,13 +62,14 @@ MonsterErase:
 			dad b
 			mov c, m
 
+			; de <- monsterEraseScrAddr
+			; hl <- monsterEraseWH
 			lxi h, monsterEraseScrAddr
 			dad b
 			mov e, m
 			inx h
 			mov d, m
 			inx_h(3)
-			; hl - monsterEraseWH
 			mov a, m
 			inx h
 			mov h, m			
@@ -83,6 +84,12 @@ MonstersCopyToScr:
 			MONSTERS_FUNCS_HANDLER(monstersDrawFunc, MonsterCopyToScr)
 
 MonsterCopyToScr:
+			; TODO: think of making layer of monstersRoomSpriteData struct like
+			; monsterEraseScrX
+			; monsterEraseScrXOld
+			; monsterEraseW
+			; monsterEraseWOld
+			; ... similar for Y and height
 			; convert monster id into the offset in the monstersRoomData array
 			; and store it into bc
 			lxi h, monsterRoomDataAddrOffsets

@@ -7,7 +7,6 @@
 ; 		a = 0 to clear the main memory
 ; use:
 ; hl
-; TODO: move it to the ram-disk like __DrawSpriteVM and __EraseSpriteSP
 
 __ClearMemSP:
 			; store ret addr

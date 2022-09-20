@@ -1,3 +1,4 @@
 __erasespritesp               = $800c
-__drawspritevm                = $80b9
-__clearmemsp                  = $8207
+__drawspritev                 = $80b9
+__drawspritevm                = $8189
+__clearmemsp                  = $82d7

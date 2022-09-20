@@ -17,17 +17,9 @@ def DelBuildDB():
 def ExportAminSprites(sourcePath, exporterUpdated, mask = False, sourceFolder = "sources\\", generatedFolder = "generated\\"):
 	jsonExt = ".json"
 	if IsFileUpdated(sourceFolder + sourcePath + jsonExt) or exporterUpdated:
-		"""
-		command = ("python tools\\animSpriteExport.py -s True" + 
-			" -m " + str(mask) +
-			" -i " + sourceFolder + sourcePath + jsonExt +
-			" -oa " + generatedFolder + sourcePath + "Anim.dasm " + 
-			" -os " + generatedFolder + sourcePath + "Sprites.dasm")
-		RunCommand(command)
-		"""
 		animSpriteExport.Export(
 			True, 
-			True, 
+			mask, 
 			sourceFolder + sourcePath + jsonExt, 
 			generatedFolder + sourcePath + "Anim.dasm", 
 			generatedFolder + sourcePath + "Sprites.dasm")
