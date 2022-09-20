@@ -11,11 +11,11 @@
 __ClearMemSP:
 			; store ret addr
 			pop h
-			shld restoreRet_ramDisk + 1
+			shld restoreRet_ramDisk__ + 1
 			; store SP
 			lxi h, 0
 			dad sp
-			shld RestoreSP_ramDisk + 1
+			shld restoreSP_ramDisk__ + 1
 
 			;RAM_DISK_ON_BANK()
 			xchg
@@ -30,5 +30,5 @@ __ClearMemSP:
 			dcx d
 			cmp d
 			jnz @loop
-			jmp RestoreSP_ramDisk
+			jmp Ret_ramDisk__
 			.closelabels

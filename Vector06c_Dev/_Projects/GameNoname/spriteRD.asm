@@ -1,21 +1,11 @@
 
 ; sharetable chunk of code to restore SP and 
 ; return a couple of parameters within HL, C
-DrawSpriteRet_ramDisk:
-RestoreSP_ramDisk:
+Ret_ramDisk__:
+restoreSP_ramDisk__:
 			lxi sp, TEMP_ADDR
-drawSpriteScrAddr_ramDisk:
-			lxi b, TEMP_ADDR
-drawSpriteWidthHeight_ramDisk:
-; d - width
-;		00 - 8pxs,
-;		01 - 16pxs,
-;		10 - 24pxs,
-;		11 - 32pxs,
-; e - height
-			lxi d, TEMP_WORD
 			;RAM_DISK_OFF()
-restoreRet_ramDisk:
+restoreRet_ramDisk__:
 			jmp TEMP_ADDR
 			.closelabels
 
@@ -41,11 +31,11 @@ __EraseSpriteSP:
 			;RAM_DISK_ON(RAM_DISK0_B2_STACK_B2_8AF_RAM)
 			; store ret addr
 			pop h
-			shld restoreRet_ramDisk + 1
+			shld restoreRet_ramDisk__ + 1
 			; store SP
 			lxi h, 0
 			dad sp
-			shld RestoreSP_ramDisk + 1
+			shld restoreSP_ramDisk__ + 1
 
 			xchg
 
@@ -73,7 +63,7 @@ __EraseSpriteSP:
 			EREASE_SPRITE_SP_COL()
 @width8:
 			EREASE_SPRITE_SP_COL(false)
-			jmp RestoreSP_ramDisk
+			jmp Ret_ramDisk__
 			.closelabels
 
 .macro EREASE_SPRITE_SP_COL(nextColumn = true)

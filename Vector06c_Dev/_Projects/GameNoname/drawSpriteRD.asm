@@ -1,3 +1,23 @@
+; sharetable chunk of code to restore SP and 
+; return a couple of parameters within HL, C
+DrawSpriteRet_ramDisk__:
+drawSpriteRestoreSP_ramDisk__:
+			lxi sp, TEMP_ADDR
+drawSpriteScrAddr_ramDisk__:
+			lxi b, TEMP_ADDR
+drawSpriteWidthHeight_ramDisk__:
+; d - width
+;		00 - 8pxs,
+;		01 - 16pxs,
+;		10 - 24pxs,
+;		11 - 32pxs,
+; e - height
+			lxi d, TEMP_WORD
+			;RAM_DISK_OFF()
+drawSpriteRestoreRet_ramDisk__:
+			jmp TEMP_ADDR
+			.closelabels
+			
 ; =============================================
 ; Draw a sprite without a mask in three consiquence screen buffs with offsetX and offsetY
 ; width is 1-3 bytes
@@ -37,11 +57,11 @@
 __DrawSpriteV:
 			; store ret addr
 			pop h
-			shld restoreRet_ramDisk + 1
+			shld drawSpriteRestoreRet_ramDisk__ + 1
 			; store SP
 			lxi h, 0
 			dad sp
-			shld RestoreSP_ramDisk + 1
+			shld drawSpriteRestoreSP_ramDisk__ + 1
 			; sp = BC
 			mov	h, b
 			mov	l, c
@@ -53,7 +73,7 @@ __DrawSpriteV:
 			pop b
 			dad b
 			; store a sprite screen addr to return it from this func
-			shld drawSpriteScrAddr_ramDisk+1
+			shld drawSpriteScrAddr_ramDisk__+1
 
 			; store sprite width and height
 			; b - width, c - height
@@ -61,7 +81,7 @@ __DrawSpriteV:
 			mov d, b
 			mov e, c
 			xchg
-			shld drawSpriteWidthHeight_ramDisk+1
+			shld drawSpriteWidthHeight_ramDisk__+1
 			xchg
 			mov a, b
 			rrc
@@ -97,7 +117,7 @@ __DrawSpriteV:
 			DrawSpriteV_B1()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk
+			jz DrawSpriteRet_ramDisk__
 
 @w16oddScr3:
 			DrawSpriteV_B0()
@@ -116,7 +136,7 @@ __DrawSpriteV:
 			inr l
 			dcr e
 			jnz @w16evenScr1
-			jmp DrawSpriteRet_ramDisk
+			jmp DrawSpriteRet_ramDisk__
 ;-------------------------------------------------
 @width24:
 			; save the high screen byte to restore X
@@ -152,7 +172,7 @@ __DrawSpriteV:
 			DrawSpriteV_B0()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk
+			jz DrawSpriteRet_ramDisk__
 
 @w24oddScr3:
 			DrawSpriteV_B1()
@@ -177,7 +197,7 @@ __DrawSpriteV:
 			inr l
 			dcr e
 			jnz @w24evenScr1
-			jmp DrawSpriteRet_ramDisk
+			jmp DrawSpriteRet_ramDisk__
 ;------------------------------------------------------
 @width8:
 			; save the high screen byte to restore X
@@ -198,7 +218,7 @@ __DrawSpriteV:
 			DrawSpriteV_B0()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk
+			jz DrawSpriteRet_ramDisk__
 @w8oddScr3:
 			DrawSpriteV_B1()
 @w8oddScr2:
@@ -210,7 +230,7 @@ __DrawSpriteV:
 			inr l
 			dcr e
 			jnz @w8evenScr1
-			jmp DrawSpriteRet_ramDisk
+			jmp DrawSpriteRet_ramDisk__
 			.closelabels
 
 
@@ -254,11 +274,11 @@ __DrawSpriteV:
 __DrawSpriteVM:
 			; store ret addr
 			pop h
-			shld restoreRet_ramDisk + 1
+			shld drawSpriteRestoreRet_ramDisk__ + 1
 			; store SP
 			lxi h, 0
 			dad sp
-			shld RestoreSP_ramDisk + 1
+			shld drawSpriteRestoreSP_ramDisk__ + 1
 			; sp = BC
 			mov	h, b
 			mov	l, c
@@ -270,7 +290,7 @@ __DrawSpriteVM:
 			pop b
 			dad b
 			; store a sprite screen addr to return it from this func
-			shld drawSpriteScrAddr_ramDisk+1
+			shld drawSpriteScrAddr_ramDisk__+1
 
 			; store sprite width and height
 			; b - width, c - height
@@ -278,7 +298,7 @@ __DrawSpriteVM:
 			mov d, b
 			mov e, c
 			xchg
-			shld drawSpriteWidthHeight_ramDisk+1
+			shld drawSpriteWidthHeight_ramDisk__+1
 			xchg
 			mov a, b
 			rrc
@@ -315,7 +335,7 @@ __DrawSpriteVM:
 			DrawSpriteVM_B()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk
+			jz DrawSpriteRet_ramDisk__
 
 @w16oddScr3:
 			DrawSpriteVM_B()
@@ -334,7 +354,7 @@ __DrawSpriteVM:
 			inr l
 			dcr e
 			jnz @w16evenScr1
-			jmp DrawSpriteRet_ramDisk
+			jmp DrawSpriteRet_ramDisk__
 ;-------------------------------------------------
 @width24:
 			; save the high screen byte to restore X
@@ -370,7 +390,7 @@ __DrawSpriteVM:
 			DrawSpriteVM_B()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk
+			jz DrawSpriteRet_ramDisk__
 
 @w24oddScr3:
 			DrawSpriteVM_B()
@@ -395,7 +415,7 @@ __DrawSpriteVM:
 			inr l
 			dcr e
 			jnz @w24evenScr1
-			jmp DrawSpriteRet_ramDisk
+			jmp DrawSpriteRet_ramDisk__
 ;------------------------------------------------------
 @width8:
 			; save the high screen byte to restore X
@@ -416,7 +436,7 @@ __DrawSpriteVM:
 			DrawSpriteVM_B()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk
+			jz DrawSpriteRet_ramDisk__
 @w8oddScr3:
 			DrawSpriteVM_B()
 @w8oddScr2:
@@ -428,5 +448,5 @@ __DrawSpriteVM:
 			inr l
 			dcr e
 			jnz @w8evenScr1
-			jmp DrawSpriteRet_ramDisk
+			jmp DrawSpriteRet_ramDisk__
 			.closelabels
