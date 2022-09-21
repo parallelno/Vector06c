@@ -32,8 +32,11 @@ RoomInit:
 			; erase back buffer
 			; $a000-$ffff in the ram-disk
 			lxi d, $0000
-			lxi b, $6000 / 128 - 1
-			CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK0_B2_STACK_B2_8AF_RAM)
+			lxi b, $6000 / 32 - 1
+			mvi a, RAM_DISK0_B2_STACK_B2_8AF_RAM
+			call ClearMemSP
+			; TODO: make the code below work to use __ClearMemSP instead of ClearMemSP
+			;CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK0_B2_STACK_B2_8AF_RAM)
 			ret
 
 
@@ -335,9 +338,9 @@ RoomDraw:
 			xra a
 			call ClearMemSP
 			; TODO: make the code below work to use __ClearMemSP instead of ClearMemSP
-			; lxi d, $0000
-			; lxi b, $8000 / 128
-			;CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK0_B2_8AF_RAM)
+			;lxi d, $0000
+			;lxi b, $8000 / 128 - 1
+			;CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK0_B2_8AF_RAM, true)
 
 			; set y = 0
 			mvi e, 0

@@ -110,10 +110,16 @@
 			out $10
 .endmacro
 ;==================================================================================================
-.macro CALL_RAM_DISK_FUNC(funcAddr, _command)
+.macro CALL_RAM_DISK_FUNC(funcAddr, _command, disableInt = false)
+		.if disableInt
+			di
+		.endif
 			RAM_DISK_ON(_command)
 			call funcAddr
 			RAM_DISK_OFF()
+		.if disableInt
+			ei
+		.endif
 .endmacro
 
 .macro DEBUG_BORDER_LINE(_borderColorIdx = 1)

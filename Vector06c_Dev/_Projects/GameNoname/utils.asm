@@ -1,6 +1,14 @@
 .include "rnd.asm"
 .include "zx0.asm"
 
+; sharetable chunk of code to restore SP
+; and dismount the ram-disk
+RestoreSP:
+			lxi sp, TEMP_ADDR
+			RAM_DISK_OFF()
+			ret
+			.closelabels
+			
 ; clear a memory buffer
 ; input:
 ; hl - addr to clear
@@ -29,25 +37,30 @@ ClearMem:
 ; use:
 ; hl
 ; TODO: move it to the ram-disk like __DrawSpriteVM and __EraseSpriteSP
+; TODO: fix it to work without di/ei
 
 ClearMemSP:
+			di
 			lxi h, 0
 			dad sp
-			shld RestoreSP + 1
+			shld @RestoreSP + 1
 			RAM_DISK_ON_BANK()
 			xchg
-			sphl
 			mov e, c
 			mov d, b
-			; safety bytes
 			lxi b, 0
 			mvi a, $ff
+			sphl
 @loop:
 			push_b(16)
 			dcx d
 			cmp d
 			jnz @loop
-			jmp RestoreSP
+@RestoreSP:
+			lxi sp, TEMP_WORD
+			RAM_DISK_OFF()
+			ei
+			ret
 			.closelabels
 
 INIT_COLOR_IDX = 15

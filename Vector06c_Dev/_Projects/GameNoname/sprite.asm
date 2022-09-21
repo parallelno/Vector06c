@@ -1,11 +1,3 @@
-; sharetable chunk of code to restore SP
-; and dismount the ram-disk
-RestoreSP:
-			lxi sp, TEMP_ADDR
-			RAM_DISK_OFF()
-			ret
-			.closelabels
-			
 ; input:
 ; hl - animation addr, for example hero_idle_r
 ; c - idx in the animation

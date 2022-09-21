@@ -2,7 +2,7 @@
 ; can be used to clear ram-disk memory as well
 ; input:
 ; de - the last addr of a erased buffer + 1
-; bc - length/128
+; bc - length/128 - 1
 ; a - ram disk activation command
 ; 		a = 0 to clear the main memory
 ; use:
@@ -22,7 +22,6 @@ __ClearMemSP:
 			sphl
 			mov e, c
 			mov d, b
-			; safety bytes
 			lxi b, 0
 			mvi a, $ff
 @loop:
