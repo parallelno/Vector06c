@@ -53,17 +53,9 @@ ROOM_Y = $FF - ROOM_HEIGHT
 ROOM_SCR_ADDR = $80 + ROOM_X + ROOM_Y
 
 ; sprite
-/*
-ROT_TIMER_0p125 = %0000_0001 ; that timer is rotated to the right.
-ROT_TIMER_0p25	= %0001_0001 ; it will trigger something when the lowest bit is 1
-ROT_TIMER_0p5	= %0101_0101 ; this value means that something will happen every second frame
-ROT_TIMER_0p75	= %1101_1101
-ROT_TIMER_1p0	= %1111_1111
-;ROT_TIMER_ONCE	= %0000_0011 ; draw just once. useful for idle anims
-;ROT_TIMER_NOP	= %0000_0000 ; no draw
-*/
-
-SPRITE_X_SCR_ADDR = $a0
+SPRITE_X_SCR_ADDR		= $a0
+PRESHIFTED_SPRITES_4	= 4
+PRESHIFTED_SPRITES_8	= 8
 
 RAM_DISK0_B0_STACK  = %00011100
 RAM_DISK0_B1_STACK  = %00011000

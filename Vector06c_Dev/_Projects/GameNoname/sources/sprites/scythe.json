@@ -19,16 +19,36 @@
 		{"x": 240,	"y" : 0}
 	],
 	"anims" : {
-		"run_rn"	: ["run_rn_0", "run_rn_1", "run_rn_2", "run_rn_3"],
-		"run_ln"	: ["run_ln_0", "run_ln_1", "run_ln_2", "run_ln_3"],
-		"run_un"	: ["run_un_0", "run_un_1", "run_un_2", "run_un_3"],
-		"run_dn"	: ["run_dn_0", "run_dn_1", "run_dn_2", "run_dn_3"],
-		"run_cl"	: ["run_un_0", "run_rn_0", "run_dn_2", "run_lf_3"],
-		"run_cc"	: ["run_uf_0", "run_ln_0", "run_df_3", "run_rf_3"],				
-		"run_rf"	: ["run_rf_0", "run_rf_1", "run_rf_2", "run_rf_3"],
-		"run_lf"	: ["run_lf_0", "run_lf_1", "run_lf_2", "run_lf_3"],
-		"run_uf"	: ["run_uf_0", "run_uf_1", "run_uf_2", "run_uf_3"],
-		"run_df"	: ["run_df_0", "run_df_1", "run_df_2", "run_df_3"]
+		"run_rn"	: [
+			["run_rn_0", "run_rn_1", "run_rn_2", "run_rn_3"]
+		],
+		"run_ln"	: [
+			["run_ln_0", "run_ln_1", "run_ln_2", "run_ln_3"]
+		],
+		"run_un"	: [
+			["run_un_0", "run_un_1", "run_un_2", "run_un_3"]
+		],
+		"run_dn"	: [
+			["run_dn_0", "run_dn_1", "run_dn_2", "run_dn_3"]
+		],
+		"run_cl"	: [
+			["run_un_0", "run_rn_0", "run_dn_2", "run_lf_3"]
+		],
+		"run_cc"	: [
+			["run_uf_0", "run_ln_0", "run_df_3", "run_rf_3"]
+		],
+		"run_rf"	: [
+			["run_rf_0", "run_rf_1", "run_rf_2", "run_rf_3"]
+		],
+		"run_lf"	: [
+			["run_lf_0", "run_lf_1", "run_lf_2", "run_lf_3"]
+		],
+		"run_uf"	: [
+			["run_uf_0", "run_uf_1", "run_uf_2", "run_uf_3"]
+		],
+		"run_df"	: [
+			["run_df_0", "run_df_1", "run_df_2", "run_df_3"]
+		]
 	},
 	"sprites" : [
 		{

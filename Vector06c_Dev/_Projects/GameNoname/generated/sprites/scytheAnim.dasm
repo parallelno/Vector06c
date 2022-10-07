@@ -2,22 +2,32 @@
 scythe_anims:
 			.word scythe_run_rn, scythe_run_ln, scythe_run_un, scythe_run_dn, scythe_run_cl, scythe_run_cc, scythe_run_rf, scythe_run_lf, scythe_run_uf, scythe_run_df, 
 scythe_run_rn:
+			.byte -1, $ff ; offset to the first frame
 			.word scythe_run_rn_0, scythe_run_rn_1, scythe_run_rn_2, scythe_run_rn_3, 
 scythe_run_ln:
+			.byte -1, $ff ; offset to the first frame
 			.word scythe_run_ln_0, scythe_run_ln_1, scythe_run_ln_2, scythe_run_ln_3, 
 scythe_run_un:
+			.byte -1, $ff ; offset to the first frame
 			.word scythe_run_un_0, scythe_run_un_1, scythe_run_un_2, scythe_run_un_3, 
 scythe_run_dn:
+			.byte -1, $ff ; offset to the first frame
 			.word scythe_run_dn_0, scythe_run_dn_1, scythe_run_dn_2, scythe_run_dn_3, 
 scythe_run_cl:
+			.byte -1, $ff ; offset to the first frame
 			.word scythe_run_un_0, scythe_run_rn_0, scythe_run_dn_2, scythe_run_lf_3, 
 scythe_run_cc:
+			.byte -1, $ff ; offset to the first frame
 			.word scythe_run_uf_0, scythe_run_ln_0, scythe_run_df_3, scythe_run_rf_3, 
 scythe_run_rf:
+			.byte -1, $ff ; offset to the first frame
 			.word scythe_run_rf_0, scythe_run_rf_1, scythe_run_rf_2, scythe_run_rf_3, 
 scythe_run_lf:
+			.byte -1, $ff ; offset to the first frame
 			.word scythe_run_lf_0, scythe_run_lf_1, scythe_run_lf_2, scythe_run_lf_3, 
 scythe_run_uf:
+			.byte -1, $ff ; offset to the first frame
 			.word scythe_run_uf_0, scythe_run_uf_1, scythe_run_uf_2, scythe_run_uf_3, 
 scythe_run_df:
+			.byte -1, $ff ; offset to the first frame
 			.word scythe_run_df_0, scythe_run_df_1, scythe_run_df_2, scythe_run_df_3, 

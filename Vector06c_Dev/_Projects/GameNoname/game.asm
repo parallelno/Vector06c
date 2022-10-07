@@ -27,6 +27,9 @@ GameInit:
 			jmp	 @gameLoop
 
 GameUpdate:
+			lxi h, gameUpdateCounter
+			inr m
+
 			; check if an interuption happened
 			lda interruptionCounter
 			ora a

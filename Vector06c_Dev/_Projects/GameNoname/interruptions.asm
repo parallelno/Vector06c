@@ -23,18 +23,17 @@
 			inr m
 
 			; fps update
-@secCounter:
-			mvi a, INTS_PER_SEC
-			dcr a
+			lxi h, intsPerSecCounter
+			dcr m
 			jnz @skipSavingFps
 			lxi h, gameDrawsCounter
 			mov a, m
+			mvi m, 0			
 			sta currentFps
-			mvi m, 0
 			call DrawFps
-			mvi a, INTS_PER_SEC
+			lxi h, intsPerSecCounter
+			mvi m, INTS_PER_SEC
 @skipSavingFps:
-			sta @secCounter+1
 			
 .endmacro
 

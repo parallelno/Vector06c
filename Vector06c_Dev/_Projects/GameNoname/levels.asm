@@ -281,7 +281,7 @@ LevelsMonstersSpawn:
 			lxi h, monsterPosX+1
 			dad b
 			push b
-			call GetSpriteScrAddr
+			call GetSpriteScrAddr4
 			mov a, c
 			pop b
 			lxi h, monsterEraseScrAddr

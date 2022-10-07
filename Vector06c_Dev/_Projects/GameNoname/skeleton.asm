@@ -12,9 +12,9 @@ SkeletonInit:
 			lxi h, monsterAnimAddr
 			dad b
 
-			mvi m, < skeleton_run_r0
+			mvi m, < skeleton_run_r
 			inx h
-			mvi m, > skeleton_run_r0
+			mvi m, > skeleton_run_r
 
 			lxi h, monsterSpeedX
 			dad b
@@ -24,7 +24,7 @@ SkeletonInit:
 
 ; in:
 ; bc - monster idx*2
-SkeletonUpdate:            
+SkeletonUpdate:
             ; convert monster id into the offset in the monstersRoomData array
 			; and store it into bc
 			lxi h, monsterRoomDataAddrOffsets
@@ -74,12 +74,12 @@ SkeletonUpdate:
 			; check the monster pos against the room collision tiles
 			call CheckRoomTilesCollision
 			; check if any tiles collide
-			
+
 			cpi $ff
 			jz @collides
 			ora a ; if all the tiles data == 0, means no collision.
 			jnz @collides
-@updatePos:			
+@updatePos:
             lhld charTempX
 			xchg
 @posXYaddr:
@@ -102,7 +102,7 @@ SkeletonUpdate:
             lxi b, TEMP_ADDR
 
             call Random
-			
+
 			lxi h, monsterSpeedX
 			dad b
 
@@ -159,21 +159,21 @@ SkeletonUpdate:
 @setAnimRunL:
 			lxi h, monsterAnimAddr
 			dad b
-			mvi m, < skeleton_run_l0
+			mvi m, < skeleton_run_l
 			inx h
-			mvi m, > skeleton_run_l0
+			mvi m, > skeleton_run_l
 			ret
 @setAnimRunR:
 			lxi h, monsterAnimAddr
 			dad b
-			mvi m, < skeleton_run_r0
+			mvi m, < skeleton_run_r
 			inx h
-			mvi m, > skeleton_run_r0
+			mvi m, > skeleton_run_r
 
             ret
 @handleTileData:
             ret
-			.closelabels			
+			.closelabels
 
 ; draw sprite and save erase scr addr
 ; in:
@@ -187,7 +187,7 @@ SkeletonDraw:
 
 			lxi h, monsterPosX+1
 			dad b
-			call GetSpriteScrAddr
+			call GetSpriteScrAddr4
 			mov a, c
 
 			; get the anim addr
@@ -199,7 +199,8 @@ SkeletonDraw:
 			mov h, m
 			mov l, b
 			mov c, a
-			call GetSpriteAddrRunV
+			call GetSpriteAddr
+
 			CALL_RAM_DISK_FUNC(__DrawSpriteVM, RAM_DISK0_B0_STACK_B2_8AF_RAM)
 			pop h
 			inx h

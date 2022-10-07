@@ -3,9 +3,12 @@
 HERO_RUN_SPEED		= $0100 ; it's a dword, low byte is a subpixel speed
 HERO_RUN_SPEED_D	= $00b5 ; for diagonal moves
 
+HERO_ANIM_TIMER_DELTA	= 90
 ; this's a struct. do not change the layout
 heroData:
-heroDirX:			.byte 1 ; 1-right, 0-left
+heroAnimTimer:		.byte TEMP_BYTE ; used to trigger change a anim frame
+heroAnimAddr:		.word TEMP_WORD
+heroDirX:			.byte 1 		; 1-right, 0-left
 heroEraseScrAddr:	.word TEMP_ADDR
 heroEraseScrAddrOld	.word TEMP_ADDR
 heroEraseWH:		.word TEMP_WORD
@@ -15,14 +18,13 @@ heroY:				.word TEMP_WORD
 heroSpeedX:			.word TEMP_WORD
 heroSpeedY:			.word TEMP_WORD
 
-; hero uses these funcs to handle the tile data. more info is in levelGlobalData.dasm->roomTilesData 
-heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, 0, 0 
+; hero uses these funcs to handle the tile data. more info is in levelGlobalData.dasm->roomTilesData
+heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, 0, 0
 
 HeroInit:
 			call HeroStop
-			; heroData access
 			lxi h, heroX+1
-			call GetSpriteScrAddr
+			call GetSpriteScrAddr8
 			xchg
 			shld heroEraseScrAddr
 			shld heroEraseScrAddrOld
@@ -33,9 +35,8 @@ HeroInit:
 			ret
 			.closelabels
 HeroStop:
-			; heroData access
 			lxi h, 0
-			shld heroSpeedX	
+			shld heroSpeedX
 			shld heroSpeedY
 			shld keyCode
 			ret
@@ -47,7 +48,6 @@ HeroStop:
 ; use:
 ; a
 HeroSetPos:
-			; heroData access
 			mov a, b
 			sta heroX+1
 			mov a, c
@@ -59,42 +59,51 @@ HeroSetPos:
 			lxi h, keyCode+1
 			cmp m
 			jz HeroMove
-.endmacro		
-			
-HeroUpdate:
-			lda keyCode
+.endmacro
 
+HeroUpdate:
+			; anim update
+			lxi h, heroAnimTimer
+			mvi a, HERO_ANIM_TIMER_DELTA
+			add m
+			mov m, a
+			jnc @skipAnimUpdate
+			lhld heroAnimAddr
+			mov e, m
+			inx h
+			mov d, m
+			dad d
+			shld heroAnimAddr
+@skipAnimUpdate:
+
+			lda keyCode
 			; if no key pressed, play idle
 			cpi $ff
 			jnz @setAnimRunR
-			
+
 			; if it's the same key as the prev frame, return
 			CHECK_HERO_PREV_KEY()
 
-			; heroData access
 			lxi h, 0
 			shld heroSpeedX
 			shld heroSpeedY
-
-			lxi h, GetSpriteAddr
-			shld HeroDrawSpriteAddrFunc+1
 
 			lda heroDirX
 			ora a
 			jz @setAnimIdleL
 
 			lxi h, hero_idle_r
-			shld HeroDrawAnimAddr+1
+			shld heroAnimAddr
 			jmp HeroMove
 @setAnimIdleL
 			lxi h, hero_idle_l
-			shld HeroDrawAnimAddr+1
+			shld heroAnimAddr
 			jmp HeroMove
 
 @setAnimRunR:
 			cpi KEY_RIGHT
 			jnz @setAnimRunRU
-			
+
 			CHECK_HERO_PREV_KEY()
 
 			lxi h, HERO_RUN_SPEED
@@ -104,16 +113,14 @@ HeroUpdate:
 
 			mvi a, 1
 			sta heroDirX
-			lxi h, hero_run_r0
-			shld HeroDrawAnimAddr+1
-			lxi h, GetSpriteAddr
-			shld HeroDrawSpriteAddrFunc+1
+			lxi h, hero_run_r
+			shld heroAnimAddr
 			jmp HeroMove
 
 @setAnimRunRU:
 			cpi KEY_RIGHT_UP
 			jnz @setAnimRunRD
-			
+
 			CHECK_HERO_PREV_KEY()
 
 			lxi h, HERO_RUN_SPEED_D
@@ -122,16 +129,14 @@ HeroUpdate:
 
 			mvi a, 1
 			sta heroDirX
-			lxi h, hero_run_r0
-			shld HeroDrawAnimAddr+1
-			lxi h, GetSpriteAddr
-			shld HeroDrawSpriteAddrFunc+1
+			lxi h, hero_run_r
+			shld heroAnimAddr
 			jmp HeroMove
 
 @setAnimRunRD:
 			cpi KEY_RIGHT_DOWN
 			jnz @setAnimRunL
-			
+
 			CHECK_HERO_PREV_KEY()
 
 			lxi h, HERO_RUN_SPEED_D
@@ -141,11 +146,9 @@ HeroUpdate:
 
 			mvi a, 1
 			sta heroDirX
-			lxi h, hero_run_r0
-			shld HeroDrawAnimAddr+1
-			lxi h, GetSpriteAddr
-			shld HeroDrawSpriteAddrFunc+1
-			jmp HeroMove			
+			lxi h, hero_run_r
+			shld heroAnimAddr
+			jmp HeroMove
 
 @setAnimRunL:
 			cpi KEY_LEFT
@@ -160,10 +163,8 @@ HeroUpdate:
 
 			xra a
 			sta heroDirX
-			lxi h, hero_run_l0
-			shld HeroDrawAnimAddr+1
-			lxi h, GetSpriteAddr
-			shld HeroDrawSpriteAddrFunc+1	
+			lxi h, hero_run_l
+			shld heroAnimAddr
 			jmp HeroMove
 
 @setAnimRunLU:
@@ -179,10 +180,8 @@ HeroUpdate:
 
 			xra a
 			sta heroDirX
-			lxi h, hero_run_l0
-			shld HeroDrawAnimAddr+1
-			lxi h, GetSpriteAddr
-			shld HeroDrawSpriteAddrFunc+1	
+			lxi h, hero_run_l
+			shld heroAnimAddr
 			jmp HeroMove
 
 @setAnimRunLD:
@@ -197,10 +196,8 @@ HeroUpdate:
 
 			xra a
 			sta heroDirX
-			lxi h, hero_run_l0
-			shld HeroDrawAnimAddr+1
-			lxi h, GetSpriteAddr
-			shld HeroDrawSpriteAddrFunc+1	
+			lxi h, hero_run_l
+			shld heroAnimAddr
 			jmp HeroMove
 
 @setAnimRunU:
@@ -214,19 +211,16 @@ HeroUpdate:
 			lxi h, HERO_RUN_SPEED
 			shld heroSpeedY
 
-			lxi h, GetSpriteAddrRunV
-			shld HeroDrawSpriteAddrFunc+1
-
 			lda heroDirX
 			ora a
 			jz @setAnimRunUfaceL
 
-			lxi h, hero_run_r0
-			shld HeroDrawAnimAddr+1
+			lxi h, hero_run_r
+			shld heroAnimAddr
 			jmp HeroMove
 @setAnimRunUfaceL:
-			lxi h, hero_run_l0
-			shld HeroDrawAnimAddr+1
+			lxi h, hero_run_l
+			shld heroAnimAddr
 			jmp HeroMove
 @setAnimRunD:
 			cpi KEY_DOWN
@@ -237,26 +231,22 @@ HeroUpdate:
 			lxi h, 0
 			shld heroSpeedX
 			lxi h, $ffff - HERO_RUN_SPEED + 1
-			shld heroSpeedY		
+			shld heroSpeedY
 
-			lxi h, GetSpriteAddrRunV
-			shld HeroDrawSpriteAddrFunc+1
-			
 			lda heroDirX
 			ora a
 			jz @setAnimRunDfaceL
-			lxi h, hero_run_r0
-			shld HeroDrawAnimAddr+1		
+			lxi h, hero_run_r
+			shld heroAnimAddr
 			jmp HeroMove
 @setAnimRunDfaceL:
-			lxi h, hero_run_l0
-			shld HeroDrawAnimAddr+1
+			lxi h, hero_run_l
+			shld heroAnimAddr
 			;jmp HeroMove
 
 HeroMove:
-			; heroData access
-			; apply the hero speed (call addr 4685)
-			lhld heroX ; 2c09, data addr 29fe
+			; apply the hero speed
+			lhld heroX
 			xchg
 			lhld heroSpeedX
 			dad d
@@ -271,20 +261,20 @@ HeroMove:
 			; check hero pos against the room collision tiles
 			call CheckRoomTilesCollision
 			; check if any tiles collide
-			
+
 			cpi $ff
 			jz @tempCheck;rz ; return if any of the tiles were collision
 			ora a ; if all the tiles data == 0, means no collision.
 			jnz @collides
-@updatePos:			
+@updatePos:
 			lhld charTempX
 			shld heroX
 			lhld charTempY
 			shld heroY
 			ret
-; TODO: handle this case
+; TODO: handle the case where the hero touches the wall tiles.
 ; for example, slide a hero along the walls if he moves along the diagonal directions
-@tempCheck: 
+@tempCheck:
 lhld charTempX
 ret
 
@@ -307,7 +297,6 @@ ret
 ; a - roomId
 ; TODO: fix the issue that hero can't teleport if he touches a wall nearby (top exit)
 HeroMoveTeleport:
-			; heroData access
 			pop h
 			; update a room id to teleport there
 			sta roomIdx
@@ -339,7 +328,7 @@ HeroMoveTeleport:
 			cma
 			sui 30
 			sta heroY+1
-			jmp @donotMoveHero	
+			jmp @donotMoveHero
 
 @donotMoveHero:
 			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
@@ -350,10 +339,9 @@ HeroMoveTeleport:
 			pop b
 			ret
 			.closelabels
-			
+
 HeroErase:
-			; heroData access
-			; TODO: update initializations of heroEraseScrAddr and heroEraseWH 
+			; TODO: update initializations of heroEraseScrAddr and heroEraseWH
 			; when the level starts, and hero teleports
 			; TODO: erease only that is outside of the updated hero pos
 			lhld heroEraseScrAddr
@@ -364,17 +352,13 @@ HeroErase:
 			.closelabels
 
 HeroDraw:
-			; heroData access
 			lxi h, heroX+1
-			call GetSpriteScrAddr
+			call GetSpriteScrAddr8
 
-HeroDrawAnimAddr:
-			lxi h, hero_idle_r
-HeroDrawSpriteAddrFunc:
+			lhld heroAnimAddr
 			call GetSpriteAddr
-			; TODO: consiider using an unrolled loop in DrawSpriteVM for sprites 15 pxs tall
-			; TODO: draw hero first, and do not have mask in its gfx data
-			;call DrawSpriteVM
+
+			; TODO: consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
 			CALL_RAM_DISK_FUNC(__DrawSpriteV, RAM_DISK0_B0_STACK_B2_8AF_RAM)
 
 			; store an old scr addr, width, and height
@@ -397,9 +381,9 @@ HeroCopyToScr:
 			mov h, d
 @keepCurrentX:
 			mov a, l
-			cmp e 
-			jc @keepCurrentY 
-			mov l, e 
+			cmp e
+			jc @keepCurrentY
+			mov l, e
 @keepCurrentY:
 			; hl - a scr addr to copy
 			push h
@@ -420,12 +404,12 @@ HeroCopyToScr:
 			pop d
 			; get the max(h, d), max(e,l)
 			mov a, h
-			cmp d 
+			cmp d
 			jnc @keepCurrentTRX
 			mov h, d
 @keepCurrentTRX:
 			mov a, l
-			cmp e 
+			cmp e
 			jnc @keepCurrentTRY
 			mov l, e
 @keepCurrentTRY:
@@ -434,9 +418,9 @@ HeroCopyToScr:
 			pop d
 			; calc width and height
 			mov a, h
-			sub d 
+			sub d
 			mov h, a
-			mov a, l 
+			mov a, l
 			sub e
 			mov l, a
 			; hl - width, height

@@ -1,23 +1,27 @@
 ; sources\sprites\vampire.json
 vampire_anims:
-			.word vampire_idle_r, vampire_idle_l, vampire_run_r0, vampire_run_r1, vampire_run_r2, vampire_run_r3, vampire_run_l0, vampire_run_l1, vampire_run_l2, vampire_run_l3, 
+			.word vampire_idle_r, vampire_idle_l, vampire_run_r, vampire_run_l, 
 vampire_idle_r:
+			.byte -1, $ff ; offset to the first frame
 			.word vampire_idle_r_0, vampire_idle_r_1, vampire_idle_r_2, vampire_idle_r_3, 
 vampire_idle_l:
+			.byte -1, $ff ; offset to the first frame
 			.word vampire_idle_l_0, vampire_idle_l_1, vampire_idle_l_2, vampire_idle_l_3, 
-vampire_run_r0:
+vampire_run_r:
+			.byte 9, 0 ; offset to the next frame
 			.word vampire_run_r0_0, vampire_run_r0_1, vampire_run_r0_2, vampire_run_r0_3, 
-vampire_run_r1:
+			.byte 9, 0 ; offset to the next frame
 			.word vampire_run_r1_0, vampire_run_r1_1, vampire_run_r1_2, vampire_run_r1_3, 
-vampire_run_r2:
+			.byte 9, 0 ; offset to the next frame
 			.word vampire_run_r2_0, vampire_run_r2_1, vampire_run_r2_2, vampire_run_r2_3, 
-vampire_run_r3:
+			.byte -31, $ff ; offset to the first frame
 			.word vampire_run_r3_0, vampire_run_r3_1, vampire_run_r3_2, vampire_run_r3_3, 
-vampire_run_l0:
+vampire_run_l:
+			.byte 9, 0 ; offset to the next frame
 			.word vampire_run_l0_0, vampire_run_l0_1, vampire_run_l0_2, vampire_run_l0_3, 
-vampire_run_l1:
+			.byte 9, 0 ; offset to the next frame
 			.word vampire_run_l1_0, vampire_run_l1_1, vampire_run_l1_2, vampire_run_l1_3, 
-vampire_run_l2:
+			.byte 9, 0 ; offset to the next frame
 			.word vampire_run_l2_0, vampire_run_l2_1, vampire_run_l2_2, vampire_run_l2_3, 
-vampire_run_l3:
+			.byte -31, $ff ; offset to the first frame
 			.word vampire_run_l3_0, vampire_run_l3_1, vampire_run_l3_2, vampire_run_l3_3, 

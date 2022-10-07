@@ -19,16 +19,24 @@
 		{"x": 240,	"y" : 0}
 	], 
 	"anims" : {
-		"idle_r"	: ["idle_r_0", "idle_r_1", "idle_r_2", "idle_r_3"],
-		"idle_l"	: ["idle_l_0", "idle_l_1", "idle_l_2", "idle_l_3"],
-		"run_r0"	: ["run_r0_0", "run_r0_1", "run_r0_2", "run_r0_3"],
-		"run_r1"	: ["run_r1_0", "run_r1_1", "run_r1_2", "run_r1_3"],
-		"run_r2"	: ["run_r2_0", "run_r2_1", "run_r2_2", "run_r2_3"],
-		"run_r3"	: ["run_r3_0", "run_r3_1", "run_r3_2", "run_r3_3"],
-		"run_l0"	: ["run_l0_0", "run_l0_1", "run_l0_2", "run_l0_3"],
-		"run_l1"	: ["run_l1_0", "run_l1_1", "run_l1_2", "run_l1_3"],
-		"run_l2"	: ["run_l2_0", "run_l2_1", "run_l2_2", "run_l2_3"],
-		"run_l3"	: ["run_l3_0", "run_l3_1", "run_l3_2", "run_l3_3"]
+		"idle_r"	: [
+			["idle_r_0", "idle_r_1", "idle_r_2", "idle_r_3"]
+		],
+		"idle_l"	: [
+			["idle_l_0", "idle_l_1", "idle_l_2", "idle_l_3"]
+		],
+		"run_r"	: [
+			["run_r0_0", "run_r0_1", "run_r0_2", "run_r0_3"],
+			["run_r1_0", "run_r1_1", "run_r1_2", "run_r1_3"],
+			["run_r2_0", "run_r2_1", "run_r2_2", "run_r2_3"],
+			["run_r3_0", "run_r3_1", "run_r3_2", "run_r3_3"]
+		],
+		"run_l"	: [
+			["run_l0_0", "run_l0_1", "run_l0_2", "run_l0_3"],
+			["run_l1_0", "run_l1_1", "run_l1_2", "run_l1_3"],
+			["run_l2_0", "run_l2_1", "run_l2_2", "run_l2_3"],
+			["run_l3_0", "run_l3_1", "run_l3_2", "run_l3_3"]
+		]
 
 	},
 	"sprites" : [

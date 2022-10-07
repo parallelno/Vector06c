@@ -129,11 +129,31 @@ def AnimsToAsm(charJ, charJPath):
 
 	# make a list of sprites for an every anim
 	for animName in charJ["anims"]:
+		
 		asm += labelPrefix + "_" + animName + ":\n"
-		asm += "			.word "
-		for spriteName in charJ["anims"][animName]:
-			asm += labelPrefix + "_" + spriteName + ", "
-		asm += "\n"
+		
+		for i, frame in enumerate(charJ["anims"][animName]):
+			preshiftedSpriteCount = len(frame)
+		
+			if i < len(charJ["anims"][animName])-1:
+				nextFrameOffset = preshiftedSpriteCount * 2 # every frame consists of preshiftedSprites pointers
+				nextFrameOffset += 1 # increase the offset to save one instruction in the game code
+				asm += "			.byte " + str(nextFrameOffset) + ", 0 ; offset to the next frame\n"
+			else:
+				offsetAddr = 1
+				nextFrameOffsetLow = -(len(charJ["anims"][animName]) -1) * (preshiftedSpriteCount + offsetAddr) * 2 
+				nextFrameOffsetLow -= 1 # decrease the offset to save one instruction in the game code
+				if nextFrameOffsetLow == 0:
+					nextFrameOffsetHiStr = "0"
+				else:
+					nextFrameOffsetHiStr = "$ff"
+				asm += "			.byte " + str(nextFrameOffsetLow) + ", " + nextFrameOffsetHiStr + " ; offset to the first frame\n"
+
+			asm += "			.word "
+			for spriteName in frame:	
+				asm += labelPrefix + "_" + spriteName + ", " 
+			asm += "\n"
+		
 	return asm
 
 def SpritesToAsm(charJPath, charJ, image, addSize, addMask):

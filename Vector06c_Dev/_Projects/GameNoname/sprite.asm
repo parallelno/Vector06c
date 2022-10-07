@@ -1,55 +1,33 @@
+; get a sprite data addr
 ; input:
-; hl - animation addr, for example hero_idle_r
-; c - idx in the animation
+; hl - animation addr ptr
+; c - preshifted sprite idx*2 offset based on posX then +2
 ; return:
 ; bc - sprite addr
-; a - width marker. 0 - means a sprite width is 2 bytes , != 0 means 3 bytes
 GetSpriteAddr:
-			mov a, c
 			mvi b, 0
 			dad b
 			mov c, m
 			inx h
 			mov b, m
 			ret
-
-; this's a special version of GetSpriteAddr for a vertical & horizontal movement.
-; input:
-; hl - animation addr, for example hero_idle_r
-; c - idx in the animation
-; e - pos Y
-; return:
-; bc - sprire addr
-; a - width marker. 0 - means a sprite width is 2 bytes , != 0 means 3 bytes
-GetSpriteAddrRunV:
-			mov a, e
-			ani	%0000011
-			rlc_(3)
-			add c
-			mov c, a
-			mvi b, 0
-			dad b
-			mov c, m
-			inx h
-			mov b, m
-			ani %110
-			ret
+			.closelabels
 
 ; input:
 ; hl - addr to posX+1 (high byte in 16-bit pos)
 ; return:
 ; de - sprite screen addr
-; c - idx in the animaion
+; c - preshifted sprite idx*2 offset based on posX then +2
 ; hl+2
 ; use: a
-GetSpriteScrAddr:
-			; convert XY to screen addr + frame idx
-			mov		a, m
-			; extract the anim frame idx
-			ani		%0000110
-			mov 	c, a
+GetSpriteScrAddr8:
 			; extract the hero X screen addr
-			mov		a, m
+			mov	a, m
+			ani PRESHIFTED_SPRITES_8 - 1
+			rlc
+			adi 2 ; because there are two bytes of nextFrameOffset in front of sprite ptrs
+			mov	c, a
+			mov	a, m
 			rrc_(3)
 			ani		%00011111
 			adi		SPRITE_X_SCR_ADDR
@@ -60,7 +38,23 @@ GetSpriteScrAddr:
 			mov	d, a
 			ret
 			.closelabels
-			
+GetSpriteScrAddr4:
+			; extract the hero X screen addr
+			mov	a, m
+			ani (PRESHIFTED_SPRITES_4 - 1) * 2
+			adi 2 ; because there are two bytes of nextFrameOffset in front of sprite ptrs
+			mov	c, a
+			mov	a, m
+			rrc_(3)
+			ani		%00011111
+			adi		SPRITE_X_SCR_ADDR
+			inx h
+			inx h
+			; copying posY
+			mov e, m
+			mov	d, a
+			ret
+			.closelabels			
 
 ; copy a sprite from the back buff to the screen
 ; in:
@@ -165,7 +159,7 @@ nextColumn:
 			mov m, b
 			inr l
 			sphl
-			
+
 			heightOdd = (height / 2)*2 != height
 	.if heightOdd
 		.loop height / 2 - 1
