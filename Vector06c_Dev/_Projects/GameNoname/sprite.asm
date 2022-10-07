@@ -54,7 +54,7 @@ GetSpriteScrAddr4:
 			mov e, m
 			mov	d, a
 			ret
-			.closelabels			
+			.closelabels
 
 ; copy a sprite from the back buff to the screen
 ; in:

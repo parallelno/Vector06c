@@ -1,5 +1,12 @@
-keyCode:
+; DN  RT  UP  LT  ЗАБ ВК  ПС  TAB
+keyCode0:
 			.word $0201 ; low byte - a key code, hi byte - a previous frame key code
+; SPC  ^   ]   \   [   Z   Y   X
+keyCode1:
+			.word $0201 ; low byte - a key code, hi byte - a previous frame key code
+; any of the set below
+; DN  RT  UP  LT  ЗАБ ВК  ПС  TAB
+; SPC  ^   ]   \   [   Z   Y   X
 anyKeyPressed:
 			.byte TEMP_BYTE
 

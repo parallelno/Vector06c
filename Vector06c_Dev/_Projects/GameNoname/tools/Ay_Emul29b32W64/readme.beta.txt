@@ -1446,7 +1446,7 @@ v2.9 beta 30:
 10 March 2022
 - Bug fix: STF compiler error due wrong info in KSA's stprhelp.txt about unused
   digits 3-7 in orn/env position. Really them used in editor and in native
-  compiler to set ornament 0 (see YIR.F aka BACA&IMP:YOLKA IN RAVE, they set 3
+  compiler to set ornament 0 (see YIR.F aka BACA&IMP:YOLKA in RAVE, they set 3
   everywhere).
 
 v2.9 beta 31:

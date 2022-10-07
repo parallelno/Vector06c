@@ -33,6 +33,30 @@ SkeletonUpdate:
 			mov h, b
 			mov l, c
 			shld @tileDataOffset+1
+
+			; anim update
+			lda gameUpdateCounter	; update anim every 4th monster update
+			ani %11
+			jnz @skipAnimUpdate
+			push b
+			lxi h, monsterAnimAddr
+			dad b
+			mov e, m
+			inx h
+			mov d, m
+			xchg
+			mov c, m
+			inx h
+			mov b, m
+			dad b
+			xchg
+			mov m, d
+			dcx h
+			mov m, e
+			pop b
+@skipAnimUpdate:			
+
+			; update movement
 			lxi h, monsterPosX
 			dad b
 			shld @posXYaddr+1
@@ -154,7 +178,7 @@ SkeletonUpdate:
 			mov m, a
 			mvi a, > SKELETON_RUN_SPEED
 @setAnim:
-			ora a
+			ora a ; a = speedX
 			jz @setAnimRunR
 @setAnimRunL:
 			lxi h, monsterAnimAddr
@@ -169,10 +193,9 @@ SkeletonUpdate:
 			mvi m, < skeleton_run_r
 			inx h
 			mvi m, > skeleton_run_r
-
             ret
 @handleTileData:
-            ret
+            ret			
 			.closelabels
 
 ; draw sprite and save erase scr addr
@@ -191,7 +214,7 @@ SkeletonDraw:
 			mov a, c
 
 			; get the anim addr
-			lxi b, $ffff - 12 ;monsterAnimAddr
+			lxi b, $ffff - 12 ;move prt to monsterAnimAddr
 			dad b
 			mov b, m
 			inx h

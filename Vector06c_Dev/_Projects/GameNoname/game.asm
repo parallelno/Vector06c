@@ -44,8 +44,11 @@ GameUpdate:
 			DEBUG_BORDER_LINE(3)
 			call LevelUpdate
 
-			lda keyCode
-			sta keyCode+1
+			; support a key-pressing repeating protection
+			lda keyCode0
+			sta keyCode0+1
+			lda keyCode1
+			sta keyCode1+1		
 
 			lxi h, interruptionCounter
 			dcr m

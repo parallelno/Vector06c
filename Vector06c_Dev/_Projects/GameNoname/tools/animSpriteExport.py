@@ -141,7 +141,7 @@ def AnimsToAsm(charJ, charJPath):
 				asm += "			.byte " + str(nextFrameOffset) + ", 0 ; offset to the next frame\n"
 			else:
 				offsetAddr = 1
-				nextFrameOffsetLow = -(len(charJ["anims"][animName]) -1) * (preshiftedSpriteCount + offsetAddr) * 2 
+				nextFrameOffsetLow = 255 - (len(charJ["anims"][animName]) -1) * (preshiftedSpriteCount + offsetAddr) * 2 + 1
 				nextFrameOffsetLow -= 1 # decrease the offset to save one instruction in the game code
 				if nextFrameOffsetLow == 0:
 					nextFrameOffsetHiStr = "0"

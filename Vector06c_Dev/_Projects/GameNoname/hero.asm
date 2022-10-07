@@ -38,7 +38,7 @@ HeroStop:
 			lxi h, 0
 			shld heroSpeedX
 			shld heroSpeedY
-			shld keyCode
+			shld keyCode0
 			ret
 			.closelabels
 
@@ -56,7 +56,7 @@ HeroSetPos:
 			.closelabels
 
 .macro CHECK_HERO_PREV_KEY()
-			lxi h, keyCode+1
+			lxi h, keyCode0+1
 			cmp m
 			jz HeroMove
 .endmacro
@@ -76,7 +76,7 @@ HeroUpdate:
 			shld heroAnimAddr
 @skipAnimUpdate:
 
-			lda keyCode
+			lda keyCode0
 			; if no key pressed, play idle
 			cpi $ff
 			jnz @setAnimRunR
