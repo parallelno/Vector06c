@@ -20,10 +20,16 @@
 	],
 	"anims" : {
 		"idle_r"	: [
-			["idle_r_0", "idle_r_1", "idle_r_2", "idle_r_3", "idle_r_4", "idle_r_5", "idle_r_6", "idle_r_7"]
+			["idle_r_0", "idle_r_1", "idle_r_2", "idle_r_3", "idle_r_4", "idle_r_5", "idle_r_6", "idle_r_7"],
+			["idle_r_0", "idle_r_1", "idle_r_2", "idle_r_3", "idle_r_4", "idle_r_5", "idle_r_6", "idle_r_7"],
+			["idle_r_0", "idle_r_1", "idle_r_2", "idle_r_3", "idle_r_4", "idle_r_5", "idle_r_6", "idle_r_7"],
+			["run_l0_0", "run_l0_1", "run_l0_2", "run_l0_3", "run_l0_4", "run_l0_5", "run_l0_6", "run_l0_7"]
 		],
 		"idle_l"	: [
-			["idle_l_0", "idle_l_1", "idle_l_2", "idle_l_3", "idle_l_4", "idle_l_5", "idle_l_6", "idle_l_7"]
+			["idle_l_0", "idle_l_1", "idle_l_2", "idle_l_3", "idle_l_4", "idle_l_5", "idle_l_6", "idle_l_7"],
+			["idle_l_0", "idle_l_1", "idle_l_2", "idle_l_3", "idle_l_4", "idle_l_5", "idle_l_6", "idle_l_7"],
+			["idle_l_0", "idle_l_1", "idle_l_2", "idle_l_3", "idle_l_4", "idle_l_5", "idle_l_6", "idle_l_7"],
+			["run_r0_0", "run_r0_1", "run_r0_2", "run_r0_3", "run_r0_4", "run_r0_5", "run_r0_6", "run_r0_7"]
 		],
 		"run_r"		: [
 			["run_r0_0", "run_r0_1", "run_r0_2", "run_r0_3", "run_r0_4", "run_r0_5", "run_r0_6", "run_r0_7"],
@@ -37,7 +43,6 @@
 			["run_l2_0", "run_l2_1", "run_l2_2", "run_l2_3", "run_l2_4", "run_l2_5", "run_l2_6", "run_l2_7"],
 			["run_l3_0", "run_l3_1", "run_l3_2", "run_l3_3", "run_l3_4", "run_l3_5", "run_l3_6", "run_l3_7"]
 		]
-
 	},
 	"sprites" : [
 		{

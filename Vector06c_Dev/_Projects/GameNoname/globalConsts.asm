@@ -33,6 +33,7 @@ TEMP_BYTE				= $00
 TEMP_WORD				= $0000
 
 ; key codes
+KEY_NO                  = %11111111
 KEY_LEFT				= %11101111
 KEY_LEFT_UP				= %11001111
 KEY_LEFT_DOWN			= %01101111

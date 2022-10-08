@@ -2,19 +2,14 @@
 			; keyboard check
 			mvi a, PORT0_OUT_IN
 			out 0
-			mvi a, %01111110
-			out 3
-			in 2
-			inr a
-			sta anyKeyPressed
 			mvi a, %11111110
 			out 3
 			in 2
-			sta keyCode0
+			sta keyCode
 			mvi a, %01111111
 			out 3
 			in 2
-			sta keyCode1		
+			sta keyCode+1		
 			; a border color, scrolling set up
 			mvi a, PORT0_OUT_OUT
 			out 0

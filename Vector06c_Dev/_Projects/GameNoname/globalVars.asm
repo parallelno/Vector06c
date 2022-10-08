@@ -1,14 +1,11 @@
-; DN  RT  UP  LT  ЗАБ ВК  ПС  TAB
-keyCode0:
-			.word $0201 ; low byte - a key code, hi byte - a previous frame key code
-; SPC  ^   ]   \   [   Z   Y   X
-keyCode1:
-			.word $0201 ; low byte - a key code, hi byte - a previous frame key code
-; any of the set below
-; DN  RT  UP  LT  ЗАБ ВК  ПС  TAB
-; SPC  ^   ]   \   [   Z   Y   X
-anyKeyPressed:
-			.byte TEMP_BYTE
+
+; low byte	- Down, Right, Up, Left, ЗБ (DEL), ВК (Enter), ПС (Alt), TAB (Tab)
+; hi byte 	- SPC, ^, ], \, [, Z, Y, X
+keyCode:
+			.word KEY_NO << 8 | 0
+; key code of a previous update
+keyCodeOld:
+			.word KEY_NO << 8 | 0
 
 borderColorIdx:
 			.byte TEMP_BYTE

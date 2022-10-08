@@ -3,7 +3,8 @@
 HERO_RUN_SPEED		= $0100 ; it's a dword, low byte is a subpixel speed
 HERO_RUN_SPEED_D	= $00b5 ; for diagonal moves
 
-HERO_ANIM_TIMER_DELTA	= 90
+HERO_MOVE_ANIM_TIMER_DELTA	= 90
+HERO_IDLE_ANIM_TIMER_DELTA	= 4
 ; this's a struct. do not change the layout
 heroData:
 heroAnimTimer:		.byte TEMP_BYTE ; used to trigger change a anim frame
@@ -38,7 +39,8 @@ HeroStop:
 			lxi h, 0
 			shld heroSpeedX
 			shld heroSpeedY
-			shld keyCode0
+            lxi h, KEY_NO << 8 | KEY_NO
+			shld keyCode
 			ret
 			.closelabels
 
@@ -55,16 +57,10 @@ HeroSetPos:
 			ret
 			.closelabels
 
-.macro CHECK_HERO_PREV_KEY()
-			lxi h, keyCode0+1
-			cmp m
-			jz HeroMove
-.endmacro
-
-HeroUpdate:
-			; anim update
+.macro HERO_UPDATE_ANIM(animTmerDelta)
+			; anim idle update
 			lxi h, heroAnimTimer
-			mvi a, HERO_ANIM_TIMER_DELTA
+			mvi a, animTmerDelta
 			add m
 			mov m, a
 			jnc @skipAnimUpdate
@@ -75,36 +71,67 @@ HeroUpdate:
 			dad d
 			shld heroAnimAddr
 @skipAnimUpdate:
+.endmacro
 
-			lda keyCode0
-			; if no key pressed, play idle
-			cpi $ff
-			jnz @setAnimRunR
+HeroUpdate:
+			; check if nothing pressed
+			lhld keyCode
+			inx h
+			mov a, h
+			ora l
+			jnz @keyStatusChanged
 
-			; if it's the same key as the prev frame, return
-			CHECK_HERO_PREV_KEY()
+			; nothing pressed
+			; check if nothing was pressed the last update
+			lhld keyCodeOld
+			inx h
+			mov a, h
+			ora l
+			jz @updateIdleAnim
 
+			; idle is started
+			; reset idle anim timer
+			xra a
+			sta heroAnimTimer
+			
+			; speed = 0
 			lxi h, 0
 			shld heroSpeedX
 			shld heroSpeedY
-
+			; set direction
 			lda heroDirX
 			ora a
 			jz @setAnimIdleL
 
 			lxi h, hero_idle_r
 			shld heroAnimAddr
-			jmp HeroMove
+			ret
 @setAnimIdleL
 			lxi h, hero_idle_l
 			shld heroAnimAddr
+			ret
+
+@updateIdleAnim:
+			HERO_UPDATE_ANIM(HERO_IDLE_ANIM_TIMER_DELTA)
+			ret
+
+@keyStatusChanged:
+			; check if the same arrow keys as the prev time pressed
+			lda keyCodeOld
+			mov e, a
+			lda keyCode
+			cmp e
+			jnz @checkKeys
+
+@updateNonIdleAnim:
+			HERO_UPDATE_ANIM(HERO_MOVE_ANIM_TIMER_DELTA)
 			jmp HeroMove
 
+@checkKeys:
+			lda keyCode
 @setAnimRunR:
 			cpi KEY_RIGHT
 			jnz @setAnimRunRU
-
-			CHECK_HERO_PREV_KEY()
 
 			lxi h, HERO_RUN_SPEED
 			shld heroSpeedX
@@ -121,8 +148,6 @@ HeroUpdate:
 			cpi KEY_RIGHT_UP
 			jnz @setAnimRunRD
 
-			CHECK_HERO_PREV_KEY()
-
 			lxi h, HERO_RUN_SPEED_D
 			shld heroSpeedX
 			shld heroSpeedY
@@ -136,8 +161,6 @@ HeroUpdate:
 @setAnimRunRD:
 			cpi KEY_RIGHT_DOWN
 			jnz @setAnimRunL
-
-			CHECK_HERO_PREV_KEY()
 
 			lxi h, HERO_RUN_SPEED_D
 			shld heroSpeedX
@@ -154,8 +177,6 @@ HeroUpdate:
 			cpi KEY_LEFT
 			jnz @setAnimRunLU
 
-			CHECK_HERO_PREV_KEY()
-
 			lxi h, $ffff - HERO_RUN_SPEED + 1
 			shld heroSpeedX
 			lxi h, 0
@@ -170,8 +191,6 @@ HeroUpdate:
 @setAnimRunLU:
 			cpi KEY_LEFT_UP
 			jnz @setAnimRunLD
-
-			CHECK_HERO_PREV_KEY()
 
 			lxi h, $ffff - HERO_RUN_SPEED_D + 1
 			shld heroSpeedX
@@ -188,8 +207,6 @@ HeroUpdate:
 			cpi KEY_LEFT_DOWN
 			jnz @setAnimRunU
 
-			CHECK_HERO_PREV_KEY()
-
 			lxi h, $ffff - HERO_RUN_SPEED_D + 1
 			shld heroSpeedX
 			shld heroSpeedY
@@ -203,8 +220,6 @@ HeroUpdate:
 @setAnimRunU:
 			cpi KEY_UP
 			jnz @setAnimRunD
-
-			CHECK_HERO_PREV_KEY()
 
 			lxi h, 0
 			shld heroSpeedX
@@ -225,8 +240,6 @@ HeroUpdate:
 @setAnimRunD:
 			cpi KEY_DOWN
 			rnz
-
-			CHECK_HERO_PREV_KEY()
 
 			lxi h, 0
 			shld heroSpeedX

@@ -44,11 +44,9 @@ GameUpdate:
 			DEBUG_BORDER_LINE(3)
 			call LevelUpdate
 
-			; support a key-pressing repeating protection
-			lda keyCode0
-			sta keyCode0+1
-			lda keyCode1
-			sta keyCode1+1		
+			; to check repeated key-pressing
+			lhld keyCode
+			shld keyCodeOld
 
 			lxi h, interruptionCounter
 			dcr m
@@ -60,17 +58,13 @@ GameDraw:
 			lxi h, gameDrawsCounter
 			inr m
 
-			DEBUG_BORDER_LINE(5)
 			call HeroErase
 			call MonstersErase
 
-			DEBUG_BORDER_LINE(6)
 			call HeroDraw
 
-			DEBUG_BORDER_LINE(0)
 			call MonstersDraw
 
-			DEBUG_BORDER_LINE(7)
 			call HeroCopyToScr
 			call MonstersCopyToScr
 
