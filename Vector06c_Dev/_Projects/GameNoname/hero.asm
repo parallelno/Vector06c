@@ -1,14 +1,23 @@
+; hero statuses
+HERO_STATUS_IDLE	= 0
+HERO_STATUS_ATTACK	= 1
 
 ; the first screen buffer X
 HERO_RUN_SPEED		= $0100 ; it's a dword, low byte is a subpixel speed
 HERO_RUN_SPEED_D	= $00b5 ; for diagonal moves
 
-HERO_MOVE_ANIM_TIMER_DELTA	= 90
-HERO_IDLE_ANIM_TIMER_DELTA	= 4
+HERO_ANIM_TIMER_DELTA_MOVE		= 90
+HERO_ANIM_TIMER_DELTA_IDLE		= 4
+HERO_ANIM_TIMER_DELTA_ATTACK	= 40
+
+HERO_ATTACK_DURATION			= 10 ; duration = updates duration * HERO_ATTACK_DURATION
+
 ; this's a struct. do not change the layout
 heroData:
+heroStatus:			.byte HERO_STATUS_IDLE
+heroStatusTimer:	.byte 0
 heroAnimTimer:		.byte TEMP_BYTE ; used to trigger change a anim frame
-heroAnimAddr:		.word TEMP_WORD
+heroAnimAddr:		.word TEMP_ADDR
 heroDirX:			.byte 1 		; 1-right, 0-left
 heroEraseScrAddr:	.word TEMP_ADDR
 heroEraseScrAddrOld	.word TEMP_ADDR
@@ -57,11 +66,11 @@ HeroSetPos:
 			ret
 			.closelabels
 
-.macro HERO_UPDATE_ANIM(animTmerDelta)
+.macro HERO_UPDATE_ANIM(animTimerDelta)
 			; anim idle update
 			lxi h, heroAnimTimer
-			mvi a, animTmerDelta
-			add m
+			mov a, m
+			adi animTimerDelta
 			mov m, a
 			jnc @skipAnimUpdate
 			lhld heroAnimAddr
@@ -74,61 +83,35 @@ HeroSetPos:
 .endmacro
 
 HeroUpdate:
-			; check if nothing pressed
+			; check if a current animation is an attack
+			lda heroStatus
+			cpi HERO_STATUS_ATTACK
+			jz HeroUpdateAttack
+
+			; check if an attack key pressed
 			lhld keyCode
-			inx h
-			mov a, h
+			mvi a, KEY_SPACE
+			cmp h
+			jz HeroStartAttack
+
+			; check if no arrow key pressed
+			mvi a, KEY_LEFT & KEY_RIGHT & KEY_UP & KEY_DOWN
 			ora l
-			jnz @keyStatusChanged
+			inr a
+			jz HeroUpdateIdle
 
-			; nothing pressed
-			; check if nothing was pressed the last update
-			lhld keyCodeOld
-			inx h
-			mov a, h
-			ora l
-			jz @updateIdleAnim
-
-			; idle is started
-			; reset idle anim timer
-			xra a
-			sta heroAnimTimer
-			
-			; speed = 0
-			lxi h, 0
-			shld heroSpeedX
-			shld heroSpeedY
-			; set direction
-			lda heroDirX
-			ora a
-			jz @setAnimIdleL
-
-			lxi h, hero_idle_r
-			shld heroAnimAddr
-			ret
-@setAnimIdleL
-			lxi h, hero_idle_l
-			shld heroAnimAddr
-			ret
-
-@updateIdleAnim:
-			HERO_UPDATE_ANIM(HERO_IDLE_ANIM_TIMER_DELTA)
-			ret
-
-@keyStatusChanged:
-			; check if the same arrow keys as the prev time pressed
+@checkMoveKeys:
+			; check if the same arrow keys pressed the prev update
 			lda keyCodeOld
-			mov e, a
-			lda keyCode
-			cmp e
-			jnz @checkKeys
+			cmp l
+			jnz @moveKeysPressed
 
-@updateNonIdleAnim:
-			HERO_UPDATE_ANIM(HERO_MOVE_ANIM_TIMER_DELTA)
+			; update a move anim
+			HERO_UPDATE_ANIM(HERO_ANIM_TIMER_DELTA_MOVE)
 			jmp HeroMove
 
-@checkKeys:
-			lda keyCode
+@moveKeysPressed:
+			mov a, l
 @setAnimRunR:
 			cpi KEY_RIGHT
 			jnz @setAnimRunRU
@@ -145,7 +128,7 @@ HeroUpdate:
 			jmp HeroMove
 
 @setAnimRunRU:
-			cpi KEY_RIGHT_UP
+			cpi KEY_RIGHT & KEY_UP
 			jnz @setAnimRunRD
 
 			lxi h, HERO_RUN_SPEED_D
@@ -159,7 +142,7 @@ HeroUpdate:
 			jmp HeroMove
 
 @setAnimRunRD:
-			cpi KEY_RIGHT_DOWN
+			cpi KEY_RIGHT & KEY_DOWN
 			jnz @setAnimRunL
 
 			lxi h, HERO_RUN_SPEED_D
@@ -189,7 +172,7 @@ HeroUpdate:
 			jmp HeroMove
 
 @setAnimRunLU:
-			cpi KEY_LEFT_UP
+			cpi KEY_LEFT & KEY_UP
 			jnz @setAnimRunLD
 
 			lxi h, $ffff - HERO_RUN_SPEED_D + 1
@@ -204,7 +187,7 @@ HeroUpdate:
 			jmp HeroMove
 
 @setAnimRunLD:
-			cpi KEY_LEFT_DOWN
+			cpi KEY_LEFT & KEY_DOWN
 			jnz @setAnimRunU
 
 			lxi h, $ffff - HERO_RUN_SPEED_D + 1
@@ -350,6 +333,78 @@ HeroMoveTeleport:
 			; so we don't need to handle the rest of the colllided tiles.
 			; we return to the func that called HeroUpdate
 			pop b
+			ret
+			.closelabels
+
+
+HeroStartAttack:
+			mvi a, HERO_STATUS_ATTACK
+			sta heroStatus
+			mvi a, HERO_ATTACK_DURATION
+			sta heroStatusTimer
+			; spawn the trail anim sprite
+			; hit the enemies in the trail area
+
+			; speed = 0
+			lxi h, 0
+			shld heroSpeedX
+			shld heroSpeedY
+			; set direction
+			lda heroDirX
+			ora a
+			jz @setAnimAttkL
+
+			lxi h, hero_attk_r
+			shld heroAnimAddr
+			ret
+@setAnimAttkL:
+			lxi h, hero_attk_l
+			shld heroAnimAddr
+			ret
+			.closelabels
+
+HeroUpdateAttack:
+			HERO_UPDATE_ANIM(HERO_ANIM_TIMER_DELTA_ATTACK)
+			lxi h, heroStatusTimer
+			dcr m
+			rnz
+
+			; if the timer == 0, set status to Idle
+			jmp HeroUpdateSetIdle
+			.closelabels
+
+HeroUpdateIdle:
+			; check if the same keys pressed the prev update
+			lda keyCodeOld
+			cmp l
+			jnz HeroUpdateSetIdle
+
+			HERO_UPDATE_ANIM(HERO_ANIM_TIMER_DELTA_IDLE)
+			ret
+
+HeroUpdateSetIdle:
+			; idle is started
+			xra a
+			sta heroStatus
+			; reset idle anim timer
+			xra a
+			sta heroAnimTimer
+
+			; speed = 0
+			lxi h, 0
+			shld heroSpeedX
+			shld heroSpeedY
+			; set direction
+			lda heroDirX
+			ora a
+			jz @setAnimIdleL
+
+			lxi h, hero_idle_r
+			shld heroAnimAddr
+			ret
+@setAnimIdleL:
+			lxi h, hero_idle_l
+			shld heroAnimAddr
 			ret
 			.closelabels
 

@@ -2,10 +2,10 @@
 ; low byte	- Down, Right, Up, Left, ЗБ (DEL), ВК (Enter), ПС (Alt), TAB (Tab)
 ; hi byte 	- SPC, ^, ], \, [, Z, Y, X
 keyCode:
-			.word KEY_NO << 8 | 0
+			.word KEY_NO << 8 | ~KEY_NO
 ; key code of a previous update
 keyCodeOld:
-			.word KEY_NO << 8 | 0
+			.word KEY_NO << 8 | ~KEY_NO
 
 borderColorIdx:
 			.byte TEMP_BYTE
