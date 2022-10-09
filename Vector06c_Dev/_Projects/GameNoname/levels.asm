@@ -61,7 +61,7 @@ RoomInitTiles:
 
 			lxi b, roomTilesData ; the tile data buffer is used as a temp buffer
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT / 2
-			call CopyDataFromRamDisk
+			call CopyFromRamDisk
 
 			; convert tile idxs into tile gfx addrs
 			lxi h, roomTilesData
@@ -131,7 +131,7 @@ RoomInitTilesData:
 			xchg
 			lxi b, roomTilesData
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT / 2
-			call CopyDataFromRamDisk
+			call CopyFromRamDisk
 
 			; handle the tile data calling tile data funcs
 			lxi h, roomTilesData

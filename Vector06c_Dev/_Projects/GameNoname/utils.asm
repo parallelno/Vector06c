@@ -166,14 +166,98 @@ GetWordFromRamDisk:
 			ret
 			.closelabels
 
-; Read copy data (max 512) from the ram-disk to ram no blocking interruptions
+
+;========================================
+; unpack the data on the screen to
+; BC addr (32K max), then copies a buffer 
+; from $8000-$ffff (32K) into the ram-disk.
+; input: 
+; bc - unpacked data addr
+; de - packed data addr
+; hl - the destination addr in the ram_disk + $8000 (because it copies 32k data backward)
+; a - ram-disk activation command
+; use:
+; all
+UnpackToRamDisk:
+			di
+			push h
+			push psw
+			call dzx0
+			; restore the destination addr
+			pop psw
+			pop d
+			; store sp
+			lxi h, $0000
+			dad sp
+			shld @restoreSp+1
+			; copy unpacked data into the ram_disk
+			xchg
+			RAM_DISK_ON_BANK()			
+			sphl
+			; TODO: copy only necessary length of data
+			lxi h, $ffff ; unpacked data screen addr + $7fff (because it copies the data backward)
+			mvi e, $7f
+@loop:
+			mov b, m
+			dcx h
+			mov c, m
+			dcx h			
+			push b
+			mov a, h
+			cmp e
+			jnz @loop
+
+@restoreSp: lxi sp, TEMP_ADDR
+			RAM_DISK_OFF()
+			ei
+			ret
+			.closelabels
+
+;========================================
+; copy a buffer into the ram-disk.
+; input: 
+; de - from addr + data length
+; hl - to addr in the ram_disk + data length (because it copies backward)
+; bc - buffer length / 2
+; a - ram-disk activation command
+; use:
+; all
+CopyToRamDisk:
+			di
+			; store sp
+			lxi h, $0000
+			dad sp
+			shld @restoreSp+1
+			RAM_DISK_ON_BANK()			
+			sphl
+			xchg
+@loop:
+			dcx h
+			mov d, m
+			dcx h
+			mov e, m
+			push d
+			dcx b
+			mov a, b
+			ora c
+			jnz @loop
+
+@restoreSp: lxi sp, TEMP_ADDR
+			RAM_DISK_OFF()
+			ei
+			ret
+			.closelabels
+
+; Copy data (max 512) from the ram-disk to ram no blocking interruptions
 ; input: 
 ; de - data addr in the ram-disk
 ; bc - destination addr
 ; a - data length / 2
 ; use: 
 ; hl
-CopyDataFromRamDisk:
+
+; TODO: replace RAM_DISK_ON() with RAM_DISK_ON_BANK() to allow it works with any ram-disk bank
+CopyFromRamDisk:
 			; store sp
 			lxi h, $0000
 			dad sp
@@ -198,4 +282,4 @@ CopyDataFromRamDisk:
 @restoreSp: lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
 			ret
-			.closelabels
+			.closelabels			

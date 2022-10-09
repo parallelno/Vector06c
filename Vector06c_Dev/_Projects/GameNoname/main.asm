@@ -30,4 +30,7 @@ Start:
 
 			jmp @mainLoop
 			.closelabels
-			.end
+
+.include "ramDiskUnpackedData.asm"
+
+.end
