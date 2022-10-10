@@ -49,6 +49,27 @@ else:
 	print(f"ExportLabels: {bank0_seg0_path}Labels.asm wasn't updated. No need to compile.")
 	print(f"zx0: {bank0_seg0_path}bin wasn't updated. No need to compress.")
 
+bank1_seg0_path = "ramDiskBank1_addr0"
+anySpritesUpdated |= IsFileUpdated(bank1_seg0_path + ".dasm")
+
+if anySpritesUpdated:
+	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank1_seg0_path + 
+			".dasm generated\\bin\\" + bank1_seg0_path + ".bin >" + bank1_seg0_path + "Labels.asm")
+
+	CheckSegmentSize("generated\\bin\\" + bank1_seg0_path + ".bin", SEGMENT_0000_7F00_ADDR)
+	
+	ExportLabels(bank1_seg0_path + "Labels.asm")
+
+	print(f"retroassembler: {bank1_seg0_path} got compiled.")
+	print(f"ExportLabels: {bank1_seg0_path}Labels.asm got compiled.")
+
+	common.DeleteFile("generated\\bin\\" + bank1_seg0_path + ".bin.zx0")
+	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank1_seg0_path + ".bin generated\\bin\\" + bank1_seg0_path + ".bin.zx0")
+else: 
+	print(f"retroassembler: {bank1_seg0_path} wasn't updated. No need to export.")
+	print(f"ExportLabels: {bank1_seg0_path}Labels.asm wasn't updated. No need to compile.")
+	print(f"zx0: {bank1_seg0_path}bin wasn't updated. No need to compress.")
+
 ######################################################################################
 # levels to the ramDisk
 bank0_seg1_path = "ramDiskBank0_addr8000"
