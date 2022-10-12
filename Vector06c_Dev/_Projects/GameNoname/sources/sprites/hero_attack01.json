@@ -1,0 +1,224 @@
+{
+	"png" : "sources\\sprites\\art\\sprites_hero_attack01.png",
+	"palette" :	[
+		{"x": 0,	"y" : 0},
+		{"x": 16,	"y" : 0},
+		{"x": 32,	"y" : 0},
+		{"x": 48,	"y" : 0},
+		{"x": 64,	"y" : 0},
+		{"x": 80,	"y" : 0},
+		{"x": 96,	"y" : 0},
+		{"x": 112,	"y" : 0},
+		{"x": 128,	"y" : 0},
+		{"x": 144,	"y" : 0},
+		{"x": 160,	"y" : 0},
+		{"x": 176,	"y" : 0},
+		{"x": 192,	"y" : 0},
+		{"x": 208,	"y" : 0},
+		{"x": 224,	"y" : 0},
+		{"x": 240,	"y" : 0}
+	],
+	"anims" : {
+		"attk_r"	: [
+			["attk_r0_0", "attk_r0_1", "attk_r0_2", "attk_r0_3", "attk_r0_4", "attk_r0_5", "attk_r0_6", "attk_r0_7"]
+		],
+		"attk_l"	: [
+			["attk_l0_0", "attk_l0_1", "attk_l0_2", "attk_l0_3", "attk_l0_4", "attk_l0_5", "attk_l0_6", "attk_l0_7"]
+		]
+	},
+	"sprites" : [
+		{
+			"name" : "attk_r0_0",
+			"x" : 8,
+			"y"	: 32,
+			"width" : 16,
+			"height" : 14,
+			"offsetX": 8,
+			"mask_x" : 8,
+			"mask_y" : 48,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_r0_1",
+			"x" : 24,
+			"y"	: 32,
+			"width" : 16,
+			"height" : 14,
+			"offsetX": 8,
+			"mask_x" : 24,
+			"mask_y" : 48,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_r0_2",
+			"x" : 48,
+			"y"	: 32,
+			"width" : 16,
+			"height" : 14,
+			"offsetX": 8,
+			"mask_x" : 48,
+			"mask_y" : 48,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_r0_3",
+			"x" : 72,
+			"y"	: 32,
+			"width" : 16,
+			"height" : 14,
+			"offsetX": 8,
+			"mask_x" : 72,
+			"mask_y" : 48,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_r0_4",
+			"x" : 104,
+			"y"	: 32,
+			"width" : 8,
+			"height" : 14,
+			"offsetX": 16,
+			"mask_x" : 104,
+			"mask_y" : 48,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_r0_5",
+			"x" : 128,
+			"y"	: 32,
+			"width" : 8,
+			"height" : 14,
+			"offsetX": 16,
+			"mask_x" : 128,
+			"mask_y" : 48,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_r0_6",
+			"x" : 152,
+			"y"	: 32,
+			"width" : 16,
+			"height" : 14,
+			"offsetX": 16,
+			"mask_x" : 152,
+			"mask_y" : 48,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_r0_7",
+			"x" : 176,
+			"y"	: 32,
+			"width" : 16,
+			"height" : 14,
+			"offsetX": 16,
+			"mask_x" : 176,
+			"mask_y" : 48,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		
+		{
+			"name" : "attk_l0_0",
+			"x" : 0,
+			"y"	: 64,
+			"width" : 16,
+			"height" : 14,
+			"offsetX": -8,
+			"mask_x" : 0,
+			"mask_y" : 80,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_l0_1",
+			"x" : 16,
+			"y"	: 64,
+			"width" : 16,
+			"height" : 14,
+			"offsetX": -8,
+			"mask_x" : 16,
+			"mask_y" : 80,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_l0_2",
+			"x" : 40,
+			"y"	: 64,
+			"width" : 16,
+			"height" : 14,
+			"offsetX": -8,
+			"mask_x" : 40,
+			"mask_y" : 80,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_l0_3",
+			"x" : 72,
+			"y"	: 64,
+			"width" : 8,
+			"height" : 14,
+			"offsetX": 0,
+			"mask_x" : 72,
+			"mask_y" : 80,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_l0_4",
+			"x" : 96,
+			"y"	: 64,
+			"width" : 8,
+			"height" : 14,
+			"offsetX": 0,
+			"mask_x" : 96,
+			"mask_y" : 80,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_l0_5",
+			"x" : 120,
+			"y"	: 64,
+			"width" : 16,
+			"height" : 14,
+			"offsetX": 0,
+			"mask_x" : 120,
+			"mask_y" : 80,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_l0_6",
+			"x" : 144,
+			"y"	: 64,
+			"width" : 16,
+			"height" : 14,
+			"offsetX": 0,
+			"mask_x" : 144,
+			"mask_y" : 80,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "attk_l0_7",
+			"x" : 168,
+			"y"	: 64,
+			"width" : 16,
+			"height" : 14,
+			"offsetX": 0,
+			"mask_x" : 168,
+			"mask_y" : 80,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		}
+	]
+}

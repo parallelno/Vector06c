@@ -214,10 +214,10 @@ GCPlayerUnpack:
 		push h
 		inx h
 		mvi a, $80
-@dzx0literals:
-		call @dzx0Elias
+@literals:
+		call @Elias
 		push psw
-@dzx0Ldir1:
+@Ldir1:
 		ldax d
 		stax b
 		inx d					
@@ -230,13 +230,13 @@ GCPlayerUnpack:
 		dcx h
 		mov a, h
 		ora l
-		jnz @dzx0Ldir1
+		jnz @Ldir1
 		pop psw
 		add a
 
-		jc @dzx0newOffset
-		call @dzx0Elias
-@dzx0copy:
+		jc @newOffset
+		call @Elias
+@copy:
 		xchg
 		xthl
 		push h
@@ -244,9 +244,9 @@ GCPlayerUnpack:
 		mov h, b ; to stay inside the circular buffer
 		xchg
 
-@dzx0ldirFromBuff:
+@ldirFromBuff:
 		push psw
-@dzx0ldirFromBuff1:
+@ldirFromBuff1:
 		ldax d
 		stax b
 		inr e		; to stay inside the circular buffer				
@@ -259,7 +259,7 @@ GCPlayerUnpack:
 		dcx h
 		mov a, h
 		ora l
-		jnz @dzx0ldirFromBuff1
+		jnz @ldirFromBuff1
 		mvi h, 0	; ----------- ???
 		pop psw
 		add a
@@ -268,14 +268,14 @@ GCPlayerUnpack:
 		pop h
 		xthl
 		xchg
-		jnc @dzx0literals
-@dzx0newOffset:
-		call @dzx0Elias
+		jnc @literals
+@newOffset:
+		call @Elias
 		mov h, a
 		pop psw
 		xra a
 		sub l
-		jz @dzx0exit
+		jz @exit
 		push h
 		rar
 		mov h, a
@@ -286,27 +286,27 @@ GCPlayerUnpack:
 		xthl
 		mov a, h
 		lxi h, 1
-		cnc @dzx0eliasBacktrack
+		cnc @eliasBacktrack
 		inx h
-		jmp @dzx0copy
+		jmp @copy
 
-@dzx0Elias:
+@Elias:
 		inr l
-@dzx0eliasLoop:	
+@eliasLoop:	
 		add a
-		jnz @dzx0eliasSkip
+		jnz @eliasSkip
 		ldax d
 		inx d
 		ral
-@dzx0eliasSkip:
+@eliasSkip:
 		rc
-@dzx0eliasBacktrack:
+@eliasBacktrack:
 		dad h
 		add a
-		jnc @dzx0eliasLoop
-		jmp @dzx0Elias
+		jnc @eliasLoop
+		jmp @Elias
 
-@dzx0exit:
+@exit:
 		; restore sp
 		lhld GCPlayerSchedulerRestoreSp+1
 		sphl

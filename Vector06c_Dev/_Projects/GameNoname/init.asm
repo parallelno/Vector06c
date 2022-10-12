@@ -9,7 +9,10 @@ StartInit:
 			shld 	RESTART_ADDR + 1
 			lxi		h, Interruption2
 			shld	INT_ADDR + 1
-			lxi		sp, STACK_MAIN_PROGRAM_ADDR
+
+			lxi sp, STACK_TMP_MAIN_PROGRAM_ADDR
+			call RamDiskInit
+			lxi sp, STACK_MAIN_PROGRAM_ADDR
 			ei
             jmp     Start
 

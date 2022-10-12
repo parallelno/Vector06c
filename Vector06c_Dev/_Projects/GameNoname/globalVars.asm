@@ -13,7 +13,7 @@ scrOffsetY:
 			.byte 255
 
 ; it is used to check how many interruptions happened since the last game uppdate
-interruptionCounter: 
+interruptionCounter:
 			.byte TEMP_BYTE
 
 ramDiskMode:

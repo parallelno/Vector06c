@@ -11,6 +11,7 @@ burnerPath = "sprites\\burner"
 knightPath = "sprites\\knight"
 vampirePath = "sprites\\vampire"
 scythePath = "sprites\\scythe"
+heroAttack01Path = "sprites\\hero_attack01"
 
 animForceExport = forceExport | IsFileUpdated("tools\\animSpriteExport.py")
 
@@ -20,6 +21,7 @@ burnerSpriteSourceUpdated = IsFileUpdated("sources\\sprites\\art\\sprites_burner
 knightSpriteSourceUpdated = IsFileUpdated("sources\\sprites\\art\\sprites_knight.png")
 vampireSpriteSourceUpdated = IsFileUpdated("sources\\sprites\\art\\sprites_vampire.png")
 projectilesSpriteSourceUpdated = IsFileUpdated("sources\\sprites\\art\\sprites_projectiles.png")
+heroAttack01SpriteSourceUpdated = IsFileUpdated("sources\\sprites\\art\\sprites_hero_attack01.png")
 
 anySpritesUpdated = False 
 anySpritesUpdated |= ExportAminSprites(heroPath, animForceExport or heroSpriteSourceUpdated)
@@ -28,6 +30,7 @@ anySpritesUpdated |= ExportAminSprites(burnerPath, animForceExport or burnerSpri
 anySpritesUpdated |= ExportAminSprites(knightPath, animForceExport or knightSpriteSourceUpdated, True)
 anySpritesUpdated |= ExportAminSprites(vampirePath, animForceExport or vampireSpriteSourceUpdated, True)
 anySpritesUpdated |= ExportAminSprites(scythePath, animForceExport or projectilesSpriteSourceUpdated, True)
+anySpritesUpdated |= ExportAminSprites(heroAttack01Path, animForceExport or heroAttack01SpriteSourceUpdated, True)
 
 anySpritesUpdated |= IsFileUpdated(bank0_seg0_path + ".dasm")
 

@@ -192,3 +192,61 @@ nextColumn:
 			jmp RestoreSP
 .endmacro
 			.closelabels
+
+; preshift a sprite
+; in:
+; hl - source sprite data addr
+; de - target sprite data addr
+; c - shift a sprite in pxls
+
+SpritesPreshift:
+			lxi h, skeleton_run_r0_0 + $8000
+			lxi d, skeleton_run_r0_1 + $8000
+
+
+			; get source width
+			inx_h(3)
+			mov a, m
+			inx h
+			cpi 1
+			jz @width16
+
+			ret
+@width16:
+			; get target height
+			inx_d(2)
+			ldax d
+			mov b, a
+			inx d
+			; get target width
+			ldax d
+			inx d
+			cpi 2
+			jz @widthTarget24
+
+			ret
+@widthTarget24:
+	SPRITE_COPY_W16_BYTE_LEN = 2 * 2 ; (color bytes + mask)*2
+	.macro SpritesPreshiftCopy(count)
+		.loop count
+			mov a, m
+			inx h
+			stax d
+			inx d			
+		.endloop
+	.endmacro
+@copyLine:
+			; screen buff 0
+			SpritesPreshiftCopy(SPRITE_COPY_W16_BYTE_LEN)
+			inx_d(2)
+			; screen buff 1
+			inx_d(2)
+			SpritesPreshiftCopy(SPRITE_COPY_W16_BYTE_LEN)
+			; screen buff 3
+			inx_d(2)
+			SpritesPreshiftCopy(SPRITE_COPY_W16_BYTE_LEN)
+			dcr b
+			jnz @copyLine
+
+			ret
+			.closelabels

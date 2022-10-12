@@ -3,6 +3,7 @@
 
 ; sharetable chunk of code to restore SP
 ; and dismount the ram-disk
+; replace @restoreSP with this
 RestoreSP:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
@@ -166,14 +167,14 @@ GetWordFromRamDisk:
 			ret
 			.closelabels
 
-
+/*
 ;========================================
 ; unpack the data on the screen to
 ; BC addr (32K max), then copies a buffer 
 ; from $8000-$ffff (32K) into the ram-disk.
 ; input: 
-; bc - unpacked data addr
 ; de - packed data addr
+; bc - unpacked data addr
 ; hl - the destination addr in the ram_disk + $8000 (because it copies 32k data backward)
 ; a - ram-disk activation command
 ; use:
@@ -212,7 +213,7 @@ UnpackToRamDisk:
 			ei
 			ret
 			.closelabels
-
+*/
 ;========================================
 ; copy a buffer into the ram-disk.
 ; input: 
@@ -224,11 +225,14 @@ UnpackToRamDisk:
 ; all
 CopyToRamDisk:
 			di
+			shld @restoreHl+1
 			; store sp
 			lxi h, $0000
 			dad sp
 			shld @restoreSp+1
 			RAM_DISK_ON_BANK()			
+@restoreHl:
+			lxi h, TEMP_WORD
 			sphl
 			xchg
 @loop:

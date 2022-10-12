@@ -52,6 +52,12 @@
 		.endloop
 .endmacro
 
+.macro INX_D(i)
+		.loop i
+			inx d
+		.endloop
+.endmacro
+
 .macro DCX_H(i)
 		.loop i
 			dcx h
@@ -96,6 +102,11 @@
 			sta ramDiskMode
 			out $10
 .endmacro
+
+.macro RAM_DISK_ON_BANK_NO_RESTORE()
+			out $10
+.endmacro
+
 ; dismount the ram-disk
 ; has to be in the main program only and be placed after lxi sp, ADDR or sphl
 .macro RAM_DISK_OFF()

@@ -22,7 +22,6 @@
 .include "game.asm"
 
 Start:
-			call RamDiskInit
 			call GCPlayerInit
 @mainLoop:
 			;call MainMenu
