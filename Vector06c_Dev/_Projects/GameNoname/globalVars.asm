@@ -18,7 +18,7 @@ interruptionCounter:
 
 ramDiskMode:
 			.byte TEMP_BYTE
-
+; it gets updated every second
 currentFps:
 			.byte TEMP_BYTE
 ; a lopped counter increased every game draw
