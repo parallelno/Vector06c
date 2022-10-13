@@ -33,10 +33,10 @@ RoomInit:
 			; $a000-$ffff in the ram-disk
 			lxi d, $0000
 			lxi b, $6000 / 32 - 1
-			mvi a, RAM_DISK0_B2_STACK_B2_8AF_RAM
+			mvi a, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F
 			call ClearMemSP
 			; TODO: make the code below work to use __ClearMemSP instead of ClearMemSP
-			;CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK0_B2_STACK_B2_8AF_RAM)
+			;CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			ret
 
 
@@ -337,10 +337,10 @@ RoomDraw:
 			lxi b, $8000 / 32 - 1
 			xra a
 			call ClearMemSP
-			; TODO: make the code below work to use __ClearMemSP instead of ClearMemSP
+			; TODO: make the code below works to use __ClearMemSP instead of ClearMemSP
 			;lxi d, $0000
 			;lxi b, $8000 / 128 - 1
-			;CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK0_B2_8AF_RAM, true)
+			;CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK_M2 | RAM_DISK_M_8F, true)
 
 			; set y = 0
 			mvi e, 0

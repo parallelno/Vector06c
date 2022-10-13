@@ -13,7 +13,10 @@
 ; 2nd screen buff : same
 ; 3rd screen buff : same
 ; 4rd screen buff : same
-		
+
+; TODO: replace RAM_DISK_ON() with RAM_DISK_ON_BANK()
+; to allow it works with any bank
+
 DrawTile16x16:
 			; store sp
 			lxi		h, $0000		; (12)
@@ -22,7 +25,7 @@ DrawTile16x16:
 			; sp = BC
 			mov		h, b			; (8)
 			mov		l, c			; (8)
-			RAM_DISK_ON()
+			RAM_DISK_ON(RAM_DISK_S0)
 			sphl					; (8)
 			; get a mask and a counter
 			pop b					; (12)

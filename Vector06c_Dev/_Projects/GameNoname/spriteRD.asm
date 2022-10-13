@@ -28,7 +28,6 @@ __EraseSpriteSP:
 			inr a
 			mov e, a
 
-			;RAM_DISK_ON(RAM_DISK0_B2_STACK_B2_8AF_RAM)
 			; store ret addr
 			pop h
 			shld restoreRet_ramDisk__ + 1

@@ -70,7 +70,7 @@ GCPlayerTasksInit:
 			dad sp
 			shld @restoreSp+1
 			; no need to restore because "di" above
-			RAM_DISK_ON_NO_RESTORE(RAM_DISK0_B1_STACK_RAM)
+			RAM_DISK_ON_NO_RESTORE(RAM_DISK_S1 | RAM_DISK_M1 | RAM_DISK_M_AD) ; RAM_DISK0_B1_STACK_RAM
 
 			lxi sp, GCPlayerTaskStack13 + GC_PLAYER_STACK_SIZE
 			lxi d, GCPlayerAyRegDataPtrs + GC_PLAYER_TASKS * WORD_LEN
@@ -120,7 +120,7 @@ GCPlayerTasksInit:
 
 ; Set the current task stack pointer to the first task stack pointer
 GCPlayerSchedulerInit:
-			RAM_DISK_ON(RAM_DISK0_B1_RAM)
+			RAM_DISK_ON(RAM_DISK_M1 | RAM_DISK_M_AD) ; RAM_DISK0_B1_RAM
 			lxi h, GCPlayerTaskSPs
 			shld GCPlayerCurrentTaskSPp
 			RAM_DISK_OFF()
@@ -132,7 +132,7 @@ GCPlayerSchedulerInit:
 ; when it repeats the current song or
 ; play a new one
 GCPlayerClearBuffers:
-			RAM_DISK_ON(RAM_DISK0_B1_RAM)
+			RAM_DISK_ON(RAM_DISK_M1 | RAM_DISK_M_AD) ; RAM_DISK0_B1_RAM
 			mvi h, >GCPlayerBuffer00
 			mvi a, (>GCPlayerBuffer13) + 1
 @nextBuff:
@@ -155,7 +155,7 @@ GCPlayerSchedulerUpdate:
 			lxi h, 0
 			dad sp
 			shld GCPlayerSchedulerRestoreSp+1
-			RAM_DISK_ON_NO_RESTORE(RAM_DISK0_B1_STACK_RAM)
+			RAM_DISK_ON_NO_RESTORE(RAM_DISK_S1 | RAM_DISK_M1 | RAM_DISK_M_AD) ; RAM_DISK0_B1_STACK_RAM
 			lhld GCPlayerCurrentTaskSPp
 			mov e, m 
 			inx h 
@@ -331,7 +331,7 @@ AY_PORT_REG		= $15
 AY_PORT_DATA	= $14
 
 GCPlayerAYUpdate:
-			RAM_DISK_ON_NO_RESTORE(RAM_DISK0_B1_RAM)
+			RAM_DISK_ON_NO_RESTORE(RAM_DISK_M1 | RAM_DISK_M_AD)
 			mvi e, GC_PLAYER_TASKS - 1
 			mov c, m
 			mvi b, (>GCPlayerBuffer00) + GC_PLAYER_TASKS - 1

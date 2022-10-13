@@ -97,6 +97,9 @@ SetPalette:
 ; hl, bc, a
 PALETTE_COLORS = 16
 
+; TODO: replace RAM_DISK_ON() with RAM_DISK_ON_BANK()
+; to allow it works with any bank
+
 SetPaletteFromRamDisk:
 			hlt
 			; store sp
@@ -105,7 +108,7 @@ SetPaletteFromRamDisk:
 			shld @restoreSp+1
 			; copy unpacked data into the ram_disk
 			xchg
-			RAM_DISK_ON()
+			RAM_DISK_ON(RAM_DISK_S0)
 			sphl
 
 			mvi	a, PORT0_OUT_OUT
@@ -151,6 +154,9 @@ SetPaletteFromRamDisk:
 ; hl
 ; out:
 ; bc - data
+
+; TODO: replace RAM_DISK_ON() with RAM_DISK_ON_BANK()
+; to allow it works with any bank
 GetWordFromRamDisk:
 			; store sp
 			lxi h, $0000
@@ -158,7 +164,7 @@ GetWordFromRamDisk:
 			shld @restoreSp+1
 			; copy unpacked data into the ram_disk
 			xchg
-			RAM_DISK_ON()
+			RAM_DISK_ON(RAM_DISK_S0)
 			sphl
 			pop b ; bc has to be used when interruptions is on
 			
@@ -260,7 +266,8 @@ CopyToRamDisk:
 ; use: 
 ; hl
 
-; TODO: replace RAM_DISK_ON() with RAM_DISK_ON_BANK() to allow it works with any ram-disk bank
+; TODO: replace RAM_DISK_ON() with RAM_DISK_ON_BANK()
+; to allow it works with any ram-disk bank
 CopyFromRamDisk:
 			; store sp
 			lxi h, $0000
@@ -269,7 +276,7 @@ CopyFromRamDisk:
 			; copy unpacked data into the ram_disk
 			xchg
 			mov e, a
-			RAM_DISK_ON()
+			RAM_DISK_ON(RAM_DISK_S0)
 			sphl
 			mov a, e
 			mov l, c

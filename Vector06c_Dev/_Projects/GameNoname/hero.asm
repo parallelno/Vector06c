@@ -415,7 +415,7 @@ HeroErase:
 			lhld heroEraseScrAddr
 			xchg
 			lhld heroEraseWH
-			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK0_B2_STACK_B2_8AF_RAM)
+			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			ret
 			.closelabels
 
@@ -427,7 +427,7 @@ HeroDraw:
 			call GetSpriteAddr
 
 			; TODO: consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
-			CALL_RAM_DISK_FUNC(__DrawSpriteV, RAM_DISK0_B0_STACK_B2_8AF_RAM)
+			CALL_RAM_DISK_FUNC(__DrawSpriteV, RAM_DISK_S0 | RAM_DISK_M2 | RAM_DISK_M_8F)
 
 			; store an old scr addr, width, and height
 			lxi h, heroEraseScrAddr

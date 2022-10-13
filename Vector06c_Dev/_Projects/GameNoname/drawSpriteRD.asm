@@ -65,7 +65,6 @@ __DrawSpriteV:
 			; sp = BC
 			mov	h, b
 			mov	l, c
-			;RAM_DISK_ON(RAM_DISK0_B0_STACK_B2_8AF_RAM)
 			sphl
 			xchg
 			; b - offsetX
@@ -282,7 +281,6 @@ __DrawSpriteVM:
 			; sp = BC
 			mov	h, b
 			mov	l, c
-			;RAM_DISK_ON(RAM_DISK0_B0_STACK_B2_8AF_RAM)
 			sphl
 			xchg
 			; b - offsetX

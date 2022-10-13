@@ -147,13 +147,13 @@ CopySpriteToScrV:
 			xchg
 			mov d, a
 nextColumn:
-			RAM_DISK_ON(RAM_DISK0_B2_STACK_B2_8AF_RAM)
+			RAM_DISK_ON(RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			; read without a stack operations because
 			; we need fill up BC prior to use POP B
 			mov b, m
 			dcr l
 			mov c, m
-			RAM_DISK_ON(RAM_DISK0_B2_STACK)
+			RAM_DISK_ON(RAM_DISK_S2)
 			mov m, c
 			inr l
 			mov m, b

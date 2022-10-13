@@ -224,7 +224,7 @@ SkeletonDraw:
 			mov c, a
 			call GetSpriteAddr
 
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, RAM_DISK0_B0_STACK_B2_8AF_RAM)
+			CALL_RAM_DISK_FUNC(__DrawSpriteVM, RAM_DISK_S0 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			pop h
 			inx h
 			; store an old scr addr, width, and height

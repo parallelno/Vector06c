@@ -74,7 +74,7 @@ MonsterErase:
 			inx h
 			mov h, m			
 			mov l, a
-			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK0_B2_STACK_B2_8AF_RAM)
+			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			ret
 
 MonstersDraw:
