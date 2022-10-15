@@ -110,7 +110,33 @@ dzx0RD:
 		mvi a,$80
 @literals:
 		call @elias
-		call @ldir
+@ldir:
+		sta @restoreA1+1
+@ldirLoop:
+		ldax d
+		sta @storeA+1
+		; turn on the ram-disk
+@ramDiskCmd1:
+		mvi a, TEMP_BYTE
+		out $10
+@storeA:
+		mvi a, TEMP_BYTE
+		stax b
+		; turn off the ram-disk
+		xra a
+		out $10
+
+		inx d
+		inx b
+		dcx h
+		mov a, h
+		ora l
+		jnz @ldirLoop
+
+@restoreA1:
+		mvi a, TEMP_BYTE		
+		add a
+
 		jc @newOffset
 		call @elias
 @copy:
@@ -119,7 +145,31 @@ dzx0RD:
 		push h
 		dad b
 		xchg
-		call @ldirUnpacked
+
+@ldirUnpacked:
+		sta @restoreA2+1
+		; turn on the ram-disk
+@ramDiskCmd2:
+		mvi a, TEMP_BYTE
+		out $10
+@ldirUnpackedLoop:
+		ldax d
+		stax b
+		inx d
+		inx b
+		dcx h
+		mov a, h
+		ora l
+		jnz @ldirUnpackedLoop
+
+		; turn off the ram-disk
+		xra a
+		out $10
+
+@restoreA2:
+		mvi a, TEMP_BYTE		
+		add a
+
 		xchg
 		pop h
 		xthl
@@ -161,54 +211,4 @@ dzx0RD:
 		add a
 		jnc @eliasLoop
 		jmp @elias
-
-@ldir:
-		push psw
-@ldirLoop:
-		ldax d
-		sta @storeA11+1
-		; turn on the ram-disk
-@ramDiskCmd1:
-		mvi a, TEMP_BYTE
-		out $10
-@storeA11:
-		mvi a, TEMP_BYTE
-		stax b
-		; turn off the ram-disk
-		xra a
-		out $10
-
-		inx d
-		inx b
-		dcx h
-		mov a, h
-		ora l
-		jnz @ldirLoop
-		pop psw
-		add a
-		ret
-
-@ldirUnpacked:
-		push psw
-		; turn on the ram-disk
-@ramDiskCmd2:
-		mvi a, TEMP_BYTE
-		out $10
-@ldirUnpackedLoop:
-		ldax d
-		stax b
-		inx d
-		inx b
-		dcx h
-		mov a, h
-		ora l
-		jnz @ldirUnpackedLoop
-
-		; turn off the ram-disk
-		xra a
-		out $10
-
-		pop psw
-		add a
-		ret
 		.closelabels

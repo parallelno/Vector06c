@@ -25,8 +25,6 @@ RamDiskInit:
 			mvi a, RAM_DISK_S0 | RAM_DISK_M0 | RAM_DISK_M_8F
 			call CopyToRamDisk
 
-
-			; TODO: fix dzx0RD which breaks data. check a flag on the wall in the first room.
 			; unpack tiles and levels to the ram-disk
 			lxi d, toBank0addr8000
 			lxi b, $8000

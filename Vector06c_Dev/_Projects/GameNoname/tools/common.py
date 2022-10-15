@@ -109,21 +109,10 @@ def BytesToAsm(data):
 		asm += str(byte) + ","
 	return asm + "\n"
 
-def RunCommand(command, comment = "", echo = True):
-	# TODO: fix echo off
+def RunCommand(command, comment = ""):
 	if comment != "" : 
 		print(comment)
-	if echo: 
-		os.system("@echo on")
-	else:
-		os.system("@echo off")
-
 	os.system(command)
-	
-	if echo: 
-		os.system("@echo on")
-	else:
-		os.system("@echo off")
 
 def DeleteFile(path):
 	if os.path.isfile(f"{path}"):
