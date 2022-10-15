@@ -4,7 +4,7 @@ RamDiskInit:
 			lxi b, $8000
 			mvi a, RAM_DISK_M2 | RAM_DISK_M_8F
 			call dzx0RD
-
+/*
 			; unpack music to the ram-disk
 			lxi d, toBank1addrA000
 			lxi b, $A000
@@ -30,5 +30,6 @@ RamDiskInit:
 			lxi b, $8000
 			mvi a, RAM_DISK_M0 | RAM_DISK_M_8F
 			call dzx0RD
+*/			
 			ret
 			.closelabels
