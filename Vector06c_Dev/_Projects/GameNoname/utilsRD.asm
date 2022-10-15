@@ -1,8 +1,8 @@
 ; clear a memory buffer using stack operations
 ; can be used to clear ram-disk memory as well
 ; input:
-; de - the last addr of a erased buffer + 1
-; bc - length/128 - 1
+; bc - the last addr of a erased buffer + 1
+; de - length/128 - 1
 ; a - ram disk activation command
 ; 		a = 0 to clear the main memory
 ; use:
@@ -18,12 +18,16 @@ __ClearMemSP:
 			shld restoreSP_ramDisk__ + 1
 
 			;RAM_DISK_ON_BANK()
-			xchg
+			mov h, b
+			mov l, c			
 			sphl
-			mov e, c
-			mov d, b
 			lxi b, 0
+
+			// mvi a, RAM_DISK_M2 | RAM_DISK_M_8F
+			// out $10
+
 			mvi a, $ff
+
 @loop:
 			push_b(64)
 			dcx d

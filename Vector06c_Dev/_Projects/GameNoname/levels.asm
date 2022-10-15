@@ -33,10 +33,11 @@ RoomInit:
 			call MonstersInit
 			; erase back buffer
 			; $a000-$ffff in the ram-disk
-			lxi d, $0000
-			lxi b, $6000 / 32 - 1
+			lxi b, $0000
+			;lxi d, $6000 / 32 - 1
+			lxi d, $6000 / 32 - 2
 			mvi a, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F
-			call ClearMemSP
+			;call ClearMemSP
 			; TODO: make the code below work to use __ClearMemSP instead of ClearMemSP
 			;CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			ret
@@ -339,14 +340,14 @@ LevelUpdate:
 
 RoomDraw:
 			; clear the screen
-			lxi d, $0000
-			lxi b, $8000 / 32 - 1
-			xra a
-			call ClearMemSP
+			;lxi b, $0000
+			;lxi d, $8000 / 32 - 1
+			;xra a
+			;call ClearMemSP
 			; TODO: make the code below works to use __ClearMemSP instead of ClearMemSP
-			;lxi d, $0000
-			;lxi b, $8000 / 128 - 1
-			;CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK_M2 | RAM_DISK_M_8F, true)
+			lxi b, $0000
+			lxi d, $8000 / 128 - 9;/128 - 1
+			CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK_M2 | RAM_DISK_M_8F, true)
 
 			; set y = 0
 			mvi e, 0

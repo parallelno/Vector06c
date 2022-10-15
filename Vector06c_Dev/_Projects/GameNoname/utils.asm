@@ -30,8 +30,8 @@ ClearMem:
 ; clear a memory buffer using stack operations
 ; can be used to clear ram-disk memory as well
 ; input:
-; de - the last addr of a erased buffer + 1
-; bc - length/32 - 1
+; bc - the last addr of a erased buffer + 1
+; de - length/32 - 1
 ; a - ram disk activation command
 ; 		a = 0 to clear the main memory
 ; use:
@@ -39,17 +39,17 @@ ClearMem:
 ; TODO: fix it to work without di/ei. di/ei causes music stuttering when the hero goes to another room
 
 ClearMemSP:
-			di
-			lxi h, 0
+			;di
+			lxi h, $0000
 			dad sp
 			shld @restoreSP + 1
+			mov h, b
+			mov l, c
 			RAM_DISK_ON_BANK()
-			xchg
-			mov e, c
-			mov d, b
-			lxi b, 0
-			mvi a, $ff
+			lxi b, $0000			
 			sphl
+
+			mvi a, $ff
 @loop:
 			push_b(16)
 			dcx d
@@ -58,9 +58,10 @@ ClearMemSP:
 @restoreSP:
 			lxi sp, TEMP_WORD
 			RAM_DISK_OFF()
-			ei
+			;ei
 			ret
 			.closelabels
+
 
 INIT_COLOR_IDX = 15
 ; Set palette

@@ -409,9 +409,7 @@ HeroUpdateSetIdle:
 			.closelabels
 
 HeroErase:
-			; TODO: update initializations of heroEraseScrAddr and heroEraseWH
-			; when the level starts, and hero teleports
-			; TODO: optimize. erease only that is outside of the updated hero pos
+			; TODO: optimize. erease only that is outside of the updated hero region
 			lhld heroEraseScrAddr
 			xchg
 			lhld heroEraseWH
