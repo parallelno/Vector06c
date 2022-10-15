@@ -88,7 +88,7 @@ Interruption2:
 			; restore A
 			mov a, l
 
-@restoreHL:	lxi		h, TEMP_ADDR
+@restoreHL:	lxi		h, TEMP_WORD
 @restoreSP:	lxi		sp, TEMP_ADDR
 			ei
 @return:	jmp TEMP_ADDR

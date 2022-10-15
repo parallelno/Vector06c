@@ -85,7 +85,7 @@ GCPlayerTasksInit:
 			di
 			lxi h, 0
 			dad sp
-			shld @restoreSp+1
+			shld @restoreSP+1
 
 			lxi sp, GCPlayerTaskStack13 + GC_PLAYER_STACK_SIZE
 			lxi d, GCPlayerAyRegDataPtrs + GC_PLAYER_TASKS * WORD_LEN
@@ -127,7 +127,7 @@ GCPlayerTasksInit:
 			dcr c
 			dcr c
 			jp @loop
-@restoreSp: lxi sp, TEMP_ADDR
+@restoreSP: lxi sp, TEMP_ADDR
 			ei 
 			ret  
 			.closelabels

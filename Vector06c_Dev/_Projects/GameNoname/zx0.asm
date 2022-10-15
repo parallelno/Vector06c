@@ -1,5 +1,5 @@
 ; -----------------------------------------------------------------------------
-; ZX0 8080 decoder by Ivan Gorodetsky - OLD FILE FORMAT v1 
+; ZX0 8080 decoder by Ivan Gorodetsky - OLD FILE FORMAT v1
 ; Based on ZX0 z80 decoder by Einar Saukas
 ; v1 (2021-02-15) - 103 bytes forward / 100 bytes backward
 ; v2 (2021-02-17) - 101 bytes forward / 100 bytes backward
@@ -19,7 +19,7 @@
 ;
 ; Compile with The Telemark Assembler (TASM) 3.2
 ; -----------------------------------------------------------------------------
-
+/*
 dzx0:
 		lxi h, $0FFFF
 		push h
@@ -31,7 +31,7 @@ dzx0:
 		jc @newOffset
 		call @elias
 @copy:
-		xchg	
+		xchg
 		xthl
 		push h
 		dad b
@@ -50,7 +50,7 @@ dzx0:
 		sub l
 		rz
 		push h
-		rar			
+		rar
         mov h, a
 		ldax d
 		rar
@@ -63,7 +63,7 @@ dzx0:
 		inx h
 		jmp @copy
 @elias:
-		inr l		
+		inr l
 @eliasLoop:
 		add a
 		jnz @eliasSkip
@@ -83,7 +83,7 @@ dzx0:
 @ldir1:
 		ldax d
 		stax b
-		inx d			
+		inx d
 		inx b
 		dcx h
 		mov a, h
@@ -92,17 +92,19 @@ dzx0:
 		pop psw
 		add a
 		ret
-		.closelabels			
-		
-; unpacks to the ram-disk $8000-$FFFF
+		.closelabels
+*/
+; unpack to the ram-disk $8000-$FFFF
 ; in:
 ; de - compressed data addr
 ; bc - uncompressed data addr
 ; a - ram-disk activation command
+
 dzx0RD:
-		sta @ramDiskActCmd1+1
-		sta @ramDiskActCmd2+1
-		lxi h, $0FFFF
+		sta @ramDiskCmd1+1
+		sta @ramDiskCmd2+1
+
+		lxi h, $ffff
 		push h
 		inx h
 		mvi a,$80
@@ -112,12 +114,12 @@ dzx0RD:
 		jc @newOffset
 		call @elias
 @copy:
-		xchg	
+		xchg
 		xthl
 		push h
 		dad b
 		xchg
-		call @ldirFromUnpacked
+		call @ldirUnpacked
 		xchg
 		pop h
 		xthl
@@ -131,7 +133,7 @@ dzx0RD:
 		sub l
 		rz
 		push h
-		rar			
+		rar
         mov h, a
 		ldax d
 		rar
@@ -139,12 +141,13 @@ dzx0RD:
 		inx d
 		xthl
 		mov a, h
-		lxi h,1
+		lxi h, 1
 		cnc @eliasBacktrack
 		inx h
 		jmp @copy
+
 @elias:
-		inr l	
+		inr l
 @eliasLoop:
 		add a
 		jnz @eliasSkip
@@ -161,47 +164,51 @@ dzx0RD:
 
 @ldir:
 		push psw
-@ldir1:
+@ldirLoop:
 		ldax d
-		push psw
+		sta @storeA11+1
 		; turn on the ram-disk
-@ramDiskActCmd1:
+@ramDiskCmd1:
 		mvi a, TEMP_BYTE
-		RAM_DISK_ON_BANK_NO_RESTORE()
-		pop psw
+		out $10
+@storeA11:
+		mvi a, TEMP_BYTE
 		stax b
 		; turn off the ram-disk
-		RAM_DISK_OFF_NO_RESTORE()
-		inx d			
+		xra a
+		out $10
+
+		inx d
 		inx b
 		dcx h
 		mov a, h
 		ora l
-		jnz @ldir1
+		jnz @ldirLoop
 		pop psw
 		add a
-		ret			
+		ret
 
-@ldirFromUnpacked:
+@ldirUnpacked:
 		push psw
 		; turn on the ram-disk
-@ramDiskActCmd2:		
+@ramDiskCmd2:
 		mvi a, TEMP_BYTE
-		RAM_DISK_ON_BANK_NO_RESTORE()		
-@ldir2:
+		out $10
+@ldirUnpackedLoop:
 		ldax d
 		stax b
-		inx d			
+		inx d
 		inx b
 		dcx h
 		mov a, h
 		ora l
-		jnz @ldir2
+		jnz @ldirUnpackedLoop
 
 		; turn off the ram-disk
-		RAM_DISK_OFF_NO_RESTORE()
+		xra a
+		out $10
 
 		pop psw
 		add a
-		ret			
+		ret
 		.closelabels

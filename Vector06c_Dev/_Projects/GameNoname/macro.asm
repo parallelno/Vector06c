@@ -76,6 +76,12 @@
 		.endloop
 .endmacro
 
+.macro NOP_(i)
+		.loop i
+			nop
+		.endloop
+.endmacro
+
 ;================================== ALL RAM_DISK_* macros has to be placed BEFORE lxi sp, *, and sphl! ;==================================
 ; has to be placed right BEFORE lxi sp, addr, and sphl
 ; mount the ram-disk w/o storing mode

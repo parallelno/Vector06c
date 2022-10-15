@@ -35,8 +35,7 @@ GameUpdate:
 			ora a
 			rz
 @updateLoop:
-			; TODO: consider having update in the interruption
-			; every second frame (25fps)
+			; TODO: optimize. consider having an update func called every second frame (25fps)
 			DEBUG_BORDER_LINE(4)
 			call HeroUpdate
 			DEBUG_BORDER_LINE(2)

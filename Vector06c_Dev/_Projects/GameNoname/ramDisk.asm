@@ -11,25 +11,26 @@ RamDiskInit:
 			mvi a, RAM_DISK_M1 | RAM_DISK_M_8F
 			call dzx0RD
 
-			; unpack sprites to the ram-disk
+			; unpack sprites to the ram-disk to $8000
 			lxi d, toBank0addr0
 			lxi b, SCR_ADDR
 			mvi a, RAM_DISK_M0 | RAM_DISK_M_8F
 			call dzx0RD
 			; preshift sprites
 			;call SpritesPreshift
-			; copy sprites to the ram-disk
+			; copy sprites to the ram-disk to a proper addr
 			lxi d, $0000
 			lxi h, $8000
 			lxi b, $4000
 			mvi a, RAM_DISK_S0 | RAM_DISK_M0 | RAM_DISK_M_8F
 			call CopyToRamDisk
 
+
+			; TODO: fix dzx0RD which breaks data. check a flag on the wall in the first room.
 			; unpack tiles and levels to the ram-disk
 			lxi d, toBank0addr8000
 			lxi b, $8000
 			mvi a, RAM_DISK_M0 | RAM_DISK_M_8F
 			call dzx0RD
-
 			ret
 			.closelabels

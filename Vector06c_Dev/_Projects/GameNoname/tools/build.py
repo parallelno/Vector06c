@@ -112,7 +112,7 @@ def CheckSegmentSize(path, segmentAddr):
 	size = os.path.getsize(path)
 
 	if segmentAddr == SEGMENT_0000_7F00_ADDR:
-		assert size < SEGMENT_0000_7F00_SIZE_MAX, f"ERROR: the segment size can't be bigger " + hex(SEGMENT_0000_7F00_SIZE_MAX)
+		assert size < SEGMENT_0000_7F00_SIZE_MAX, f"ERROR: the segment size can't be bigger /n" + hex(SEGMENT_0000_7F00_SIZE_MAX)
 	
 	if segmentAddr == SEGMENT_8000_0000_ADDR:
-		assert size < SEGMENT_8000_0000_SIZE_MAX, f"ERROR: the segment size can't be bigger " + hex(SEGMENT_8000_0000_SIZE_MAX)
+		assert size < SEGMENT_8000_0000_SIZE_MAX, f"ERROR: the segment size can't be bigger /n" + hex(SEGMENT_8000_0000_SIZE_MAX)

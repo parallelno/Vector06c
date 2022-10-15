@@ -31,22 +31,22 @@
 DrawSprite16x15:
 			DrawSprite16Height = 15
 			; store sp
-			lxi		h, $0000			; (12)
-			dad		sp				; (12)
-			shld	@restoreSP + 1	; (20)
+			lxi h, $0000			; (12)
+			dad sp				; (12)
+			shld @restoreSP + 1	; (20)
 			; sp = BC
-			mov		h, b			; (8)
-			mov		l, c			; (8)
+			mov h, b			; (8)
+			mov l, c			; (8)
 			sphl					; (8)
 			; D, e, a are initial X for 
 			; the 1st, the 2nd, the 3rd screen buffs
 			xchg					; (4)
-			mvi		a, 1			; (8)
-			add 	h				; (4)
-			mov 	d, a			; (8)
-			adi     $20             ; (8)
-			mov     e, a            ; (8)
-			adi 	$20				; (8)
+			mvi a, 1			; (8)
+			add h				; (4)
+			mov d, a			; (8)
+			adi $20             ; (8)
+			mov e, a            ; (8)
+			adi $20				; (8)
 									; (108) total
 
 ; HL - 1st screen buff XY
@@ -58,7 +58,7 @@ DrawSprite16x15:
 			DrawSprite16_M(DrawSprite16Height)
 			
 @restoreSP:	
-			lxi		sp, TEMP_ADDR	; restore sp (12)
+			lxi sp, TEMP_ADDR	; restore sp (12)
 			ret
 			.closelabels
 

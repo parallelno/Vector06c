@@ -3,6 +3,7 @@ from tools.build import *
 forceExport = IsFileUpdated("build_run.py")
 ######################################################################################
 # sprites to ramDisk
+print(f"sprites:")
 bank0_seg0_path = "ramDiskBank0_addr0"
 
 heroPath = "sprites\\hero"
@@ -24,6 +25,9 @@ projectilesSpriteSourceUpdated = IsFileUpdated("sources\\sprites\\art\\sprites_p
 heroAttack01SpriteSourceUpdated = IsFileUpdated("sources\\sprites\\art\\sprites_hero_attack01.png")
 
 anySpritesUpdated = False 
+
+print(f"sprite export")
+
 anySpritesUpdated |= ExportAminSprites(heroPath, animForceExport or heroSpriteSourceUpdated)
 anySpritesUpdated |= ExportAminSprites(skeletonPath, animForceExport or skeletonSpriteSourceUpdated, True)
 anySpritesUpdated |= ExportAminSprites(burnerPath, animForceExport or burnerSpriteSourceUpdated, True)
@@ -31,6 +35,7 @@ anySpritesUpdated |= ExportAminSprites(knightPath, animForceExport or knightSpri
 anySpritesUpdated |= ExportAminSprites(vampirePath, animForceExport or vampireSpriteSourceUpdated, True)
 anySpritesUpdated |= ExportAminSprites(scythePath, animForceExport or projectilesSpriteSourceUpdated, True)
 anySpritesUpdated |= ExportAminSprites(heroAttack01Path, animForceExport or heroAttack01SpriteSourceUpdated, True)
+print("")
 
 anySpritesUpdated |= IsFileUpdated(bank0_seg0_path + ".dasm")
 
@@ -43,15 +48,16 @@ if anySpritesUpdated:
 	ExportLabels(bank0_seg0_path + "Labels.asm")
 
 	print(f"retroassembler: {bank0_seg0_path} got compiled.")
-	print(f"ExportLabels: {bank0_seg0_path}Labels.asm got compiled.")
+	print(f"ExportLabels: {bank0_seg0_path}Labels.asm got compiled.\n")
 
 	common.DeleteFile("generated\\bin\\" + bank0_seg0_path + ".bin.zx0")
 	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank0_seg0_path + ".bin generated\\bin\\" + bank0_seg0_path + ".bin.zx0")
 else: 
 	print(f"retroassembler: {bank0_seg0_path} wasn't updated. No need to export.")
 	print(f"ExportLabels: {bank0_seg0_path}Labels.asm wasn't updated. No need to compile.")
-	print(f"zx0: {bank0_seg0_path}bin wasn't updated. No need to compress.")
+	print(f"zx0: {bank0_seg0_path}bin wasn't updated. No need to compress.\n")
 
+print(f"")
 bank1_seg0_path = "ramDiskBank1_addr0"
 anySpritesUpdated |= IsFileUpdated(bank1_seg0_path + ".dasm")
 
@@ -64,18 +70,21 @@ if anySpritesUpdated:
 	ExportLabels(bank1_seg0_path + "Labels.asm")
 
 	print(f"retroassembler: {bank1_seg0_path} got compiled.")
-	print(f"ExportLabels: {bank1_seg0_path}Labels.asm got compiled.")
+	print(f"ExportLabels: {bank1_seg0_path}Labels.asm got compiled.\n")
 
 	common.DeleteFile("generated\\bin\\" + bank1_seg0_path + ".bin.zx0")
 	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank1_seg0_path + ".bin generated\\bin\\" + bank1_seg0_path + ".bin.zx0")
 else: 
 	print(f"retroassembler: {bank1_seg0_path} wasn't updated. No need to export.")
 	print(f"ExportLabels: {bank1_seg0_path}Labels.asm wasn't updated. No need to compile.")
-	print(f"zx0: {bank1_seg0_path}bin wasn't updated. No need to compress.")
+	print(f"zx0: {bank1_seg0_path}bin wasn't updated. No need to compress.\n")
 
+print(f"")
 ######################################################################################
 # levels to the ramDisk
+print(f"levels:")
 bank0_seg1_path = "ramDiskBank0_addr8000"
+
 
 level01Path = "levels\\level01"
 
@@ -86,6 +95,7 @@ anyLevelsUpdated |= IsFileUpdated("sources\\levels\\level01_room00.tmj")
 anyLevelsUpdated |= IsFileUpdated("sources\\levels\\level01_room01.tmj")
 anyLevelsUpdated |= IsFileUpdated("sources\\levels\\level01_room02.tmj")
 
+print(f"level export for {bank0_seg1_path}")
 anyLevelsUpdated = ExportLevel(level01Path, levelForceExport | anyLevelsUpdated)
 anyLevelsUpdated |= IsFileUpdated(bank0_seg1_path + ".dasm")
 
@@ -98,17 +108,19 @@ if anyLevelsUpdated:
 	ExportLabels(bank0_seg1_path + "Labels.asm")
 
 	print(f"retroassembler: {bank0_seg1_path} got compiled.")
-	print(f"ExportLabels: {bank0_seg1_path}Labels.asm got compiled.")
+	print(f"ExportLabels: {bank0_seg1_path}Labels.asm got compiled.\n")
 
 	common.DeleteFile("generated\\bin\\" + bank0_seg1_path + ".bin.zx0")
 	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank0_seg1_path + ".bin generated\\bin\\" + bank0_seg1_path + ".bin.zx0")
 else: 
 	print(f"retroassembler: {bank0_seg1_path} wasn't updated. No need to export.")
 	print(f"ExportLabels: {bank0_seg1_path}Labels.asm wasn't updated. No need to compile.")
-	print(f"zx0: {bank0_seg1_path}bin wasn't updated. No need to compress.")
+	print(f"zx0: {bank0_seg1_path}bin wasn't updated. No need to compress.\n")
 
+print(f"")
 ######################################################################################
 # music to the ram-disk
+print(f"music:")
 bank1_screen_path = "ramDiskBank1_addrA000"
 
 musicForceExport = forceExport | IsFileUpdated("tools\\ay6Export.py")
@@ -130,13 +142,16 @@ if musicForceExport or anyMusicUpdated:
 	ExportLabels(bank1_screen_path + "Labels.asm")
 
 	print(f"retroassembler: {bank1_screen_path} got compiled.")
-	print(f"ExportLabels: {bank1_screen_path}Labels.asm got compiled.")
+	print(f"ExportLabels: {bank1_screen_path}Labels.asm got compiled.\n")
 
 	# compress music bin
 	common.RunCommand("del generated\\bin\\" + bank1_screen_path + ".bin.zx0")
 	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank1_screen_path + ".bin generated\\bin\\" + bank1_screen_path + ".bin.zx0")
+
+print(f"")
 ######################################################################################
 # codeLib is in the same bank where a backbuffer is
+print(f"code:")
 bank2_seg1_path = "ramDiskBank2_addr8000"
 
 codeLibForceExport = forceExport
@@ -157,13 +172,17 @@ if codeLibForceExport or anyCodeUpdated:
 	ExportLabels(bank2_seg1_path + "Labels.asm", True)
 
 	print(f"retroassembler: {bank2_seg1_path} got compiled.")
-	print(f"ExportLabels: {bank2_seg1_path}Labels.asm got compiled.")
+	print(f"ExportLabels: {bank2_seg1_path}Labels.asm got compiled.\n")
 
 	# compress codeLib bin
 	common.RunCommand("del generated\\bin\\" + bank2_seg1_path + ".bin.zx0")
 	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank2_seg1_path + ".bin generated\\bin\\" + bank2_seg1_path + ".bin.zx0")
+
+print(f"")
 ######################################################################################
 # game rom
+print(f"game rome:")
+
 mainAsm = "main"
 romPath = "rom\\"
 romName = os.path.basename(os.getcwd())

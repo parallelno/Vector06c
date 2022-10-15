@@ -68,7 +68,7 @@ GCPlayerTasksInit:
 			di
 			lxi h, 0
 			dad sp
-			shld @restoreSp+1
+			shld @restoreSP+1
 			; no need to restore because "di" above
 			RAM_DISK_ON_NO_RESTORE(RAM_DISK_S1 | RAM_DISK_M1 | RAM_DISK_M_AD) ; RAM_DISK0_B1_STACK_RAM
 
@@ -112,7 +112,7 @@ GCPlayerTasksInit:
 			dcr c
 			dcr c
 			jp @loop
-@restoreSp: lxi sp, TEMP_ADDR
+@restoreSP: lxi sp, TEMP_ADDR
 			RAM_DISK_OFF_NO_RESTORE()
 			ei 
 			ret
@@ -210,116 +210,116 @@ GCPlayerSchedulerRestoreSp:
 ; unpack every 16 bytes into a current task circular buffer, 
 ; then call GCPlayerSchedulerStoreTaskContext
 GCPlayerUnpack:
-		lxi h, $ffff
-		push h
-		inx h
-		mvi a, $80
+			lxi h, $ffff
+			push h
+			inx h
+			mvi a, $80
 @literals:
-		call @Elias
-		push psw
+			call @Elias
+			push psw
 @Ldir1:
-		ldax d
-		stax b
-		inx d					
-		inr c 		; to stay inside the circular buffer
-		; check if it's time to
-		mvi a, $0f
-		ana c
-		cz GCPlayerSchedulerStoreTaskContext 
+			ldax d
+			stax b
+			inx d					
+			inr c 		; to stay inside the circular buffer
+			; check if it's time to have a break
+			mvi a, $0f
+			ana c
+			cz GCPlayerSchedulerStoreTaskContext 
 
-		dcx h
-		mov a, h
-		ora l
-		jnz @Ldir1
-		pop psw
-		add a
+			dcx h
+			mov a, h
+			ora l
+			jnz @Ldir1
+			pop psw
+			add a
 
-		jc @newOffset
-		call @Elias
+			jc @newOffset
+			call @Elias
 @copy:
-		xchg
-		xthl
-		push h
-		dad b
-		mov h, b ; to stay inside the circular buffer
-		xchg
+			xchg
+			xthl
+			push h
+			dad b
+			mov h, b ; to stay inside the circular buffer
+			xchg
 
 @ldirFromBuff:
-		push psw
+			push psw
 @ldirFromBuff1:
-		ldax d
-		stax b
-		inr e		; to stay inside the circular buffer				
-		inr c 		; to stay inside the circular buffer
-		; check if it's time to
-		mvi a, $0f
-		ana c
-		cz GCPlayerSchedulerStoreTaskContext 
+			ldax d
+			stax b
+			inr e		; to stay inside the circular buffer				
+			inr c 		; to stay inside the circular buffer
+			; check if it's time to have a break
+			mvi a, $0f
+			ana c
+			cz GCPlayerSchedulerStoreTaskContext 
 
-		dcx h
-		mov a, h
-		ora l
-		jnz @ldirFromBuff1
-		mvi h, 0	; ----------- ???
-		pop psw
-		add a
+			dcx h
+			mov a, h
+			ora l
+			jnz @ldirFromBuff1
+			mvi h, 0	; ----------- ???
+			pop psw
+			add a
 
-		xchg
-		pop h
-		xthl
-		xchg
-		jnc @literals
+			xchg
+			pop h
+			xthl
+			xchg
+			jnc @literals
 @newOffset:
-		call @Elias
-		mov h, a
-		pop psw
-		xra a
-		sub l
-		jz @exit
-		push h
-		rar
-		mov h, a
-		ldax d
-		rar
-		mov l, a
-		inx d
-		xthl
-		mov a, h
-		lxi h, 1
-		cnc @eliasBacktrack
-		inx h
-		jmp @copy
+			call @Elias
+			mov h, a
+			pop psw
+			xra a
+			sub l
+			jz @exit
+			push h
+			rar
+			mov h, a
+			ldax d
+			rar
+			mov l, a
+			inx d
+			xthl
+			mov a, h
+			lxi h, 1
+			cnc @eliasBacktrack
+			inx h
+			jmp @copy
 
 @Elias:
-		inr l
+			inr l
 @eliasLoop:	
-		add a
-		jnz @eliasSkip
-		ldax d
-		inx d
-		ral
+			add a
+			jnz @eliasSkip
+			ldax d
+			inx d
+			ral
 @eliasSkip:
-		rc
+			rc
 @eliasBacktrack:
-		dad h
-		add a
-		jnc @eliasLoop
-		jmp @Elias
+			dad h
+			add a
+			jnc @eliasLoop
+			jmp @Elias
 
 @exit:
-		; restore sp
-		lhld GCPlayerSchedulerRestoreSp+1
-		sphl
-		; pop GCPlayerSchedulerUpdate return addr 
-		; to return right to the func that called GCPlayerUpdate
-		pop psw
-		; turn off the current music
-		mvi a, OPCODE_RET
-		sta GCPlayerUpdate
-		RAM_DISK_OFF_NO_RESTORE()
-		; return to the func that called GCPlayerUpdate		
-		ret
-		.closelabels
+			; restore sp
+			lhld GCPlayerSchedulerRestoreSp+1
+			sphl
+			; pop GCPlayerSchedulerUpdate return addr 
+			; to return right to the func that called GCPlayerUpdate
+			pop psw
+			; turn off the current music
+			mvi a, OPCODE_RET
+			sta GCPlayerUpdate
+			RAM_DISK_OFF_NO_RESTORE()
+			; return to the func that called GCPlayerUpdate		
+			ret
+			.closelabels
 		
 ; send buffers data to AY regs
 ; this code is performed during an interruption

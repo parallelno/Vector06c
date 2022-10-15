@@ -11,13 +11,15 @@ LevelsInit:
 ;
 LevelInit:
 			lxi d, level01_palette_sprites_tiles_lv01
-            call SetPaletteFromRamDisk
+            mvi a, RAM_DISK_S0
+			call SetPaletteFromRamDisk
 			mvi a, 1
 			sta borderColorIdx
 			xra a
 			sta roomIdx
 
 			lxi d, level01_startPos
+			mvi a, RAM_DISK_S0
 			call GetWordFromRamDisk
 			call HeroSetPos
 			call HeroInit
@@ -55,12 +57,14 @@ RoomInitTiles:
 			dad b
 
 			xchg
+			mvi a, RAM_DISK_S0
 			call GetWordFromRamDisk
 			mov d, b
 			mov e, c
 
 			lxi b, roomTilesData ; the tile data buffer is used as a temp buffer
-			mvi a, ROOM_WIDTH * ROOM_HEIGHT / 2
+			lxi h, RAM_DISK_S0<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
+
 			call CopyFromRamDisk
 
 			; convert tile idxs into tile gfx addrs
@@ -89,6 +93,7 @@ RoomInitTiles:
 			; copy the tile graphics addr to the current room tile graphics table
 			push b
 			xchg
+			mvi a, RAM_DISK_S0
 			call GetWordFromRamDisk
 			mov a, c
 			mov e, b
@@ -124,13 +129,14 @@ RoomInitTilesData:
 			dad b
 
 			xchg
+			mvi a, RAM_DISK_S0
 			call GetWordFromRamDisk
 			lxi h, ROOM_WIDTH * ROOM_HEIGHT + 2 ; tiles data is stored right after the tile addr tbl plus 2 safety bytes
 			dad b
 
 			xchg
 			lxi b, roomTilesData
-			mvi a, ROOM_WIDTH * ROOM_HEIGHT / 2
+			lxi h, RAM_DISK_S0<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
 			call CopyFromRamDisk
 
 			; handle the tile data calling tile data funcs
@@ -359,6 +365,7 @@ RoomDraw:
 			inx h
 			push d
 			push h
+			mvi a, RAM_DISK_S0
 			call DrawTile16x16
 			pop h
 			pop d

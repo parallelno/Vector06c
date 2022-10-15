@@ -3,7 +3,6 @@
 
 ; sharetable chunk of code to restore SP
 ; and dismount the ram-disk
-; replace @restoreSP with this
 RestoreSP:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
@@ -37,14 +36,13 @@ ClearMem:
 ; 		a = 0 to clear the main memory
 ; use:
 ; hl
-; TODO: move it to the ram-disk like __DrawSpriteVM and __EraseSpriteSP
-; TODO: fix it to work without di/ei
+; TODO: fix it to work without di/ei. di/ei causes music stuttering when the hero goes to another room
 
 ClearMemSP:
 			di
 			lxi h, 0
 			dad sp
-			shld @RestoreSP + 1
+			shld @restoreSP + 1
 			RAM_DISK_ON_BANK()
 			xchg
 			mov e, c
@@ -57,7 +55,7 @@ ClearMemSP:
 			dcx d
 			cmp d
 			jnz @loop
-@RestoreSP:
+@restoreSP:
 			lxi sp, TEMP_WORD
 			RAM_DISK_OFF()
 			ei
@@ -90,25 +88,23 @@ SetPalette:
 			ret
 			.closelabels
 
-; Set palette copied from the ram-disk no blocking interruptions
+; Set palette copied from the ram-disk w/o blocking interruptions
 ; input: 
 ; de - the addr of the first item in the palette
+; a - ram-disk activation command
 ; use: 
 ; hl, bc, a
 PALETTE_COLORS = 16
-
-; TODO: replace RAM_DISK_ON() with RAM_DISK_ON_BANK()
-; to allow it works with any bank
 
 SetPaletteFromRamDisk:
 			hlt
 			; store sp
 			lxi h, $0000
 			dad sp
-			shld @restoreSp+1
+			shld RestoreSP+1
 			; copy unpacked data into the ram_disk
 			xchg
-			RAM_DISK_ON(RAM_DISK_S0)
+			RAM_DISK_ON_BANK()
 			sphl
 
 			mvi	a, PORT0_OUT_OUT
@@ -141,87 +137,36 @@ SetPaletteFromRamDisk:
 			mov a, e
 			cpi PALETTE_COLORS
 			jnz	@loop
-			
-@restoreSp: lxi sp, TEMP_ADDR
-			RAM_DISK_OFF()
-			ret
+			jmp RestoreSP
 			.closelabels
 
 ; Read a word from the ram-disk w/o blocking interruptions
 ; input: 
 ; de - data addr in the ram-disk
+; a - ram-disk activation command
 ; use: 
 ; hl
 ; out:
 ; bc - data
 
-; TODO: replace RAM_DISK_ON() with RAM_DISK_ON_BANK()
-; to allow it works with any bank
+; TODO: optimize. make a special version of that func for accesing a data pair
+; stored in $8000 and higher with a direct access
 GetWordFromRamDisk:
 			; store sp
 			lxi h, $0000
 			dad sp
-			shld @restoreSp+1
+			shld RestoreSP+1
 			; copy unpacked data into the ram_disk
 			xchg
-			RAM_DISK_ON(RAM_DISK_S0)
+			RAM_DISK_ON_BANK()
 			sphl
 			pop b ; bc has to be used when interruptions is on
-			
-@restoreSp: lxi sp, TEMP_ADDR
-			RAM_DISK_OFF()
-			ret
+			jmp RestoreSP
 			.closelabels
 
-/*
-;========================================
-; unpack the data on the screen to
-; BC addr (32K max), then copies a buffer 
-; from $8000-$ffff (32K) into the ram-disk.
-; input: 
-; de - packed data addr
-; bc - unpacked data addr
-; hl - the destination addr in the ram_disk + $8000 (because it copies 32k data backward)
-; a - ram-disk activation command
-; use:
-; all
-UnpackToRamDisk:
-			di
-			push h
-			push psw
-			call dzx0
-			; restore the destination addr
-			pop psw
-			pop d
-			; store sp
-			lxi h, $0000
-			dad sp
-			shld @restoreSp+1
-			; copy unpacked data into the ram_disk
-			xchg
-			RAM_DISK_ON_BANK()			
-			sphl
-			; TODO: copy only necessary length of data
-			lxi h, $ffff ; unpacked data screen addr + $7fff (because it copies the data backward)
-			mvi e, $7f
-@loop:
-			mov b, m
-			dcx h
-			mov c, m
-			dcx h			
-			push b
-			mov a, h
-			cmp e
-			jnz @loop
-
-@restoreSp: lxi sp, TEMP_ADDR
-			RAM_DISK_OFF()
-			ei
-			ret
-			.closelabels
-*/
 ;========================================
 ; copy a buffer into the ram-disk.
+; turn off interruptions!!!
 ; input: 
 ; de - from addr + data length
 ; hl - to addr in the ram_disk + data length (because it copies backward)
@@ -230,13 +175,12 @@ UnpackToRamDisk:
 ; use:
 ; all
 CopyToRamDisk:
-			di
 			shld @restoreHl+1
 			; store sp
 			lxi h, $0000
 			dad sp
-			shld @restoreSp+1
-			RAM_DISK_ON_BANK()			
+			shld @restoreSP+1
+			RAM_DISK_ON_BANK()
 @restoreHl:
 			lxi h, TEMP_WORD
 			sphl
@@ -252,33 +196,34 @@ CopyToRamDisk:
 			ora c
 			jnz @loop
 
-@restoreSp: lxi sp, TEMP_ADDR
+@restoreSP: 
+			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
-			ei
 			ret
 			.closelabels
-
-; Copy data (max 512) from the ram-disk to ram no blocking interruptions
+			
+; Copy data (max 512) from the ram-disk to ram w/o blocking interruptions
 ; input: 
+; h - ram-disk activation command
+; l - data length / 2
 ; de - data addr in the ram-disk
 ; bc - destination addr
-; a - data length / 2
-; use: 
-; hl
 
-; TODO: replace RAM_DISK_ON() with RAM_DISK_ON_BANK()
-; to allow it works with any ram-disk bank
+; TODO: optimize. check if it is more efficient to copy a data stored 
+; in $8000 and higher with a direct access like mov
 CopyFromRamDisk:
 			; store sp
-			lxi h, $0000
+			push h
+			lxi h, $0002
 			dad sp
-			shld @restoreSp+1
+			shld RestoreSP+1
 			; copy unpacked data into the ram_disk
 			xchg
-			mov e, a
-			RAM_DISK_ON(RAM_DISK_S0)
+			pop d
+			mov a, d
+			RAM_DISK_ON_BANK()
 			sphl
-			mov a, e
+			;mov a, e
 			mov l, c
 			mov h, b
 @loop:
@@ -287,10 +232,7 @@ CopyFromRamDisk:
 			inx h
 			mov m, b
 			inx h
-			dcr a
+			dcr e;a
 			jnz @loop
-			
-@restoreSp: lxi sp, TEMP_ADDR
-			RAM_DISK_OFF()
-			ret
+			jmp RestoreSP
 			.closelabels			

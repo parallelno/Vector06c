@@ -49,9 +49,7 @@ monstersDrawFunc:
 
 ; sprite data structs of the current room. do not change its layout
 monstersRoomSpriteData:
-; TODO: consider copying certain monster's data from its place 
-; to a common place where it can be addressed within just labels 
-; without using relative pointers.
+
 monsterDirX:			.byte 1 ; 1-right, 0-left
 monsterState:           .byte 0 ; 0 - idle
 monsterStateCounter:    .byte 40

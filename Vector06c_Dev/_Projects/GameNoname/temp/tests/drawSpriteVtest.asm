@@ -68,7 +68,7 @@ DrawSpriteV2:
 			shld @restoreH+1
 			lxi h, @stopTbl
 			mvi d, 0
-			; TODO: (height - 1)*2 in the script. because there is no height = 0
+			; TODO: optimize. (height - 1)*2 in the script. because there is no height = 0
 			; then remove mul below and the first addr in the addr table
 			mov a, c
 			dcr a

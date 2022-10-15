@@ -411,7 +411,7 @@ HeroUpdateSetIdle:
 HeroErase:
 			; TODO: update initializations of heroEraseScrAddr and heroEraseWH
 			; when the level starts, and hero teleports
-			; TODO: erease only that is outside of the updated hero pos
+			; TODO: optimize. erease only that is outside of the updated hero pos
 			lhld heroEraseScrAddr
 			xchg
 			lhld heroEraseWH
@@ -426,7 +426,7 @@ HeroDraw:
 			lhld heroAnimAddr
 			call GetSpriteAddr
 
-			; TODO: consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
+			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
 			CALL_RAM_DISK_FUNC(__DrawSpriteV, RAM_DISK_S0 | RAM_DISK_M2 | RAM_DISK_M_8F)
 
 			; store an old scr addr, width, and height
