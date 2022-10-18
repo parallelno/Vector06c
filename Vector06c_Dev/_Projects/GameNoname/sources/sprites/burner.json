@@ -18,30 +18,16 @@
 		{"x": 224,	"y" : 0},
 		{"x": 240,	"y" : 0}
 	],
+	"preshifted_sprites" : 4,
 	"anims" : {
-		"idle_r"	: [
-			["idle_r_0", "idle_r_1", "idle_r_2", "idle_r_3"]
-		],
-		"idle_l"	: [
-			["idle_l_0", "idle_l_1", "idle_l_2", "idle_l_3"]
-		],
-		"run_r"	: [
-			["run_r0_0", "run_r0_1", "run_r0_2", "run_r0_3"],
-			["run_r1_0", "run_r1_1", "run_r1_2", "run_r1_3"],
-			["run_r2_0", "run_r2_1", "run_r2_2", "run_r2_3"],
-			["run_r3_0", "run_r3_1", "run_r3_2", "run_r3_3"]
-		],
-		"run_l"	: [
-			["run_l0_0", "run_l0_1", "run_l0_2", "run_l0_3"],
-			["run_l1_0", "run_l1_1", "run_l1_2", "run_l1_3"],
-			["run_l2_0", "run_l2_1", "run_l2_2", "run_l2_3"],
-			["run_l3_0", "run_l3_1", "run_l3_2", "run_l3_3"]
-		]
-
+		"idle_r"	: ["idle_r0"],
+		"idle_l"	: ["idle_l0"],
+		"run_r"	: ["run_r0", "run_r1", "run_r2", "run_r3"],
+		"run_l"	: ["run_l0", "run_l1", "run_l2", "run_l3"]
 	},
 	"sprites" : [
 		{
-			"name" : "idle_r_0",
+			"name" : "idle_r0",
 			"x" : 0,
 			"y"	: 32,
 			"width" : 16,
@@ -53,43 +39,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "idle_r_1",
-			"x" : 16,
-			"y"	: 32,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "idle_r_2",
-			"x" : 40,
-			"y"	: 32,
-			"width" : 24,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "idle_r_3",
-			"x" : 72,
-			"y"	: 32,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 8,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "idle_l_0",
+			"name" : "idle_l0",
 			"x" : 0,
 			"y"	: 48,
 			"width" : 16,
@@ -101,43 +51,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "idle_l_1",
-			"x" : 16,
-			"y"	: 48,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "idle_l_2",
-			"x" : 40,
-			"y"	: 48,
-			"width" : 24,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "idle_l_3",
-			"x" : 72,
-			"y"	: 48,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 8,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_r0_0",
+			"name" : "run_r0",
 			"x" : 0,
 			"y"	: 64,
 			"width" : 16,
@@ -149,43 +63,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_r0_1",
-			"x" : 16,
-			"y"	: 64,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_r0_2",
-			"x" : 40,
-			"y"	: 64,
-			"width" : 24,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_r0_3",
-			"x" : 72,
-			"y"	: 64,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 8,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_r1_0",
+			"name" : "run_r1",
 			"x" : 0, 
 			"y"	: 80,
 			"width" : 16,
@@ -197,43 +75,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_r1_1",
-			"x" : 16,
-			"y"	: 80,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_r1_2",
-			"x" : 40,
-			"y"	: 80,
-			"width" : 24,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_r1_3",
-			"x" : 72,
-			"y"	: 80,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 8,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_r2_0",
+			"name" : "run_r2",
 			"x" : 0,
 			"y"	: 96,
 			"width" : 16,
@@ -245,43 +87,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_r2_1",
-			"x" : 16,
-			"y"	: 96,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_r2_2",
-			"x" : 40,
-			"y"	: 96,
-			"width" : 24,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_r2_3",
-			"x" : 72,
-			"y"	: 96,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 8,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_r3_0",
+			"name" : "run_r3",
 			"x" : 0,
 			"y"	: 112,
 			"width" : 16,
@@ -293,43 +99,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_r3_1",
-			"x" : 16,
-			"y"	: 112,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_r3_2",
-			"x" : 40,
-			"y"	: 112,
-			"width" : 24,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_r3_3",
-			"x" : 72,
-			"y"	: 112,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 8,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_l0_0",
+			"name" : "run_l0",
 			"x" : 0,
 			"y"	: 128,
 			"width" : 16,
@@ -341,43 +111,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_l0_1",
-			"x" : 16,
-			"y"	: 128,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_l0_2",
-			"x" : 40,
-			"y"	: 128,
-			"width" : 24,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_l0_3",
-			"x" : 72,
-			"y"	: 128,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 8,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_l1_0",
+			"name" : "run_l1",
 			"x" : 0, 
 			"y"	: 144,
 			"width" : 16,
@@ -389,43 +123,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_l1_1",
-			"x" : 16,
-			"y"	: 144,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_l1_2",
-			"x" : 40,
-			"y"	: 144,
-			"width" : 24,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_l1_3",
-			"x" : 72,
-			"y"	: 144,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 8,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_l2_0",
+			"name" : "run_l2",
 			"x" : 0,
 			"y"	: 160,
 			"width" : 16,
@@ -437,43 +135,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_l2_1",
-			"x" : 16,
-			"y"	: 160,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_l2_2",
-			"x" : 40,
-			"y"	: 160,
-			"width" : 24,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_l2_3",
-			"x" : 72,
-			"y"	: 160,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 8,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_l3_0",
+			"name" : "run_l3",
 			"x" : 0,
 			"y"	: 176,
 			"width" : 16,
@@ -483,42 +145,6 @@
 			"mask_y" : 60,
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		},
-		{
-			"name" : "run_l3_1",
-			"x" : 16,
-			"y"	: 176,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_l3_2",
-			"x" : 40,
-			"y"	: 176,
-			"width" : 24,
-			"height" : 13,
-			"offsetX" : 0,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "run_l3_3",
-			"x" : 72,
-			"y"	: 176,
-			"width" : 16,
-			"height" : 13,
-			"offsetX" : 8,
-			"mask_x" : 16,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		}				
+		}
 	]
 }

@@ -8,8 +8,8 @@ buildDBPath = "generated\\build.db"
 SEGMENT_0000_7F00_ADDR = 0x0000
 SEGMENT_8000_0000_ADDR = 0x8000
 
-SEGMENT_0000_7F00_SIZE_MAX = 2 ** 31 - 256 # because an interruption can corrupt the ram-disk memory from STACK_MIN_ADDR = $7f00 to STACK_TEMP_ADDR = $8000
-SEGMENT_8000_0000_SIZE_MAX = 2 ** 31
+SEGMENT_0000_7F00_SIZE_MAX = 2 ** 15 - 256 # because an interruption can corrupt the ram-disk memory from STACK_MIN_ADDR = $7f00 to STACK_TEMP_ADDR = $8000
+SEGMENT_8000_0000_SIZE_MAX = 2 ** 15
 
 def DelBuildDB():
 	common.RunCommand("del " + buildDBPath, "Build DB was deleted")
@@ -18,7 +18,6 @@ def ExportAminSprites(sourcePath, exporterUpdated, mask = False, sourceFolder = 
 	jsonExt = ".json"
 	if IsFileUpdated(sourceFolder + sourcePath + jsonExt) or exporterUpdated:
 		animSpriteExport.Export(
-			True, 
 			mask, 
 			sourceFolder + sourcePath + jsonExt, 
 			generatedFolder + sourcePath + "Anim.dasm", 
@@ -112,7 +111,11 @@ def CheckSegmentSize(path, segmentAddr):
 	size = os.path.getsize(path)
 
 	if segmentAddr == SEGMENT_0000_7F00_ADDR:
-		assert size < SEGMENT_0000_7F00_SIZE_MAX, f"ERROR: the segment size can't be bigger /n" + hex(SEGMENT_0000_7F00_SIZE_MAX)
-	
-	if segmentAddr == SEGMENT_8000_0000_ADDR:
-		assert size < SEGMENT_8000_0000_SIZE_MAX, f"ERROR: the segment size can't be bigger /n" + hex(SEGMENT_8000_0000_SIZE_MAX)
+		segmentSizeMax = SEGMENT_0000_7F00_SIZE_MAX
+	else:
+		segmentSizeMax = SEGMENT_8000_0000_SIZE_MAX
+
+	if size > segmentSizeMax:
+			print(f"ERROR: {path} is bigger than {segmentSizeMax} bytes")
+			print("Stop export")
+			exit(1)

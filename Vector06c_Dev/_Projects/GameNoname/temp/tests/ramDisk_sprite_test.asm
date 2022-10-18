@@ -1,11 +1,133 @@
+RamDiskInit_sprite_test_clearScr:
+			lxi h, $8200
+@column1:
+			mvi m, 0
+			inr l
+			jnz @column1
+			inr h
+@column2:
+			mvi m, 0
+			inr l
+			jnz @column2
+			inr h
+
+@column3:
+			mvi m, 128
+			inr l
+			jnz @column3
+			inr h
+			jnz @column1
+			ret
+
+RamDiskInit_sprite_test:
+			; clear the screen
+			;lxi b, $0000
+			;lxi d, $8000 / 32 - 1
+			;xra a
+			;call ClearMemSP
+			call RamDiskInit_sprite_test_clearScr
+			; HERO
+			RAM_DISK_ON(RAM_DISK_S0)
+
+			TEST_DRAW_SPRITE(hero_idle_r0_0, $a0f0 - 16)
+			TEST_DRAW_SPRITE(hero_idle_r0_1, $a3f0 - 16)
+			TEST_DRAW_SPRITE(hero_idle_r0_2, $a6f0 - 16)
+			TEST_DRAW_SPRITE(hero_idle_r0_3, $a9f0 - 16)
+			TEST_DRAW_SPRITE(hero_idle_r0_4, $acf0 - 16)
+			TEST_DRAW_SPRITE(hero_idle_r0_5, $aff0 - 16)
+			TEST_DRAW_SPRITE(hero_idle_r0_6, $b2f0 - 16)
+			TEST_DRAW_SPRITE(hero_idle_r0_7, $b5f0 - 16)
+
+			TEST_DRAW_SPRITE(hero_idle_l0_0, $a0f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_idle_l0_1, $a3f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_idle_l0_2, $a6f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_idle_l0_3, $a9f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_idle_l0_4, $acf0 - 16*2)
+			TEST_DRAW_SPRITE(hero_idle_l0_5, $aff0 - 16*2)
+			TEST_DRAW_SPRITE(hero_idle_l0_6, $b2f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_idle_l0_7, $b5f0 - 16*2)
+
+			TEST_DRAW_SPRITE(hero_run_r0_0, $a0f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_r0_1, $a3f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_r0_2, $a6f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_r0_3, $a9f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_r0_4, $acf0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_r0_5, $aff0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_r0_6, $b2f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_r0_7, $b5f0 - 16*3)
+
+			TEST_DRAW_SPRITE(hero_run_r1_0, $a0f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_r1_1, $a3f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_r1_2, $a6f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_r1_3, $a9f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_r1_4, $acf0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_r1_5, $aff0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_r1_6, $b2f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_r1_7, $b5f0 - 16*4)			
+			
+			TEST_DRAW_SPRITE(hero_run_r2_0, $a0f0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_r2_1, $a3f0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_r2_2, $a6f0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_r2_3, $a9f0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_r2_4, $acf0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_r2_5, $aff0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_r2_6, $b2f0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_r2_7, $b5f0 - 16*5)			
+
+
+			TEST_DRAW_SPRITE_M(skeleton_idle_r0_0, $a080 - 16)
+			TEST_DRAW_SPRITE_M(skeleton_idle_r0_1, $a380 - 16)
+			TEST_DRAW_SPRITE_M(skeleton_idle_r0_2, $a680 - 16)
+			TEST_DRAW_SPRITE_M(skeleton_idle_r0_3, $a980 - 16)
+
+			TEST_DRAW_SPRITE_M(skeleton_idle_l0_0, $a080 - 16*2)
+			TEST_DRAW_SPRITE_M(skeleton_idle_l0_1, $a380 - 16*2)
+			TEST_DRAW_SPRITE_M(skeleton_idle_l0_2, $a680 - 16*2)
+			TEST_DRAW_SPRITE_M(skeleton_idle_l0_3, $a980 - 16*2)
+
+			TEST_DRAW_SPRITE_M(skeleton_run_r0_0, $a080 - 16*3)
+			TEST_DRAW_SPRITE_M(skeleton_run_r0_1, $a380 - 16*3)
+			TEST_DRAW_SPRITE_M(skeleton_run_r0_2, $a680 - 16*3)
+			TEST_DRAW_SPRITE_M(skeleton_run_r0_3, $a980 - 16*3)
+
+			TEST_DRAW_SPRITE_M(skeleton_run_r1_0, $a080 - 16*4)
+			TEST_DRAW_SPRITE_M(skeleton_run_r1_1, $a380 - 16*4)
+			TEST_DRAW_SPRITE_M(skeleton_run_r1_2, $a680 - 16*4)
+			TEST_DRAW_SPRITE_M(skeleton_run_r1_3, $a980 - 16*4)
+			
+			TEST_DRAW_SPRITE_M(skeleton_run_r2_0, $a080 - 16*5)
+			TEST_DRAW_SPRITE_M(skeleton_run_r2_1, $a380 - 16*5)
+			TEST_DRAW_SPRITE_M(skeleton_run_r2_2, $a680 - 16*5)
+			TEST_DRAW_SPRITE_M(skeleton_run_r2_3, $a980 - 16*5)
+			
+			TEST_DRAW_SPRITE_M(skeleton_run_r3_0, $a080 - 16*6)
+			TEST_DRAW_SPRITE_M(skeleton_run_r3_1, $a380 - 16*6)
+			TEST_DRAW_SPRITE_M(skeleton_run_r3_2, $a680 - 16*6)
+			TEST_DRAW_SPRITE_M(skeleton_run_r3_3, $a980 - 16*6)
+
+			RAM_DISK_OFF()
+@loop:		jmp @loop
+			ret
+.macro TEST_DRAW_SPRITE(source, screen)
+			lxi b, source
+			lxi d, screen
+			call DrawSpriteV
+.endmacro
+.macro TEST_DRAW_SPRITE_M(source, screen)
+			lxi b, source
+			lxi d, screen
+			call DrawSpriteVM
+.endmacro
+			.closelabels
+
 ; sharetable chunk of code to restore SP and 
 ; return a couple of parameters within HL, C
-DrawSpriteRet_ramDisk__:
-drawSpriteRestoreSP_ramDisk__:
+DrawSpriteRet_ramDisk_:
+drawSpriteRestoreSP_ramDisk_:
 			lxi sp, TEMP_ADDR
-drawSpriteScrAddr_ramDisk__:
+drawSpriteScrAddr_ramDisk_:
 			lxi b, TEMP_ADDR
-drawSpriteWidthHeight_ramDisk__:
+drawSpriteWidthHeight_ramDisk_:
 ; d - width
 ;		00 - 8pxs,
 ;		01 - 16pxs,
@@ -54,14 +176,14 @@ drawSpriteRestoreRet_ramDisk__:
 .macro DrawSpriteV_B1()
 			mov m, b
 .endmacro
-__DrawSpriteV:
+DrawSpriteV:
 			; store ret addr
 			pop h
 			shld drawSpriteRestoreRet_ramDisk__ + 1
 			; store SP
 			lxi h, 0
 			dad sp
-			shld drawSpriteRestoreSP_ramDisk__ + 1
+			shld drawSpriteRestoreSP_ramDisk_ + 1
 			; sp = BC
 			mov	h, b
 			mov	l, c
@@ -72,7 +194,7 @@ __DrawSpriteV:
 			pop b
 			dad b
 			; store a sprite screen addr to return it from this func
-			shld drawSpriteScrAddr_ramDisk__+1
+			shld drawSpriteScrAddr_ramDisk_+1
 
 			; store sprite width and height
 			; b - width, c - height
@@ -80,7 +202,7 @@ __DrawSpriteV:
 			mov d, b
 			mov e, c
 			xchg
-			shld drawSpriteWidthHeight_ramDisk__+1
+			shld drawSpriteWidthHeight_ramDisk_+1
 			xchg
 			mov a, b
 			rrc
@@ -116,7 +238,7 @@ __DrawSpriteV:
 			DrawSpriteV_B1()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk__
+			jz DrawSpriteRet_ramDisk_
 
 @w16oddScr3:
 			DrawSpriteV_B0()
@@ -135,7 +257,7 @@ __DrawSpriteV:
 			inr l
 			dcr e
 			jnz @w16evenScr1
-			jmp DrawSpriteRet_ramDisk__
+			jmp DrawSpriteRet_ramDisk_
 ;-------------------------------------------------
 @width24:
 			; save the high screen byte to restore X
@@ -171,7 +293,7 @@ __DrawSpriteV:
 			DrawSpriteV_B0()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk__
+			jz DrawSpriteRet_ramDisk_
 
 @w24oddScr3:
 			DrawSpriteV_B1()
@@ -196,7 +318,7 @@ __DrawSpriteV:
 			inr l
 			dcr e
 			jnz @w24evenScr1
-			jmp DrawSpriteRet_ramDisk__
+			jmp DrawSpriteRet_ramDisk_
 ;------------------------------------------------------
 @width8:
 			; save the high screen byte to restore X
@@ -217,7 +339,7 @@ __DrawSpriteV:
 			DrawSpriteV_B0()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk__
+			jz DrawSpriteRet_ramDisk_
 @w8oddScr3:
 			DrawSpriteV_B1()
 @w8oddScr2:
@@ -229,7 +351,7 @@ __DrawSpriteV:
 			inr l
 			dcr e
 			jnz @w8evenScr1
-			jmp DrawSpriteRet_ramDisk__
+			jmp DrawSpriteRet_ramDisk_
 			.closelabels
 
 
@@ -270,14 +392,14 @@ __DrawSpriteV:
 			mov m, a
 .endmacro
 
-__DrawSpriteVM:
+DrawSpriteVM:
 			; store ret addr
 			pop h
 			shld drawSpriteRestoreRet_ramDisk__ + 1
 			; store SP
 			lxi h, 0
 			dad sp
-			shld drawSpriteRestoreSP_ramDisk__ + 1
+			shld drawSpriteRestoreSP_ramDisk_ + 1
 			; sp = BC
 			mov	h, b
 			mov	l, c
@@ -288,7 +410,7 @@ __DrawSpriteVM:
 			pop b
 			dad b
 			; store a sprite screen addr to return it from this func
-			shld drawSpriteScrAddr_ramDisk__+1
+			shld drawSpriteScrAddr_ramDisk_+1
 
 			; store sprite width and height
 			; b - width, c - height
@@ -296,7 +418,7 @@ __DrawSpriteVM:
 			mov d, b
 			mov e, c
 			xchg
-			shld drawSpriteWidthHeight_ramDisk__+1
+			shld drawSpriteWidthHeight_ramDisk_+1
 			xchg
 			mov a, b
 			rrc
@@ -333,7 +455,7 @@ __DrawSpriteVM:
 			DRAW_SPRITE_V_M()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk__
+			jz DrawSpriteRet_ramDisk_
 
 @w16oddScr3:
 			DRAW_SPRITE_V_M()
@@ -352,7 +474,7 @@ __DrawSpriteVM:
 			inr l
 			dcr e
 			jnz @w16evenScr1
-			jmp DrawSpriteRet_ramDisk__
+			jmp DrawSpriteRet_ramDisk_
 ;-------------------------------------------------
 @width24:
 			; save the high screen byte to restore X
@@ -388,7 +510,7 @@ __DrawSpriteVM:
 			DRAW_SPRITE_V_M()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk__
+			jz DrawSpriteRet_ramDisk_
 
 @w24oddScr3:
 			DRAW_SPRITE_V_M()
@@ -413,7 +535,7 @@ __DrawSpriteVM:
 			inr l
 			dcr e
 			jnz @w24evenScr1
-			jmp DrawSpriteRet_ramDisk__
+			jmp DrawSpriteRet_ramDisk_
 ;------------------------------------------------------
 @width8:
 			; save the high screen byte to restore X
@@ -434,7 +556,7 @@ __DrawSpriteVM:
 			DRAW_SPRITE_V_M()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk__
+			jz DrawSpriteRet_ramDisk_
 @w8oddScr3:
 			DRAW_SPRITE_V_M()
 @w8oddScr2:
@@ -446,5 +568,5 @@ __DrawSpriteVM:
 			inr l
 			dcr e
 			jnz @w8evenScr1
-			jmp DrawSpriteRet_ramDisk__
+			jmp DrawSpriteRet_ramDisk_
 			.closelabels

@@ -12,7 +12,7 @@ GameInit:
 			call LevelsInit
 			call LevelInit
 			call RoomInit
-			call RoomDraw
+			call RoomDraw			
 
 			xra a
 			sta interruptionCounter

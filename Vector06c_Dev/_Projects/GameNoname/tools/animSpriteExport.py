@@ -51,7 +51,7 @@ def SpriteDataBB(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 					scrBuff.append(maskBytes[i])
 		data.append(scrBuff)
 	return data
-	
+
 # tiles 8*8pxs for 3 scr fuffers
 def SpriteDataTiled(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 	# sprite data structure description is in drawSprite.asm
@@ -70,7 +70,7 @@ def SpriteDataTiled(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 					if maskBytes:
 						tile.append(maskBytes[i])
 			data.append(tile)
-	return data	
+	return data
 
 def SpriteData(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 	# sprite data structure description is in drawSprite.asm
@@ -85,33 +85,33 @@ def SpriteData(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 			for x in range(width):
 				i = y*width+x
 				if maskBytes:
-					data.append(maskBytes[i])				
+					data.append(maskBytes[i])
 				data.append(bytes1[i])
 			for x in range(width):
 				i = y*width+width-x-1
 				if maskBytes:
-					data.append(maskBytes[i])				
+					data.append(maskBytes[i])
 				data.append(bytes2[i])
 			for x in range(width):
 				i = y*width+width-x-1
 				if maskBytes:
-					data.append(maskBytes[i])				
+					data.append(maskBytes[i])
 				data.append(bytes3[i])
 		else:
 			for x in range(width):
 				i = y*width+x
 				if maskBytes:
-					data.append(maskBytes[i])				
+					data.append(maskBytes[i])
 				data.append(bytes3[i])
 			for x in range(width):
 				i = y*width+width-x-1
 				if maskBytes:
-					data.append(maskBytes[i])				
+					data.append(maskBytes[i])
 				data.append(bytes2[i])
 			for x in range(width):
 				i = y*width+width-x-1
 				if maskBytes:
-					data.append(maskBytes[i])				
+					data.append(maskBytes[i])
 				data.append(bytes1[i])
 
 	return [data]
@@ -119,29 +119,34 @@ def SpriteData(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 def AnimsToAsm(charJ, charJPath):
 	asm = ""
 	labelPrefix = charJPath.split("/")[-1].split("\\")[-1].split(".")[0]
-	
+
+	# preshifted sprites
+	preshiftedSprites = charJ["preshifted_sprites"]
+	asm += labelPrefix + "_preshifted_sprites:\n"
+	asm += f"			.byte " + str(preshiftedSprites) + "\n"
+
+
 	# make a list of animNames
 	asm += labelPrefix + "_anims:\n"
 	asm += "			.word "
 	for animName in charJ["anims"]:
 		asm += labelPrefix + "_" + animName + ", "
-	asm += "\n"
+	asm += "0, \n"
 
 	# make a list of sprites for an every anim
 	for animName in charJ["anims"]:
-		
+
 		asm += labelPrefix + "_" + animName + ":\n"
-		
+ 
 		for i, frame in enumerate(charJ["anims"][animName]):
-			preshiftedSpriteCount = len(frame)
-		
+
 			if i < len(charJ["anims"][animName])-1:
-				nextFrameOffset = preshiftedSpriteCount * 2 # every frame consists of preshiftedSprites pointers
+				nextFrameOffset = preshiftedSprites * 2 # every frame consists of preshiftedSprites pointers
 				nextFrameOffset += 1 # increase the offset to save one instruction in the game code
 				asm += "			.byte " + str(nextFrameOffset) + ", 0 ; offset to the next frame\n"
 			else:
 				offsetAddr = 1
-				nextFrameOffsetLow = 255 - (len(charJ["anims"][animName]) -1) * (preshiftedSpriteCount + offsetAddr) * 2 + 1
+				nextFrameOffsetLow = 255 - (len(charJ["anims"][animName]) -1) * (preshiftedSprites + offsetAddr) * 2 + 1
 				nextFrameOffsetLow -= 1 # decrease the offset to save one instruction in the game code
 				if nextFrameOffsetLow == 0:
 					nextFrameOffsetHiStr = "0"
@@ -150,16 +155,59 @@ def AnimsToAsm(charJ, charJPath):
 				asm += "			.byte " + str(nextFrameOffsetLow) + ", " + nextFrameOffsetHiStr + " ; offset to the first frame\n"
 
 			asm += "			.word "
-			for spriteName in frame:	
-				asm += labelPrefix + "_" + spriteName + ", " 
+			for i in range(preshiftedSprites):
+				asm += labelPrefix + "_" + str(frame) + "_" + str(i) + ", "
 			asm += "\n"
-		
+
 	return asm
 
-def SpritesToAsm(charJPath, charJ, image, addSize, addMask):
+# find the most leftest or rightest pixel in a sprite
+# return its dx
+def FindSpriteHorizBorder(forwardSearch, spriteImg, mask_alpha, width, height):
+	stopFlag = False
+	for dx in range(width):
+		for dy in range(height):
+			if forwardSearch:
+				dx2 = dx
+			else:
+				dx2 = width - 1 - dx
+			colorIdx = spriteImg[dy][dx2]
+			if colorIdx != mask_alpha:
+				stopFlag = True
+				break
+		if stopFlag: break
+	return dx2  
+
+def GetSpriteParams(labelPrefix, spriteName, spriteImg, mask_alpha, width, height, shift):
+	#if labelPrefix == 'burner' and spriteName == 'idle_l0':
+	#	test= 10 
+ 
+	# find leftest pixel dx
+	dxL = shift + FindSpriteHorizBorder(True, spriteImg, mask_alpha, width, height)
+	dxR = shift + FindSpriteHorizBorder(False, spriteImg, mask_alpha, width, height) 
+
+	offsetXNew = dxL//8 * 8
+	widthNew = (dxR//8+1) * 8 - offsetXNew
+	return offsetXNew, widthNew
+
+def MakeEmptySpriteData(addMask, width, height):
+	srcBuffCount = 3
+	data = []
+	for dy in range(height):
+		for dx in range(width // 8 * srcBuffCount):		
+			if addMask:
+				data.append(255)
+			data.append(0)
+
+	return [data]
+
+def SpritesToAsm(charJPath, charJ, image, addMask):
 	labelPrefix = charJPath.split("/")[-1].split("\\")[-1].split(".")[0]
 	spritesJ = charJ["sprites"]
 	asm = labelPrefix + "_sprites:"
+
+	# preshifted sprites
+	preshiftedSprites = charJ["preshifted_sprites"]
 
 	for sprite in spritesJ:
 		spriteName = sprite["name"]
@@ -183,7 +231,7 @@ def SpritesToAsm(charJPath, charJ, image, addSize, addMask):
 				line.append(colorIdx)
 
 			spriteImg.append(line)
-		
+
 		# convert indexes into bit lists.
 		bits0, bits1, bits2, bits3 = common.IndexesToBitLists(spriteImg)
 
@@ -193,13 +241,14 @@ def SpritesToAsm(charJPath, charJ, image, addSize, addMask):
 		bytes2 = common.CombineBitsToBytes(bits2) # C000-DFFF
 		bytes3 = common.CombineBitsToBytes(bits3) # E000-FFFF
 
+		mask_alpha = sprite["mask_alpha"]
+		mask_color = sprite["mask_color"]
+
 		maskBytes = None
 		if addMask:
 			# get a sprite as a color index 2d array
 			x = sprite["mask_x"]
 			y = sprite["mask_y"]
-			mask_alpha = sprite["mask_alpha"]
-			mask_color = sprite["mask_color"]
 
 			maskImg = []
 			for py in range(y, y + height) :
@@ -209,84 +258,72 @@ def SpritesToAsm(charJPath, charJ, image, addSize, addMask):
 						maskImg.append(1)
 					else:
 						maskImg.append(0)
-		
+
 			maskBytes = common.CombineBitsToBytes(maskImg)
 
 		# to support a sprite render function
 		data = SpriteData(bytes1, bytes2, bytes3, width, height, maskBytes)
 
 		asm += "\n"
-		# two empty bytes prior every to support a stack renderer
-		asm += "			.byte 0,0  ; safety pair of bytes to support a stack renderer\n"
-		asm += labelPrefix + "_" + spriteName + ":\n"
+		# two empty bytes prior every sprite data to support a stack renderer
+		asm += "			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.\n"
+		asm += labelPrefix + "_" + spriteName + "_0:\n"
 
-		if addSize:
-			widthPacked = width//8 - 1
-			offsetXPacked = offsetX//8
-			asm += "			.byte " + str( offsetY ) + ", " +  str( offsetXPacked ) + "; offsetY, offsetX\n"
-			asm += "			.byte " + str( height ) + ", " +  str( widthPacked ) + "; height, width\n"
-		
-		asm += BytesToAsmTiled(data) 
+		widthPacked = width//8 - 1
+		offsetXPacked = offsetX//8
+		asm += "			.byte " + str( offsetY ) + ", " +  str( offsetXPacked ) + "; offsetY, offsetX\n"
+		asm += "			.byte " + str( height ) + ", " +  str( widthPacked ) + "; height, width\n"
+
+		asm += BytesToAsmTiled(data)
+
+		# calculate preshifted sprite data
+		for i in range(1, preshiftedSprites):
+			offsetXNew, width2 = GetSpriteParams(labelPrefix, spriteName, spriteImg, mask_alpha, width, height, 8//preshiftedSprites * i)
+			offsetX2 = offsetX + offsetXNew
+			asm += "\n"
+			# two empty bytes prior every sprite data to support a stack renderer
+			preshift = 8//preshiftedSprites * i - offsetXNew
+			
+			if addMask:
+				maskFlag = 1
+			else: 
+				maskFlag = 0
+
+			asm += "			.byte " + str(preshift) + ", "+ str(maskFlag) + " ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)\n"
+			asm += labelPrefix + "_" + spriteName + "_" + str(i) + ":\n"
+
+			widthPacked2 = width2//8 - 1
+			offsetXPacked2 = offsetX2//8
+			asm += "			.byte " + str( offsetY ) + ", " +  str( offsetXPacked2 ) + "; offsetY, offsetX\n"
+			asm += "			.byte " + str( height ) + ", " +  str( widthPacked2 ) + "; height, width\n"
+
+			data2 = MakeEmptySpriteData(addMask, width2, height)
+			asm += BytesToAsmTiled(data2)
 
 	return asm
 
-def Export(addSize : bool, addMask : bool, charJPath, asmAnimPath, asmSpritePath):
+def Export(addMask : bool, charJPath, asmAnimPath, asmSpritePath):
 
 	with open(charJPath, "rb") as file:
 		charJ = json.load(file)
-	
+
 	pngPath = str(charJ["png"])
 	image = Image.open(pngPath)
-	
+
 	_, colors = common.PaletteToAsm(image, charJ, charJPath)
-	
+
 	image = common.RemapColors(image, colors)
-	
+
 	asm = "; " + charJPath + "\n"
 	asmAnims = asm + AnimsToAsm(charJ, charJPath)
-	asmSprites = asm + SpritesToAsm(charJPath, charJ, image, addSize, addMask)
-	
+	asmSprites = asm + SpritesToAsm(charJPath, charJ, image, addMask)
+
 	# save asm
 	with open(asmAnimPath, "w") as file:
 		file.write(asmAnims)
-	
+
 	with open(asmSpritePath, "w") as file:
 		file.write(asmSprites)
-
-#=====================================================
-"""
-import argparse
-
-parser = argparse.ArgumentParser()
-parser.add_argument("-s", "--size", help = "Size and a screen addr are included in the sprite data", type = Boolean)
-parser.add_argument("-m", "--mask", help = "Mask is included in the sprite data")
-parser.add_argument("-i", "--input", help = "Input file")
-parser.add_argument("-oa", "--outputAnim", help = "Output anim file")
-parser.add_argument("-os", "--outputSprite", help = "Output sprite file")
-args = parser.parse_args()
-
-addSize = False
-if args.size :
-	addSize = common.str2bool(args.size)
-
-addMask = False
-if args.mask :
-	addMask = common.str2bool(args.mask)
-
-if not args.input or not args.outputAnim or not args.outputSprite:
-	print("-i, -oa, and -os command-line parameters are required. Use -h for help.")
-	exit()
-charJPath = args.input
-asmAnimPath = args.outputAnim
-asmSpritePath = args.outputSprite
-"""
-'''
-addSize = True
-addMask = True
-charJPath = "sources\\sprites\\skeleton.json"
-asmAnimPath = ""
-asmSpritePath = ""
-'''
 
 
 

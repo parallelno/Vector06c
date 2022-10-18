@@ -1,12 +1,14 @@
 ; sources\sprites\skeleton.json
+skeleton_preshifted_sprites:
+			.byte 4
 skeleton_anims:
-			.word skeleton_idle_r, skeleton_idle_l, skeleton_run_r, skeleton_run_l, 
+			.word skeleton_idle_r, skeleton_idle_l, skeleton_run_r, skeleton_run_l, 0, 
 skeleton_idle_r:
 			.byte 255, $ff ; offset to the first frame
-			.word skeleton_idle_r_0, skeleton_idle_r_1, skeleton_idle_r_2, skeleton_idle_r_3, 
+			.word skeleton_idle_r0_0, skeleton_idle_r0_1, skeleton_idle_r0_2, skeleton_idle_r0_3, 
 skeleton_idle_l:
 			.byte 255, $ff ; offset to the first frame
-			.word skeleton_idle_l_0, skeleton_idle_l_1, skeleton_idle_l_2, skeleton_idle_l_3, 
+			.word skeleton_idle_l0_0, skeleton_idle_l0_1, skeleton_idle_l0_2, skeleton_idle_l0_3, 
 skeleton_run_r:
 			.byte 9, 0 ; offset to the next frame
 			.word skeleton_run_r0_0, skeleton_run_r0_1, skeleton_run_r0_2, skeleton_run_r0_3, 

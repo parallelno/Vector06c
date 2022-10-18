@@ -1,12 +1,14 @@
 ; sources\sprites\knight.json
+knight_preshifted_sprites:
+			.byte 4
 knight_anims:
-			.word knight_idle_r, knight_idle_l, knight_run_r, knight_run_l, 
+			.word knight_idle_r, knight_idle_l, knight_run_r, knight_run_l, 0, 
 knight_idle_r:
 			.byte 255, $ff ; offset to the first frame
-			.word knight_idle_r_0, knight_idle_r_1, knight_idle_r_2, knight_idle_r_3, 
+			.word knight_idle_r0_0, knight_idle_r0_1, knight_idle_r0_2, knight_idle_r0_3, 
 knight_idle_l:
 			.byte 255, $ff ; offset to the first frame
-			.word knight_idle_l_0, knight_idle_l_1, knight_idle_l_2, knight_idle_l_3, 
+			.word knight_idle_l0_0, knight_idle_l0_1, knight_idle_l0_2, knight_idle_l0_3, 
 knight_run_r:
 			.byte 9, 0 ; offset to the next frame
 			.word knight_run_r0_0, knight_run_r0_1, knight_run_r0_2, knight_run_r0_3, 

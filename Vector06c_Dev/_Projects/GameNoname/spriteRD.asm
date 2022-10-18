@@ -4,8 +4,7 @@
 Ret_ramDisk__:
 restoreSP_ramDisk__:
 			lxi sp, TEMP_ADDR
-			;RAM_DISK_OFF()
-restoreRet_ramDisk__:
+__restoreRet_ramDisk:
 			jmp TEMP_ADDR
 			.closelabels
 
@@ -30,7 +29,7 @@ __EraseSpriteSP:
 
 			; store ret addr
 			pop h
-			shld restoreRet_ramDisk__ + 1
+			shld __restoreRet_ramDisk + 1
 			; store SP
 			lxi h, 0
 			dad sp

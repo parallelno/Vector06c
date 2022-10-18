@@ -4,7 +4,7 @@ RamDiskInit:
 			lxi b, $8000
 			mvi a, RAM_DISK_M2 | RAM_DISK_M_8F
 			call dzx0RD
-/*
+
 			; unpack music to the ram-disk
 			lxi d, toBank1addrA000
 			lxi b, $A000
@@ -16,8 +16,15 @@ RamDiskInit:
 			lxi b, SCR_ADDR
 			mvi a, RAM_DISK_M0 | RAM_DISK_M_8F
 			call dzx0RD
+
 			; preshift sprites
-			;call SpritesPreshift
+			RAM_DISK_ON(RAM_DISK_M0 | RAM_DISK_M_8F)
+			lxi h, hero_preshifted_sprites
+			call SpriteDupPreshift
+			lxi h, skeleton_preshifted_sprites
+			call SpriteDupPreshift
+			RAM_DISK_OFF()
+
 			; copy sprites to the ram-disk to a proper addr
 			lxi d, $0000
 			lxi h, $8000
@@ -30,6 +37,6 @@ RamDiskInit:
 			lxi b, $8000
 			mvi a, RAM_DISK_M0 | RAM_DISK_M_8F
 			call dzx0RD
-*/			
+
 			ret
 			.closelabels

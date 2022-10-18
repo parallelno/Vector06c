@@ -1,12 +1,14 @@
 ; sources\sprites\vampire.json
+vampire_preshifted_sprites:
+			.byte 4
 vampire_anims:
-			.word vampire_idle_r, vampire_idle_l, vampire_run_r, vampire_run_l, 
+			.word vampire_idle_r, vampire_idle_l, vampire_run_r, vampire_run_l, 0, 
 vampire_idle_r:
 			.byte 255, $ff ; offset to the first frame
-			.word vampire_idle_r_0, vampire_idle_r_1, vampire_idle_r_2, vampire_idle_r_3, 
+			.word vampire_idle_r0_0, vampire_idle_r0_1, vampire_idle_r0_2, vampire_idle_r0_3, 
 vampire_idle_l:
 			.byte 255, $ff ; offset to the first frame
-			.word vampire_idle_l_0, vampire_idle_l_1, vampire_idle_l_2, vampire_idle_l_3, 
+			.word vampire_idle_l0_0, vampire_idle_l0_1, vampire_idle_l0_2, vampire_idle_l0_3, 
 vampire_run_r:
 			.byte 9, 0 ; offset to the next frame
 			.word vampire_run_r0_0, vampire_run_r0_1, vampire_run_r0_2, vampire_run_r0_3, 

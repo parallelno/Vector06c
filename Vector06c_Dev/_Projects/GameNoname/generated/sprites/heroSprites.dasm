@@ -1,672 +1,672 @@
 ; sources\sprites\hero.json
 hero_sprites:
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_r_0:
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
+hero_idle_r0_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 28,96,0,0,144,34,35,160,0,0,64,28,14,192,0,0,32,17,127,248,64,14,128,0,32,16,128,14,124,81,82,30,224,45,12,0,6,6,128,6,127,63,28,39,192,11,194,11,7,224,224,7,211,24,32,16,224,15,224,23,26,192,192,6,24,96,128,4,248,127,0,0,15,192,0,0,56,112,16,32,192,15,0,0,0,0,0,0,192,15,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_r_1:
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_r0_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_r_2:
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_r0_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_r_3:
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_r0_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_r_4:
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_r0_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_r_5:
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_r0_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_r_6:
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_r0_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_r_7:
+			.byte 7, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_r0_7:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_l_0:
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
+hero_idle_l0_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
-			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			.byte 6,56,0,0,68,9,5,196,0,0,56,2,3,112,0,0,136,4,31,254,112,2,0,1,8,4,112,1,138,62,120,74,180,7,0,48,96,96,96,1,252,254,228,56,208,3,208,67,7,224,224,7,24,203,8,4,240,7,232,7,3,88,96,3,6,24,32,1,254,31,0,0,3,240,0,0,14,28,4,8,240,3,0,0,0,0,0,0,240,3,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_l_1:
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_l0_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_l_2:
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_l0_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_l_3:
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_l0_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_l_4:
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_l0_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_l_5:
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_l0_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_l_6:
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_l0_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
-hero_idle_l_7:
+			.byte 7, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+hero_idle_l0_7:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
 hero_run_r0_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 7,0,0,0,192,8,8,32,0,0,192,7,6,128,0,0,96,9,127,248,64,14,128,0,32,16,128,14,124,81,82,30,224,45,12,0,6,6,128,6,127,63,28,39,192,11,194,11,7,224,224,7,211,24,32,16,224,15,224,23,26,192,192,6,24,96,128,4,248,127,0,0,15,192,0,0,56,112,16,32,192,15,0,0,0,0,0,0,192,15,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r0_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r0_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r0_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r0_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r0_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r0_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 7, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r0_7:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
 hero_run_r1_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 56,0,0,0,192,68,71,176,0,0,64,56,30,224,0,0,16,33,127,248,64,14,128,0,32,16,128,14,124,81,82,30,224,45,12,0,6,6,128,6,127,63,28,39,192,11,194,11,7,224,224,7,211,24,32,16,224,15,224,23,26,192,192,6,24,96,128,4,248,127,0,0,15,192,0,0,56,112,16,32,192,15,0,0,0,0,0,0,192,15,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r1_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r1_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r1_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r1_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r1_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r1_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 7, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r1_7:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
 hero_run_r2_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 0,112,0,0,136,14,49,144,0,0,96,14,30,192,0,0,32,33,127,248,64,14,128,0,32,16,128,14,124,81,82,30,224,45,12,0,6,6,128,6,127,63,28,39,192,11,194,11,7,224,224,7,211,24,32,16,224,15,224,23,26,192,192,6,24,96,128,4,248,127,0,0,15,192,0,0,56,112,16,32,192,15,0,0,0,0,0,0,192,15,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r2_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r2_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r2_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r2_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r2_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r2_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 7, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r2_7:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
 hero_run_r3_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 7,0,0,0,192,24,17,96,0,0,128,14,14,192,0,0,32,17,127,248,64,14,128,0,32,16,128,14,124,81,82,30,224,45,12,0,6,6,128,6,127,63,28,39,192,11,194,11,7,224,224,7,211,24,32,16,224,15,224,23,26,192,192,6,24,96,128,4,248,127,0,0,15,192,0,0,56,112,16,32,192,15,0,0,0,0,0,0,192,15,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r3_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r3_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r3_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r3_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r3_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r3_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 7, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_r3_7:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
 hero_run_l0_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
-			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			.byte 0,224,0,0,24,3,6,136,0,0,112,1,3,112,0,0,136,4,31,254,112,2,0,1,8,4,112,1,138,62,120,74,180,7,0,48,96,96,96,1,252,254,228,56,208,3,208,67,7,224,224,7,24,203,8,4,240,7,232,7,3,88,96,3,6,24,32,1,254,31,0,0,3,240,0,0,14,28,4,8,240,3,0,0,0,0,0,0,240,3,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l0_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l0_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l0_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l0_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l0_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l0_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 7, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l0_7:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
 hero_run_l1_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
-			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			.byte 0,224,0,0,16,3,4,16,0,0,224,3,1,96,0,0,144,6,31,254,112,2,0,1,8,4,112,1,138,62,120,74,180,7,0,48,96,96,96,1,252,254,228,56,208,3,208,67,7,224,224,7,24,203,8,4,240,7,232,7,3,88,96,3,6,24,32,1,254,31,0,0,3,240,0,0,14,28,4,8,240,3,0,0,0,0,0,0,240,3,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l1_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l1_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l1_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l1_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l1_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l1_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 7, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l1_7:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
 hero_run_l2_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
-			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			.byte 0,28,0,0,34,3,13,226,0,0,28,2,7,120,0,0,132,8,31,254,112,2,0,1,8,4,112,1,138,62,120,74,180,7,0,48,96,96,96,1,252,254,228,56,208,3,208,67,7,224,224,7,24,203,8,4,240,7,232,7,3,88,96,3,6,24,32,1,254,31,0,0,3,240,0,0,14,28,4,8,240,3,0,0,0,0,0,0,240,3,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l2_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l2_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l2_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l2_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l2_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l2_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 7, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l2_7:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
 hero_run_l3_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
-			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			.byte 14,0,0,0,112,17,9,140,0,0,112,6,3,120,0,0,132,4,31,254,112,2,0,1,8,4,112,1,138,62,120,74,180,7,0,48,96,96,96,1,252,254,228,56,208,3,208,67,7,224,224,7,24,203,8,4,240,7,232,7,3,88,96,3,6,24,32,1,254,31,0,0,3,240,0,0,14,28,4,8,240,3,0,0,0,0,0,0,240,3,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l3_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l3_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l3_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l3_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l3_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l3_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 7, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_run_l3_7:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
 hero_attk_r0_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 28,0,0,0,120,34,35,136,0,0,112,28,14,224,0,0,24,17,127,176,128,14,64,0,32,128,64,14,224,81,82,32,192,45,0,0,6,0,192,6,48,63,28,88,160,11,128,11,7,192,208,7,232,24,32,200,48,15,0,23,26,0,48,6,200,97,131,244,8,124,192,0,3,128,0,0,248,127,63,160,64,0,0,30,0,0,0,0,192,31,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r0_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r0_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r0_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r0_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r0_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r0_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 7, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r0_7:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
 hero_attk_r1_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 28,112,0,0,136,34,51,152,0,0,96,12,14,224,0,0,16,17,127,240,32,7,64,0,32,0,64,7,176,88,33,0,240,30,0,0,3,0,96,3,144,31,14,16,224,5,224,5,3,240,240,3,104,12,16,8,240,7,240,11,13,96,96,3,12,48,64,2,252,63,0,0,7,224,0,0,28,56,8,16,224,7,0,0,0,0,0,0,224,7,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r1_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r1_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r1_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r1_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r1_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r1_6:
-			.byte 0, 1; offsetY, offsetX
-			.byte 15, 1; height, width
-			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			.byte 0, 0; offsetY, offsetX
+			.byte 15, 2; height, width
+			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte -1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_r1_7:
 			.byte 0, 1; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
 hero_attk_l0_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
-			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			.byte 0,56,0,0,68,30,17,196,0,0,56,14,7,112,0,0,136,24,13,254,112,1,0,2,1,4,112,2,138,7,4,74,180,3,0,0,0,96,96,3,252,12,26,56,208,5,208,1,3,224,224,11,24,23,19,4,240,12,232,0,0,88,96,12,134,19,47,193,62,16,0,3,1,192,0,0,254,31,5,252,0,2,120,0,0,0,0,0,248,3,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l0_1:
 			.byte 0, 0; offsetY, offsetX
-			.byte 15, 1; height, width
-			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			.byte 15, 2; height, width
+			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l0_2:
 			.byte 0, 0; offsetY, offsetX
-			.byte 15, 1; height, width
-			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			.byte 15, 2; height, width
+			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l0_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l0_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l0_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte -2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l0_6:
 			.byte 0, 1; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte -1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l0_7:
 			.byte 0, 1; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
 hero_attk_l1_0:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
-			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			.byte 14,56,0,0,68,17,25,204,0,0,48,6,7,112,0,0,136,8,15,254,224,4,0,2,0,4,224,2,26,13,0,132,120,15,0,0,0,192,192,6,248,9,8,112,160,7,160,7,15,192,192,15,48,22,16,8,224,15,208,15,6,176,192,6,12,48,64,2,252,63,0,0,7,224,0,0,28,56,8,16,224,7,0,0,0,0,0,0,224,7,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l1_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 1; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 2, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l1_2:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 3, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l1_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 4, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l1_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 5, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l1_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte 6, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l1_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 15, 2; height, width
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.byte -1, 0 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
 hero_attk_l1_7:
 			.byte 0, 1; offsetY, offsetX
 			.byte 15, 1; height, width

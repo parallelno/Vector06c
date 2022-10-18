@@ -36,10 +36,9 @@ ClearMem:
 ; 		a = 0 to clear the main memory
 ; use:
 ; hl
-; TODO: fix it to work without di/ei. di/ei causes music stuttering when the hero goes to another room
 
 ClearMemSP:
-			;di
+			di
 			lxi h, $0000
 			dad sp
 			shld @restoreSP + 1
@@ -48,7 +47,6 @@ ClearMemSP:
 			RAM_DISK_ON_BANK()
 			lxi b, $0000			
 			sphl
-
 			mvi a, $ff
 @loop:
 			push_b(16)
@@ -58,7 +56,7 @@ ClearMemSP:
 @restoreSP:
 			lxi sp, TEMP_WORD
 			RAM_DISK_OFF()
-			;ei
+			ei
 			ret
 			.closelabels
 
