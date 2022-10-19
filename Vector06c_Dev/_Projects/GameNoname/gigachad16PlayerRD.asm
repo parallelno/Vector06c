@@ -69,8 +69,6 @@ GCPlayerTasksInit:
 			lxi h, 0
 			dad sp
 			shld @restoreSP+1
-			; no need to restore because "di" above
-			;RAM_DISK_ON_NO_RESTORE(RAM_DISK_S1 | RAM_DISK_M1 | RAM_DISK_M_8F) ; RAM_DISK0_B1_STACK_RAM
 
 			lxi sp, GCPlayerTaskStack13 + GC_PLAYER_STACK_SIZE
 			lxi d, GCPlayerAyRegDataPtrs + GC_PLAYER_TASKS * WORD_LEN
@@ -113,17 +111,14 @@ GCPlayerTasksInit:
 			dcr c
 			jp @loop
 @restoreSP: lxi sp, TEMP_ADDR
-			;RAM_DISK_OFF_NO_RESTORE()
 			ei 
 			ret
 			.closelabels
 
 ; Set the current task stack pointer to the first task stack pointer
 GCPlayerSchedulerInit:
-			;RAM_DISK_ON(RAM_DISK_M1 | RAM_DISK_M_8F)
 			lxi h, GCPlayerTaskSPs
 			shld GCPlayerCurrentTaskSPp
-			;RAM_DISK_OFF()
 			ret
 			.closelabels
 
@@ -132,7 +127,6 @@ GCPlayerSchedulerInit:
 ; when it repeats the current song or
 ; play a new one
 GCPlayerClearBuffers:
-			;RAM_DISK_ON(RAM_DISK_M1 | RAM_DISK_M_8F)
 			mvi h, >GCPlayerBuffer00
 			mvi a, (>GCPlayerBuffer13) + 1
 @nextBuff:
@@ -144,7 +138,6 @@ GCPlayerClearBuffers:
 			inr h	
 			cmp h
 			jnz @nextBuff
-			;RAM_DISK_OFF()			
 			ret
 			.closelabels
 
@@ -155,7 +148,6 @@ GCPlayerSchedulerUpdate:
 			lxi h, 0
 			dad sp
 			shld GCPlayerSchedulerRestoreSp+1
-			;RAM_DISK_ON_NO_RESTORE(RAM_DISK_S1 | RAM_DISK_M1 | RAM_DISK_M_8F)
 			lhld GCPlayerCurrentTaskSPp
 			mov e, m 
 			inx h 
@@ -198,7 +190,6 @@ GCPlayerSchedulerStoreTaskContext:
 			shld GCPlayerCurrentTaskSPp
 GCPlayerSchedulerRestoreSp:
 			lxi sp, TEMP_ADDR
-			;RAM_DISK_OFF_NO_RESTORE()
 			ret
 			.closelabels
 
@@ -316,7 +307,6 @@ GCPlayerUnpack:
 			; turn off the current music
 			mvi a, OPCODE_RET
 			sta __GCPlayerUpdate
-			;RAM_DISK_OFF_NO_RESTORE()
 			; return to the func that called __GCPlayerUpdate		
 			ret
 			.closelabels
@@ -331,7 +321,6 @@ AY_PORT_REG		= $15
 AY_PORT_DATA	= $14
 
 GCPlayerAYUpdate:
-			;RAM_DISK_ON_NO_RESTORE(RAM_DISK_M1 | RAM_DISK_M_8F)
 			mvi e, GC_PLAYER_TASKS - 1
 			mov c, m
 			mvi b, (>GCPlayerBuffer00) + GC_PLAYER_TASKS - 1
@@ -347,7 +336,6 @@ GCPlayerAYUpdate:
 			dcr b
 			dcr e
 			jp @sendData
-			;RAM_DISK_OFF_NO_RESTORE()
 			ret
 			.closelabels
 

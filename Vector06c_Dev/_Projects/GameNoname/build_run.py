@@ -51,7 +51,8 @@ if anySpritesUpdated:
 	print(f"ExportLabels: {bank0_seg0_path}Labels.asm got compiled.\n")
 
 	common.DeleteFile("generated\\bin\\" + bank0_seg0_path + ".bin.zx0")
-	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank0_seg0_path + ".bin generated\\bin\\" + bank0_seg0_path + ".bin.zx0")
+	#common.RunCommand("tools\zx0 -c generated\\bin\\" + bank0_seg0_path + ".bin generated\\bin\\" + bank0_seg0_path + ".bin.zx0")
+	common.RunCommand(f"tools\\zx0salvador.exe -v -classic generated\\bin\\{bank0_seg0_path}.bin generated\\bin\\{bank0_seg0_path}.bin.zx0")
 else:
 	print(f"retroassembler: {bank0_seg0_path} wasn't updated. No need to export.")
 	print(f"ExportLabels: {bank0_seg0_path}Labels.asm wasn't updated. No need to compile.")
@@ -73,8 +74,9 @@ if anySpritesUpdated:
 	print(f"ExportLabels: {bank1_seg0_path}Labels.asm got compiled.\n")
 
 	common.DeleteFile("generated\\bin\\" + bank1_seg0_path + ".bin.zx0")
-	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank1_seg0_path + ".bin generated\\bin\\" + bank1_seg0_path + ".bin.zx0")
-else:
+	#common.RunCommand("tools\zx0 -c generated\\bin\\" + bank1_seg0_path + ".bin generated\\bin\\" + bank1_seg0_path + ".bin.zx0")
+	common.RunCommand(f"tools\\zx0salvador.exe -v -classic generated\\bin\\{bank1_seg0_path}.bin generated\\bin\\{bank1_seg0_path}.bin.zx0")
+else: 
 	print(f"retroassembler: {bank1_seg0_path} wasn't updated. No need to export.")
 	print(f"ExportLabels: {bank1_seg0_path}Labels.asm wasn't updated. No need to compile.")
 	print(f"zx0: {bank1_seg0_path}bin wasn't updated. No need to compress.\n")
@@ -111,7 +113,8 @@ if anyLevelsUpdated:
 	print(f"ExportLabels: {bank0_seg1_path}Labels.asm got compiled.\n")
 
 	common.DeleteFile("generated\\bin\\" + bank0_seg1_path + ".bin.zx0")
-	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank0_seg1_path + ".bin generated\\bin\\" + bank0_seg1_path + ".bin.zx0")
+	#common.RunCommand("tools\zx0 -c generated\\bin\\" + bank0_seg1_path + ".bin generated\\bin\\" + bank0_seg1_path + ".bin.zx0")
+	common.RunCommand(f"tools\\zx0salvador.exe -v -classic generated\\bin\\{bank0_seg1_path}.bin generated\\bin\\{bank0_seg1_path}.bin.zx0")
 else:
 	print(f"retroassembler: {bank0_seg1_path} wasn't updated. No need to export.")
 	print(f"ExportLabels: {bank0_seg1_path}Labels.asm wasn't updated. No need to compile.")
@@ -122,21 +125,22 @@ print(f"")
 # music to the ram-disk
 print(f"music:")
 bank1_screen_path = "ramDiskBank1_addr8000"
+musicExporter = "tools\\musicExport.py"
 
-musicForceExport = forceExport | IsFileUpdated("tools\\ay6Export.py")
+musicForceExport = forceExport | IsFileUpdated(musicExporter)
 
 song01 = "song01"
 musicInFolder = "sources\\music\\"
 musicOutFolder = "generated\\music\\"
 
 anyMusicUpdated = False
-anyMusicUpdated |= IsFileUpdated(musicInFolder + song01 + ".ym")
+anyMusicUpdated |= IsFileUpdated(musicInFolder + song01 + ".ym") 
 anyMusicUpdated |= IsFileUpdated(bank1_screen_path + ".dasm")
 
 playerUpdated = IsFileUpdated("gigachad16PlayerRD.asm")
 
 if musicForceExport or anyMusicUpdated or playerUpdated:
-	common.RunCommand(f"tools\\ay6Export.py -i " + musicInFolder + song01 + ".ym" + " -o " + musicOutFolder + song01 + ".dasm")
+	common.RunCommand(f"{musicExporter} -i " + musicInFolder + song01 + ".ym" + " -o " + musicOutFolder + song01 + ".dasm")
 	# compile dasm to get a bin + labels
 	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank1_screen_path +
 			".dasm generated\\bin\\" + bank1_screen_path + ".bin >" + bank1_screen_path + "Labels.asm")
@@ -148,7 +152,8 @@ if musicForceExport or anyMusicUpdated or playerUpdated:
 
 	# compress music bin
 	common.RunCommand("del generated\\bin\\" + bank1_screen_path + ".bin.zx0")
-	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank1_screen_path + ".bin generated\\bin\\" + bank1_screen_path + ".bin.zx0")
+	#common.RunCommand("tools\zx0 -c generated\\bin\\" + bank1_screen_path + ".bin generated\\bin\\" + bank1_screen_path + ".bin.zx0")
+	common.RunCommand(f"tools\\zx0salvador.exe -v -classic generated\\bin\\{bank1_screen_path}.bin generated\\bin\\{bank1_screen_path}.bin.zx0")
 
 print(f"")
 ######################################################################################
@@ -178,7 +183,8 @@ if codeLibForceExport or anyCodeUpdated:
 
 	# compress codeLib bin
 	common.RunCommand("del generated\\bin\\" + bank2_seg1_path + ".bin.zx0")
-	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank2_seg1_path + ".bin generated\\bin\\" + bank2_seg1_path + ".bin.zx0")
+	#common.RunCommand("tools\zx0 -c generated\\bin\\" + bank2_seg1_path + ".bin generated\\bin\\" + bank2_seg1_path + ".bin.zx0")
+	common.RunCommand(f"tools\\zx0salvador.exe -v -classic generated\\bin\\{bank2_seg1_path}.bin generated\\bin\\{bank2_seg1_path}.bin.zx0")
 
 print(f"")
 ######################################################################################

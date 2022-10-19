@@ -88,7 +88,7 @@ outPath = args.output
 cleanTmp = args.clean
 
 # test
-# inPath = "sources\\music\\song01.ym"
+# inPath = "sources\\music\\song01.ym" 
 # outPath = "sources\\music\\song01.asm"
 
 (fileName, ext) = os.path.splitext(inPath)

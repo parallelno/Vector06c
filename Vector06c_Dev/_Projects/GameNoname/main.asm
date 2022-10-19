@@ -18,11 +18,9 @@
 .include "generated\\sprites\\heroAnim.dasm"
 .include "generated\\sprites\\skeletonAnim.dasm"
 
-;.include "gigachad16Player.asm"
 .include "game.asm"
 
 Start:
-			;call GCPlayerInit
 			CALL_RAM_DISK_FUNC(__GCPlayerInit, RAM_DISK_M1 | RAM_DISK_M_8F)
 @mainLoop:
 			;call MainMenu
