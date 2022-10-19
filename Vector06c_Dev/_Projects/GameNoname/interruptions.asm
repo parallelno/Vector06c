@@ -74,8 +74,7 @@ Interruption2:
 			push b
 			push d
 
-
-			call GCPlayerUpdate
+			CALL_RAM_DISK_FUNC_NO_RESTORE(__GCPlayerUpdate, RAM_DISK_S1 | RAM_DISK_M1 | RAM_DISK_M_8F)
 			INTERRUPTION_MAIN_LOGIC()
 
 			pop d

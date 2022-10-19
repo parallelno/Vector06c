@@ -18,7 +18,8 @@ GameInit:
 			sta interruptionCounter
 			hlt
 @gameLoop:
-			call GCPlayerStartRepeat
+			;call GCPlayerStartRepeat
+			CALL_RAM_DISK_FUNC(__GCPlayerStartRepeat, RAM_DISK_S1 | RAM_DISK_M1 | RAM_DISK_M_8F)
 			call GameUpdate
 			call GameDraw
 

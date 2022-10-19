@@ -139,6 +139,18 @@
 		.endif
 .endmacro
 
+.macro CALL_RAM_DISK_FUNC_NO_RESTORE(funcAddr, _command, disableInt = false)
+		.if disableInt
+			di
+		.endif
+			RAM_DISK_ON_NO_RESTORE(_command)
+			call funcAddr
+			RAM_DISK_OFF_NO_RESTORE()
+		.if disableInt
+			ei
+		.endif
+.endmacro
+
 .macro DEBUG_BORDER_LINE(_borderColorIdx = 1)
 		.if SHOW_CPU_HIGHLOAD_ON_BORDER
 			mvi a, PORT0_OUT_OUT

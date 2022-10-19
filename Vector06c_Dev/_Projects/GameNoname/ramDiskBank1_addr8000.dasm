@@ -1,0 +1,8 @@
+.setting "ShowLabelsAfterCompiling", true
+.org $8000
+
+.include "macro.asm"
+.include "globalConsts.asm"
+
+.include "generated\\music\\song01.dasm"
+.include "gigachad16PlayerRD.asm"

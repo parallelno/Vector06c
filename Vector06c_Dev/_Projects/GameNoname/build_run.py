@@ -24,7 +24,7 @@ vampireSpriteSourceUpdated = IsFileUpdated("sources\\sprites\\art\\sprites_vampi
 projectilesSpriteSourceUpdated = IsFileUpdated("sources\\sprites\\art\\sprites_projectiles.png")
 heroAttack01SpriteSourceUpdated = IsFileUpdated("sources\\sprites\\art\\sprites_hero_attack01.png")
 
-anySpritesUpdated = False 
+anySpritesUpdated = False
 
 print(f"sprite export")
 
@@ -40,19 +40,19 @@ print("")
 anySpritesUpdated |= IsFileUpdated(bank0_seg0_path + ".dasm")
 
 if anySpritesUpdated:
-	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank0_seg0_path + 
+	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank0_seg0_path +
 			".dasm generated\\bin\\" + bank0_seg0_path + ".bin >" + bank0_seg0_path + "Labels.asm")
- 
+
 	CheckSegmentSize("generated\\bin\\" + bank0_seg0_path + ".bin", SEGMENT_0000_7F00_ADDR)
-	    
+
 	ExportLabels(bank0_seg0_path + "Labels.asm")
-  
-	print(f"retroassembler: {bank0_seg0_path} got compiled.") 
+
+	print(f"retroassembler: {bank0_seg0_path} got compiled.")
 	print(f"ExportLabels: {bank0_seg0_path}Labels.asm got compiled.\n")
 
 	common.DeleteFile("generated\\bin\\" + bank0_seg0_path + ".bin.zx0")
 	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank0_seg0_path + ".bin generated\\bin\\" + bank0_seg0_path + ".bin.zx0")
-else: 
+else:
 	print(f"retroassembler: {bank0_seg0_path} wasn't updated. No need to export.")
 	print(f"ExportLabels: {bank0_seg0_path}Labels.asm wasn't updated. No need to compile.")
 	print(f"zx0: {bank0_seg0_path}bin wasn't updated. No need to compress.\n")
@@ -60,13 +60,13 @@ else:
 print(f"")
 bank1_seg0_path = "ramDiskBank1_addr0"
 anySpritesUpdated |= IsFileUpdated(bank1_seg0_path + ".dasm")
- 
+
 if anySpritesUpdated:
-	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank1_seg0_path + 
+	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank1_seg0_path +
 			".dasm generated\\bin\\" + bank1_seg0_path + ".bin >" + bank1_seg0_path + "Labels.asm")
 
 	CheckSegmentSize("generated\\bin\\" + bank1_seg0_path + ".bin", SEGMENT_0000_7F00_ADDR)
-	 
+
 	ExportLabels(bank1_seg0_path + "Labels.asm")
 
 	print(f"retroassembler: {bank1_seg0_path} got compiled.")
@@ -74,11 +74,11 @@ if anySpritesUpdated:
 
 	common.DeleteFile("generated\\bin\\" + bank1_seg0_path + ".bin.zx0")
 	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank1_seg0_path + ".bin generated\\bin\\" + bank1_seg0_path + ".bin.zx0")
-else: 
+else:
 	print(f"retroassembler: {bank1_seg0_path} wasn't updated. No need to export.")
 	print(f"ExportLabels: {bank1_seg0_path}Labels.asm wasn't updated. No need to compile.")
 	print(f"zx0: {bank1_seg0_path}bin wasn't updated. No need to compress.\n")
- 
+
 print(f"")
 ######################################################################################
 # levels to the ramDisk
@@ -100,9 +100,9 @@ anyLevelsUpdated = ExportLevel(level01Path, levelForceExport | anyLevelsUpdated)
 anyLevelsUpdated |= IsFileUpdated(bank0_seg1_path + ".dasm")
 
 if anyLevelsUpdated:
-	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank0_seg1_path + 
+	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank0_seg1_path +
 			".dasm generated\\bin\\" + bank0_seg1_path + ".bin >" + bank0_seg1_path + "Labels.asm")
-	
+
 	CheckSegmentSize("generated\\bin\\" + bank0_seg1_path + ".bin", SEGMENT_8000_0000_ADDR)
 
 	ExportLabels(bank0_seg1_path + "Labels.asm")
@@ -112,7 +112,7 @@ if anyLevelsUpdated:
 
 	common.DeleteFile("generated\\bin\\" + bank0_seg1_path + ".bin.zx0")
 	common.RunCommand("tools\zx0 -c generated\\bin\\" + bank0_seg1_path + ".bin generated\\bin\\" + bank0_seg1_path + ".bin.zx0")
-else: 
+else:
 	print(f"retroassembler: {bank0_seg1_path} wasn't updated. No need to export.")
 	print(f"ExportLabels: {bank0_seg1_path}Labels.asm wasn't updated. No need to compile.")
 	print(f"zx0: {bank0_seg1_path}bin wasn't updated. No need to compress.\n")
@@ -121,7 +121,7 @@ print(f"")
 ######################################################################################
 # music to the ram-disk
 print(f"music:")
-bank1_screen_path = "ramDiskBank1_addrA000"
+bank1_screen_path = "ramDiskBank1_addr8000"
 
 musicForceExport = forceExport | IsFileUpdated("tools\\ay6Export.py")
 
@@ -133,13 +133,15 @@ anyMusicUpdated = False
 anyMusicUpdated |= IsFileUpdated(musicInFolder + song01 + ".ym")
 anyMusicUpdated |= IsFileUpdated(bank1_screen_path + ".dasm")
 
-if musicForceExport or anyMusicUpdated:
+playerUpdated = IsFileUpdated("gigachad16PlayerRD.asm")
+
+if musicForceExport or anyMusicUpdated or playerUpdated:
 	common.RunCommand(f"tools\\ay6Export.py -i " + musicInFolder + song01 + ".ym" + " -o " + musicOutFolder + song01 + ".dasm")
 	# compile dasm to get a bin + labels
-	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank1_screen_path + 
+	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank1_screen_path +
 			".dasm generated\\bin\\" + bank1_screen_path + ".bin >" + bank1_screen_path + "Labels.asm")
-	
-	ExportLabels(bank1_screen_path + "Labels.asm")
+
+	ExportLabels(bank1_screen_path + "Labels.asm", True)
 
 	print(f"retroassembler: {bank1_screen_path} got compiled.")
 	print(f"ExportLabels: {bank1_screen_path}Labels.asm got compiled.\n")
@@ -166,9 +168,9 @@ anyCodeUpdated |= IsFileUpdated(bank2_seg1_path + ".asm")
 
 if codeLibForceExport or anyCodeUpdated:
 	# compile asm to get a bin + labels
-	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank2_seg1_path + 
+	common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank2_seg1_path +
 			".asm generated\\bin\\" + bank2_seg1_path + ".bin >" + bank2_seg1_path + "Labels.asm")
-	
+
 	ExportLabels(bank2_seg1_path + "Labels.asm", True)
 
 	print(f"retroassembler: {bank2_seg1_path} got compiled.")
@@ -191,7 +193,7 @@ binExt = ".bin"
 
 common.DeleteFile(romPath + romName + romExt)
 
-common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + mainAsm + 
+common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + mainAsm +
 	".asm " + romPath + romName + binExt )
 
 common.RunCommand(f"ren {romPath}*.bin *.rom")
