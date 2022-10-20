@@ -2,17 +2,16 @@
 ; because it can be corrupted by the subroutines which manipulate the stack
 
 toBank0addr0:
-.incbin "generated\\bin\\ramDiskBank0_addr0.bin.zx0"
-
+;.incbin "generated\\bin\\ramDiskBank0_addr0.bin.zx0"
+toBank0addr0_0:
+.incbin "generated\\bin\\ramDiskBank0_addr0_0.bin.zx0"
+toBank0addr0_1: 
+.incbin "generated\\bin\\ramDiskBank0_addr0_1.bin.zx0"
 
 toBank2addr8000:
 .incbin "generated\\bin\\ramDiskBank2_addr8000.bin.zx0"
-;toBank1addr0:
-;.incbin "generated\\bin\\ramDiskBank1_addr0.bin.zx0"
-toBank1addr0_0:
-.incbin "generated\\bin\\ramDiskBank1_addr0_0.bin.zx0"
-toBank1addr0_1:
-.incbin "generated\\bin\\ramDiskBank1_addr0_1.bin.zx0"
+toBank1addr0:
+.incbin "generated\\bin\\ramDiskBank1_addr0.bin.zx0"
 toBank1addrA000:
 .incbin "generated\\bin\\ramDiskBank1_addr8000.bin.zx0"
 toBank0addr8000:

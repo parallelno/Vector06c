@@ -2,10 +2,15 @@
 
 ; Calculate preshifted sprites
 ; in:
-; hl - preshifted_sprites addr
+; de - preshifted_sprites addr
+; hl - sprite data offset in the ram-disk
 ; used:
 ; de, bc, a
-SpriteDupPreshift:
+__SpriteDupPreshift:
+			shld @dataOffset0+1
+			shld @dataOffset1+1
+			
+			xchg
 			mov a, m
 			sta @preshiftedSprites+1
 			inx h
@@ -44,7 +49,8 @@ SpriteDupPreshift:
 			inx h
 			xchg
 			; add an offset inside the bank to the source sprite
-			lxi b, $8000
+@dataOffset0:
+			lxi b, TEMP_ADDR
 			dad b
 			; check if a frame is already preshifted
 			dcx h
@@ -69,7 +75,8 @@ SpriteDupPreshift:
 			push b			
 			push h
 			; add an offset inside the bank to the target sprite
-			lxi h, $8000
+@dataOffset1:
+			lxi h, TEMP_ADDR
 			dad d
 			shld @preshiftSprite+1
 			xchg

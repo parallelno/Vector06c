@@ -5,24 +5,18 @@ forceExport = IsFileUpdated("build_run.py")
 print(f"export sprites:")
 
 animForceExport = forceExport | IsFileUpdated("tools\\animSpriteExport.py")
-anySpritesUpdated = False 
  
-anySpritesUpdated |= ExportAnimSprites("sprites\\hero", animForceExport)
-anySpritesUpdated |= ExportAnimSprites("sprites\\skeleton", animForceExport, True)
-anySpritesUpdated |= ExportAnimSprites("sprites\\burner", animForceExport, True)
-anySpritesUpdated |= ExportAnimSprites("sprites\\knight", animForceExport, True)
-anySpritesUpdated |= ExportAnimSprites("sprites\\vampire", animForceExport, True)
-anySpritesUpdated |= ExportAnimSprites("sprites\\scythe", animForceExport, True)
-anySpritesUpdated |= ExportAnimSprites("sprites\\hero_attack01", animForceExport, True)
+animForceExport |= ExportAnimSprites("sprites\\hero", animForceExport)
+animForceExport |= ExportAnimSprites("sprites\\skeleton", animForceExport, True)
+animForceExport |= ExportAnimSprites("sprites\\burner", animForceExport, True)
+animForceExport |= ExportAnimSprites("sprites\\knight", animForceExport, True)
+animForceExport |= ExportAnimSprites("sprites\\vampire", animForceExport, True)
+animForceExport |= ExportAnimSprites("sprites\\scythe", animForceExport, True)
+animForceExport |= ExportAnimSprites("sprites\\hero_attack01", animForceExport, True)
 print("")
- 
-ramdisk_seg_path = "ramDiskBank0_addr0"
-segmentForceExport = anySpritesUpdated | IsDasmUpdated(ramdisk_seg_path + ".dasm")
-ExportSegment(ramdisk_seg_path, segmentForceExport, SEGMENT_0000_7F00_ADDR)
 
-ramdisk_seg_path = "ramDiskBank1_addr0"
-segmentForceExport = anySpritesUpdated | IsDasmUpdated(ramdisk_seg_path + ".dasm")
-ExportSegment(ramdisk_seg_path, segmentForceExport, SEGMENT_0000_7F00_ADDR) 
+ExportSegment("ramDiskBank0_addr0.asm" , animForceExport, SEGMENT_0000_7F00_ADDR)
+ExportSegment("ramDiskBank1_addr0.asm", animForceExport, SEGMENT_0000_7F00_ADDR) 
 
 print("")
 ######################################################################################
@@ -30,10 +24,7 @@ print(f"export levels:")
 
 levelForceExport = forceExport | IsFileUpdated("tools\\levelExport.py")
 levelForceExport = ExportLevel("levels\\level01", levelForceExport)
-
-ramdisk_seg_path = "ramDiskBank0_addr8000"
-segmentForceExport = levelForceExport | IsDasmUpdated(ramdisk_seg_path + ".dasm")
-ExportSegment(ramdisk_seg_path, segmentForceExport, SEGMENT_8000_0000_ADDR)
+ExportSegment("ramDiskBank0_addr8000.asm", levelForceExport, SEGMENT_8000_0000_ADDR)
 
 print("")
 ######################################################################################
@@ -41,19 +32,14 @@ print(f"export music:")
 
 musicForceExport = forceExport | IsFileUpdated("tools\\musicExport.py")
 musicForceExport = ExportMusic("music\\song01", musicForceExport)
+ExportSegment("ramDiskBank1_addr8000.asm", musicForceExport, SEGMENT_8000_0000_ADDR, True)
 
-ramdisk_seg_path = "ramDiskBank1_addr8000"
-segmentForceExport = musicForceExport | IsDasmUpdated(ramdisk_seg_path + ".dasm")
-ExportSegment(ramdisk_seg_path, segmentForceExport, SEGMENT_8000_0000_ADDR, True)
-
-print("")
+print("") 
 ######################################################################################
 # codeLib is in the same bank where a backbuffer is
 print(f"export code library:")
 
-ramdisk_seg_path = "ramDiskBank2_addr8000"
-segmentForceExport = IsDasmUpdated(ramdisk_seg_path + ".dasm")
-ExportSegment(ramdisk_seg_path, segmentForceExport, SEGMENT_8000_0000_ADDR, True)
+ExportSegment("ramDiskBank2_addr8000.asm", False, SEGMENT_8000_0000_ADDR, True)
 
 print("")
 ######################################################################################

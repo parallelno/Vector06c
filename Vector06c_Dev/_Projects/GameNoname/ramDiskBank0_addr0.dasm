@@ -1,9 +1,0 @@
-.setting "ShowLabelsAfterCompiling", true
-.org 0
-
-.include "generated\\sprites\\heroSprites.dasm"
-__split:
-
-.include "generated\\sprites\\skeletonSprites.dasm"
-.include "generated\\sprites\\scytheSprites.dasm"
-.include "generated\\sprites\\hero_attack01Sprites.dasm"

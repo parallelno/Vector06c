@@ -28,7 +28,7 @@ heroY:				.word TEMP_WORD
 heroSpeedX:			.word TEMP_WORD
 heroSpeedY:			.word TEMP_WORD
 
-; hero uses these funcs to handle the tile data. more info is in levelGlobalData.dasm->roomTilesData
+; hero uses these funcs to handle the tile data. more info is in levelGlobalData.asm->roomTilesData
 heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, 0, 0
 
 HeroInit:

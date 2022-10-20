@@ -15,8 +15,8 @@
 .include "ramDiskBank1_addr8000Labels.asm"
 .include "ramDiskBank2_addr8000Labels.asm"
 
-.include "generated\\sprites\\heroAnim.dasm"
-.include "generated\\sprites\\skeletonAnim.dasm"
+.include "generated\\sprites\\heroAnim.asm"
+.include "generated\\sprites\\skeletonAnim.asm"
 
 .include "game.asm"
 

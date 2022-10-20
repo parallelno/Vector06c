@@ -22,8 +22,8 @@ def ExportAnimSprites(sourcePath, forceExport, mask = False, sourceFolder = "sou
 		animSpriteExport.Export( 
 			mask, 
 			sourceFolder + sourcePath + ext, 
-			generatedFolder + sourcePath + "Anim.dasm", 
-			generatedFolder + sourcePath + "Sprites.dasm")
+			generatedFolder + sourcePath + "Anim.asm", 
+			generatedFolder + sourcePath + "Sprites.asm")
 
 		print("animSpriteExport: " + sourceFolder + sourcePath + ext + " got exported.")
 		return True
@@ -36,7 +36,7 @@ def ExportLevel(sourcePath, forceExport, sourceFolder = "sources\\", generatedFo
 	if levelExport.IsFileUpdated(sourceFolder + sourcePath + ext) or forceExport:
 		levelExport.Export( 
 			sourceFolder + sourcePath + ext, 
-			generatedFolder + sourcePath + ".dasm")
+			generatedFolder + sourcePath + ".asm")
 			
 		print("levelExport: " + sourceFolder + sourcePath + ext + " got exported.")		
 		return True
@@ -49,42 +49,46 @@ def ExportMusic(sourcePath, forceExport, sourceFolder = "sources\\", generatedFo
 	if IsFileUpdated(sourceFolder + sourcePath + ext) or forceExport:
 		musicExport.Export( 
 			sourceFolder + sourcePath + ext, 
-			generatedFolder + sourcePath + ".dasm")
+			generatedFolder + sourcePath + ".asm")
 			
 		print("musicExport: " + sourceFolder + sourcePath + ext + " got exported.")		
 		return True
 	else:	
 		return False		
 
-def ExportSegment(bank0_seg_path, forceExport, segmentAddr, externalsOnly = False):
-	if forceExport:
-		common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank0_seg_path +
-				".dasm generated\\bin\\" + bank0_seg_path + ".bin >" + bank0_seg_path + "Labels.asm")
+def ExportSegment(segmentPath, forceExport, segmentAddr, externalsOnly = False):
+	segmentPathWOExt = os.path.splitext(segmentPath)[0]
+	segmentName = os.path.basename(segmentPathWOExt)
+	generatedFolder = "generated\\bin\\"
 
-		CheckSegmentSize("generated\\bin\\" + bank0_seg_path + ".bin", segmentAddr)
+	if IsAsmUpdated(segmentPath) | forceExport:
+		common.RunCommand(f"..\\..\\retroassembler\\retroassembler.exe -C=8080 {segmentPath} "
+				f" {generatedFolder}{segmentName}.bin >{segmentPathWOExt}Labels.asm")
 
-		ExportLabels(bank0_seg_path + "Labels.asm", externalsOnly)
+		CheckSegmentSize(f"{generatedFolder}{segmentName}.bin", segmentAddr)
 
-		chunkPaths = SplitSegment("generated\\bin\\" + bank0_seg_path + ".bin", bank0_seg_path + "Labels.asm")
+		ExportLabels(f"{segmentPathWOExt}Labels.asm", externalsOnly)
+
+		chunkPaths = SplitSegment(f"{generatedFolder}{segmentName}.bin", f"{segmentPathWOExt}Labels.asm")
 
 		if len(chunkPaths) == 0:
-			common.DeleteFile("generated\\bin\\" + bank0_seg_path + ".bin.zx0")
-			common.RunCommand(f"tools\\zx0salvador.exe -v -classic generated\\bin\\{bank0_seg_path}.bin generated\\bin\\{bank0_seg_path}.bin.zx0")
+			common.DeleteFile(f"{generatedFolder}{segmentName}.bin.zx0")
+			common.RunCommand(f"tools\\zx0salvador.exe -v -classic {generatedFolder}{segmentName}.bin {generatedFolder}{segmentName}.bin.zx0")
 		else:
 			for chunkPath in chunkPaths:
 				zipfilePathWOExt = os.path.splitext(chunkPath)[0] 
 				common.DeleteFile(zipfilePathWOExt + ".bin.zx0")
 				common.RunCommand(f"tools\\zx0salvador.exe -v -classic {zipfilePathWOExt}.bin {zipfilePathWOExt}.bin.zx0")
 		
-		print(f"ExportSegment: {bank0_seg_path} segment got exported.")	
+		print(f"ExportSegment: {segmentName} segment got exported.")	
 		return True
 	else:
 		return False
 
 
 
-def IsDasmUpdated(path):
-	with open(path, "rb") as file:
+def IsAsmUpdated(asmPath):
+	with open(asmPath, "rb") as file:
 		lines = file.readlines()
 		
 	includes = []
@@ -105,7 +109,7 @@ def IsDasmUpdated(path):
 
 	anyIncUpdated = False
 	for path in includes:
-		anyIncUpdated |= IsFileUpdated(path)
+		anyIncUpdated |= IsFileUpdated(asmPath)
 
 	return anyIncUpdated | IsFileUpdated(path)
 
@@ -115,6 +119,9 @@ def IsFileUpdated(path, _buildDBPath = buildDBPath):
 	cur = con.cursor()
 	cur.execute('''CREATE TABLE if not exists files
 			   (path text, modtime real)''')
+	
+	if not os.path.exists(path):
+		return True
 	modificationTime = os.path.getmtime(path)
 	
 	
@@ -222,13 +229,13 @@ def SplitSegment(segmentPath, segmentLabelsPath):
 			splittedFiles.append(chunkPath)
 			with open(chunkPath, "wb") as fw:
 				fw.write(data)
+		'''
 		# remain chunk
 		remainSize = segmentSize - splitAddr
 		data = file.read(remainSize)
-		
 		chunkPath = os.path.splitext(segmentPath)[0] + "_" + str(i+1) + chunkExt
 		splittedFiles.append(chunkPath)
 		with open(chunkPath, "wb") as fw:
 			fw.write(data)
-
+		'''
 	return splittedFiles

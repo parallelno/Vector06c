@@ -7,4 +7,4 @@
 .include "spriteRD.asm"
 .include "drawSpriteRD.asm"
 .include "utilsRD.asm"
-;.include "spritePreshift.asm"
+.include "spritePreshiftRD.asm"
