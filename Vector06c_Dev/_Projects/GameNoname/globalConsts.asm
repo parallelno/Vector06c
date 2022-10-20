@@ -5,7 +5,8 @@
 ; SCR - screen buffer
 ; MEM - memory
 ; LEN - length
-; SEC - seconds
+; SEC - second
+; SEG - segment (a ram-disk is split into four 64K banks. each bank is split into two 32K segments.)
 ; RES - result
 ; PTR - pointer
 
@@ -97,3 +98,4 @@ OPCODE_MOV_M_B = $70
 OPCODE_MOV_M_A = $77
 OPCODE_POP_B = $C1
 OPCODE_STC	= $37
+OPCODE_INX_D = $13

@@ -37,6 +37,7 @@ ClearMem:
 ; use:
 ; hl
 
+; TODO: optimize. make it works without stopping (di/ei) interruptions.
 ClearMemSP:
 			di
 			lxi h, $0000

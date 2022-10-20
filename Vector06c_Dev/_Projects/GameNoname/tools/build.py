@@ -2,6 +2,8 @@ import os
 import sqlite3
 import tools.common as common
 import tools.animSpriteExport as animSpriteExport
+import tools.levelExport as levelExport
+import tools.musicExport as musicExport
 
 
 buildDBPath = "generated\\build.db"
@@ -14,31 +16,98 @@ SEGMENT_8000_0000_SIZE_MAX = 2 ** 15
 def DelBuildDB():
 	common.RunCommand("del " + buildDBPath, "Build DB was deleted")
 
-def ExportAminSprites(sourcePath, exporterUpdated, mask = False, sourceFolder = "sources\\", generatedFolder = "generated\\"):
-	jsonExt = ".json"
-	if IsFileUpdated(sourceFolder + sourcePath + jsonExt) or exporterUpdated:
-		animSpriteExport.Export(
+def ExportAnimSprites(sourcePath, forceExport, mask = False, sourceFolder = "sources\\", generatedFolder = "generated\\"):
+	ext = ".json"
+	if animSpriteExport.IsFileUpdated(sourceFolder + sourcePath + ext) or forceExport:
+		animSpriteExport.Export( 
 			mask, 
-			sourceFolder + sourcePath + jsonExt, 
+			sourceFolder + sourcePath + ext, 
 			generatedFolder + sourcePath + "Anim.dasm", 
 			generatedFolder + sourcePath + "Sprites.dasm")
 
-		print("animSpriteExport: " + sourceFolder + sourcePath + jsonExt + " got exported.")
+		print("animSpriteExport: " + sourceFolder + sourcePath + ext + " got exported.")
 		return True
 	else:
-		print("animSpriteExport: " + sourceFolder + sourcePath + jsonExt + " wasn't updated. No need to export.")
+		#print("animSpriteExport: " + sourceFolder + sourcePath + ext + " is no need to export.")
 		return False
 
-def ExportLevel(sourcePath, exporterUpdated, sourceFolder = "sources\\", generatedFolder = "generated\\"):
-	jsonExt = ".json"
-	if (IsFileUpdated(sourceFolder + sourcePath + jsonExt) or exporterUpdated):
-		common.RunCommand("python tools\\levelExport.py -i " + sourceFolder + sourcePath + jsonExt + 
-			" -o " + generatedFolder + sourcePath + ".dasm")
-		print("levelExport: " + sourceFolder + sourcePath + jsonExt + " got exported.")
+def ExportLevel(sourcePath, forceExport, sourceFolder = "sources\\", generatedFolder = "generated\\"):
+	ext = ".json"
+	if levelExport.IsFileUpdated(sourceFolder + sourcePath + ext) or forceExport:
+		levelExport.Export( 
+			sourceFolder + sourcePath + ext, 
+			generatedFolder + sourcePath + ".dasm")
+			
+		print("levelExport: " + sourceFolder + sourcePath + ext + " got exported.")		
 		return True
 	else:
-		print("levelExport: " + sourceFolder + sourcePath + jsonExt + " wasn't updated. No need to export.")		
+		#print("levelExport: " + sourceFolder + sourcePath + ext + " is no need to export.")		
 		return False
+
+def ExportMusic(sourcePath, forceExport, sourceFolder = "sources\\", generatedFolder = "generated\\"):
+	ext = ".ym"
+	if IsFileUpdated(sourceFolder + sourcePath + ext) or forceExport:
+		musicExport.Export( 
+			sourceFolder + sourcePath + ext, 
+			generatedFolder + sourcePath + ".dasm")
+			
+		print("musicExport: " + sourceFolder + sourcePath + ext + " got exported.")		
+		return True
+	else:	
+		return False		
+
+def ExportSegment(bank0_seg_path, forceExport, segmentAddr, externalsOnly = False):
+	if forceExport:
+		common.RunCommand("..\\..\\retroassembler\\retroassembler.exe -C=8080 " + bank0_seg_path +
+				".dasm generated\\bin\\" + bank0_seg_path + ".bin >" + bank0_seg_path + "Labels.asm")
+
+		CheckSegmentSize("generated\\bin\\" + bank0_seg_path + ".bin", segmentAddr)
+
+		ExportLabels(bank0_seg_path + "Labels.asm", externalsOnly)
+
+		chunkPaths = SplitSegment("generated\\bin\\" + bank0_seg_path + ".bin", bank0_seg_path + "Labels.asm")
+
+		if len(chunkPaths) == 0:
+			common.DeleteFile("generated\\bin\\" + bank0_seg_path + ".bin.zx0")
+			common.RunCommand(f"tools\\zx0salvador.exe -v -classic generated\\bin\\{bank0_seg_path}.bin generated\\bin\\{bank0_seg_path}.bin.zx0")
+		else:
+			for chunkPath in chunkPaths:
+				zipfilePathWOExt = os.path.splitext(chunkPath)[0] 
+				common.DeleteFile(zipfilePathWOExt + ".bin.zx0")
+				common.RunCommand(f"tools\\zx0salvador.exe -v -classic {zipfilePathWOExt}.bin {zipfilePathWOExt}.bin.zx0")
+		
+		print(f"ExportSegment: {bank0_seg_path} segment got exported.")	
+		return True
+	else:
+		return False
+
+
+
+def IsDasmUpdated(path):
+	with open(path, "rb") as file:
+		lines = file.readlines()
+		
+	includes = []
+	for line in lines:
+		lineStr = line.decode('ascii')
+		incStr = ".include "
+		incIdx = lineStr.find(incStr)
+		
+		if incIdx != -1 and lineStr[0] != ";":
+			path = lineStr[incIdx + len(incStr)+1:]
+			pathEndQ1 = path.find('"')
+			pathEndQ2 = path.find("'")
+			if pathEndQ1 != -1:
+				includes.append(path[:pathEndQ1])
+			elif pathEndQ2 != -1:
+				includes.append(path[:pathEndQ2])
+			continue
+
+	anyIncUpdated = False
+	for path in includes:
+		anyIncUpdated |= IsFileUpdated(path)
+
+	return anyIncUpdated | IsFileUpdated(path)
 
 def IsFileUpdated(path, _buildDBPath = buildDBPath):
 	
@@ -119,3 +188,47 @@ def CheckSegmentSize(path, segmentAddr):
 			print(f"ERROR: {path} is bigger than {segmentSizeMax} bytes")
 			print("Stop export")
 			exit(1)
+
+def SplitSegment(segmentPath, segmentLabelsPath):
+	with open(segmentLabelsPath, "rb") as file:
+		labels = file.readlines()
+
+	if len(labels) == 0:
+		return []
+
+	firstLine = labels[0].decode('ascii')
+	firstLabelAddrStr = firstLine[firstLine.find("$")+1:]
+	firstLabelAddr = int(firstLabelAddrStr, 16)
+
+	splitAddrs = []
+	for line in labels:
+		label = line.decode('ascii')
+		if label.find("__split") != -1:
+			splitAddrStr = label[label.find("$")+1:]
+			splitAddr = int(splitAddrStr, 16) - firstLabelAddr
+			splitAddrs.append(splitAddr)
+
+	if len(splitAddrs) == 0:
+		return []
+	
+	chunkExt = os.path.splitext(segmentPath)[1]
+	segmentSize = os.path.getsize(segmentPath)
+	splittedFiles = []
+
+	with open(segmentPath, "rb") as file:
+		for i, splitAddr in enumerate(splitAddrs):
+			data = file.read(splitAddr)
+			chunkPath = os.path.splitext(segmentPath)[0] + "_" + str(i) + chunkExt
+			splittedFiles.append(chunkPath)
+			with open(chunkPath, "wb") as fw:
+				fw.write(data)
+		# remain chunk
+		remainSize = segmentSize - splitAddr
+		data = file.read(remainSize)
+		
+		chunkPath = os.path.splitext(segmentPath)[0] + "_" + str(i+1) + chunkExt
+		splittedFiles.append(chunkPath)
+		with open(chunkPath, "wb") as fw:
+			fw.write(data)
+
+	return splittedFiles

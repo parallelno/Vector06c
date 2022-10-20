@@ -111,6 +111,7 @@ hero_attk_l1_4           = $37cd
 hero_attk_l1_5           = $385a
 hero_attk_l1_6           = $38e7
 hero_attk_l1_7           = $3974
+__split                  = $39d2
 skeleton_sprites         = $39d2
 skeleton_idle_r0_0       = $39d4
 skeleton_idle_r0_1       = $3a8e

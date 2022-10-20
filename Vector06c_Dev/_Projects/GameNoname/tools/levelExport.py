@@ -1,6 +1,7 @@
 from PIL import Image
 import json
-import common
+import tools.common as common
+import tools.build as build
 
 def RoomTilesToAsm(roomJ, roomPath, remapIdxs):
 	asm = "; " + roomPath + "\n"
@@ -157,78 +158,82 @@ def StartPosToAsm(levelJ, labelPrefix):
 	return asm, 4
 
 #=====================================================
-import argparse
-parser = argparse.ArgumentParser()
-parser.add_argument("-i", "--input", help = "Input file")
-parser.add_argument("-o", "--output", help = "Output file")
-args = parser.parse_args()
+def Export(levelJPath, levelAsmPath):
 
-if not args.output or not args.input:
-	print("-i and -o command-line parameters needed. Use -h for help.")
-	exit()
-levelJPath = args.input
-levelAsmPath = args.output
+	with open(levelJPath, "rb") as file:
+		levelJ = json.load(file)
 
-with open(levelJPath, "rb") as file:
-	levelJ = json.load(file)
+	pngPath = str(levelJ["png"])
+	image = Image.open(pngPath)
 
-pngPath = str(levelJ["png"])
-image = Image.open(pngPath)
+	levelAsmName = levelAsmPath.split("/")[-1].split("\\")[-1].split(".")[0]
 
-levelAsmName = levelAsmPath.split("/")[-1].split("\\")[-1].split(".")[0]
+	asm, colors = common.PaletteToAsm(image, levelJ, pngPath, levelAsmName)
 
-asm, colors = common.PaletteToAsm(image, levelJ, pngPath, levelAsmName)
+	dataSize = len(colors)
+	asmStartPos, size = StartPosToAsm(levelJ, levelAsmName)
+	asm += asmStartPos
+	dataSize += size
+	image = common.RemapColors(image, colors)
 
-dataSize = len(colors)
-asmStartPos, size = StartPosToAsm(levelJ, levelAsmName)
-asm += asmStartPos
-dataSize += size
-image = common.RemapColors(image, colors)
+	roomPaths = levelJ["rooms"]
+	roomsJ = []
+	# load and parse tiled map
+	for roomPathP in roomPaths:
+		roomPath = roomPathP['file']
+		with open(roomPath, "rb") as file:
+			roomsJ.append(json.load(file))
+		
+	# make a tile index remap dictionary, to have the first idx = 0
+	remapIdxs = RemapIndex(roomsJ)
 
-roomPaths = levelJ["rooms"]
-roomsJ = []
-# load and parse tiled map
-for roomPathP in roomPaths:
-	roomPath = roomPathP['file']
-	with open(roomPath, "rb") as file:
-		roomsJ.append(json.load(file))
+	pngLabelPrefix = pngPath.split("/")[-1].split("\\")[-1].split(".")[0]
+
+	# list of rooms
+	asmL, size = GetListOfRooms(roomPaths, levelAsmName)
+	asm += asmL
+	dataSize += size
+	# list of tiles addreses
+	asmLT, size = GetListOfTiles(remapIdxs, levelAsmName, pngLabelPrefix)
+	asm += asmLT
+	dataSize += size
+	# every room data
+	for i, roomJ in enumerate(roomsJ):
+		asmRT, size = RoomTilesToAsm(roomJ["layers"][0], roomPaths[i]['file'], remapIdxs)
+		asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
+		asm += asmRT
+		dataSize += size
+		asmRTD, size = RoomTilesDataToAsm(roomJ["layers"][1], roomPaths[i]['file'])
+		asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
+		asm += asmRTD
+		dataSize += size
+
+	# tile art data to asm
+	asmT, size = TilesToAsm(roomsJ[0], image, pngPath, remapIdxs, pngLabelPrefix)
+	asm += asmT
+	dataSize += size
+
+	# save asm
+	with open(levelAsmPath, "w") as file:
+		file.write(asm)
+
+def IsFileUpdated(levelJPath):
+	with open(levelJPath, "rb") as file:
+		levelJ = json.load(file)
 	
-# make a tile index remap dictionary, to have the first idx = 0
-remapIdxs = RemapIndex(roomsJ)
+	pngPath = str(levelJ["png"])
 
-pngLabelPrefix = pngPath.split("/")[-1].split("\\")[-1].split(".")[0]
+	roomPaths = levelJ["rooms"]
+	levelsUpdated = False
+	for roomPathP in roomPaths:
+		roomPath = roomPathP['file']
+		if build.IsFileUpdated(roomPath):
+			levelsUpdated = True
+			break
 
-# list of rooms
-asmL, size = GetListOfRooms(roomPaths, levelAsmName)
-asm += asmL
-dataSize += size
-# list of tiles addreses
-asmLT, size = GetListOfTiles(remapIdxs, levelAsmName, pngLabelPrefix)
-asm += asmLT
-dataSize += size
-# every room data
-for i, roomJ in enumerate(roomsJ):
-	asmRT, size = RoomTilesToAsm(roomJ["layers"][0], roomPaths[i]['file'], remapIdxs)
-	asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
-	asm += asmRT
-	dataSize += size
-	asmRTD, size = RoomTilesDataToAsm(roomJ["layers"][1], roomPaths[i]['file'])
-	asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
-	asm += asmRTD
-	dataSize += size
-
-# tile art data to asm
-asmT, size = TilesToAsm(roomsJ[0], image, pngPath, remapIdxs, pngLabelPrefix)
-asm += asmT
-dataSize += size
-
-
-# save asm
-with open(levelAsmPath, "w") as file:
-	file.write(asm)
-
-print(f"levelGenerator: path: {levelAsmPath}, dataSize: {dataSize} bytes.")
-
+	if build.IsFileUpdated(levelJPath) | build.IsFileUpdated(pngPath) | levelsUpdated:
+		return True
+	return False
 
 
 

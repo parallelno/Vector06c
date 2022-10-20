@@ -1,3 +1,5 @@
+.include "spritePreshift.asm"
+
 RamDiskInit:
 			; unpack utils to the ram-disk
 			lxi d, toBank2addr8000
@@ -11,7 +13,7 @@ RamDiskInit:
 			mvi a, RAM_DISK_M1 | RAM_DISK_M_8F
 			call dzx0RD
 
-			; unpack sprites to the ram-disk to $8000
+			; unpack sprites chunk0 to the ram-disk to $A000
 			lxi d, toBank0addr0
 			lxi b, SCR_ADDR
 			mvi a, RAM_DISK_M0 | RAM_DISK_M_8F

@@ -2,6 +2,7 @@ from xmlrpc.client import Boolean, boolean
 from PIL import Image
 import json
 import tools.common as common
+import tools.build as build
 
 def BytesToAsmTiled(data):
 	asm = ""
@@ -325,5 +326,14 @@ def Export(addMask : bool, charJPath, asmAnimPath, asmSpritePath):
 	with open(asmSpritePath, "w") as file:
 		file.write(asmSprites)
 
+def IsFileUpdated(charJPath):
+	with open(charJPath, "rb") as file:
+		charJ = json.load(file)
+	
+	pngPath = str(charJ["png"])
+
+	if build.IsFileUpdated(charJPath) | build.IsFileUpdated(pngPath):
+		return True
+	return False
 
 
