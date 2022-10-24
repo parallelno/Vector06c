@@ -218,8 +218,8 @@ SPRITE_W16 = 2
 SPRITE_W24 = 3
 SPRITE_PRESHIFT_RIGHT = true
 SPRITE_PRESHIFT_LEFT = false
-SPRITE_FORWARD_LINE = true
-SPRITE_BACKWARD_LINE = false
+SPRITE_FORWARD_ORDER = true
+SPRITE_BACKWARD_ORDER = false
 SPRITE_COLOR = false
 SPRITE_MASK = true
 
@@ -281,7 +281,7 @@ SpritePreshift:
 
 .endmacro
 
-.macro SPRITE_PRESHIFT_(width, direction, withMask)
+.macro SPRITE_PRESHIFT_(width, dir, withMask)
 			; an example of a byte order for a 24 width sprite
 			; with a mask
 			; 0 line
@@ -305,24 +305,26 @@ SpritePreshift:
 		.if withMask == false
 			SP_BYTE_LEN = COLOR_BYTE_LEN
 		.endif
+		
+		.if dir == SPRITE_PRESHIFT_LEFT
+			; move hl to the last byte in the line
+			lxi d, SP_BYTE_LEN * (width/8 - 1)
+			dad d
+		.endif		
 
-		.if direction == SPRITE_PRESHIFT_RIGHT
+		.if dir == SPRITE_PRESHIFT_RIGHT
 			NEXT_LINE_OFFSET_SCR1 = SP_BYTE_LEN * width/8
 			NEXT_LINE_OFFSET_SCR2 = SP_BYTE_LEN * (width/8*2 - 1)
 			NEXT_LINE_OFFSET_SCR3 = SP_BYTE_LEN * width/8
+			SPRITE_FORWARD_LINE = SPRITE_FORWARD_ORDER
+			SPRITE_BACKWARD_LINE = SPRITE_BACKWARD_ORDER
 		.endif
-		.if direction == SPRITE_PRESHIFT_LEFT
+		.if dir == SPRITE_PRESHIFT_LEFT
 			NEXT_LINE_OFFSET_SCR1 = SP_BYTE_LEN * width/8
 			NEXT_LINE_OFFSET_SCR2 = SP_BYTE_LEN * 1
-			NEXT_LINE_OFFSET_SCR3 = SP_BYTE_LEN * (width/8*2 - 1)
-		.endif
-
-		.if direction == SPRITE_PRESHIFT_LEFT
-			; move hl to the last byte in the line
-			push b
-			lxi d, SP_BYTE_LEN * (width/8 - 1)
-			dad d
-			pop b
+			NEXT_LINE_OFFSET_SCR3 = SP_BYTE_LEN * width/8
+			SPRITE_FORWARD_LINE = SPRITE_BACKWARD_ORDER
+			SPRITE_BACKWARD_LINE = SPRITE_FORWARD_ORDER			
 		.endif
 @loop:
 		.if withMask
@@ -331,11 +333,11 @@ SpritePreshift:
 			push b
 @maskLoop:
 			; 1st scr buffer
-			SPRITE_PRESHIFT_LINE(width, direction, withMask, SPRITE_MASK, SPRITE_FORWARD_LINE, NEXT_LINE_OFFSET_SCR1)
+			SPRITE_PRESHIFT_LINE(width, dir, withMask, SPRITE_MASK, SPRITE_FORWARD_LINE, NEXT_LINE_OFFSET_SCR1)
 			; 2nd scr buffer
-			SPRITE_PRESHIFT_LINE(width, direction, withMask, SPRITE_MASK, SPRITE_BACKWARD_LINE, NEXT_LINE_OFFSET_SCR2)
+			SPRITE_PRESHIFT_LINE(width, dir, withMask, SPRITE_MASK, SPRITE_BACKWARD_LINE, NEXT_LINE_OFFSET_SCR2)
 			; 3rd scr buffer
-			SPRITE_PRESHIFT_LINE(width, direction, withMask, SPRITE_MASK, SPRITE_BACKWARD_LINE, NEXT_LINE_OFFSET_SCR3)
+			SPRITE_PRESHIFT_LINE(width, dir, withMask, SPRITE_MASK, SPRITE_BACKWARD_LINE, NEXT_LINE_OFFSET_SCR3)
 			dcr b
 			jnz @maskLoop
 			pop b
@@ -350,29 +352,33 @@ SpritePreshift:
 		.endif
 @colorLoop:
 			; 1st scr buffer
-			SPRITE_PRESHIFT_LINE(width, direction, withMask, SPRITE_COLOR, SPRITE_FORWARD_LINE, NEXT_LINE_OFFSET_SCR1)
+			SPRITE_PRESHIFT_LINE(width, dir, withMask, SPRITE_COLOR, SPRITE_FORWARD_LINE, NEXT_LINE_OFFSET_SCR1)
 			; 2nd scr buffer
-			SPRITE_PRESHIFT_LINE(width, direction, withMask, SPRITE_COLOR, SPRITE_BACKWARD_LINE, NEXT_LINE_OFFSET_SCR2)
+			SPRITE_PRESHIFT_LINE(width, dir, withMask, SPRITE_COLOR, SPRITE_BACKWARD_LINE, NEXT_LINE_OFFSET_SCR2)
 			; 3rd scr buffer
-			SPRITE_PRESHIFT_LINE(width, direction, withMask, SPRITE_COLOR, SPRITE_BACKWARD_LINE, NEXT_LINE_OFFSET_SCR3)
+			SPRITE_PRESHIFT_LINE(width, dir, withMask, SPRITE_COLOR, SPRITE_BACKWARD_LINE, NEXT_LINE_OFFSET_SCR3)
 			dcr b
 			jnz @colorLoop
 			pop b
 			pop h
-
+		.if dir == SPRITE_PRESHIFT_RIGHT
 			dcr c
+		.endif
+		.if dir == SPRITE_PRESHIFT_LEFT
+			inr c
+		.endif		
 			jnz @loop
 			ret
 .endmacro
 
 .macro SPRITE_PRESHIFT_ADVANCE(byteOrder, withMask)
-	.if byteOrder == SPRITE_FORWARD_LINE
+	.if byteOrder == SPRITE_FORWARD_ORDER
 			inx h
 		.if withMask
 			inx h
 		.endif
 	.endif
-	.if byteOrder == SPRITE_BACKWARD_LINE
+	.if byteOrder == SPRITE_BACKWARD_ORDER
 			dcx h
 		.if withMask
 			dcx h
@@ -380,31 +386,33 @@ SpritePreshift:
 	.endif
 .endmacro
 
-.macro SPRITE_PRESHIFT_SCROLL(direction)
-		.if direction == SPRITE_PRESHIFT_RIGHT
+.macro SPRITE_PRESHIFT_ROTATE_BYTE(dir)
+		.if dir == SPRITE_PRESHIFT_RIGHT
 			rar
 		.endif
-		.if direction == SPRITE_PRESHIFT_LEFT
+		.if dir == SPRITE_PRESHIFT_LEFT
 			ral
 		.endif
 .endmacro
 
-.macro SPRITE_PRESHIFT_LINE(width, direction, withMask, mask, byteOrder, nextLineOffset)
+.macro SPRITE_PRESHIFT_LINE(width, dir, withMask, mask, byteOrder, nextLineOffset)
+			LOOP_COUNTER .var 0
 		.if mask
 			stc
 		.endif
 		.if mask == false
 			xra a
 		.endif
-		.loop width/8 - 1
+	.loop width/8
 			mov a, m
-			SPRITE_PRESHIFT_SCROLL(direction)
+			SPRITE_PRESHIFT_ROTATE_BYTE(dir)
 			mov m, a
+			
+			LOOP_COUNTER = LOOP_COUNTER + 1
+		.if LOOP_COUNTER < width/8
 			SPRITE_PRESHIFT_ADVANCE(byteOrder, withMask)
-		.endloop
-			mov a, m 
-			SPRITE_PRESHIFT_SCROLL(direction)
-			mov m, a
+		.endif
+	.endloop
 
 			lxi d, nextLineOffset
 			dad d

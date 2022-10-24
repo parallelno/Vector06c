@@ -1,18 +1,19 @@
 RamDiskInit_sprite_test_clearScr:
-			lxi h, $8200
+			lxi h, $A200
 @column1:
 			mvi m, 0
 			inr l
 			jnz @column1
 			inr h
+			rz
 @column2:
 			mvi m, 0
 			inr l
 			jnz @column2
 			inr h
-
+			rz
 @column3:
-			mvi m, 128
+			mvi m, 0
 			inr l
 			jnz @column3
 			inr h
@@ -20,15 +21,10 @@ RamDiskInit_sprite_test_clearScr:
 			ret
 
 RamDiskInit_sprite_test:
-			; clear the screen
-			;lxi b, $0000
-			;lxi d, $8000 / 32 - 1
-			;xra a
-			;call ClearMemSP
 			call RamDiskInit_sprite_test_clearScr
 			; HERO
 			RAM_DISK_ON(RAM_DISK_S0)
-
+/*
 			TEST_DRAW_SPRITE(hero_idle_r0_0, $a0f0 - 16)
 			TEST_DRAW_SPRITE(hero_idle_r0_1, $a3f0 - 16)
 			TEST_DRAW_SPRITE(hero_idle_r0_2, $a6f0 - 16)
@@ -38,41 +34,77 @@ RamDiskInit_sprite_test:
 			TEST_DRAW_SPRITE(hero_idle_r0_6, $b2f0 - 16)
 			TEST_DRAW_SPRITE(hero_idle_r0_7, $b5f0 - 16)
 
-			TEST_DRAW_SPRITE(hero_idle_l0_0, $a0f0 - 16*2)
-			TEST_DRAW_SPRITE(hero_idle_l0_1, $a3f0 - 16*2)
-			TEST_DRAW_SPRITE(hero_idle_l0_2, $a6f0 - 16*2)
-			TEST_DRAW_SPRITE(hero_idle_l0_3, $a9f0 - 16*2)
-			TEST_DRAW_SPRITE(hero_idle_l0_4, $acf0 - 16*2)
-			TEST_DRAW_SPRITE(hero_idle_l0_5, $aff0 - 16*2)
-			TEST_DRAW_SPRITE(hero_idle_l0_6, $b2f0 - 16*2)
-			TEST_DRAW_SPRITE(hero_idle_l0_7, $b5f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_run_l0_0, $a0f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_run_l0_1, $a3f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_run_l0_2, $a6f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_run_l0_3, $a9f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_run_l0_4, $acf0 - 16*2)
+			TEST_DRAW_SPRITE(hero_run_l0_5, $aff0 - 16*2)
+			TEST_DRAW_SPRITE(hero_run_l0_6, $b2f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_run_l0_7, $b5f0 - 16*2)
 
-			TEST_DRAW_SPRITE(hero_run_r0_0, $a0f0 - 16*3)
-			TEST_DRAW_SPRITE(hero_run_r0_1, $a3f0 - 16*3)
-			TEST_DRAW_SPRITE(hero_run_r0_2, $a6f0 - 16*3)
-			TEST_DRAW_SPRITE(hero_run_r0_3, $a9f0 - 16*3)
-			TEST_DRAW_SPRITE(hero_run_r0_4, $acf0 - 16*3)
-			TEST_DRAW_SPRITE(hero_run_r0_5, $aff0 - 16*3)
-			TEST_DRAW_SPRITE(hero_run_r0_6, $b2f0 - 16*3)
-			TEST_DRAW_SPRITE(hero_run_r0_7, $b5f0 - 16*3)
-
-			TEST_DRAW_SPRITE(hero_run_r1_0, $a0f0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_r1_1, $a3f0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_r1_2, $a6f0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_r1_3, $a9f0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_r1_4, $acf0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_r1_5, $aff0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_r1_6, $b2f0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_r1_7, $b5f0 - 16*4)			
+			TEST_DRAW_SPRITE(hero_run_l1_0, $a0f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_l1_1, $a3f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_l1_2, $a6f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_l1_3, $a9f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_l1_4, $acf0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_l1_5, $aff0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_l1_6, $b2f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_run_l1_7, $b5f0 - 16*3)			
 			
-			TEST_DRAW_SPRITE(hero_run_r2_0, $a0f0 - 16*5)
-			TEST_DRAW_SPRITE(hero_run_r2_1, $a3f0 - 16*5)
-			TEST_DRAW_SPRITE(hero_run_r2_2, $a6f0 - 16*5)
-			TEST_DRAW_SPRITE(hero_run_r2_3, $a9f0 - 16*5)
-			TEST_DRAW_SPRITE(hero_run_r2_4, $acf0 - 16*5)
-			TEST_DRAW_SPRITE(hero_run_r2_5, $aff0 - 16*5)
-			TEST_DRAW_SPRITE(hero_run_r2_6, $b2f0 - 16*5)
-			TEST_DRAW_SPRITE(hero_run_r2_7, $b5f0 - 16*5)			
+			TEST_DRAW_SPRITE(hero_run_l2_0, $a0f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l2_1, $a3f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l2_2, $a6f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l2_3, $a9f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l2_4, $acf0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l2_5, $aff0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l2_6, $b2f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l2_7, $b5f0 - 16*4)
+
+			TEST_DRAW_SPRITE(hero_run_l3_0, $a0f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l3_1, $a3f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l3_2, $a6f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l3_3, $a9f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l3_4, $acf0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l3_5, $aff0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l3_6, $b2f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_run_l3_7, $b5f0 - 16*4)							
+*/
+			TEST_DRAW_SPRITE(hero_attk_r0_0, $a0f0 - 16)
+			TEST_DRAW_SPRITE(hero_attk_r0_1, $a3f0 - 16)
+			TEST_DRAW_SPRITE(hero_attk_r0_2, $a6f0 - 16)
+			TEST_DRAW_SPRITE(hero_attk_r0_3, $a9f0 - 16)
+			TEST_DRAW_SPRITE(hero_attk_r0_4, $acf0 - 16)
+			TEST_DRAW_SPRITE(hero_attk_r0_5, $aff0 - 16)
+			TEST_DRAW_SPRITE(hero_attk_r0_6, $b2f0 - 16)
+			TEST_DRAW_SPRITE(hero_attk_r0_7, $b5f0 - 16)
+
+			TEST_DRAW_SPRITE(hero_attk_r1_0, $a0f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_attk_r1_1, $a3f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_attk_r1_2, $a6f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_attk_r1_3, $a9f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_attk_r1_4, $acf0 - 16*2)
+			TEST_DRAW_SPRITE(hero_attk_r1_5, $aff0 - 16*2)
+			TEST_DRAW_SPRITE(hero_attk_r1_6, $b2f0 - 16*2)
+			TEST_DRAW_SPRITE(hero_attk_r1_7, $b5f0 - 16*2)
+
+			TEST_DRAW_SPRITE(hero_attk_l0_0, $a0f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_attk_l0_1, $a3f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_attk_l0_2, $a6f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_attk_l0_3, $a9f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_attk_l0_4, $acf0 - 16*3)
+			TEST_DRAW_SPRITE(hero_attk_l0_5, $aff0 - 16*3)
+			TEST_DRAW_SPRITE(hero_attk_l0_6, $b2f0 - 16*3)
+			TEST_DRAW_SPRITE(hero_attk_l0_7, $b5f0 - 16*3)
+
+			TEST_DRAW_SPRITE(hero_attk_l1_0, $a0f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_attk_l1_1, $a3f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_attk_l1_2, $a6f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_attk_l1_3, $a9f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_attk_l1_4, $acf0 - 16*4)
+			TEST_DRAW_SPRITE(hero_attk_l1_5, $aff0 - 16*4)
+			TEST_DRAW_SPRITE(hero_attk_l1_6, $b2f0 - 16*4)
+			TEST_DRAW_SPRITE(hero_attk_l1_7, $b5f0 - 16*4)			
 
 
 			TEST_DRAW_SPRITE_M(skeleton_idle_r0_0, $a080 - 16)

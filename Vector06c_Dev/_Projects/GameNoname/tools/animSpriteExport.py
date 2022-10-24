@@ -179,16 +179,14 @@ def FindSpriteHorizBorder(forwardSearch, spriteImg, mask_alpha, width, height):
 		if stopFlag: break
 	return dx2  
 
-def GetSpriteParams(labelPrefix, spriteName, spriteImg, mask_alpha, width, height, shift):
+def GetSpriteParams(labelPrefix, spriteName, dxL, dxR, spriteImg, mask_alpha, width, height, shift):
 	#if labelPrefix == 'burner' and spriteName == 'idle_l0':
 	#	test= 10 
- 
-	# find leftest pixel dx
-	dxL = shift + FindSpriteHorizBorder(True, spriteImg, mask_alpha, width, height)
-	dxR = shift + FindSpriteHorizBorder(False, spriteImg, mask_alpha, width, height) 
+	shiftedDxL = shift + dxL
+	shiftedDxR = shift + dxR
 
-	offsetXNew = dxL//8 * 8
-	widthNew = (dxR//8+1) * 8 - offsetXNew
+	offsetXNew = shiftedDxL//8 * 8
+	widthNew = (shiftedDxR//8+1) * 8 - offsetXNew
 	return offsetXNew, widthNew
 
 def MakeEmptySpriteData(addMask, width, height):
@@ -277,9 +275,17 @@ def SpritesToAsm(charJPath, charJ, image, addMask):
 
 		asm += BytesToAsmTiled(data)
 
+ 
+		# find leftest pixel dx
+		dxL = FindSpriteHorizBorder(True, spriteImg, mask_alpha, width, height)
+		# find rightest pixel dx
+		dxR = FindSpriteHorizBorder(False, spriteImg, mask_alpha, width, height) 
+
 		# calculate preshifted sprite data
 		for i in range(1, preshiftedSprites):
-			offsetXNew, width2 = GetSpriteParams(labelPrefix, spriteName, spriteImg, mask_alpha, width, height, 8//preshiftedSprites * i)
+			shift = 8//preshiftedSprites * i
+
+			offsetXNew, width2 = GetSpriteParams(labelPrefix, spriteName, dxL, dxR, spriteImg, mask_alpha, width, height, shift)
 			offsetX2 = offsetX + offsetXNew
 			asm += "\n"
 			# two empty bytes prior every sprite data to support a stack renderer
