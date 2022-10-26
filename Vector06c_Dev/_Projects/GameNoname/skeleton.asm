@@ -96,7 +96,7 @@ SkeletonUpdate:
 			mov b, a
 			mov c, h
 			; check the monster pos against the room collision tiles
-			call CheckRoomTilesCollision
+			call RoomCheckTileCollision
 			; check if any tiles collide
 
 			cpi $ff

@@ -31,7 +31,7 @@ roomTilesAddr:
 
 ; this functions are used when the room initialized. check levels.asm RoomInitTilesData func
 roomFuncTable:		
-			.word LevelsTileDataCopy, LevelsTileDataCopy, LevelsMonstersSpawn, LevelsTileDataCopy, LevelsTileDataCopy, LevelsTileDataCopy, LevelsTileDataCopy
+			.word RoomTileDataCopy, RoomTileDataCopy, RoomMonstersSpawn, RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy
 
 roomTilesData:
 			.storage ROOM_WIDTH * ROOM_HEIGHT

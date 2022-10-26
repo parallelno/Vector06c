@@ -65,40 +65,61 @@ GetSpriteScrAddr4:
 ;		10 - 24pxs,
 ;		11 - 32pxs
 ; l - height
-CopySpriteToScrV:
-			; adjust initial Y
-			inr e
+COPY_SPRITE_H_MIN = 5
 
-			; set up a copy routine
+CopySpriteToScrV:
+			; Y -= 1 because we start copying bytes with dec Y
+			inr e
+/*
+			; y=max(y, 5)
+			mvi a, 5
+			cmp l
+			jc @doNotSetMax
+@setMax:
+			mvi l, 5
+@doNotSetMax:
+*/
+
+			; y=min(y, 20)
+			mvi a, 20
+			cmp l
+			jnc @doNotSetMin
+@setMin:
+			mvi l, 20
+@doNotSetMin:
+
+			; BC = an offset in the copy routine table
 			mov a, l
 			rlc
 			mov c, a
-			mov a, h
 			mvi b, 0
+			; temp a = width
+			mov a, h
 
 			; store sp
 			lxi h, 0
 			dad	sp
 			shld RestoreSP + 1
 
-			; continue setting up a copy routine
-			lxi h, @copyRoutineAddrs-8
+			; hl - an addr of a copy routine
+			lxi h, @copyRoutineAddrs - COPY_SPRITE_H_MIN * WORD_LEN
 			dad b
 			mov b, m
 			inx h
 			mov h, m
 			mov l, b
+
+			; run the copy routine
 			pchl
 
-@h04:
 @h05:		COPY_SPRITE_TO_SCR(5)
 @h06:		COPY_SPRITE_TO_SCR(6)
 @h07:		COPY_SPRITE_TO_SCR(7)
 @h08:		COPY_SPRITE_TO_SCR(8)
-@h09:
-@h10:
-@h11:
-@h12:
+@h09:		COPY_SPRITE_TO_SCR(9)
+@h10:		COPY_SPRITE_TO_SCR(10)
+@h11:		COPY_SPRITE_TO_SCR(11)
+@h12:		COPY_SPRITE_TO_SCR(12)
 @h13:		COPY_SPRITE_TO_SCR(13)
 @h14:		COPY_SPRITE_TO_SCR(14)
 @h15:		COPY_SPRITE_TO_SCR(15)
@@ -109,7 +130,6 @@ CopySpriteToScrV:
 @h20:		COPY_SPRITE_TO_SCR(20)
 
 @copyRoutineAddrs:
-			.word @h04
 			.word @h05
 			.word @h06
 			.word @h07
@@ -125,10 +145,7 @@ CopySpriteToScrV:
 			.word @h17
 			.word @h18
 			.word @h19
-			.word @h20
-			.word @h20
-			.word @h20
-			.word @h20
+			.word @h20		
 
 .macro COPY_SPRITE_TO_SCR_PB(moveUp = true)
 			pop b
@@ -143,8 +160,11 @@ CopySpriteToScrV:
 			pop b
 			mov m, c
 .endmacro
+
 .macro COPY_SPRITE_TO_SCR(height)
+			; hl - scr addr
 			xchg
+			; d - width
 			mov d, a
 nextColumn:
 			RAM_DISK_ON(RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
@@ -154,6 +174,7 @@ nextColumn:
 			dcr l
 			mov c, m
 			RAM_DISK_ON(RAM_DISK_S2)
+
 			mov m, c
 			inr l
 			mov m, b
@@ -177,11 +198,12 @@ nextColumn:
 			; assign SP to prevent screen data corruption
 			; when we use mov b, m and mov c, m commands.
 			; a corruption might happen because we fill up B and C with
-			; more than one command
+			; more than one command (mov b,m/mov c,m)
 			lxi sp, STACK_INTERRUPTION_ADDR
 			; advance Y down and to the next scr buff
 			lxi b, $2000-height+2
 			dad b
+
 			jnc nextColumn
 			; advance Y to the next column
 			mvi a, -$20*3+1

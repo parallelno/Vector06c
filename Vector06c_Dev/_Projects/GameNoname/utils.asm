@@ -8,7 +8,7 @@ RestoreSP:
 			RAM_DISK_OFF()
 			ret
 			.closelabels
-			
+
 ; clear a memory buffer
 ; input:
 ; hl - addr to clear
@@ -38,15 +38,24 @@ ClearMem:
 ; hl
 
 ; TODO: optimize. make it works without stopping (di/ei) interruptions.
-ClearMemSP:
+.macro CLEAR_MEM_SP(disableInt)
+		.if disableInt
 			di
+		.endif
+			call ClearMemSP
+		.if disableInt
+			ei
+		.endif			
+.endmacro
+
+ClearMemSP:
 			lxi h, $0000
 			dad sp
 			shld @restoreSP + 1
 			mov h, b
 			mov l, c
 			RAM_DISK_ON_BANK()
-			lxi b, $0000			
+			lxi b, $0000
 			sphl
 			mvi a, $ff
 @loop:
@@ -57,11 +66,38 @@ ClearMemSP:
 @restoreSP:
 			lxi sp, TEMP_WORD
 			RAM_DISK_OFF()
-			ei
 			ret
 			.closelabels
+/*
+ClearRamDisk:
+			lxi b, $0000
+			lxi d, $10000/32 - 1
+			mvi a, RAM_DISK_S0
+			push b
+			push d
+			CLEAR_MEM_SP(false)
+			pop d
+			pop b
 
+			mvi a, RAM_DISK_S1
+			push b
+			push d
+			CLEAR_MEM_SP(false)
+			pop d
+			pop b
 
+			mvi a, RAM_DISK_S2
+			push b
+			push d
+			CLEAR_MEM_SP(false)
+			pop d
+			pop b
+
+			mvi a, RAM_DISK_S3
+			CLEAR_MEM_SP(false)
+			ret
+			.closelabels			
+*/
 INIT_COLOR_IDX = 15
 ; Set palette
 ; input: hl - the addr of the last item in the palette
@@ -89,10 +125,10 @@ SetPalette:
 			.closelabels
 
 ; Set palette copied from the ram-disk w/o blocking interruptions
-; input: 
+; input:
 ; de - the addr of the first item in the palette
 ; a - ram-disk activation command
-; use: 
+; use:
 ; hl, bc, a
 PALETTE_COLORS = 16
 
@@ -110,7 +146,7 @@ SetPaletteFromRamDisk:
 			mvi	a, PORT0_OUT_OUT
 			out	0
 			mvi e, $00
-@loop:		
+@loop:
 			pop b
 			; even color
 			mov	a, e
@@ -132,7 +168,7 @@ SetPaletteFromRamDisk:
 			xthl ; delay 24
 			inr e ; counter plus delay 8
 			inr h ; delay 8
-			dcr h ; delay 8		
+			dcr h ; delay 8
 			out $0c
 			mov a, e
 			cpi PALETTE_COLORS
@@ -141,10 +177,10 @@ SetPaletteFromRamDisk:
 			.closelabels
 
 ; Read a word from the ram-disk w/o blocking interruptions
-; input: 
+; input:
 ; de - data addr in the ram-disk
 ; a - ram-disk activation command
-; use: 
+; use:
 ; hl
 ; out:
 ; bc - data
@@ -167,7 +203,7 @@ GetWordFromRamDisk:
 ;========================================
 ; copy a buffer into the ram-disk.
 ; turn off interruptions!!!
-; input: 
+; input:
 ; de - from addr + data length
 ; hl - to addr in the ram_disk + data length (because it copies backward)
 ; bc - buffer length / 2
@@ -196,20 +232,20 @@ CopyToRamDisk:
 			ora c
 			jnz @loop
 
-@restoreSP: 
+@restoreSP:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
 			ret
 			.closelabels
-			
+
 ; Copy data (max 512) from the ram-disk to ram w/o blocking interruptions
-; input: 
+; input:
 ; h - ram-disk activation command
 ; l - data length / 2
 ; de - data addr in the ram-disk
 ; bc - destination addr
 
-; TODO: optimize. check if it is more efficient to copy a data stored 
+; TODO: optimize. check if it is more efficient to copy a data stored
 ; in $8000 and higher with a direct access like mov
 CopyFromRamDisk:
 			; store sp
@@ -235,4 +271,4 @@ CopyFromRamDisk:
 			dcr e;a
 			jnz @loop
 			jmp RestoreSP
-			.closelabels			
+			.closelabels

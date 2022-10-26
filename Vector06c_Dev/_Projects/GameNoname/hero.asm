@@ -255,7 +255,7 @@ HeroMove:
 			mov c, h
 			shld charTempY
 			; check hero pos against the room collision tiles
-			call CheckRoomTilesCollision
+			call RoomCheckTileCollision
 			; check if any tiles collide
 
 			cpi $ff
@@ -276,7 +276,7 @@ ret
 
 @collides:
 			; handle collided tiles data
-			lxi h, collidedRoomTilesData
+			lxi h, roomTileCollisionData
 			mvi c, 4
 @loop:
 			TILE_DATA_HANDLE_FUNC_CALL(heroFuncTable)
@@ -409,7 +409,7 @@ HeroUpdateSetIdle:
 			.closelabels
 
 HeroErase:
-			; TODO: optimize. erease only that is outside of the updated hero region
+			; TODO: optimize. erase only that is outside of the updated hero region
 			lhld heroEraseScrAddr
 			xchg
 			lhld heroEraseWH

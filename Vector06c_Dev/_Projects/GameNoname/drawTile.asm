@@ -7,7 +7,7 @@
 ; use: a, hl, sp
 
 ; tile graphics format:
-; .byte - a bit mask xxxxECA8, where the "8" bit says if a sprite needs to draw in $8000 buffer, the "A" bit in charge of $A000 buffer etc.
+; .byte - a bit mask xxxxECA8, where the "8" bit says if a sprite needs to be drawn in the $8000 buffer, the "A" bit in charge of $A000 buffer etc.
 ; .byte 4 - needs for a counter
 ; screen format
 ; 1st screen buff : draw 16 bites down, step one byte right, draw 16 bytes up.
@@ -34,17 +34,22 @@ DrawTile16x16:
 
 ; HL - 1st screen buff XY
 ; sp - sprite data
-; E - contains a bit mask xxxxECA8, where the "8" bit says if a sprite needs to draw in $8000 buffer, the "A" bit in charge of $A000 buffer etc.
+; E - contains a bit mask xxxxECA8
+;   "8" bit - draw in $8000 buffer
+;   "A" bit - draw in $A000 buffer etc.
 ; D - counter of screen buffers
 @loop:
 			mov a, e
 			rrc
 			mov e, a
-			jnc @doNotDraw
+			jnc @eraseTileBuf
 
-			DRAW_TILE_16x16_LINE()
+			DRAW_TILE_16x16_BUF()
+			jmp @nextBuf
 
-@doNotDraw:	
+@eraseTileBuf:
+			DRAW_TILE_EREASE_16x16_BUF()
+@nextBuf:
 			; move X to the next scr buff
 			mvi a, $20
 			add h
@@ -55,7 +60,7 @@ DrawTile16x16:
 			jmp RestoreSP
 			.closelabels
 			
-.macro DRAW_TILE_16x16_LINE()
+.macro DRAW_TILE_16x16_BUF()
 		.loop 7
 			pop b					; (12)
 			mov m, c				; (8)
@@ -81,4 +86,20 @@ DrawTile16x16:
 			dcr l					; (8)
 			mov m, b				; (8)
 			dcr h					; (8) (704)		
+.endmacro
+
+.macro DRAW_TILE_EREASE_16x16_BUF()
+			xra a
+		.loop 15
+			mov m, a
+			inr l
+		.endloop
+			mov m, a
+			inr h		
+		.loop 15
+			mov m, a
+			dcr l				
+		.endloop
+			mov m, a 
+			dcr h		
 .endmacro

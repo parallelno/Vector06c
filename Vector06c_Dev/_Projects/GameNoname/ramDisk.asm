@@ -1,4 +1,6 @@
 RamDiskInit:
+			;call ClearRamDisk
+			
 			; unpack utils to the ram-disk
 			lxi d, toBank2addr8000
 			lxi b, $8000

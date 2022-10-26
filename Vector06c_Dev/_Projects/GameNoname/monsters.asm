@@ -92,7 +92,7 @@ MonsterCopyToScr:
 			; ... similar for Y and height
 			; convert monster id into the offset in the monstersRoomData array
 			; and store it into bc
-			; TODO: optimize. think of copying monster data to temp buff with pop+shld
+			; TODO: optimize. consider copying monster data to temp buff with pop+shld
 			; to be able addressing with lhld GLOBAL_ADDR then copy back
 			lxi h, monsterRoomDataAddrOffsets
 			dad b

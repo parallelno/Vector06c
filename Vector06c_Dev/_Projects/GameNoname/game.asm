@@ -4,17 +4,13 @@
 .include "hero.asm"
 .include "monsters.asm"
 .include "levels.asm"
+.include "room.asm"
 .include "text.asm"
-
-.include "temp\\test\\ramDisk_sprite_test.asm"
 
 GameInit:
 			call LevelsInit
 			call LevelInit
 			call RoomInit
-
-			call RamDiskInit_sprite_test
-
 			call RoomDraw	
 
 			xra a
