@@ -13,9 +13,7 @@ drawSpriteWidthHeight_ramDisk__:
 ;		11 - 32pxs,
 ; e - height
 			lxi d, TEMP_WORD
-			;RAM_DISK_OFF()
-drawSpriteRestoreRet_ramDisk__:
-			jmp TEMP_ADDR
+			ret
 			.closelabels
 			
 ; =============================================
@@ -55,9 +53,6 @@ drawSpriteRestoreRet_ramDisk__:
 			mov m, b
 .endmacro
 __DrawSpriteV:
-			; store ret addr
-			pop h
-			shld drawSpriteRestoreRet_ramDisk__ + 1
 			; store SP
 			lxi h, 0
 			dad sp
@@ -271,9 +266,6 @@ __DrawSpriteV:
 .endmacro
 
 __DrawSpriteVM:
-			; store ret addr
-			pop h
-			shld drawSpriteRestoreRet_ramDisk__ + 1
 			; store SP
 			lxi h, 0
 			dad sp

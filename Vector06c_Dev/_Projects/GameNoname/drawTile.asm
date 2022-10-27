@@ -19,11 +19,11 @@ DrawTile16x16:
 			; store sp
 			lxi h, $0000		; (12)
 			dad sp				; (12)
-			shld RestoreSP + 1	; (20)
+			shld @restoreSP + 1	; (20)
 			; sp = BC
 			mov h, b			; (8)
 			mov l, c			; (8)
-			RAM_DISK_ON_BANK()
+			;RAM_DISK_ON_BANK()
 			sphl					; (8)
 			; get a mask and a counter
 			pop b					; (12)
@@ -44,11 +44,11 @@ DrawTile16x16:
 			mov e, a
 			jnc @eraseTileBuf
 
-			DRAW_TILE_16x16_BUF()
+			DRAWTILE16x16_DRAW_BUF()
 			jmp @nextBuf
 
 @eraseTileBuf:
-			DRAW_TILE_EREASE_16x16_BUF()
+			DRAWTILE16x16_ERASE_BUF()
 @nextBuf:
 			; move X to the next scr buff
 			mvi a, $20
@@ -57,10 +57,13 @@ DrawTile16x16:
 
 			dcr d
 			jnz @loop
-			jmp RestoreSP
+@restoreSP:		
+			lxi sp, TEMP_ADDR	
+			;jmp RestoreSP
+			ret
 			.closelabels
 			
-.macro DRAW_TILE_16x16_BUF()
+.macro DRAWTILE16x16_DRAW_BUF()
 		.loop 7
 			pop b					; (12)
 			mov m, c				; (8)
@@ -88,7 +91,7 @@ DrawTile16x16:
 			dcr h					; (8) (704)		
 .endmacro
 
-.macro DRAW_TILE_EREASE_16x16_BUF()
+.macro DRAWTILE16x16_ERASE_BUF()
 			xra a
 		.loop 15
 			mov m, a

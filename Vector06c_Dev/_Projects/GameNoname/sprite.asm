@@ -161,12 +161,29 @@ CopySpriteToScrV:
 			mov m, c
 .endmacro
 
+.macro COPY_SPRITE_TO_SCR_LOOP(height)
+			heightOdd = (height / 2)*2 != height
+
+	.if heightOdd
+		.loop height / 2 - 1
+			COPY_SPRITE_TO_SCR_PB()
+		.endloop
+			COPY_SPRITE_TO_SCR_B()
+	.endif
+	.if heightOdd == false
+		.loop height / 2 - 2
+			COPY_SPRITE_TO_SCR_PB()
+		.endloop
+			COPY_SPRITE_TO_SCR_PB(false)
+	.endif			
+.endmacro
+
 .macro COPY_SPRITE_TO_SCR(height)
 			; hl - scr addr
 			xchg
 			; d - width
 			mov d, a
-nextColumn:
+@nextColumn:
 			RAM_DISK_ON(RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			; read without a stack operations because
 			; we need fill up BC prior to use POP B
@@ -181,7 +198,125 @@ nextColumn:
 			inr l
 			sphl
 
+			COPY_SPRITE_TO_SCR_LOOP(height)
+
+			; assign SP to prevent screen data corruption
+			; when we use mov b, m and mov c, m commands.
+			; a corruption might happen because we fill up B and C with
+			; more than one command (mov b,m/mov c,m)
+			lxi sp, STACK_INTERRUPTION_ADDR
+			; advance Y down and to the next scr buff
+			lxi b, $2000-height+2
+			dad b
+
+			jnc @nextColumn
+			; advance Y to the next column
+			mvi a, -$20*3+1
+			add h
+			mov h, a
+			dcr d
+			jp @nextColumn
+			jmp RestoreSP
+.endmacro
+
+; copy a sprite from backbuff1 to backbuff2
+; in:
+; de - scr addr
+; h - width
+;		00 - 8pxs,
+;		01 - 16pxs,
+;		10 - 24pxs,
+;		11 - 32pxs
+; l - height
+
+CopySpriteToScrV2:
+			; Y -= 1 because we start copying bytes with dec Y
+			inr e
+
+			; y=min(y, 20)
+			mvi a, 20
+			cmp l
+			jnc @doNotSetMin
+@setMin:
+			mvi l, 20
+@doNotSetMin:
+
+			; BC = an offset in the copy routine table
+			mov a, l
+			rlc
+			mov c, a
+			mvi b, 0
+			; temp a = width
+			mov a, h
+
+			; store sp
+			lxi h, 0
+			dad	sp
+			shld RestoreSP + 1
+
+			; hl - an addr of a copy routine
+			lxi h, @copyRoutineAddrs - COPY_SPRITE_H_MIN * WORD_LEN
+			dad b
+			mov b, m
+			inx h
+			mov h, m
+			mov l, b
+
+			; run the copy routine
+			pchl
+
+@h05:		COPY_SPRITE_TO_SCR2(5)
+@h06:		COPY_SPRITE_TO_SCR2(6)
+@h07:		COPY_SPRITE_TO_SCR2(7)
+@h08:		COPY_SPRITE_TO_SCR2(8)
+@h09:		COPY_SPRITE_TO_SCR2(9)
+@h10:		COPY_SPRITE_TO_SCR2(10)
+@h11:		COPY_SPRITE_TO_SCR2(11)
+@h12:		COPY_SPRITE_TO_SCR2(12)
+@h13:		COPY_SPRITE_TO_SCR2(13)
+@h14:		COPY_SPRITE_TO_SCR2(14)
+@h15:		COPY_SPRITE_TO_SCR2(15)
+@h16:		COPY_SPRITE_TO_SCR2(16)
+@h17:		COPY_SPRITE_TO_SCR2(17)
+@h18:		COPY_SPRITE_TO_SCR2(18)
+@h19:		COPY_SPRITE_TO_SCR2(19)
+@h20:		COPY_SPRITE_TO_SCR2(20)
+
+@copyRoutineAddrs:
+			.word @h05
+			.word @h06
+			.word @h07
+			.word @h08
+			.word @h09
+			.word @h10
+			.word @h11
+			.word @h12
+			.word @h13
+			.word @h14
+			.word @h15
+			.word @h16
+			.word @h17
+			.word @h18
+			.word @h19
+			.word @h20		
+
+.macro COPY_SPRITE_TO_SCR_PB2(moveUp = true)
+			pop b
+			mov m, c
+			inr l
+			mov m, b
+		.if moveUp == true
+			inr l
+		.endif
+.endmacro
+.macro COPY_SPRITE_TO_SCR_B2()
+			pop b
+			mov m, c
+.endmacro
+
+.macro COPY_SPRITE_TO_SCR_LOOP2(height)
 			heightOdd = (height / 2)*2 != height
+
 	.if heightOdd
 		.loop height / 2 - 1
 			COPY_SPRITE_TO_SCR_PB()
@@ -193,7 +328,30 @@ nextColumn:
 			COPY_SPRITE_TO_SCR_PB()
 		.endloop
 			COPY_SPRITE_TO_SCR_PB(false)
-	.endif
+	.endif			
+.endmacro
+
+.macro COPY_SPRITE_TO_SCR2(height)
+			; hl - scr addr
+			xchg
+			; d - width
+			mov d, a
+@nextColumn:
+			RAM_DISK_ON(RAM_DISK_S3 | RAM_DISK_M2 | RAM_DISK_M_8F)
+			; read without a stack operations because
+			; we need fill up BC prior to use POP B
+			mov b, m
+			dcr l
+			mov c, m
+			RAM_DISK_ON(RAM_DISK_S3 | RAM_DISK_M2 | RAM_DISK_M_8F)
+
+			mov m, c
+			inr l
+			mov m, b
+			inr l
+			sphl
+
+			COPY_SPRITE_TO_SCR_LOOP2(height)
 
 			; assign SP to prevent screen data corruption
 			; when we use mov b, m and mov c, m commands.
@@ -204,13 +362,12 @@ nextColumn:
 			lxi b, $2000-height+2
 			dad b
 
-			jnc nextColumn
+			jnc @nextColumn
 			; advance Y to the next column
 			mvi a, -$20*3+1
 			add h
 			mov h, a
 			dcr d
-			jp nextColumn
+			jp @nextColumn
 			jmp RestoreSP
 .endmacro
-			.closelabels

@@ -188,9 +188,9 @@ RoomMonstersSpawn:
 			ani %11110000
 			sta @savePosY+1
 
-			; loop monstersUpdateFunc to find an empty slot
+			; loop monstersUpdateFuncs to find an empty slot
 			; check only high byte if it's zero
-			lxi h, monstersInitFunc + 1
+			lxi h, monstersInitFuncs + 1
 			; c - doubled counter.
 			; it is used to get a draw func addr as well as a room sprite data addr
 			; b = 0 for "dad b" below
@@ -217,7 +217,7 @@ RoomMonstersSpawn:
 			mov m, e
 
 			; store a monster update func addr
-			lxi h, monstersUpdateFunc
+			lxi h, monstersUpdateFuncs
 			dad b
 @storeUpdateFunc:
 			lxi d, TEMP_ADDR
@@ -226,7 +226,7 @@ RoomMonstersSpawn:
 			mov m, d
 
 			; store a monster draw func addr
-			lxi h, monstersDrawFunc
+			lxi h, monstersDrawFuncs
 			dad b
 @storeDrawFunc:
 			lxi d, TEMP_ADDR
@@ -290,12 +290,16 @@ RoomMonstersSpawn:
 			.closelabels
 
 RoomDraw:
-			; clear the screen
-			;lxi b, $0000
-			;lxi d, $8000 / 32 - 1
-			;xra a
-			;CLEAR_MEM_SP(true)
-
+			; main scr
+			CALL_RAM_DISK_FUNC(RoomDrawB, RAM_DISK_S0)
+			; back buffer2 (used for restore tiles in the back buffer)
+			CALL_RAM_DISK_FUNC(RoomDrawB, RAM_DISK_S0 | RAM_DISK_M3 | RAM_DISK_M_8F)
+			ret
+;=========================================================
+; draw a room in the buffer. It might be a main screen, or a back buffer with 3 scr buffs ($A000-$FFFF) available.
+; in:
+; a - ram-disk activation command where stored tile gfx
+RoomDrawB:
 			; set y = 0
 			mvi e, 0
 			; set a pointer to the first item in the list of addrs of tile graphics
@@ -313,14 +317,13 @@ RoomDraw:
 			inx h
 			push d
 			push h
-			mvi a, RAM_DISK_S0
+			;mvi a, RAM_DISK_S0
 			call DrawTile16x16
 			pop h
 			pop d
 
 			; x = x + 2
-			inr d
-			inr d
+			inr_d(2)
 			; repeat if x reaches the high byte of the second screen buffer addr
 			mvi a, $a0
 			cmp d

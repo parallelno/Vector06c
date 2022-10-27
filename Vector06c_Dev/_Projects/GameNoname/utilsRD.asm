@@ -8,9 +8,6 @@
 ; use:
 ; hl
 __ClearMemSP:
-			; store the return addr
-			pop h
-			shld __restoreRet_ramDisk + 1
 			; store SP
 			lxi h, 0
 			dad sp

@@ -16,7 +16,7 @@ HERO_ATTACK_DURATION			= 10 ; duration = updates duration * HERO_ATTACK_DURATION
 heroData:
 heroStatus:			.byte HERO_STATUS_IDLE
 heroStatusTimer:	.byte 0
-heroAnimTimer:		.byte TEMP_BYTE ; used to trigger change a anim frame
+heroAnimTimer:		.byte TEMP_BYTE ; used to trigger to change an anim frame
 heroAnimAddr:		.word TEMP_ADDR
 heroDirX:			.byte 1 		; 1-right, 0-left
 heroEraseScrAddr:	.word TEMP_ADDR
@@ -370,19 +370,10 @@ HeroUpdateAttack:
 			rnz
 
 			; if the timer == 0, set status to Idle
-			jmp HeroUpdateSetIdle
+			jmp HeroStartIdle
 			.closelabels
 
-HeroUpdateIdle:
-			; check if the same keys pressed the prev update
-			lda keyCodeOld
-			cmp l
-			jnz HeroUpdateSetIdle
-
-			HERO_UPDATE_ANIM(HERO_ANIM_TIMER_DELTA_IDLE)
-			ret
-
-HeroUpdateSetIdle:
+HeroStartIdle:
 			; idle is started
 			xra a
 			sta heroStatus
@@ -406,7 +397,15 @@ HeroUpdateSetIdle:
 			lxi h, hero_idle_l
 			shld heroAnimAddr
 			ret
-			.closelabels
+			
+HeroUpdateIdle:
+			; check if the same keys pressed the prev update
+			lda keyCodeOld
+			cmp l
+			jnz HeroStartIdle
+
+			HERO_UPDATE_ANIM(HERO_ANIM_TIMER_DELTA_IDLE)
+			ret
 
 HeroErase:
 			; TODO: optimize. erase only that is outside of the updated hero region

@@ -1,16 +1,15 @@
-.include "skeleton.asm"
-.include "monstersRuntimeData.asm"
+;.include "projectileRuntimeData.asm"
 
-MonstersClearRoomData:
-			lxi h, monstersRoomData
-			lxi b, MONSTERS_ROOM_DATA_LEN
-			call ClearMem
+projectileClearRoomData:
+			;lxi h, monstersRoomData
+			;lxi b, MONSTERS_ROOM_DATA_LEN
+			;call ClearMem
 			ret
 			.closelabels
+/*
+PROJECTILE_NO_SPECIAL_FUNC = $ffff
 
-MONSTERS_NO_SPECIAL_FUNC = $ffff
-
-.macro MONSTERS_FUNCS_HANDLER(funcs, specialFunc = MONSTERS_NO_SPECIAL_FUNC, noRet = false)
+.macro PROJECTILE_FUNCS_HANDLER(funcs, specialFunc = PROJECTILE_NO_SPECIAL_FUNC, noRet = false)
 			lxi h, funcs + (MONSTERS_MAX-1) * 2 + 1
 			; bc - monster idx, used in a func
 			lxi b, MONSTERS_MAX-1
@@ -42,23 +41,14 @@ MONSTERS_NO_SPECIAL_FUNC = $ffff
 		.endif
 			.closelabels
 .endfunction
+*/
+ProjectilesInit:
+            ;MONSTERS_FUNCS_HANDLER(monstersInitFuncs)
 
-MonstersInit:
-            MONSTERS_FUNCS_HANDLER(monstersInitFuncs)
+ProjectilesUpdate:
+            ;MONSTERS_FUNCS_HANDLER(monstersUpdateFuncs)
 
-MonstersUpdate:
-            MONSTERS_FUNCS_HANDLER(monstersUpdateFuncs)
-
-MonstersErase:
-			MONSTERS_FUNCS_HANDLER(monstersDrawFuncs, MonsterErase)
-
-MonstersDraw:
-			MONSTERS_FUNCS_HANDLER(monstersDrawFuncs)
-
-MonstersCopyToScr:
-			MONSTERS_FUNCS_HANDLER(monstersDrawFuncs, MonsterCopyToScr)
-
-
+/*
 ; erase sprite
 ; in:
 ; bc - monster idx*2
@@ -83,8 +73,30 @@ MonsterErase:
 			mov l, a
 			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			ret
-			
-MonsterCopyToScr:
+*/
+ProjectilesDraw:
+			;MONSTERS_FUNCS_HANDLER(monstersDrawFuncs)
+			lxi b, hero_attack01_sword_r0_0
+			lxi d, $a080
+			CALL_RAM_DISK_FUNC(__DrawSpriteVM, RAM_DISK_S0 | RAM_DISK_M2 | RAM_DISK_M_8F)
+			ret
+
+ProjectilesCopyToScr:
+			lxi d, $a180
+			; hl - width, height
+			lxi h, 1<<8 | 16
+			call CopySpriteToScrV
+			ret
+
+ProjectilesRestoreTiles:
+			lxi d, $a180
+			; hl - width, height
+			lxi h, 1<<8 | 16
+			call CopySpriteToScrV2
+			ret			
+
+ProjectileCopyToScr:
+/*
 			; TODO: optimize. think of making a layer of monstersRoomSpriteData struct like
 			; monsterEraseScrX
 			; monsterEraseScrXOld
@@ -185,3 +197,4 @@ MonsterCopyToScr:
 			mov l, a
 			; hl - width, height
 			jmp CopySpriteToScrV
+*/

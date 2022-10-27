@@ -1,5 +1,5 @@
 ; max monsters amount in the room
-MONSTERS_MAX = 10
+MONSTERS_MAX = 12
 
 ; monster init, update, and draw funcs has to be 
 ; listed here
@@ -11,7 +11,7 @@ monstersFuncs:
 			.word 0, 0, 0
 		.endloop
 
-MONSTERS_ROOM_SPRITE_DATA_LEN = 21
+MONSTERS_ROOM_SPRITE_DATA_LEN = 22
 MONSTERS_ROOM_DATA_ADDR_OFFSET .var 0
 monsterRoomDataAddrOffsets:
 	.loop MONSTERS_MAX
@@ -30,29 +30,29 @@ MONSTERS_FUNCS_LEN = MONSTERS_INIT_FUNC_LEN + MONSTERS_UPDATE_FUNC_LEN + MONSTER
 MONSTERS_ROOM_DATA_LEN = (MONSTERS_FUNCS_LEN + MONSTERS_ROOM_SPRITE_DATA_LEN) * MONSTERS_MAX
 
 ; monster init funcs in the current room
-monstersInitFunc:
+monstersInitFuncs:
 		.loop MONSTERS_MAX
 			.word 0
 		.endloop
 
 ; monster update funcs in the current room
-monstersUpdateFunc:
+monstersUpdateFuncs:
 		.loop MONSTERS_MAX
 			.word 0
 		.endloop
 
 ; monster draw funcs in the current room
-monstersDrawFunc:
+monstersDrawFuncs:
 	.loop MONSTERS_MAX
 			.word 0
 	.endloop
 
 ; sprite data structs of the current room. do not change its layout
 monstersRoomSpriteData:
-
-monsterDirX:			.byte 1 ; 1-right, 0-left
-monsterState:           .byte 0 ; 0 - idle
-monsterStateCounter:    .byte 40
+monsterHealth:			.byte TEMP_BYTE
+monsterStatus:			.byte HERO_STATUS_IDLE
+monsterStatusTimer:		.byte 0
+monsterAnimTimer:		.byte TEMP_BYTE ; used to trigger to change an anim frame
 monsterAnimAddr:        .word TEMP_ADDR
 monsterEraseScrAddr:	.word TEMP_WORD
 monsterEraseScrAddrOld:	.word TEMP_ADDR

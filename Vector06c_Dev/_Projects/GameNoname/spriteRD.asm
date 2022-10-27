@@ -4,8 +4,7 @@
 Ret_ramDisk__:
 restoreSP_ramDisk__:
 			lxi sp, TEMP_ADDR
-__restoreRet_ramDisk:
-			jmp TEMP_ADDR
+			ret
 			.closelabels
 
 ; clear a N*16 pxs square on the screen,
@@ -27,9 +26,6 @@ __EraseSpriteSP:
 			inr a
 			mov e, a
 
-			; store ret addr
-			pop h
-			shld __restoreRet_ramDisk + 1
 			; store SP
 			lxi h, 0
 			dad sp
@@ -54,17 +50,17 @@ __EraseSpriteSP:
 			jnc @width16
 
 @width32:
-			EREASE_SPRITE_SP_COL()
+			ERASE_SPRITE_SP_COL()
 @width24:
-			EREASE_SPRITE_SP_COL()
+			ERASE_SPRITE_SP_COL()
 @width16:
-			EREASE_SPRITE_SP_COL()
+			ERASE_SPRITE_SP_COL()
 @width8:
-			EREASE_SPRITE_SP_COL(false)
+			ERASE_SPRITE_SP_COL(false)
 			jmp Ret_ramDisk__
 			.closelabels
 
-.macro EREASE_SPRITE_SP_COL(nextColumn = true)
+.macro ERASE_SPRITE_SP_COL(nextColumn = true)
 	col .var 0
 	.loop 3
 			col = col+1

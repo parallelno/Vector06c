@@ -3,6 +3,7 @@
 .include "sprite.asm"
 .include "hero.asm"
 .include "monsters.asm"
+.include "projectiles.asm"
 .include "levels.asm"
 .include "room.asm"
 .include "text.asm"
@@ -60,11 +61,14 @@ GameDraw:
 			call MonstersErase
 
 			call HeroDraw
-
 			call MonstersDraw
+			call ProjectilesDraw
 
 			call HeroCopyToScr
 			call MonstersCopyToScr
+			call ProjectilesCopyToScr
+
+			call ProjectilesRestoreTiles
 
 			ret
 			.closelabels
