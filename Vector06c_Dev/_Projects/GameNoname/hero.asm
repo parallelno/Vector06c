@@ -397,7 +397,7 @@ HeroStartIdle:
 			lxi h, hero_idle_l
 			shld heroAnimAddr
 			ret
-			
+
 HeroUpdateIdle:
 			; check if the same keys pressed the prev update
 			lda keyCodeOld
@@ -481,12 +481,11 @@ HeroCopyToScr:
 			; hl - top-right corner scr addr to copy
 			; de - a scr addr to copy
 			pop d
-			; calc width and height
+			; calc bc (width, height)
 			mov a, h
 			sub d
-			mov h, a
+			mov b, a 
 			mov a, l
 			sub e
-			mov l, a
-			; hl - width, height
+			mov c, a 
 			jmp CopySpriteToScrV

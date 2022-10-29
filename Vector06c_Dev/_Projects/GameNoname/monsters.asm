@@ -83,7 +83,7 @@ MonsterErase:
 			mov l, a
 			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			ret
-			
+
 MonsterCopyToScr:
 			; TODO: optimize. think of making a layer of monstersRoomSpriteData struct like
 			; monsterEraseScrX
@@ -176,12 +176,11 @@ MonsterCopyToScr:
 			; hl - top-right corner scr addr to copy
 			; de - a scr addr to copy
 			pop d
-			; calc width and height
+			; calc bc (width, height)
 			mov a, h
-			sub d 
-			mov h, a
-			mov a, l 
+			sub d
+			mov b, a 
+			mov a, l
 			sub e
-			mov l, a
-			; hl - width, height
+			mov c, a 
 			jmp CopySpriteToScrV

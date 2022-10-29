@@ -2,7 +2,7 @@
 SKELETON_RUN_SPEED		= $0080
 SKELETON_RUN_SPEED_D	= $ffff - $80 + 1
 ; in:
-; bc - monster idx*2
+; bc - monster idx
 SkeletonInit:
             ; convert monster id into the offset in the monstersRoomData array
 			; and store it into bc
@@ -23,7 +23,7 @@ SkeletonInit:
 			.closelabels
 
 ; in:
-; bc - monster idx*2
+; bc - monster idx
 SkeletonUpdate:
             ; convert monster id into the offset in the monstersRoomData array
 			; and store it into bc
@@ -200,7 +200,7 @@ SkeletonUpdate:
 
 ; draw sprite and save erase scr addr
 ; in:
-; bc - monster idx*2
+; bc - monster idx
 SkeletonDraw:
 			; convert monster id into the offset in the monstersRoomData array
 			; and store it into bc

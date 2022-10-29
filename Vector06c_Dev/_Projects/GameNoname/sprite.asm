@@ -59,47 +59,37 @@ GetSpriteScrAddr4:
 ; copy a sprite from the back buff to the screen
 ; in:
 ; de - scr addr
-; h - width
+; b - width
 ;		00 - 8pxs,
 ;		01 - 16pxs,
 ;		10 - 24pxs,
 ;		11 - 32pxs
-; l - height
+; c - height
 COPY_SPRITE_H_MIN = 5
+COPY_SPRITE_H_MAX = 20
 
 CopySpriteToScrV:
-			; Y -= 1 because we start copying bytes with dec Y
-			inr e
-/*
-			; y=max(y, 5)
-			mvi a, 5
-			cmp l
-			jc @doNotSetMax
-@setMax:
-			mvi l, 5
-@doNotSetMax:
-*/
-
-			; y=min(y, 20)
-			mvi a, 20
-			cmp l
-			jnc @doNotSetMin
-@setMin:
-			mvi l, 20
-@doNotSetMin:
-
-			; BC = an offset in the copy routine table
-			mov a, l
-			rlc
-			mov c, a
-			mvi b, 0
-			; temp a = width
-			mov a, h
-
 			; store sp
 			lxi h, 0
 			dad	sp
 			shld RestoreSP + 1
+
+			; Y -= 1 because we start copying bytes with dec Y
+			inr e
+
+			; h=min(h, COPY_SPRITE_H_MAX)
+			mov a, c
+			cpi COPY_SPRITE_H_MAX
+			jc @skipMinH
+@minH:
+			mvi a, COPY_SPRITE_H_MAX
+@skipMinH:
+
+			; BC = an offset in the copy routine table
+			rlc
+			mov c, a
+			mov a, b ; temp a = width
+			mvi b, 0
 
 			; hl - an addr of a copy routine
 			lxi h, @copyRoutineAddrs - COPY_SPRITE_H_MIN * WORD_LEN
@@ -161,9 +151,7 @@ CopySpriteToScrV:
 			mov m, c
 .endmacro
 
-.macro COPY_SPRITE_TO_SCR_LOOP(height)
-			heightOdd = (height / 2)*2 != height
-
+.macro COPY_SPRITE_TO_SCR_LOOP(height, heightOdd)
 	.if heightOdd
 		.loop height / 2 - 1
 			COPY_SPRITE_TO_SCR_PB()
@@ -179,10 +167,14 @@ CopySpriteToScrV:
 .endmacro
 
 .macro COPY_SPRITE_TO_SCR(height)
+			heightOdd = (height / 2)*2 != height
 			; hl - scr addr
 			xchg
 			; d - width
-			mov d, a
+			mov d, a			
+			; to restore X
+			mov e, h
+
 @nextColumn:
 			RAM_DISK_ON(RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			; read without a stack operations because
@@ -198,22 +190,21 @@ CopySpriteToScrV:
 			inr l
 			sphl
 
-			COPY_SPRITE_TO_SCR_LOOP(height)
+			COPY_SPRITE_TO_SCR_LOOP(height, heightOdd)
 
-			; assign SP to prevent screen data corruption
-			; when we use mov b, m and mov c, m commands.
-			; a corruption might happen because we fill up B and C with
-			; more than one command (mov b,m/mov c,m)
-			lxi sp, STACK_INTERRUPTION_ADDR
-			; advance Y down and to the next scr buff
-			lxi b, $2000-height+2
-			dad b
+			; advance Y to the bottom of the sprite, X to the next scr buff
+	.if heightOdd
+			lxi h, $2000-height+2-1-1
+	.endif
+	.if heightOdd == false
+			lxi h, $2000-height+2-1
+	.endif
+			dad sp
 
 			jnc @nextColumn
 			; advance Y to the next column
-			mvi a, -$20*3+1
-			add h
-			mov h, a
+			inr e
+			mov h, e
 			dcr d
 			jp @nextColumn
 			jmp RestoreSP
@@ -233,16 +224,15 @@ CopySpriteToScrV2:
 			; Y -= 1 because we start copying bytes with dec Y
 			inr e
 
-			; y=min(y, 20)
-			mvi a, 20
-			cmp l
-			jnc @doNotSetMin
+			; h=min(h, COPY_SPRITE_H_MAX)
+			mov a, l
+			cpi COPY_SPRITE_H_MAX
+			jc @doNotSetMin
 @setMin:
-			mvi l, 20
+			mvi a, COPY_SPRITE_H_MAX
 @doNotSetMin:
 
 			; BC = an offset in the copy routine table
-			mov a, l
 			rlc
 			mov c, a
 			mvi b, 0
@@ -371,3 +361,4 @@ CopySpriteToScrV2:
 			jp @nextColumn
 			jmp RestoreSP
 .endmacro
+
