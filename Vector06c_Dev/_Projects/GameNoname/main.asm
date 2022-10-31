@@ -1,4 +1,5 @@
 ;.setting "OmitUnusedFunctions", true
+.setting "Debug", true
 
 .include "macro.asm"
 .include "globalConsts.asm"

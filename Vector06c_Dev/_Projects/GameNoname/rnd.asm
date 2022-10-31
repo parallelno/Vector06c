@@ -19,10 +19,11 @@ Random:
 */
 
 ; 16-bit xorshift pseudorandom number generator
-; returns   hl = pseudorandom number
-; corrupts   a
 ; http://www.retroprogramming.com/2017/07/xorshift-pseudorandom-numbers-in-z80.html?m=1
-; the best quality with a still good speed.
+; returns:   
+; hl = pseudorandom number
+; use:
+; a
 Random:
 			lxi h, 1       ; seed must not be 0
 			mov a, h
@@ -42,15 +43,14 @@ Random:
 			shld Random+1		; 116
 			ret
 		
-
+/*
 ; An 8-bit pseudo-random number generator,
-;
 ; R = random number seed an integer in the range [1, 256]
 ; R -> (33*R) mod 257
 ; S = R - 1
 ; an 8-bit unsigned integer. 256 period
 ; http://www.z80.info/pseudo-random.txt
-/*
+
 RndVal		.byte 34
 Random:
 			lxi	h, RndVal
@@ -64,12 +64,13 @@ Random:
 			mov m, a		; 60
 			ret
 */
+/*
 ; Highway Encounter game 8-bit pseudo random number. 
 ; 256 period: X[1] = X[0] * 5 + 7
 ; I: -
 ; O: A=RND
 ; M: HL, AF
-/*
+
 RndVal		.byte 1
 Random:
 			lxi	h, RndVal

@@ -82,6 +82,37 @@
 		.endloop
 .endmacro
 
+.macro LXI_B_TO_DIFF(offsetTo, offsetFrom)
+		offsetAddr = offsetTo - offsetFrom
+		.if offsetAddr > 0
+			lxi b, offsetAddr
+		.endif
+		.if offsetAddr < 0
+			lxi b, $ffff + offsetAddr + 1
+		.endif
+.endmacro
+
+.macro LXI_D_TO_DIFF(offsetTo, offsetFrom)
+		offsetAddr = offsetTo - offsetFrom
+		.if offsetAddr > 0
+			lxi d, offsetAddr
+		.endif
+		.if offsetAddr < 0
+			lxi d, $ffff + offsetAddr + 1
+		.endif
+.endmacro
+
+.macro LXI_H_TO_DIFF(offsetTo, offsetFrom)
+		offsetAddr = offsetTo - offsetFrom
+		.if offsetAddr > 0
+			lxi h, offsetAddr
+		.endif
+		.if offsetAddr < 0
+			lxi h, $ffff + offsetAddr + 1
+		.endif
+.endmacro
+
+
 ;================================== ALL RAM_DISK_* macros has to be placed BEFORE lxi sp, *, and sphl! ;==================================
 ; has to be placed right BEFORE lxi sp, addr, and sphl
 ; mount the ram-disk w/o storing mode
@@ -167,10 +198,15 @@
 			hlt
 		.endif
 .endmacro
-; gets DDDDDfff from (hl), extracts fff which is a func idx in the funcTable
-; call that func with DDDDD stored in A, B = tileData, C - tileIdx
+
+; a tile data handler. 
+; tileData should be in the format: DDDDDfff
+;		fff is a handler func idx in the funcTable
+;		DDDDD is an argument for a handler func
+; call a handler func with DDDDD stored in a, b = tileData, c = tileIdx
 ; input:
-; hl - addr to the tile data
+; hl - a pointer to a tile data in a format DDDDDfff.
+
 ; keeps hl unchanged
 ; use:
 ; de, a

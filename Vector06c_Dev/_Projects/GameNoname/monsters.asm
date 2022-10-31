@@ -1,89 +1,173 @@
 .include "skeleton.asm"
 .include "monstersRuntimeData.asm"
 
-MonstersClearRoomData:
-			lxi h, monstersRoomData
-			lxi b, MONSTERS_ROOM_DATA_LEN
-			call ClearMem
+MonstersEraseRuntimeData:
+			mvi a, >MONSTER_RUNTIME_DATA_LAST
+			sta monsterUpdate+1
 			ret
 			.closelabels
 
-MONSTERS_NO_SPECIAL_FUNC = $ffff
+; look up the empty spot in the monster runtime data
+; in: 
+; none
+; return:
+; hl - a ptr to monsterUpdate+1 of an empty monster runtime data
+; uses:
+; de, a
 
-.macro MONSTERS_FUNCS_HANDLER(funcs, specialFunc = MONSTERS_NO_SPECIAL_FUNC, noRet = false)
-			lxi h, funcs + (MONSTERS_MAX-1) * 2 + 1
-			; bc - monster idx, used in a func
-			lxi b, MONSTERS_MAX-1
+; TODO: optimize. use a lastRemovedMonsterRuntimeDataPtr as a starter to find an empty data
+MonstersGetEmptyDataPtr:
+			lxi h, monsterUpdate+1
 @loop:
-			mov d, m
-			dcx h
-			mov e, m
-			dcx h
-			xra a
-			ora d
-			jz @skip
-			push h
-			push b
+			mov a, m
+			cpi >MONSTER_RUNTIME_DATA_EMPTY
+			; return if it is an empty data
+			rz
+			jc @nextData
+			cpi >MONSTER_RUNTIME_DATA_LAST
+			jnz @monstersTooMany
+			; it is the end of the last monster data
 			xchg
-			lxi d, @funcReturnAddr
-			push d
-		.if specialFunc != MONSTERS_NO_SPECIAL_FUNC
-			lxi h, specialFunc
-		.endif
-			pchl ; call a monster update func
-@funcReturnAddr:
-			pop b
-			pop h
-@skip:
-			dcr c
-			jp @loop
-		.if noRet == false
+			lxi h, MONSTER_RUNTIME_DATA_LEN
+			dad d
+			mvi a, >MONSTER_RUNTIME_DATA_END
+			cmp m
+			xchg
+			; if the next after the last data is end, then just return
+			rz
+			; if not the end, then set it as the last
+			xchg
+			mvi m, >MONSTER_RUNTIME_DATA_LAST
+			xchg
+			; TODO: optimize. store hl into lastRemovedMonsterRuntimeDataPtr
 			ret
-		.endif
+@monstersTooMany:
+			; return bypassing a func that called this func
+			pop psw
+			ret
+@nextData:
+			lxi d, MONSTER_RUNTIME_DATA_LEN
+			dad d
+			jmp @loop
 			.closelabels
-.endfunction
 
-MonstersInit:
-            MONSTERS_FUNCS_HANDLER(monstersInitFuncs)
+; call all active monsters' Update/Draw func
+; a func will get DE pointing to a func ptr (ex.:monsterUpdate or monsterDraw) in the runtime data
+; in:
+; hl - offset to a func ptr relative to monsterUpdate in the runtime data
+; 		ex.: the offset to monsterUpdate is zero
+; use:
+; de, a
+MonstersDataFuncCaller:
+			shld @funcPtrOffset+1
+			lxi h, monsterUpdate+1
+@loop:
+			mov a, m
+			cpi >MONSTER_RUNTIME_DATA_EMPTY
+			jc @callFunc
+			jz @nextData
+			; it is the last or the end, so return
+			ret
+@callFunc:
+			push h
+			lxi d, @return
+			push d
+@funcPtrOffset:
+			lxi d, TEMP_ADDR
+			; advance to a func ptr
+			dad d
+			; read the func addr
+			mov d, m 
+			dcx h
+			mov e, m 
+			xchg
+			; call a func
+			pchl
+@return:
+			pop h
+@nextData:
+			lxi d, MONSTER_RUNTIME_DATA_LEN
+			dad d
+			jmp @loop
+			ret			
+			.closelabels
 
+; call a provided func if a monster is alive
+; a func will get HL pointing to a monsterUpdate+1 in the runtime data
+; in:
+; hl - a func addr
+; use:
+; de, a
+MonstersFuncCaller:
+			shld @funcPtr+1
+			lxi h, monsterUpdate+1
+@loop:
+			mov a, m
+			cpi >MONSTER_RUNTIME_DATA_EMPTY
+			jc @callFunc
+			jz @nextData
+			; it is the last or the end, so return
+			ret
+@callFunc:			
+			push h
+@funcPtr:
+			call TEMP_ADDR
+			pop h
+@nextData:
+			lxi d, MONSTER_RUNTIME_DATA_LEN
+			dad d
+			jmp @loop
+			ret
+			.closelabels
+			
 MonstersUpdate:
-            MONSTERS_FUNCS_HANDLER(monstersUpdateFuncs)
-
-MonstersErase:
-			MONSTERS_FUNCS_HANDLER(monstersDrawFuncs, MonsterErase)
+			lxi h, 0
+			jmp MonstersDataFuncCaller
 
 MonstersDraw:
-			MONSTERS_FUNCS_HANDLER(monstersDrawFuncs)
+			lxi h, monsterDraw - monsterUpdate
+			jmp MonstersDataFuncCaller
 
 MonstersCopyToScr:
-			MONSTERS_FUNCS_HANDLER(monstersDrawFuncs, MonsterCopyToScr)
+			lxi h, MonsterCopyToScr
+			jmp MonstersFuncCaller
 
+MonstersErase:
+			lxi h, MonsterErase
+			jmp MonstersFuncCaller
 
 ; erase sprite
 ; in:
-; bc - monster idx*2
+; hl - ptr to monsterUpdate+1 in the runtime data
 MonsterErase:
 			; convert monster id into the offset in the monstersRoomData array
 			; and store it into bc
-			lxi h, monsterRoomDataAddrOffsets
-			dad b
-			mov c, m
+			// lxi h, monsterRoomDataAddrOffsets
+			// dad b
+			// mov c, m
 
-			; de <- monsterEraseScrAddr
-			; hl <- monsterEraseWH
-			lxi h, monsterEraseScrAddr
-			dad b
+			; advance to monsterEraseScrAddr
+			;lxi h, monsterEraseScrAddr
+			LXI_D_TO_DIFF(monsterEraseScrAddr, monsterUpdate+1)
+			dad d
 			mov e, m
 			inx h
 			mov d, m
-			inx_h(3)
+			; de <- monsterEraseScrAddr
+			;inx_h(3)
+			LXI_B_TO_DIFF(monsterEraseWH, monsterEraseScrAddr+1)
+			dad b
 			mov a, m
 			inx h
 			mov h, m			
 			mov l, a
+			; hl <- monsterEraseWH			
 			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			ret
 
+; copy sprites from a backbuffer to a scr
+; in:
+; hl - ptr to monsterUpdate+1 in the runtime data
 MonsterCopyToScr:
 			; TODO: optimize. think of making a layer of monstersRoomSpriteData struct like
 			; monsterEraseScrX
@@ -95,12 +179,13 @@ MonsterCopyToScr:
 			; and store it into bc
 			; TODO: optimize. consider copying monster data to temp buff with pop+shld
 			; to be able addressing with lhld GLOBAL_ADDR then copy back
-			lxi h, monsterRoomDataAddrOffsets
-			dad b
-			mov c, m
+			// lxi h, monsterRoomDataAddrOffsets
+			// dad b
+			// mov c, m
 
 			; read monsterEraseScrAddr
-			lxi h, monsterEraseScrAddr
+			;lxi h, monsterEraseScrAddr
+			LXI_B_TO_DIFF(monsterEraseScrAddr, monsterUpdate+1)			
 			dad b
 			mov c, m
 			inx h

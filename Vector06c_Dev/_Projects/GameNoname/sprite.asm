@@ -1,9 +1,9 @@
 ; get a sprite data addr
-; input:
-; hl - animation addr ptr
+; in:
+; hl - animPtr
 ; c - preshifted sprite idx*2 offset based on posX then +2
-; return:
-; bc - sprite addr
+; out:
+; bc - ptr to a sprite
 GetSpriteAddr:
 			mvi b, 0
 			dad b
@@ -13,15 +13,15 @@ GetSpriteAddr:
 			ret
 			.closelabels
 
-; input:
-; hl - addr to posX+1 (high byte in 16-bit pos)
-; return:
+; in:
+; hl - ptr to posX+1 (high byte in 16-bit pos)
+; out:
 ; de - sprite screen addr
 ; c - preshifted sprite idx*2 offset based on posX then +2
-; hl+2
+; hl - ptr to posY+1
 ; use: a
 GetSpriteScrAddr8:
-			; extract the hero X screen addr
+			; calc screen addr X
 			mov	a, m
 			ani PRESHIFTED_SPRITES_8 - 1
 			rlc
@@ -33,13 +33,13 @@ GetSpriteScrAddr8:
 			adi		SPRITE_X_SCR_ADDR
 			inx h
 			inx h
-			; copying posY
+			; de - sprite screen addr
 			mov e, m
 			mov	d, a
 			ret
 			.closelabels
 GetSpriteScrAddr4:
-			; extract the hero X screen addr
+			; calc screen addr X
 			mov	a, m
 			ani (PRESHIFTED_SPRITES_4 - 1) * 2
 			adi 2 ; because there are two bytes of nextFrameOffset in front of sprite ptrs
@@ -50,7 +50,7 @@ GetSpriteScrAddr4:
 			adi		SPRITE_X_SCR_ADDR
 			inx h
 			inx h
-			; copying posY
+			; de - sprite screen addr
 			mov e, m
 			mov	d, a
 			ret

@@ -1,11 +1,10 @@
 RoomInit:
-			call MonstersClearRoomData
+			call MonstersEraseRuntimeData
 			call RoomInitTiles
 			call RoomInitTilesData
-			call MonstersInit
 			; erase a back buffer $a000-$ffff in the ram-disk
-			; TODO: perhaps we do not need to clear a back buffer.
-			; because we will need to restore a background tiles
+			; TODO: perhaps we do not need to erase a back buffer.
+			; because we will restore a background tiles
 			lxi b, $0000
 			lxi d, $6000 / 128 - 1
 			CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_89)
@@ -81,10 +80,8 @@ RoomInitTiles:
 			ret
 			.closelabels
 
-; copy the tiles data of the current room into the main memory
-; then it analizes the tiles data and calls monster init funcs,
-; feeds up the monster pool if there is any monster in the room
-;
+; copies the tiles data of the current room into the main memory.
+; calls the tile data handler func to spawn spawn a monster, etc
 RoomInitTilesData:
 			; copy the tiles data from the ram-disk
 			lda roomIdx
@@ -126,7 +123,7 @@ RoomInitTilesData:
 			.closelabels
 
 
-; this is a handler of the RoomInitTilesData
+; this is a dummy tile data handler.
 ; it copies the tile data byte into the roomTilesData as it is
 ; input:
 ; b - tile data
@@ -138,155 +135,27 @@ RoomTileDataCopy:
 			ret
 			.closelabels
 
-; this is a handler of the RoomInitTilesData
-; it spawns a monster according to the argument which is a part of the tile data byte.
-; for the details on tile data format see levelsGlobalData.asm->tile data format
-; then it stores zero into the roomTilesData
+; a tile data handler to spawn a monster by its id.
+; then it stores a zero into the roomTilesData
 ; input:
-; c - tile number idx in the room data array. it starts from left-top corner to right-bottom
+; c - tile idx in the roomTilesData array.
 ; a - monster id
 ; return:
-; a - tile data that will be saved into the room tile data array
-RoomMonstersSpawn:
-			; get the monster funcs addr
-			lxi h, monstersFuncs
+; a = 0 to make the tile empty
+RoomMonsterSpawn:
+			; get a monster init func addr ptr
+			lxi h, monstersInits+1
 			rlc
 			mov e, a
 			mvi d, 0
 			dad d
-			; get the monster init func addr
-			mov e, m
-			inx h
+			; get a monster init func addr
 			mov d, m
-			inx h
-			xchg
-			shld @storeInitFunc+1
-			xchg
-			; get the monster update func addr
-			mov e, m
-			inx h
-			mov d, m
-			inx h
-			xchg
-			shld @storeUpdateFunc+1
-			xchg
-			; get the monster draw func addr
-			mov e, m
-			inx h
-			mov d, m
-			xchg
-			shld @storeDrawFunc+1
-			; convert tile idx into the posX
-			mov a, c
-			; posX = tile idx % ROOM_WIDTH * TILE_WIDTH
-			ani %00001111
-			rlc_(4)
-			sta @savePosX+1
-			; convert tile idx into the posY
-			mov a, c
-			; posY = tile idx % ROOM_WIDTH * TILE_WIDTH
-			ani %11110000
-			sta @savePosY+1
-
-			; loop monstersUpdateFuncs to find an empty slot
-			; check only high byte if it's zero
-			lxi h, monstersInitFuncs + 1
-			; c - doubled counter.
-			; it is used to get a draw func addr as well as a room sprite data addr
-			; b = 0 for "dad b" below
-			lxi b, 0
-@loop:
-			mov a, m
-			ora a
-			jz @storeInitFunc
-			inx h
-			inx h
-			inr c
-			inr c
-			mov a, c
-			cpi MONSTERS_MAX * 2
-			jnz @loop
-			; return if there is no room for a new monster
-			jmp @tileDataToZero
-
-@storeInitFunc:
-			lxi d, TEMP_ADDR
-			; store a monster init func addr backwards from high byte to low
-			mov m, d
 			dcx h
-			mov m, e
-
-			; store a monster update func addr
-			lxi h, monstersUpdateFuncs
-			dad b
-@storeUpdateFunc:
-			lxi d, TEMP_ADDR
-			mov m, e
-			inx h
-			mov m, d
-
-			; store a monster draw func addr
-			lxi h, monstersDrawFuncs
-			dad b
-@storeDrawFunc:
-			lxi d, TEMP_ADDR
-			mov m, e
-			inx h
-			mov m, d
-
-			; divide the offset by 2 because the monsterRoomDataAddrOffsets contains bytes
-			mov a, c
-			rrc
-			mov c, a
-			; get the posX+1 addr
-			lxi h, monsterRoomDataAddrOffsets
-			dad b
-			mov c, m
-			lxi h, monsterPosX+1
-			dad b
-@savePosX:
-			mvi m, TEMP_BYTE
-			inx h
-			inx h
-
-@savePosY:
-			mvi m, TEMP_BYTE
-; TODO: move this code into a monster code base
-			; init monsterEraseScrAddr
-			lxi h, monsterPosX+1
-			dad b
-			push b
-			call GetSpriteScrAddr4
-			mov a, c
-			pop b
-			lxi h, monsterEraseScrAddr
-			dad b
-			; store monsterEraseScrAddr
-			mov m, e
-			inx h
-			mov m, d
-			inx h
-			; store monsterEraseScrAddrOld
-			mov m, e
-			inx h
-			mov m, d
-			inx h
-			; store monsterEraseWH
-; TODO: do not erase monsters when a room drawn the first time
-; TODO: set minimum height, because we don't need to erase
-			mvi m, 15 ; height
-			inx h
-			mvi m, 1 ; width
-			inx h
-			; store monsterEraseWHOld
-			mvi m, 15
-			inx h
-			mvi m, 1
-
-@tileDataToZero:
-			; replace the tile data with an empty tile
-            xra a
-			ret
+			mov e, m
+			; call a monster init func
+			xchg
+			pchl
 			.closelabels
 
 RoomDraw:
