@@ -1,6 +1,10 @@
+.include "ramDiskBank0_addr0Labels.asm"
+.include "ramDiskBank0_addr8000Labels.asm"
+.include "ramDiskBank1_addr8000Labels.asm"
+.include "ramDiskBank2_addr8000Labels.asm"
+
 ; ram-disk data has to keep the range from STACK_MIN_ADDR to STACK_MAIN_PROGRAM_ADDR-1 not used. 
 ; because it can be corrupted by the subroutines which manipulate the stack
-
 toBank0addr0_0:
 .incbin "generated\\bin\\ramDiskBank0_addr0_0.bin.zx0"
 toBank0addr0_1: 

@@ -76,6 +76,12 @@
 		.endloop
 .endmacro
 
+.macro INR_A(i)
+		.loop i
+			inr a
+		.endloop
+.endmacro
+
 .macro NOP_(i)
 		.loop i
 			nop

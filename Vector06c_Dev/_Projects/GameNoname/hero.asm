@@ -86,19 +86,19 @@ HeroUpdate:
 			; check if a current animation is an attack
 			lda heroStatus
 			cpi HERO_STATUS_ATTACK
-			jz HeroUpdateAttack
+			jz HeroAttackUpdate
 
 			; check if an attack key pressed
 			lhld keyCode
 			mvi a, KEY_SPACE
 			cmp h
-			jz HeroStartAttack
+			jz HeroAttackStart
 
 			; check if no arrow key pressed
 			mvi a, KEY_LEFT & KEY_RIGHT & KEY_UP & KEY_DOWN
 			ora l
 			inr a
-			jz HeroUpdateIdle
+			jz HeroIdleUpdate
 
 @checkMoveKeys:
 			; check if the same arrow keys pressed the prev update
@@ -337,7 +337,7 @@ HeroMoveTeleport:
 			.closelabels
 
 
-HeroStartAttack:
+HeroAttackStart:
 			mvi a, HERO_STATUS_ATTACK
 			sta heroStatus
 			mvi a, HERO_ATTACK_DURATION
@@ -356,6 +356,9 @@ HeroStartAttack:
 
 			lxi h, hero_attk_r
 			shld heroAnimAddr
+
+			; spawn a sword trail atack
+			call HeroSwordTrailInit
 			ret
 @setAnimAttkL:
 			lxi h, hero_attk_l
@@ -363,17 +366,17 @@ HeroStartAttack:
 			ret
 			.closelabels
 
-HeroUpdateAttack:
+HeroAttackUpdate:
 			HERO_UPDATE_ANIM(HERO_ANIM_TIMER_DELTA_ATTACK)
 			lxi h, heroStatusTimer
 			dcr m
 			rnz
 
 			; if the timer == 0, set status to Idle
-			jmp HeroStartIdle
+			jmp HeroIdleStart
 			.closelabels
 
-HeroStartIdle:
+HeroIdleStart:
 			; idle is started
 			xra a
 			sta heroStatus
@@ -398,11 +401,11 @@ HeroStartIdle:
 			shld heroAnimAddr
 			ret
 
-HeroUpdateIdle:
+HeroIdleUpdate:
 			; check if the same keys pressed the prev update
 			lda keyCodeOld
 			cmp l
-			jnz HeroStartIdle
+			jnz HeroIdleStart
 
 			HERO_UPDATE_ANIM(HERO_ANIM_TIMER_DELTA_IDLE)
 			ret

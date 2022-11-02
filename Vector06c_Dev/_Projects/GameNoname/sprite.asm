@@ -65,6 +65,8 @@ GetSpriteScrAddr4:
 ;		10 - 24pxs,
 ;		11 - 32pxs
 ; c - height
+COPY_SPRITE_W_MIN = %0
+COPY_SPRITE_W_MAX = %11
 COPY_SPRITE_H_MIN = 5
 COPY_SPRITE_H_MAX = 20
 
@@ -76,14 +78,22 @@ CopySpriteToScrV:
 
 			; Y -= 1 because we start copying bytes with dec Y
 			inr e
-
-			; h=min(h, COPY_SPRITE_H_MAX)
+/*
+			; w=max(h, COPY_SPRITE_H_MAX)
+			mvi a, COPY_SPRITE_W_MAX
+			cmp b
+			jnc @skipMaxW
+@maxW:
+			mvi b, COPY_SPRITE_W_MAX
+@skipMaxW:
+*/
+			; h=max(h, COPY_SPRITE_H_MAX)
 			mov a, c
 			cpi COPY_SPRITE_H_MAX
-			jc @skipMinH
-@minH:
+			jc @skipMaxH
+@maxH:
 			mvi a, COPY_SPRITE_H_MAX
-@skipMinH:
+@skipMaxH:
 
 			; BC = an offset in the copy routine table
 			rlc

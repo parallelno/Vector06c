@@ -1,9 +1,10 @@
 .include "skeleton.asm"
+.include "heroSwordTrail.asm"
 .include "monstersRuntimeData.asm"
 
 MonstersEraseRuntimeData:
 			mvi a, >MONSTER_RUNTIME_DATA_LAST
-			sta monsterUpdate+1
+			sta monsterUpdatePtr+1
 			ret
 			.closelabels
 
@@ -11,13 +12,13 @@ MonstersEraseRuntimeData:
 ; in: 
 ; none
 ; return:
-; hl - a ptr to monsterUpdate+1 of an empty monster runtime data
+; hl - a ptr to monsterUpdatePtr+1 of an empty monster runtime data
 ; uses:
 ; de, a
 
 ; TODO: optimize. use a lastRemovedMonsterRuntimeDataPtr as a starter to find an empty data
 MonstersGetEmptyDataPtr:
-			lxi h, monsterUpdate+1
+			lxi h, monsterUpdatePtr+1
 @loop:
 			mov a, m
 			cpi >MONSTER_RUNTIME_DATA_EMPTY
@@ -51,16 +52,26 @@ MonstersGetEmptyDataPtr:
 			jmp @loop
 			.closelabels
 
-; call all active monsters' Update/Draw func
-; a func will get DE pointing to a func ptr (ex.:monsterUpdate or monsterDraw) in the runtime data
+
+; remove a monster from the monster data
 ; in:
-; hl - offset to a func ptr relative to monsterUpdate in the runtime data
-; 		ex.: the offset to monsterUpdate is zero
+; hl - monsterUpdate+1 ptr
+; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
+MonstersDestroy:
+			mvi m, >MONSTER_RUNTIME_DATA_EMPTY
+			ret
+			.closelabels
+
+; call all active monsters' Update/Draw func
+; a func will get DE pointing to a func ptr (ex.:monsterUpdatePtr or monsterDrawPtr) in the runtime data
+; in:
+; hl - offset to a func ptr relative to monsterUpdatePtr in the runtime data
+; 		ex.: the offset to monsterUpdatePtr is zero
 ; use:
 ; de, a
 MonstersDataFuncCaller:
 			shld @funcPtrOffset+1
-			lxi h, monsterUpdate+1
+			lxi h, monsterUpdatePtr+1
 @loop:
 			mov a, m
 			cpi >MONSTER_RUNTIME_DATA_EMPTY
@@ -93,14 +104,14 @@ MonstersDataFuncCaller:
 			.closelabels
 
 ; call a provided func if a monster is alive
-; a func will get HL pointing to a monsterUpdate+1 in the runtime data
+; a func will get HL pointing to a monsterUpdatePtr+1 in the runtime data
 ; in:
 ; hl - a func addr
 ; use:
 ; de, a
-MonstersFuncCaller:
+MonstersCommonFuncCaller:
 			shld @funcPtr+1
-			lxi h, monsterUpdate+1
+			lxi h, monsterUpdatePtr+1
 @loop:
 			mov a, m
 			cpi >MONSTER_RUNTIME_DATA_EMPTY
@@ -125,68 +136,46 @@ MonstersUpdate:
 			jmp MonstersDataFuncCaller
 
 MonstersDraw:
-			lxi h, monsterDraw - monsterUpdate
+			lxi h, monsterDrawPtr - monsterUpdatePtr
 			jmp MonstersDataFuncCaller
 
 MonstersCopyToScr:
 			lxi h, MonsterCopyToScr
-			jmp MonstersFuncCaller
+			jmp MonstersCommonFuncCaller
 
 MonstersErase:
 			lxi h, MonsterErase
-			jmp MonstersFuncCaller
+			jmp MonstersCommonFuncCaller
 
 ; erase sprite
 ; in:
-; hl - ptr to monsterUpdate+1 in the runtime data
+; hl - ptr to monsterUpdatePtr+1 in the runtime data
 MonsterErase:
-			; convert monster id into the offset in the monstersRoomData array
-			; and store it into bc
-			// lxi h, monsterRoomDataAddrOffsets
-			// dad b
-			// mov c, m
-
 			; advance to monsterEraseScrAddr
-			;lxi h, monsterEraseScrAddr
-			LXI_D_TO_DIFF(monsterEraseScrAddr, monsterUpdate+1)
+			LXI_D_TO_DIFF(monsterEraseScrAddr, monsterUpdatePtr+1)
 			dad d
 			mov e, m
 			inx h
 			mov d, m
 			; de <- monsterEraseScrAddr
-			;inx_h(3)
 			LXI_B_TO_DIFF(monsterEraseWH, monsterEraseScrAddr+1)
 			dad b
 			mov a, m
 			inx h
 			mov h, m			
 			mov l, a
-			; hl <- monsterEraseWH			
+			; hl <- monsterEraseWH
 			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			ret
 
 ; copy sprites from a backbuffer to a scr
 ; in:
-; hl - ptr to monsterUpdate+1 in the runtime data
+; hl - ptr to monsterUpdatePtr+1 in the runtime data
 MonsterCopyToScr:
-			; TODO: optimize. think of making a layer of monstersRoomSpriteData struct like
-			; monsterEraseScrX
-			; monsterEraseScrXOld
-			; monsterEraseW
-			; monsterEraseWOld
-			; ... similar for Y and height
-			; convert monster id into the offset in the monstersRoomData array
-			; and store it into bc
-			; TODO: optimize. consider copying monster data to temp buff with pop+shld
-			; to be able addressing with lhld GLOBAL_ADDR then copy back
-			// lxi h, monsterRoomDataAddrOffsets
-			// dad b
-			// mov c, m
-
-			; read monsterEraseScrAddr
-			;lxi h, monsterEraseScrAddr
-			LXI_B_TO_DIFF(monsterEraseScrAddr, monsterUpdate+1)			
+			; advance to monsterEraseScrAddr
+			LXI_B_TO_DIFF(monsterEraseScrAddr, monsterUpdatePtr+1)			
 			dad b
+			; read monsterEraseScrAddr
 			mov c, m
 			inx h
 			mov b, m

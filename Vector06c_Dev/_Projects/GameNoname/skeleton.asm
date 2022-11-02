@@ -2,11 +2,12 @@ SKELETON_HEALTH = 1
 SKELETON_RUN_SPEED		= $0080
 SKELETON_RUN_SPEED_D	= $ffff - $80 + 1
 ; in:
-; hl - ptr to monsterUpdate+1
+; c - monster idx
 ; out:
 ; a = 0
 SkeletonInit:
 			call MonstersGetEmptyDataPtr
+			; hl - ptr to monsterUpdatePtr+1			
 			dcx h
 			mvi m, <SkeletonUpdate
 			inx h 
@@ -17,31 +18,29 @@ SkeletonInit:
 			mvi m, >SkeletonDraw
 			inx h 
 			mvi m, SKELETON_HEALTH
-			;lxi d, monsterAnimAddr - monsterHealth ; 4
-			LXI_D_TO_DIFF(monsterAnimAddr, monsterHealth)
+			LXI_D_TO_DIFF(monsterAnimPtr, monsterHealth)
 			dad d
-			; monsterAnimAddr
+			; monsterAnimPtr
 			mvi m, < skeleton_run_r
 			inx h
 			mvi m, > skeleton_run_r
-			; advance to monsterSpeedY+1
-			;lxi d, monsterSpeedY+1 - monsterAnimAddr+1; 16
-			LXI_D_TO_DIFF(monsterSpeedY+1, monsterAnimAddr+1)
+			; advance hl to monsterSpeedY+1
+			LXI_D_TO_DIFF(monsterSpeedY+1, monsterAnimPtr+1)
 			dad d
-			; monsterSpeedY+1
-			; set monsterSpeedY to zero
-			mvi b, 0
-			mov m, b
+			; tmp d = 0
+			mvi d, 0
+			; set monsterSpeedY to zero			
+			mov m, d
 			dcx h
-			mov m, b
+			mov m, d
 			dcx h 
-			; monsterSpeedX+1
+			; advance hl to monsterSpeedX+1
 			; set monsterSpeedX to right 
 			mvi m, >SKELETON_RUN_SPEED
 			dcx h 
 			mvi m, <SKELETON_RUN_SPEED
 			dcx h 
-			; monsterPosY+1
+			; advance hl to monsterPosY+1
 			; convert tile idx into the posY and set it
 			mov a, c
 			; posY = tile idx % ROOM_WIDTH * TILE_WIDTH
@@ -49,9 +48,9 @@ SkeletonInit:
 			mov m, a
 			mov e, a
 			dcx h 
-			mov m, b
-			dcx h 
-			; monsterPosX+1
+			mov m, d
+			; advance hl to monsterPosX+1
+			dcx h 			
 			; convert tile idx into the posX and set it
 			mov a, c
 			; posX = tile idx % ROOM_WIDTH * TILE_WIDTH
@@ -59,16 +58,19 @@ SkeletonInit:
 			rlc_(4)
 			mov m, a
 			dcx h 
-			mov m, b 
-			dcx h 
-			; monsterEraseWHOld+1
-			mov m, b ; width = 8
+			mov m, d 
+			; advance hl to monsterEraseWHOld+1
+			dcx h 			
+			mov m, d ; width = 8
 			dcx h 
 			mvi m, 5 ; supported mimimum height
-			dcx_h(3)
-			; monsterEraseScrAddrOld+1
-			; scrX = x/8 + $a0
+			; advance hl to monsterEraseScrAddrOld+1
+			LXI_B_TO_DIFF(monsterEraseScrAddrOld+1, monsterEraseWHOld)
+			dad b			
+			; a - posX
+			; scrX = posX/8 + $a0
 			rrc_(3)
+			ani %00011111			
 			adi SPRITE_X_SCR_ADDR
 			mov m, a
 			dcx h 
@@ -82,7 +84,7 @@ SkeletonInit:
 
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to monsterUpdate in the runtime data
+; de - ptr to monsterUpdatePtr in the runtime data
 SkeletonUpdate:
 			mov b, d
 			mov c, e
@@ -95,9 +97,8 @@ SkeletonUpdate:
 			jnz @skipAnimUpdate
 			; advance the anim to the next frame
 			push b
-			; advance to monsterAnimAddr
-			;lxi h, monsterAnimAddr - monsterUpdate
-			LXI_H_TO_DIFF(monsterAnimAddr, monsterUpdate)
+			; advance hl to monsterAnimPtr
+			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
 			dad b
 			; read the ptr to a current frame
 			mov e, m
@@ -109,19 +110,18 @@ SkeletonUpdate:
 			mov c, m
 			inx h
 			mov b, m
-			; advance the current frame ptr to the next frame
+			; advance hl to the current frame ptr to the next frame
 			dad b
 			xchg
 			; de - the next frame ptr
-			; store de into the monsterAnimAddr
+			; store de into the monsterAnimPtr
 			mov m, d
 			dcx h
 			mov m, e
 			pop b
 @skipAnimUpdate:			
 			; update movement
-			;lxi h, monsterPosX - monsterUpdate
-			LXI_H_TO_DIFF(monsterPosX, monsterUpdate)
+			LXI_H_TO_DIFF(monsterPosX, monsterUpdatePtr)
 			dad b
 			shld @monsterPosXPtr+1
 			; bc <- (posX)
@@ -183,8 +183,7 @@ SkeletonUpdate:
 			; get speedX addr
             call Random
 
-			;lxi h, monsterSpeedX - monsterUpdate
-			LXI_H_TO_DIFF(monsterSpeedX, monsterUpdate)
+			LXI_H_TO_DIFF(monsterSpeedX, monsterUpdatePtr)
 			dad b
 
 			cpi $40
@@ -241,16 +240,14 @@ SkeletonUpdate:
 			; that means a vertical movement plays skeleton_run_r anim as well
 			jz @setAnimRunR
 @setAnimRunL:
-			;lxi h, monsterAnimAddr - monsterUpdate
-			LXI_H_TO_DIFF(monsterAnimAddr, monsterUpdate)
+			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
 			dad b
 			mvi m, < skeleton_run_l
 			inx h
 			mvi m, > skeleton_run_l
 			ret
 @setAnimRunR:
-			;lxi h, monsterAnimAddr - monsterUpdate
-			LXI_H_TO_DIFF(monsterAnimAddr, monsterUpdate)
+			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
 			dad b
 			mvi m, < skeleton_run_r
 			inx h
@@ -262,19 +259,17 @@ SkeletonUpdate:
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to monsterDraw in the runtime data
+; de - ptr to monsterDrawPtr in the runtime data
 SkeletonDraw:
-			;lxi h, monsterPosX+1 - monsterDraw
-			LXI_H_TO_DIFF(monsterPosX+1, monsterDraw)
+			LXI_H_TO_DIFF(monsterPosX+1, monsterDrawPtr)
 			dad d
 			call GetSpriteScrAddr4
 			; hl - ptr to monsterPosY+1
 			; tmpA <- c
 			mov a, c
 
-			; advance to monsterAnimAddr
-			;lxi b, monsterAnimAddr - monsterPosY+1;$ffff - 12 ;move prt to monsterAnimAddr
-			LXI_B_TO_DIFF(monsterAnimAddr, monsterPosY+1)
+			; advance to monsterAnimPtr
+			LXI_B_TO_DIFF(monsterAnimPtr, monsterPosY+1)
 			dad b
 			mov b, m
 			inx h
@@ -296,8 +291,6 @@ SkeletonDraw:
 			inx h
 			mov m, b
 			; advance to monsterEraseWH
-			;inx_h(3)
-			;lxi b, monsterEraseWH - monsterEraseScrAddr+1;
 			LXI_B_TO_DIFF(monsterEraseWH, monsterEraseScrAddr+1)
 			dad b
 			; store a width and a height into monsterEraseWH

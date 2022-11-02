@@ -1,4 +1,3 @@
-;.setting "OmitUnusedFunctions", true
 .setting "Debug", true
 
 .include "macro.asm"
@@ -11,13 +10,9 @@
 .include "interruptions.asm"
 .include "ramDisk.asm"
 
-.include "ramDiskBank0_addr0Labels.asm"
-.include "ramDiskBank0_addr8000Labels.asm"
-.include "ramDiskBank1_addr8000Labels.asm"
-.include "ramDiskBank2_addr8000Labels.asm"
-
 .include "generated\\sprites\\heroAnim.asm"
 .include "generated\\sprites\\skeletonAnim.asm"
+.include "generated\\sprites\\hero_attack01Anim.asm"
 
 .include "game.asm"
 
