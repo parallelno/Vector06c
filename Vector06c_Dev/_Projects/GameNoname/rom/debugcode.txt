@@ -343,7 +343,7 @@ $035a 32 2f 01   sta $012f
 $035d d3 10      out $10
 $035f 11 cd 03   lxi d,$03cd
 $0362 21 00 a0   lxi h,$a000
-$0365 cd 38 83   call $8338
+$0365 cd 24 83   call $8324
 $0368 af         xra a
 $0369 32 2f 01   sta $012f
 $036c d3 10      out $10
@@ -361,7 +361,7 @@ $0389 32 2f 01   sta $012f
 $038c d3 10      out $10
 $038e 11 44 05   lxi d,$0544
 $0391 21 2e 66   lxi h,$662e
-$0394 cd 38 83   call $8338
+$0394 cd 24 83   call $8324
 $0397 af         xra a
 $0398 32 2f 01   sta $012f
 $039b d3 10      out $10
@@ -370,7 +370,7 @@ $039f 32 2f 01   sta $012f
 $03a2 d3 10      out $10
 $03a4 11 b3 05   lxi d,$05b3
 $03a7 21 2e 66   lxi h,$662e
-$03aa cd 38 83   call $8338
+$03aa cd 24 83   call $8324
 $03ad af         xra a
 $03ae 32 2f 01   sta $012f
 $03b1 d3 10      out $10
@@ -2639,7 +2639,7 @@ $156e 2a bb 12   lhld $12bb
 $1571 3e fa      mvi a,$fa
 $1573 32 2f 01   sta $012f
 $1576 d3 10      out $10
-$1578 cd 06 80   call $8006
+$1578 cd 04 80   call $8004
 $157b af         xra a
 $157c 32 2f 01   sta $012f
 $157f d3 10      out $10
@@ -2651,7 +2651,7 @@ $158b cd 77 09   call $0977
 $158e 3e f2      mvi a,$f2
 $1590 32 2f 01   sta $012f
 $1593 d3 10      out $10
-$1595 cd bf 80   call $80bf
+$1595 cd b7 80   call $80b7
 $1598 af         xra a
 $1599 32 2f 01   sta $012f
 $159c d3 10      out $10
@@ -2901,7 +2901,7 @@ $1714 cd 77 09   call $0977
 $1717 3e f2      mvi a,$f2
 $1719 32 2f 01   sta $012f
 $171c d3 10      out $10
-$171e cd 8f 81   call $818f
+$171e cd 83 81   call $8183
 $1721 af         xra a
 $1722 32 2f 01   sta $012f
 $1725 d3 10      out $10
@@ -2942,7 +2942,7 @@ $175a 2b         dcx h
 $175b 70         mov m,b
 $175c 2b         dcx h
 $175d 3a c0 12   lda $12c0
-$1760 3e 06      mvi a,$06
+$1760 3e 05      mvi a,$05
 $1762 77         mov m,a
 $1763 2b         dcx h
 $1764 70         mov m,b
@@ -3002,7 +3002,7 @@ $17b1 cd 77 09   call $0977
 $17b4 3e f2      mvi a,$f2
 $17b6 32 2f 01   sta $012f
 $17b9 d3 10      out $10
-$17bb cd 8f 81   call $818f
+$17bb cd 83 81   call $8183
 $17be af         xra a
 $17bf 32 2f 01   sta $012f
 $17c2 d3 10      out $10
@@ -3158,7 +3158,7 @@ $1a11 6f         mov l,a
 $1a12 3e fa      mvi a,$fa
 $1a14 32 2f 01   sta $012f
 $1a17 d3 10      out $10
-$1a19 cd 06 80   call $8006
+$1a19 cd 04 80   call $8004
 $1a1c af         xra a
 $1a1d 32 2f 01   sta $012f
 $1a20 d3 10      out $10
@@ -3261,7 +3261,7 @@ $1abd 11 bf 00   lxi d,$00bf
 $1ac0 3e 5a      mvi a,$5a
 $1ac2 32 2f 01   sta $012f
 $1ac5 d3 10      out $10
-$1ac7 cd dd 82   call $82dd
+$1ac7 cd cd 82   call $82cd
 $1aca af         xra a
 $1acb 32 2f 01   sta $012f
 $1ace d3 10      out $10

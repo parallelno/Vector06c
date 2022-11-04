@@ -127,7 +127,7 @@ SpriteDup:
 @width8: 	DUP_SPRITE(8)
 @width16:	DUP_SPRITE(16)
 
-.macro DUP_SPRITE(width)
+.macro DUP_SPRITE(sourceWidth)
 			xchg
 			dcx h
 			; get a maskFlag
@@ -140,12 +140,12 @@ SpriteDup:
 			ora a
 			jz @WithoutMask
 @withMask:
-			DUP_SPRITE_(width, True)
+			DUP_SPRITE_(sourceWidth, True)
 @WithoutMask:
-			DUP_SPRITE_(width, False)
+			DUP_SPRITE_(sourceWidth, False)
 .endmacro
 
-.macro DUP_SPRITE_(width, withMask)
+.macro DUP_SPRITE_(sourceWidth, withMask)
 		.if withMask
 			SP_BYTE_LEN = MASK_BYTE_COLOR_BYTE_LEN
 		.endif
@@ -157,18 +157,22 @@ SpriteDup:
 			ldax d
 			mov b, a
 			inx d
-			; get a target width
+			; get a target sourceWidth
 			ldax d
 			inx d
-			cpi width/8
+			cpi sourceWidth/8
 			jz @widthOriginalToExtended ; Extended means 8 pxls wider
-			cpi width/8 - 1
+			cpi sourceWidth/8 - 1
 			jz @widthOriginalToOriginal
+		.if sourceWidth != 8
+			cpi sourceWidth/8 - 2
+			;jz @widthOriginalToReduced ; Reduced means 8 pxls shorter
+		.endif
 			ret
 			
 @widthOriginalToExtended:
 			; screen buff 0
-			SpritesCopyLine(width / 8 * SP_BYTE_LEN)
+			SpritesCopyLine(sourceWidth / 8 * SP_BYTE_LEN)
 			inx d
 		.if withMask
 			inx d
@@ -178,27 +182,51 @@ SpriteDup:
 		.if withMask
 			inx d
 		.endif
-			SpritesCopyLine(width / 8 * SP_BYTE_LEN)
+			SpritesCopyLine(sourceWidth / 8 * SP_BYTE_LEN)
 			; screen buff 2
 			inx d
 		.if withMask
 			inx d
 		.endif
-			SpritesCopyLine(width / 8 * SP_BYTE_LEN)
+			SpritesCopyLine(sourceWidth / 8 * SP_BYTE_LEN)
 			dcr b
 			jnz @widthOriginalToExtended
 			ret
 
 @widthOriginalToOriginal:
 			; screen buff 0
-			SpritesCopyLine(width / 8 * SP_BYTE_LEN)
+			SpritesCopyLine(sourceWidth / 8 * SP_BYTE_LEN)
 			; screen buff 1
-			SpritesCopyLine(width / 8 * SP_BYTE_LEN)
+			SpritesCopyLine(sourceWidth / 8 * SP_BYTE_LEN)
 			; screen buff 2
-			SpritesCopyLine(width / 8 * SP_BYTE_LEN)
+			SpritesCopyLine(sourceWidth / 8 * SP_BYTE_LEN)
 			dcr b
 			jnz @widthOriginalToOriginal
 			ret
+/*
+@widthOriginalToReduced:
+			; screen buff 0
+			SpritesCopyLine((sourceWidth-1) / 8 * SP_BYTE_LEN)
+			inx h
+		.if withMask
+			inx h
+		.endif
+			; screen buff 1
+			inx h
+		.if withMask
+			inx h
+		.endif
+			SpritesCopyLine((sourceWidth-1) / 8 * SP_BYTE_LEN)
+			; screen buff 2
+			inx h
+		.if withMask
+			inx h
+		.endif
+			SpritesCopyLine((sourceWidth-1) / 8 * SP_BYTE_LEN)
+			dcr b
+			jnz @widthOriginalToReduced
+			ret			
+*/
 .endmacro
 
 .macro SpritesCopyLine(count)
@@ -417,3 +445,4 @@ SpritePreshift:
 			lxi d, nextLineOffset
 			dad d
 .endmacro
+__spriteduppreshiftEnd:
