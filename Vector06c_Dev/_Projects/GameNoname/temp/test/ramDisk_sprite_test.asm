@@ -93,8 +93,8 @@ RamDiskInit_sprite_test:
 			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_4, $acf0 - 16*6)
 			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_5, $aff0 - 16*6)
 			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_6, $b2f0 - 16*6)
-			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_7, $b5f0 - 16*6)
-/*
+			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_7, $b5f0 - 16*6)	
+
 			TEST_DRAW_SPRITE_M(skeleton_idle_r0_0, $a080 - 16)
 			TEST_DRAW_SPRITE_M(skeleton_idle_r0_1, $a380 - 16)
 			TEST_DRAW_SPRITE_M(skeleton_idle_r0_2, $a680 - 16)
@@ -124,7 +124,7 @@ RamDiskInit_sprite_test:
 			TEST_DRAW_SPRITE_M(skeleton_run_r3_1, $a380 - 16*6)
 			TEST_DRAW_SPRITE_M(skeleton_run_r3_2, $a680 - 16*6)
 			TEST_DRAW_SPRITE_M(skeleton_run_r3_3, $a980 - 16*6)
-*/
+
 			RAM_DISK_OFF()
 @loop:		jmp @loop
 			ret

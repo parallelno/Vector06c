@@ -102,7 +102,7 @@ scythe_run_un0_0:
 			.byte 12, 0; height, width
 			.byte 31,192,31,0,31,0,143,0,143,128,143,64,159,64,159,128,159,0,159,0,159,128,159,64,151,96,151,128,151,0,135,0,135,96,135,16,15,32,15,64,15,0,31,0,31,64,31,32,255,40,255,64,255,0,255,8,255,64,255,48,255,128,255,0,255,112,255,224,255,0,255,0,
 
-			.byte 0, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
+			.byte -1, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 scythe_run_un0_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 12, 0; height, width
@@ -150,7 +150,7 @@ scythe_run_dn0_0:
 			.byte 12, 0; height, width
 			.byte 31,56,31,0,31,0,143,56,143,0,143,64,159,136,159,0,159,112,159,128,159,16,159,8,151,8,151,16,151,0,135,0,135,16,135,8,15,40,15,16,15,0,31,0,31,48,31,8,255,4,255,8,255,0,255,0,255,8,255,4,255,4,255,8,255,0,255,0,255,8,255,4,
 
-			.byte 0, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
+			.byte -1, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 scythe_run_dn0_1:
 			.byte 0, 0; offsetY, offsetX
 			.byte 12, 0; height, width

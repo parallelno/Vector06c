@@ -185,9 +185,9 @@ def GetSpriteParams(labelPrefix, spriteName, dxL, dxR, spriteImg, mask_alpha, wi
 	shiftedDxL = shift + dxL
 	shiftedDxR = shift + dxR
 
-	offsetXNew = shiftedDxL//8 * 8
-	widthNew = (shiftedDxR//8+1) * 8 - offsetXNew
-	return offsetXNew, widthNew
+	offsetXPreshiftedLocal = shiftedDxL//8 * 8
+	widthNew = (shiftedDxR//8+1) * 8 - offsetXPreshiftedLocal
+	return offsetXPreshiftedLocal, widthNew
 
 def MakeEmptySpriteData(addMask, width, height):
 	srcBuffCount = 3
@@ -290,19 +290,24 @@ def SpritesToAsm(charJPath, charJ, image, addMask):
 		for i in range(1, preshiftedSprites):
 			shift = 8//preshiftedSprites * i
 
-			offsetXNew, width2 = GetSpriteParams(labelPrefix, spriteName, dxL, dxR, spriteImg, mask_alpha, width, height, shift)
-			offsetX2 = offsetX + offsetXNew
+			offsetXPreshiftedLocal, widthPreshifted = GetSpriteParams(labelPrefix, spriteName, dxL, dxR, spriteImg, mask_alpha, width, height, shift)
+			offsetXPreshifted = offsetX + offsetXPreshiftedLocal
 			asm += "\n"
+
+			copyFromBuffOffset = offsetXPreshiftedLocal//8
+			if widthPreshifted == 8: 
+				copyFromBuffOffset -= 1
+
 			# two empty bytes prior every sprite data to support a stack renderer
-			asm += "			.byte " + str(offsetXNew//8) + ", "+ str(maskFlag) + " ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)\n"
+			asm += "			.byte " + str(copyFromBuffOffset) + ", "+ str(maskFlag) + " ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)\n"
 			asm += labelPrefix + "_" + spriteName + "_" + str(i) + ":\n"
 
-			widthPacked2 = width2//8 - 1
-			offsetXPacked2 = offsetX2//8
-			asm += "			.byte " + str( offsetY ) + ", " +  str( offsetXPacked2 ) + "; offsetY, offsetX\n"
-			asm += "			.byte " + str( height ) + ", " +  str( widthPacked2 ) + "; height, width\n"
+			widthPreshiftedPacked = widthPreshifted//8 - 1
+			offsetXPreshiftedPacked = offsetXPreshifted//8
+			asm += "			.byte " + str( offsetY ) + ", " +  str( offsetXPreshiftedPacked ) + "; offsetY, offsetX\n"
+			asm += "			.byte " + str( height ) + ", " +  str( widthPreshiftedPacked ) + "; height, width\n"
 
-			data2 = MakeEmptySpriteData(addMask, width2, height)
+			data2 = MakeEmptySpriteData(addMask, widthPreshifted, height)
 			asm += BytesToAsmTiled(data2)
 
 	return asm

@@ -7,7 +7,7 @@
 .include "room.asm"
 .include "text.asm"
 
-.include "temp/test/ramDisk_sprite_test.asm"
+;.include "temp/test/ramDisk_sprite_test.asm"
 
 GameInit:
 			call LevelsInit
@@ -15,7 +15,7 @@ GameInit:
 			call RoomInit
 
 			; TODO: test
-			call RamDiskInit_sprite_test
+			;call RamDiskInit_sprite_test
 
 			call RoomDraw
 

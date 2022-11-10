@@ -1,18 +1,13 @@
+SPRITE_SCR_BUFFS = 3
 SPRITE_W16 = 2
 SPRITE_W24 = 3
-SPRITE_PRESHIFT_RIGHT = true
-SPRITE_PRESHIFT_LEFT = false
+SPRITE_HEIGHT_MAX = 24
+
 SPRITE_FORWARD_ORDER = true
 SPRITE_BACKWARD_ORDER = false
-SPRITE_COLOR = false
-SPRITE_MASK = true
 
 COLOR_BYTE_LEN = 1
 MASK_BYTE_COLOR_BYTE_LEN = 2
-
-SPRITE_HEIGHT_MAX = 24
-
-SPRITE_SCR_BUFFS = 3
 
 ; TODO: calculate mirrored sprites.
 
@@ -187,22 +182,24 @@ SpriteToBuff:
 @loop:
 			; screen buff 0
 			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+			SPRITE_TO_BUFF_COPY_LINE(sourceWidth / 8 * SP_BYTE_LEN)
 		.if sourceWidth == 8
 			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
-		.endif
-			SPRITE_TO_BUFF_COPY_LINE(sourceWidth / 8 * SP_BYTE_LEN)
+		.endif			
+			
 			; screen buff 1
-			SPRITE_TO_BUFF_COPY_LINE(sourceWidth / 8 * SP_BYTE_LEN)
-			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
 		.if sourceWidth == 8
 			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
-		.endif
+		.endif			
+			SPRITE_TO_BUFF_COPY_LINE(sourceWidth / 8 * SP_BYTE_LEN)
+			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+			
 			; screen buff 2
-			SPRITE_TO_BUFF_COPY_LINE(sourceWidth / 8 * SP_BYTE_LEN)
-			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
 		.if sourceWidth == 8
 			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
-		.endif
+		.endif			
+			SPRITE_TO_BUFF_COPY_LINE(sourceWidth / 8 * SP_BYTE_LEN)
+			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
 
 			dcr c
 			jnz @loop
@@ -307,9 +304,9 @@ SpriteFromBuff:
 			xra a
 			ora e
 			lxi d, spriteTmpBuff
-			jz @skipFirstRowLoop
+			jz @noOffset
 
-@skipLastRowLoop:
+@noOffset8:
 			; screen buff 0
 			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)			
 		.if targetWidth == 8
@@ -332,10 +329,10 @@ SpriteFromBuff:
 			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)		
 
 			dcr c
-			jnz @skipLastRowLoop
+			jnz @noOffset8
 			ret
 
-@skipFirstRowLoop:
+@noOffset:
 			; screen buff 0
 		.if targetWidth == 8
 			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
@@ -358,7 +355,7 @@ SpriteFromBuff:
 		.endif
 
 			dcr c
-			jnz @skipFirstRowLoop
+			jnz @noOffset
 			ret
 .endmacro
 

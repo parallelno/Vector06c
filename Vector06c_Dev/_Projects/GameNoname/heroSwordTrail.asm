@@ -45,7 +45,7 @@ HeroSwordTrailInit:
 			lda heroX+1
 
 			; TODO: temp
-			mvi a, 5
+			;mvi a, 5
 
 			mov m, a
 			dcx h
