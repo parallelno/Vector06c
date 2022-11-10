@@ -1,25 +1,3 @@
-RamDiskInit_sprite_test_clearScr:
-			lxi h, $A200
-@column1:
-			mvi m, 0
-			inr l
-			jnz @column1
-			inr h
-			rz
-@column2:
-			mvi m, 0
-			inr l
-			jnz @column2
-			inr h
-			rz
-@column3:
-			mvi m, 0
-			inr l
-			jnz @column3
-			inr h
-			jnz @column1
-			ret
-
 RamDiskInit_sprite_test:
 			call RamDiskInit_sprite_test_clearScr
 			; HERO
@@ -60,16 +38,18 @@ RamDiskInit_sprite_test:
 			TEST_DRAW_SPRITE(hero_run_l2_5, $aff0 - 16*4)
 			TEST_DRAW_SPRITE(hero_run_l2_6, $b2f0 - 16*4)
 			TEST_DRAW_SPRITE(hero_run_l2_7, $b5f0 - 16*4)
-
-			TEST_DRAW_SPRITE(hero_run_l3_0, $a0f0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_l3_1, $a3f0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_l3_2, $a6f0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_l3_3, $a9f0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_l3_4, $acf0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_l3_5, $aff0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_l3_6, $b2f0 - 16*4)
-			TEST_DRAW_SPRITE(hero_run_l3_7, $b5f0 - 16*4)							
 */
+			TEST_DRAW_SPRITE(hero_run_l3_0, $a0f0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_l3_1, $a3f0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_l3_2, $a6f0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_l3_3, $a9f0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_l3_4, $acf0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_l3_5, $aff0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_l3_6, $b2f0 - 16*5)
+			TEST_DRAW_SPRITE(hero_run_l3_7, $b5f0 - 16*5)							
+
+
+
 			TEST_DRAW_SPRITE(hero_attk_r0_0, $a0f0 - 16)
 			TEST_DRAW_SPRITE(hero_attk_r0_1, $a3f0 - 16)
 			TEST_DRAW_SPRITE(hero_attk_r0_2, $a6f0 - 16)
@@ -104,9 +84,17 @@ RamDiskInit_sprite_test:
 			TEST_DRAW_SPRITE(hero_attk_l1_4, $acf0 - 16*4)
 			TEST_DRAW_SPRITE(hero_attk_l1_5, $aff0 - 16*4)
 			TEST_DRAW_SPRITE(hero_attk_l1_6, $b2f0 - 16*4)
-			TEST_DRAW_SPRITE(hero_attk_l1_7, $b5f0 - 16*4)			
+			TEST_DRAW_SPRITE(hero_attk_l1_7, $b5f0 - 16*4)	
 
-
+			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_0, $a0f0 - 16*6)
+			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_1, $a3f0 - 16*6)
+			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_2, $a6f0 - 16*6)
+			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_3, $a9f0 - 16*6)
+			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_4, $acf0 - 16*6)
+			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_5, $aff0 - 16*6)
+			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_6, $b2f0 - 16*6)
+			TEST_DRAW_SPRITE_M(hero_attack01_sword_r0_7, $b5f0 - 16*6)
+/*
 			TEST_DRAW_SPRITE_M(skeleton_idle_r0_0, $a080 - 16)
 			TEST_DRAW_SPRITE_M(skeleton_idle_r0_1, $a380 - 16)
 			TEST_DRAW_SPRITE_M(skeleton_idle_r0_2, $a680 - 16)
@@ -136,10 +124,33 @@ RamDiskInit_sprite_test:
 			TEST_DRAW_SPRITE_M(skeleton_run_r3_1, $a380 - 16*6)
 			TEST_DRAW_SPRITE_M(skeleton_run_r3_2, $a680 - 16*6)
 			TEST_DRAW_SPRITE_M(skeleton_run_r3_3, $a980 - 16*6)
-
+*/
 			RAM_DISK_OFF()
 @loop:		jmp @loop
 			ret
+
+RamDiskInit_sprite_test_clearScr:
+			lxi h, $A200
+@column1:
+			mvi m, 0
+			inr l
+			jnz @column1
+			inr h
+			rz
+@column2:
+			mvi m, 0
+			inr l
+			jnz @column2
+			inr h
+			rz
+@column3:
+			mvi m, 1
+			inr l
+			jnz @column3
+			inr h
+			jnz @column1
+			ret
+
 .macro TEST_DRAW_SPRITE(source, screen)
 			lxi b, source
 			lxi d, screen

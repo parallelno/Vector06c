@@ -263,9 +263,14 @@ def SpritesToAsm(charJPath, charJ, image, addMask):
 		# to support a sprite render function
 		data = SpriteData(bytes1, bytes2, bytes3, width, height, maskBytes)
 
+		if addMask:
+			maskFlag = 1
+		else: 
+			maskFlag = 0
+
 		asm += "\n"
 		# two empty bytes prior every sprite data to support a stack renderer
-		asm += "			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.\n"
+		asm += f"			.byte {maskFlag},1  ; safety pair of bytes to support a stack renderer, and also (maskFlag, preshifting is done)\n"
 		asm += labelPrefix + "_" + spriteName + "_0:\n"
 
 		widthPacked = width//8 - 1
@@ -289,14 +294,7 @@ def SpritesToAsm(charJPath, charJ, image, addMask):
 			offsetX2 = offsetX + offsetXNew
 			asm += "\n"
 			# two empty bytes prior every sprite data to support a stack renderer
-			preshift = 8//preshiftedSprites * i - offsetXNew
-			
-			if addMask:
-				maskFlag = 1
-			else: 
-				maskFlag = 0
-
-			asm += "			.byte " + str(preshift) + ", "+ str(maskFlag) + " ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)\n"
+			asm += "			.byte " + str(offsetXNew//8) + ", "+ str(maskFlag) + " ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)\n"
 			asm += labelPrefix + "_" + spriteName + "_" + str(i) + ":\n"
 
 			widthPacked2 = width2//8 - 1

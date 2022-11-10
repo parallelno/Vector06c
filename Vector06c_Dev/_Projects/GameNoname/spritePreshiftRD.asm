@@ -1,3 +1,19 @@
+SPRITE_W16 = 2
+SPRITE_W24 = 3
+SPRITE_PRESHIFT_RIGHT = true
+SPRITE_PRESHIFT_LEFT = false
+SPRITE_FORWARD_ORDER = true
+SPRITE_BACKWARD_ORDER = false
+SPRITE_COLOR = false
+SPRITE_MASK = true
+
+COLOR_BYTE_LEN = 1
+MASK_BYTE_COLOR_BYTE_LEN = 2
+
+SPRITE_HEIGHT_MAX = 24
+
+SPRITE_SCR_BUFFS = 3
+
 ; TODO: calculate mirrored sprites.
 
 ; Calculate preshifted sprites
@@ -9,10 +25,11 @@
 __SpriteDupPreshift:
 			shld @dataOffset0+1
 			shld @dataOffset1+1
-			
+
 			xchg
 			mov a, m
 			sta @preshiftedSprites+1
+			sta @preshiftedSprites2+1
 			inx h
 @getAnimAddr:
 			; get anim addr
@@ -42,13 +59,13 @@ __SpriteDupPreshift:
 			shld @nextFrameAddr+1
 			pop h
 			inx h
-			; get the source sprite. like skeleton_run_r0_0
+			; get the source sprite addr. like skeleton_run_r0_0
 			mov e, m
 			inx h
 			mov d, m
 			inx h
 			xchg
-			; add an offset inside the bank to the source sprite
+			; add an offset inside the bank to the source sprite addr
 @dataOffset0:
 			lxi b, TEMP_ADDR
 			dad b
@@ -59,41 +76,55 @@ __SpriteDupPreshift:
 			jz @nextFrameAddr
 			; mark a first sprite of this frame being preshifted
 			dcr m
-			inx h
 
-			shld @sourceSpriteAddr+1
-			xchg
+			push d
+			call SpriteToBuff
+			pop h
 
 @preshiftedSprites:
 			mvi c, TEMP_BYTE
+			; decr preshiftedSprites because we do not need 
+			; to update the first sprite in a frame
+			dcr c
+			
+			; hl - a ptr to a target sprite addr. like skeleton_run_r0_1
+			; advance it to the last preshifted sprite addr (high byte)
+			; because we iterate them backwards,
+			; because we can preshift only to the left
+			mov e, c
+			mvi d, 0
+			xchg
+			dad h
+			dad d
+			dcx h
+
+
 @preshiftedSpritesloop:
-			; get a target sprite addr that needs to be preshifted
-			mov e, m
-			inx h
+			; get a target sprite addr to preshift
 			mov d, m
-			inx h
-			push b			
+			dcx h
+			mov e, m
+			dcx h
+			push b
 			push h
+
 			; add an offset inside the bank to the target sprite
 @dataOffset1:
 			lxi h, TEMP_ADDR
 			dad d
-			shld @preshiftSprite+1
-			xchg
-@sourceSpriteAddr:			
-			lxi h, TEMP_ADDR
-			call SpriteDup
-
-@preshiftSprite:
-			lxi h, TEMP_ADDR
-			call SpritePreshift
+			push h
+@preshiftedSprites2:
+			mvi e, TEMP_BYTE
+			call SpriteBuffPreshift ; check target addr and preshift counter
+			pop h
+			call SpriteFromBuff
 
 			pop h
 			pop b
 			dcr c
 			jnz @preshiftedSpritesloop
 
-@nextFrameAddr: 
+@nextFrameAddr:
 			lxi h, TEMP_ADDR
 @checkLastFrame:
 			mvi a, TEMP_BYTE
@@ -102,20 +133,23 @@ __SpriteDupPreshift:
 
 			pop h
 			jmp @getAnimAddr
-
-			ret
-
+			
 ;================================================================
-; duplicate a sprite
+; copy a sprite to a temp buffer (16*24 pxls max. w/wo a mask)
 ; in:
-; h - original sprite data addr
-; d - dupped sprite data addr
-COLOR_BYTE_LEN = 1
-MASK_BYTE_COLOR_BYTE_LEN = 2
-
-SpriteDup:
-			; get source width
-			inx_h(3)
+; hl - an original sprite data addr - 1
+SpriteToBuff:
+			dcx h
+			; get a maskFlag
+			; 0 = no mask
+			; 1 = a mask
+			mov b, m
+			inx_h(4)
+			; get a height
+			mov c, m
+			; advance to a width
+			inx h
+			; check a width
 			mov a, m
 			inx h
 			cpi 1
@@ -124,28 +158,24 @@ SpriteDup:
 			jz @width8
 			ret
 
-@width8: 	DUP_SPRITE(8)
-@width16:	DUP_SPRITE(16)
+@width8: 	SPRITE_TO_BUFF(8)
+@width16:	SPRITE_TO_BUFF(16)
 
-.macro DUP_SPRITE(sourceWidth)
-			xchg
-			dcx h
-			; get a maskFlag
-			; 0 = no mask
-			; 1 = a mask
-			mov a, m
-			inx_h(3)
-			xchg
-			; check a maskFlag		
-			ora a
+; hl - sprite data addr
+; b - 0 = no mask, 1 = mask
+; c - height
+.macro SPRITE_TO_BUFF(sourceWidth)
+			; check a maskFlag
+			xra a
+			ora b
 			jz @WithoutMask
 @withMask:
-			DUP_SPRITE_(sourceWidth, True)
+			SPRITE_TO_BUFF_(sourceWidth, True)
 @WithoutMask:
-			DUP_SPRITE_(sourceWidth, False)
+			SPRITE_TO_BUFF_(sourceWidth, False)
 .endmacro
 
-.macro DUP_SPRITE_(sourceWidth, withMask)
+.macro SPRITE_TO_BUFF_(sourceWidth, withMask)
 		.if withMask
 			SP_BYTE_LEN = MASK_BYTE_COLOR_BYTE_LEN
 		.endif
@@ -153,296 +183,387 @@ SpriteDup:
 			SP_BYTE_LEN = COLOR_BYTE_LEN
 		.endif
 
-			; get a target height
-			ldax d
-			mov b, a
-			inx d
-			; get a target sourceWidth
-			ldax d
-			inx d
-			cpi sourceWidth/8
-			jz @widthOriginalToExtended ; Extended means 8 pxls wider
-			cpi sourceWidth/8 - 1
-			jz @widthOriginalToOriginal
-		.if sourceWidth != 8
-			cpi sourceWidth/8 - 2
-			;jz @widthOriginalToReduced ; Reduced means 8 pxls shorter
-		.endif
-			ret
-			
-@widthOriginalToExtended:
-			; screen buff 0
-			SpritesCopyLine(sourceWidth / 8 * SP_BYTE_LEN)
-			inx d
-		.if withMask
-			inx d
-		.endif
-			; screen buff 1
-			inx d
-		.if withMask
-			inx d
-		.endif
-			SpritesCopyLine(sourceWidth / 8 * SP_BYTE_LEN)
-			; screen buff 2
-			inx d
-		.if withMask
-			inx d
-		.endif
-			SpritesCopyLine(sourceWidth / 8 * SP_BYTE_LEN)
-			dcr b
-			jnz @widthOriginalToExtended
-			ret
-
-@widthOriginalToOriginal:
-			; screen buff 0
-			SpritesCopyLine(sourceWidth / 8 * SP_BYTE_LEN)
-			; screen buff 1
-			SpritesCopyLine(sourceWidth / 8 * SP_BYTE_LEN)
-			; screen buff 2
-			SpritesCopyLine(sourceWidth / 8 * SP_BYTE_LEN)
-			dcr b
-			jnz @widthOriginalToOriginal
-			ret
-/*
-@widthOriginalToReduced:
-			; screen buff 0
-			SpritesCopyLine((sourceWidth-1) / 8 * SP_BYTE_LEN)
-			inx h
-		.if withMask
-			inx h
-		.endif
-			; screen buff 1
-			inx h
-		.if withMask
-			inx h
-		.endif
-			SpritesCopyLine((sourceWidth-1) / 8 * SP_BYTE_LEN)
-			; screen buff 2
-			inx h
-		.if withMask
-			inx h
-		.endif
-			SpritesCopyLine((sourceWidth-1) / 8 * SP_BYTE_LEN)
-			dcr b
-			jnz @widthOriginalToReduced
-			ret			
-*/
-.endmacro
-
-.macro SpritesCopyLine(count)
-		.loop count
-			mov a, m
-			stax d
-			inx h			
-			inx d			
-		.endloop
-.endmacro
-
-;================================================================
-; preshift a sprite with mask
-; in:
-; h - a sprite data addr
-SPRITE_W16 = 2
-SPRITE_W24 = 3
-SPRITE_PRESHIFT_RIGHT = true
-SPRITE_PRESHIFT_LEFT = false
-SPRITE_FORWARD_ORDER = true
-SPRITE_BACKWARD_ORDER = false
-SPRITE_COLOR = false
-SPRITE_MASK = true
-
-SpritePreshift:
-			dcx_h(2)
-			; get preshift
-			mov c, m
-			inx h
-
-			; get a maskFlag
-			; 0 = no mask
-			; 1 = a mask
-			mov a, m
-			lxi d, 3
-			dad d
-			; check a maskFlag
-			ora a
-			jz @withoutMask
-@withMask:	
-			SPRITE_PRESHIFT(true)
-@WithoutMask:
-			SPRITE_PRESHIFT(false)
-			.closelabels
-
-.macro SPRITE_PRESHIFT(withMask)
-			; get target height
-			mov b, m
-			inx h
-
-			; check if preshift is to right
-			xra a
-			ora c
-			jm @left
-
-@right:
-			; get target width
-			mov a, m
-			inx h
-			cpi SPRITE_W24 - 1
-			jz @right24
-			cpi SPRITE_W16 - 1
-			jz @right16
-			ret
-
-@left:
-			; get target width
-			mov a, m
-			inx h
-			cpi SPRITE_W24 - 1
-			jz @left24
-			cpi SPRITE_W16 - 1
-			jz @left16
-			ret
-
-@right24:	SPRITE_PRESHIFT_(24, SPRITE_PRESHIFT_RIGHT, withMask)
-@right16:	SPRITE_PRESHIFT_(16, SPRITE_PRESHIFT_RIGHT, withMask)
-@left24:	SPRITE_PRESHIFT_(24, SPRITE_PRESHIFT_LEFT, withMask)
-@left16:	SPRITE_PRESHIFT_(16, SPRITE_PRESHIFT_LEFT, withMask)
-
-.endmacro
-
-.macro SPRITE_PRESHIFT_(width, dir, withMask)
-			; an example of a byte order for a 24 width sprite
-			; with a mask
-			; 0 line
-			; (1,2)		(3,4)	(5,6)
-			; (11,12)	(9,10)	(7,8)
-			; (17,18)	(15,16)	(13,14)
-			; 1 line
-			; (15,16) ...
-
-			; without a mask
-			; 0 line
-			; (1) (2) (3)
-			; (6) (5) (4)
-			; (9) (8) (7)
-			; 1 line
-			; (10) ...		
-
-		.if withMask
-			SP_BYTE_LEN = MASK_BYTE_COLOR_BYTE_LEN
-		.endif
-		.if withMask == false
-			SP_BYTE_LEN = COLOR_BYTE_LEN
-		.endif
-		
-		.if dir == SPRITE_PRESHIFT_LEFT
-			; move hl to the last byte in the line
-			lxi d, SP_BYTE_LEN * (width/8 - 1)
-			dad d
-		.endif		
-
-		.if dir == SPRITE_PRESHIFT_RIGHT
-			NEXT_LINE_OFFSET_SCR1 = SP_BYTE_LEN * width/8
-			NEXT_LINE_OFFSET_SCR2 = SP_BYTE_LEN * (width/8*2 - 1)
-			NEXT_LINE_OFFSET_SCR3 = SP_BYTE_LEN * width/8
-			SPRITE_FORWARD_LINE = SPRITE_FORWARD_ORDER
-			SPRITE_BACKWARD_LINE = SPRITE_BACKWARD_ORDER
-		.endif
-		.if dir == SPRITE_PRESHIFT_LEFT
-			NEXT_LINE_OFFSET_SCR1 = SP_BYTE_LEN * width/8
-			NEXT_LINE_OFFSET_SCR2 = SP_BYTE_LEN * 1
-			NEXT_LINE_OFFSET_SCR3 = SP_BYTE_LEN * width/8
-			SPRITE_FORWARD_LINE = SPRITE_BACKWARD_ORDER
-			SPRITE_BACKWARD_LINE = SPRITE_FORWARD_ORDER			
-		.endif
+			lxi d, spriteTmpBuff
 @loop:
-		.if withMask
-			; preshift mask
-			push h
-			push b
-@maskLoop:
-			; 1st scr buffer
-			SPRITE_PRESHIFT_LINE(width, dir, withMask, SPRITE_MASK, SPRITE_FORWARD_LINE, NEXT_LINE_OFFSET_SCR1)
-			; 2nd scr buffer
-			SPRITE_PRESHIFT_LINE(width, dir, withMask, SPRITE_MASK, SPRITE_BACKWARD_LINE, NEXT_LINE_OFFSET_SCR2)
-			; 3rd scr buffer
-			SPRITE_PRESHIFT_LINE(width, dir, withMask, SPRITE_MASK, SPRITE_BACKWARD_LINE, NEXT_LINE_OFFSET_SCR3)
-			dcr b
-			jnz @maskLoop
-			pop b
-			pop h
+			; screen buff 0
+			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+		.if sourceWidth == 8
+			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+		.endif
+			SPRITE_TO_BUFF_COPY_LINE(sourceWidth / 8 * SP_BYTE_LEN)
+			; screen buff 1
+			SPRITE_TO_BUFF_COPY_LINE(sourceWidth / 8 * SP_BYTE_LEN)
+			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+		.if sourceWidth == 8
+			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+		.endif
+			; screen buff 2
+			SPRITE_TO_BUFF_COPY_LINE(sourceWidth / 8 * SP_BYTE_LEN)
+			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+		.if sourceWidth == 8
+			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
 		.endif
 
-			; preshift color
-			push h
-			push b			
-		.if withMask
-			inx h
-		.endif
-@colorLoop:
-			; 1st scr buffer
-			SPRITE_PRESHIFT_LINE(width, dir, withMask, SPRITE_COLOR, SPRITE_FORWARD_LINE, NEXT_LINE_OFFSET_SCR1)
-			; 2nd scr buffer
-			SPRITE_PRESHIFT_LINE(width, dir, withMask, SPRITE_COLOR, SPRITE_BACKWARD_LINE, NEXT_LINE_OFFSET_SCR2)
-			; 3rd scr buffer
-			SPRITE_PRESHIFT_LINE(width, dir, withMask, SPRITE_COLOR, SPRITE_BACKWARD_LINE, NEXT_LINE_OFFSET_SCR3)
-			dcr b
-			jnz @colorLoop
-			pop b
-			pop h
-		.if dir == SPRITE_PRESHIFT_RIGHT
 			dcr c
-		.endif
-		.if dir == SPRITE_PRESHIFT_LEFT
-			inr c
-		.endif		
 			jnz @loop
 			ret
 .endmacro
 
-.macro SPRITE_PRESHIFT_ADVANCE(byteOrder, withMask)
-	.if byteOrder == SPRITE_FORWARD_ORDER
-			inx h
-		.if withMask
-			inx h
-		.endif
+.macro SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+	.if withMask
+			; empty the first mask byte
+			mvi a, $ff
+			stax d
+			inx d
 	.endif
-	.if byteOrder == SPRITE_BACKWARD_ORDER
-			dcx h
-		.if withMask
-			dcx h
-		.endif
-	.endif
-.endmacro
-
-.macro SPRITE_PRESHIFT_ROTATE_BYTE(dir)
-		.if dir == SPRITE_PRESHIFT_RIGHT
-			rar
-		.endif
-		.if dir == SPRITE_PRESHIFT_LEFT
-			ral
-		.endif
-.endmacro
-
-.macro SPRITE_PRESHIFT_LINE(width, dir, withMask, mask, byteOrder, nextLineOffset)
-			LOOP_COUNTER .var 0
-		.if mask
-			stc
-		.endif
-		.if mask == false
+			; empty the first color byte
 			xra a
-		.endif
-	.loop width/8
-			mov a, m
-			SPRITE_PRESHIFT_ROTATE_BYTE(dir)
-			mov m, a
-			
-			LOOP_COUNTER = LOOP_COUNTER + 1
-		.if LOOP_COUNTER < width/8
-			SPRITE_PRESHIFT_ADVANCE(byteOrder, withMask)
-		.endif
-	.endloop
-
-			lxi d, nextLineOffset
-			dad d
+			stax d
+			inx d
 .endmacro
+
+.macro SPRITE_TO_BUFF_COPY_LINE(count)
+		.loop count
+			mov a, m
+			stax d
+			inx h
+			inx d
+		.endloop
+.endmacro
+
+;================================================================
+; copy a sprite from a temp buffer (24*24 pxls max. w/wo a mask)
+; in:
+; hl - a target sprite data addr
+SpriteFromBuff:
+			; get copyFromBuffOffset
+			dcx_h(2)
+			mov e, m
+			inx h
+			; get a maskFlag
+			; 0 = no mask
+			; 1 = a mask
+			mov b, m
+			inx_h(3)
+			; get a height
+			mov c, m
+			; advance to a width
+			inx h
+			; check a width
+			mov a, m
+			inx h
+			cpi 2
+			jz @width24
+			cpi 1
+			jz @width16
+			cpi 0
+			jz @width8
+			ret
+
+@width8: 	SPRITE_FROM_BUFF(8)
+@width16:	SPRITE_FROM_BUFF(16)
+@width24:	; copy buff as it is
+
+			; if there is a mask, 
+			; then double the amount of bytes to copy
+			xra a
+			ora b
+			jz @width24NoMask
+			mov a, c
+			add a
+			mov c, a
+
+@width24NoMask:			
+			lxi d, spriteTmpBuff
+@width24Loop:	
+			SPRITE_FROM_BUFF_COPY_LINE(SPRITE_W24 * SPRITE_SCR_BUFFS * COLOR_BYTE_LEN)
+			dcr c
+			jnz @width24Loop
+			ret
+
+; hl - sprite data addr
+; b - 0 = no mask, 1 = mask
+; c - height
+.macro SPRITE_FROM_BUFF(targetWidth)
+			; check a maskFlag
+			xra a
+			ora b
+			jz @WithoutMask
+@withMask:
+			SPRITE_FROM_BUFF_(targetWidth, True)
+@WithoutMask:
+			SPRITE_FROM_BUFF_(targetWidth, False)
+.endmacro
+
+.macro SPRITE_FROM_BUFF_(targetWidth, withMask)
+		.if withMask
+			SP_BYTE_LEN = MASK_BYTE_COLOR_BYTE_LEN
+		.endif
+		.if withMask == false
+			SP_BYTE_LEN = COLOR_BYTE_LEN
+		.endif
+
+			; check copyFromBuffOffset
+			xra a
+			ora e
+			lxi d, spriteTmpBuff
+			jz @skipFirstRowLoop
+
+@skipLastRowLoop:
+			; screen buff 0
+			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)			
+		.if targetWidth == 8
+			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+		.endif
+			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
+
+			; screen buff 1			
+			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
+		.if targetWidth == 8
+			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+		.endif
+			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)		
+			
+			; screen buff 2			
+			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
+		.if targetWidth == 8
+			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+		.endif
+			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)		
+
+			dcr c
+			jnz @skipLastRowLoop
+			ret
+
+@skipFirstRowLoop:
+			; screen buff 0
+		.if targetWidth == 8
+			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+		.endif
+			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
+			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+
+			; screen buff 1
+			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)			
+			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
+		.if targetWidth == 8
+			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+		.endif
+
+			; screen buff 2
+			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)			
+			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
+		.if targetWidth == 8
+			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+		.endif
+
+			dcr c
+			jnz @skipFirstRowLoop
+			ret
+.endmacro
+
+.macro SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+			inx d
+		.if withMask
+			inx d
+		.endif
+.endmacro
+
+.macro SPRITE_FROM_BUFF_COPY_LINE(count)
+		.loop count
+			ldax d
+			mov m, a
+			inx h
+			inx d
+		.endloop
+.endmacro
+
+;================================================================
+; preshift a temp buffer
+; in:
+; hl - a target sprite data addr
+; e - preshiftedsprites. 
+;	8 - shift by 1 pxl
+;	4 - shift by 2 pxls
+SpriteBuffPreshift:
+			; get a preshift
+			dcx_h(2)
+			mov b, m
+			; get a maskFlag
+			inx h
+			mov a, m
+			; get a height
+			inx_h(3)
+			mov c, m
+			; advance to gfx data
+			inx_h(2)
+			; check a maskFlag
+			ora a
+			lxi h, spriteTmpBuff
+			jz @color
+
+@colorMask:
+			; check preshift
+			mvi a, 4
+			cmp e
+			jz @colorMask2pxls
+
+@colorMask1pxl:
+			; scr buff 0
+			SPRITE_BUFF_PRESHIFT_LINE_W_MASK(1, SPRITE_FORWARD_ORDER, true)
+			SPRITE_BUFF_PRESHIFT_LINE_W_MASK(1, SPRITE_FORWARD_ORDER, false)
+			; scr buff 1
+			SPRITE_BUFF_PRESHIFT_LINE_W_MASK(1, SPRITE_BACKWARD_ORDER, true)
+			SPRITE_BUFF_PRESHIFT_LINE_W_MASK(1, SPRITE_BACKWARD_ORDER, false)
+			; scr buff 2
+			SPRITE_BUFF_PRESHIFT_LINE_W_MASK(1, SPRITE_BACKWARD_ORDER, true)
+			SPRITE_BUFF_PRESHIFT_LINE_W_MASK(1, SPRITE_BACKWARD_ORDER, false)
+			dcr c
+			jnz @colorMask1pxl
+			ret
+
+@colorMask2pxls:
+			; scr buff 0
+			SPRITE_BUFF_PRESHIFT_LINE_W_MASK(2, SPRITE_FORWARD_ORDER, true)
+			SPRITE_BUFF_PRESHIFT_LINE_W_MASK(2, SPRITE_FORWARD_ORDER, false)
+			; scr buff 1
+			SPRITE_BUFF_PRESHIFT_LINE_W_MASK(2, SPRITE_BACKWARD_ORDER, true)
+			SPRITE_BUFF_PRESHIFT_LINE_W_MASK(2, SPRITE_BACKWARD_ORDER, false)
+			; scr buff 2
+			SPRITE_BUFF_PRESHIFT_LINE_W_MASK(2, SPRITE_BACKWARD_ORDER, true)
+			SPRITE_BUFF_PRESHIFT_LINE_W_MASK(2, SPRITE_BACKWARD_ORDER, false)
+			dcr c
+			jnz @colorMask2pxls
+			ret
+
+@color:
+			; check preshift
+			mvi a, 4
+			cmp e
+			jz @color2pxls
+
+@color1pxl:
+			; scr buff 0
+			SPRITE_BUFF_PRESHIFT_LINE(1, SPRITE_FORWARD_ORDER)
+			; scr buff 1
+			SPRITE_BUFF_PRESHIFT_LINE(1, SPRITE_BACKWARD_ORDER)
+			; scr buff 2
+			SPRITE_BUFF_PRESHIFT_LINE(1, SPRITE_BACKWARD_ORDER)
+			dcr c
+			jnz @color1pxl
+			ret
+
+@color2pxls:
+			; scr buff 0
+			SPRITE_BUFF_PRESHIFT_LINE(2, SPRITE_FORWARD_ORDER)
+			; scr buff 1
+			SPRITE_BUFF_PRESHIFT_LINE(2, SPRITE_BACKWARD_ORDER)
+			; scr buff 2
+			SPRITE_BUFF_PRESHIFT_LINE(2, SPRITE_BACKWARD_ORDER)
+			dcr c
+			jnz @color2pxls
+			ret			
+
+.macro SPRITE_BUFF_PRESHIFT_LINE(count, order)
+			; load a line
+		.if order == SPRITE_FORWARD_ORDER
+			mov a, m
+			inx h
+			mov d, m
+			inx h
+			mov e, m
+		.endif
+		.if order == SPRITE_BACKWARD_ORDER
+			mov e, m
+			inx h
+			mov d, m
+			inx h
+			mov a, m
+		.endif
+
+		.loop count
+			; shift
+			xchg
+			dad h
+			ral
+			xchg
+		.endloop
+
+			; save 
+		.if order == SPRITE_FORWARD_ORDER
+			mov m, e
+			dcx h
+			mov m, d
+			dcx h
+			mov m, a
+		.endif
+		.if order == SPRITE_BACKWARD_ORDER
+			mov m, a
+			dcx h
+			mov m, d
+			dcx h
+			mov m, e
+		.endif
+		; advance to the next line
+		lxi d, SPRITE_W24 * COLOR_BYTE_LEN
+		dad d
+.endmacro
+
+.macro SPRITE_BUFF_PRESHIFT_LINE_W_MASK(count, order, mask)
+			; load a line of mask bytes
+		.if order == SPRITE_FORWARD_ORDER
+			mov a, m
+			inx_h(2)
+			mov d, m
+			inx_h(2)
+			mov e, m
+		.endif
+		.if order == SPRITE_BACKWARD_ORDER
+			mov e, m
+			inx_h(2)
+			mov d, m
+			inx_h(2)
+			mov a, m
+		.endif
+
+		.loop count
+			; shift
+			xchg
+			dad h
+		.if mask
+			inr l ; fill up the rightest bit of mask to 1
+		.endif
+			ral
+			xchg
+		.endloop
+
+			; save bytes
+		.if order == SPRITE_FORWARD_ORDER
+			mov m, e
+			dcx_h(2)
+			mov m, d
+			dcx_h(2)
+			mov m, a
+		.endif
+		.if order == SPRITE_BACKWARD_ORDER
+			mov m, a
+			dcx_h(2)
+			mov m, d
+			dcx_h(2)
+			mov m, e
+		.endif
+
+	.if mask
+		inx h
+	.endif
+	.if mask == false
+		; advance to the next line
+		lxi d, SPRITE_W24 * MASK_BYTE_COLOR_BYTE_LEN - 1
+		dad d
+	.endif
+.endmacro
+
+spriteTmpBuff:
+			.storage SPRITE_W16 * MASK_BYTE_COLOR_BYTE_LEN * SPRITE_SCR_BUFFS * SPRITE_HEIGHT_MAX
+
 __spriteduppreshiftEnd:

@@ -1,96 +1,96 @@
 ; sources\sprites\hero_attack01.json
 hero_attack01_sprites:
-			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
+			.byte 1,1  ; safety pair of bytes to support a stack renderer, and also (maskFlag, preshifting is done)
 hero_attack01_sword_r0_0:
 			.byte 0, 1; offsetY, offsetX
 			.byte 14, 1; height, width
 			.byte 254,1,63,192,63,0,254,0,63,0,254,0,248,1,31,192,31,0,248,0,31,224,248,7,240,15,31,224,31,0,240,0,31,32,240,7,240,0,223,32,223,0,240,8,223,32,240,7,243,12,159,32,159,0,243,0,159,96,243,0,255,0,159,96,159,0,255,0,159,32,255,0,255,0,31,32,31,0,255,0,31,224,255,0,255,0,31,224,31,0,255,0,31,96,255,0,254,0,63,64,63,0,254,0,63,192,254,1,254,1,63,192,63,0,254,0,63,192,254,0,252,0,127,128,127,0,252,0,127,128,252,3,252,3,255,0,255,0,252,0,255,0,252,1,249,2,255,0,255,0,249,0,255,0,249,6,247,8,255,0,255,0,247,0,255,0,247,0,
 
-			.byte 1, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 0, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_r0_1:
 			.byte 0, 1; offsetY, offsetX
 			.byte 14, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 2, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 0, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_r0_2:
 			.byte 0, 1; offsetY, offsetX
 			.byte 14, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 3, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 0, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_r0_3:
 			.byte 0, 1; offsetY, offsetX
 			.byte 14, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte -4, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 1, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_r0_4:
 			.byte 0, 2; offsetY, offsetX
 			.byte 14, 0; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte -3, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 1, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_r0_5:
 			.byte 0, 2; offsetY, offsetX
 			.byte 14, 0; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte -2, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 1, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_r0_6:
 			.byte 0, 2; offsetY, offsetX
 			.byte 14, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte -1, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 1, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_r0_7:
 			.byte 0, 2; offsetY, offsetX
 			.byte 14, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 0,1  ; safety pair of bytes to support a stack renderer, and also a marker that preshifting is done.
+			.byte 1,1  ; safety pair of bytes to support a stack renderer, and also (maskFlag, preshifting is done)
 hero_attack01_sword_l0_0:
 			.byte 0, -1; offsetY, offsetX
 			.byte 14, 1; height, width
 			.byte 252,3,127,128,127,0,252,0,127,0,252,0,248,3,31,128,31,0,248,0,31,224,248,7,248,7,15,240,15,0,248,0,15,224,248,4,251,4,15,0,15,16,251,0,15,224,251,4,249,4,207,48,207,0,249,0,207,0,249,6,249,6,255,0,255,0,249,0,255,0,249,4,248,4,255,0,255,0,248,0,255,0,248,7,248,7,255,0,255,0,248,0,255,0,248,6,252,2,127,0,127,0,252,0,127,128,252,3,252,3,127,128,127,0,252,0,127,0,252,3,254,1,63,0,63,0,254,0,63,192,254,1,255,0,63,192,63,0,255,0,63,128,255,0,255,0,159,64,159,0,255,0,159,96,255,0,255,0,239,16,239,0,255,0,239,0,255,0,
 
-			.byte 1, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 0, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_l0_1:
 			.byte 0, -1; offsetY, offsetX
 			.byte 14, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 2, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 0, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_l0_2:
 			.byte 0, -1; offsetY, offsetX
 			.byte 14, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte -5, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 1, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_l0_3:
 			.byte 0, 0; offsetY, offsetX
 			.byte 14, 0; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte -4, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 1, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_l0_4:
 			.byte 0, 0; offsetY, offsetX
 			.byte 14, 0; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte -3, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 1, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_l0_5:
 			.byte 0, 0; offsetY, offsetX
 			.byte 14, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte -2, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 1, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_l0_6:
 			.byte 0, 0; offsetY, offsetX
 			.byte 14, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte -1, 1 ; safety pair of bytes to support a stack renderer and also (preshift, maskFlag)
+			.byte 1, 1 ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)
 hero_attack01_sword_l0_7:
 			.byte 0, 0; offsetY, offsetX
 			.byte 14, 1; height, width
