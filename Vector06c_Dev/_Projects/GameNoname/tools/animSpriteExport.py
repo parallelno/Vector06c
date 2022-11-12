@@ -80,7 +80,7 @@ def SpriteData(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 	width = w // 8
 	#mask = 0
 	data = []
-	for y in reversed(range(h)):
+	for y in range(h):
 		evenLine = y % 2 == 0
 		if evenLine:
 			for x in range(width):
@@ -223,7 +223,7 @@ def SpritesToAsm(charJPath, charJ, image, addMask):
 
 		# get a sprite as a color index 2d array
 		spriteImg = []
-		for py in range(y, y + height) :
+		for py in reversed(range(y, y + height)) : # Y is reversed because it is from bottomto top in the game
 			line = []
 			for px in range(x, x+width) :
 				colorIdx = image.getpixel((px, py))
@@ -250,7 +250,7 @@ def SpritesToAsm(charJPath, charJ, image, addMask):
 			y = sprite["mask_y"]
 
 			maskImg = []
-			for py in range(y, y + height) :
+			for py in reversed(range(y, y + height)) : # Y is reversed because it is from bottomto top in the game
 				for px in range(x, x+width) :
 					colorIdx = image.getpixel((px, py))
 					if colorIdx == mask_alpha:
@@ -307,8 +307,8 @@ def SpritesToAsm(charJPath, charJ, image, addMask):
 			asm += "			.byte " + str( offsetY ) + ", " +  str( offsetXPreshiftedPacked ) + "; offsetY, offsetX\n"
 			asm += "			.byte " + str( height ) + ", " +  str( widthPreshiftedPacked ) + "; height, width\n"
 
-			data2 = MakeEmptySpriteData(addMask, widthPreshifted, height)
-			asm += BytesToAsmTiled(data2)
+			emptyData = MakeEmptySpriteData(addMask, widthPreshifted, height)
+			asm += BytesToAsmTiled(emptyData)
 
 	return asm
 

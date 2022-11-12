@@ -53,11 +53,20 @@ MonstersGetEmptyDataPtr:
 			.closelabels
 
 
-; remove a monster from the monster data
+; mark a monster data ptr as it's going to be destroyed
 ; in:
 ; hl - monsterUpdate+1 ptr
 ; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
 MonstersDestroy:
+			mvi m, >MONSTER_RUNTIME_DATA_DESTROY
+			ret
+			.closelabels
+
+; mark a monster data as empty
+; in:
+; hl - monsterUpdate+1 ptr
+; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
+MonstersEmpty:
 			mvi m, >MONSTER_RUNTIME_DATA_EMPTY
 			ret
 			.closelabels
@@ -74,7 +83,7 @@ MonstersDataFuncCaller:
 			lxi h, monsterUpdatePtr+1
 @loop:
 			mov a, m
-			cpi >MONSTER_RUNTIME_DATA_EMPTY
+			cpi >MONSTER_RUNTIME_DATA_DESTROY
 			jc @callFunc
 			jz @nextData
 			; it is the last or the end, so return
@@ -104,7 +113,7 @@ MonstersDataFuncCaller:
 			.closelabels
 
 ; call a provided func if a monster is alive
-; a func will get HL pointing to a monsterUpdatePtr+1 in the runtime data
+; a func will get HL pointing to a monsterUpdatePtr+1 in the runtime data, and A holding a MONSTER_RUNTIME_DATA_* status
 ; in:
 ; hl - a func addr
 ; use:
@@ -150,7 +159,12 @@ MonstersErase:
 ; erase sprite
 ; in:
 ; hl - ptr to monsterUpdatePtr+1 in the runtime data
+; a - MONSTER_RUNTIME_DATA_* status
 MonsterErase:
+			; if a monster is destroyed mark a its data as empty
+			cpi >MONSTER_RUNTIME_DATA_DESTROY
+			jz MonstersEmpty
+
 			; advance to monsterEraseScrAddr
 			LXI_D_TO_DIFF(monsterEraseScrAddr, monsterUpdatePtr+1)
 			dad d

@@ -1,4 +1,4 @@
-HERO_ATTACK01_LIFETIME = 100
+HERO_ATTACK01_LIFETIME = 50
 ; in:
 ; c - monster idx
 ; out:
@@ -43,9 +43,6 @@ HeroSwordTrailInit:
 			dcx h			
 			; set posX
 			lda heroX+1
-
-			; TODO: temp
-			;mvi a, 5
 
 			mov m, a
 			dcx h

@@ -1,5 +1,6 @@
 ; max monsters in the room
 MONSTERS_MAX = 15
+MONSTER_RUNTIME_DATA_DESTROY = $fc00
 MONSTER_RUNTIME_DATA_EMPTY = $fd00
 MONSTER_RUNTIME_DATA_LAST = $fe00 ; the end of the last existing monster data
 MONSTER_RUNTIME_DATA_END = $ff00 ; the end of the data
