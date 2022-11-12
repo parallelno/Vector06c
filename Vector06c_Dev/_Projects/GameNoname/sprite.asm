@@ -4,7 +4,7 @@
 ; c - preshifted sprite idx*2 offset based on posX then +2
 ; out:
 ; bc - ptr to a sprite
-GetSpriteAddr:
+SpriteGetAddr:
 			mvi b, 0
 			dad b
 			mov c, m
@@ -23,7 +23,7 @@ GetSpriteAddr:
 GetSpriteScrAddr8:
 			; calc screen addr X
 			mov	a, m
-			ani PRESHIFTED_SPRITES_8 - 1
+			ani SPRITES_PRESHIFTED_8 - 1
 			rlc
 			adi 2 ; because there are two bytes of nextFrameOffset in front of sprite ptrs
 			mov	c, a
@@ -41,7 +41,7 @@ GetSpriteScrAddr8:
 GetSpriteScrAddr4:
 			; calc screen addr X
 			mov	a, m
-			ani (PRESHIFTED_SPRITES_4 - 1) * 2
+			ani (SPRITES_PRESHIFTED_4 - 1) * 2
 			adi 2 ; because there are two bytes of nextFrameOffset in front of sprite ptrs
 			mov	c, a
 			mov	a, m
@@ -65,10 +65,6 @@ GetSpriteScrAddr4:
 ;		10 - 24pxs,
 ;		11 - 32pxs
 ; c - height
-COPY_SPRITE_W_MIN = %0
-COPY_SPRITE_W_MAX = %11
-COPY_SPRITE_H_MIN = 5
-COPY_SPRITE_H_MAX = 20
 
 CopySpriteToScrV:
 			; store sp
@@ -79,20 +75,20 @@ CopySpriteToScrV:
 			; Y -= 1 because we start copying bytes with dec Y
 			inr e
 /*
-			; w=max(h, COPY_SPRITE_H_MAX)
-			mvi a, COPY_SPRITE_W_MAX
+			; w=max(h, SPRITE_COPY_TO_SCR_H_MAX)
+			mvi a, SPRITE_COPY_TO_SCR_W_PACKED_MAX
 			cmp b
 			jnc @skipMaxW
 @maxW:
-			mvi b, COPY_SPRITE_W_MAX
+			mvi b, SPRITE_COPY_TO_SCR_W_PACKED_MAX
 @skipMaxW:
 */
-			; h=max(h, COPY_SPRITE_H_MAX)
+			; h=max(h, SPRITE_COPY_TO_SCR_H_MAX)
 			mov a, c
-			cpi COPY_SPRITE_H_MAX
+			cpi SPRITE_COPY_TO_SCR_H_MAX
 			jc @skipMaxH
 @maxH:
-			mvi a, COPY_SPRITE_H_MAX
+			mvi a, SPRITE_COPY_TO_SCR_H_MAX
 @skipMaxH:
 
 			; BC = an offset in the copy routine table
@@ -102,7 +98,7 @@ CopySpriteToScrV:
 			mvi b, 0
 
 			; hl - an addr of a copy routine
-			lxi h, @copyRoutineAddrs - COPY_SPRITE_H_MIN * WORD_LEN
+			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * WORD_LEN
 			dad b
 			mov b, m
 			inx h
@@ -234,12 +230,12 @@ CopySpriteToScrV2:
 			; Y -= 1 because we start copying bytes with dec Y
 			inr e
 
-			; h=min(h, COPY_SPRITE_H_MAX)
+			; h=min(h, SPRITE_COPY_TO_SCR_H_MAX)
 			mov a, l
-			cpi COPY_SPRITE_H_MAX
+			cpi SPRITE_COPY_TO_SCR_H_MAX
 			jc @doNotSetMin
 @setMin:
-			mvi a, COPY_SPRITE_H_MAX
+			mvi a, SPRITE_COPY_TO_SCR_H_MAX
 @doNotSetMin:
 
 			; BC = an offset in the copy routine table
@@ -255,7 +251,7 @@ CopySpriteToScrV2:
 			shld RestoreSP + 1
 
 			; hl - an addr of a copy routine
-			lxi h, @copyRoutineAddrs - COPY_SPRITE_H_MIN * WORD_LEN
+			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * WORD_LEN
 			dad b
 			mov b, m
 			inx h

@@ -32,7 +32,7 @@ HeroSwordTrailInit:
 			LXI_D_TO_DIFF(monsterPosY+1, monsterAnimPtr+1)
 			dad d
 			; set posY
-			lda heroY+1
+			lda heroPosY+1
 			; tmp c = posY
 			mov c, a
 			; set posY
@@ -42,7 +42,7 @@ HeroSwordTrailInit:
 			; advance hl to monsterPosX+1	
 			dcx h			
 			; set posX
-			lda heroX+1
+			lda heroPosX+1
 
 			mov m, a
 			dcx h
@@ -139,7 +139,7 @@ HeroSwordTrailDraw:
 			mov c, a
 			; hl - animPtr
 			; c - preshifted sprite idx*2 offset
-			call GetSpriteAddr
+			call SpriteGetAddr
 ; TODO: optimize. set RAM_DISK_S0 | RAM_DISK_M2 | RAM_DISK_M_8F just once for all monsters draw funcs
 			CALL_RAM_DISK_FUNC(__DrawSpriteVM, RAM_DISK_S0 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			pop h

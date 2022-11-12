@@ -136,23 +136,20 @@ RoomTileDataCopy:
 			.closelabels
 
 ; a tile data handler to spawn a monster by its id.
-; then it stores a zero into the roomTilesData
 ; input:
 ; c - tile idx in the roomTilesData array.
 ; a - monster id
-; return:
-; a = 0 to make the tile empty
 RoomMonsterSpawn:
 			; get a monster init func addr ptr
-			lxi h, monstersInits+1
+			lxi h, monstersInits
 			rlc
 			mov e, a
 			mvi d, 0
 			dad d
 			; get a monster init func addr
-			mov d, m
-			dcx h
 			mov e, m
+			inx h
+			mov d, m
 			; call a monster init func
 			xchg
 			pchl

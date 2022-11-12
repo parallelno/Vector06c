@@ -3,7 +3,7 @@
 .include "monstersRuntimeData.asm"
 
 MonstersEraseRuntimeData:
-			mvi a, >MONSTER_RUNTIME_DATA_LAST
+			mvi a, MONSTER_RUNTIME_DATA_LAST
 			sta monsterUpdatePtr+1
 			ret
 			.closelabels
@@ -21,24 +21,24 @@ MonstersGetEmptyDataPtr:
 			lxi h, monsterUpdatePtr+1
 @loop:
 			mov a, m
-			cpi >MONSTER_RUNTIME_DATA_EMPTY
+			cpi MONSTER_RUNTIME_DATA_EMPTY
 			; return if it is an empty data
 			rz
 			jc @nextData
-			cpi >MONSTER_RUNTIME_DATA_LAST
+			cpi MONSTER_RUNTIME_DATA_LAST
 			jnz @monstersTooMany
 			; it is the end of the last monster data
 			xchg
 			lxi h, MONSTER_RUNTIME_DATA_LEN
 			dad d
-			mvi a, >MONSTER_RUNTIME_DATA_END
+			mvi a, MONSTER_RUNTIME_DATA_END
 			cmp m
 			xchg
 			; if the next after the last data is end, then just return
 			rz
 			; if not the end, then set it as the last
 			xchg
-			mvi m, >MONSTER_RUNTIME_DATA_LAST
+			mvi m, MONSTER_RUNTIME_DATA_LAST
 			xchg
 			; TODO: optimize. store hl into lastRemovedMonsterRuntimeDataPtr
 			ret
@@ -58,7 +58,7 @@ MonstersGetEmptyDataPtr:
 ; hl - monsterUpdate+1 ptr
 ; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
 MonstersDestroy:
-			mvi m, >MONSTER_RUNTIME_DATA_DESTROY
+			mvi m, MONSTER_RUNTIME_DATA_DESTROY
 			ret
 			.closelabels
 
@@ -67,7 +67,7 @@ MonstersDestroy:
 ; hl - monsterUpdate+1 ptr
 ; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
 MonstersEmpty:
-			mvi m, >MONSTER_RUNTIME_DATA_EMPTY
+			mvi m, MONSTER_RUNTIME_DATA_EMPTY
 			ret
 			.closelabels
 
@@ -83,7 +83,7 @@ MonstersDataFuncCaller:
 			lxi h, monsterUpdatePtr+1
 @loop:
 			mov a, m
-			cpi >MONSTER_RUNTIME_DATA_DESTROY
+			cpi MONSTER_RUNTIME_DATA_DESTROY
 			jc @callFunc
 			jz @nextData
 			; it is the last or the end, so return
@@ -123,7 +123,7 @@ MonstersCommonFuncCaller:
 			lxi h, monsterUpdatePtr+1
 @loop:
 			mov a, m
-			cpi >MONSTER_RUNTIME_DATA_EMPTY
+			cpi MONSTER_RUNTIME_DATA_EMPTY
 			jc @callFunc
 			jz @nextData
 			; it is the last or the end, so return
@@ -162,7 +162,7 @@ MonstersErase:
 ; a - MONSTER_RUNTIME_DATA_* status
 MonsterErase:
 			; if a monster is destroyed mark a its data as empty
-			cpi >MONSTER_RUNTIME_DATA_DESTROY
+			cpi MONSTER_RUNTIME_DATA_DESTROY
 			jz MonstersEmpty
 
 			; advance to monsterEraseScrAddr

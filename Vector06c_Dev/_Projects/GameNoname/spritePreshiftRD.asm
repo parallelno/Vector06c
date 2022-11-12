@@ -1,7 +1,4 @@
-SPRITE_SCR_BUFFS = 3
-SPRITE_W16 = 2
-SPRITE_W24 = 3
-SPRITE_HEIGHT_MAX = 24
+
 
 SPRITE_FORWARD_ORDER = true
 SPRITE_BACKWARD_ORDER = false
@@ -147,9 +144,9 @@ SpriteToBuff:
 			; check a width
 			mov a, m
 			inx h
-			cpi 1
+			cpi SPRITE_W16_PACKED
 			jz @width16
-			cpi 0
+			cpi SPRITE_W8_PACKED
 			jz @width8
 			ret
 
@@ -249,11 +246,11 @@ SpriteFromBuff:
 			; check a width
 			mov a, m
 			inx h
-			cpi 2
+			cpi SPRITE_W24_PACKED
 			jz @width24
-			cpi 1
+			cpi SPRITE_W16_PACKED
 			jz @width16
-			cpi 0
+			cpi SPRITE_W8_PACKED
 			jz @width8
 			ret
 
@@ -561,6 +558,6 @@ SpriteBuffPreshift:
 .endmacro
 
 spriteTmpBuff:
-			.storage SPRITE_W16 * MASK_BYTE_COLOR_BYTE_LEN * SPRITE_SCR_BUFFS * SPRITE_HEIGHT_MAX
+			.storage SPRITE_W16 * MASK_BYTE_COLOR_BYTE_LEN * SPRITE_SCR_BUFFS * SPRITE_PRESHIFT_H_MAX
 
 __spriteduppreshiftEnd:

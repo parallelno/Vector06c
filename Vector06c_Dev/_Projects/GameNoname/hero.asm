@@ -1,30 +1,36 @@
-; hero statuses
+; the first screen buffer X
+HERO_RUN_SPEED		= $0100 ; low byte is a subpixel speed, high byte is a speed in pixels
+HERO_RUN_SPEED_D	= $00b5 ; for diagonal moves
+
+; hero statuses.
+; a status describes what set of animations and behavior is active
+; for ex. HERO_STATUS_ATTACK plays hero_attk_r or hero_attk_l depending on the direction and it spawns a weapon trail
 HERO_STATUS_IDLE	= 0
 HERO_STATUS_ATTACK	= 1
 
-; the first screen buffer X
-HERO_RUN_SPEED		= $0100 ; it's a dword, low byte is a subpixel speed
-HERO_RUN_SPEED_D	= $00b5 ; for diagonal moves
+; duration of statuses
+HERO_STATUS_ATTACK_DURATION	= 10
 
-HERO_ANIM_TIMER_DELTA_MOVE		= 90
-HERO_ANIM_TIMER_DELTA_IDLE		= 4
-HERO_ANIM_TIMER_DELTA_ATTACK	= 40
+; animation speed
+HERO_ANIM_SPEED_MOVE	= 90
+HERO_ANIM_SPEED_IDLE	= 4
+HERO_ANIM_SPEED_ATTACK	= 40
 
-HERO_ATTACK_DURATION			= 10 ; duration = updates duration * HERO_ATTACK_DURATION
 
 ; this's a struct. do not change the layout
 heroData:
-heroStatus:			.byte HERO_STATUS_IDLE
-heroStatusTimer:	.byte 0
-heroAnimTimer:		.byte TEMP_BYTE ; used to trigger to change an anim frame
-heroAnimAddr:		.word TEMP_ADDR
+heroHealth:			.byte TEMP_BYTE
+heroStatus:			.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
+heroStatusTimer:	.byte 0	; a duration of the status. ticks every update
+heroAnimTimer:		.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
+heroAnimAddr:		.word TEMP_ADDR ; holds the current frame ptr
 heroDirX:			.byte 1 		; 1-right, 0-left
 heroEraseScrAddr:	.word TEMP_ADDR
 heroEraseScrAddrOld	.word TEMP_ADDR
 heroEraseWH:		.word TEMP_WORD
 heroEraseWHOld:		.word TEMP_WORD
-heroX:				.word TEMP_WORD
-heroY:				.word TEMP_WORD
+heroPosX:			.word TEMP_WORD
+heroPosY:			.word TEMP_WORD
 heroSpeedX:			.word TEMP_WORD
 heroSpeedY:			.word TEMP_WORD
 
@@ -32,26 +38,18 @@ heroSpeedY:			.word TEMP_WORD
 heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, 0, 0
 
 HeroInit:
-			call HeroStop
-			lxi h, heroX+1
+			call HeroIdleStart
+			lxi h, KEY_NO << 8 | KEY_NO
+			shld keyCode
+
+			lxi h, heroPosX+1
 			call GetSpriteScrAddr8
 			xchg
-			shld heroEraseScrAddr
 			shld heroEraseScrAddrOld
 			; 16x15 size
-			lxi h, 1<<8 | 15
-			shld heroEraseWH
+			lxi h, SPRITE_COPY_TO_SCR_W_PACKED_MIN<<8 | SPRITE_COPY_TO_SCR_H_MIN
 			shld heroEraseWHOld
 			ret
-			.closelabels
-HeroStop:
-			lxi h, 0
-			shld heroSpeedX
-			shld heroSpeedY
-            lxi h, KEY_NO << 8 | KEY_NO
-			shld keyCode
-			ret
-			.closelabels
 
 ; input:
 ; b - posX
@@ -60,9 +58,9 @@ HeroStop:
 ; a
 HeroSetPos:
 			mov a, b
-			sta heroX+1
+			sta heroPosX+1
 			mov a, c
-			sta heroY+1
+			sta heroPosY+1
 			ret
 			.closelabels
 
@@ -107,7 +105,7 @@ HeroUpdate:
 			jnz @moveKeysPressed
 
 			; update a move anim
-			HERO_UPDATE_ANIM(HERO_ANIM_TIMER_DELTA_MOVE)
+			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_MOVE)
 			jmp HeroMove
 
 @moveKeysPressed:
@@ -242,13 +240,13 @@ HeroUpdate:
 
 HeroMove:
 			; apply the hero speed
-			lhld heroX
+			lhld heroPosX
 			xchg
 			lhld heroSpeedX
 			dad d
 			mov b, h
 			shld charTempX ; 12a
-			lhld heroY
+			lhld heroPosY
 			xchg
 			lhld heroSpeedY
 			dad d
@@ -264,9 +262,9 @@ HeroMove:
 			jnz @collides
 @updatePos:
 			lhld charTempX
-			shld heroX
+			shld heroPosX
 			lhld charTempY
-			shld heroY
+			shld heroPosY
 			ret
 ; TODO: handle the case where the hero touches the wall tiles.
 ; for example, slide a hero along the walls if he moves along the diagonal directions
@@ -297,13 +295,13 @@ HeroMoveTeleport:
 			; update a room id to teleport there
 			sta roomIdx
 			; is the teleport of the left or right side?
-			lda heroX+1
+			lda heroPosX+1
 			cpi (ROOM_WIDTH - 2 ) * TILE_WIDTH
 			jnc @teleportLeftRight
 			cpi TILE_WIDTH + 2
 			jc @teleportLeftRight
 			; is the teleport of the top or bottom side?
-			lda heroY+1
+			lda heroPosY+1
 			cpi (ROOM_HEIGHT - 3 ) * TILE_WIDTH
 			jnc @teleportTopBottom
 			cpi TILE_HEIGHT * 2 + 2
@@ -312,18 +310,18 @@ HeroMoveTeleport:
 
 @teleportLeftRight:
 			; if the hero is on the right, move him to the left and vice versa
-			lda heroX+1
+			lda heroPosX+1
 			cma
 			sui 15
-			sta heroX+1
+			sta heroPosX+1
 			jmp @donotMoveHero
 
 			; if the hero is on the top, move him down and vice versa
 @teleportTopBottom:
-			lda heroY+1
+			lda heroPosY+1
 			cma
 			sui 30
-			sta heroY+1
+			sta heroPosY+1
 			jmp @donotMoveHero
 
 @donotMoveHero:
@@ -338,12 +336,14 @@ HeroMoveTeleport:
 
 
 HeroAttackStart:
+			; set status
 			mvi a, HERO_STATUS_ATTACK
 			sta heroStatus
-			mvi a, HERO_ATTACK_DURATION
+			mvi a, HERO_STATUS_ATTACK_DURATION
 			sta heroStatusTimer
-			; spawn the trail anim sprite
-			; hit the enemies in the trail area
+			; reset anim timer
+			xra a
+			sta heroAnimTimer			
 
 			; speed = 0
 			lxi h, 0
@@ -357,30 +357,32 @@ HeroAttackStart:
 			lxi h, hero_attk_r
 			shld heroAnimAddr
 
-			; spawn a sword trail atack
-			call HeroSwordTrailInit
-			ret
+			; spawn a sword trail attack
+			jmp  HeroSwordTrailInit
 @setAnimAttkL:
 			lxi h, hero_attk_l
 			shld heroAnimAddr
-			ret
+
+			; TODO: spawn a left trail instead of a right
+			; spawn a sword trail attack
+			jmp HeroSwordTrailInit
 			.closelabels
 
 HeroAttackUpdate:
-			HERO_UPDATE_ANIM(HERO_ANIM_TIMER_DELTA_ATTACK)
+			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_ATTACK)
 			lxi h, heroStatusTimer
 			dcr m
 			rnz
 
-			; if the timer == 0, set status to Idle
+			; if the timer == 0, set the status to Idle
 			jmp HeroIdleStart
 			.closelabels
 
 HeroIdleStart:
-			; idle is started
-			xra a
+			; set status
+			mvi a, HERO_STATUS_IDLE
 			sta heroStatus
-			; reset idle anim timer
+			; reset anim timer
 			xra a
 			sta heroAnimTimer
 
@@ -407,7 +409,7 @@ HeroIdleUpdate:
 			cmp l
 			jnz HeroIdleStart
 
-			HERO_UPDATE_ANIM(HERO_ANIM_TIMER_DELTA_IDLE)
+			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_IDLE)
 			ret
 
 HeroErase:
@@ -420,11 +422,11 @@ HeroErase:
 			.closelabels
 
 HeroDraw:
-			lxi h, heroX+1
+			lxi h, heroPosX+1
 			call GetSpriteScrAddr8
 
 			lhld heroAnimAddr
-			call GetSpriteAddr
+			call SpriteGetAddr
 
 			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
 			CALL_RAM_DISK_FUNC(__DrawSpriteV, RAM_DISK_S0 | RAM_DISK_M2 | RAM_DISK_M_8F)
@@ -487,8 +489,8 @@ HeroCopyToScr:
 			; calc bc (width, height)
 			mov a, h
 			sub d
-			mov b, a 
+			mov b, a
 			mov a, l
 			sub e
-			mov c, a 
+			mov c, a
 			jmp CopySpriteToScrV
