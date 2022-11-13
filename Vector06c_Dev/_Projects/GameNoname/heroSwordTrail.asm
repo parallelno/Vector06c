@@ -1,4 +1,15 @@
-HERO_ATTACK01_LIFETIME = 50
+; statuses.
+; a status describes what set of animations and behavior is active
+; for ex. HERO_STATUS_ATTACK plays hero_attk_r or hero_attk_l depending on the direction and it spawns a weapon trail
+ATTK01_STATUS_ATTACK = 0
+
+; duration of statuses
+ATTK01_STATUS_INVIS_DURATION	= 4
+ATTK01_STATUS_ATTACK_DURATION	= 6
+
+; animation speed
+ATTK01_ANIM_SPEED_ATTACK	= 40
+
 ; in:
 ; c - monster idx
 ; out:
@@ -15,21 +26,19 @@ HeroSwordTrailInit:
 			mvi m, <HeroSwordTrailDraw
 			inx h 
 			mvi m, >HeroSwordTrailDraw
-			; advance to monsterAnimTimer
-			LXI_D_TO_DIFF(monsterAnimTimer, monsterDrawPtr+1)
+
+			; advance and set monsterStatus
+			LXI_D_TO_DIFF(monsterStatus, monsterDrawPtr+1)
 			dad d
-			mvi m, HERO_ATTACK01_LIFETIME
-			; advance to monsterAnimPtr
+			mvi m, <$ff ; MONSTER_STATUS_INVIS
+			; advance and set monsterStatusTimer
 			inx h
-			; set the anim
-			mvi m, < hero_attack01_attk_r
-			inx h
-			mvi m, > hero_attack01_attk_r
+			mvi m, ATTK01_STATUS_INVIS_DURATION
 
 			; tmp b = 0
 			mvi b, 0
 			; advance hl to monsterPosY+1
-			LXI_D_TO_DIFF(monsterPosY+1, monsterAnimPtr+1)
+			LXI_D_TO_DIFF(monsterPosY+1, monsterStatusTimer)
 			dad d
 			; set posY
 			lda heroPosY+1
@@ -80,16 +89,30 @@ HeroSwordTrailInit:
 ; in:
 ; de - ptr to monsterUpdatePtr in the runtime data
 HeroSwordTrailUpdate:
-			; advance to monsterAnimTimer
-			LXI_H_TO_DIFF(monsterAnimTimer, monsterUpdatePtr)
+			; advance to monsterStatus
+			LXI_H_TO_DIFF(monsterStatus, monsterUpdatePtr)
 			dad d
-			dcr m
-			jz @destroy
+			mov a, m
+			cpi $ff ; MONSTER_STATUS_INVIS
+			jz @delayUpdate
 
-			; anim update
-			lda gameUpdateCounter	; update anim every 4th update
-			ani %11
-			jnz @skipAnimUpdate
+@attkUpdate:
+			; hl - ptr to monsterStatus
+			; advance and decr monsterStatusTimer
+			inx h
+			; check if it's time to die
+			dcr m
+			jz @destroy			
+
+@attkAnimUpdate:
+			; advance to monsterAnimTimer
+			inx h
+			; update it
+			mov a, m
+			adi ATTK01_ANIM_SPEED_ATTACK
+			mov m, a
+			jnc @skipAnimUpdate
+
 			; advance to monsterAnimPtr
 			inx h			
 			; read the ptr to a current frame
@@ -102,7 +125,7 @@ HeroSwordTrailUpdate:
 			mov c, m
 			inx h
 			mov b, m
-			; advance hl to the current frame ptr to the next frame
+			; advance the current frame ptr to the next frame
 			dad b
 			xchg
 			; de - the next frame ptr
@@ -111,18 +134,60 @@ HeroSwordTrailUpdate:
 			dcx h
 			mov m, e
 @skipAnimUpdate:
-			; update movement
+			; update movement if needed
 			ret
 @destroy:
-			LXI_D_TO_DIFF(monsterUpdatePtr+1, monsterAnimTimer)
+			LXI_D_TO_DIFF(monsterUpdatePtr+1, monsterStatusTimer)
 			dad d
 			jmp MonstersDestroy
+
+@delayUpdate:
+			; hl - ptr to monsterStatus
+			; advance and decr monsterStatusTimer
+			inx h
+			dcr m
+			rnz
+			
+			; set the attack
+			mvi m, ATTK01_STATUS_ATTACK_DURATION
+			; advance and set monsterStatus
+			dcx h
+			mvi m, ATTK01_STATUS_ATTACK
+			
+			; commented out because it is set in the Init
+			; advance and reset monsterAnimTimer			
+			inx_h(2)
+			mvi m, 0
+			; advance and set monsterAnimPtr
+			inx h
+			lda heroDirX
+			ora a
+			jz @attkL
+@attkR:
+			mvi m, < hero_attack01_attk_r
+			inx h
+			mvi m, > hero_attack01_attk_r
+			jmp @next
+@attkL:			
+			mvi m, < hero_attack01_attk_l
+			inx h
+			mvi m, > hero_attack01_attk_l
+@next:
+			ret
 
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to monsterDrawPtr in the runtime data
 HeroSwordTrailDraw:
-			LXI_H_TO_DIFF(monsterPosX+1, monsterDrawPtr)
+			; advance to monsterStatus
+			LXI_H_TO_DIFF(monsterStatus, monsterDrawPtr)
+			dad d
+			mov a, m
+			; if it is invisible, return
+			cpi $ff ; MONSTER_STATUS_INVIS
+			rz
+
+			LXI_D_TO_DIFF(monsterPosX+1, monsterStatus)
 			dad d
 			call GetSpriteScrAddr8
 			; hl - ptr to monsterPosY+1

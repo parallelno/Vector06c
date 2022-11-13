@@ -20,25 +20,26 @@
 	],
 	"preshifted_sprites" : 8,
 	"anims" : {
-		"attk_r"	: ["sword_r0", "sword_r1"],
+		"delay"		: ["sword_delay"],
+		"attk_r"	: ["sword_r0"],
 		"attk_l"	: ["sword_l0"]
 	},
 	"sprites" : [
 		{
-			"name" : "sword_r0",
-			"x" : 8,
-			"y"	: 32,
+			"name" : "sword_delay",
+			"x" : 16,
+			"y"	: 0,
 			"width" : 8,
 			"height" : 5,
-			"offsetX": 8,
-			"offsetY": 10,
-			"mask_x" : 8,
-			"mask_y" : 48,
+			"offsetX": 0,
+			"offsetY": 0,
+			"mask_x" : 0,
+			"mask_y" : 0,
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		},
+		},		
 		{
-			"name" : "sword_r1",
+			"name" : "sword_r0",
 			"x" : 8,
 			"y"	: 32,
 			"width" : 16,

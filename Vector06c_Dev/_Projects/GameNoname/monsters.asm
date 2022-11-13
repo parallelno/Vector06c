@@ -58,7 +58,7 @@ MonstersGetEmptyDataPtr:
 ; hl - monsterUpdate+1 ptr
 ; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
 MonstersDestroy:
-			mvi m, MONSTER_RUNTIME_DATA_DESTROY
+			mvi m, MONSTER_RUNTIME_DATA_DESTR
 			ret
 			.closelabels
 
@@ -74,7 +74,7 @@ MonstersEmpty:
 ; call all active monsters' Update/Draw func
 ; a func will get DE pointing to a func ptr (ex.:monsterUpdatePtr or monsterDrawPtr) in the runtime data
 ; in:
-; hl - offset to a func ptr relative to monsterUpdatePtr in the runtime data
+; hl - an offset to a func ptr relative to monsterUpdatePtr in the runtime data
 ; 		ex.: the offset to monsterUpdatePtr is zero
 ; use:
 ; de, a
@@ -83,7 +83,7 @@ MonstersDataFuncCaller:
 			lxi h, monsterUpdatePtr+1
 @loop:
 			mov a, m
-			cpi MONSTER_RUNTIME_DATA_DESTROY
+			cpi MONSTER_RUNTIME_DATA_DESTR
 			jc @callFunc
 			jz @nextData
 			; it is the last or the end, so return
@@ -162,11 +162,19 @@ MonstersErase:
 ; a - MONSTER_RUNTIME_DATA_* status
 MonsterErase:
 			; if a monster is destroyed mark a its data as empty
-			cpi MONSTER_RUNTIME_DATA_DESTROY
+			cpi MONSTER_RUNTIME_DATA_DESTR
 			jz MonstersEmpty
 
+			; advance to monsterStatus
+			LXI_D_TO_DIFF(monsterStatus, monsterUpdatePtr+1)
+			dad d
+			; if it is invisible, return
+			mov a, m
+			cpi MONSTER_STATUS_INVIS
+			rz
+
 			; advance to monsterEraseScrAddr
-			LXI_D_TO_DIFF(monsterEraseScrAddr, monsterUpdatePtr+1)
+			LXI_D_TO_DIFF(monsterEraseScrAddr, monsterStatus)
 			dad d
 			mov e, m
 			inx h
@@ -186,8 +194,16 @@ MonsterErase:
 ; in:
 ; hl - ptr to monsterUpdatePtr+1 in the runtime data
 MonsterCopyToScr:
+			; advance to monsterStatus
+			LXI_D_TO_DIFF(monsterStatus, monsterUpdatePtr+1)
+			dad d
+			; if it is invisible, return
+			mov a, m
+			cpi MONSTER_STATUS_INVIS
+			rz
+
 			; advance to monsterEraseScrAddr
-			LXI_B_TO_DIFF(monsterEraseScrAddr, monsterUpdatePtr+1)			
+			LXI_B_TO_DIFF(monsterEraseScrAddr, monsterStatus)			
 			dad b
 			; read monsterEraseScrAddr
 			mov c, m

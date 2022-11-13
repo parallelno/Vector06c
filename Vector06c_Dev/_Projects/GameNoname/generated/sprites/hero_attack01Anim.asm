@@ -2,12 +2,13 @@
 hero_attack01_preshifted_sprites:
 			.byte 8
 hero_attack01_anims:
-			.word hero_attack01_attk_r, hero_attack01_attk_l, 0, 
+			.word hero_attack01_delay, hero_attack01_attk_r, hero_attack01_attk_l, 0, 
+hero_attack01_delay:
+			.byte 255, $ff ; offset to the first frame
+			.word hero_attack01_sword_delay_0, hero_attack01_sword_delay_1, hero_attack01_sword_delay_2, hero_attack01_sword_delay_3, hero_attack01_sword_delay_4, hero_attack01_sword_delay_5, hero_attack01_sword_delay_6, hero_attack01_sword_delay_7, 
 hero_attack01_attk_r:
-			.byte 17, 0 ; offset to the next frame
+			.byte 255, $ff ; offset to the first frame
 			.word hero_attack01_sword_r0_0, hero_attack01_sword_r0_1, hero_attack01_sword_r0_2, hero_attack01_sword_r0_3, hero_attack01_sword_r0_4, hero_attack01_sword_r0_5, hero_attack01_sword_r0_6, hero_attack01_sword_r0_7, 
-			.byte 237, $ff ; offset to the first frame
-			.word hero_attack01_sword_r1_0, hero_attack01_sword_r1_1, hero_attack01_sword_r1_2, hero_attack01_sword_r1_3, hero_attack01_sword_r1_4, hero_attack01_sword_r1_5, hero_attack01_sword_r1_6, hero_attack01_sword_r1_7, 
 hero_attack01_attk_l:
 			.byte 255, $ff ; offset to the first frame
 			.word hero_attack01_sword_l0_0, hero_attack01_sword_l0_1, hero_attack01_sword_l0_2, hero_attack01_sword_l0_3, hero_attack01_sword_l0_4, hero_attack01_sword_l0_5, hero_attack01_sword_l0_6, hero_attack01_sword_l0_7, 

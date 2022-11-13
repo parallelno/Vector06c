@@ -1,9 +1,15 @@
 ; max monsters in the room
 MONSTERS_MAX = 15
-MONSTER_RUNTIME_DATA_DESTROY = $fc ; a monster is ready to be destroyed
+
+MONSTER_RUNTIME_DATA_DESTR = $fc ; a monster is ready to be destroyed
 MONSTER_RUNTIME_DATA_EMPTY = $fd ; a monster data is available for a new monster
 MONSTER_RUNTIME_DATA_LAST = $fe ; the end of the last existing monster data
 MONSTER_RUNTIME_DATA_END = $ff ; the end of the data
+
+; statuses.
+; a status describes what set of animations and behavior is active
+; for ex. HERO_STATUS_ATTACK plays hero_attk_r or hero_attk_l depending on the direction and it spawns a weapon trail
+MONSTER_STATUS_INVIS = $ff
 
 ; a newly inited room uses this list to find an Init func
 ; of a monster that has to be spawn

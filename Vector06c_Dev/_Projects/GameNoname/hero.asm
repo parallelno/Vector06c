@@ -64,11 +64,11 @@ HeroSetPos:
 			ret
 			.closelabels
 
-.macro HERO_UPDATE_ANIM(animTimerDelta)
+.macro HERO_UPDATE_ANIM(animSpeed)
 			; anim idle update
 			lxi h, heroAnimTimer
 			mov a, m
-			adi animTimerDelta
+			adi animSpeed
 			mov m, a
 			jnc @skipAnimUpdate
 			lhld heroAnimAddr
