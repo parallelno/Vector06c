@@ -3,7 +3,6 @@
 ; input:
 ; bc - tile data addr
 ; de - screen addr (x,y)
-; a - ram-disk activation command
 ; use: a, hl, sp
 
 ; tile graphics format:

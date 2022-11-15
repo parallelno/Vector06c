@@ -20,7 +20,7 @@ SpriteGetAddr:
 ; c - preshifted sprite idx*2 offset based on posX then +2
 ; hl - ptr to posY+1
 ; use: a
-GetSpriteScrAddr8:
+SpriteGetScrAddr8:
 			; calc screen addr X
 			mov	a, m
 			ani SPRITES_PRESHIFTED_8 - 1
@@ -38,7 +38,7 @@ GetSpriteScrAddr8:
 			mov	d, a
 			ret
 			.closelabels
-GetSpriteScrAddr4:
+SpriteGetScrAddr4:
 			; calc screen addr X
 			mov	a, m
 			ani (SPRITES_PRESHIFTED_4 - 1) * 2
@@ -66,7 +66,7 @@ GetSpriteScrAddr4:
 ;		11 - 32pxs
 ; c - height
 
-CopySpriteToScrV:
+SpriteCopyToScrV:
 			; store sp
 			lxi h, 0
 			dad	sp
@@ -226,7 +226,7 @@ CopySpriteToScrV:
 ;		11 - 32pxs
 ; l - height
 
-CopySpriteToScrV2:
+SpriteCopyToBackBuffV:
 			; Y -= 1 because we start copying bytes with dec Y
 			inr e
 
@@ -333,7 +333,7 @@ CopySpriteToScrV2:
 			; d - width
 			mov d, a
 @nextColumn:
-			RAM_DISK_ON(RAM_DISK_S3 | RAM_DISK_M2 | RAM_DISK_M_8F)
+			RAM_DISK_ON(RAM_DISK_S3 | RAM_DISK_M3 | RAM_DISK_M_8F)
 			; read without a stack operations because
 			; we need fill up BC prior to use POP B
 			mov b, m

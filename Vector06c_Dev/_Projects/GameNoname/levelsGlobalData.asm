@@ -19,19 +19,23 @@ roomTilesAddr:
 ; ddddd	- argument
 ; fff == 0, d == 0, nothing, walkable
 ; fff == 1, a slowness+damage pool. ddddd = damage
-; fff == 2, d any, a key with d keyId
-; fff == 3, d any, a monster spawner, ddddd is a monsterId
+; fff == 2, a key. keyId = d
+; fff == 3, a monster spawner, monsterId = d
 ;		monsterId = 0 - skeleton (tiledata = 3)
-;		monsterId = 1 - vampire (tiledata = 7) 
-;		monsterId = 2 - flame (tiledata = 11)
-;		monsterId = 3 - knight (tiledata = 15)
+;		monsterId = 1 - vampire (tiledata = 11) 
+;		monsterId = 2 - flame (tiledata = 19)
+;		monsterId = 3 - knight (tiledata = 27)
 ;		monsterId = 4 - chest with money
 ;		monsterId = 5 - chest with monster
-; fff == 4, d any, go to 0-31 room with d roomId, %1100 (12) - go to the roomId=1 room, %100 (4)
-; fff == 5, d any, go to 32-63 room with d+32 roomId
-; fff == 6, d == 0, ???
+; fff == 4, teleport, roomId = d, go to 0-31 room , ex. tileData = %1100 (12) - teleport to the roomId=1, %100 (4) teleport to the roomId=0
+; fff == 5, teleport, roomId = d+32, go to 32-63 room
+; fff == 6, ???
 ; fff == 7, d == %11111, collision
+; fff == 7, d == 0, no collision, restore background (tiledata = 7)
 ; fff == 7, d != %11111, ???
+
+; tileData - collision
+TILE_DATA_COLLISION = %11111111
 
 ; this functions are used when the room initialized. check room.asm RoomInitTilesData func
 roomFuncTable:		

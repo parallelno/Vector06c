@@ -1,6 +1,18 @@
 SKELETON_HEALTH = 1
 SKELETON_RUN_SPEED		= $0080
 SKELETON_RUN_SPEED_D	= $ffff - $80 + 1
+
+SKELETON_WIDTH = 15
+SKELETON_HEIGHT = 15
+
+SKELETON_POS_X_MIN = TILE_WIDTH
+SKELETON_POS_X_MAX = (ROOM_WIDTH - 2 ) * TILE_WIDTH
+SKELETON_POS_Y_MIN = TILE_WIDTH
+SKELETON_POS_Y_MAX = (ROOM_HEIGHT - 2 ) * TILE_HEIGHT
+
+
+;========================================================
+; called to spawn this mod
 ; in:
 ; c - monster idx
 ; out:
@@ -158,16 +170,26 @@ SkeletonUpdate:
 			dad b
 			shld charTempY
 
-			mov b, a
-			mov c, h
-			; check the monster pos against the room collision tiles
-			call RoomCheckTileCollision
-			; check if any tiles collide
-
-			cpi $ff
+			; check the collision tiles
+			mov d, a
+			mov e, h
+			lxi b, SKELETON_WIDTH<<8 | SKELETON_HEIGHT
+			CALL_RAM_DISK_FUNC(RoomCheckTileCollision2, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
 			jz @collides
-			ora a ; if all the tiles data == 0, means no collision.
-			jnz @collides
+
+			; check the collision against the scr border
+			lda charTempX+1
+			cpi SKELETON_POS_X_MAX
+			jnc @collides
+			cpi SKELETON_POS_X_MIN
+			jc @collides
+
+			lda charTempY+1
+			cpi SKELETON_POS_Y_MAX
+			jnc @collides
+			cpi SKELETON_POS_Y_MIN
+			jc @collides			
+
 @updatePos:
             lhld charTempX
 @monsterPosXPtr:
@@ -263,7 +285,7 @@ SkeletonUpdate:
 SkeletonDraw:
 			LXI_H_TO_DIFF(monsterPosX+1, monsterDrawPtr)
 			dad d
-			call GetSpriteScrAddr4
+			call SpriteGetScrAddr4
 			; hl - ptr to monsterPosY+1
 			; tmpA <- c
 			mov a, c

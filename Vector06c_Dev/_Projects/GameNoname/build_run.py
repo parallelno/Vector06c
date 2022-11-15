@@ -1,18 +1,19 @@
 from tools.build import *
 
 forceExport = IsFileUpdated("build_run.py")
+forceExport |= IsFileUpdated("tools\\build.py")
 ######################################################################################
 print(f"export sprites:")
 
 animForceExport = forceExport | IsFileUpdated("tools\\animSpriteExport.py")
  
 animForceExport |= ExportAnimSprites("sprites\\hero", animForceExport)
-animForceExport |= ExportAnimSprites("sprites\\skeleton", animForceExport, True)
-animForceExport |= ExportAnimSprites("sprites\\burner", animForceExport, True)
-animForceExport |= ExportAnimSprites("sprites\\knight", animForceExport, True)
-animForceExport |= ExportAnimSprites("sprites\\vampire", animForceExport, True)
-animForceExport |= ExportAnimSprites("sprites\\scythe", animForceExport, True)
-animForceExport |= ExportAnimSprites("sprites\\hero_attack01", animForceExport, True)
+animForceExport |= ExportAnimSprites("sprites\\skeleton", animForceExport)
+animForceExport |= ExportAnimSprites("sprites\\burner", animForceExport)
+animForceExport |= ExportAnimSprites("sprites\\knight", animForceExport)
+animForceExport |= ExportAnimSprites("sprites\\vampire", animForceExport)
+animForceExport |= ExportAnimSprites("sprites\\scythe", animForceExport)
+animForceExport |= ExportAnimSprites("sprites\\hero_attack01", animForceExport)
 print("")
 
 ExportSegment("ramDiskBank0_addr0.asm" , animForceExport, SEGMENT_0000_7F00_ADDR)

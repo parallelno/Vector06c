@@ -1,3 +1,6 @@
+HERO_WIDTH = 15
+HERO_HEIGHT = 15
+
 ; the first screen buffer X
 HERO_RUN_SPEED		= $0100 ; low byte is a subpixel speed, high byte is a speed in pixels
 HERO_RUN_SPEED_D	= $00b5 ; for diagonal moves
@@ -43,7 +46,7 @@ HeroInit:
 			shld keyCode
 
 			lxi h, heroPosX+1
-			call GetSpriteScrAddr8
+			call SpriteGetScrAddr8
 			xchg
 			shld heroEraseScrAddrOld
 			; 16x15 size
@@ -245,13 +248,15 @@ HeroMove:
 			lhld heroSpeedX
 			dad d
 			mov b, h
-			shld charTempX ; 12a
+			shld charTempX
 			lhld heroPosY
 			xchg
 			lhld heroSpeedY
 			dad d
-			mov c, h
 			shld charTempY
+			
+/*			
+			mov c, h
 			; check hero pos against the room collision tiles
 			call RoomCheckTileCollision
 			; check if any tiles collide
@@ -260,6 +265,16 @@ HeroMove:
 			jz @tempCheck;rz ; return if any of the tiles were collision
 			ora a ; if all the tiles data == 0, means no collision.
 			jnz @collides
+*/
+
+			; check the collision tiles
+			mov d, b
+			mov e, h
+			lxi b, HERO_WIDTH<<8 | HERO_HEIGHT
+			CALL_RAM_DISK_FUNC(RoomCheckTileCollision2, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			jz @collides
+
+
 @updatePos:
 			lhld charTempX
 			shld heroPosX
@@ -277,7 +292,7 @@ ret
 			lxi h, roomTileCollisionData
 			mvi c, 4
 @loop:
-			TILE_DATA_HANDLE_FUNC_CALL(heroFuncTable)
+			;TILE_DATA_HANDLE_FUNC_CALL(heroFuncTable)
 
 			inx h
 			dcr c
@@ -412,24 +427,15 @@ HeroIdleUpdate:
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_IDLE)
 			ret
 
-HeroErase:
-			; TODO: optimize. erase only that is outside of the updated hero region
-			lhld heroEraseScrAddr
-			xchg
-			lhld heroEraseWH
-			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
-			ret
-			.closelabels
-
 HeroDraw:
 			lxi h, heroPosX+1
-			call GetSpriteScrAddr8
+			call SpriteGetScrAddr4
 
 			lhld heroAnimAddr
 			call SpriteGetAddr
 
 			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
-			CALL_RAM_DISK_FUNC(__DrawSpriteV, RAM_DISK_S0 | RAM_DISK_M2 | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(__DrawSpriteVM, RAM_DISK_S0 | RAM_DISK_M2 | RAM_DISK_M_8F)
 
 			; store an old scr addr, width, and height
 			lxi h, heroEraseScrAddr
@@ -493,4 +499,25 @@ HeroCopyToScr:
 			mov a, l
 			sub e
 			mov c, a
-			jmp CopySpriteToScrV
+			jmp SpriteCopyToScrV
+
+HeroErase:
+			; TODO: optimize. erase only that is outside of the updated hero region
+			lhld heroEraseScrAddr
+			xchg
+			lhld heroEraseWH
+
+			; check if it needs to restore the background
+			push h
+			push d
+			mvi a, -$20
+			add d
+			mov d, a
+			CALL_RAM_DISK_FUNC(RoomTileDataBuffCheck, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			pop d
+			pop h
+			jnz SpriteCopyToBackBuffV
+
+			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
+			ret
+			.closelabels	

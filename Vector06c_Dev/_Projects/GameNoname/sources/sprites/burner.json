@@ -1,5 +1,4 @@
 {
-	"png" : "sources\\sprites\\art\\sprites_burner.png",
 	"palette" :	[
 		{"x": 0,	"y" : 0},
 		{"x": 16,	"y" : 0},
@@ -18,7 +17,9 @@
 		{"x": 224,	"y" : 0},
 		{"x": 240,	"y" : 0}
 	],
+	"png" : "sources\\sprites\\art\\sprites_burner.png",	
 	"preshifted_sprites" : 4,
+	"mask" : true,	
 	"anims" : {
 		"idle_r"	: ["idle_r0"],
 		"idle_l"	: ["idle_l0"],

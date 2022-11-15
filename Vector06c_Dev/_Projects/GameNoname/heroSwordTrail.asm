@@ -189,7 +189,7 @@ HeroSwordTrailDraw:
 
 			LXI_D_TO_DIFF(monsterPosX+1, monsterStatus)
 			dad d
-			call GetSpriteScrAddr8
+			call SpriteGetScrAddr8
 			; hl - ptr to monsterPosY+1
 			; tmpA <- c
 			mov a, c

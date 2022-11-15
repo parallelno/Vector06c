@@ -68,7 +68,7 @@ ClearMemSP:
 			RAM_DISK_OFF()
 			ret
 			.closelabels
-/*
+
 ClearRamDisk:
 			lxi b, $0000
 			lxi d, $10000/32 - 1
@@ -97,7 +97,7 @@ ClearRamDisk:
 			CLEAR_MEM_SP(false)
 			ret
 			.closelabels			
-*/
+
 INIT_COLOR_IDX = 15
 ; Set palette
 ; input: hl - the addr of the last item in the palette
@@ -185,8 +185,7 @@ SetPaletteFromRamDisk:
 ; out:
 ; bc - data
 
-; TODO: optimize. make a special version of that func for accesing a data pair
-; stored in $8000 and higher with a direct access
+; TODO: optimize. make a special version of that func for accessing $8000 and higher with a direct access
 GetWordFromRamDisk:
 			; store sp
 			lxi h, $0000
@@ -202,31 +201,27 @@ GetWordFromRamDisk:
 
 ;========================================
 ; copy a buffer into the ram-disk.
-; turn off interruptions!!!
+; if interruptions are ON, it corrupts a pair of bytes at target addr-2 !!!
 ; input:
-; de - from addr + data length
-; hl - to addr in the ram_disk + data length (because it copies backward)
+; de - source addr + data length
+; hl - target addr + data length
 ; bc - buffer length / 2
 ; a - ram-disk activation command
 ; use:
 ; all
 CopyToRamDisk:
-			shld @restoreHl+1
+			shld @restoreTargetAddr+1
 			; store sp
 			lxi h, $0000
 			dad sp
 			shld @restoreSP+1
 			RAM_DISK_ON_BANK()
-@restoreHl:
+@restoreTargetAddr:
 			lxi h, TEMP_WORD
 			sphl
 			xchg
 @loop:
-			dcx h
-			mov d, m
-			dcx h
-			mov e, m
-			push d
+			COPY_TO_RAM_DISK(1)
 			dcx b
 			mov a, b
 			ora c
@@ -236,7 +231,49 @@ CopyToRamDisk:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
 			ret
-			.closelabels
+
+.macro COPY_TO_RAM_DISK(count)
+		.loop count
+			dcx h
+			mov d, m
+			dcx h
+			mov e, m
+			push d
+		.endloop
+.endmacro
+
+;========================================
+; copy a buffer into the ram-disk.
+; if interruptions are ON, it corrupts a pair of bytes at target addr-2 !!!
+; input:
+; de - source addr + data length
+; hl - target addr + data length
+; bc - buffer length / 32
+; a - ram-disk activation command
+; use:
+; all
+CopyToRamDisk32:
+			shld @restoreTargetAddr+1
+			; store sp
+			lxi h, $0000
+			dad sp
+			shld @restoreSP+1
+			RAM_DISK_ON_BANK()
+@restoreTargetAddr:
+			lxi h, TEMP_WORD
+			sphl
+			xchg
+@loop:
+			COPY_TO_RAM_DISK(16)
+			dcx b
+			mov a, b
+			ora c
+			jnz @loop
+
+@restoreSP:
+			lxi sp, TEMP_ADDR
+			RAM_DISK_OFF()
+			ret
 
 ; Copy data (max 512) from the ram-disk to ram w/o blocking interruptions
 ; input:
@@ -271,4 +308,3 @@ CopyFromRamDisk:
 			dcr e;a
 			jnz @loop
 			jmp RestoreSP
-			.closelabels

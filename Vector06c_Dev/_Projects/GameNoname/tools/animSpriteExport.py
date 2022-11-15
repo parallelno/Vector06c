@@ -189,18 +189,18 @@ def GetSpriteParams(labelPrefix, spriteName, dxL, dxR, spriteImg, mask_alpha, wi
 	widthNew = (shiftedDxR//8+1) * 8 - offsetXPreshiftedLocal
 	return offsetXPreshiftedLocal, widthNew
 
-def MakeEmptySpriteData(addMask, width, height):
+def MakeEmptySpriteData(hasMask, width, height):
 	srcBuffCount = 3
 	data = []
 	for dy in range(height):
 		for dx in range(width // 8 * srcBuffCount):		
-			if addMask:
+			if hasMask:
 				data.append(255)
 			data.append(0)
 
 	return [data]
 
-def SpritesToAsm(charJPath, charJ, image, addMask):
+def SpritesToAsm(charJPath, charJ, image, hasMask):
 	labelPrefix = charJPath.split("/")[-1].split("\\")[-1].split(".")[0]
 	spritesJ = charJ["sprites"]
 	asm = labelPrefix + "_sprites:"
@@ -244,7 +244,7 @@ def SpritesToAsm(charJPath, charJ, image, addMask):
 		mask_color = sprite["mask_color"]
 
 		maskBytes = None
-		if addMask:
+		if hasMask:
 			# get a sprite as a color index 2d array
 			x = sprite["mask_x"]
 			y = sprite["mask_y"]
@@ -263,7 +263,7 @@ def SpritesToAsm(charJPath, charJ, image, addMask):
 		# to support a sprite render function
 		data = SpriteData(bytes1, bytes2, bytes3, width, height, maskBytes)
 
-		if addMask:
+		if hasMask:
 			maskFlag = 1
 		else: 
 			maskFlag = 0
@@ -307,17 +307,18 @@ def SpritesToAsm(charJPath, charJ, image, addMask):
 			asm += "			.byte " + str( offsetY ) + ", " +  str( offsetXPreshiftedPacked ) + "; offsetY, offsetX\n"
 			asm += "			.byte " + str( height ) + ", " +  str( widthPreshiftedPacked ) + "; height, width\n"
 
-			emptyData = MakeEmptySpriteData(addMask, widthPreshifted, height)
+			emptyData = MakeEmptySpriteData(hasMask, widthPreshifted, height)
 			asm += BytesToAsmTiled(emptyData)
 
 	return asm
 
-def Export(addMask : bool, charJPath, asmAnimPath, asmSpritePath):
+def Export(charJPath, asmAnimPath, asmSpritePath):
 
 	with open(charJPath, "rb") as file:
 		charJ = json.load(file)
 
 	pngPath = str(charJ["png"])
+	hasMask = str(charJ["mask"])
 	image = Image.open(pngPath)
 
 	_, colors = common.PaletteToAsm(image, charJ, charJPath)
@@ -326,7 +327,7 @@ def Export(addMask : bool, charJPath, asmAnimPath, asmSpritePath):
 
 	asm = "; " + charJPath + "\n"
 	asmAnims = asm + AnimsToAsm(charJ, charJPath)
-	asmSprites = asm + SpritesToAsm(charJPath, charJ, image, addMask)
+	asmSprites = asm + SpritesToAsm(charJPath, charJ, image, hasMask)
 
 	# save asm
 	with open(asmAnimPath, "w") as file:

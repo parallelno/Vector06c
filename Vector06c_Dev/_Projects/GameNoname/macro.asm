@@ -152,37 +152,47 @@
 
 ; dismount the ram-disk
 ; has to be in the main program only and be placed after lxi sp, ADDR or sphl
-.macro RAM_DISK_OFF()
+.macro RAM_DISK_OFF(useXRA = true)
+		.if useXRA
 			xra a
+		.endif
+		.if useXRA == false
+			mvi a, 0
+		.endif
 			sta ramDiskMode			
 			out $10
 .endmacro
 ; dismount the ram-disk w/o storing mode
 ; should be used inside the interruption call or with disabled interruptions
-.macro RAM_DISK_OFF_NO_RESTORE()
+.macro RAM_DISK_OFF_NO_RESTORE(useXRA = true)
+		.if useXRA
 			xra a
+		.endif
+		.if useXRA == false
+			mvi a, 0
+		.endif
 			out $10
 .endmacro
 ;==================================================================================================
-.macro CALL_RAM_DISK_FUNC(funcAddr, _command, disableInt = false)
+.macro CALL_RAM_DISK_FUNC(funcAddr, _command, disableInt = false, useXRA = true)
 		.if disableInt
 			di
 		.endif
 			RAM_DISK_ON(_command)
 			call funcAddr
-			RAM_DISK_OFF()
+			RAM_DISK_OFF(useXRA)
 		.if disableInt
 			ei
 		.endif
 .endmacro
 
-.macro CALL_RAM_DISK_FUNC_NO_RESTORE(funcAddr, _command, disableInt = false)
+.macro CALL_RAM_DISK_FUNC_NO_RESTORE(funcAddr, _command, disableInt = false, useXRA = true)
 		.if disableInt
 			di
 		.endif
 			RAM_DISK_ON_NO_RESTORE(_command)
 			call funcAddr
-			RAM_DISK_OFF_NO_RESTORE()
+			RAM_DISK_OFF_NO_RESTORE(useXRA)
 		.if disableInt
 			ei
 		.endif

@@ -23,6 +23,8 @@ toBank2addr8000:
 ; ramDiskBank0_0000 - sprites
 ; ramDiskBank0_8000 - tiles
 ; ramDiskBank1_0000 - sprites
-; ramDiskBank1_8000 - $8000 music
+; ramDiskBank1_8000 - music
 ; ramDiskBank2_0000 - 
 ; ramDiskBank2_8000 - $8000 code, A000-FFFF back buffer
+; ramDiskBank3_0000 - 
+; ramDiskBank3_8000 - $8000 tiledata (for collision, copyToScr), A000-FFFF back buffer2 (to restore the background in the back buffer)

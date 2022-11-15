@@ -32,7 +32,6 @@ RoomInitTiles:
 
 			lxi b, roomTilesData ; the tile data buffer is used as a temp buffer
 			lxi h, RAM_DISK_S0<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
-
 			call CopyFromRamDisk
 
 			; convert tile idxs into tile gfx addrs
@@ -157,15 +156,88 @@ RoomMonsterSpawn:
 
 RoomDraw:
 			; main scr
-			CALL_RAM_DISK_FUNC(RoomDrawB, RAM_DISK_S0)
-			; back buffer2 (used for restore tiles in the back buffer)
-			CALL_RAM_DISK_FUNC(RoomDrawB, RAM_DISK_S0 | RAM_DISK_M3 | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(RoomDrawTiles, RAM_DISK_S0)
+
+			; copy $a000-$ffff scr buffs to the ram-disk
+			; TODO: optimization. think of making copy process while the gameplay started.
+			lxi d, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
+			lxi h, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
+			lxi b, SCR_BUFF_LEN * 3 / 32
+			mvi a, RAM_DISK_S2
+			call CopyToRamDisk32
+
+			; copy $a000-$ffff scr buffs to the back buffer2 (to restore the background in the back buffer)
+			lxi d, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
+			lxi h, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
+			lxi b, SCR_BUFF_LEN * 3 / 32
+			mvi a, RAM_DISK_S3
+			call CopyToRamDisk32
+
+			; convert roomTilesData into $8000 tiledata buffer in the ram-disk
+			;call RoomTileDataBuff
+			CALL_RAM_DISK_FUNC(RoomTileDataBuff, RAM_DISK_M3 | RAM_DISK_M_8F)
 			ret
+
+
 ;=========================================================
-; draw a room in the buffer. It might be a main screen, or a back buffer with 3 scr buffs ($A000-$FFFF) available.
-; in:
-; a - ram-disk activation command where stored tile gfx
-RoomDrawB:
+; convert roomTilesData into the tiledata buffer in the ram-disk (bank 3 at $8000)
+; call ex. CALL_RAM_DISK_FUNC(RoomTileDataBuff, RAM_DISK_M3 | RAM_DISK_M_8F)
+RoomTileDataBuff:
+			; set y = 0
+			mvi e, 0
+			lxi h, roomTilesData
+@newLine
+			; reset the x. it's a high byte of the first screen buffer addr
+			mvi d, $80
+@loop:
+			; DE - screen addr
+			; HL - tile graphics addr
+			mov a, m
+			inx h
+			ROOM_DRAW_TILE_DATA()	
+
+			; x = x + 1
+			inr d
+			; repeat if x reaches the high byte of the second screen buffer addr
+			mvi a, $a0
+			cmp d
+			jnz @loop
+
+			; move posY up to the next tile line
+			mvi a, TILE_HEIGHT
+			add e
+			mov e, a
+			cpi ROOM_HEIGHT * TILE_HEIGHT
+			jc @newLine
+			ret
+
+;----------------------------------------------------------------
+; draw a tile filled up with a tile data (16x16 pixels)
+; input:
+; c - tile data
+; de - screen addr (x,y)
+; out:
+; d = d + 1
+.macro ROOM_DRAW_TILE_DATA()
+		.loop 15
+			stax d
+			inr e
+		.endloop
+			stax d
+
+			inr d
+		.loop 15
+			stax d
+			dcr e
+		.endloop
+			stax d
+.endmacro
+
+;=========================================================
+; draw a room tiles. It might be a main screen, or a back buffer
+; call ex. CALL_RAM_DISK_FUNC(RoomDrawTiles, RAM_DISK_S0)
+; RAM_DISK_S0 - ram-disk activation command where stored tile gfx
+RoomDrawTiles:
 			; set y = 0
 			mvi e, 0
 			; set a pointer to the first item in the list of addrs of tile graphics
@@ -176,14 +248,12 @@ RoomDrawB:
 @loop:
 			; DE - screen addr
 			; HL - tile graphics addr
-			; A - counter
 			mov c, m
 			inx h
 			mov b, m
 			inx h
 			push d
 			push h
-			;mvi a, RAM_DISK_S0
 			call DrawTile16x16
 			pop h
 			pop d
@@ -202,15 +272,12 @@ RoomDrawB:
 			cpi ROOM_HEIGHT * TILE_HEIGHT
 			jc @newLine
 			ret
-			.closelabels
 
-; TODO: optimize. do not check if the hero still inside the same tiles
-; b - char posX
-; c - char posY
-; return: roomTileCollisionData. it's a list with collided tiles data
+; TODO: optimize. do not check if a actor is still inside the same tiles
+; b - an actor posX
+; c - an actor posY
+; return: roomTileCollisionData. it's a list of collided tiles data
 ;
-roomTileCollisionData:
-			.byte 0, 0, 0, 0,
 RoomCheckTileCollision:
 			; clear only the last 2 bytes, because the first one will be overwritten anyway
 			lxi h, 0
@@ -245,12 +312,12 @@ RoomCheckTileCollision:
 
 @check:
 			; get the index in the tile map table
-			; use the char posY
+			; use the posY
 			mov a, c
 			ani %11110000
 			mov c, a
 
-			; use the char posX
+			; use the posX
 			mov a, b
 			rrc_(4)
 			ana d
@@ -260,9 +327,9 @@ RoomCheckTileCollision:
 			mvi b, 0
 			lxi h, roomTilesData
 			dad b
-			; get data of a tile where a top-left pixel of a sprite drawn
+			; get the tile data where a top-left pixel of a sprite drawn
 			mov e, m
-			; get data of a tile where a top-right pixel of a sprite drawn
+			; get the tile data where a top-right pixel of a sprite drawn
 			inx h
 @checkRightUpTile:
 			mov d, m
@@ -272,12 +339,12 @@ RoomCheckTileCollision:
 			ora h
 @checkBottomTiles:
 			xchg
-			; get data of a tile where a bottom-left pixel of a sprite drawn
+			; get the tile data where a bottom-left pixel of a sprite drawn
 			mvi c, ROOM_WIDTH-1
 			dad b
 			mov e, m
 			ora e
-			; get data of a tile where a bottom-right pixel of a sprite drawn
+			; get the tile data where a bottom-right pixel of a sprite drawn
 			inx h
 @checkRightBottomTile:
 			mov d, m
@@ -285,4 +352,101 @@ RoomCheckTileCollision:
 			xchg
 			shld roomTileCollisionData+2
 			ret
-			.closelabels
+roomTileCollisionData:
+			.byte 0, 0, 0, 0,
+
+; read a byte from a tiledata buffer in the ram-disk (bank 3 at $8000)
+; call ex. CALL_RAM_DISK_FUNC(RoomTileDataBuffCheck, RAM_DISK_M3 | RAM_DISK_M_8F, false, false)
+; in:
+; de - scr addr
+; h - width
+;		00 - 8pxs,
+;		01 - 16pxs,
+;		10 - 24pxs,
+;		11 - 32pxs
+; l - height
+; out:
+; Z flag is ON if tile data == 0
+
+RoomTileDataBuffCheck:
+		xchg
+		xra a
+		; check the bottom-left corner
+		cmp m
+		rnz
+		; check the top-right corner
+		xchg
+		dad d
+		dcr l ; to be inside the AABB
+		cmp m
+		rnz	
+		; check the top-left corner
+		mov b, h
+		mov h, d
+		cmp m
+		rnz
+		; check the bottom-right corner
+		xchg
+		mov h, b
+		cmp m
+		rnz
+		; return Z=1 if all checked tile data is zero
+		ret
+
+; check collision in the tiledata buffer in the ram-disk (bank 3 at $8000)
+; call ex. CALL_RAM_DISK_FUNC(RoomCheckTileCollision2, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+; in:
+; d - posX
+; e - posY
+; b - width
+; c - height
+; out:
+; Z flag is ON if the tile data == TILE_DATA_COLLISION
+RoomCheckTileCollision2:
+		xchg
+		shld @restorePos+1
+		; calc the bottom left scr addr
+		mvi a, %11110000
+		ana h
+		rrc_(3)
+		adi $80
+		mov h, a
+
+		; check the bottom-left corner
+		mov a, m
+		cpi TILE_DATA_COLLISION
+		rz
+		; check the top-left corner
+		mov a, l
+		add c
+		dcr a ; to be inside the AABB
+		mov l, a
+		mov a, m
+		cpi TILE_DATA_COLLISION
+		rz
+
+@restorePos:
+		lxi h, TEMP_WORD
+		; calc the bottom right scr addr
+		mov a, h
+		add b
+		dcr a ; to be inside the AABB
+		ani %11110000
+		rrc_(3)
+		adi $80
+		mov h, a
+
+		; check the bottom right scr addr
+		mov a, m
+		cpi TILE_DATA_COLLISION
+		rz
+		; check the top-left corner
+		mov a, l
+		add c
+		dcr a ; to be inside the AABB		
+		mov l, a
+		mov a, m
+		cpi TILE_DATA_COLLISION
+		rz
+		; return Z=0 if no collision
+		ret

@@ -16,11 +16,10 @@ SEGMENT_8000_0000_SIZE_MAX = 2 ** 15
 def DelBuildDB():
 	common.RunCommand("del " + buildDBPath, "Build DB was deleted")
 
-def ExportAnimSprites(sourcePath, forceExport, mask = False, sourceFolder = "sources\\", generatedFolder = "generated\\"):
+def ExportAnimSprites(sourcePath, forceExport, sourceFolder = "sources\\", generatedFolder = "generated\\"):
 	ext = ".json"
 	if animSpriteExport.IsFileUpdated(sourceFolder + sourcePath + ext) or forceExport:
-		animSpriteExport.Export( 
-			mask, 
+		animSpriteExport.Export(  
 			sourceFolder + sourcePath + ext, 
 			generatedFolder + sourcePath + "Anim.asm", 
 			generatedFolder + sourcePath + "Sprites.asm")
@@ -174,15 +173,17 @@ def BinToAsm(path, outPath):
 			if data:
 				txt += "\n.byte "
 				for byteData in data:
-					txt += str(byteData) + ", "
+					txt += str(byteData) + ", " 
 			else: break
 		
 		with open(outPath, "w") as fw:
 			fw.write(txt)
 
 def CheckSegmentSize(path, segmentAddr):
-	assert segmentAddr == SEGMENT_0000_7F00_ADDR or segmentAddr == SEGMENT_8000_0000_ADDR, (
-		"ERROR: Segment start addr has to be " + hex(SEGMENT_0000_7F00_SIZE_MAX) + " or " + hex(SEGMENT_8000_0000_SIZE_MAX))
+	if segmentAddr != SEGMENT_0000_7F00_ADDR and segmentAddr != SEGMENT_8000_0000_ADDR :
+		print("ERROR: Segment start addr has to be " + hex(SEGMENT_0000_7F00_SIZE_MAX) + " or " + hex(SEGMENT_8000_0000_SIZE_MAX))
+		print("Stop export")
+		exit(1)
 
 	size = os.path.getsize(path)
 

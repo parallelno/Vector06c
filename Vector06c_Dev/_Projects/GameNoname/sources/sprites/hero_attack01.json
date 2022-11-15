@@ -1,5 +1,4 @@
 {
-	"png" : "sources\\sprites\\art\\sprites_hero_attack01.png",
 	"palette" :	[
 		{"x": 0,	"y" : 0},
 		{"x": 16,	"y" : 0},
@@ -18,7 +17,9 @@
 		{"x": 224,	"y" : 0},
 		{"x": 240,	"y" : 0}
 	],
+	"png" : "sources\\sprites\\art\\sprites_hero_attack01.png",
 	"preshifted_sprites" : 8,
+	"mask" : true,
 	"anims" : {
 		"delay"		: ["sword_delay"],
 		"attk_r"	: ["sword_r0"],

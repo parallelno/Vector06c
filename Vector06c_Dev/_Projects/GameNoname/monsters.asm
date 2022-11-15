@@ -156,40 +156,6 @@ MonstersErase:
 			lxi h, MonsterErase
 			jmp MonstersCommonFuncCaller
 
-; erase sprite
-; in:
-; hl - ptr to monsterUpdatePtr+1 in the runtime data
-; a - MONSTER_RUNTIME_DATA_* status
-MonsterErase:
-			; if a monster is destroyed mark a its data as empty
-			cpi MONSTER_RUNTIME_DATA_DESTR
-			jz MonstersEmpty
-
-			; advance to monsterStatus
-			LXI_D_TO_DIFF(monsterStatus, monsterUpdatePtr+1)
-			dad d
-			; if it is invisible, return
-			mov a, m
-			cpi MONSTER_STATUS_INVIS
-			rz
-
-			; advance to monsterEraseScrAddr
-			LXI_D_TO_DIFF(monsterEraseScrAddr, monsterStatus)
-			dad d
-			mov e, m
-			inx h
-			mov d, m
-			; de <- monsterEraseScrAddr
-			LXI_B_TO_DIFF(monsterEraseWH, monsterEraseScrAddr+1)
-			dad b
-			mov a, m
-			inx h
-			mov h, m			
-			mov l, a
-			; hl <- monsterEraseWH
-			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
-			ret
-
 ; copy sprites from a backbuffer to a scr
 ; in:
 ; hl - ptr to monsterUpdatePtr+1 in the runtime data
@@ -287,4 +253,53 @@ MonsterCopyToScr:
 			mov a, l
 			sub e
 			mov c, a 
-			jmp CopySpriteToScrV
+			jmp SpriteCopyToScrV
+
+
+; erase sprite
+; in:
+; hl - ptr to monsterUpdatePtr+1 in the runtime data
+; a - MONSTER_RUNTIME_DATA_* status
+MonsterErase:
+			; if a monster is destroyed mark a its data as empty
+			cpi MONSTER_RUNTIME_DATA_DESTR
+			jz MonstersEmpty
+
+			; advance to monsterStatus
+			LXI_D_TO_DIFF(monsterStatus, monsterUpdatePtr+1)
+			dad d
+			; if it is invisible, return
+			mov a, m
+			cpi MONSTER_STATUS_INVIS
+			rz
+
+			; advance to monsterEraseScrAddr
+			LXI_D_TO_DIFF(monsterEraseScrAddr, monsterStatus)
+			dad d
+			mov e, m
+			inx h
+			mov d, m
+
+			LXI_B_TO_DIFF(monsterEraseWH, monsterEraseScrAddr+1)
+			dad b
+			mov a, m
+			inx h
+			mov h, m			
+			mov l, a
+			; hl - monsterEraseWH
+			; de - monsterEraseScrAddr
+
+			; check if it needs to restore the background
+			push h
+			push d
+			mvi a, -$20
+			add d
+			mov d, a
+			CALL_RAM_DISK_FUNC(RoomTileDataBuffCheck, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			pop d
+			pop h
+			jnz SpriteCopyToBackBuffV
+
+			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
+			;call SpriteCopyToBackBuffV
+			ret

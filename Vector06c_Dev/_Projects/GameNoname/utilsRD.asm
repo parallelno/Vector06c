@@ -14,7 +14,7 @@ __ClearMemSP:
 			shld restoreSP_ramDisk__ + 1
 
 			mov h, b
-			mov l, c			
+			mov l, c		
 			sphl
 			lxi b, $0000
 			mvi a, $ff
@@ -24,4 +24,3 @@ __ClearMemSP:
 			cmp d
 			jnz @loop
 			jmp Ret_ramDisk__
-			.closelabels

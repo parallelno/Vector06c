@@ -1,5 +1,4 @@
 {
-	"png" : "sources\\sprites\\art\\sprites_hero.png",
 	"palette" :	[
 		{"x": 0,	"y" : 0},
 		{"x": 16,	"y" : 0},
@@ -18,7 +17,9 @@
 		{"x": 224,	"y" : 0},
 		{"x": 240,	"y" : 0}
 	],
-	"preshifted_sprites" : 8,
+	"png" : "sources\\sprites\\art\\sprites_hero.png",
+	"preshifted_sprites" : 4,
+	"mask" : true,
 	"anims" : {
 		"idle_r"	: ["idle_r0", "idle_r0", "idle_r0", "run_l0"],
 		"idle_l"	: ["idle_l0", "idle_l0", "idle_l0", "run_r0"],
@@ -34,7 +35,7 @@
 			"y"	: 32,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
+			"mask_x" : 16,
 			"mask_y" : 32,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -45,7 +46,7 @@
 			"y"	: 48,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
+			"mask_x" : 16,
 			"mask_y" : 48,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -56,7 +57,7 @@
 			"y"	: 64,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
+			"mask_x" : 16,
 			"mask_y" : 64,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -67,7 +68,7 @@
 			"y"	: 80,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
+			"mask_x" : 16,
 			"mask_y" : 80,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -78,7 +79,7 @@
 			"y"	: 96,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
+			"mask_x" : 16,
 			"mask_y" : 96,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -89,7 +90,7 @@
 			"y"	: 112,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
+			"mask_x" : 16,
 			"mask_y" : 112,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -100,7 +101,7 @@
 			"y"	: 128,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
+			"mask_x" : 16,
 			"mask_y" : 128,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -111,7 +112,7 @@
 			"y"	: 144,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
+			"mask_x" : 16,
 			"mask_y" : 144,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -122,7 +123,7 @@
 			"y"	: 160,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
+			"mask_x" : 16,
 			"mask_y" : 160,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -133,7 +134,7 @@
 			"y"	: 176,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
+			"mask_x" : 16,
 			"mask_y" : 176,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -144,8 +145,8 @@
 			"y"	: 192,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
-			"mask_y" : 176,
+			"mask_x" : 16,
+			"mask_y" : 192,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -155,8 +156,8 @@
 			"y"	: 208,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
-			"mask_y" : 176,
+			"mask_x" : 16,
+			"mask_y" : 208,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -166,8 +167,8 @@
 			"y"	: 224,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
-			"mask_y" : 176,
+			"mask_x" : 16,
+			"mask_y" : 224,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -177,8 +178,8 @@
 			"y"	: 240,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 88,
-			"mask_y" : 176,
+			"mask_x" : 16,
+			"mask_y" : 240,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		}
