@@ -355,8 +355,8 @@ RoomCheckTileCollision:
 roomTileCollisionData:
 			.byte 0, 0, 0, 0,
 
-; read a byte from a tiledata buffer in the ram-disk (bank 3 at $8000)
-; call ex. CALL_RAM_DISK_FUNC(RoomTileDataBuffCheck, RAM_DISK_M3 | RAM_DISK_M_8F, false, false)
+; check tiles if they need to be restored. It uses the tiledata buffer in the ram-disk (bank 3 at $8000)
+; call ex. CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, RAM_DISK_M3 | RAM_DISK_M_8F, false, false)
 ; in:
 ; de - scr addr
 ; h - width
@@ -366,9 +366,10 @@ roomTileCollisionData:
 ;		11 - 32pxs
 ; l - height
 ; out:
-; Z flag is ON if tile data == 0
-
-RoomTileDataBuffCheck:
+; Z flag is OFF if an area needs to be restored
+; change:
+; a, hl, de, b
+RoomCheckNonZeroTiles:
 		xchg
 		xra a
 		; check the bottom-left corner
@@ -390,7 +391,7 @@ RoomTileDataBuffCheck:
 		mov h, b
 		cmp m
 		rnz
-		; return Z=1 if all checked tile data is zero
+		; returns Z=1. this area do not need to be restored
 		ret
 
 ; check collision in the tiledata buffer in the ram-disk (bank 3 at $8000)
@@ -398,14 +399,26 @@ RoomTileDataBuffCheck:
 ; in:
 ; d - posX
 ; e - posY
-; b - width
-; c - height
+; b - width-1
+; c - height-1
 ; out:
-; Z flag is ON if the tile data == TILE_DATA_COLLISION
+; Z flag is ON if the all tile data == 0
+; c - OR operation with all tile data
+; roomTileCollisionData four bytes. from bottom-left to top-right
 RoomCheckTileCollision2:
-		xchg
-		shld @restorePos+1
+		; calc the top-right corner addr
+		mov a, d
+		add b
+		ani %11110000
+		rrc_(3)
+		adi $80
+		mov h, a
+		mov a, e
+		add c
+		mov l, a
+
 		; calc the bottom left scr addr
+		xchg
 		mvi a, %11110000
 		ana h
 		rrc_(3)
@@ -414,39 +427,22 @@ RoomCheckTileCollision2:
 
 		; check the bottom-left corner
 		mov a, m
-		cpi TILE_DATA_COLLISION
-		rz
-		; check the top-left corner
-		mov a, l
-		add c
-		dcr a ; to be inside the AABB
-		mov l, a
-		mov a, m
-		cpi TILE_DATA_COLLISION
-		rz
+		sta roomTileCollisionData
 
-@restorePos:
-		lxi h, TEMP_WORD
-		; calc the bottom right scr addr
-		mov a, h
-		add b
-		dcr a ; to be inside the AABB
-		ani %11110000
-		rrc_(3)
-		adi $80
-		mov h, a
+		; check the bottom-right corner
+		mov b, h ; tmp
+		mov h, d
+		ora m
+		sta roomTileCollisionData+1
 
-		; check the bottom right scr addr
-		mov a, m
-		cpi TILE_DATA_COLLISION
-		rz
+		; check the top right scr addr
+		mov l, e
+		ora m
+		sta roomTileCollisionData+3
+
 		; check the top-left corner
-		mov a, l
-		add c
-		dcr a ; to be inside the AABB		
-		mov l, a
-		mov a, m
-		cpi TILE_DATA_COLLISION
-		rz
-		; return Z=0 if no collision
+		mov h, b
+		ora m
+		sta roomTileCollisionData+2
+		mov c, a
 		ret

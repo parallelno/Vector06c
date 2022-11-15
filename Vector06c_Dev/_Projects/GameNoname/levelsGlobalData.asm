@@ -36,10 +36,11 @@ roomTilesAddr:
 
 ; tileData - collision
 TILE_DATA_COLLISION = %11111111
+TILE_DATA_FUNC_MASK = %111
 
 ; this functions are used when the room initialized. check room.asm RoomInitTilesData func
 roomFuncTable:		
-			.word RoomTileDataCopy, RoomTileDataCopy, RoomMonsterSpawn, RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy
+			.word RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy, RoomMonsterSpawn, RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy
 
 roomTilesData:
 			.storage ROOM_WIDTH * ROOM_HEIGHT

@@ -295,7 +295,7 @@ MonsterErase:
 			mvi a, -$20
 			add d
 			mov d, a
-			CALL_RAM_DISK_FUNC(RoomTileDataBuffCheck, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
 			pop d
 			pop h
 			jnz SpriteCopyToBackBuffV

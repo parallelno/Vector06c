@@ -1,5 +1,5 @@
 HERO_WIDTH = 15
-HERO_HEIGHT = 15
+HERO_HEIGHT = 11
 
 ; the first screen buffer X
 HERO_RUN_SPEED		= $0100 ; low byte is a subpixel speed, high byte is a speed in pixels
@@ -38,7 +38,7 @@ heroSpeedX:			.word TEMP_WORD
 heroSpeedY:			.word TEMP_WORD
 
 ; hero uses these funcs to handle the tile data. more info is in levelGlobalData.asm->roomTilesData
-heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, 0, 0
+heroFuncTable:		.word 0, 0, 0, 0, HeroMoveTeleport, 0, 0, 0
 
 HeroInit:
 			call HeroIdleStart
@@ -270,7 +270,7 @@ HeroMove:
 			; check the collision tiles
 			mov d, b
 			mov e, h
-			lxi b, HERO_WIDTH<<8 | HERO_HEIGHT
+			lxi b, (HERO_WIDTH-1)<<8 | HERO_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomCheckTileCollision2, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
 			jz @collides
 
@@ -513,7 +513,7 @@ HeroErase:
 			mvi a, -$20
 			add d
 			mov d, a
-			CALL_RAM_DISK_FUNC(RoomTileDataBuffCheck, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
 			pop d
 			pop h
 			jnz SpriteCopyToBackBuffV

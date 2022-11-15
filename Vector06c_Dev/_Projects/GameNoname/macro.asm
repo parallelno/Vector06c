@@ -232,9 +232,6 @@
 			push h	
 			; extract a function
 			ani %00000111
-			; if it's %000, that means it is an empty tile and we can skip it.
-			jz @funcReturnAddr
-			dcr a ; we do not need to handle funcId == 0
 			rlc
 			mov e, a
 			mvi d, 0

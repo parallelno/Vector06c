@@ -3,7 +3,7 @@ SKELETON_RUN_SPEED		= $0080
 SKELETON_RUN_SPEED_D	= $ffff - $80 + 1
 
 SKELETON_WIDTH = 15
-SKELETON_HEIGHT = 15
+SKELETON_HEIGHT = 10
 
 SKELETON_POS_X_MIN = TILE_WIDTH
 SKELETON_POS_X_MAX = (ROOM_WIDTH - 2 ) * TILE_WIDTH
@@ -173,23 +173,12 @@ SkeletonUpdate:
 			; check the collision tiles
 			mov d, a
 			mov e, h
-			lxi b, SKELETON_WIDTH<<8 | SKELETON_HEIGHT
+			lxi b, (SKELETON_WIDTH-1)<<8 | SKELETON_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomCheckTileCollision2, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
-			jz @collides
-
-			; check the collision against the scr border
-			lda charTempX+1
-			cpi SKELETON_POS_X_MAX
-			jnc @collides
-			cpi SKELETON_POS_X_MIN
-			jc @collides
-
-			lda charTempY+1
-			cpi SKELETON_POS_Y_MAX
-			jnc @collides
-			cpi SKELETON_POS_Y_MIN
-			jc @collides			
-
+			mvi a, TILE_DATA_FUNC_MASK
+			ana c
+			jnz @collides
+			
 @updatePos:
             lhld charTempX
 @monsterPosXPtr:
