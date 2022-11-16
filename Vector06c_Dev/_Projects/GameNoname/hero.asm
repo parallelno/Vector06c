@@ -384,8 +384,17 @@ HeroMoveVertically:
 ; a - roomId
 HeroMoveTeleport:
 			pop h
+
 			; update a room id to teleport there
 			sta roomIdx
+			; requesting room loading
+			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
+			sta levelCommand
+			; bypassing the HeroCheckTileData:@loop because the hero is teleporting
+			; so we don't need to handle the rest of the colllided tiles.
+			; return to the func that called HeroUpdate
+			pop b
+
 			; check if the teleport on the left or right side
 			lda heroPosX+1
 			cpi (ROOM_WIDTH - 1 ) * TILE_WIDTH - HERO_WIDTH
@@ -398,37 +407,27 @@ HeroMoveTeleport:
 			jnc @teleportTopToBottom
 			cpi TILE_HEIGHT
 			jc @teleportBottomToTop
-			jmp @roomLoading
+			; teleport keeping the same pos
+			ret
 
 @teleportRightToLeft:
 			mvi a, TILE_WIDTH
 			sta heroPosX+1
-			jmp @roomLoading
+			ret
 
 @teleportLeftToRight:
 			mvi a, (ROOM_WIDTH - 1 ) * TILE_WIDTH - HERO_WIDTH
 			sta heroPosX+1
-			jmp @roomLoading
+			ret
 
 @teleportTopToBottom:
 			mvi a, TILE_HEIGHT
 			sta heroPosY+1
-			jmp @roomLoading
+			ret
 @teleportBottomToTop:
 			mvi a, (ROOM_HEIGHT - 1 ) * TILE_HEIGHT - HERO_HEIGHT
 			sta heroPosY+1
-			jmp @roomLoading
-
-@roomLoading:
-			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
-			sta levelCommand
-			; bypassing the HeroUpdatePos:@loop because the hero is teleporting
-			; so we don't need to handle the rest of the colllided tiles.
-			; we return to the func that called HeroUpdate
-			pop b
 			ret
-			.closelabels
-
 
 HeroAttackStart:
 			; set status
