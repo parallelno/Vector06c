@@ -37,6 +37,19 @@ heroPosY:			.word TEMP_WORD
 heroSpeedX:			.word TEMP_WORD
 heroSpeedY:			.word TEMP_WORD
 
+;
+heroCollisionFuncTable:
+			; bit layout:
+			; (bottom-left), (bottom-right), (top_right), (top-left)
+			; 						 0001,              0010,              0011,              
+			; 0100,                  0101,              0110,              0111,
+			; 1000,                  1001,              1010,              1011, 
+			; 1100,                  1101,              1110,              1111           
+			.word 				   	 	HeroCheckCollisionTL,	HeroCheckCollisionTR,	HeroCheckCollisionT
+			.word HeroCheckCollisionBR,	HeroCheckTileData,		HeroCheckCollisionR,	HeroCheckTileData
+			.word HeroCheckCollisionBL,	HeroCheckCollisionL,	HeroCheckTileData,		HeroCheckTileData
+			.word HeroCheckCollisionB,	HeroCheckTileData,		HeroCheckTileData,		HeroCheckTileData
+
 ; hero uses these funcs to handle the tile data. more info is in levelGlobalData.asm->roomTilesData
 heroFuncTable:		.word 0, 0, 0, 0, HeroMoveTeleport, 0, 0, 0
 
@@ -109,7 +122,7 @@ HeroUpdate:
 
 			; update a move anim
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_MOVE)
-			jmp HeroMove
+			jmp HeroUpdatePos
 
 @moveKeysPressed:
 			mov a, l
@@ -126,7 +139,7 @@ HeroUpdate:
 			sta heroDirX
 			lxi h, hero_run_r
 			shld heroAnimAddr
-			jmp HeroMove
+			jmp HeroUpdatePos
 
 @setAnimRunRU:
 			cpi KEY_RIGHT & KEY_UP
@@ -140,7 +153,7 @@ HeroUpdate:
 			sta heroDirX
 			lxi h, hero_run_r
 			shld heroAnimAddr
-			jmp HeroMove
+			jmp HeroUpdatePos
 
 @setAnimRunRD:
 			cpi KEY_RIGHT & KEY_DOWN
@@ -155,7 +168,7 @@ HeroUpdate:
 			sta heroDirX
 			lxi h, hero_run_r
 			shld heroAnimAddr
-			jmp HeroMove
+			jmp HeroUpdatePos
 
 @setAnimRunL:
 			cpi KEY_LEFT
@@ -170,7 +183,7 @@ HeroUpdate:
 			sta heroDirX
 			lxi h, hero_run_l
 			shld heroAnimAddr
-			jmp HeroMove
+			jmp HeroUpdatePos
 
 @setAnimRunLU:
 			cpi KEY_LEFT & KEY_UP
@@ -185,7 +198,7 @@ HeroUpdate:
 			sta heroDirX
 			lxi h, hero_run_l
 			shld heroAnimAddr
-			jmp HeroMove
+			jmp HeroUpdatePos
 
 @setAnimRunLD:
 			cpi KEY_LEFT & KEY_DOWN
@@ -199,7 +212,7 @@ HeroUpdate:
 			sta heroDirX
 			lxi h, hero_run_l
 			shld heroAnimAddr
-			jmp HeroMove
+			jmp HeroUpdatePos
 
 @setAnimRunU:
 			cpi KEY_UP
@@ -216,11 +229,11 @@ HeroUpdate:
 
 			lxi h, hero_run_r
 			shld heroAnimAddr
-			jmp HeroMove
+			jmp HeroUpdatePos
 @setAnimRunUfaceL:
 			lxi h, hero_run_l
 			shld heroAnimAddr
-			jmp HeroMove
+			jmp HeroUpdatePos
 @setAnimRunD:
 			cpi KEY_DOWN
 			rnz
@@ -235,13 +248,13 @@ HeroUpdate:
 			jz @setAnimRunDfaceL
 			lxi h, hero_run_r
 			shld heroAnimAddr
-			jmp HeroMove
+			jmp HeroUpdatePos
 @setAnimRunDfaceL:
 			lxi h, hero_run_l
 			shld heroAnimAddr
-			;jmp HeroMove
+			;jmp HeroUpdatePos
 
-HeroMove:
+HeroUpdatePos:
 			; apply the hero speed
 			lhld heroPosX
 			xchg
@@ -255,94 +268,161 @@ HeroMove:
 			dad d
 			shld charTempY
 			
-/*			
-			mov c, h
-			; check hero pos against the room collision tiles
-			call RoomCheckTileCollision
-			; check if any tiles collide
-
-			cpi $ff
-			jz @tempCheck;rz ; return if any of the tiles were collision
-			ora a ; if all the tiles data == 0, means no collision.
-			jnz @collides
-*/
-
 			; check the collision tiles
 			mov d, b
 			mov e, h
 			lxi b, (HERO_WIDTH-1)<<8 | HERO_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomCheckTileCollision2, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
-			jz @collides
-
-
-@updatePos:
+			CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision2, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			jnz @collides
+@heroMove:
 			lhld charTempX
 			shld heroPosX
 			lhld charTempY
 			shld heroPosY
-			ret
-; TODO: handle the case where the hero touches the wall tiles.
-; for example, slide a hero along the walls if he moves along the diagonal directions
-@tempCheck:
-lhld charTempX
-ret
-
+			jmp HeroCheckTileData
 @collides:
-			; handle collided tiles data
+			; handle a collision data around a hero
+			; if a hero is inside the collision, move him out
+			lxi h, heroCollisionFuncTable-2 ; there is no case there C==0, skip it
+			mvi b, 0
+			dad b
+			mov e, m
+			inx h
+			mov d, m 
+			xchg
+			pchl
+; handle tileData around a hero.
+HeroCheckTileData:
+			lxi h, heroPosX+1
+			mov d, m
+			inx_h(2)
+			mov e, m
+			lxi b, (HERO_WIDTH-1)<<8 | HERO_HEIGHT-1
+			CALL_RAM_DISK_FUNC(RoomGetTileDataAroundSprite, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			rz
+
 			lxi h, roomTileCollisionData
 			mvi c, 4
-@loop:
-			;TILE_DATA_HANDLE_FUNC_CALL(heroFuncTable)
-
+@loop:		TILE_DATA_HANDLE_FUNC_CALL(heroFuncTable, true)
 			inx h
 			dcr c
 			jnz @loop
 			ret
-			.closelabels
+
+HeroCheckCollisionTL:
+			lda heroPosX+1
+			; get the offset inside the tile
+			ani %00001111
+			mov c, a
+			lda heroPosY+1
+			adi HERO_HEIGHT-1
+			; get the offset inside the tile
+			cma
+			ani %00001111
+			cmp c
+			jnc HeroMoveVertically
+			jmp HeroMoveHorizontally
+			
+HeroCheckCollisionTR:
+			lda heroPosX+1
+			adi HERO_WIDTH-1
+			; get the offset inside the tile
+			ani %00001111
+			mov c, a
+			lda heroPosY+1
+			adi HERO_HEIGHT-1
+			; get the offset inside the tile
+			ani %00001111
+			cmp c
+			jc HeroMoveVertically
+			jmp HeroMoveHorizontally
+
+HeroCheckCollisionBL:
+			lda heroPosX+1
+			; get the offset inside the tile
+			ani %00001111
+			mov c, a
+			lda heroPosY+1
+			; get the offset inside the tile
+			ani %00001111
+			cmp c
+			jnc HeroMoveVertically
+			jmp HeroMoveHorizontally
+
+HeroCheckCollisionBR:
+			lda heroPosX+1
+			adi HERO_WIDTH-1			
+			; get the offset inside the tile
+			ani %00001111
+			mov c, a
+			lda heroPosY+1
+			; get the offset inside the tile
+			cma
+			ani %00001111
+			cmp c
+			jc HeroMoveVertically
+			jmp HeroMoveHorizontally
+
+HeroCheckCollisionT:
+HeroCheckCollisionB:
+HeroMoveHorizontally:
+			; do not move vertically
+			lhld charTempX
+			shld heroPosX	
+			jmp HeroCheckTileData
+HeroCheckCollisionL:
+HeroCheckCollisionR:
+HeroMoveVertically:
+			; do not move horizontally
+			lhld charTempY
+			shld heroPosY			
+			jmp HeroCheckTileData
 
 ; load a new room with roomId, move the hero to an
 ; appropriate position based on his current posXY
 ; input:
 ; a - roomId
-; TODO: fix the issue that hero can't teleport if he touches a wall nearby (top exit)
 HeroMoveTeleport:
 			pop h
 			; update a room id to teleport there
 			sta roomIdx
-			; is the teleport of the left or right side?
+			; check if the teleport on the left or right side
 			lda heroPosX+1
-			cpi (ROOM_WIDTH - 2 ) * TILE_WIDTH
-			jnc @teleportLeftRight
-			cpi TILE_WIDTH + 2
-			jc @teleportLeftRight
-			; is the teleport of the top or bottom side?
+			cpi (ROOM_WIDTH - 1 ) * TILE_WIDTH - HERO_WIDTH
+			jnc @teleportRightToLeft
+			cpi TILE_WIDTH
+			jc @teleportLeftToRight
+			; check if the teleport on the top or bottom side
 			lda heroPosY+1
-			cpi (ROOM_HEIGHT - 3 ) * TILE_WIDTH
-			jnc @teleportTopBottom
-			cpi TILE_HEIGHT * 2 + 2
-			jc @teleportTopBottom
-			jmp @donotMoveHero
+			cpi (ROOM_HEIGHT - 1 ) * TILE_HEIGHT - HERO_HEIGHT
+			jnc @teleportTopToBottom
+			cpi TILE_HEIGHT
+			jc @teleportBottomToTop
+			jmp @roomLoading
 
-@teleportLeftRight:
-			; if the hero is on the right, move him to the left and vice versa
-			lda heroPosX+1
-			cma
-			sui 15
+@teleportRightToLeft:
+			mvi a, TILE_WIDTH
 			sta heroPosX+1
-			jmp @donotMoveHero
+			jmp @roomLoading
 
-			; if the hero is on the top, move him down and vice versa
-@teleportTopBottom:
-			lda heroPosY+1
-			cma
-			sui 30
+@teleportLeftToRight:
+			mvi a, (ROOM_WIDTH - 1 ) * TILE_WIDTH - HERO_WIDTH
+			sta heroPosX+1
+			jmp @roomLoading
+
+@teleportTopToBottom:
+			mvi a, TILE_HEIGHT
 			sta heroPosY+1
-			jmp @donotMoveHero
+			jmp @roomLoading
+@teleportBottomToTop:
+			mvi a, (ROOM_HEIGHT - 1 ) * TILE_HEIGHT - HERO_HEIGHT
+			sta heroPosY+1
+			jmp @roomLoading
 
-@donotMoveHero:
+@roomLoading:
 			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
 			sta levelCommand
-			; bypassing the HeroMove:@loop because the hero is teleporting
+			; bypassing the HeroUpdatePos:@loop because the hero is teleporting
 			; so we don't need to handle the rest of the colllided tiles.
 			; we return to the func that called HeroUpdate
 			pop b

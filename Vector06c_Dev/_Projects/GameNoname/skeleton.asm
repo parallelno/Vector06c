@@ -174,11 +174,9 @@ SkeletonUpdate:
 			mov d, a
 			mov e, h
 			lxi b, (SKELETON_WIDTH-1)<<8 | SKELETON_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomCheckTileCollision2, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
-			mvi a, TILE_DATA_FUNC_MASK
-			ana c
+			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
 			jnz @collides
-			
+
 @updatePos:
             lhld charTempX
 @monsterPosXPtr:
