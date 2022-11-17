@@ -508,7 +508,7 @@ roomchecknonzerotiles $1d50
 roomcheckwalkabletiles $1d62
 roomtilecollisiondata $1d84
 roomgettiledataaroundsprite $1d88
-roomchecktiledatacollision2 $1db6
+roomchecktiledatacollision $1db6
 drawfpsscraddr $a0ff
 drawfps $1deb
 @below10 $1df7
@@ -732,7 +732,7 @@ sprites_tiles_lv01_tile33 $933a
 __gcplayerinit $b100
 __gcplayerstartrepeat $b107
 __gcplayerupdate $b121
-__erasespritesp $8004
+__erasesprite $8004
 __drawspritev $80b7
 __drawspritevm $8183
 __clearmemsp $82cd

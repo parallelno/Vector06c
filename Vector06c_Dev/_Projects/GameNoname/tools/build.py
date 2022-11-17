@@ -107,10 +107,10 @@ def IsAsmUpdated(asmPath):
 			continue
 
 	anyIncUpdated = False
-	for path in includes:
-		anyIncUpdated |= IsFileUpdated(asmPath)
+	for incPath in includes:
+		anyIncUpdated |= IsFileUpdated(incPath)
 
-	return anyIncUpdated | IsFileUpdated(path)
+	return anyIncUpdated | IsFileUpdated(asmPath)
 
 def IsFileUpdated(path, _buildDBPath = buildDBPath):
 	

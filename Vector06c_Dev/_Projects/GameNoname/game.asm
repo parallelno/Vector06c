@@ -1,4 +1,4 @@
-.include "levelsGlobalData.asm"
+.include "levelsData.asm"
 .include "drawTile.asm"
 .include "sprite.asm"
 .include "hero.asm"

@@ -425,7 +425,7 @@ RoomGetTileDataAroundSprite:
 
 ; collects a tiledata around a sprite if it's a collision data (equals $ff)
 ; this func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
-; call ex. CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision2, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+; call ex. CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
 ; in:
 ; d - posX
 ; e - posY
@@ -438,7 +438,7 @@ RoomGetTileDataAroundSprite:
 		; if it's collision, bit is ON.
 ; Z flag = 1 if no collision
 
-RoomCheckTileDataCollision2:
+RoomCheckTileDataCollision:
 			; calc the top-right corner addr
 			mov a, d
 			add b

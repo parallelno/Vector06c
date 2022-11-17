@@ -17,7 +17,7 @@ restoreSP_ramDisk__:
 ;		01 - 16pxs,
 ;		10 - 24pxs,
 ;		11 - 32pxs,
-__EraseSpriteSP:
+__EraseSprite: 
 			mov b, h
 			; adjust Y
 			mov a, e

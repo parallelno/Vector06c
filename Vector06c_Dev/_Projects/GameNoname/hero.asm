@@ -272,7 +272,7 @@ HeroUpdatePos:
 			mov d, b
 			mov e, h
 			lxi b, (HERO_WIDTH-1)<<8 | HERO_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision2, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
 			jz HeroMove
 @collides:
 			; handle a collision data around a hero
@@ -597,7 +597,6 @@ HeroErase:
 			pop d
 			pop h
 			jnz SpriteCopyToBackBuffV
-
-			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(__EraseSprite, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			ret
 			.closelabels	

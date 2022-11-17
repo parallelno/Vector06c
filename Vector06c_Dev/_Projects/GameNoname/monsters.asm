@@ -1,6 +1,6 @@
 .include "skeleton.asm"
 .include "heroSwordTrail.asm"
-.include "monstersRuntimeData.asm"
+.include "monstersData.asm"
 
 MonstersEraseRuntimeData:
 			mvi a, MONSTER_RUNTIME_DATA_LAST
@@ -299,7 +299,5 @@ MonsterErase:
 			pop d
 			pop h
 			jnz SpriteCopyToBackBuffV
-
-			CALL_RAM_DISK_FUNC(__EraseSpriteSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
-			;call SpriteCopyToBackBuffV
+			CALL_RAM_DISK_FUNC(__EraseSprite, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
 			ret

@@ -1,12 +1,13 @@
+; TODO: do we need it?
 ; list of adresses of compressed levels 
 levelsAddr:		.word TEMP_ADDR, 0
-
+; TODO: do we need it?
 ; current level index in levelsAddr
 levelIdx:
 				.byte 0
 ; current room index in roomsAddr of the current level
 roomIdx:
-				.byte 0 ; 0 - 127 ; find why it says it's <128
+				.byte 0 ; 0 - 127 ; TODO: find why it says it's <128
 
 ; the address table to tile graphics
 roomTilesAddr:
