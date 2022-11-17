@@ -34,7 +34,7 @@ roomTilesAddr:
 ; fff == 7, d == 0, no collision, restore background (tiledata = 7)
 ; fff == 7, d != %11111, ???
 
-; tileData - collision
+; tileData consts
 TILE_DATA_COLLISION = %11111111
 TILE_DATA_FUNC_MASK = %111
 

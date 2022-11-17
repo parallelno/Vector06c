@@ -50,8 +50,8 @@ heroCollisionFuncTable:
 			.word HeroCheckCollisionBL,	HeroCheckCollisionL,	HeroCheckTileData,		HeroCheckTileData
 			.word HeroCheckCollisionB,	HeroCheckTileData,		HeroCheckTileData,		HeroCheckTileData
 
-; hero uses these funcs to handle the tile data. more info is in levelGlobalData.asm->roomTilesData
-heroFuncTable:		.word 0, 0, 0, 0, HeroMoveTeleport, 0, 0, 0
+; funcs to handle the tile data. more info is in levelGlobalData.asm->roomTilesData
+heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, HeroDoesNothing
 
 HeroInit:
 			call HeroIdleStart
@@ -273,13 +273,7 @@ HeroUpdatePos:
 			mov e, h
 			lxi b, (HERO_WIDTH-1)<<8 | HERO_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision2, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
-			jnz @collides
-@heroMove:
-			lhld charTempX
-			shld heroPosX
-			lhld charTempY
-			shld heroPosY
-			jmp HeroCheckTileData
+			jz HeroMove
 @collides:
 			; handle a collision data around a hero
 			; if a hero is inside the collision, move him out
@@ -291,6 +285,12 @@ HeroUpdatePos:
 			mov d, m 
 			xchg
 			pchl
+
+HeroMove:
+			lhld charTempX
+			shld heroPosX
+			lhld charTempY
+			shld heroPosY
 ; handle tileData around a hero.
 HeroCheckTileData:
 			lxi h, heroPosX+1
@@ -303,7 +303,7 @@ HeroCheckTileData:
 
 			lxi h, roomTileCollisionData
 			mvi c, 4
-@loop:		TILE_DATA_HANDLE_FUNC_CALL(heroFuncTable, true)
+@loop:		TILE_DATA_HANDLE_FUNC_CALL(heroFuncTable-2, true)
 			inx h
 			dcr c
 			jnz @loop
@@ -378,6 +378,12 @@ HeroMoveVertically:
 			shld heroPosY			
 			jmp HeroCheckTileData
 
+HeroDoesNothing:
+			; return from the HeroUpdate func
+			pop psw
+			pop psw
+			ret
+
 ; load a new room with roomId, move the hero to an
 ; appropriate position based on his current posXY
 ; input:
@@ -450,15 +456,10 @@ HeroAttackStart:
 
 			lxi h, hero_attk_r
 			shld heroAnimAddr
-
-			; spawn a sword trail attack
 			jmp  HeroSwordTrailInit
 @setAnimAttkL:
 			lxi h, hero_attk_l
 			shld heroAnimAddr
-
-			; TODO: spawn a left trail instead of a right
-			; spawn a sword trail attack
 			jmp HeroSwordTrailInit
 			.closelabels
 

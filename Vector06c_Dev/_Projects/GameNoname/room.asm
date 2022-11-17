@@ -273,88 +273,6 @@ RoomDrawTiles:
 			jc @newLine
 			ret
 
-; TODO: optimize. do not check if a actor is still inside the same tiles
-; b - an actor posX
-; c - an actor posY
-; return: roomTileCollisionData. it's a list of collided tiles data
-;
-RoomCheckTileCollision:
-			; clear only the last 2 bytes, because the first one will be overwritten anyway
-			lxi h, 0
-			shld roomTileCollisionData+2
-
-			; mask
-			mvi d, %00001111
-			; check if we have to check bottom tiles
-			mov a, c
-            ana d
-			cpi 2
-			mvi a, OPCODE_XCHG
-			jnc @checkBottom
-			; do not check bottom tiles
-			mvi a, OPCODE_RET
-@checkBottom:
-			sta @checkBottomTiles
-			; check if we need to check up-right and bottom-right tiles
-			mov a, b
-			ana d
-			jnz @ckeckRight
-			; do not check right tiles
-			mvi a, OPCODE_MOV_D_B
-			sta @checkRightUpTile
-			mvi a, OPCODE_RET
-			sta @checkRightBottomTile
-			jmp @check
-@ckeckRight:
-			mvi a, OPCODE_MOV_D_M
-			sta @checkRightUpTile
-			sta @checkRightBottomTile
-
-@check:
-			; get the index in the tile map table
-			; use the posY
-			mov a, c
-			ani %11110000
-			mov c, a
-
-			; use the posX
-			mov a, b
-			rrc_(4)
-			ana d
-			add c
-
-			mov c, a
-			mvi b, 0
-			lxi h, roomTilesData
-			dad b
-			; get the tile data where a top-left pixel of a sprite drawn
-			mov e, m
-			; get the tile data where a top-right pixel of a sprite drawn
-			inx h
-@checkRightUpTile:
-			mov d, m
-			xchg
-			shld roomTileCollisionData
-			mov a, l
-			ora h
-@checkBottomTiles:
-			xchg
-			; get the tile data where a bottom-left pixel of a sprite drawn
-			mvi c, ROOM_WIDTH-1
-			dad b
-			mov e, m
-			ora e
-			; get the tile data where a bottom-right pixel of a sprite drawn
-			inx h
-@checkRightBottomTile:
-			mov d, m
-			ora d
-			xchg
-			shld roomTileCollisionData+2
-			ret
-roomTileCollisionData:
-			.byte 0, 0, 0, 0,
-
 ; check tiles if they need to be restored. It uses the tiledata buffer in the ram-disk (bank 3 at $8000)
 ; call ex. CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, RAM_DISK_M3 | RAM_DISK_M_8F, false, false)
 ; in:
@@ -370,29 +288,29 @@ roomTileCollisionData:
 ; change:
 ; a, hl, de, b
 RoomCheckNonZeroTiles:
-		xchg
-		xra a
-		; check the bottom-left corner
-		cmp m
-		rnz
-		; check the top-right corner
-		xchg
-		dad d
-		dcr l ; to be inside the AABB
-		cmp m
-		rnz
-		; check the top-left corner
-		mov b, h
-		mov h, d
-		cmp m
-		rnz
-		; check the bottom-right corner
-		xchg
-		mov h, b
-		cmp m
-		rnz
-		; returns Z=1. this area do not need to be restored
-		ret
+			xchg
+			xra a
+			; check the bottom-left corner
+			cmp m
+			rnz
+			; check the top-right corner
+			xchg
+			dad d
+			dcr l ; to be inside the AABB
+			cmp m
+			rnz
+			; check the top-left corner
+			mov b, h
+			mov h, d
+			cmp m
+			rnz
+			; check the bottom-right corner
+			xchg
+			mov h, b
+			cmp m
+			rnz
+			; returns Z=1. this area do not need to be restored
+			ret
 
 ; check if tiles are walkable.
 ; func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
@@ -405,42 +323,39 @@ RoomCheckNonZeroTiles:
 ; out:
 ; Z flag is off when all tile data is walkable, means tiledata fff == 0
 RoomCheckWalkableTiles:
-		; calc the top-right corner addr
-		mov a, d
-		add b
-		ani %11110000
-		rrc_(3)
-		adi $80
-		mov h, a
-		mov a, e
-		add c
-		mov l, a
+			; calc the top-right corner addr
+			mov a, d
+			add b
+			ani %11110000
+			rrc_(3)
+			adi $80
+			mov h, a
+			mov a, e
+			add c
+			mov l, a
 
-		; calc the bottom-left scr addr
-		xchg
-		mvi a, %11110000
-		ana h
-		rrc_(3)
-		adi $80
-		mov h, a
+			; calc the bottom-left scr addr
+			xchg
+			mvi a, %11110000
+			ana h
+			rrc_(3)
+			adi $80
+			mov h, a
 
-		; check the bottom-left corner
-		mov a, m
-
-		; check the bottom-right corner
-		mov b, h ; tmp
-		mov h, d
-		ora m
-
-		; check the top-right scr addr
-		mov l, e
-		ora m
-
-		; check the top-left corner
-		mov h, b
-		ora m
-		ani TILE_DATA_FUNC_MASK
-		ret
+			; check the bottom-left corner
+			mov a, m
+			; check the bottom-right corner
+			mov b, h ; tmp
+			mov h, d
+			ora m
+			; check the top-right scr addr
+			mov l, e
+			ora m
+			; check the top-left corner
+			mov h, b
+			ora m
+			ani TILE_DATA_FUNC_MASK
+			ret
 
 ; collects tiledata of tiles which intersect with a sprite
 ; this func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
@@ -451,65 +366,62 @@ RoomCheckWalkableTiles:
 ; b - width-1
 ; c - height-1
 ; out:
-; roomTileCollisionData
-		; tileData layout:
-		; (bottom-left), (top-left), (top_right), (bottom-right)
+roomTileCollisionData:
+			; tileData layout:
+			; (bottom-left), (top-left), (top_right), (bottom-right)
+			.byte 0, 0, 0, 0,		
 ; Z flag = 1 if all tiles have tileData func==0
 RoomGetTileDataAroundSprite:
-		; calc the top-right corner addr
-		mov a, d
-		add b
-		ani %11110000
-		rrc_(3)
-		adi $80
-		mov h, a
-		mov a, e
-		add c
-		mov l, a
+			; calc the top-right corner addr
+			mov a, d
+			add b
+			ani %11110000
+			rrc_(3)
+			adi $80
+			mov h, a
+			mov a, e
+			add c
+			mov l, a
 
-		; calc the bottom-left scr addr
-		xchg
-		mvi a, %11110000
-		ana h
-		rrc_(3)
-		adi $80
-		mov h, a
+			; calc the bottom-left scr addr
+			xchg
+			mvi a, %11110000
+			ana h
+			rrc_(3)
+			adi $80
+			mov h, a
 
-		; check the bottom-left corner
-		mov c, m
+			; check the bottom-left corner
+			mov c, m
+			; check the bottom-right corner
+			mov b, h ; tmp
+			mov h, d
+			mov d, m
+			; check the top-right scr addr
+			mov l, e
+			mov e, m
+			; check the top-left corner
+			mov h, b
+			mov h, m
+			mov l, c
+			
+			; tileData layout in registers:
+			; h (top-left), 	e (top_right)
+			; l (bottom-left), 	d (bottom-right)
 
-		; check the bottom-right corner
-		mov b, h ; tmp
-		mov h, d
-		mov d, m
+			; tileData layout in roomTileCollisionData:
+			; (bottom-left), (top-left), (top_right), (bottom-right)
 
-		; check the top-right scr addr
-		mov l, e
-		mov e, m
+			shld roomTileCollisionData
+			xchg
+			shld roomTileCollisionData+2
 
-		; check the top-left corner
-		mov h, b
-		mov h, m
-		mov l, c
-		
-		; tileData layout in registers:
-		; h (top-left), 	e (top_right)
-		; l (bottom-left), 	d (bottom-right)
-
-		; tileData layout in roomTileCollisionData:
-		; (bottom-left), (top-left), (top_right), (bottom-right)
-
-		shld roomTileCollisionData
-		xchg
-		shld roomTileCollisionData+2
-
-		mov a, h
-		ora l
-		ora d
-		ora e
-		ani TILE_DATA_FUNC_MASK
-
-		ret
+			mov a, h
+			ora l
+			ora d
+			ora e
+			ani TILE_DATA_FUNC_MASK
+			ret
 
 ; collects a tiledata around a sprite if it's a collision data (equals $ff)
 ; this func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
@@ -527,60 +439,60 @@ RoomGetTileDataAroundSprite:
 ; Z flag = 1 if no collision
 
 RoomCheckTileDataCollision2:
-		; calc the top-right corner addr
-		mov a, d
-		add b
-		ani %11110000
-		rrc_(3)
-		adi $80
-		mov h, a
-		mov a, e
-		add c
-		mov l, a
+			; calc the top-right corner addr
+			mov a, d
+			add b
+			ani %11110000
+			rrc_(3)
+			adi $80
+			mov h, a
+			mov a, e
+			add c
+			mov l, a
 
-		; calc the bottom left scr addr
-		xchg
-		mvi a, %11110000
-		ana h
-		rrc_(3)
-		adi $80
-		mov h, a
+			; calc the bottom left scr addr
+			xchg
+			mvi a, %11110000
+			ana h
+			rrc_(3)
+			adi $80
+			mov h, a
 
-		; check the bottom-left corner
-		mov a, m
-		adi 1
-		mvi a, 0
-		ral
-		mov c, a
+			; check the bottom-left corner
+			mov a, m
+			adi 1
+			mvi a, 0
+			ral
+			mov c, a
 
-		; check the bottom-right corner
-		mov b, h ; tmp
-		mov h, d
+			; check the bottom-right corner
+			mov b, h ; tmp
+			mov h, d
 
-		mvi d, 1
-		mov a, m
-		add d
-		mov a, c
-		ral
-		mov c, a
+			mvi d, 1
+			mov a, m
+			add d
+			mov a, c
+			ral
+			mov c, a
 
-		; check the top-right scr addr
-		mov l, e
-		mov a, m
-		add d
-		mov a, c
-		ral
-		mov c, a
+			; check the top-right scr addr
+			mov l, e
+			mov a, m
+			add d
+			mov a, c
+			ral
+			mov c, a
 
-		; check the top-left corner
-		mov h, b
-		mov a, m
-		add d
-		mov a, c
-		ral
-		; scroll to make a ptr offset
-		add a
-		mov c, a
-		; collision data bits layout in C register:
-		; 0,0,0,0, (bottom-left), (bottom-right), (top_right), (top-left), 0
-		ret
+			; check the top-left corner
+			mov h, b
+			mov a, m
+			add d
+			mov a, c
+			ral
+			; scroll to make a ptr offset
+			add a
+			mov c, a
+			; collision data bits layout in C register:
+			; 0,0,0,0, (bottom-left), (bottom-right), (top_right), (top-left), 0
+			ret
