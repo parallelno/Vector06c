@@ -22,7 +22,7 @@ HERO_ANIM_SPEED_ATTACK	= 40
 
 ; this's a struct. do not change the layout
 heroData:
-heroHealth:			.byte TEMP_BYTE
+heroHealth:			.byte 100;TEMP_BYTE
 heroStatus:			.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
 heroStatusTimer:	.byte 0	; a duration of the status. ticks every update
 heroAnimTimer:		.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
@@ -503,8 +503,25 @@ HeroIdleUpdate:
 			lda keyCodeOld
 			cmp l
 			jnz HeroIdleStart
-
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_IDLE)
+			ret
+
+; handle the damage
+; in:
+; c - damage (positive number)
+HeroSetDamage:
+			lxi h, heroHealth
+			mov a, m
+			sub c
+			mov m, a
+			; check if he dies
+			push psw
+			call GameUIHealthDraw
+			pop psw
+			rnc
+			; hero's dead
+			; TODO: teleport the hero to the main scene if he died in the level
+			; TODO: teleport the hero to the catacombs entrance if a boss killed him
 			ret
 
 HeroDraw:

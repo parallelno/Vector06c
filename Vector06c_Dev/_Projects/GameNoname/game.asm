@@ -6,12 +6,14 @@
 .include "levels.asm"
 .include "room.asm"
 .include "text.asm"
+.include "ui.asm"
 
 GameInit:
 			call LevelsInit
-			call LevelInit
+			call LevelInit			
 			call RoomInit
 			call RoomDraw
+			call GameUIInit			
 
 			xra a
 			sta interruptionCounter

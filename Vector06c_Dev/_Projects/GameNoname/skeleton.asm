@@ -190,25 +190,40 @@ SkeletonUpdate:
             lhld charTempX
 @monsterPosXPtr:
 			shld TEMP_ADDR
-			mov c, h ; tmp a = posX
 			lhld charTempY
 @monsterPosYPtr:
 			shld TEMP_ADDR
 @heroCollisionCheck:
-			; c - posX
-			; h - posY
+			; TODO: check hero-monster collision every second frame
+			lhld @monsterPosXPtr+1
+			inx h
+			; horizontal check
+			mov c, m ; monster posX
 			lda heroPosX+1
-			;adi HERO_WIDTH-1
+			mov b, a
+			adi HERO_WIDTH-1
 			cmp c
 			rc
-
-
-			lhld @monsterPosXPtr+1
-			LXI_D_TO_DIFF(monsterUpdatePtr+1, monsterPosX)
-			;lxi d, $ff<<8 | <(-17);monsterPosX - monsterUpdatePtr+1
-			dad d
-			jmp MonstersSetDestroy
-@noCollision:
+			mvi a, SKELETON_WIDTH-1
+			add c
+			cmp b
+			rc
+			; vertical check
+			inx_h(2)
+			mov c, m ; monster posY
+			lda heroPosY+1
+			mov b, a
+			adi HERO_HEIGHT-1
+			cmp c
+			rc
+			mvi a, SKELETON_HEIGHT-1
+			add c
+			cmp b
+			rc
+			; hero collides
+			; send him a damage
+			mvi c, 1
+			call HeroSetDamage
 			ret
 
 @tilesCollide:

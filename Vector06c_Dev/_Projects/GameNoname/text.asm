@@ -1,35 +1,49 @@
+; convert a byte into a two byte buffer fill up with ascii codes.
+; in:
+; a - byte
+; hl - text ptr (2 bytes buffer)
+; modified:
+; bc, de, a
 
-; draw an FPS counter every second on the screen at DrawFpsScrAddr addr
+HexToAskii:
+			mov e, a ; tmp
+			lxi b, $0f30 ; $30 - char 0 code
+			
+			ana b
+			cpi $0a ; to adjust chars codes
+			jc @below10
+			sui $39 ; adjust a char code
+@below10:
+			add c
+			inx h
+			mov m, a
+			dcx h
+
+			mov a, e
+			rrc_(4)
+			ana b
+			cpi $0a ; to adjust chars codes
+			jc @below10a
+			sui $39 ; adjust a char code
+@below10a:
+			add c
+			mov m, a
+			ret
+
+
+; draw an FPS counter every second on the screen at FPS_SCR_ADDR addr
 ; works only in the interruption func and in the
 ; main program when the ram-disk is dismount
 ; in:
 ; A - fps
 ; uses:
 ; BC, DE, HL
-drawFpsScrAddr = $a0ff
+FPS_SCR_ADDR = $a0ff
 DrawFps:
-			lxi b, $0f30 ; $30 - char 0 code
-			lxi d, $390a ; to adjust chars codes
-			ana b
-			cmp e
-			jc @below10
-			sub d
-@below10:
-			add c
-			sta @fpsText+1
-
-			lda currentFps
-			rrc_(4)
-			ana b
-			cmp e
-			jc @below10a
-			sub d
-@below10a:
-			add c
-			sta @fpsText
-
 			lxi h, @fpsText
-			lxi b, drawFpsScrAddr
+			call HexToAskii
+
+			lxi b, FPS_SCR_ADDR
 			jmp DrawText
 
 @fpsText:
@@ -259,3 +273,12 @@ testFont:
 			.byte %00001000
 			.byte %01110000
 			.byte 0	
+			; heart ($3A)
+			.byte %01101100
+			.byte %11111010
+			.byte %11111010
+			.byte %11111110
+			.byte %01111100
+			.byte %00111000
+			.byte %00010000
+			.byte 0				
