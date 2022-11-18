@@ -57,7 +57,7 @@ MonstersGetEmptyDataPtr:
 ; in:
 ; hl - monsterUpdate+1 ptr
 ; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
-MonstersDestroy:
+MonstersSetDestroy:
 			mvi m, MONSTER_RUNTIME_DATA_DESTR
 			ret
 			.closelabels
@@ -66,7 +66,7 @@ MonstersDestroy:
 ; in:
 ; hl - monsterUpdate+1 ptr
 ; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
-MonstersEmpty:
+MonstersSetEmpty:
 			mvi m, MONSTER_RUNTIME_DATA_EMPTY
 			ret
 			.closelabels
@@ -85,7 +85,8 @@ MonstersDataFuncCaller:
 			mov a, m
 			cpi MONSTER_RUNTIME_DATA_DESTR
 			jc @callFunc
-			jz @nextData
+			cpi MONSTER_RUNTIME_DATA_LAST
+			jc @nextData
 			; it is the last or the end, so return
 			ret
 @callFunc:
@@ -112,7 +113,7 @@ MonstersDataFuncCaller:
 			ret			
 			.closelabels
 
-; call a provided func if a monster is alive
+; call a provided func (MonsterCopyToScr, MonsterErase) if a monster is alive
 ; a func will get HL pointing to a monsterUpdatePtr+1 in the runtime data, and A holding a MONSTER_RUNTIME_DATA_* status
 ; in:
 ; hl - a func addr
@@ -261,9 +262,9 @@ MonsterCopyToScr:
 ; hl - ptr to monsterUpdatePtr+1 in the runtime data
 ; a - MONSTER_RUNTIME_DATA_* status
 MonsterErase:
-			; if a monster is destroyed mark a its data as empty
+			; if a monster is destroyed mark its data as empty
 			cpi MONSTER_RUNTIME_DATA_DESTR
-			jz MonstersEmpty
+			jz MonstersSetEmpty
 
 			; advance to monsterStatus
 			LXI_D_TO_DIFF(monsterStatus, monsterUpdatePtr+1)

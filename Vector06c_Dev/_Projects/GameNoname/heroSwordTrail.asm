@@ -139,7 +139,7 @@ HeroSwordTrailUpdate:
 @destroy:
 			LXI_D_TO_DIFF(monsterUpdatePtr+1, monsterStatusTimer)
 			dad d
-			jmp MonstersDestroy
+			jmp MonstersSetDestroy
 
 @delayUpdate:
 			; hl - ptr to monsterStatus

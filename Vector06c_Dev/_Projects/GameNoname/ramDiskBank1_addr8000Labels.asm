@@ -1,3 +1,3 @@
-__gcplayerinit                    = $b100
-__gcplayerstartrepeat             = $b107
-__gcplayerupdate                  = $b121
+__gcplayerinit                    = $b0fe
+__gcplayerstartrepeat             = $b105
+__gcplayerupdate                  = $b11f

@@ -76,14 +76,23 @@ SkeletonInit:
 			mov m, d ; width = 8
 			dcx h 
 			mvi m, 5 ; supported mimimum height
+			; advance hl to monsterEraseWH+1
+			dcx h 			
+			mov m, d ; width = 8
+			dcx h 
+			mvi m, 5 ; supported mimimum height
 			; advance hl to monsterEraseScrAddrOld+1
-			LXI_B_TO_DIFF(monsterEraseScrAddrOld+1, monsterEraseWHOld)
-			dad b			
+			dcx h
 			; a - posX
 			; scrX = posX/8 + $a0
 			rrc_(3)
 			ani %00011111			
 			adi SPRITE_X_SCR_ADDR
+			mov m, a
+			dcx h 
+			mov m, e
+			; advance hl to monsterEraseScrAddr+1
+			dcx h
 			mov m, a
 			dcx h 
 			mov m, e
@@ -175,18 +184,34 @@ SkeletonUpdate:
 			mov e, h
 			lxi b, (SKELETON_WIDTH-1)<<8 | SKELETON_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
-			jnz @collides
+			jnz @tilesCollide
 
 @updatePos:
             lhld charTempX
 @monsterPosXPtr:
 			shld TEMP_ADDR
+			mov c, h ; tmp a = posX
 			lhld charTempY
 @monsterPosYPtr:
 			shld TEMP_ADDR
+@heroCollisionCheck:
+			; c - posX
+			; h - posY
+			lda heroPosX+1
+			;adi HERO_WIDTH-1
+			cmp c
+			rc
+
+
+			lhld @monsterPosXPtr+1
+			LXI_D_TO_DIFF(monsterUpdatePtr+1, monsterPosX)
+			;lxi d, $ff<<8 | <(-17);monsterPosX - monsterUpdatePtr+1
+			dad d
+			jmp MonstersSetDestroy
+@noCollision:
 			ret
 
-@collides:
+@tilesCollide:
 @monsterUpdatePptr:
             lxi b, TEMP_ADDR
 			; get speedX addr
@@ -261,9 +286,7 @@ SkeletonUpdate:
 			mvi m, < skeleton_run_r
 			inx h
 			mvi m, > skeleton_run_r
-            ret
-@handleTileData:
-            ret			
+            ret	
 			.closelabels
 
 ; draw a sprite into a backbuffer
