@@ -8,6 +8,83 @@ MonstersEraseRuntimeData:
 			ret
 			.closelabels
 
+; in:
+; hl - 	posX, posY
+; a  - 	collider width
+; c  - 	collider height
+; de -	monster data ptr + 1
+; out:
+; collision 	- (hl) < MONSTER_RUNTIME_DATA_LAST
+; no collision 	- (hl) >= MONSTER_RUNTIME_DATA_LAST
+
+MonstersGetFirstCollided:
+			sta @colliderWidth+1
+			mov a, c
+			sta @colliderHeight+1
+			mov a, h
+			sta @colliderPosX+1
+			mov a, l
+			sta @colliderPosY+1
+			xchg
+
+@loop:
+			mov a, m
+			cpi MONSTER_RUNTIME_DATA_DESTR
+			jc @checkCollision
+			cpi MONSTER_RUNTIME_DATA_LAST
+			jc @nextData
+			; no collision against all alive monsters
+			ret
+@checkCollision:
+			push h
+			; advance hl to monsterType
+			LXI_B_TO_DIFF(monsterType, monsterUpdatePtr+1)
+			dad b
+			mov a, m
+			cpi MONSTER_TYPE_ALLY
+			jz @noCollision
+
+			; advance hl to monsterPosX+1
+			LXI_B_TO_DIFF(monsterPosX+1, monsterType)
+			dad b
+			; horizontal check
+			mov c, m 	; monster posX
+@colliderPosX:
+			mvi a, TEMP_BYTE
+			mov b, a	; tmp
+@colliderWidth:
+			adi TEMP_BYTE
+			cmp c
+			jc @noCollision
+			mvi a, SKELETON_COLLISION_WIDTH-1
+			add c
+			cmp b
+			jc @noCollision
+			; vertical check
+			inx_h(2)
+			mov c, m ; monster posY
+@colliderPosY:
+			mvi a, TEMP_BYTE
+			mov b, a
+@colliderHeight:
+			adi TEMP_BYTE
+			cmp c
+			jc @noCollision
+			mvi a, SKELETON_COLLISION_HEIGHT-1
+			add c
+			cmp b
+			jc @noCollision
+
+			; collides
+			pop h
+			ret
+@noCollision:
+			pop h
+@nextData:
+			lxi b, MONSTER_RUNTIME_DATA_LEN
+			dad b
+			jmp @loop
+
 ; look up the empty spot in the monster runtime data
 ; in: 
 ; none
@@ -50,7 +127,6 @@ MonstersGetEmptyDataPtr:
 			lxi d, MONSTER_RUNTIME_DATA_LEN
 			dad d
 			jmp @loop
-			.closelabels
 
 
 ; mark a monster data ptr as it's going to be destroyed

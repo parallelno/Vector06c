@@ -2,14 +2,16 @@ SKELETON_HEALTH = 1
 SKELETON_RUN_SPEED		= $0080
 SKELETON_RUN_SPEED_D	= $ffff - $80 + 1
 
-SKELETON_WIDTH = 15
-SKELETON_HEIGHT = 10
+SKELETON_COLLISION_WIDTH = 15
+SKELETON_COLLISION_HEIGHT = 10
 
 SKELETON_POS_X_MIN = TILE_WIDTH
 SKELETON_POS_X_MAX = (ROOM_WIDTH - 2 ) * TILE_WIDTH
 SKELETON_POS_Y_MIN = TILE_WIDTH
 SKELETON_POS_Y_MAX = (ROOM_HEIGHT - 2 ) * TILE_HEIGHT
 
+; gameplay
+SKELETON_DAMAGE = 1
 
 ;========================================================
 ; called to spawn this mod
@@ -28,8 +30,17 @@ SkeletonInit:
 			mvi m, <SkeletonDraw
 			inx h 
 			mvi m, >SkeletonDraw
-			inx h 
+			inx h
+			mvi m, <SkeletonImpact
+			inx h
+			mvi m, >SkeletonImpact
+			; advance to monsterType
+			inx h
+			mvi m, 0; MONSTER_TYPE_ENEMY			
+			; advance to monsterHealth
+			inx h
 			mvi m, SKELETON_HEALTH
+
 			LXI_D_TO_DIFF(monsterAnimPtr, monsterHealth)
 			dad d
 			; monsterAnimPtr
@@ -41,7 +52,7 @@ SkeletonInit:
 			dad d
 			; tmp d = 0
 			mvi d, 0
-			; set monsterSpeedY to zero			
+			; set monsterSpeedY to zero
 			mov m, d
 			dcx h
 			mov m, d
@@ -182,7 +193,7 @@ SkeletonUpdate:
 			; check the collision tiles
 			mov d, a
 			mov e, h
-			lxi b, (SKELETON_WIDTH-1)<<8 | SKELETON_HEIGHT-1
+			lxi b, (SKELETON_COLLISION_WIDTH-1)<<8 | SKELETON_COLLISION_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
 			jnz @tilesCollide
 
@@ -200,11 +211,11 @@ SkeletonUpdate:
 			; horizontal check
 			mov c, m ; monster posX
 			lda heroPosX+1
-			mov b, a
-			adi HERO_WIDTH-1
+			mov b, a ; tmp
+			adi HERO_COLLISION_WIDTH-1
 			cmp c
 			rc
-			mvi a, SKELETON_WIDTH-1
+			mvi a, SKELETON_COLLISION_WIDTH-1
 			add c
 			cmp b
 			rc
@@ -213,17 +224,17 @@ SkeletonUpdate:
 			mov c, m ; monster posY
 			lda heroPosY+1
 			mov b, a
-			adi HERO_HEIGHT-1
+			adi HERO_COLLISION_HEIGHT-1
 			cmp c
 			rc
-			mvi a, SKELETON_HEIGHT-1
+			mvi a, SKELETON_COLLISION_HEIGHT-1
 			add c
 			cmp b
 			rc
 			; hero collides
 			; send him a damage
-			mvi c, 1
-			call HeroSetDamage
+			mvi c, SKELETON_DAMAGE
+			call HeroImpact
 			ret
 
 @tilesCollide:
@@ -303,6 +314,14 @@ SkeletonUpdate:
 			mvi m, > skeleton_run_r
             ret	
 			.closelabels
+
+SkeletonImpact:
+			; de - ptr to monsterImpactPtr+1
+			LXI_H_TO_DIFF(monsterUpdatePtr+1, monsterImpactPtr+1)
+			dad d
+			jmp MonstersSetDestroy
+
+			ret
 
 ; draw a sprite into a backbuffer
 ; in:

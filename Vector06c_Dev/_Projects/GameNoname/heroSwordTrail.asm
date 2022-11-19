@@ -10,6 +10,16 @@ ATTK01_STATUS_ATTACK_DURATION	= 6
 ; animation speed
 ATTK01_ANIM_SPEED_ATTACK	= 40
 
+; gameplay
+ATTK01_DAMAGE = 1
+ATTK01_COLLISION_WIDTH	= 11
+ATTK01_COLLISION_HEIGHT	= 16
+ATTK01_COLLISION_OFFSET_X_R = 8
+ATTK01_COLLISION_OFFSET_Y_R = 0
+
+ATTK01_COLLISION_OFFSET_X_L = <(-3)
+ATTK01_COLLISION_OFFSET_Y_L = 0
+
 ; in:
 ; c - monster idx
 ; out:
@@ -27,9 +37,13 @@ HeroSwordTrailInit:
 			inx h 
 			mvi m, >HeroSwordTrailDraw
 
-			; advance and set monsterStatus
-			LXI_D_TO_DIFF(monsterStatus, monsterDrawPtr+1)
+			; advance hl to monsterType
+			LXI_D_TO_DIFF(monsterType, monsterDrawPtr+1)			
 			dad d
+			mvi m, 1 ; MONSTER_TYPE_ALLY			
+
+			; advance and set monsterStatus
+			inx_h(2)
 			mvi m, <$ff ; MONSTER_STATUS_INVIS
 			; advance and set monsterStatusTimer
 			inx h
@@ -75,6 +89,7 @@ HeroSwordTrailInit:
 			ani %00011111
 			adi SPRITE_X_SCR_ADDR
 			mov m, a
+			; advance hl to monsterEraseScrAddrOld
 			dcx h
 			; c = posY
 			mov m, c
@@ -148,14 +163,14 @@ HeroSwordTrailUpdate:
 			dcr m
 			rnz
 			
+			; hl = monsterStatusDuration
 			; set the attack
 			mvi m, ATTK01_STATUS_ATTACK_DURATION
 			; advance and set monsterStatus
 			dcx h
 			mvi m, ATTK01_STATUS_ATTACK
 			
-			; commented out because it is set in the Init
-			; advance and reset monsterAnimTimer			
+			; advance and reset monsterAnimTimer
 			inx_h(2)
 			mvi m, 0
 			; advance and set monsterAnimPtr
@@ -167,13 +182,63 @@ HeroSwordTrailUpdate:
 			mvi m, < hero_attack01_attk_r
 			inx h
 			mvi m, > hero_attack01_attk_r
-			jmp @next
+
+			; check enemies-attk01 sprite collision
+			; hl - monsterAnimPtr+1
+			; advance hl to monsterPosX+1			
+			LXI_B_TO_DIFF(monsterPosX+1, monsterAnimPtr+1)
+			dad b
+			; add a collision offset
+			mov d, m
+			inx_h(2)
+			mov e, m
+			lxi h, ATTK01_COLLISION_OFFSET_X_R<<8 | ATTK01_COLLISION_OFFSET_Y_R
+			dad d			
+
+			jmp @setCollisionSize
 @attkL:			
 			mvi m, < hero_attack01_attk_l
 			inx h
 			mvi m, > hero_attack01_attk_l
-@next:
+
+			; check enemies-attk01 sprite collision
+			; hl - monsterAnimPtr+1
+			; advance hl to monsterPosX+1			
+			LXI_B_TO_DIFF(monsterPosX+1, monsterAnimPtr+1)
+			dad b
+			; add a collision offset
+			mov d, m
+			inx_h(2)
+			mov e, m
+			lxi h, ATTK01_COLLISION_OFFSET_X_L<<8 | ATTK01_COLLISION_OFFSET_Y_L
+			dad d
+
+@setCollisionSize:
+			mvi a, ATTK01_COLLISION_WIDTH-1
+			mvi c, ATTK01_COLLISION_HEIGHT-1
+			lxi d, monstersRuntimeData+1
+			call MonstersGetFirstCollided
+			
+			; check if there is collision happened
+			mvi a, $fd;MONSTER_RUNTIME_DATA_EMPTY
+			cmp m
+			rc ; return if no collision
+
+			; advance hl to monsterPosX+1
+			LXI_B_TO_DIFF(monsterImpactPtr, monsterUpdatePtr+1)
+			dad b
+			; call monsterImpactPtr
+			;lxi b, @return
+			;push b			
+			mov e, m
+			inx h
+			mov d, m
+			xchg
+			pchl
+			/*
+@return:
 			ret
+*/
 
 ; draw a sprite into a backbuffer
 ; in:

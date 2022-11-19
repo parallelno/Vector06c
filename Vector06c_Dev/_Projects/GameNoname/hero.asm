@@ -1,7 +1,5 @@
-HERO_WIDTH = 15
-HERO_HEIGHT = 11
-
-; the first screen buffer X
+HERO_COLLISION_WIDTH = 15
+HERO_COLLISION_HEIGHT = 11
 HERO_RUN_SPEED		= $0100 ; low byte is a subpixel speed, high byte is a speed in pixels
 HERO_RUN_SPEED_D	= $00b5 ; for diagonal moves
 
@@ -11,7 +9,7 @@ HERO_RUN_SPEED_D	= $00b5 ; for diagonal moves
 HERO_STATUS_IDLE	= 0
 HERO_STATUS_ATTACK	= 1
 
-; duration of statuses
+; duration of statuses (in updateDurations)
 HERO_STATUS_ATTACK_DURATION	= 10
 
 ; animation speed
@@ -19,10 +17,12 @@ HERO_ANIM_SPEED_MOVE	= 90
 HERO_ANIM_SPEED_IDLE	= 4
 HERO_ANIM_SPEED_ATTACK	= 40
 
+; gameplay
+HERO_HEALTH_MAX = 100
 
 ; this's a struct. do not change the layout
 heroData:
-heroHealth:			.byte 100;TEMP_BYTE
+heroHealth:			.byte HERO_HEALTH_MAX
 heroStatus:			.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
 heroStatusTimer:	.byte 0	; a duration of the status. ticks every update
 heroAnimTimer:		.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
@@ -271,7 +271,7 @@ HeroUpdatePos:
 			; check the collision tiles
 			mov d, b
 			mov e, h
-			lxi b, (HERO_WIDTH-1)<<8 | HERO_HEIGHT-1
+			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
 			jz HeroMove
 @collides:
@@ -297,7 +297,7 @@ HeroCheckTileData:
 			mov d, m
 			inx_h(2)
 			mov e, m
-			lxi b, (HERO_WIDTH-1)<<8 | HERO_HEIGHT-1
+			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomGetTileDataAroundSprite, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
 			rz
 
@@ -315,7 +315,7 @@ HeroCheckCollisionTL:
 			ani %00001111
 			mov c, a
 			lda heroPosY+1
-			adi HERO_HEIGHT-1
+			adi HERO_COLLISION_HEIGHT-1
 			; get the offset inside the tile
 			cma
 			ani %00001111
@@ -325,12 +325,12 @@ HeroCheckCollisionTL:
 			
 HeroCheckCollisionTR:
 			lda heroPosX+1
-			adi HERO_WIDTH-1
+			adi HERO_COLLISION_WIDTH-1
 			; get the offset inside the tile
 			ani %00001111
 			mov c, a
 			lda heroPosY+1
-			adi HERO_HEIGHT-1
+			adi HERO_COLLISION_HEIGHT-1
 			; get the offset inside the tile
 			ani %00001111
 			cmp c
@@ -351,7 +351,7 @@ HeroCheckCollisionBL:
 
 HeroCheckCollisionBR:
 			lda heroPosX+1
-			adi HERO_WIDTH-1			
+			adi HERO_COLLISION_WIDTH-1			
 			; get the offset inside the tile
 			ani %00001111
 			mov c, a
@@ -403,13 +403,13 @@ HeroMoveTeleport:
 
 			; check if the teleport on the left or right side
 			lda heroPosX+1
-			cpi (ROOM_WIDTH - 1 ) * TILE_WIDTH - HERO_WIDTH
+			cpi (ROOM_WIDTH - 1 ) * TILE_WIDTH - HERO_COLLISION_WIDTH
 			jnc @teleportRightToLeft
 			cpi TILE_WIDTH
 			jc @teleportLeftToRight
 			; check if the teleport on the top or bottom side
 			lda heroPosY+1
-			cpi (ROOM_HEIGHT - 1 ) * TILE_HEIGHT - HERO_HEIGHT
+			cpi (ROOM_HEIGHT - 1 ) * TILE_HEIGHT - HERO_COLLISION_HEIGHT
 			jnc @teleportTopToBottom
 			cpi TILE_HEIGHT
 			jc @teleportBottomToTop
@@ -422,7 +422,7 @@ HeroMoveTeleport:
 			ret
 
 @teleportLeftToRight:
-			mvi a, (ROOM_WIDTH - 1 ) * TILE_WIDTH - HERO_WIDTH
+			mvi a, (ROOM_WIDTH - 1 ) * TILE_WIDTH - HERO_COLLISION_WIDTH
 			sta heroPosX+1
 			ret
 
@@ -431,7 +431,7 @@ HeroMoveTeleport:
 			sta heroPosY+1
 			ret
 @teleportBottomToTop:
-			mvi a, (ROOM_HEIGHT - 1 ) * TILE_HEIGHT - HERO_HEIGHT
+			mvi a, (ROOM_HEIGHT - 1 ) * TILE_HEIGHT - HERO_COLLISION_HEIGHT
 			sta heroPosY+1
 			ret
 
@@ -509,7 +509,7 @@ HeroIdleUpdate:
 ; handle the damage
 ; in:
 ; c - damage (positive number)
-HeroSetDamage:
+HeroImpact:
 			lxi h, heroHealth
 			mov a, m
 			sub c

@@ -1,5 +1,8 @@
 ; max monsters in the room
 MONSTERS_MAX = 15
+; monster types
+MONSTER_TYPE_ENEMY = 0
+MONSTER_TYPE_ALLY = 1
 
 MONSTER_RUNTIME_DATA_DESTR = $fc ; a monster is ready to be destroyed
 MONSTER_RUNTIME_DATA_EMPTY = $fd ; a monster data is available for a new monster
@@ -16,11 +19,13 @@ MONSTER_STATUS_INVIS = $ff
 monstersInits:
 			.word SkeletonInit
 
-MONSTER_RUNTIME_DATA_LEN = 26
+MONSTER_RUNTIME_DATA_LEN = 29
 ; a list of monster runtime data structs.
 monstersRuntimeData:
 monsterUpdatePtr:		.word TEMP_ADDR
 monsterDrawPtr:			.word TEMP_ADDR
+monsterImpactPtr:		.word TEMP_WORD
+monsterType:			.byte TEMP_BYTE
 monsterHealth:			.byte TEMP_BYTE
 monsterStatus:			.byte TEMP_BYTE
 monsterStatusTimer:		.byte TEMP_BYTE
@@ -34,6 +39,7 @@ monsterPosX:			.word TEMP_WORD
 monsterPosY:			.word TEMP_WORD
 monsterSpeedX:			.word TEMP_WORD
 monsterSpeedY:			.word TEMP_WORD
+
 ; the same structs for the rest of the monsters
 .storage MONSTER_RUNTIME_DATA_LEN * (MONSTERS_MAX-1), 0
 monstersRuntimeDataEnd:	.word MONSTER_RUNTIME_DATA_END << 8
