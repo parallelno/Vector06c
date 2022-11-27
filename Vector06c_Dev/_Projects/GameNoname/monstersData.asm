@@ -20,7 +20,7 @@ monstersInits:
 			.word SkeletonInit
 
 ; ptr to the first monster data in the sorted list
-monsterRintimeDataSorted:
+monsterRuntimeDataSorted:
 			.word monsterUpdatePtr
 
 MONSTER_RUNTIME_DATA_LEN = 33
@@ -28,9 +28,8 @@ MONSTER_RUNTIME_DATA_LEN = 33
 ; a list of monster runtime data structs.
 monstersRuntimeData:
 monsterUpdatePtr:		.word TEMP_ADDR
-
 monsterDrawPtr:			.word TEMP_ADDR
-monsterImpactPtr:		.word TEMP_WORD
+monsterImpactPtr:		.word TEMP_WORD ; called by hero bullet, another monster, etc. to affect this monster
 monsterType:			.byte TEMP_BYTE
 monsterHealth:			.byte TEMP_BYTE
 monsterStatus:			.byte TEMP_BYTE

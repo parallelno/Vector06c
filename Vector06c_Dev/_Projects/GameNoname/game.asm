@@ -3,6 +3,7 @@
 .include "sprite.asm"
 .include "hero.asm"
 .include "monsters.asm"
+.include "bullets.asm"
 .include "levels.asm"
 .include "room.asm"
 .include "text.asm"
@@ -22,9 +23,6 @@ GameInit:
 			CALL_RAM_DISK_FUNC(__GCPlayerStartRepeat, RAM_DISK_S1 | RAM_DISK_M1 | RAM_DISK_M_8F)
 			call GameUpdate
 			call GameDraw
-
-			DEBUG_BORDER_LINE(1)
-			DEBUG_HLT()
 			jmp	 @gameLoop
 
 GameUpdate:
@@ -36,12 +34,9 @@ GameUpdate:
 			ora a
 			rz
 @updateLoop:
-			; TODO: optimize. consider having an update func called every second frame (25fps)
-			DEBUG_BORDER_LINE(4)
 			call HeroUpdate
-			DEBUG_BORDER_LINE(2)
 			call MonstersUpdate
-			DEBUG_BORDER_LINE(3)
+			call BulletsUpdate
 			call LevelUpdate
 
 			; to check repeated key-pressing
@@ -52,7 +47,6 @@ GameUpdate:
 			dcr m
 			jnz @updateLoop
 			ret
-			.closelabels
 
 GameDraw:
 			lxi h, gameDrawsCounter
@@ -60,15 +54,16 @@ GameDraw:
 
 			call HeroDraw
 			call MonstersDraw
+			call BulletsDraw
 
 			call HeroCopyToScr
 			call MonstersCopyToScr
+			call BulletsCopyToScr
 
 			call HeroErase
 			call MonstersErase
-
+			call BulletsErase
 			ret
-			.closelabels
 
 
 

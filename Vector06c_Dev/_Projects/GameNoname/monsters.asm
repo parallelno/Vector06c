@@ -1,5 +1,4 @@
 .include "skeleton.asm"
-.include "heroSwordTrail.asm"
 .include "monstersData.asm"
 
 MonstersEraseRuntimeData:

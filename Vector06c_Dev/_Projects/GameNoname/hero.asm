@@ -10,12 +10,12 @@ HERO_STATUS_IDLE	= 0
 HERO_STATUS_ATTACK	= 1
 
 ; duration of statuses (in updateDurations)
-HERO_STATUS_ATTACK_DURATION	= 10
+HERO_STATUS_ATTACK_DURATION	= 6
 
-; animation speed
-HERO_ANIM_SPEED_MOVE	= 130
-HERO_ANIM_SPEED_IDLE	= 8
-HERO_ANIM_SPEED_ATTACK	= 80
+; animation speed (the less the slower, 0-255, 255 means next frame every update)
+HERO_ANIM_SPEED_MOVE	= 65
+HERO_ANIM_SPEED_IDLE	= 4
+HERO_ANIM_SPEED_ATTACK	= 100
 
 ; gameplay
 HERO_HEALTH_MAX = 100
@@ -23,8 +23,6 @@ HERO_HEALTH_MAX = 100
 ; hero runtime data
 ; this's a struct. do not change the layout
 heroUpdatePtr:			.word HeroUpdate
-heroDataPrevPPtr:		.word DRAW_LIST_FIRST_DATA_MARKER
-heroDataNextPPtr:		.word monsterDataNextPPtr
 heroDrawPtr:			.word HeroDraw
 heroImpactPtr:			.word HeroImpact
 heroType:				.byte MONSTER_TYPE_ALLY
@@ -42,6 +40,8 @@ heroPosX:				.word TEMP_WORD
 heroPosY:				.word TEMP_WORD
 heroSpeedX:				.word TEMP_WORD
 heroSpeedY:				.word TEMP_WORD
+heroDataPrevPPtr:		.word DRAW_LIST_FIRST_DATA_MARKER
+heroDataNextPPtr:		.word monsterDataNextPPtr
 ;
 heroCollisionFuncTable:
 			; bit layout:
@@ -57,13 +57,13 @@ heroCollisionFuncTable:
 
 ; funcs to handle the tile data. more info is in levelGlobalData.asm->roomTilesData
 HeroTileFuncTable:
-heroFuncId1:	.word 0
-heroFuncId2:	.word 0
-heroFuncId3:	.word 0
-heroFuncId4:	.word HeroTileFuncTeleport
-heroFuncId5:	.word 0
-heroFuncId6:	.word 0
-heroFuncId7:	.word HeroTileFuncNothing
+			.word 0						; funcId == 1
+			.word 0						; funcId == 2
+			.word 0						; funcId == 3
+			.word HeroTileFuncTeleport	; funcId == 4
+			.word 0						; funcId == 5
+			.word 0						; funcId == 6
+			.word HeroTileFuncNothing	; funcId == 7 (collision) called only when a hero has got stuck into a collision tiles
 
 HeroInit:
 			call HeroIdleStart
