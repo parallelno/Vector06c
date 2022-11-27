@@ -16,7 +16,7 @@ GameInit:
 			call GameUIInit			
 
 			xra a
-			sta interruptionCounter
+			sta updateRequestCounter
 			hlt
 @gameLoop:
 			CALL_RAM_DISK_FUNC(__GCPlayerStartRepeat, RAM_DISK_S1 | RAM_DISK_M1 | RAM_DISK_M_8F)
@@ -32,7 +32,7 @@ GameUpdate:
 			inr m
 
 			; check if an interuption happened
-			lda interruptionCounter
+			lda updateRequestCounter
 			ora a
 			rz
 @updateLoop:
@@ -48,7 +48,7 @@ GameUpdate:
 			lhld keyCode
 			shld keyCodeOld
 
-			lxi h, interruptionCounter
+			lxi h, updateRequestCounter
 			dcr m
 			jnz @updateLoop
 			ret

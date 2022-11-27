@@ -19,10 +19,16 @@ MONSTER_STATUS_INVIS = $ff
 monstersInits:
 			.word SkeletonInit
 
-MONSTER_RUNTIME_DATA_LEN = 29
+; ptr to the first monster data in the sorted list
+monsterRintimeDataSorted:
+			.word monsterUpdatePtr
+
+MONSTER_RUNTIME_DATA_LEN = 33
+
 ; a list of monster runtime data structs.
 monstersRuntimeData:
 monsterUpdatePtr:		.word TEMP_ADDR
+
 monsterDrawPtr:			.word TEMP_ADDR
 monsterImpactPtr:		.word TEMP_WORD
 monsterType:			.byte TEMP_BYTE
@@ -39,6 +45,8 @@ monsterPosX:			.word TEMP_WORD
 monsterPosY:			.word TEMP_WORD
 monsterSpeedX:			.word TEMP_WORD
 monsterSpeedY:			.word TEMP_WORD
+monsterDataPrevPPtr:	.word TEMP_WORD
+monsterDataNextPPtr:	.word TEMP_WORD
 
 ; the same structs for the rest of the monsters
 .storage MONSTER_RUNTIME_DATA_LEN * (MONSTERS_MAX-1), 0

@@ -18,9 +18,14 @@
 			lda scrOffsetY
 			out 3
 			; used in the main program to keep the update synced with interuption
-			lxi h, interruptionCounter
+@updateSkipper:
+			mvi a, %01010101
+			rrc
+			sta @updateSkipper+1
+			jnc @skipUpdate
+			lxi h, updateRequestCounter
 			inr m
-
+@skipUpdate:
 			; fps update
 			lxi h, intsPerSecCounter
 			dcr m

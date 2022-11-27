@@ -38,7 +38,7 @@ LevelUpdate:
 
 			call HeroInit
 			xra a
-			lda	interruptionCounter
+			lda	updateRequestCounter
 			; reset the command
 			xra a
 			sta levelCommand

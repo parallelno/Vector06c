@@ -1,7 +1,7 @@
 HERO_COLLISION_WIDTH = 15
 HERO_COLLISION_HEIGHT = 11
-HERO_RUN_SPEED		= $0100 ; low byte is a subpixel speed, high byte is a speed in pixels
-HERO_RUN_SPEED_D	= $00b5 ; for diagonal moves
+HERO_RUN_SPEED		= $0200 ; low byte is a subpixel speed, high byte is a speed in pixels
+HERO_RUN_SPEED_D	= $016a ; for diagonal moves
 
 ; hero statuses.
 ; a status describes what set of animations and behavior is active
@@ -13,45 +13,57 @@ HERO_STATUS_ATTACK	= 1
 HERO_STATUS_ATTACK_DURATION	= 10
 
 ; animation speed
-HERO_ANIM_SPEED_MOVE	= 90
-HERO_ANIM_SPEED_IDLE	= 4
-HERO_ANIM_SPEED_ATTACK	= 40
+HERO_ANIM_SPEED_MOVE	= 130
+HERO_ANIM_SPEED_IDLE	= 8
+HERO_ANIM_SPEED_ATTACK	= 80
 
 ; gameplay
 HERO_HEALTH_MAX = 100
 
+; hero runtime data
 ; this's a struct. do not change the layout
-heroData:
-heroHealth:			.byte HERO_HEALTH_MAX
-heroStatus:			.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
-heroStatusTimer:	.byte 0	; a duration of the status. ticks every update
-heroAnimTimer:		.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
-heroAnimAddr:		.word TEMP_ADDR ; holds the current frame ptr
-heroDirX:			.byte 1 		; 1-right, 0-left
-heroEraseScrAddr:	.word TEMP_ADDR
-heroEraseScrAddrOld	.word TEMP_ADDR
-heroEraseWH:		.word TEMP_WORD
-heroEraseWHOld:		.word TEMP_WORD
-heroPosX:			.word TEMP_WORD
-heroPosY:			.word TEMP_WORD
-heroSpeedX:			.word TEMP_WORD
-heroSpeedY:			.word TEMP_WORD
-
+heroUpdatePtr:			.word HeroUpdate
+heroDataPrevPPtr:		.word DRAW_LIST_FIRST_DATA_MARKER
+heroDataNextPPtr:		.word monsterDataNextPPtr
+heroDrawPtr:			.word HeroDraw
+heroImpactPtr:			.word HeroImpact
+heroType:				.byte MONSTER_TYPE_ALLY
+heroHealth:				.byte HERO_HEALTH_MAX
+heroStatus:				.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
+heroStatusTimer:		.byte 0	; a duration of the status. ticks every update
+heroAnimTimer:			.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
+heroAnimAddr:			.word TEMP_ADDR ; holds the current frame ptr
+heroDirX:				.byte 1 		; 1-right, 0-left
+heroEraseScrAddr:		.word TEMP_ADDR
+heroEraseScrAddrOld		.word TEMP_ADDR
+heroEraseWH:			.word TEMP_WORD
+heroEraseWHOld:			.word TEMP_WORD
+heroPosX:				.word TEMP_WORD
+heroPosY:				.word TEMP_WORD
+heroSpeedX:				.word TEMP_WORD
+heroSpeedY:				.word TEMP_WORD
 ;
 heroCollisionFuncTable:
 			; bit layout:
-			; (bottom-left), (bottom-right), (top_right), (top-left)
-			; 						 0001,              0010,              0011,              
-			; 0100,                  0101,              0110,              0111,
-			; 1000,                  1001,              1010,              1011, 
-			; 1100,                  1101,              1110,              1111           
-			.word 				   	 	HeroCheckCollisionTL,	HeroCheckCollisionTR,	HeroCheckCollisionT
-			.word HeroCheckCollisionBR,	HeroCheckTileData,		HeroCheckCollisionR,	HeroCheckTileData
-			.word HeroCheckCollisionBL,	HeroCheckCollisionL,	HeroCheckTileData,		HeroCheckTileData
-			.word HeroCheckCollisionB,	HeroCheckTileData,		HeroCheckTileData,		HeroCheckTileData
+			; (bottom-left), (bottom-right), (top_right), (top-left), 0
+			; 							00010,					01000,					00110,
+			; 01000,					01010,					01100,					01110,
+			; 10000,					10010,					10100,					10110, 
+			; 11000,					11010,					11100,					11110           
+			.word 				   	 	HeroCheckCollisionTL,	HeroCheckCollisionTR,	HeroMoveHorizontally
+			.word HeroCheckCollisionBR,	HeroDontMove,			HeroMoveVertically,		HeroDontMove
+			.word HeroCheckCollisionBL,	HeroMoveVertically,		HeroDontMove,			HeroDontMove
+			.word HeroMoveHorizontally,	HeroDontMove,			HeroDontMove,			HeroDontMove
 
 ; funcs to handle the tile data. more info is in levelGlobalData.asm->roomTilesData
-heroFuncTable:		.word 0, 0, 0, HeroMoveTeleport, 0, 0, HeroDoesNothing
+HeroTileFuncTable:
+heroFuncId1:	.word 0
+heroFuncId2:	.word 0
+heroFuncId3:	.word 0
+heroFuncId4:	.word HeroTileFuncTeleport
+heroFuncId5:	.word 0
+heroFuncId6:	.word 0
+heroFuncId7:	.word HeroTileFuncNothing
 
 HeroInit:
 			call HeroIdleStart
@@ -260,8 +272,8 @@ HeroUpdatePos:
 			xchg
 			lhld heroSpeedX
 			dad d
-			mov b, h
 			shld charTempX
+			mov b, h			
 			lhld heroPosY
 			xchg
 			lhld heroSpeedY
@@ -269,20 +281,20 @@ HeroUpdatePos:
 			shld charTempY
 			
 			; check the collision tiles
-			mov d, b
-			mov e, h
+			mov d, b ; posX
+			mov e, h ; posY
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
 			jz HeroMove
 @collides:
 			; handle a collision data around a hero
 			; if a hero is inside the collision, move him out
-			lxi h, heroCollisionFuncTable-2 ; there is no case there C==0, skip it
+			lxi h, heroCollisionFuncTable-2 ; C==0 is no case, skip it
 			mvi b, 0
 			dad b
 			mov e, m
 			inx h
-			mov d, m 
+			mov d, m
 			xchg
 			pchl
 
@@ -293,6 +305,7 @@ HeroMove:
 			shld heroPosY
 ; handle tileData around a hero.
 HeroCheckTileData:
+HeroDontMove:
 			lxi h, heroPosX+1
 			mov d, m
 			inx_h(2)
@@ -303,83 +316,182 @@ HeroCheckTileData:
 
 			lxi h, roomTileCollisionData
 			mvi c, 4
-@loop:		TILE_DATA_HANDLE_FUNC_CALL(heroFuncTable-2, true)
+@loop:		TILE_DATA_HANDLE_FUNC_CALL(HeroTileFuncTable-2, true)
 			inx h
 			dcr c
 			jnz @loop
 			ret
 
 HeroCheckCollisionTL:
-			lda heroPosX+1
-			; get the offset inside the tile
-			ani %00001111
-			mov c, a
-			lda heroPosY+1
-			adi HERO_COLLISION_HEIGHT-1
-			; get the offset inside the tile
+			lda charTempX+1
+			; get the inverted offsetX inside the tile
 			cma
 			ani %00001111
+			mov c, a
+			lda charTempY+1
+			adi HERO_COLLISION_HEIGHT-1
+			; get the offsetY inside the tile
+			ani %00001111
 			cmp c
-			jnc HeroMoveVertically
-			jmp HeroMoveHorizontally
+			jz HeroMoveTileBR
+			jnc HeroMoveTileR
+			jmp HeroMoveTileB
 			
 HeroCheckCollisionTR:
-			lda heroPosX+1
+			lda charTempX+1
 			adi HERO_COLLISION_WIDTH-1
 			; get the offset inside the tile
 			ani %00001111
 			mov c, a
-			lda heroPosY+1
+			lda charTempY+1
 			adi HERO_COLLISION_HEIGHT-1
 			; get the offset inside the tile
 			ani %00001111
 			cmp c
-			jc HeroMoveVertically
-			jmp HeroMoveHorizontally
+			jz HeroMoveTileBL
+			jc HeroMoveTileB
+			jmp HeroMoveTileL
 
 HeroCheckCollisionBL:
-			lda heroPosX+1
+			lda charTempX+1
 			; get the offset inside the tile
+			cma
 			ani %00001111
 			mov c, a
-			lda heroPosY+1
-			; get the offset inside the tile
-			ani %00001111
-			cmp c
-			jnc HeroMoveVertically
-			jmp HeroMoveHorizontally
-
-HeroCheckCollisionBR:
-			lda heroPosX+1
-			adi HERO_COLLISION_WIDTH-1			
-			; get the offset inside the tile
-			ani %00001111
-			mov c, a
-			lda heroPosY+1
+			lda charTempY+1
 			; get the offset inside the tile
 			cma
 			ani %00001111
 			cmp c
-			jc HeroMoveVertically
-			jmp HeroMoveHorizontally
+			jz HeroMoveTileTR
+			jc HeroMoveTileT
+			jmp HeroMoveTileR
 
-HeroCheckCollisionT:
-HeroCheckCollisionB:
+HeroCheckCollisionBR:
+			lda charTempX+1
+			adi HERO_COLLISION_WIDTH-1
+			; get the offset inside the tile
+			ani %00001111
+			mov c, a
+			lda charTempY+1
+			; get the offset inside the tile
+			cma
+			ani %00001111
+			cmp c
+			jz HeroMoveTileTL
+			jc HeroMoveTileT
+			jmp HeroMoveTileL
+
+; move the hero to the right out of of the collided tile
+HeroMoveTileR:
+			lda charTempX+1
+			stc		; to move outside the current tile
+			adc c
+			sta heroPosX+1
+			lhld charTempY
+			shld heroPosY
+			jmp HeroCheckTileData
+
+; move the hero under the collided tile
+HeroMoveTileB:
+			lhld charTempX
+			shld heroPosX
+			mov c, a
+			lda charTempY+1
+			stc		; to move outside the current tile
+			sbb c
+			sta heroPosY+1
+			jmp HeroCheckTileData
+
+; move the hero to the bottom-right corner of the collided tile
+HeroMoveTileBR:
+			lxi h, charTempX+1
+			stc		; to move outside the current tile
+			adc m
+			sta heroPosX+1
+			inx_h(2)
+			mov a, m
+			stc		; to move outside the current tile
+			sbb c
+			sta heroPosY+1
+			jmp HeroCheckTileData
+
+; move the hero to the left out of of the collided tile
+HeroMoveTileL:
+			lda charTempX+1
+			stc		; to move outside the current tile
+			sbb c
+			sta heroPosX+1
+			lhld charTempY
+			shld heroPosY
+			jmp HeroCheckTileData
+
+; move the hero to the bottom-left corner of the collided tile
+HeroMoveTileBL:
+			lxi h, charTempX+1
+			sub m
+			cma
+			sta heroPosX+1
+			inx_h(2)
+			mov a, m
+			stc		; to move outside the current tile
+			sbb c
+			sta heroPosY+1
+			jmp HeroCheckTileData
+
+; move the hero on top of the collided tile
+HeroMoveTileT:
+			lhld charTempX
+			shld heroPosX
+			mov c, a
+			lda charTempY+1
+			stc		; to move outside the current tile
+			adc c
+			sta heroPosY+1
+			jmp HeroCheckTileData
+
+; move the hero to the top-right corner of the collided tile
+HeroMoveTileTR:
+			lxi h, charTempX+1
+			stc		; to move outside the current tile
+			adc m
+			sta heroPosX+1
+			inx_h(2)
+			mov a, m
+			stc		; to move outside the current tile
+			adc c
+			sta heroPosY+1
+			jmp HeroCheckTileData
+
+; move the hero to the top-left corner of the collided tile
+HeroMoveTileTL:			
+			lxi h, charTempX+1
+			sub m
+			cma
+			sta heroPosX+1
+			inx_h(2)
+			mov a, m
+			stc		; to move outside the current tile
+			adc c
+			sta heroPosY+1
+			jmp HeroCheckTileData
+
+; when the hero runs into a tile from top or bottom, move him only horizontally
 HeroMoveHorizontally:
 			; do not move vertically
 			lhld charTempX
 			shld heroPosX	
 			jmp HeroCheckTileData
-HeroCheckCollisionL:
-HeroCheckCollisionR:
+
+; when the hero runs into a tile from left or right, move him only vertically
 HeroMoveVertically:
 			; do not move horizontally
 			lhld charTempY
 			shld heroPosY			
 			jmp HeroCheckTileData
 
-HeroDoesNothing:
-			; return from the HeroUpdate func
+HeroTileFuncNothing:
+			; bypass "ret"s to return from the HeroUpdate func
 			pop psw
 			pop psw
 			ret
@@ -388,7 +500,7 @@ HeroDoesNothing:
 ; appropriate position based on his current posXY
 ; input:
 ; a - roomId
-HeroMoveTeleport:
+HeroTileFuncTeleport:
 			pop h
 
 			; update a room id to teleport there

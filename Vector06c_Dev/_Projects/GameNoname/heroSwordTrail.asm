@@ -216,7 +216,7 @@ HeroSwordTrailUpdate:
 @setCollisionSize:
 			mvi a, ATTK01_COLLISION_WIDTH-1
 			mvi c, ATTK01_COLLISION_HEIGHT-1
-			lxi d, monstersRuntimeData+1
+			lxi d, monsterUpdatePtr+1
 			call MonstersGetFirstCollided
 			
 			; check if there is collision happened

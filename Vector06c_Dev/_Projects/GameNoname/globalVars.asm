@@ -12,8 +12,8 @@ borderColorIdx:
 scrOffsetY:
 			.byte 255
 
-; it is used to check how many interruptions happened since the last game uppdate
-interruptionCounter:
+; it is used to check how many updates needs to happened to sync with Interruptions
+updateRequestCounter:
 			.byte TEMP_BYTE
 
 ramDiskMode:

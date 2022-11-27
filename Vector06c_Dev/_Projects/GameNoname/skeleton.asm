@@ -1,6 +1,6 @@
 SKELETON_HEALTH = 1
-SKELETON_RUN_SPEED		= $0080
-SKELETON_RUN_SPEED_D	= $ffff - $80 + 1
+SKELETON_RUN_SPEED		= $0100
+SKELETON_RUN_SPEED_D	= $ffff - $100 + 1
 
 SKELETON_COLLISION_WIDTH = 15
 SKELETON_COLLISION_HEIGHT = 10
@@ -22,11 +22,18 @@ SKELETON_DAMAGE = 1
 SkeletonInit:
 			call MonstersGetEmptyDataPtr
 			; hl - ptr to monsterUpdatePtr+1			
-			dcx h
-			mvi m, <SkeletonUpdate
-			inx h 
 			mvi m, >SkeletonUpdate
-			inx h 
+			dcx h 
+			mvi m, <SkeletonUpdate
+
+			; TODO: add monsterDataPrevPPtr init
+			; TODO: add monsterDataNextPPtr init
+
+			
+			; advance to SkeletonDraw
+			LXI_d_TO_DIFF(monsterDrawPtr, monsterUpdatePtr)
+			dad d
+			
 			mvi m, <SkeletonDraw
 			inx h 
 			mvi m, >SkeletonDraw
