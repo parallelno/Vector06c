@@ -10,12 +10,12 @@ HERO_STATUS_IDLE	= 0
 HERO_STATUS_ATTACK	= 1
 
 ; duration of statuses (in updateDurations)
-HERO_STATUS_ATTACK_DURATION	= 6
+HERO_STATUS_ATTACK_DURATION	= 12
 
 ; animation speed (the less the slower, 0-255, 255 means next frame every update)
 HERO_ANIM_SPEED_MOVE	= 65
 HERO_ANIM_SPEED_IDLE	= 4
-HERO_ANIM_SPEED_ATTACK	= 100
+HERO_ANIM_SPEED_ATTACK	= 50
 
 ; gameplay
 HERO_HEALTH_MAX = 100

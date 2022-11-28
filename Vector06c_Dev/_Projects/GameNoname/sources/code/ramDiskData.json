@@ -1,0 +1,62 @@
+{	
+	"ramDisks" : 
+	[
+		{
+			"accesCode" :	"RAM_DISK_S0",
+			"segments" :
+			[
+				{
+					"addr" : "0",
+					"chunks" : 
+					[
+						[
+							"generated\\sprites\\heroSprites.asm"
+						],
+						[
+							"generated\\sprites\\skeletonSprites.asm",
+							"generated\\sprites\\scytheSprites.asm",
+							"generated\\sprites\\hero_attack01Sprites.asm"
+						]
+					]
+				},
+				{
+					"addr" : "$8000",
+					"chunks" : 
+					[
+						[
+							"generated\\levels\\level01.asm"
+						]
+					]
+
+				}
+			]
+		},
+		{
+			"accesCode" :	"RAM_DISK_S1",
+			"segments" :
+			[
+				{
+					"addr" : "0",
+					"chunks" : 
+					[
+						[
+							"generated\\sprites\\knightSprites.asm",
+							"generated\\sprites\\burnerSprites.asm",
+							"generated\\sprites\\vampireSprites.asm"
+						]
+					]
+				},
+				{
+					"addr" : "$8000",
+					"chunks" : 
+					[
+						[
+							"generated\\music\\song01.asm",
+							"gigachad16PlayerRD.asm"
+						]
+					]
+				}				
+			]
+		}		
+	]
+}

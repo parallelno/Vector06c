@@ -16,8 +16,8 @@ animForceExport |= ExportAnimSprites("sprites\\scythe", animForceExport)
 animForceExport |= ExportAnimSprites("sprites\\hero_attack01", animForceExport)
 print("")
 
-ExportSegment("ramDiskBank0_addr0.asm" , animForceExport, SEGMENT_0000_7F00_ADDR)
-ExportSegment("ramDiskBank1_addr0.asm", animForceExport, SEGMENT_0000_7F00_ADDR) 
+ExportSegment("ramDiskBank0_addr0.asm" , animForceExport, SEGMENT_0000_7F00_ADDR, True) 
+ExportSegment("ramDiskBank1_addr0.asm", animForceExport, SEGMENT_0000_7F00_ADDR, True)
 
 print("")
 ######################################################################################

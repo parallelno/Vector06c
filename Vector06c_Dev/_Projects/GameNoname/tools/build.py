@@ -216,7 +216,7 @@ def SplitSegment(segmentPath, segmentLabelsPath):
 			splitAddr = int(splitAddrStr, 16) - firstLabelAddr
 			splitAddrs.append(splitAddr)
 
-	if len(splitAddrs) == 0:
+	if len(splitAddrs) < 2:
 		return []
 	
 	chunkExt = os.path.splitext(segmentPath)[1]

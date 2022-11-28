@@ -117,10 +117,8 @@ def SpriteData(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 
 	return [data]
 
-def AnimsToAsm(charJ, charJPath):
+def AnimsToAsm(labelPrefix, charJ):
 	asm = ""
-	labelPrefix = charJPath.split("/")[-1].split("\\")[-1].split(".")[0]
-
 	# preshifted sprites
 	preshiftedSprites = charJ["preshifted_sprites"]
 	asm += labelPrefix + "_preshifted_sprites:\n"
@@ -157,7 +155,7 @@ def AnimsToAsm(charJ, charJPath):
 
 			asm += "			.word "
 			for i in range(preshiftedSprites):
-				asm += labelPrefix + "_" + str(frame) + "_" + str(i) + ", "
+				asm += "__" + labelPrefix + "_" + str(frame) + "_" + str(i) + ", "
 			asm += "\n"
 
 	return asm
@@ -200,8 +198,7 @@ def MakeEmptySpriteData(hasMask, width, height):
 
 	return [data]
 
-def SpritesToAsm(charJPath, charJ, image, hasMask):
-	labelPrefix = charJPath.split("/")[-1].split("\\")[-1].split(".")[0]
+def SpritesToAsm(labelPrefix, charJ, image, hasMask):
 	spritesJ = charJ["sprites"]
 	asm = labelPrefix + "_sprites:"
 
@@ -325,9 +322,11 @@ def Export(charJPath, asmAnimPath, asmSpritePath):
 
 	image = common.RemapColors(image, colors)
 
+	labelPrefix = charJPath.split("/")[-1].split("\\")[-1].split(".")[0]
 	asm = "; " + charJPath + "\n"
-	asmAnims = asm + AnimsToAsm(charJ, charJPath)
-	asmSprites = asm + SpritesToAsm(charJPath, charJ, image, hasMask)
+	asmAnims = asm + AnimsToAsm(labelPrefix, charJ)
+	asmSprites = asm + f"__RAM_DISK_SPRITE_DATA_{labelPrefix} = RAM_DISK_BANK_ACTIVATION_CMD" + "\n"
+	asmSprites += SpritesToAsm("__" + labelPrefix, charJ, image, hasMask)
 
 	# save asm
 	with open(asmAnimPath, "w") as file:

@@ -4,11 +4,11 @@
 ATTK01_STATUS_ATTACK = 0
 
 ; duration of statuses (in updateDurations)
-ATTK01_STATUS_INVIS_DURATION	= 2
-ATTK01_STATUS_ATTACK_DURATION	= 3
+ATTK01_STATUS_INVIS_DURATION	= 6
+ATTK01_STATUS_ATTACK_DURATION	= 8
 
 ; animation speed (the less the slower, 0-255, 255 means next frame every update)
-ATTK01_ANIM_SPEED_ATTACK	= 40
+ATTK01_ANIM_SPEED_ATTACK	= 50
 
 ; gameplay
 ATTK01_DAMAGE = 1

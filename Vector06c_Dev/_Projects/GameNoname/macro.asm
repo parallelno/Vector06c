@@ -134,7 +134,7 @@
 ; mount the ram-disk
 ; has to be placed right BEFORE lxi sp, addr, and sphl
 .macro RAM_DISK_ON(_command)
-			mvi a, _command
+			mvi a, <_command
 			sta ramDiskMode
 			out $10
 .endmacro

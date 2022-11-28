@@ -22,8 +22,8 @@
 	"mask" : true,
 	"anims" : {
 		"delay"		: ["sword_delay"],
-		"attk_r"	: ["sword_r0"],
-		"attk_l"	: ["sword_l0"]
+		"attk_r"	: ["sword_r0", "sword_r1"],
+		"attk_l"	: ["sword_l0", "sword_l1"]
 	},
 	"sprites" : [
 		{
@@ -46,11 +46,25 @@
 			"width" : 16,
 			"height" : 14,
 			"offsetX": 8,
+			"offsetY": 2,
 			"mask_x" : 8,
 			"mask_y" : 48,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},		
+		{
+			"name" : "sword_r1",
+			"x" : 24,
+			"y"	: 35,
+			"width" : 16,
+			"height" : 13,
+			"offsetX": 8,
+			"offsetY": 0,
+			"mask_x" : 24,
+			"mask_y" : 51,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},				
 		{
 			"name" : "sword_l0",
 			"x" : 0,
@@ -58,10 +72,24 @@
 			"width" : 16,
 			"height" : 14,
 			"offsetX": -8,
+			"offsetY": 2,
 			"mask_x" : 0,
 			"mask_y" : 80,
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		}
+		},
+		{
+			"name" : "sword_l1",
+			"x" : 24,
+			"y"	: 67,
+			"width" : 16,
+			"height" : 13,
+			"offsetX": -8,
+			"offsetY": 0,
+			"mask_x" : 24,
+			"mask_y" : 83,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		}		
 	]
 }
