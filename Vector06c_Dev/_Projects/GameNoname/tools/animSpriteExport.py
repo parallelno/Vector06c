@@ -1,4 +1,3 @@
-from xmlrpc.client import Boolean, boolean
 from PIL import Image
 import json
 import tools.common as common

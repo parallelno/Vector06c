@@ -1,8 +1,20 @@
 {	
-	"ramDisks" : 
+	"dependencies" : 
+	{
+		"sprite" : "tools\\animSpriteExport.py",
+		"level" : "tools\\levelExport.py",
+		"music" : "tools\\musicExport.py",
+		"global" : [
+			"build_run.py",
+			"tools\\build.py",
+			"tools\\common.py",
+			"tools\\ramDiskDataExport.py"
+		]
+	},
+	"banks" : 
 	[
 		{
-			"accesCode" :	"RAM_DISK_S0",
+			"bank" :	"0",
 			"segments" :
 			[
 				{
@@ -10,12 +22,24 @@
 					"chunks" : 
 					[
 						[
-							"generated\\sprites\\heroSprites.asm"
+							{
+								"type" : "sprite",
+								"path" : "sprites\\hero"
+							}
 						],
 						[
-							"generated\\sprites\\skeletonSprites.asm",
-							"generated\\sprites\\scytheSprites.asm",
-							"generated\\sprites\\hero_attack01Sprites.asm"
+							{
+								"type" : "sprite",
+								"path" : "sprites\\skeleton"
+							},
+							{
+								"type" : "sprite",
+								"path" : "sprites\\scythe"
+							},
+							{
+								"type" : "sprite",
+								"path" : "sprites\\hero_attack01"
+							}
 						]
 					]
 				},
@@ -24,7 +48,10 @@
 					"chunks" : 
 					[
 						[
-							"generated\\levels\\level01.asm"
+							{
+								"type" : "level",
+								"path" : "levels\\level01"
+							}
 						]
 					]
 
@@ -32,7 +59,7 @@
 			]
 		},
 		{
-			"accesCode" :	"RAM_DISK_S1",
+			"bank" :	"1",
 			"segments" :
 			[
 				{
@@ -40,9 +67,18 @@
 					"chunks" : 
 					[
 						[
-							"generated\\sprites\\knightSprites.asm",
-							"generated\\sprites\\burnerSprites.asm",
-							"generated\\sprites\\vampireSprites.asm"
+							{
+								"type" : "sprite",
+								"path" : "sprites\\knight"
+							},
+							{
+								"type" : "sprite",
+								"path" : "sprites\\burner"
+							},
+							{
+								"type" : "sprite",
+								"path" : "sprites\\vampire"
+							}
 						]
 					]
 				},
@@ -51,12 +87,50 @@
 					"chunks" : 
 					[
 						[
-							"generated\\music\\song01.asm",
-							"gigachad16PlayerRD.asm"
+							{
+								"type" : "music",
+								"path" : "music\\song01"
+							},
+							{
+								"type" : "code",
+								"path": "gigachad16PlayerRD.asm"
+							}
 						]
 					]
-				}				
+
+				}
 			]
-		}		
+		},
+		{
+			"bank" :	"2",
+			"segments" :
+			[
+				{
+					"addr" : "$8000",
+					"chunks" : 
+					[
+						[
+							{
+								"type" : "code",
+								"path" : "spriteRD.asm"
+							},
+							{
+								"type" : "code",
+								"path": "drawSpriteRD.asm"
+							},
+							{
+								"type" : "code",
+								"path" : "utilsRD.asm"
+							},
+							{
+								"type" : "code",
+								"path" : "spritePreshiftRD.asm"
+							}
+						]												
+					]
+
+				}
+			]
+		}			
 	]
 }

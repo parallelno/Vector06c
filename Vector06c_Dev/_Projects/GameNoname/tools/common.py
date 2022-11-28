@@ -109,10 +109,13 @@ def BytesToAsm(data):
 		asm += str(byte) + ","
 	return asm + "\n"
 
-def RunCommand(command, comment = ""):
+def RunCommand(command, comment = "", checkPath = ""):
 	if comment != "" : 
 		print(comment)
-	os.system(command)
+	if checkPath == "" or os.path.isfile(checkPath):
+		os.system(command)
+	else:
+		print(f"command {command} is failed. file {checkPath} doesn't exist")
 
 def DeleteFile(path):
 	if os.path.isfile(f"{path}"):
@@ -125,3 +128,11 @@ def str2bool(v):
         return True
     else:
         return False
+
+def DoubleSleshes(path):
+	res = ""
+	for char in path:
+		res += char
+		if char == '\\':
+			res += char
+	return res

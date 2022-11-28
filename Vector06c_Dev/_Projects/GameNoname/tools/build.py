@@ -25,10 +25,10 @@ def ExportAnimSprites(sourcePath, forceExport, sourceFolder = "sources\\", gener
 			generatedFolder + sourcePath + "Sprites.asm")
 
 		print("animSpriteExport: " + sourceFolder + sourcePath + ext + " got exported.")
-		return True
+		return True, {"anim" : generatedFolder + sourcePath + "Anim.asm", "sprites" : generatedFolder + sourcePath + "Sprites.asm"}
 	else:
 		#print("animSpriteExport: " + sourceFolder + sourcePath + ext + " is no need to export.")
-		return False
+		return False, {"anim" : generatedFolder + sourcePath + "Anim.asm", "sprites" : generatedFolder + sourcePath + "Sprites.asm"}
 
 def ExportLevel(sourcePath, forceExport, sourceFolder = "sources\\", generatedFolder = "generated\\"):
 	ext = ".json"
@@ -38,10 +38,10 @@ def ExportLevel(sourcePath, forceExport, sourceFolder = "sources\\", generatedFo
 			generatedFolder + sourcePath + ".asm")
 			
 		print("levelExport: " + sourceFolder + sourcePath + ext + " got exported.")		
-		return True
+		return True, generatedFolder + sourcePath + ".asm"
 	else:
 		#print("levelExport: " + sourceFolder + sourcePath + ext + " is no need to export.")		
-		return False
+		return False, generatedFolder + sourcePath + ".asm"
 
 def ExportMusic(sourcePath, forceExport, sourceFolder = "sources\\", generatedFolder = "generated\\"):
 	ext = ".ym"
@@ -51,28 +51,29 @@ def ExportMusic(sourcePath, forceExport, sourceFolder = "sources\\", generatedFo
 			generatedFolder + sourcePath + ".asm")
 			
 		print("musicExport: " + sourceFolder + sourcePath + ext + " got exported.")		
-		return True
+		return True, generatedFolder + sourcePath + ".asm"
 	else:	
-		return False		
+		return False, generatedFolder + sourcePath + ".asm"
 
-def ExportSegment(segmentPath, forceExport, segmentAddr, externalsOnly = False):
-	segmentPathWOExt = os.path.splitext(segmentPath)[0]
-	segmentName = os.path.basename(segmentPathWOExt)
-	generatedFolder = "generated\\bin\\"
+def ExportSegment(segmentPath, forceExport, segmentAddr, externalsOnly = False, generatedFolder = "generated\\"):
+	extAsm = ".asm"
+	segmentName = os.path.basename(segmentPath)
+	segmentFullPath = generatedFolder + segmentPath + extAsm
+	binFolder = generatedFolder + "bin\\"
 
-	if IsAsmUpdated(segmentPath) | forceExport:
-		common.RunCommand(f"..\\..\\retroassembler\\retroassembler.exe -C=8080 {segmentPath} "
-				f" {generatedFolder}{segmentName}.bin >{segmentPathWOExt}Labels.asm")
+	if IsAsmUpdated(segmentFullPath) | forceExport:
+		common.RunCommand(f"..\\..\\retroassembler\\retroassembler.exe -x -C=8080 {segmentFullPath} "
+				f" {binFolder}{segmentName}.bin >{generatedFolder + segmentPath}_labels.asm")
 
-		CheckSegmentSize(f"{generatedFolder}{segmentName}.bin", segmentAddr)
+		CheckSegmentSize(f"{binFolder}{segmentName}.bin", segmentAddr)
 
-		ExportLabels(f"{segmentPathWOExt}Labels.asm", externalsOnly)
+		ExportLabels(f"{generatedFolder + segmentPath}_labels.asm", externalsOnly)
 
-		chunkPaths = SplitSegment(f"{generatedFolder}{segmentName}.bin", f"{segmentPathWOExt}Labels.asm")
+		chunkPaths = SplitSegment(f"{binFolder}{segmentName}.bin", f"{generatedFolder + segmentPath}_labels.asm")
 
 		if len(chunkPaths) == 0:
-			common.DeleteFile(f"{generatedFolder}{segmentName}.bin.zx0")
-			common.RunCommand(f"tools\\zx0salvador.exe -v -classic {generatedFolder}{segmentName}.bin {generatedFolder}{segmentName}.bin.zx0")
+			common.DeleteFile(f"{binFolder}{segmentName}.bin.zx0")
+			common.RunCommand(f"tools\\zx0salvador.exe -v -classic {binFolder}{segmentName}.bin {binFolder}{segmentName}.bin.zx0")
 		else:
 			for chunkPath in chunkPaths:
 				zipfilePathWOExt = os.path.splitext(chunkPath)[0] 
@@ -211,7 +212,7 @@ def SplitSegment(segmentPath, segmentLabelsPath):
 	splitAddrs = []
 	for line in labels:
 		label = line.decode('ascii')
-		if label.find("__split") != -1:
+		if label.find("__chunkEnd") != -1:
 			splitAddrStr = label[label.find("$")+1:]
 			splitAddr = int(splitAddrStr, 16) - firstLabelAddr
 			splitAddrs.append(splitAddr)
