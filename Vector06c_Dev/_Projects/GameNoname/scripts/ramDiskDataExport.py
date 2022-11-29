@@ -10,7 +10,7 @@ def Export(contentJPath):
 		contentJ = json.load(file)
 
 	# set global buildDBPath
-	build.buildDBPath = contentJ["buildDBPath"]
+	build.SetBuildDBPath(contentJ["buildDBPath"])
 
 	sourceFolder = contentJ["paths"]["source"]
 	generatedFolder = contentJ["paths"]["generated"]
@@ -170,6 +170,7 @@ def Export(contentJPath):
 			ramDiskInitAsm += "	;===============================================\n"
 
 			if name == "sprites":
+				chunkLen = len(segmentJ["chunks"])
 				for chunk, chunkJ in enumerate(segmentJ["chunks"]):
 					assetNames = []
 					for asset in chunkJ:
@@ -178,8 +179,12 @@ def Export(contentJPath):
 						assetName = os.path.basename(pathWOExt)
 						assetNames.append(assetName)
 
+					ramDiskChunkFileName = ramDiskSegmentFileName
+					if chunkLen > 1:
+						ramDiskChunkFileName += f"_{chunk}"
+
 					ramDiskInitAsm +=f"			; unpack chunk {chunk} {assetNames} sprites into the ram-disk back buffer\n"
-					ramDiskInitAsm +=f"			lxi d, {ramDiskSegmentFileName}_{chunk}\n"
+					ramDiskInitAsm +=f"			lxi d, {ramDiskChunkFileName}\n"
 					ramDiskInitAsm += "			lxi b, SCR_BUFF1_ADDR\n"
 					ramDiskInitAsm += "			mvi a, RAM_DISK_M2 | RAM_DISK_M_8F\n"
 					ramDiskInitAsm += "			call dzx0RD\n\n"
@@ -207,7 +212,7 @@ def Export(contentJPath):
 						ramDiskInitAsm +=f"			RAM_DISK_OFF()\n\n"
 
 					ramDiskInitAsm +=f"			; copy chunk {chunk} {assetNames} sprites to the ram-disk\n"
-					ramDiskInitAsm +=f"			lxi d, SCR_BUFF1_ADDR + {chunkLenS}\n"
+					ramDiskInitAsm +=f"			lxi d, SCR_BUFF1_ADDR + ({chunkLenS})\n"
 					ramDiskInitAsm +=f"			lxi h, {chunkEndAddrS}{chunk}\n"
 					ramDiskInitAsm +=f"			lxi b, ({chunkLenS}) / 2\n"
 					ramDiskInitAsm +=f"			mvi a, RAM_DISK_S{bank} | RAM_DISK_M2 | RAM_DISK_M_8F\n"

@@ -22,7 +22,7 @@ RoomInitTiles:
 			rlc
 			mov c, a
 			mvi b, 0
-			lxi h, level01_roomsAddr
+			lxi h, __level01_roomsAddr
 			dad b
 
 			xchg
@@ -54,7 +54,7 @@ RoomInitTiles:
 			dad h
 			; double it again because there are two safety bytes in front of every pointer
 			dad h
-			lxi d, level01_tilesAddr
+			lxi d, __level01_tilesAddr
 			; hl gets the tile graphics ponter
 			dad d
 
@@ -91,7 +91,7 @@ RoomInitTilesData:
 			rlc
 			mov c, a
 			mvi b, 0
-			lxi h, level01_roomsAddr
+			lxi h, __level01_roomsAddr
 			dad b
 
 			xchg

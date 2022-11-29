@@ -8,7 +8,7 @@
 
 .include "utils.asm"
 .include "interruptions.asm"
-.include "ramDisk.asm"
+.include "generated\\code\\ramDiskInit.asm"
 .include "game.asm"
 
 MainStart:
@@ -18,5 +18,5 @@ MainStart:
 			call GameInit
 			jmp @mainLoop
 
-.include "ramDiskData.asm"
+.include "generated\\code\\ramDiskData.asm"
 .end

@@ -21,7 +21,7 @@ RamDiskInit:
 	;===============================================
 	;		sprites, bank 1, addr 0
 	;===============================================
-			; unpack chunk 0 ['knight', 'burner', 'vampire'] sprites into the ram-disk back buffer
+			; unpack chunk 0 ['knight', 'burner'] sprites into the ram-disk back buffer
 			lxi d, ramDiskData_bank1_addr0_0
 			lxi b, SCR_BUFF1_ADDR
 			mvi a, RAM_DISK_M2 | RAM_DISK_M_8F
@@ -41,17 +41,30 @@ RamDiskInit:
 			call __SpriteDupPreshift
 			RAM_DISK_OFF()
 
-			; preshift chunk 0 vampire sprites
+			; copy chunk 0 ['knight', 'burner'] sprites to the ram-disk
+			lxi d, SCR_BUFF1_ADDR + (__chunkEnd_bank1_addr0_chunk0 - __chunkStart_bank1_addr0_chunk0)
+			lxi h, __chunkEnd_bank1_addr0_chunk0
+			lxi b, (__chunkEnd_bank1_addr0_chunk0 - __chunkStart_bank1_addr0_chunk0) / 2
+			mvi a, RAM_DISK_S1 | RAM_DISK_M2 | RAM_DISK_M_8F
+			call CopyToRamDisk
+
+			; unpack chunk 1 ['vampire'] sprites into the ram-disk back buffer
+			lxi d, ramDiskData_bank1_addr0_1
+			lxi b, SCR_BUFF1_ADDR
+			mvi a, RAM_DISK_M2 | RAM_DISK_M_8F
+			call dzx0RD
+
+			; preshift chunk 1 vampire sprites
 			RAM_DISK_ON(RAM_DISK_M2 | RAM_DISK_M_8F)
 			lxi d, vampire_preshifted_sprites
-			lxi h, SCR_BUFF1_ADDR
+			lxi h, SCR_BUFF1_ADDR - __chunkEnd_bank1_addr0_chunk0
 			call __SpriteDupPreshift
 			RAM_DISK_OFF()
 
-			; copy chunk 0 ['knight', 'burner', 'vampire'] sprites to the ram-disk
-			lxi d, SCR_BUFF1_ADDR + __chunkEnd_bank1_addr0_chunk0 - __chunkStart_bank1_addr0_chunk0
-			lxi h, __chunkEnd_bank1_addr0_chunk0
-			lxi b, (__chunkEnd_bank1_addr0_chunk0 - __chunkStart_bank1_addr0_chunk0) / 2
+			; copy chunk 1 ['vampire'] sprites to the ram-disk
+			lxi d, SCR_BUFF1_ADDR + (__chunkEnd_bank1_addr0_chunk1 - __chunkEnd_bank1_addr0_chunk0)
+			lxi h, __chunkEnd_bank1_addr0_chunk1
+			lxi b, (__chunkEnd_bank1_addr0_chunk1 - __chunkEnd_bank1_addr0_chunk0) / 2
 			mvi a, RAM_DISK_S1 | RAM_DISK_M2 | RAM_DISK_M_8F
 			call CopyToRamDisk
 
@@ -81,7 +94,7 @@ RamDiskInit:
 			RAM_DISK_OFF()
 
 			; copy chunk 0 ['hero'] sprites to the ram-disk
-			lxi d, SCR_BUFF1_ADDR + __chunkEnd_bank0_addr0_chunk0 - __chunkStart_bank0_addr0_chunk0
+			lxi d, SCR_BUFF1_ADDR + (__chunkEnd_bank0_addr0_chunk0 - __chunkStart_bank0_addr0_chunk0)
 			lxi h, __chunkEnd_bank0_addr0_chunk0
 			lxi b, (__chunkEnd_bank0_addr0_chunk0 - __chunkStart_bank0_addr0_chunk0) / 2
 			mvi a, RAM_DISK_S0 | RAM_DISK_M2 | RAM_DISK_M_8F
@@ -115,7 +128,7 @@ RamDiskInit:
 			RAM_DISK_OFF()
 
 			; copy chunk 1 ['skeleton', 'scythe', 'hero_attack01'] sprites to the ram-disk
-			lxi d, SCR_BUFF1_ADDR + __chunkEnd_bank0_addr0_chunk1 - __chunkEnd_bank0_addr0_chunk0
+			lxi d, SCR_BUFF1_ADDR + (__chunkEnd_bank0_addr0_chunk1 - __chunkEnd_bank0_addr0_chunk0)
 			lxi h, __chunkEnd_bank0_addr0_chunk1
 			lxi b, (__chunkEnd_bank0_addr0_chunk1 - __chunkEnd_bank0_addr0_chunk0) / 2
 			mvi a, RAM_DISK_S0 | RAM_DISK_M2 | RAM_DISK_M_8F

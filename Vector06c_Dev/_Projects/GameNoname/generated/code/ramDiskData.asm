@@ -21,8 +21,10 @@ ramDiskData_bank0_addr0_1: ; ['skeleton', 'scythe', 'hero_attack01']
 .incbin "generated\\bin\\ramDiskData_bank0_addr0_1.bin.zx0"
 ramDiskData_bank0_addr8000: ; ['level01']
 .incbin "generated\\bin\\ramDiskData_bank0_addr8000.bin.zx0"
-ramDiskData_bank1_addr0: ; ['knight', 'burner', 'vampire']
-.incbin "generated\\bin\\ramDiskData_bank1_addr0.bin.zx0"
+ramDiskData_bank1_addr0_0: ; ['knight', 'burner']
+.incbin "generated\\bin\\ramDiskData_bank1_addr0_0.bin.zx0"
+ramDiskData_bank1_addr0_1: ; ['vampire']
+.incbin "generated\\bin\\ramDiskData_bank1_addr0_1.bin.zx0"
 ramDiskData_bank1_addr8000: ; ['song01', 'gigachad16PlayerRD']
 .incbin "generated\\bin\\ramDiskData_bank1_addr8000.bin.zx0"
 ramDiskData_bank2_addr8000: ; ['spriteRD', 'drawSpriteRD', 'utilsRD', 'spritePreshiftRD']

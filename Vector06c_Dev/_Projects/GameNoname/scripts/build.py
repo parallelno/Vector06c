@@ -13,6 +13,10 @@ SEGMENT_8000_0000_ADDR = 0x8000
 SEGMENT_0000_7F00_SIZE_MAX = 2 ** 15 - 256 # because an interruption can corrupt the ram-disk memory from STACK_MIN_ADDR = $7f00 to STACK_TEMP_ADDR = $8000
 SEGMENT_8000_0000_SIZE_MAX = 2 ** 15
 
+def SetBuildDBPath(_buildDBPath):
+	global buildDBPath
+	buildDBPath = _buildDBPath
+
 def DelBuildDB():
 	common.RunCommand("del " + buildDBPath, "Build DB was deleted")
 
@@ -123,9 +127,9 @@ def IsAsmUpdated(asmPath):
 
 	return anyIncUpdated | IsFileUpdated(asmPath)
 
-def IsFileUpdated(path, _buildDBPath = buildDBPath):
+def IsFileUpdated(path):
 	
-	con = sqlite3.connect(_buildDBPath)
+	con = sqlite3.connect(buildDBPath)
 	cur = con.cursor()
 	cur.execute('''CREATE TABLE if not exists files
 			   (path text, modtime real)''')

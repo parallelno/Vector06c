@@ -4,7 +4,7 @@ import common
           
 print(f"ram-disk data export:")
 ramDiskDataExport.Export("source\\code\\ramDiskData.json")
-    
+
 print("") 
 ######################################################################################
 print(f"build a game rom:")

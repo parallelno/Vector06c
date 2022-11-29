@@ -10,7 +10,7 @@ LevelsInit:
 ;	initialization level data every game start
 ;
 LevelInit:
-			lxi d, level01_palette_sprites_tiles_lv01
+			lxi d, __level01_palette_sprites_tiles_lv01
             mvi a, RAM_DISK_S0
 			call SetPaletteFromRamDisk
 			mvi a, 1
@@ -18,7 +18,7 @@ LevelInit:
 			xra a
 			sta roomIdx
 
-			lxi d, level01_startPos
+			lxi d, __level01_startPos
 			mvi a, RAM_DISK_S0
 			call GetWordFromRamDisk
 			call HeroSetPos

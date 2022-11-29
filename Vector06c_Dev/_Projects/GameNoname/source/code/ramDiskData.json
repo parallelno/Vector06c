@@ -1,9 +1,9 @@
 {	
 	"dependencies" : 
 	{
-		"sprite" : "tools\\animSpriteExport.py",
-		"level" : "tools\\levelExport.py",
-		"music" : "tools\\musicExport.py",
+		"sprite" : "scripts\\animSpriteExport.py",
+		"level" : "scripts\\levelExport.py",
+		"music" : "scripts\\musicExport.py",
 		"global" : [
 			"scripts\\task_buildRun.py",
 			"scripts\\build.py",
@@ -18,7 +18,7 @@
 		"bin" : "generated\\bin\\",
 		"rom" : "rom\\"
 	},
-	"buildDBPath" : "generated\\build_new.db",
+	"buildDBPath" : "generated\\build.db",
 	"banks" : 
 	[
 		{
@@ -85,7 +85,9 @@
 							{
 								"type" : "sprite",
 								"path" : "sprites\\burner.json"
-							},
+							}
+						],
+						[
 							{
 								"type" : "sprite",
 								"path" : "sprites\\vampire.json"
