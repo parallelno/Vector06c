@@ -6,7 +6,8 @@
 .include "generated\\code\\ramDiskData_bank2_addr8000_labels.asm"
 
 ; sprites anims
-.include "generated\\sprites\\heroAnim.asm"
+.include "generated\\sprites\\heroRAnim.asm"
+.include "generated\\sprites\\heroLAnim.asm"
 .include "generated\\sprites\\skeletonAnim.asm"
 .include "generated\\sprites\\scytheAnim.asm"
 .include "generated\\sprites\\hero_attack01Anim.asm"
@@ -15,7 +16,7 @@
 .include "generated\\sprites\\vampireAnim.asm"
 
 ; compressed ram-disk data. They will be unpacked in a reverse order.
-ramDiskData_bank0_addr0_0: ; ['hero']
+ramDiskData_bank0_addr0_0: ; ['heroR', 'heroL']
 .incbin "generated\\bin\\ramDiskData_bank0_addr0_0.bin.zx0"
 ramDiskData_bank0_addr0_1: ; ['skeleton', 'scythe', 'hero_attack01']
 .incbin "generated\\bin\\ramDiskData_bank0_addr0_1.bin.zx0"
@@ -31,7 +32,7 @@ ramDiskData_bank2_addr8000: ; ['spriteRD', 'drawSpriteRD', 'utilsRD', 'spritePre
 .incbin "generated\\bin\\ramDiskData_bank2_addr8000.bin.zx0"
 
 ; ram-disk data layout
-; bank0 addr$0000 [694 free]	- sprites:	['hero', 'skeleton', 'scythe', 'hero_attack01']
+; bank0 addr$0000 [694 free]	- sprites:	['heroR', 'heroL', 'skeleton', 'scythe', 'hero_attack01']
 ; bank0 addr$8000 [27780 free]	- levels:	['level01']
 ; bank1 addr$0000 [7672 free]	- sprites:	['knight', 'burner', 'vampire']
 ; bank1 addr$8000 [19856 free]	- music:	['song01', 'gigachad16PlayerRD']

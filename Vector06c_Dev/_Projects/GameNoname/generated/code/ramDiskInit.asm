@@ -80,20 +80,27 @@ RamDiskInit:
 	;===============================================
 	;		sprites, bank 0, addr 0
 	;===============================================
-			; unpack chunk 0 ['hero'] sprites into the ram-disk back buffer
+			; unpack chunk 0 ['heroR', 'heroL'] sprites into the ram-disk back buffer
 			lxi d, ramDiskData_bank0_addr0_0
 			lxi b, SCR_BUFF1_ADDR
 			mvi a, RAM_DISK_M2 | RAM_DISK_M_8F
 			call dzx0RD
 
-			; preshift chunk 0 hero sprites
+			; preshift chunk 0 heroR sprites
 			RAM_DISK_ON(RAM_DISK_M2 | RAM_DISK_M_8F)
-			lxi d, hero_preshifted_sprites
+			lxi d, heroR_preshifted_sprites
 			lxi h, SCR_BUFF1_ADDR
 			call __SpriteDupPreshift
 			RAM_DISK_OFF()
 
-			; copy chunk 0 ['hero'] sprites to the ram-disk
+			; preshift chunk 0 heroL sprites
+			RAM_DISK_ON(RAM_DISK_M2 | RAM_DISK_M_8F)
+			lxi d, heroL_preshifted_sprites
+			lxi h, SCR_BUFF1_ADDR
+			call __SpriteDupPreshift
+			RAM_DISK_OFF()
+
+			; copy chunk 0 ['heroR', 'heroL'] sprites to the ram-disk
 			lxi d, SCR_BUFF1_ADDR + (__chunkEnd_bank0_addr0_chunk0 - __chunkStart_bank0_addr0_chunk0)
 			lxi h, __chunkEnd_bank0_addr0_chunk0
 			lxi b, (__chunkEnd_bank0_addr0_chunk0 - __chunkStart_bank0_addr0_chunk0) / 2

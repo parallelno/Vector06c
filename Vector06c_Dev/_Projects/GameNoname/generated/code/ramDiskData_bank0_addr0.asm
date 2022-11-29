@@ -5,7 +5,8 @@ __chunkStart_bank0_addr0_chunk0:
 .include "macro.asm"
 RAM_DISK_BANK_ACTIVATION_CMD = RAM_DISK_S0
 
-.include "generated\\sprites\\heroSprites.asm"
+.include "generated\\sprites\\heroRSprites.asm"
+.include "generated\\sprites\\heroLSprites.asm"
 .align 2
 __chunkEnd_bank0_addr0_chunk0:
 

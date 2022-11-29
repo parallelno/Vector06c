@@ -186,6 +186,19 @@
 		.endif
 .endmacro
 
+; a - ram disk activation command
+.macro CALL_RAM_DISK_FUNC_BANK(funcAddr, disableInt = false, useXRA = true)
+		.if disableInt
+			di
+		.endif
+			RAM_DISK_ON_BANK()
+			call funcAddr
+			RAM_DISK_OFF(useXRA)
+		.if disableInt
+			ei
+		.endif
+.endmacro
+
 .macro CALL_RAM_DISK_FUNC_NO_RESTORE(funcAddr, _command, disableInt = false, useXRA = true)
 		.if disableInt
 			di

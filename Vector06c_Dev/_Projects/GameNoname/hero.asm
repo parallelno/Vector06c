@@ -5,7 +5,7 @@ HERO_RUN_SPEED_D	= $016a ; for diagonal moves
 
 ; hero statuses.
 ; a status describes what set of animations and behavior is active
-; for ex. HERO_STATUS_ATTACK plays hero_attk_r or hero_attk_l depending on the direction and it spawns a weapon trail
+; for ex. HERO_STATUS_ATTACK plays heroR_attk or heroL_attk depending on the direction and it spawns a weapon trail
 HERO_STATUS_IDLE	= 0
 HERO_STATUS_ATTACK	= 1
 
@@ -149,7 +149,7 @@ HeroUpdate:
 
 			mvi a, 1
 			sta heroDirX
-			lxi h, hero_run_r
+			lxi h, heroR_run
 			shld heroAnimAddr
 			jmp HeroUpdatePos
 
@@ -163,7 +163,7 @@ HeroUpdate:
 
 			mvi a, 1
 			sta heroDirX
-			lxi h, hero_run_r
+			lxi h, heroR_run
 			shld heroAnimAddr
 			jmp HeroUpdatePos
 
@@ -178,7 +178,7 @@ HeroUpdate:
 
 			mvi a, 1
 			sta heroDirX
-			lxi h, hero_run_r
+			lxi h, heroR_run
 			shld heroAnimAddr
 			jmp HeroUpdatePos
 
@@ -193,7 +193,7 @@ HeroUpdate:
 
 			xra a
 			sta heroDirX
-			lxi h, hero_run_l
+			lxi h, heroL_run
 			shld heroAnimAddr
 			jmp HeroUpdatePos
 
@@ -208,7 +208,7 @@ HeroUpdate:
 
 			xra a
 			sta heroDirX
-			lxi h, hero_run_l
+			lxi h, heroL_run
 			shld heroAnimAddr
 			jmp HeroUpdatePos
 
@@ -222,7 +222,7 @@ HeroUpdate:
 
 			xra a
 			sta heroDirX
-			lxi h, hero_run_l
+			lxi h, heroL_run
 			shld heroAnimAddr
 			jmp HeroUpdatePos
 
@@ -239,11 +239,11 @@ HeroUpdate:
 			ora a
 			jz @setAnimRunUfaceL
 
-			lxi h, hero_run_r
+			lxi h, heroR_run
 			shld heroAnimAddr
 			jmp HeroUpdatePos
 @setAnimRunUfaceL:
-			lxi h, hero_run_l
+			lxi h, heroL_run
 			shld heroAnimAddr
 			jmp HeroUpdatePos
 @setAnimRunD:
@@ -258,11 +258,11 @@ HeroUpdate:
 			lda heroDirX
 			ora a
 			jz @setAnimRunDfaceL
-			lxi h, hero_run_r
+			lxi h, heroR_run
 			shld heroAnimAddr
 			jmp HeroUpdatePos
 @setAnimRunDfaceL:
-			lxi h, hero_run_l
+			lxi h, heroL_run
 			shld heroAnimAddr
 			;jmp HeroUpdatePos
 
@@ -566,11 +566,11 @@ HeroAttackStart:
 			ora a
 			jz @setAnimAttkL
 
-			lxi h, hero_attk_r
+			lxi h, heroR_attk
 			shld heroAnimAddr
 			jmp  HeroSwordTrailInit
 @setAnimAttkL:
-			lxi h, hero_attk_l
+			lxi h, heroL_attk
 			shld heroAnimAddr
 			jmp HeroSwordTrailInit
 			.closelabels
@@ -602,11 +602,11 @@ HeroIdleStart:
 			ora a
 			jz @setAnimIdleL
 
-			lxi h, hero_idle_r
+			lxi h, heroR_idle
 			shld heroAnimAddr
 			ret
 @setAnimIdleL:
-			lxi h, hero_idle_l
+			lxi h, heroL_idle
 			shld heroAnimAddr
 			ret
 
@@ -643,8 +643,16 @@ HeroDraw:
 			lhld heroAnimAddr
 			call SpriteGetAddr
 
+			lda heroDirX
+			ora a
+			mvi a, <(__RAM_DISK_SPRITE_DATA_HEROR | RAM_DISK_M2 | RAM_DISK_M_8F)
+			jnz @spriteR
+@spriteL:
+			mvi a, <(__RAM_DISK_SPRITE_DATA_HEROL | RAM_DISK_M2 | RAM_DISK_M_8F)
+@spriteR:			
+
 			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, RAM_DISK_S0 | RAM_DISK_M2 | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC_BANK(__DrawSpriteVM)
 
 			; store an old scr addr, width, and height
 			lxi h, heroEraseScrAddr

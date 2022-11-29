@@ -33,7 +33,11 @@
 						[
 							{
 								"type" : "sprite",
-								"path" : "sprites\\hero.json"
+								"path" : "sprites\\heroR.json"
+							},
+							{
+								"type" : "sprite",
+								"path" : "sprites\\heroL.json"
 							}
 						],
 						[
