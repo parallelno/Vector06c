@@ -1,4 +1,4 @@
-; sources\sprites\scythe.json
+; source\sprites\scythe.json
 scythe_preshifted_sprites:
 			.byte 4
 scythe_anims:

@@ -1,4 +1,4 @@
-; sources\sprites\hero.json
+; source\sprites\hero.json
 hero_preshifted_sprites:
 			.byte 4
 hero_anims:

@@ -5,12 +5,20 @@
 		"level" : "tools\\levelExport.py",
 		"music" : "tools\\musicExport.py",
 		"global" : [
-			"build_run.py",
-			"tools\\build.py",
-			"tools\\common.py",
-			"tools\\ramDiskDataExport.py"
+			"scripts\\task_buildRun.py",
+			"scripts\\build.py",
+			"scripts\\common.py",
+			"scripts\\ramDiskDataExport.py"
 		]
 	},
+	"paths" :
+	{
+		"source" : "source\\",
+		"generated" : "generated\\",
+		"bin" : "generated\\bin\\",
+		"rom" : "rom\\"
+	},
+	"buildDBPath" : "generated\\build_new.db",
 	"banks" : 
 	[
 		{
@@ -24,21 +32,21 @@
 						[
 							{
 								"type" : "sprite",
-								"path" : "sprites\\hero"
+								"path" : "sprites\\hero.json"
 							}
 						],
 						[
 							{
 								"type" : "sprite",
-								"path" : "sprites\\skeleton"
+								"path" : "sprites\\skeleton.json"
 							},
 							{
 								"type" : "sprite",
-								"path" : "sprites\\scythe"
+								"path" : "sprites\\scythe.json"
 							},
 							{
 								"type" : "sprite",
-								"path" : "sprites\\hero_attack01"
+								"path" : "sprites\\hero_attack01.json"
 							}
 						]
 					]
@@ -50,7 +58,7 @@
 						[
 							{
 								"type" : "level",
-								"path" : "levels\\level01"
+								"path" : "levels\\level01.json"
 							}
 						]
 					]
@@ -69,15 +77,15 @@
 						[
 							{
 								"type" : "sprite",
-								"path" : "sprites\\knight"
+								"path" : "sprites\\knight.json"
 							},
 							{
 								"type" : "sprite",
-								"path" : "sprites\\burner"
+								"path" : "sprites\\burner.json"
 							},
 							{
 								"type" : "sprite",
-								"path" : "sprites\\vampire"
+								"path" : "sprites\\vampire.json"
 							}
 						]
 					]
@@ -89,7 +97,7 @@
 						[
 							{
 								"type" : "music",
-								"path" : "music\\song01"
+								"path" : "music\\song01.ym"
 							},
 							{
 								"type" : "code",

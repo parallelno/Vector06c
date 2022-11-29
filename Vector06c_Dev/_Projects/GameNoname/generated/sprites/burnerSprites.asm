@@ -1,5 +1,5 @@
-; sources\sprites\burner.json
-__RAM_DISK_SPRITE_DATA_burner = RAM_DISK_BANK_ACTIVATION_CMD
+; source\sprites\burner.json
+__RAM_DISK_SPRITE_DATA_BURNER = RAM_DISK_BANK_ACTIVATION_CMD
 __burner_sprites:
 			.byte 1,1  ; safety pair of bytes to support a stack renderer, and also (maskFlag, preshifting is done)
 __burner_idle_r0_0:

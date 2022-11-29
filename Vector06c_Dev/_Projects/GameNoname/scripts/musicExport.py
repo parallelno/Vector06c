@@ -2,9 +2,7 @@
 import struct
 import sys
 import os
-from subprocess import Popen, PIPE
-import tools.common as common
-import tools.build as build
+import common
 
 #from utils import *
 import lhafile      # pip3 install lhafile
@@ -73,17 +71,17 @@ def readym(filename):
 	return [regs, comment1, comment2, comment3]
 
 #=====================================================
-def Export(inPath, outPath, cleanTmp = True):
+def Export(sourcePath, exportPath, cleanTmp = True):
 
-	(fileName, ext) = os.path.splitext(inPath)
+	sourceName = os.path.splitext(sourcePath)[0]
 
 	try:
-		[regData, comment1, comment2, comment3] = readym(inPath)
+		[regData, comment1, comment2, comment3] = readym(sourcePath)
 	except:
-		sys.stderr.write(f'musicExport: error reading f{inPath}\n')
+		sys.stderr.write(f'musicExport: error reading f{sourcePath}\n')
 		exit(1)
 
-	with open(outPath, "w") as fileInc:
+	with open(exportPath, "w") as fileInc:
 		# ram-disk addrs
 		#fileInc.write(f'.org $a000\n')
 		# task stacks
@@ -101,8 +99,8 @@ def Export(inPath, outPath, cleanTmp = True):
 		fileInc.write(f'\n')
 
 		for i, c in enumerate(regData[0:14]):
-			binFile = fileName + ("%02d" % i) + ".bin"
-			zx0File = fileName + ("%02d" % i) + ".zx0"
+			binFile = f"sourceName{i:02d}.bin"
+			zx0File = f"sourceName{i:02d}.zx0"
 			with open(binFile, "wb") as f:
 				f.write(c)
 			
@@ -110,9 +108,9 @@ def Export(inPath, outPath, cleanTmp = True):
 			common.RunCommand(f"tools\\zx0salvador.exe -v -classic -w 256 {binFile} {zx0File}")
 
 			with open(zx0File, "rb") as f:
-				dbname = "ayRegData" + ("%02d" % i)
+				dbname = f"ayRegData{i:02d}"
 				data = f.read()
-				fileInc.write(f'{dbname}: .byte ' +  ",".join("$%02x" % x for x in data) + "\n")
+				fileInc.write(f'{dbname}: .byte ' + ",".join("$%02x" % x for x in data) + "\n")
 			if cleanTmp:
 				print("musicExport: clean up tmp resources")
 				common.DeleteFile(binFile)

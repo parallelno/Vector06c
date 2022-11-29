@@ -1,12 +1,15 @@
+import os
 from PIL import Image
+from pathlib import Path
 import json
-import tools.common as common
-import tools.build as build
+import common
+import build
 
-def RoomTilesToAsm(roomJ, roomPath, remapIdxs):
-	asm = "; " + roomPath + "\n"
-	labelPrefix = roomPath.split("/")[-1].split("\\")[-1].split(".")[0]
-	asm += labelPrefix + ":\n"
+def RoomTilesToAsm(roomJ, roomPath, remapIdxs, sourceDir):
+	asm = "; " + sourceDir + roomPath + "\n"
+	roomPathWOExt = os.path.splitext(roomPath)[0]
+	labelPrefix = os.path.basename(roomPathWOExt)
+	asm += "__" + labelPrefix + ":\n"
 	width = roomJ["width"]
 	height = roomJ["height"]
 	size = width * height
@@ -20,10 +23,11 @@ def RoomTilesToAsm(roomJ, roomPath, remapIdxs):
 		asm += "\n"
 	return asm, size
 
-def RoomTilesDataToAsm(roomJ, roomPath):
-	asm = "; " + roomPath + "\n"
-	labelPrefix = roomPath.split("/")[-1].split("\\")[-1].split(".")[0]
-	asm += labelPrefix + "_tilesData:\n"
+def RoomTilesDataToAsm(roomJ, roomPath, sourceDir):
+	asm = "; " + sourceDir + roomPath + "\n"
+	roomPathWOExt = os.path.splitext(roomPath)[0]
+	labelPrefix = os.path.basename(roomPathWOExt)
+	asm += "__" + labelPrefix + "_tilesData:\n"
 	width = roomJ["width"]
 	height = roomJ["height"]
 	size = width * height
@@ -127,9 +131,10 @@ def GetListOfRooms(roomPaths, labelPrefix):
 	asm = "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 	asm += labelPrefix + "_roomsAddr:\n			.word "
 	for i, roomPathP in enumerate(roomPaths):
-		roomPath = roomPathP['file']
-		labelPrefix = roomPath.split("/")[-1].split("\\")[-1].split(".")[0]
-		asm += labelPrefix + ", "
+		roomPath = roomPathP['path']
+		roomPathWOExt = os.path.splitext(roomPath)[0]
+		labelPrefix = os.path.basename(roomPathWOExt)
+		asm += "__" + labelPrefix + ", "
 		if i != len(roomPaths)-1:
 			# two safety fytes
 			asm += "0, "
@@ -137,12 +142,12 @@ def GetListOfRooms(roomPaths, labelPrefix):
 	asm += "\n"
 	return asm, size
 
-def GetListOfTiles(remapIdxs, levelAsmName, pngLabelPrefix):
+def GetListOfTiles(remapIdxs, labelPrefix, pngLabelPrefix):
 	size = 0
 	asm = "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
-	asm += levelAsmName + "_tilesAddr:\n			.word "
+	asm += labelPrefix + "_tilesAddr:\n			.word "
 	for i, tidx in enumerate(remapIdxs):
-		asm += pngLabelPrefix + "_tile" + str(remapIdxs[tidx]) + ", "
+		asm += "__" + pngLabelPrefix + "_tile" + str(remapIdxs[tidx]) + ", "
 		if i != len(remapIdxs)-1:
 			# two safety fytes
 			asm += "0, "
@@ -150,88 +155,92 @@ def GetListOfTiles(remapIdxs, levelAsmName, pngLabelPrefix):
 	asm += "\n"
 	return asm, size
 
-def StartPosToAsm(levelJ, labelPrefix):
+def StartPosToAsm(sourceJ, labelPrefix):
 	asm = ("\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n" + 
-			labelPrefix + "_startPos:\n			.byte " + 
-			str(levelJ["startPos"]["y"]) + ", " + 
-			str(levelJ["startPos"]["x"]) + "\n")
+			"__" + labelPrefix + "_startPos:\n			.byte " + 
+			str(sourceJ["startPos"]["y"]) + ", " + 
+			str(sourceJ["startPos"]["x"]) + "\n")
 	return asm, 4
 
 #=====================================================
-def Export(levelJPath, levelAsmPath):
+def Export(sourcePath, exportPath):
 
-	with open(levelJPath, "rb") as file:
-		levelJ = json.load(file)
+	with open(sourcePath, "rb") as file:
+		sourceJ = json.load(file)
 
-	pngPath = str(levelJ["png"])
+	sourceDir = str(Path(sourcePath).parent) + "\\"
+	pngPath = sourceDir + sourceJ["pngPath"]
 	image = Image.open(pngPath)
 
-	levelAsmName = levelAsmPath.split("/")[-1].split("\\")[-1].split(".")[0]
+	sourcePathWOExt = os.path.splitext(sourcePath)[0]
+	sourceName = os.path.basename(sourcePathWOExt)
 
-	asm, colors = common.PaletteToAsm(image, levelJ, pngPath, levelAsmName)
+	asm, colors = common.PaletteToAsm(image, sourceJ, pngPath, "__" + sourceName)
 
 	dataSize = len(colors)
-	asmStartPos, size = StartPosToAsm(levelJ, levelAsmName)
+	asmStartPos, size = StartPosToAsm(sourceJ, sourceName)
 	asm += asmStartPos
 	dataSize += size
 	image = common.RemapColors(image, colors)
 
-	roomPaths = levelJ["rooms"]
+	roomPaths = sourceJ["rooms"]
 	roomsJ = []
 	# load and parse tiled map
 	for roomPathP in roomPaths:
-		roomPath = roomPathP['file']
+		roomPath = sourceDir + roomPathP['path']
 		with open(roomPath, "rb") as file:
 			roomsJ.append(json.load(file))
 		
 	# make a tile index remap dictionary, to have the first idx = 0
 	remapIdxs = RemapIndex(roomsJ)
 
-	pngLabelPrefix = pngPath.split("/")[-1].split("\\")[-1].split(".")[0]
+	pngPathWOExt = os.path.splitext(pngPath)[0]
+	pngName = os.path.basename(pngPathWOExt)
 
 	# list of rooms
-	asmL, size = GetListOfRooms(roomPaths, levelAsmName)
+	asmL, size = GetListOfRooms(roomPaths, "__" + sourceName)
 	asm += asmL
 	dataSize += size
 	# list of tiles addreses
-	asmLT, size = GetListOfTiles(remapIdxs, levelAsmName, pngLabelPrefix)
+	asmLT, size = GetListOfTiles(remapIdxs, "__" + sourceName, pngName)
 	asm += asmLT
 	dataSize += size
 	# every room data
 	for i, roomJ in enumerate(roomsJ):
-		asmRT, size = RoomTilesToAsm(roomJ["layers"][0], roomPaths[i]['file'], remapIdxs)
+		asmRT, size = RoomTilesToAsm(roomJ["layers"][0], roomPaths[i]['path'], remapIdxs, sourceDir)
 		asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 		asm += asmRT
 		dataSize += size
-		asmRTD, size = RoomTilesDataToAsm(roomJ["layers"][1], roomPaths[i]['file'])
+		asmRTD, size = RoomTilesDataToAsm(roomJ["layers"][1], roomPaths[i]['path'], sourceDir)
 		asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 		asm += asmRTD
 		dataSize += size
 
 	# tile art data to asm
-	asmT, size = TilesToAsm(roomsJ[0], image, pngPath, remapIdxs, pngLabelPrefix)
+	asmT, size = TilesToAsm(roomsJ[0], image, pngPath, remapIdxs, "__" + pngName)
 	asm += asmT
 	dataSize += size
 
 	# save asm
-	with open(levelAsmPath, "w") as file:
+	with open(exportPath, "w") as file:
 		file.write(asm)
 
-def IsFileUpdated(levelJPath):
-	with open(levelJPath, "rb") as file:
-		levelJ = json.load(file)
+def IsFileUpdated(sourceJPath):
+	with open(sourceJPath, "rb") as file:
+		sourceJ = json.load(file)
 	
-	pngPath = str(levelJ["png"])
+	sourceDir = str(Path(sourceJPath).parent) + "\\"
+	pngPath = sourceDir + sourceJ["pngPath"]
 
-	roomPaths = levelJ["rooms"]
-	levelsUpdated = False
+	roomPaths = sourceJ["rooms"]
+	roomsUpdated = False
 	for roomPathP in roomPaths:
-		roomPath = roomPathP['file']
+		roomPath = sourceDir + roomPathP['path']
 		if build.IsFileUpdated(roomPath):
-			levelsUpdated = True
+			roomsUpdated = True
 			break
 
-	if build.IsFileUpdated(levelJPath) | build.IsFileUpdated(pngPath) | levelsUpdated:
+	if build.IsFileUpdated(sourceJPath) | build.IsFileUpdated(pngPath) | roomsUpdated:
 		return True
 	return False
 

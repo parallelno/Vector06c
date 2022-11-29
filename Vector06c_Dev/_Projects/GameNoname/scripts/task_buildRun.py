@@ -1,13 +1,13 @@
 import os
-import tools.ramDiskDataExport as ramDiskDataExport
-import tools.common as common
+import ramDiskDataExport
+import common
           
 print(f"ram-disk data export:")
-ramDiskDataExport.Export("code\\ramDiskData")
-
+ramDiskDataExport.Export("source\\code\\ramDiskData.json")
+    
 print("")
 ######################################################################################
-print(f"build a game rom:") 
+print(f"build a game rom:")
  
 mainAsm = "main"
 romPath = "rom\\"

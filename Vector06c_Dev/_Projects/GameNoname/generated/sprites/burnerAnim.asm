@@ -1,4 +1,4 @@
-; sources\sprites\burner.json
+; source\sprites\burner.json
 burner_preshifted_sprites:
 			.byte 4
 burner_anims:

@@ -1,8 +1,4 @@
 
-.include "generated\\sprites\\heroAnim.asm"
-.include "generated\\sprites\\skeletonAnim.asm"
-.include "generated\\sprites\\hero_attack01Anim.asm"
-
 RamDiskInit:
 			;call ClearRamDisk
 	;===============================================

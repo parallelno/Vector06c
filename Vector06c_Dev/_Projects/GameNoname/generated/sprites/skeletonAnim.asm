@@ -1,4 +1,4 @@
-; sources\sprites\skeleton.json
+; source\sprites\skeleton.json
 skeleton_preshifted_sprites:
 			.byte 4
 skeleton_anims:

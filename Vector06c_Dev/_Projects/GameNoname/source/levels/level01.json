@@ -1,5 +1,5 @@
 {
-	"png" : "sources\\levels\\art\\sprites_tiles_lv01.png",
+	"pngPath" : "art\\sprites_tiles_lv01.png",
 	"palette" :
 	[ 
 		{"x": 0,	"y" : 256},
@@ -24,8 +24,8 @@
 		"y" : 160
 	},
 	"rooms" : [
-		{"file" : "sources\\levels\\level01_room00.tmj"},
-		{"file" : "sources\\levels\\level01_room01.tmj"},
-		{"file" : "sources\\levels\\level01_room02.tmj"}
+		{"path" : "level01_room00.tmj"},
+		{"path" : "level01_room01.tmj"},
+		{"path" : "level01_room02.tmj"}
 	]
 }

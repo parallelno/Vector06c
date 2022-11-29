@@ -1,4 +1,4 @@
-; sources\sprites\knight.json
+; source\sprites\knight.json
 knight_preshifted_sprites:
 			.byte 4
 knight_anims:

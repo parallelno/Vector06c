@@ -1,5 +1,5 @@
-; sources\sprites\scythe.json
-__RAM_DISK_SPRITE_DATA_scythe = RAM_DISK_BANK_ACTIVATION_CMD
+; source\sprites\scythe.json
+__RAM_DISK_SPRITE_DATA_SCYTHE = RAM_DISK_BANK_ACTIVATION_CMD
 __scythe_sprites:
 			.byte 1,1  ; safety pair of bytes to support a stack renderer, and also (maskFlag, preshifting is done)
 __scythe_run_rn0_0:

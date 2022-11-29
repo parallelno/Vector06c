@@ -1,7 +1,9 @@
+import os
+from pathlib import Path
 from PIL import Image
 import json
-import tools.common as common
-import tools.build as build
+import common
+import build
 
 def BytesToAsmTiled(data):
 	asm = ""
@@ -116,10 +118,10 @@ def SpriteData(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 
 	return [data]
 
-def AnimsToAsm(labelPrefix, charJ):
+def AnimsToAsm(labelPrefix, sourceJ):
 	asm = ""
 	# preshifted sprites
-	preshiftedSprites = charJ["preshifted_sprites"]
+	preshiftedSprites = sourceJ["preshifted_sprites"]
 	asm += labelPrefix + "_preshifted_sprites:\n"
 	asm += f"			.byte " + str(preshiftedSprites) + "\n"
 
@@ -127,24 +129,24 @@ def AnimsToAsm(labelPrefix, charJ):
 	# make a list of animNames
 	asm += labelPrefix + "_anims:\n"
 	asm += "			.word "
-	for animName in charJ["anims"]:
+	for animName in sourceJ["anims"]:
 		asm += labelPrefix + "_" + animName + ", "
 	asm += "0, \n"
 
 	# make a list of sprites for an every anim
-	for animName in charJ["anims"]:
+	for animName in sourceJ["anims"]:
 
 		asm += labelPrefix + "_" + animName + ":\n"
  
-		for i, frame in enumerate(charJ["anims"][animName]):
+		for i, frame in enumerate(sourceJ["anims"][animName]):
 
-			if i < len(charJ["anims"][animName])-1:
+			if i < len(sourceJ["anims"][animName])-1:
 				nextFrameOffset = preshiftedSprites * 2 # every frame consists of preshiftedSprites pointers
 				nextFrameOffset += 1 # increase the offset to save one instruction in the game code
 				asm += "			.byte " + str(nextFrameOffset) + ", 0 ; offset to the next frame\n"
 			else:
 				offsetAddr = 1
-				nextFrameOffsetLow = 255 - (len(charJ["anims"][animName]) -1) * (preshiftedSprites + offsetAddr) * 2 + 1
+				nextFrameOffsetLow = 255 - (len(sourceJ["anims"][animName]) -1) * (preshiftedSprites + offsetAddr) * 2 + 1
 				nextFrameOffsetLow -= 1 # decrease the offset to save one instruction in the game code
 				if nextFrameOffsetLow == 0:
 					nextFrameOffsetHiStr = "0"
@@ -197,12 +199,12 @@ def MakeEmptySpriteData(hasMask, width, height):
 
 	return [data]
 
-def SpritesToAsm(labelPrefix, charJ, image, hasMask):
-	spritesJ = charJ["sprites"]
+def SpritesToAsm(labelPrefix, sourceJ, image, hasMask):
+	spritesJ = sourceJ["sprites"]
 	asm = labelPrefix + "_sprites:"
 
 	# preshifted sprites
-	preshiftedSprites = charJ["preshifted_sprites"]
+	preshiftedSprites = sourceJ["preshifted_sprites"]
 
 	for sprite in spritesJ:
 		spriteName = sprite["name"]
@@ -308,24 +310,27 @@ def SpritesToAsm(labelPrefix, charJ, image, hasMask):
 
 	return asm
 
-def Export(charJPath, asmAnimPath, asmSpritePath):
+def Export(sourceJPath, asmAnimPath, asmSpritePath):
+	
+	sourcePathWOExt = os.path.splitext(sourceJPath)[0]
+	sourceName = os.path.basename(sourcePathWOExt)
+	sourceDir = str(Path(sourceJPath).parent) + "\\"
 
-	with open(charJPath, "rb") as file:
-		charJ = json.load(file)
+	with open(sourceJPath, "rb") as file:
+		sourceJ = json.load(file)
 
-	pngPath = str(charJ["png"])
-	hasMask = str(charJ["mask"])
+	pngPath = sourceDir + sourceJ["pngPath"]
+	hasMask = str(sourceJ["mask"])
 	image = Image.open(pngPath)
 
-	_, colors = common.PaletteToAsm(image, charJ, charJPath)
+	_, colors = common.PaletteToAsm(image, sourceJ)
 
 	image = common.RemapColors(image, colors)
 
-	labelPrefix = charJPath.split("/")[-1].split("\\")[-1].split(".")[0]
-	asm = "; " + charJPath + "\n"
-	asmAnims = asm + AnimsToAsm(labelPrefix, charJ)
-	asmSprites = asm + f"__RAM_DISK_SPRITE_DATA_{labelPrefix} = RAM_DISK_BANK_ACTIVATION_CMD" + "\n"
-	asmSprites += SpritesToAsm("__" + labelPrefix, charJ, image, hasMask)
+	asm = "; " + sourceJPath + "\n"
+	asmAnims = asm + AnimsToAsm(sourceName, sourceJ)
+	asmSprites = asm + f"__RAM_DISK_SPRITE_DATA_{sourceName.upper()} = RAM_DISK_BANK_ACTIVATION_CMD" + "\n"
+	asmSprites += SpritesToAsm("__" + sourceName, sourceJ, image, hasMask)
 
 	# save asm
 	with open(asmAnimPath, "w") as file:
@@ -334,13 +339,14 @@ def Export(charJPath, asmAnimPath, asmSpritePath):
 	with open(asmSpritePath, "w") as file:
 		file.write(asmSprites)
 
-def IsFileUpdated(charJPath):
-	with open(charJPath, "rb") as file:
-		charJ = json.load(file)
+def IsFileUpdated(sourceJPath):
+	with open(sourceJPath, "rb") as file:
+		sourceJ = json.load(file)
 	
-	pngPath = str(charJ["png"])
+	sourceDir = str(Path(sourceJPath).parent) + "\\"
+	pngPath = sourceDir + sourceJ["pngPath"]
 
-	if build.IsFileUpdated(charJPath) | build.IsFileUpdated(pngPath):
+	if build.IsFileUpdated(sourceJPath) | build.IsFileUpdated(pngPath):
 		return True
 	return False
 

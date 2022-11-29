@@ -1,4 +1,4 @@
-; sources\sprites\vampire.json
+; source\sprites\vampire.json
 vampire_preshifted_sprites:
 			.byte 4
 vampire_anims:

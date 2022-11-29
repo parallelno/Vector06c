@@ -1,4 +1,4 @@
-; sources\sprites\hero_attack01.json
+; source\sprites\hero_attack01.json
 hero_attack01_preshifted_sprites:
 			.byte 8
 hero_attack01_anims:

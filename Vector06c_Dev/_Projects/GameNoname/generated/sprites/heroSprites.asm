@@ -1,5 +1,5 @@
-; sources\sprites\hero.json
-__RAM_DISK_SPRITE_DATA_hero = RAM_DISK_BANK_ACTIVATION_CMD
+; source\sprites\hero.json
+__RAM_DISK_SPRITE_DATA_HERO = RAM_DISK_BANK_ACTIVATION_CMD
 __hero_sprites:
 			.byte 1,1  ; safety pair of bytes to support a stack renderer, and also (maskFlag, preshifting is done)
 __hero_idle_r0_0:
