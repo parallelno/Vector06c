@@ -26,6 +26,7 @@
 			"segments" :
 			[
 				{
+					"name" : "sprites",
 					"addr" : "0",
 					"chunks" : 
 					[
@@ -52,6 +53,7 @@
 					]
 				},
 				{
+					"name" : "levels",
 					"addr" : "$8000",
 					"chunks" : 
 					[
@@ -71,6 +73,7 @@
 			"segments" :
 			[
 				{
+					"name" : "sprites",
 					"addr" : "0",
 					"chunks" : 
 					[
@@ -91,6 +94,7 @@
 					]
 				},
 				{
+					"name" : "music",
 					"addr" : "$8000",
 					"chunks" : 
 					[
@@ -114,6 +118,7 @@
 			"segments" :
 			[
 				{
+					"name" : "code library",
 					"addr" : "$8000",
 					"chunks" : 
 					[

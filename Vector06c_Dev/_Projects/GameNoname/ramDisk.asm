@@ -1,8 +1,7 @@
-
 RamDiskInit:
 			;call ClearRamDisk
 	;===============================================
-	;				UNPACK UTILS
+	;		UNPACK UTILS
 	;===============================================
 			; unpack utils to the ram-disk
 			lxi d, toBank2addr8000
@@ -82,4 +81,3 @@ RamDiskInit:
 			call dzx0RD
 
 			ret
-			.closelabels

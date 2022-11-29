@@ -93,9 +93,9 @@ def ExportSegment(sourcePath1, forceExport, segmentAddr, externalsOnly = False, 
 				compressedChunkPaths.append(f"{zipfilePathWOExt}.bin.zx0")
 		
 		print(f"ExportSegment: {sourceName} segment got exported.")	
-		return True, f"{generatedFolder + sourcePathWOExt}_labels.asm", compressedChunkPaths
+		return True, f"{generatedFolder + sourcePathWOExt}_labels.asm", f"{binFolder}{sourceName}.bin", compressedChunkPaths
 	else:
-		return False, f"{generatedFolder + sourcePathWOExt}_labels.asm", compressedChunkPaths
+		return False, f"{generatedFolder + sourcePathWOExt}_labels.asm", f"{binFolder}{sourceName}.bin", compressedChunkPaths
 
 def IsAsmUpdated(asmPath):
 	with open(asmPath, "rb") as file:
@@ -190,20 +190,22 @@ def BinToAsm(path, outPath):
 		with open(outPath, "w") as fw:
 			fw.write(txt)
 
+def GetSegmentSizeMax(segmentStartAddr):
+	if segmentStartAddr == SEGMENT_0000_7F00_ADDR:
+		return SEGMENT_0000_7F00_SIZE_MAX
+	else:
+		return SEGMENT_8000_0000_SIZE_MAX
+
 def CheckSegmentSize(path, segmentAddr):
 	if segmentAddr != SEGMENT_0000_7F00_ADDR and segmentAddr != SEGMENT_8000_0000_ADDR :
 		print("ERROR: Segment start addr has to be " + hex(SEGMENT_0000_7F00_SIZE_MAX) + " or " + hex(SEGMENT_8000_0000_SIZE_MAX))
 		print("Stop export")
 		exit(1)
 
-	size = os.path.getsize(path)
+	segmentSize = os.path.getsize(path)
+	segmentSizeMax = GetSegmentSizeMax(segmentAddr)
 
-	if segmentAddr == SEGMENT_0000_7F00_ADDR:
-		segmentSizeMax = SEGMENT_0000_7F00_SIZE_MAX
-	else:
-		segmentSizeMax = SEGMENT_8000_0000_SIZE_MAX
-
-	if size > segmentSizeMax:
+	if segmentSize > segmentSizeMax:
 			print(f"ERROR: {path} is bigger than {segmentSizeMax} bytes")
 			print("Stop export")
 			exit(1)
