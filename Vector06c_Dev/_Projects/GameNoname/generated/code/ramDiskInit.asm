@@ -10,6 +10,22 @@ RamDiskInit:
 			call dzx0RD
 
 	;===============================================
+	;		levels, bank 2, addr 0
+	;===============================================
+			; unpack levels into the ram-disk backbuffer2
+			lxi d, ramDiskData_bank2_addr0
+			lxi b, SCR_BUFF0_ADDR
+			mvi a, RAM_DISK_M3 | RAM_DISK_M_8F
+			call dzx0RD
+
+			; copy levels to the ram-disk
+			lxi d, SCR_BUFF0_ADDR + (__chunkEnd_bank2_addr0_chunk0 - __chunkStart_bank2_addr0_chunk0)
+			lxi h, __chunkEnd_bank2_addr0_chunk0
+			lxi b, (__chunkEnd_bank2_addr0_chunk0 - __chunkStart_bank2_addr0_chunk0) / 2
+			mvi a, RAM_DISK_S2 | RAM_DISK_M3 | RAM_DISK_M_8F
+			call CopyToRamDisk
+
+	;===============================================
 	;		music, bank 1, addr $8000
 	;===============================================
 			; unpack music to the ram-disk
@@ -67,15 +83,6 @@ RamDiskInit:
 			lxi b, (__chunkEnd_bank1_addr0_chunk1 - __chunkEnd_bank1_addr0_chunk0) / 2
 			mvi a, RAM_DISK_S1 | RAM_DISK_M2 | RAM_DISK_M_8F
 			call CopyToRamDisk
-
-	;===============================================
-	;		levels, bank 0, addr $8000
-	;===============================================
-			; unpack levels to the ram-disk
-			lxi d, ramDiskData_bank0_addr8000
-			lxi b, $8000
-			mvi a, RAM_DISK_M0 | RAM_DISK_M_8F
-			call dzx0RD
 
 	;===============================================
 	;		sprites, bank 0, addr 0

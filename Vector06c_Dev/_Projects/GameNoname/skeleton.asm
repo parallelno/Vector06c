@@ -351,7 +351,7 @@ SkeletonDraw:
 			; c - preshifted sprite idx*2 offset
 			call SpriteGetAddr
 
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_SPRITE_DATA_SKELETON | RAM_DISK_M2 | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_BANK_ACTIVATION_CMD_SKELETON | RAM_DISK_M2 | RAM_DISK_M_8F)
 			pop h
 			inx h
 			; hl - ptr to monsterEraseScrAddr

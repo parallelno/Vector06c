@@ -1,5 +1,5 @@
 ; source\sprites\vampire.json
-__RAM_DISK_SPRITE_DATA_VAMPIRE = RAM_DISK_BANK_ACTIVATION_CMD
+__RAM_DISK_BANK_ACTIVATION_CMD_VAMPIRE = RAM_DISK_BANK_ACTIVATION_CMD
 __vampire_sprites:
 			.byte 1,1  ; safety pair of bytes to support a stack renderer, and also (maskFlag, preshifting is done)
 __vampire_idle_r0_0:

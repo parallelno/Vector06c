@@ -19,10 +19,12 @@
 		"rom" : "rom\\"
 	},
 	"buildDBPath" : "generated\\build.db",
+	"bankBackBuffer" : 2,
+	"bankBackBuffer2" : 3,
 	"banks" : 
 	[
 		{
-			"bank" :	"0",
+			"bank" :	0,
 			"segments" :
 			[
 				{
@@ -55,25 +57,11 @@
 							}
 						]
 					]
-				},
-				{
-					"name" : "levels",
-					"addr" : "$8000",
-					"chunks" : 
-					[
-						[
-							{
-								"type" : "level",
-								"path" : "levels\\level01.json"
-							}
-						]
-					]
-
 				}
 			]
 		},
 		{
-			"bank" :	"1",
+			"bank" :	1,
 			"segments" :
 			[
 				{
@@ -115,14 +103,26 @@
 							}
 						]
 					]
-
 				}
 			]
 		},
 		{
-			"bank" :	"2",
+			"bank" :	2,
 			"segments" :
 			[
+				{
+					"name" : "levels",
+					"addr" : "0",
+					"chunks" : 
+					[
+						[
+							{
+								"type" : "level",
+								"path" : "levels\\level01.json"
+							}
+						]
+					]
+				},
 				{
 					"name" : "code library",
 					"addr" : "$8000",
@@ -147,7 +147,6 @@
 							}
 						]												
 					]
-
 				}
 			]
 		}			

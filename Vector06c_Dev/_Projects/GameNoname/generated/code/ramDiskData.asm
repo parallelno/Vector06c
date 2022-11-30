@@ -1,8 +1,8 @@
 ; ram-disk data labels
 .include "generated\\code\\ramDiskData_bank0_addr0_labels.asm"
-.include "generated\\code\\ramDiskData_bank0_addr8000_labels.asm"
 .include "generated\\code\\ramDiskData_bank1_addr0_labels.asm"
 .include "generated\\code\\ramDiskData_bank1_addr8000_labels.asm"
+.include "generated\\code\\ramDiskData_bank2_addr0_labels.asm"
 .include "generated\\code\\ramDiskData_bank2_addr8000_labels.asm"
 
 ; sprites anims
@@ -20,21 +20,21 @@ ramDiskData_bank0_addr0_0: ; ['heroR', 'heroL']
 .incbin "generated\\bin\\ramDiskData_bank0_addr0_0.bin.zx0"
 ramDiskData_bank0_addr0_1: ; ['skeleton', 'scythe', 'hero_attack01']
 .incbin "generated\\bin\\ramDiskData_bank0_addr0_1.bin.zx0"
-ramDiskData_bank0_addr8000: ; ['level01']
-.incbin "generated\\bin\\ramDiskData_bank0_addr8000.bin.zx0"
 ramDiskData_bank1_addr0_0: ; ['knight', 'burner']
 .incbin "generated\\bin\\ramDiskData_bank1_addr0_0.bin.zx0"
 ramDiskData_bank1_addr0_1: ; ['vampire']
 .incbin "generated\\bin\\ramDiskData_bank1_addr0_1.bin.zx0"
 ramDiskData_bank1_addr8000: ; ['song01', 'gigachad16PlayerRD']
 .incbin "generated\\bin\\ramDiskData_bank1_addr8000.bin.zx0"
+ramDiskData_bank2_addr0: ; ['level01']
+.incbin "generated\\bin\\ramDiskData_bank2_addr0.bin.zx0"
 ramDiskData_bank2_addr8000: ; ['spriteRD', 'drawSpriteRD', 'utilsRD', 'spritePreshiftRD']
 .incbin "generated\\bin\\ramDiskData_bank2_addr8000.bin.zx0"
 
 ; ram-disk data layout
 ; bank0 addr$0000 [694 free]	- sprites:	['heroR', 'heroL', 'skeleton', 'scythe', 'hero_attack01']
-; bank0 addr$8000 [27780 free]	- levels:	['level01']
 ; bank1 addr$0000 [7672 free]	- sprites:	['knight', 'burner', 'vampire']
 ; bank1 addr$8000 [19856 free]	- music:	['song01', 'gigachad16PlayerRD']
+; bank2 addr$0000 [27524 free]	- levels:	['level01']
 ; bank2 addr$8000 [30714 free]	- code library:	['spriteRD', 'drawSpriteRD', 'utilsRD', 'spritePreshiftRD']
 ; bank3 addr$8000 - $8000-$9FFF tiledata (for collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore the background in the back buffer)

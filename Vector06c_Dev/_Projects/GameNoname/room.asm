@@ -26,13 +26,13 @@ RoomInitTiles:
 			dad b
 
 			xchg
-			mvi a, RAM_DISK_S0
+			mvi a, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01
 			call GetWordFromRamDisk
 			mov d, b
 			mov e, c
 
 			lxi b, roomTilesData ; the tile data buffer is used as a temp buffer
-			lxi h, RAM_DISK_S0<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
+			lxi h, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
 			call CopyFromRamDisk
 
 			; convert tile idxs into tile gfx addrs
@@ -61,7 +61,7 @@ RoomInitTiles:
 			; copy the tile graphics addr to the current room tile graphics table
 			push b
 			xchg
-			mvi a, RAM_DISK_S0
+			mvi a, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01
 			call GetWordFromRamDisk
 			mov a, c
 			mov e, b
@@ -95,14 +95,14 @@ RoomInitTilesData:
 			dad b
 
 			xchg
-			mvi a, RAM_DISK_S0
+			mvi a, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01
 			call GetWordFromRamDisk
 			lxi h, ROOM_WIDTH * ROOM_HEIGHT + 2 ; tiles data is stored right after the tile addr tbl plus 2 safety bytes
 			dad b
 
 			xchg
 			lxi b, roomTilesData
-			lxi h, RAM_DISK_S0<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
+			lxi h, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
 			call CopyFromRamDisk
 
 			; handle the tile data calling tile data funcs
@@ -157,7 +157,7 @@ RoomMonsterSpawn:
 
 RoomDraw:
 			; main scr
-			CALL_RAM_DISK_FUNC(RoomDrawTiles, RAM_DISK_S0)
+			CALL_RAM_DISK_FUNC(RoomDrawTiles, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01)
 
 			; copy $a000-$ffff scr buffs to the ram-disk
 			; TODO: optimization. think of making copy process while the gameplay started.
@@ -236,8 +236,8 @@ RoomTileDataBuff:
 
 ;=========================================================
 ; draw a room tiles. It might be a main screen, or a back buffer
-; call ex. CALL_RAM_DISK_FUNC(RoomDrawTiles, RAM_DISK_S0)
-; RAM_DISK_S0 - ram-disk activation command where stored tile gfx
+; call ex. CALL_RAM_DISK_FUNC(RoomDrawTiles, RAM_DISK_S<n>)
+; RAM_DISK_S<n> - ram-disk activation command where stored tile gfx
 RoomDrawTiles:
 			; set y = 0
 			mvi e, 0

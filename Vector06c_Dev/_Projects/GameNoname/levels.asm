@@ -11,7 +11,7 @@ LevelsInit:
 ;
 LevelInit:
 			lxi d, __level01_palette_sprites_tiles_lv01
-            mvi a, RAM_DISK_S0
+            mvi a, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01
 			call SetPaletteFromRamDisk
 			mvi a, 1
 			sta borderColorIdx
@@ -19,7 +19,7 @@ LevelInit:
 			sta roomIdx
 
 			lxi d, __level01_startPos
-			mvi a, RAM_DISK_S0
+			mvi a, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01
 			call GetWordFromRamDisk
 			call HeroSetPos
 			call HeroInit

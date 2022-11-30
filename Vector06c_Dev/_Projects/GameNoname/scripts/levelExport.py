@@ -175,7 +175,10 @@ def Export(sourcePath, exportPath):
 	sourcePathWOExt = os.path.splitext(sourcePath)[0]
 	sourceName = os.path.basename(sourcePathWOExt)
 
-	asm, colors = common.PaletteToAsm(image, sourceJ, pngPath, "__" + sourceName)
+	asm = f"__RAM_DISK_BANK_ACTIVATION_CMD_{sourceName.upper()} = RAM_DISK_BANK_ACTIVATION_CMD\n"
+	
+	paletteAsm, colors = common.PaletteToAsm(image, sourceJ, pngPath, "__" + sourceName)
+	asm += paletteAsm
 
 	dataSize = len(colors)
 	asmStartPos, size = StartPosToAsm(sourceJ, sourceName)

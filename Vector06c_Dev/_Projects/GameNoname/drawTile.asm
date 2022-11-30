@@ -22,7 +22,6 @@ DrawTile16x16:
 			; sp = BC
 			mov h, b			; (8)
 			mov l, c			; (8)
-			;RAM_DISK_ON_BANK()
 			sphl					; (8)
 			; get a mask and a counter
 			pop b					; (12)
@@ -57,8 +56,7 @@ DrawTile16x16:
 			dcr d
 			jnz @loop
 @restoreSP:		
-			lxi sp, TEMP_ADDR	
-			;jmp RestoreSP
+			lxi sp, TEMP_ADDR
 			ret
 			.closelabels
 			

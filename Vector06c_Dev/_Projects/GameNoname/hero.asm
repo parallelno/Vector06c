@@ -645,10 +645,10 @@ HeroDraw:
 
 			lda heroDirX
 			ora a
-			mvi a, <(__RAM_DISK_SPRITE_DATA_HEROR | RAM_DISK_M2 | RAM_DISK_M_8F)
+			mvi a, <(__RAM_DISK_BANK_ACTIVATION_CMD_HEROR | RAM_DISK_M2 | RAM_DISK_M_8F)
 			jnz @spriteR
 @spriteL:
-			mvi a, <(__RAM_DISK_SPRITE_DATA_HEROL | RAM_DISK_M2 | RAM_DISK_M_8F)
+			mvi a, <(__RAM_DISK_BANK_ACTIVATION_CMD_HEROL | RAM_DISK_M2 | RAM_DISK_M_8F)
 @spriteR:			
 
 			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall

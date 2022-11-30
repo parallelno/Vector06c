@@ -329,7 +329,7 @@ def Export(sourceJPath, asmAnimPath, asmSpritePath):
 
 	asm = "; " + sourceJPath + "\n"
 	asmAnims = asm + AnimsToAsm(sourceName, sourceJ)
-	asmSprites = asm + f"__RAM_DISK_SPRITE_DATA_{sourceName.upper()} = RAM_DISK_BANK_ACTIVATION_CMD" + "\n"
+	asmSprites = asm + f"__RAM_DISK_BANK_ACTIVATION_CMD_{sourceName.upper()} = RAM_DISK_BANK_ACTIVATION_CMD" + "\n"
 	asmSprites += SpritesToAsm("__" + sourceName, sourceJ, image, hasMask)
 
 	# save asm

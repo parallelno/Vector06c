@@ -1,5 +1,5 @@
 ; source\sprites\skeleton.json
-__RAM_DISK_SPRITE_DATA_SKELETON = RAM_DISK_BANK_ACTIVATION_CMD
+__RAM_DISK_BANK_ACTIVATION_CMD_SKELETON = RAM_DISK_BANK_ACTIVATION_CMD
 __skeleton_sprites:
 			.byte 1,1  ; safety pair of bytes to support a stack renderer, and also (maskFlag, preshifting is done)
 __skeleton_idle_r0_0:
