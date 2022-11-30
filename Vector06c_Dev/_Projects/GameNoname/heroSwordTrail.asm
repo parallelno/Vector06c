@@ -244,7 +244,7 @@ HeroSwordTrailDraw:
 
 			LXI_D_TO_DIFF(bulletPosX+1, bulletStatus)
 			dad d
-			call SpriteGetScrAddr8
+			call SpriteGetScrAddr_hero_attack01
 			; hl - ptr to bulletPosY+1
 			; tmpA <- c
 			mov a, c
