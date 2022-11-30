@@ -19,8 +19,9 @@
 		"rom" : "rom\\"
 	},
 	"buildDBPath" : "generated\\build.db",
-	"bankBackBuffer" : 2,
-	"bankBackBuffer2" : 3,
+	"bankBackBuffer" : 3,
+	"bankBackBuffer2" : 1,
+	"backBufferSize" : 24578,
 	"banks" : 
 	[
 		{
@@ -59,7 +60,7 @@
 					]
 				},
 				{
-					"name" : "empty",
+					"name" : "sprites",
 					"addr" : "$8000",
 					"chunks" : []
 				}
@@ -93,6 +94,22 @@
 					]
 				},
 				{
+					"name" : "reserved",
+					"addr" : "$8000",
+					"comment" : "$8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)"
+				}	
+			]
+		},
+		{
+			"bank" :	2,
+			"segments" :
+			[
+				{
+					"name" : "empty",
+					"addr" : "0",
+					"chunks" : []
+				},
+				{
 					"name" : "music",
 					"addr" : "$8000",
 					"chunks" : 
@@ -108,23 +125,29 @@
 							}
 						]
 					]
-				}
+				}	
 			]
-		},
-		{
-			"bank" :	2,
+		},		{
+			"bank" :	3,
 			"segments" :
 			[
 				{
-					"name" : "empty",
+					"name" : "levels",
 					"addr" : "0",
-					"chunks" : []
-				},
+					"chunks" : 
+					[
+						[
+							{
+								"type" : "level",
+								"path" : "levels\\level01.json"
+							}
+						]
+					]
+				},		
 				{
 					"name" : "code library",
 					"addr" : "$8000",
 					"comment" : "$8000-$9FFF code library. $A000-$FFFF back buffer",
-					"customSegmentSizeMax" : 8192,
 					"chunks" : 
 					[
 						[
@@ -147,29 +170,6 @@
 						]												
 					]
 				}
-			]
-		},		{
-			"bank" :	3,
-			"segments" :
-			[
-				{
-					"name" : "levels",
-					"addr" : "0",
-					"chunks" : 
-					[
-						[
-							{
-								"type" : "level",
-								"path" : "levels\\level01.json"
-							}
-						]
-					]
-				},
-				{
-					"name" : "reserved",
-					"addr" : "$8000",
-					"comment" : "$8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)"
-				}				
 			]
 		}		
 	]

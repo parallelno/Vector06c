@@ -4,6 +4,7 @@ import common
 import build
 
 SEGMENT_RESERVED = "reserved"
+SCR_BUFF_SIZE = 8192
 
 def Export(contentJPath):
 	extAsm = ".asm"
@@ -30,7 +31,8 @@ def Export(contentJPath):
 
 	bankBackBuffer = contentJ["bankBackBuffer"]
 	bankBackBuffer2 = contentJ["bankBackBuffer2"]
-	
+	backBufferSize = contentJ["backBufferSize"]
+
 	labelsPaths = []
 	spriteAnimsPaths = []
 	segmentPaths = []
@@ -151,8 +153,8 @@ def Export(contentJPath):
 				else:
 					segmentStartAddr = build.SEGMENT_8000_0000_ADDR			
 				
-				if "customSegmentSizeMax" in segmentJ:
-					segmentSizeMax = segmentJ["customSegmentSizeMax"]
+				if bank == bankBackBuffer:
+					segmentSizeMax = SCR_BUFF_SIZE*4 - backBufferSize
 				else:
 					segmentSizeMax = build.GetSegmentSizeMax(segmentStartAddr)
 
@@ -229,11 +231,11 @@ def Export(contentJPath):
 					ramDiskInitAsm +=f"			; unpack chunk {chunk} {assetNames} sprites into the ram-disk back buffer\n"
 					ramDiskInitAsm +=f"			lxi d, {ramDiskChunkFileName}\n"
 					ramDiskInitAsm += "			lxi b, SCR_BUFF1_ADDR\n"
-					ramDiskInitAsm +=f"			mvi a, RAM_DISK_M{bankBackBuffer} | RAM_DISK_M_8F\n"
+					ramDiskInitAsm +=f"			mvi a, __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F\n"
 					ramDiskInitAsm += "			call dzx0RD\n\n"
 
-					chunkStartAddrS = f"__chunkStart_bank{bank}_addr{addrS}_chunk"
-					chunkEndAddrS = f"__chunkEnd_bank{bank}_addr{addrS}_chunk"
+					chunkStartAddrS = f"__chunkStart_bank{bank}_addr{addrS_WO_hexSym}_chunk"
+					chunkEndAddrS = f"__chunkEnd_bank{bank}_addr{addrS_WO_hexSym}_chunk"
 					chunkOffsetS = ""
 					if chunk > 0:
 						chunkOffsetS = f" - {chunkEndAddrS}{chunk-1}"
@@ -248,7 +250,7 @@ def Export(contentJPath):
 						assetName = os.path.basename(pathWOExt)
 
 						ramDiskInitAsm +=f"			; preshift chunk {chunk} {assetName} sprites\n"
-						ramDiskInitAsm +=f"			RAM_DISK_ON(RAM_DISK_M{bankBackBuffer} | RAM_DISK_M_8F)\n"
+						ramDiskInitAsm +=f"			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)\n"
 						ramDiskInitAsm +=f"			lxi d, {assetName}_preshifted_sprites\n"
 						ramDiskInitAsm +=f"			lxi h, SCR_BUFF1_ADDR{chunkOffsetS}\n"
 						ramDiskInitAsm +=f"			call __SpriteDupPreshift\n"
@@ -258,27 +260,27 @@ def Export(contentJPath):
 					ramDiskInitAsm +=f"			lxi d, SCR_BUFF1_ADDR + ({chunkLenS})\n"
 					ramDiskInitAsm +=f"			lxi h, {chunkEndAddrS}{chunk}\n"
 					ramDiskInitAsm +=f"			lxi b, ({chunkLenS}) / 2\n"
-					ramDiskInitAsm +=f"			mvi a, RAM_DISK_S{bank} | RAM_DISK_M{bankBackBuffer} | RAM_DISK_M_8F\n"
+					ramDiskInitAsm +=f"			mvi a, RAM_DISK_S{bank} | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F\n"
 					ramDiskInitAsm +=f"			call CopyToRamDisk\n\n"
 				
 			elif addrS_WO_hexSym == "0" or addrS_WO_hexSym == "0000":
 
 				# supposed to have just one chunk
-				chunkStartAddrS = f"__chunkStart_bank{bank}_addr{addrS}_chunk"
-				chunkEndAddrS = f"__chunkEnd_bank{bank}_addr{addrS}_chunk"
+				chunkStartAddrS = f"__chunkStart_bank{bank}_addr{addrS_WO_hexSym}_chunk"
+				chunkEndAddrS = f"__chunkEnd_bank{bank}_addr{addrS_WO_hexSym}_chunk"
 				chunkLenS = f"{chunkEndAddrS}0 - {chunkStartAddrS}0"
 
 				ramDiskInitAsm +=f"			; unpack {name} into the ram-disk backbuffer2\n"
 				ramDiskInitAsm +=f"			lxi d, {ramDiskSegmentFileName}\n"
 				ramDiskInitAsm +=f"			lxi b, SCR_BUFF0_ADDR\n"
-				ramDiskInitAsm +=f"			mvi a, RAM_DISK_M{bankBackBuffer2} | RAM_DISK_M_8F\n"
+				ramDiskInitAsm +=f"			mvi a, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F\n"
 				ramDiskInitAsm += "			call dzx0RD\n\n"
 
 				ramDiskInitAsm +=f"			; copy {name} to the ram-disk\n"
 				ramDiskInitAsm +=f"			lxi d, SCR_BUFF0_ADDR + ({chunkLenS})\n"
 				ramDiskInitAsm +=f"			lxi h, {chunkEndAddrS}0\n"
 				ramDiskInitAsm +=f"			lxi b, ({chunkLenS}) / 2\n"
-				ramDiskInitAsm +=f"			mvi a, RAM_DISK_S{bank} | RAM_DISK_M{bankBackBuffer2} | RAM_DISK_M_8F\n"
+				ramDiskInitAsm +=f"			mvi a, RAM_DISK_S{bank} | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F\n"
 				ramDiskInitAsm +=f"			call CopyToRamDisk\n\n"
 
 			else:
