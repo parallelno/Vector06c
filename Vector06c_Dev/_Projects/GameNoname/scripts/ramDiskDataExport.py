@@ -140,12 +140,12 @@ def Export(contentJPath):
 				addrS = "$0000"
 				addrS_WO_hexSym = "0000"
 
-			comment = ""
-			if "comment" in segmentJ:
-				comment = segmentJ["comment"]
+			description = ""
+			if "description" in segmentJ:
+				description = segmentJ["description"]
 
 			if name == SEGMENT_RESERVED:
-				ramDiskDataAsm += f"; bank{bank} addr{addrS} [ 0 free]		- {comment}\n"	
+				ramDiskDataAsm += f"; bank{bank} addr{addrS} [0 free]		- {description}\n"	
 			else:
 			
 				if addrS_WO_hexSym == "0" or addrS_WO_hexSym == "0000":
@@ -164,8 +164,7 @@ def Export(contentJPath):
 				else:
 					segmentSize = 0
 				
-				description = ""
-				if comment == "":
+				if description == "":
 					assetNames = []
 					for chunkJ in segmentJ["chunks"]:
 						for asset in chunkJ:
@@ -173,9 +172,10 @@ def Export(contentJPath):
 							pathWOExt = os.path.splitext(path)[0]
 							assetName = os.path.basename(pathWOExt)
 							assetNames.append(assetName)
-					description = f"{name}:	{assetNames}"
-				else:
-					description = comment
+					if len(assetNames) > 0:
+						description = f"{name}:	{assetNames}"
+					else:
+						description = "empty:"
 
 				ramDiskDataAsm += f"; bank{bank} addr{addrS} [{segmentSizeMax - segmentSize} free]	- {description}\n"
 

@@ -7,7 +7,6 @@ RAM_DISK_S = RAM_DISK_S0
 RAM_DISK_M = RAM_DISK_M0
 
 .include "generated\\sprites\\heroRSprites.asm"
-.include "generated\\sprites\\heroLSprites.asm"
 .align 2
 __chunkEnd_bank0_addr0_chunk0:
 

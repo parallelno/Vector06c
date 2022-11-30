@@ -638,7 +638,7 @@ HeroImpact:
 
 HeroDraw:
 			lxi h, heroPosX+1
-			call SpriteGetScrAddr4
+			call SpriteGetScrAddr_heroR
 
 			lhld heroAnimAddr
 			call SpriteGetAddr

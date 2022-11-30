@@ -1,4 +1,6 @@
 ; source\sprites\knight.json
+SpriteGetScrAddr_knight = SpriteGetScrAddr4
+
 knight_preshifted_sprites:
 			.byte 4
 knight_anims:

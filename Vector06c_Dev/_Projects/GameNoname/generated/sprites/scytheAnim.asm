@@ -1,4 +1,6 @@
 ; source\sprites\scythe.json
+SpriteGetScrAddr_scythe = SpriteGetScrAddr4
+
 scythe_preshifted_sprites:
 			.byte 4
 scythe_anims:

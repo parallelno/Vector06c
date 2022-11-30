@@ -37,10 +37,6 @@
 							{
 								"type" : "sprite",
 								"path" : "sprites\\heroR.json"
-							},
-							{
-								"type" : "sprite",
-								"path" : "sprites\\heroL.json"
 							}
 						],
 						[
@@ -96,7 +92,7 @@
 				{
 					"name" : "reserved",
 					"addr" : "$8000",
-					"comment" : "$8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)"
+					"description" : "$8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)"
 				}	
 			]
 		},
@@ -105,9 +101,17 @@
 			"segments" :
 			[
 				{
-					"name" : "empty",
+					"name" : "sprites",
 					"addr" : "0",
-					"chunks" : []
+					"chunks" : 
+					[
+						[
+							{
+								"type" : "sprite",
+								"path" : "sprites\\heroL.json"
+							}
+						]
+					]
 				},
 				{
 					"name" : "music",
@@ -147,7 +151,7 @@
 				{
 					"name" : "code library",
 					"addr" : "$8000",
-					"comment" : "$8000-$9FFF code library. $A000-$FFFF back buffer",
+					"description" : "$8000-$9FFF code library. $A000-$FFFF back buffer",
 					"chunks" : 
 					[
 						[

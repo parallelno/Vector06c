@@ -333,7 +333,7 @@ SkeletonImpact:
 SkeletonDraw:
 			LXI_H_TO_DIFF(monsterPosX+1, monsterDrawPtr)
 			dad d
-			call SpriteGetScrAddr4
+			call SpriteGetScrAddr_skeleton
 			; hl - ptr to monsterPosY+1
 			; tmpA <- c
 			mov a, c

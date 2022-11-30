@@ -122,6 +122,7 @@ def AnimsToAsm(labelPrefix, sourceJ):
 	asm = ""
 	# preshifted sprites
 	preshiftedSprites = sourceJ["preshifted_sprites"]
+	asm += f"SpriteGetScrAddr_{labelPrefix} = SpriteGetScrAddr{preshiftedSprites}\n\n"
 	asm += labelPrefix + "_preshifted_sprites:\n"
 	asm += f"			.byte " + str(preshiftedSprites) + "\n"
 

@@ -1,4 +1,6 @@
 ; source\sprites\skeleton.json
+SpriteGetScrAddr_skeleton = SpriteGetScrAddr4
+
 skeleton_preshifted_sprites:
 			.byte 4
 skeleton_anims:
