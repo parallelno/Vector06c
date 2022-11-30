@@ -22,10 +22,10 @@ roomTilesAddr:
 ; fff == 1, a slowness+damage pool. ddddd = damage
 ; fff == 2, a key. keyId = d
 ; fff == 3, a monster spawner, monsterId = d
-;		monsterId = 0 - skeleton (tiledata = 3)
-;		monsterId = 1 - vampire (tiledata = 11) 
-;		monsterId = 2 - flame (tiledata = 19)
-;		monsterId = 3 - knight (tiledata = 27)
+;		monsterId = 0 - skeleton (tiledata = 3+0=3)
+;		monsterId = 1 - vampire (tiledata = 3+1*8=11) 
+;		monsterId = 2 - burner (tiledata = 3+2*8=19)
+;		monsterId = 3 - knight (tiledata = 3+3*8=27)
 ;		monsterId = 4 - chest with money
 ;		monsterId = 5 - chest with monster
 ; fff == 4, teleport, roomId = d, go to 0-31 room , ex. tileData = %1100 (12) - teleport to the roomId=1, %100 (4) teleport to the roomId=0

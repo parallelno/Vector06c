@@ -14,10 +14,13 @@ MONSTER_RUNTIME_DATA_END = $ff ; the end of the data
 ; for ex. HERO_STATUS_ATTACK plays hero_attk_r or hero_attk_l depending on the direction and it spawns a weapon trail
 MONSTER_STATUS_INVIS = $ff
 
-; a newly inited room uses this list to find an Init func
-; of a monster that has to be spawn
+; a newly inited room uses this list to find an Init func of a monster that has to be spawn
+; it's ordered by monsterId (see tile data format in levelsData.asm)
 monstersInits:
 			.word SkeletonInit
+			.word VampireInit
+			.word BurnerInit
+			.word KnightInit
 
 ; ptr to the first monster data in the sorted list
 monsterRuntimeDataSorted:

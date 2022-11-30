@@ -1,4 +1,7 @@
 .include "skeleton.asm"
+.include "vampire.asm"
+.include "burner.asm"
+.include "knight.asm"
 .include "monstersData.asm"
 
 MonstersEraseRuntimeData:
