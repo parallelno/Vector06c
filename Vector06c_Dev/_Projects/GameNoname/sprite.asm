@@ -182,13 +182,13 @@ SpriteCopyToScrV:
 			mov e, h
 
 @nextColumn:
-			RAM_DISK_ON(RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
+			RAM_DISK_ON(__RAM_DISK_S_BACKBUFF | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			; read without a stack operations because
 			; we need fill up BC prior to use POP B
 			mov b, m
 			dcr l
 			mov c, m
-			RAM_DISK_ON(RAM_DISK_S2)
+			RAM_DISK_ON(__RAM_DISK_S_BACKBUFF)
 
 			mov m, c
 			inr l
@@ -333,13 +333,13 @@ SpriteCopyToBackBuffV:
 			; d - width
 			mov d, a
 @nextColumn:
-			RAM_DISK_ON(RAM_DISK_S3 | RAM_DISK_M3 | RAM_DISK_M_8F)
+			RAM_DISK_ON(__RAM_DISK_S_BACKBUFF2 | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
 			; read without a stack operations because
 			; we need fill up BC prior to use POP B
 			mov b, m
 			dcr l
 			mov c, m
-			RAM_DISK_ON(RAM_DISK_S3 | RAM_DISK_M2 | RAM_DISK_M_8F)
+			RAM_DISK_ON(__RAM_DISK_S_BACKBUFF2 | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 
 			mov m, c
 			inr l

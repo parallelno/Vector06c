@@ -293,12 +293,12 @@ BulletErase:
 			; check if it needs to restore the background
 			push h
 			push d
-			mvi a, -$20
+			mvi a, -$20 ; advance DE to SCR_ADDR_0 to check the collision, to decide if we need to restore a beckground
 			add d
 			mov d, a
-			CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			pop d
 			pop h
-			jnz SpriteCopyToBackBuffV
-			CALL_RAM_DISK_FUNC(__EraseSprite, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
+			jnz SpriteCopyToBackBuffV ; restore a background
+			CALL_RAM_DISK_FUNC(__EraseSprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 			ret

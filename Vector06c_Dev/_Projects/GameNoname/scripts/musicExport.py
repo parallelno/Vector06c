@@ -82,8 +82,6 @@ def Export(sourcePath, exportPath, cleanTmp = True):
 		exit(1)
 
 	with open(exportPath, "w") as fileInc:
-		# ram-disk addrs
-		#fileInc.write(f'.org $a000\n')
 		# task stacks
 		fileInc.write(f'GCP_WORD_LEN = 2\n')
 		fileInc.write(f'GCP_TEMP_ADDR = 0\n')

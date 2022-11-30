@@ -57,6 +57,11 @@
 							}
 						]
 					]
+				},
+				{
+					"name" : "empty",
+					"addr" : "$8000",
+					"chunks" : []
 				}
 			]
 		},
@@ -111,21 +116,15 @@
 			"segments" :
 			[
 				{
-					"name" : "levels",
+					"name" : "empty",
 					"addr" : "0",
-					"chunks" : 
-					[
-						[
-							{
-								"type" : "level",
-								"path" : "levels\\level01.json"
-							}
-						]
-					]
+					"chunks" : []
 				},
 				{
 					"name" : "code library",
 					"addr" : "$8000",
+					"comment" : "$8000-$9FFF code library. $A000-$FFFF back buffer",
+					"customSegmentSizeMax" : 8192,
 					"chunks" : 
 					[
 						[
@@ -149,6 +148,29 @@
 					]
 				}
 			]
-		}			
+		},		{
+			"bank" :	3,
+			"segments" :
+			[
+				{
+					"name" : "levels",
+					"addr" : "0",
+					"chunks" : 
+					[
+						[
+							{
+								"type" : "level",
+								"path" : "levels\\level01.json"
+							}
+						]
+					]
+				},
+				{
+					"name" : "reserved",
+					"addr" : "$8000",
+					"comment" : "$8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)"
+				}				
+			]
+		}		
 	]
 }

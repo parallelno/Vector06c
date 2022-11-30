@@ -1,5 +1,26 @@
+__RAM_DISK_S_BACKBUFF = RAM_DISK_S2
+__RAM_DISK_M_BACKBUFF = RAM_DISK_M2
+__RAM_DISK_S_BACKBUFF2 = RAM_DISK_S3
+__RAM_DISK_M_BACKBUFF2 = RAM_DISK_M3
+
 RamDiskInit:
 			;call ClearRamDisk
+	;===============================================
+	;		levels, bank 3, addr 0
+	;===============================================
+			; unpack levels into the ram-disk backbuffer2
+			lxi d, ramDiskData_bank3_addr0
+			lxi b, SCR_BUFF0_ADDR
+			mvi a, RAM_DISK_M3 | RAM_DISK_M_8F
+			call dzx0RD
+
+			; copy levels to the ram-disk
+			lxi d, SCR_BUFF0_ADDR + (__chunkEnd_bank3_addr0_chunk0 - __chunkStart_bank3_addr0_chunk0)
+			lxi h, __chunkEnd_bank3_addr0_chunk0
+			lxi b, (__chunkEnd_bank3_addr0_chunk0 - __chunkStart_bank3_addr0_chunk0) / 2
+			mvi a, RAM_DISK_S3 | RAM_DISK_M3 | RAM_DISK_M_8F
+			call CopyToRamDisk
+
 	;===============================================
 	;		code library, bank 2, addr $8000
 	;===============================================
@@ -8,22 +29,6 @@ RamDiskInit:
 			lxi b, $8000
 			mvi a, RAM_DISK_M2 | RAM_DISK_M_8F
 			call dzx0RD
-
-	;===============================================
-	;		levels, bank 2, addr 0
-	;===============================================
-			; unpack levels into the ram-disk backbuffer2
-			lxi d, ramDiskData_bank2_addr0
-			lxi b, SCR_BUFF0_ADDR
-			mvi a, RAM_DISK_M3 | RAM_DISK_M_8F
-			call dzx0RD
-
-			; copy levels to the ram-disk
-			lxi d, SCR_BUFF0_ADDR + (__chunkEnd_bank2_addr0_chunk0 - __chunkStart_bank2_addr0_chunk0)
-			lxi h, __chunkEnd_bank2_addr0_chunk0
-			lxi b, (__chunkEnd_bank2_addr0_chunk0 - __chunkStart_bank2_addr0_chunk0) / 2
-			mvi a, RAM_DISK_S2 | RAM_DISK_M3 | RAM_DISK_M_8F
-			call CopyToRamDisk
 
 	;===============================================
 	;		music, bank 1, addr $8000

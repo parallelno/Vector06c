@@ -8,7 +8,7 @@ RoomInit:
 			; because we will restore a background tiles
 			lxi b, $0000
 			lxi d, $6000 / 128 - 1
-			CALL_RAM_DISK_FUNC(__ClearMemSP, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_89)
+			CALL_RAM_DISK_FUNC(__ClearMemSP, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_CLEAR_MEM | RAM_DISK_M_89)
 			ret
 
 ; it copies the tile idxs of the current room into roomTilesData as a temp storrage
@@ -26,13 +26,13 @@ RoomInitTiles:
 			dad b
 
 			xchg
-			mvi a, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01
+			mvi a, <__RAM_DISK_S_LEVEL01
 			call GetWordFromRamDisk
 			mov d, b
 			mov e, c
 
 			lxi b, roomTilesData ; the tile data buffer is used as a temp buffer
-			lxi h, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
+			lxi h, <__RAM_DISK_S_LEVEL01<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
 			call CopyFromRamDisk
 
 			; convert tile idxs into tile gfx addrs
@@ -61,7 +61,7 @@ RoomInitTiles:
 			; copy the tile graphics addr to the current room tile graphics table
 			push b
 			xchg
-			mvi a, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01
+			mvi a, <__RAM_DISK_S_LEVEL01
 			call GetWordFromRamDisk
 			mov a, c
 			mov e, b
@@ -95,14 +95,14 @@ RoomInitTilesData:
 			dad b
 
 			xchg
-			mvi a, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01
+			mvi a, <__RAM_DISK_S_LEVEL01
 			call GetWordFromRamDisk
 			lxi h, ROOM_WIDTH * ROOM_HEIGHT + 2 ; tiles data is stored right after the tile addr tbl plus 2 safety bytes
 			dad b
 
 			xchg
 			lxi b, roomTilesData
-			lxi h, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
+			lxi h, <__RAM_DISK_S_LEVEL01<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
 			call CopyFromRamDisk
 
 			; handle the tile data calling tile data funcs
@@ -157,32 +157,32 @@ RoomMonsterSpawn:
 
 RoomDraw:
 			; main scr
-			CALL_RAM_DISK_FUNC(RoomDrawTiles, <__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01)
+			CALL_RAM_DISK_FUNC(RoomDrawTiles, <__RAM_DISK_S_LEVEL01)
 
-			; copy $a000-$ffff scr buffs to the ram-disk
+			; copy $a000-$ffff scr buffs to the ram-disk back buffer
 			; TODO: optimization. think of making copy process while the gameplay started.
 			lxi d, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi h, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi b, SCR_BUFF_LEN * 3 / 32
-			mvi a, RAM_DISK_S2
+			mvi a, __RAM_DISK_S_BACKBUFF
 			call CopyToRamDisk32
 
-			; copy $a000-$ffff scr buffs to the back buffer2 (to restore the background in the back buffer)
+			; copy $a000-$ffff scr buffs to the ram-disk back buffer2 (to restore the background in the back buffer)
 			lxi d, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi h, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi b, SCR_BUFF_LEN * 3 / 32
-			mvi a, RAM_DISK_S3
+			mvi a, __RAM_DISK_S_BACKBUFF2
 			call CopyToRamDisk32
 
 			; convert roomTilesData into $8000 tiledata buffer in the ram-disk
 			;call RoomTileDataBuff
-			CALL_RAM_DISK_FUNC(RoomTileDataBuff, RAM_DISK_M3 | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(RoomTileDataBuff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
 			ret
 
 
 ;=========================================================
 ; convert roomTilesData into the tiledata buffer in the ram-disk (bank 3 at $8000)
-; call ex. CALL_RAM_DISK_FUNC(RoomTileDataBuff, RAM_DISK_M3 | RAM_DISK_M_8F)
+; call ex. CALL_RAM_DISK_FUNC(RoomTileDataBuff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
 RoomTileDataBuff:
 			; set y = 0
 			mvi e, 0
@@ -275,7 +275,7 @@ RoomDrawTiles:
 			ret
 
 ; check tiles if they need to be restored. It uses the tiledata buffer in the ram-disk (bank 3 at $8000)
-; call ex. CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, RAM_DISK_M3 | RAM_DISK_M_8F, false, false)
+; ex. CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; de - scr addr
 ; h - width
@@ -315,7 +315,7 @@ RoomCheckNonZeroTiles:
 
 ; check if tiles are walkable.
 ; func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
-; call ex. CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+; call ex. CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; d - posX
 ; e - posY
@@ -360,7 +360,7 @@ RoomCheckWalkableTiles:
 
 ; collects tiledata of tiles which intersect with a sprite
 ; this func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
-; call ex. CALL_RAM_DISK_FUNC(RoomGetTileDataAroundSprite, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+; ex. CALL_RAM_DISK_FUNC(RoomGetTileDataAroundSprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; d - posX
 ; e - posY
@@ -426,7 +426,7 @@ RoomGetTileDataAroundSprite:
 /*
 ; check a collision of sprite pixel against a tiledata
 ; this func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
-; call ex. CALL_RAM_DISK_FUNC(RoomCheckTileDataCollisionPxl, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+; call ex. CALL_RAM_DISK_FUNC(RoomCheckTileDataCollisionPxl, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; d - posX
 ; e - posY
@@ -453,7 +453,7 @@ RoomCheckTileDataCollisionPxl:
 */
 ; collects a tiledata around a sprite if it's a collision data (equals $ff)
 ; this func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
-; call ex. CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+; ex. CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; d - posX
 ; e - posY

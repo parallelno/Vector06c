@@ -3,6 +3,8 @@ import json
 import common
 import build
 
+SEGMENT_RESERVED = "reserved"
+
 def Export(contentJPath):
 	extAsm = ".asm"
 
@@ -38,6 +40,11 @@ def Export(contentJPath):
 	for bankJ in contentJ["banks"]:
 		bank = int(bankJ["bank"])
 		for segmentJ in bankJ["segments"]:
+			if segmentJ["name"] == SEGMENT_RESERVED:
+				continue
+			if len(segmentJ["chunks"]) == 0:
+				continue
+
 			addrS = segmentJ["addr"]
 			addrS_WO_hexSym = addrS
 			if addrS_WO_hexSym[0] == "$":
@@ -47,7 +54,8 @@ def Export(contentJPath):
 			ramDiskSegmentData += f'__chunkStart_bank{bank}_addr{addrS_WO_hexSym}_chunk0:\n\n'
 			ramDiskSegmentData += '.include "globalConsts.asm"\n'
 			ramDiskSegmentData += '.include "macro.asm"\n'
-			ramDiskSegmentData += f'RAM_DISK_BANK_ACTIVATION_CMD = RAM_DISK_S{bank}\n\n'
+			ramDiskSegmentData += f'RAM_DISK_S = RAM_DISK_S{bank}\n'
+			ramDiskSegmentData += f'RAM_DISK_M = RAM_DISK_M{bank}\n\n'
 
 			segmentIncludesUpdatedFiles = globalForceExport
 			for chunkN, chunkJ in enumerate(segmentJ["chunks"]):
@@ -121,6 +129,7 @@ def Export(contentJPath):
 		bank = int(bankJ["bank"])
 		for segmentJ in bankJ["segments"]:
 			name = segmentJ["name"]
+
 			addrS = segmentJ["addr"]
 			addrS_WO_hexSym = addrS
 			if addrS_WO_hexSym[0] == "$":
@@ -128,25 +137,45 @@ def Export(contentJPath):
 			if (addrS_WO_hexSym == "0"):
 				addrS = "$0000"
 				addrS_WO_hexSym = "0000"
-			
-			if addrS_WO_hexSym == "0" or addrS_WO_hexSym == "0000":
-				segmentStartAddr = build.SEGMENT_0000_7F00_ADDR
+
+			comment = ""
+			if "comment" in segmentJ:
+				comment = segmentJ["comment"]
+
+			if name == SEGMENT_RESERVED:
+				ramDiskDataAsm += f"; bank{bank} addr{addrS} [ 0 free]		- {comment}\n"	
 			else:
-				segmentStartAddr = build.SEGMENT_8000_0000_ADDR			
-			segmentSizeMax = build.GetSegmentSizeMax(segmentStartAddr)
-			segmentSize = os.path.getsize(segmentPaths[segmentNum])
-			segmentNum += 1
+			
+				if addrS_WO_hexSym == "0" or addrS_WO_hexSym == "0000":
+					segmentStartAddr = build.SEGMENT_0000_7F00_ADDR
+				else:
+					segmentStartAddr = build.SEGMENT_8000_0000_ADDR			
+				
+				if "customSegmentSizeMax" in segmentJ:
+					segmentSizeMax = segmentJ["customSegmentSizeMax"]
+				else:
+					segmentSizeMax = build.GetSegmentSizeMax(segmentStartAddr)
 
-			assetNames = []
-			for chunkJ in segmentJ["chunks"]:
-				for asset in chunkJ:
-					path = asset["path"]
-					pathWOExt = os.path.splitext(path)[0]
-					assetName = os.path.basename(pathWOExt)
-					assetNames.append(assetName)
+				if len(segmentJ["chunks"]) > 0:
+					segmentSize = os.path.getsize(segmentPaths[segmentNum])
+					segmentNum += 1
+				else:
+					segmentSize = 0
+				
+				description = ""
+				if comment == "":
+					assetNames = []
+					for chunkJ in segmentJ["chunks"]:
+						for asset in chunkJ:
+							path = asset["path"]
+							pathWOExt = os.path.splitext(path)[0]
+							assetName = os.path.basename(pathWOExt)
+							assetNames.append(assetName)
+					description = f"{name}:	{assetNames}"
+				else:
+					description = comment
 
-			ramDiskDataAsm += f"; bank{bank} addr{addrS} [{segmentSizeMax - segmentSize} free]	- {name}:	{assetNames}\n"
-	ramDiskDataAsm += "; bank3 addr$8000 - $8000-$9FFF tiledata (for collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore the background in the back buffer)\n"
+				ramDiskDataAsm += f"; bank{bank} addr{addrS} [{segmentSizeMax - segmentSize} free]	- {description}\n"
 
 	# save ramDiskData.asm
 	ramDiskDataPath = f"\\code\\ramDiskData{extAsm}"
@@ -155,13 +184,24 @@ def Export(contentJPath):
 
 
 	# make ramDiskInit.asm
-	ramDiskInitAsm = "RamDiskInit:\n"
+	ramDiskInitAsm = ""
+	ramDiskInitAsm += f'__RAM_DISK_S_BACKBUFF = RAM_DISK_S{bankBackBuffer}\n'
+	ramDiskInitAsm += f'__RAM_DISK_M_BACKBUFF = RAM_DISK_M{bankBackBuffer}\n'
+	ramDiskInitAsm += f'__RAM_DISK_S_BACKBUFF2 = RAM_DISK_S{bankBackBuffer2}\n'
+	ramDiskInitAsm += f'__RAM_DISK_M_BACKBUFF2 = RAM_DISK_M{bankBackBuffer2}\n\n'
+
+	ramDiskInitAsm += "RamDiskInit:\n"
 	ramDiskInitAsm += "			;call ClearRamDisk\n"
 	# unpack segments in a reverse order of banks listed in ramDiskData.json
 	for bankJ in reversed(contentJ["banks"]):
 		bank = int(bankJ["bank"])
 		for segmentJ in reversed(bankJ["segments"]):
 			name = segmentJ["name"]
+			if segmentJ["name"] == SEGMENT_RESERVED:
+				continue			
+			if len(segmentJ["chunks"]) == 0:
+				continue
+
 			addrS = segmentJ["addr"]
 			addrS_WO_hexSym = addrS
 			if addrS_WO_hexSym[0] == "$":

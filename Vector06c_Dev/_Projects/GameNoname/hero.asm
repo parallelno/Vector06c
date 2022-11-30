@@ -284,7 +284,7 @@ HeroUpdatePos:
 			mov d, b ; posX
 			mov e, h ; posY
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			jz HeroMove
 @collides:
 			; handle a collision data around a hero
@@ -311,7 +311,7 @@ HeroDontMove:
 			inx_h(2)
 			mov e, m
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomGetTileDataAroundSprite, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(RoomGetTileDataAroundSprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			rz
 
 			lxi h, roomTileCollisionData
@@ -645,10 +645,10 @@ HeroDraw:
 
 			lda heroDirX
 			ora a
-			mvi a, <(__RAM_DISK_BANK_ACTIVATION_CMD_HEROR | RAM_DISK_M2 | RAM_DISK_M_8F)
+			mvi a, <(__RAM_DISK_S_HEROR | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			jnz @spriteR
 @spriteL:
-			mvi a, <(__RAM_DISK_BANK_ACTIVATION_CMD_HEROL | RAM_DISK_M2 | RAM_DISK_M_8F)
+			mvi a, <(__RAM_DISK_S_HEROL | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 @spriteR:			
 
 			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
@@ -727,13 +727,13 @@ HeroErase:
 			; check if it needs to restore the background
 			push h
 			push d
-			mvi a, -$20
+			mvi a, -$20 ; advance DE to SCR_ADDR_0 to check the collision, to decide if we need to restore a beckground
 			add d
 			mov d, a
-			CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			pop d
 			pop h
-			jnz SpriteCopyToBackBuffV
-			CALL_RAM_DISK_FUNC(__EraseSprite, RAM_DISK_S2 | RAM_DISK_M2 | RAM_DISK_M_8F)
+			jnz SpriteCopyToBackBuffV ; restore a background
+			CALL_RAM_DISK_FUNC(__EraseSprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 			ret
 			.closelabels	

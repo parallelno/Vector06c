@@ -1,5 +1,7 @@
 ; source\sprites\hero_attack01.json
-__RAM_DISK_BANK_ACTIVATION_CMD_HERO_ATTACK01 = RAM_DISK_BANK_ACTIVATION_CMD
+__RAM_DISK_S_HERO_ATTACK01 = RAM_DISK_S
+; source\sprites\hero_attack01.json
+__RAM_DISK_M_HERO_ATTACK01 = RAM_DISK_M
 __hero_attack01_sprites:
 			.byte 1,1  ; safety pair of bytes to support a stack renderer, and also (maskFlag, preshifting is done)
 __hero_attack01_sword_delay_0:

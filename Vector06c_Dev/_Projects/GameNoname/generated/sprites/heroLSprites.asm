@@ -1,5 +1,7 @@
 ; source\sprites\heroL.json
-__RAM_DISK_BANK_ACTIVATION_CMD_HEROL = RAM_DISK_BANK_ACTIVATION_CMD
+__RAM_DISK_S_HEROL = RAM_DISK_S
+; source\sprites\heroL.json
+__RAM_DISK_M_HEROL = RAM_DISK_M
 __heroL_sprites:
 			.byte 1,1  ; safety pair of bytes to support a stack renderer, and also (maskFlag, preshifting is done)
 __heroL_idle0_0:

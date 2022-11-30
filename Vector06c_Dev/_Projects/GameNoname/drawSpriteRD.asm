@@ -235,7 +235,7 @@ __DrawSpriteV:
 ; offsetX in bytes
 ; offsetY in pixels
 ; it uses sp to read the sprite data
-
+; ex. CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_HERO_ATTACK01 | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 ; input:
 ; bc	sprite data
 ; de	screen address
@@ -264,6 +264,8 @@ __DrawSpriteV:
 			ora b
 			mov m, a
 .endmacro
+
+__RAM_DISK_M_DRAW_SPRITE_VM = RAM_DISK_M
 
 __DrawSpriteVM:
 			; store SP

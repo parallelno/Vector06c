@@ -1,5 +1,7 @@
 ; source\sprites\knight.json
-__RAM_DISK_BANK_ACTIVATION_CMD_KNIGHT = RAM_DISK_BANK_ACTIVATION_CMD
+__RAM_DISK_S_KNIGHT = RAM_DISK_S
+; source\sprites\knight.json
+__RAM_DISK_M_KNIGHT = RAM_DISK_M
 __knight_sprites:
 			.byte 1,1  ; safety pair of bytes to support a stack renderer, and also (maskFlag, preshifting is done)
 __knight_idle_r0_0:

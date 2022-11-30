@@ -1,4 +1,5 @@
-__RAM_DISK_BANK_ACTIVATION_CMD_LEVEL01 = RAM_DISK_BANK_ACTIVATION_CMD
+__RAM_DISK_S_LEVEL01 = RAM_DISK_S
+__RAM_DISK_M_LEVEL01 = RAM_DISK_M
 ; source\levels\art\sprites_tiles_lv01.png
 __level01_palette_sprites_tiles_lv01:
 			.byte %01001010, %00000001, %01011100, %00011010, 

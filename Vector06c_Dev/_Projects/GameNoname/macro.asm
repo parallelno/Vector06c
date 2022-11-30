@@ -123,7 +123,7 @@
 ; has to be placed right BEFORE lxi sp, addr, and sphl
 ; mount the ram-disk w/o storing mode
 .macro RAM_DISK_ON_NO_RESTORE(_command)
-			mvi a, _command
+			mvi a, <_command
 			out $10
 .endmacro
 ; restore the ram-disk mode

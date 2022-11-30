@@ -9,6 +9,7 @@ restoreSP_ramDisk__:
 
 ; clear a N*16 pxs square on the screen,
 ; it clears 3 screen buffers from de addr and further
+; ex. CALL_RAM_DISK_FUNC(__EraseSprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 ; in:
 ; de - scr addr
 ; hl - width, height
@@ -17,6 +18,8 @@ restoreSP_ramDisk__:
 ;		01 - 16pxs,
 ;		10 - 24pxs,
 ;		11 - 32pxs,
+__RAM_DISK_M_ERASE_SPRITE = RAM_DISK_M
+
 __EraseSprite: 
 			mov b, h
 			; adjust Y

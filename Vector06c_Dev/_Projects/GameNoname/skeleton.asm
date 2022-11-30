@@ -201,7 +201,7 @@ SkeletonUpdate:
 			mov d, a
 			mov e, h
 			lxi b, (SKELETON_COLLISION_WIDTH-1)<<8 | SKELETON_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, RAM_DISK_M3 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			jnz @tilesCollide
 
 @updatePos:
@@ -351,7 +351,7 @@ SkeletonDraw:
 			; c - preshifted sprite idx*2 offset
 			call SpriteGetAddr
 
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_BANK_ACTIVATION_CMD_SKELETON | RAM_DISK_M2 | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_SKELETON | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			pop h
 			inx h
 			; hl - ptr to monsterEraseScrAddr

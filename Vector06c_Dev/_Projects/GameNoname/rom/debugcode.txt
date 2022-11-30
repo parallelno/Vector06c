@@ -451,19 +451,19 @@ $03d1 21 00 00   lxi h,$0000
 $03d4 31 00 00   lxi sp,$0000
 $03d7 fb         ei
 $03d8 c3 00 00   jmp $0000
-$03db 11 db 51   lxi d,$51db
+$03db 11 17 4d   lxi d,$4d17
 $03de 01 00 80   lxi b,$8000
-$03e1 3e e2      mvi a,$e2
+$03e1 3e e3      mvi a,$e3
 $03e3 cd 4d 01   call $014d
-$03e6 11 65 4a   lxi d,$4a65
-$03e9 01 00 80   lxi b,$8000
-$03ec 3e e3      mvi a,$e3
-$03ee cd 4d 01   call $014d
-$03f1 11 7c 93   lxi d,$937c
-$03f4 21 7c 13   lxi h,$137c
-$03f7 01 be 09   lxi b,$09be
-$03fa 3e fb      mvi a,$fb
-$03fc cd a0 02   call $02a0
+$03e6 11 7c 93   lxi d,$937c
+$03e9 21 7c 13   lxi h,$137c
+$03ec 01 be 09   lxi b,$09be
+$03ef 3e ff      mvi a,$ff
+$03f1 cd a0 02   call $02a0
+$03f4 11 65 4a   lxi d,$4a65
+$03f7 01 00 80   lxi b,$8000
+$03fa 3e e2      mvi a,$e2
+$03fc cd 4d 01   call $014d
 $03ff 11 85 34   lxi d,$3485
 $0402 01 00 80   lxi b,$8000
 $0405 3e e1      mvi a,$e1
@@ -3956,14 +3956,14 @@ $1f5c af         xra a
 $1f5d 32 23 05   sta $0523
 $1f60 c9         ret
 $1f61 11 00 00   lxi d,$0000
-$1f64 3e 18      mvi a,$18
+$1f64 3e 1c      mvi a,$1c
 $1f66 cd 55 02   call $0255
 $1f69 3e 01      mvi a,$01
 $1f6b 32 2c 01   sta $012c
 $1f6e af         xra a
 $1f6f 32 24 05   sta $0524
 $1f72 11 12 00   lxi d,$0012
-$1f75 3e 18      mvi a,$18
+$1f75 3e 1c      mvi a,$1c
 $1f77 cd 8e 02   call $028e
 $1f7a cd 5c 12   call $125c
 $1f7d cd 42 12   call $1242
@@ -4004,12 +4004,12 @@ $1fc7 06 00      mvi b,$00
 $1fc9 21 16 00   lxi h,$0016
 $1fcc 09         dad b
 $1fcd eb         xchg
-$1fce 3e 18      mvi a,$18
+$1fce 3e 1c      mvi a,$1c
 $1fd0 cd 8e 02   call $028e
 $1fd3 50         mov d,b
 $1fd4 59         mov e,c
 $1fd5 01 15 07   lxi b,$0715
-$1fd8 21 78 18   lxi h,$1878
+$1fd8 21 78 1c   lxi h,$1c78
 $1fdb cd 3d 03   call $033d
 $1fde 21 15 07   lxi h,$0715
 $1fe1 01 25 05   lxi b,$0525
@@ -4026,7 +4026,7 @@ $1fef 11 22 00   lxi d,$0022
 $1ff2 19         dad d
 $1ff3 c5         push b
 $1ff4 eb         xchg
-$1ff5 3e 18      mvi a,$18
+$1ff5 3e 1c      mvi a,$1c
 $1ff7 cd 8e 02   call $028e
 $1ffa 79         mov a,c
 $1ffb 58         mov e,b
@@ -4049,13 +4049,13 @@ $200f 06 00      mvi b,$00
 $2011 21 16 00   lxi h,$0016
 $2014 09         dad b
 $2015 eb         xchg
-$2016 3e 18      mvi a,$18
+$2016 3e 1c      mvi a,$1c
 $2018 cd 8e 02   call $028e
 $201b 21 f2 00   lxi h,$00f2
 $201e 09         dad b
 $201f eb         xchg
 $2020 01 15 07   lxi b,$0715
-$2023 21 78 18   lxi h,$1878
+$2023 21 78 1c   lxi h,$1c78
 $2026 cd 3d 03   call $033d
 $2029 21 15 07   lxi h,$0715
 $202c 0e 00      mvi c,$00
@@ -4102,7 +4102,7 @@ $2062 23         inx h
 $2063 56         mov d,m
 $2064 eb         xchg
 $2065 e9         pchl
-$2066 3e 18      mvi a,$18
+$2066 3e 1c      mvi a,$1c
 $2068 32 2f 01   sta $012f
 $206b d3 10      out $10
 $206d cd fc 20   call $20fc

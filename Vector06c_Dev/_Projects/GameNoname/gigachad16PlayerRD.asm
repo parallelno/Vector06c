@@ -7,11 +7,16 @@
 ; original player code was written by svofski 2022
 ; original zx0 decompression code was written by ivagor 2022
 
+__RAM_DISK_S_GCPLAYER = RAM_DISK_S
+__RAM_DISK_M_GCPLAYER = RAM_DISK_M
+
+; ex. CALL_RAM_DISK_FUNC(__GCPlayerInit, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 __GCPlayerInit:
 			call GCPlayerMute
 			call GCPlayerClearBuffers
 			ret
 
+; ex. CALL_RAM_DISK_FUNC(__GCPlayerStartRepeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 __GCPlayerStartRepeat:
 			lda __GCPlayerUpdate 
 			ora a
@@ -34,6 +39,7 @@ __GCPlayerStartRepeat:
 			.closelabels
 
 ; this function has to be called from an unterruption routine
+; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(__GCPlayerUpdate, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 __GCPlayerUpdate:
 			; ret will be replaced with NOP when the player inited
 			ret
