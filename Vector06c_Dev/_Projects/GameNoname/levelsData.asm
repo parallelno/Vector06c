@@ -11,7 +11,7 @@ roomIdx:
 
 ; the address table to tile graphics
 roomTilesAddr:
-				.storage ROOM_WIDTH * ROOM_HEIGHT * 2
+				.storage ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
 
 ; tile data format: 
 ; it's stored in roomTilesData

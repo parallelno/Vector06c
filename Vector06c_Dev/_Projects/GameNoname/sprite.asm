@@ -98,7 +98,7 @@ SpriteCopyToScrV:
 			mvi b, 0
 
 			; hl - an addr of a copy routine
-			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * WORD_LEN
+			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * ADDR_LEN
 			dad b
 			mov b, m
 			inx h
@@ -251,7 +251,7 @@ SpriteCopyToBackBuffV:
 			shld RestoreSP + 1
 
 			; hl - an addr of a copy routine
-			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * WORD_LEN
+			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * ADDR_LEN
 			dad b
 			mov b, m
 			inx h

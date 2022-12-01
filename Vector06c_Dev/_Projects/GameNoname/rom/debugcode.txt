@@ -451,7 +451,7 @@ $03d1 21 00 00   lxi h,$0000
 $03d4 31 00 00   lxi sp,$0000
 $03d7 fb         ei
 $03d8 c3 00 00   jmp $0000
-$03db 11 a1 59   lxi d,$59a1
+$03db 11 c9 59   lxi d,$59c9
 $03de 01 00 80   lxi b,$8000
 $03e1 3e e3      mvi a,$e3
 $03e3 cd 4d 01   call $014d
@@ -459,9 +459,9 @@ $03e6 11 49 50   lxi d,$5049
 $03e9 01 00 80   lxi b,$8000
 $03ec 3e e1      mvi a,$e1
 $03ee cd 4d 01   call $014d
-$03f1 11 5c 97   lxi d,$975c
-$03f4 21 5c 17   lxi h,$175c
-$03f7 01 ae 0b   lxi b,$0bae
+$03f1 11 94 98   lxi d,$9894
+$03f4 21 94 18   lxi h,$1894
+$03f7 01 4a 0c   lxi b,$0c4a
 $03fa 3e fd      mvi a,$fd
 $03fc cd a0 02   call $02a0
 $03ff 11 69 3a   lxi d,$3a69

@@ -77,9 +77,9 @@ GCPlayerTasksInit:
 			shld @restoreSP+1
 
 			lxi sp, GCPlayerTaskStack13 + GC_PLAYER_STACK_SIZE
-			lxi d, GCPlayerAyRegDataPtrs + GC_PLAYER_TASKS * WORD_LEN
+			lxi d, GCPlayerAyRegDataPtrs + GC_PLAYER_TASKS * ADDR_LEN
 			; b = 0, c = a task counter * 2
-			lxi b, (GC_PLAYER_TASKS - 1) * WORD_LEN
+			lxi b, (GC_PLAYER_TASKS - 1) * ADDR_LEN
 @loop:
 			; store zx0 entry point to a task stack
 			lxi h, GCPlayerUnpack

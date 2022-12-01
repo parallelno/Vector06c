@@ -4,7 +4,6 @@ import common
 import build
 
 SEGMENT_RESERVED = "reserved"
-SCR_BUFF_SIZE = 8192
 
 def Export(contentJPath):
 	extAsm = ".asm"
@@ -153,8 +152,8 @@ def Export(contentJPath):
 				else:
 					segmentStartAddr = build.SEGMENT_8000_0000_ADDR			
 				
-				if bank == bankBackBuffer:
-					segmentSizeMax = SCR_BUFF_SIZE*4 - backBufferSize
+				if bank == bankBackBuffer and segmentStartAddr == build.SEGMENT_8000_0000_ADDR :
+					segmentSizeMax = build.SCR_BUFF_SIZE * 4 - backBufferSize
 				else:
 					segmentSizeMax = build.GetSegmentSizeMax(segmentStartAddr)
 
