@@ -1,5 +1,3 @@
-HERO_COLLISION_WIDTH = 15
-HERO_COLLISION_HEIGHT = 11
 HERO_RUN_SPEED		= $0200 ; low byte is a subpixel speed, high byte is a speed in pixels
 HERO_RUN_SPEED_D	= $016a ; for diagonal moves
 
@@ -19,6 +17,9 @@ HERO_ANIM_SPEED_ATTACK	= 50
 
 ; gameplay
 HERO_HEALTH_MAX = 100
+
+HERO_COLLISION_WIDTH = 15
+HERO_COLLISION_HEIGHT = 11
 
 ; hero runtime data
 ; this's a struct. do not change the layout
@@ -173,7 +174,7 @@ HeroUpdate:
 
 			lxi h, HERO_RUN_SPEED_D
 			shld heroSpeedX
-			lxi h, $ffff - HERO_RUN_SPEED_D + 1
+			LXI_H_NEG(HERO_RUN_SPEED_D)
 			shld heroSpeedY
 
 			mvi a, 1
@@ -186,7 +187,7 @@ HeroUpdate:
 			cpi KEY_LEFT
 			jnz @setAnimRunLU
 
-			lxi h, $ffff - HERO_RUN_SPEED + 1
+			LXI_H_NEG(HERO_RUN_SPEED)
 			shld heroSpeedX
 			lxi h, 0
 			shld heroSpeedY
@@ -201,7 +202,7 @@ HeroUpdate:
 			cpi KEY_LEFT & KEY_UP
 			jnz @setAnimRunLD
 
-			lxi h, $ffff - HERO_RUN_SPEED_D + 1
+			LXI_H_NEG(HERO_RUN_SPEED_D)
 			shld heroSpeedX
 			lxi h, HERO_RUN_SPEED_D
 			shld heroSpeedY
@@ -216,7 +217,7 @@ HeroUpdate:
 			cpi KEY_LEFT & KEY_DOWN
 			jnz @setAnimRunU
 
-			lxi h, $ffff - HERO_RUN_SPEED_D + 1
+			LXI_H_NEG(HERO_RUN_SPEED_D)
 			shld heroSpeedX
 			shld heroSpeedY
 
@@ -252,7 +253,7 @@ HeroUpdate:
 
 			lxi h, 0
 			shld heroSpeedX
-			lxi h, $ffff - HERO_RUN_SPEED + 1
+			LXI_H_NEG(HERO_RUN_SPEED)
 			shld heroSpeedY
 
 			lda heroDirX

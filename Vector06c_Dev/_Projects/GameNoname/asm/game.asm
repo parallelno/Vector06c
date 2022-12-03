@@ -1,13 +1,16 @@
-.include "levelsData.asm"
-.include "drawTile.asm"
-.include "sprite.asm"
-.include "hero.asm"
-.include "monsters.asm"
-.include "bullets.asm"
-.include "levels.asm"
-.include "room.asm"
-.include "text.asm"
-.include "ui.asm"
+.include "asm\\levels\\levelsConst.asm"
+.include "asm\\levels\\levelsMacro.asm"
+.include "asm\\levels\\levelsData.asm"
+
+.include "asm\\render\\drawTile.asm"
+.include "asm\\render\\sprite.asm"
+.include "asm\\hero.asm"
+.include "asm\\monsters\\monsters.asm"
+.include "asm\\bullets\\bullets.asm"
+.include "asm\\levels\\levels.asm"
+.include "asm\\levels\\room.asm"
+.include "asm\\render\\text.asm"
+.include "asm\\ui.asm"
 
 GameInit:
 			call LevelsInit

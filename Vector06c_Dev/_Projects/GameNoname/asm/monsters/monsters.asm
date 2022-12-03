@@ -1,8 +1,8 @@
-.include "skeleton.asm"
-.include "vampire.asm"
-.include "burner.asm"
-.include "knight.asm"
-.include "monstersData.asm"
+.include "asm\\monsters\\skeleton.asm"
+.include "asm\\monsters\\vampire.asm"
+.include "asm\\monsters\\burner.asm"
+.include "asm\\monsters\\knight.asm"
+.include "asm\\monsters\\monstersData.asm"
 
 MonstersEraseRuntimeData:
 			mvi a, MONSTER_RUNTIME_DATA_LAST

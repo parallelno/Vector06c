@@ -35,10 +35,6 @@ roomTilesAddr:
 ; fff == 7, d == 0, no collision, restore background (tiledata = 7)
 ; fff == 7, d != %11111, ???
 
-; tileData consts
-TILE_DATA_COLLISION = %11111111
-TILE_DATA_FUNC_MASK = %111
-
 ; this functions are used when the room initialized. check room.asm RoomInitTilesData func
 roomFuncTable:		
 			.word RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy, RoomMonsterSpawn, RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy

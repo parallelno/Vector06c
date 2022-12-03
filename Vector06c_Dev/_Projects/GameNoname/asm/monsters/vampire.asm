@@ -1,17 +1,17 @@
-KNIGHT_HEALTH = 1
-KNIGHT_RUN_SPEED		= $0100
-KNIGHT_RUN_SPEED_D	= $ffff - $100 + 1
+VAMPIRE_HEALTH = 1
+VAMPIRE_RUN_SPEED		= $0100
+VAMPIRE_RUN_SPEED_NEG	= $ffff - $100 + 1
 
-KNIGHT_COLLISION_WIDTH = 15
-KNIGHT_COLLISION_HEIGHT = 10
+VAMPIRE_COLLISION_WIDTH = 15
+VAMPIRE_COLLISION_HEIGHT = 10
 
-KNIGHT_POS_X_MIN = TILE_WIDTH
-KNIGHT_POS_X_MAX = (ROOM_WIDTH - 2 ) * TILE_WIDTH
-KNIGHT_POS_Y_MIN = TILE_WIDTH
-KNIGHT_POS_Y_MAX = (ROOM_HEIGHT - 2 ) * TILE_HEIGHT
+VAMPIRE_POS_X_MIN = TILE_WIDTH
+VAMPIRE_POS_X_MAX = (ROOM_WIDTH - 2 ) * TILE_WIDTH
+VAMPIRE_POS_Y_MIN = TILE_WIDTH
+VAMPIRE_POS_Y_MAX = (ROOM_HEIGHT - 2 ) * TILE_HEIGHT
 
 ; gameplay
-KNIGHT_DAMAGE = 1
+VAMPIRE_DAMAGE = 1
 
 ;========================================================
 ; called to spawn this mod
@@ -19,41 +19,41 @@ KNIGHT_DAMAGE = 1
 ; c - monster idx
 ; out:
 ; a = 0
-KnightInit:
+VampireInit:
 			call MonstersGetEmptyDataPtr
 			; hl - ptr to monsterUpdatePtr+1			
-			mvi m, >KnightUpdate
+			mvi m, >VampireUpdate
 			dcx h 
-			mvi m, <KnightUpdate
+			mvi m, <VampireUpdate
 
 			; TODO: add monsterDataPrevPPtr init
 			; TODO: add monsterDataNextPPtr init
 
 			
-			; advance to KnightDraw
+			; advance to VampireDraw
 			LXI_d_TO_DIFF(monsterDrawPtr, monsterUpdatePtr)
 			dad d
 			
-			mvi m, <KnightDraw
+			mvi m, <VampireDraw
 			inx h 
-			mvi m, >KnightDraw
+			mvi m, >VampireDraw
 			inx h
-			mvi m, <KnightImpact
+			mvi m, <VampireImpact
 			inx h
-			mvi m, >KnightImpact
+			mvi m, >VampireImpact
 			; advance to monsterType
 			inx h
 			mvi m, 0; MONSTER_TYPE_ENEMY			
 			; advance to monsterHealth
 			inx h
-			mvi m, KNIGHT_HEALTH
+			mvi m, VAMPIRE_HEALTH
 
 			LXI_D_TO_DIFF(monsterAnimPtr, monsterHealth)
 			dad d
 			; monsterAnimPtr
-			mvi m, < knight_run_r
+			mvi m, < vampire_run_r
 			inx h
-			mvi m, > knight_run_r
+			mvi m, > vampire_run_r
 			; advance hl to monsterSpeedY+1
 			LXI_D_TO_DIFF(monsterSpeedY+1, monsterAnimPtr+1)
 			dad d
@@ -66,9 +66,9 @@ KnightInit:
 			dcx h 
 			; advance hl to monsterSpeedX+1
 			; set monsterSpeedX to right 
-			mvi m, >KNIGHT_RUN_SPEED
+			mvi m, >VAMPIRE_RUN_SPEED
 			dcx h 
-			mvi m, <KNIGHT_RUN_SPEED
+			mvi m, <VAMPIRE_RUN_SPEED
 			dcx h 
 			; advance hl to monsterPosY+1
 			; convert tile idx into the posY and set it
@@ -124,7 +124,7 @@ KnightInit:
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monsterUpdatePtr in the runtime data
-KnightUpdate:
+VampireUpdate:
 			mov b, d
 			mov c, e
 			xchg
@@ -200,7 +200,7 @@ KnightUpdate:
 			; check the collision tiles
 			mov d, a
 			mov e, h
-			lxi b, (KNIGHT_COLLISION_WIDTH-1)<<8 | KNIGHT_COLLISION_HEIGHT-1
+			lxi b, (VAMPIRE_COLLISION_WIDTH-1)<<8 | VAMPIRE_COLLISION_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			jnz @tilesCollide
 
@@ -222,7 +222,7 @@ KnightUpdate:
 			adi HERO_COLLISION_WIDTH-1
 			cmp c
 			rc
-			mvi a, KNIGHT_COLLISION_WIDTH-1
+			mvi a, VAMPIRE_COLLISION_WIDTH-1
 			add c
 			cmp b
 			rc
@@ -234,13 +234,13 @@ KnightUpdate:
 			adi HERO_COLLISION_HEIGHT-1
 			cmp c
 			rc
-			mvi a, KNIGHT_COLLISION_HEIGHT-1
+			mvi a, VAMPIRE_COLLISION_HEIGHT-1
 			add c
 			cmp b
 			rc
 			; hero collides
 			; send him a damage
-			mvi c, KNIGHT_DAMAGE
+			mvi c, VAMPIRE_DAMAGE
 			call HeroImpact
 			ret
 
@@ -265,9 +265,9 @@ KnightUpdate:
 			inx h
 			mov m, a
 			inx h
-			mvi m, < KNIGHT_RUN_SPEED_D
+			mvi m, < VAMPIRE_RUN_SPEED_NEG
 			inx h
-			mvi m, > KNIGHT_RUN_SPEED_D
+			mvi m, > VAMPIRE_RUN_SPEED_NEG
 			jmp @setAnim
 @speedYp:
 			xra a
@@ -275,53 +275,53 @@ KnightUpdate:
 			inx h
 			mov m, a
 			inx h
-			mvi m, < KNIGHT_RUN_SPEED
+			mvi m, < VAMPIRE_RUN_SPEED
 			inx h
-			mvi m, > KNIGHT_RUN_SPEED
+			mvi m, > VAMPIRE_RUN_SPEED
 			jmp @setAnim
 @speedXn:
 			xra a
-			mvi m, < KNIGHT_RUN_SPEED_D
+			mvi m, < VAMPIRE_RUN_SPEED_NEG
 			inx h
-			mvi m, > KNIGHT_RUN_SPEED_D
-			inx h
-			mov m, a
+			mvi m, > VAMPIRE_RUN_SPEED_NEG
 			inx h
 			mov m, a
-			mvi a, > KNIGHT_RUN_SPEED_D
+			inx h
+			mov m, a
+			mvi a, > VAMPIRE_RUN_SPEED_NEG
 			jmp @setAnim
 @speedXp:
 			xra a
-			mvi m, < KNIGHT_RUN_SPEED
+			mvi m, < VAMPIRE_RUN_SPEED
 			inx h
-			mvi m, > KNIGHT_RUN_SPEED
-			inx h
-			mov m, a
+			mvi m, > VAMPIRE_RUN_SPEED
 			inx h
 			mov m, a
-			mvi a, > KNIGHT_RUN_SPEED
+			inx h
+			mov m, a
+			mvi a, > VAMPIRE_RUN_SPEED
 @setAnim:
 			; a = speedX
 			ora a
-			; if speedX is positive, then play knight_run_r
-			; that means a vertical movement plays knight_run_r anim as well
+			; if speedX is positive, then play vampire_run_r
+			; that means a vertical movement plays vampire_run_r anim as well
 			jz @setAnimRunR
 @setAnimRunL:
 			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
 			dad b
-			mvi m, < knight_run_l
+			mvi m, < vampire_run_l
 			inx h
-			mvi m, > knight_run_l
+			mvi m, > vampire_run_l
 			ret
 @setAnimRunR:
 			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
 			dad b
-			mvi m, < knight_run_r
+			mvi m, < vampire_run_r
 			inx h
-			mvi m, > knight_run_r
+			mvi m, > vampire_run_r
             ret
 
-KnightImpact:
+VampireImpact:
 			; de - ptr to monsterImpactPtr+1
 			LXI_H_TO_DIFF(monsterUpdatePtr+1, monsterImpactPtr+1)
 			dad d
@@ -330,10 +330,10 @@ KnightImpact:
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to monsterDrawPtr in the runtime data
-KnightDraw:
+VampireDraw:
 			LXI_H_TO_DIFF(monsterPosX+1, monsterDrawPtr)
 			dad d
-			call SpriteGetScrAddr_knight
+			call SpriteGetScrAddr_vampire
 			; hl - ptr to monsterPosY+1
 			; tmpA <- c
 			mov a, c
@@ -351,7 +351,7 @@ KnightDraw:
 			; c - preshifted sprite idx*2 offset
 			call SpriteGetAddr
 
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_KNIGHT | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_VAMPIRE | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			pop h
 			inx h
 			; hl - ptr to monsterEraseScrAddr

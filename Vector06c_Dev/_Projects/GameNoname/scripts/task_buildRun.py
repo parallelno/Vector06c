@@ -9,7 +9,7 @@ print("")
 ######################################################################################
 print(f"build a game rom:")
  
-mainAsm = "main"
+mainAsm = "asm\\main"
 romPath = "rom\\"
 romName = os.path.basename(os.getcwd())
 romExt = ".rom"

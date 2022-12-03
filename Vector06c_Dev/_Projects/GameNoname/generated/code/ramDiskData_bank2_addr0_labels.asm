@@ -1,4 +1,4 @@
-__chunkstart_bank2_addr0_chunk0 = $00
+__chunkstart_bank2_addr0_0      = $00
 __ram_disk_s_herol              = $18
 __ram_disk_m_herol              = $02
 __herol_sprites                 = $00
@@ -58,4 +58,4 @@ __herol_attk1_4                 = $348e
 __herol_attk1_5                 = $35a2
 __herol_attk1_6                 = $36b6
 __herol_attk1_7                 = $37ca
-__chunkend_bank2_addr0_chunk0   = $3882
+__chunkend_bank2_addr0_0        = $3882

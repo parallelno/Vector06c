@@ -104,12 +104,12 @@ GCPlayerTasksInit:
 			dad b
 			shld @storeTaskSP+1
 			; move sp back 4 bytes to skip storing HL, PSW because zx0 doesnt use them to init
-			lxi h, $ffff - WORD_LEN * 2 + 1
+			LXI_H_NEG(WORD_LEN * 2)
 			dad sp
 @storeTaskSP:
 			shld TEMP_ADDR
 			; move SP to the previous task stack end
-			lxi h, $ffff - GC_PLAYER_STACK_SIZE + WORD_LEN * 3 + 1
+			LXI_H_NEG(GC_PLAYER_STACK_SIZE - WORD_LEN * 3)
 			dad sp
 
 			sphl

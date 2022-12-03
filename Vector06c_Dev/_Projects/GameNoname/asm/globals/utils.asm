@@ -1,5 +1,5 @@
-.include "rnd.asm"
-.include "zx0.asm"
+.include "asm\\globals\\rnd.asm"
+.include "asm\\globals\\zx0.asm"
 
 ; sharetable chunk of code to restore SP
 ; and dismount the ram-disk

@@ -7,8 +7,7 @@
 		"global" : [
 			"scripts\\task_buildRun.py",
 			"scripts\\build.py",
-			"scripts\\common.py",
-			"scripts\\ramDiskDataExport.py"
+			"scripts\\common.py"
 		]
 	},
 	"paths" :
@@ -125,7 +124,7 @@
 							},
 							{
 								"type" : "code",
-								"path": "gigachad16PlayerRD.asm"
+								"path": "asm\\globals\\gigachad16PlayerRD.asm"
 							}
 						]
 					]
@@ -157,19 +156,19 @@
 						[
 							{
 								"type" : "code",
-								"path" : "spriteRD.asm"
+								"path" : "asm\\render\\spriteRD.asm"
 							},
 							{
 								"type" : "code",
-								"path": "drawSpriteRD.asm"
+								"path": "asm\\render\\drawSpriteRD.asm"
 							},
 							{
 								"type" : "code",
-								"path" : "utilsRD.asm"
+								"path" : "asm\\globals\\utilsRD.asm"
 							},
 							{
 								"type" : "code",
-								"path" : "spritePreshiftRD.asm"
+								"path" : "asm\\render\\spritePreshiftRD.asm"
 							}
 						]												
 					]

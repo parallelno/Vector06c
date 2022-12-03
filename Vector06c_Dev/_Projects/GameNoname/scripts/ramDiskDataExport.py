@@ -5,8 +5,44 @@ import build
 
 SEGMENT_RESERVED = "reserved"
 
+
+def ChunkStartLabelName(bank, addrS_WO_hexSym, chunkN = -1):
+	res = f'__chunkStart_bank{bank}_addr{addrS_WO_hexSym}_'
+	if chunkN == -1:
+		return res
+	return res + str(chunkN)	
+
+def ChunkEndLabelName(bank, addrS_WO_hexSym, chunkN = -1):
+	res = f'__chunkEnd_bank{bank}_addr{addrS_WO_hexSym}_'
+	if chunkN == -1:
+		return res
+	return res + str(chunkN)
+
+def AddrWOHexS(addrS):
+	addrS_WO_hexSym = addrS
+	if addrS_WO_hexSym[0] == "$":
+		addrS_WO_hexSym = addrS_WO_hexSym[1:]
+	if addrS_WO_hexSym == "0000" or addrS_WO_hexSym == "000" or addrS_WO_hexSym == "00":
+		addrS_WO_hexSym = "0"
+
+	if addrS_WO_hexSym == "0":
+		segmentStartAddr = build.SEGMENT_0000_7F00_ADDR
+	else:
+		segmentStartAddr = build.SEGMENT_8000_0000_ADDR		
+
+	return addrS_WO_hexSym, segmentStartAddr
+
+def RamDiskDataFileName(bank, addrS_WO_hexSym, chunkN = "", chunks = 2):
+	result = f'ramDiskData_bank{bank}_addr{addrS_WO_hexSym}'
+	if chunkN != "" and chunks > 1:
+		result += "_" + str(chunkN)
+
+	return result
+
 def Export(contentJPath):
 	extAsm = ".asm"
+	extBin = ".bin"
+	extZx0 = ".bin.zx0"
 
 	with open(contentJPath, "rb") as file:
 		contentJ = json.load(file)
@@ -16,45 +52,47 @@ def Export(contentJPath):
 
 	sourceFolder = contentJ["paths"]["source"]
 	generatedFolder = contentJ["paths"]["generated"]
+	binFolder = contentJ["paths"]["bin"]
 
 	dependencyPathsJ = contentJ["dependencies"]
 	# check dependencies
 	globalForceExport = False
 	for path in dependencyPathsJ["global"]:
-		if build.IsFileUpdated(path):
-			globalForceExport = True
-			break
+		globalForceExport |= build.IsFileUpdated(path)
+
 	spriteForceExport = globalForceExport | build.IsFileUpdated(dependencyPathsJ["sprite"])
 	levelForceExport = globalForceExport | build.IsFileUpdated(dependencyPathsJ["level"])
 	musicForceExport = globalForceExport | build.IsFileUpdated(dependencyPathsJ["music"])
+
+	if globalForceExport or spriteForceExport or levelForceExport or musicForceExport:
+		test = 0
 
 	bankBackBuffer = contentJ["bankBackBuffer"]
 	bankBackBuffer2 = contentJ["bankBackBuffer2"]
 	backBufferSize = contentJ["backBufferSize"]
 
 	labelsPaths = []
-	spriteAnimsPaths = []
 	segmentPaths = []
-	allCompressedChunkPaths = []
-	chunksLayout = []
+	spriteAnimsPaths = []
+	compressedChunkFileNames = []
+
 
 	for bankJ in contentJ["banks"]:
 		bank = int(bankJ["bank"])
 		for segmentJ in bankJ["segments"]:
 			if segmentJ["name"] == SEGMENT_RESERVED:
 				continue
-			if len(segmentJ["chunks"]) == 0:
+
+			segments = len(segmentJ["chunks"])
+			if segments == 0:
 				continue
 
 			addrS = segmentJ["addr"]
-			addrS_WO_hexSym = addrS
-			if addrS_WO_hexSym[0] == "$":
-				addrS_WO_hexSym = addrS_WO_hexSym[1:]
-			ramDiskSegmentFilePath = f"code\\ramDiskData_bank{bank}_addr{addrS_WO_hexSym}{extAsm}"
+			addrS_WO_hexSym, segmentStartAddr = AddrWOHexS(addrS)
 			ramDiskSegmentData = f'.org {addrS}\n'
-			ramDiskSegmentData += f'__chunkStart_bank{bank}_addr{addrS_WO_hexSym}_chunk0:\n\n'
-			ramDiskSegmentData += '.include "globalConsts.asm"\n'
-			ramDiskSegmentData += '.include "macro.asm"\n'
+			ramDiskSegmentData += ChunkStartLabelName(bank, addrS_WO_hexSym, 0) + ":\n\n"
+			ramDiskSegmentData += '.include "asm\\\\globals\\\\globalConsts.asm"\n' 
+			ramDiskSegmentData += '.include "asm\\\\globals\\\\macro.asm"\n'
 			ramDiskSegmentData += f'RAM_DISK_S = RAM_DISK_S{bank}\n'
 			ramDiskSegmentData += f'RAM_DISK_M = RAM_DISK_M{bank}\n\n'
 
@@ -64,24 +102,28 @@ def Export(contentJPath):
 				for asset in chunkJ:
 					path = asset["path"]
 					pathWOExt = os.path.splitext(path)[0]
-					chunkLayout.append(os.path.basename(pathWOExt))
-
 					exportedAssetFilePath = ""
 					if asset["type"] == "sprite":
 						exportedfileUpdated, exportedFilePaths = build.ExportAnimSprites(path, spriteForceExport, sourceFolder, generatedFolder)
 						segmentIncludesUpdatedFiles |= exportedfileUpdated
 						spriteAnimsPaths.append(exportedFilePaths["anim"])
 						exportedAssetFilePath = exportedFilePaths["sprites"]
+						if segmentIncludesUpdatedFiles:
+							test = 1
 
 					if asset["type"] == "level":
 						exportedfileUpdated, exportedFilePath = build.ExportLevel(path, levelForceExport, sourceFolder, generatedFolder)
 						segmentIncludesUpdatedFiles |= exportedfileUpdated
 						exportedAssetFilePath = exportedFilePath
+						if segmentIncludesUpdatedFiles:
+							test = 1
 
 					if asset["type"] == "music":
 						exportedfileUpdated, exportedFilePath = build.ExportMusic(path, musicForceExport, sourceFolder, generatedFolder)
 						segmentIncludesUpdatedFiles |= exportedfileUpdated
 						exportedAssetFilePath = exportedFilePath
+						if segmentIncludesUpdatedFiles:
+							test = 1						
 
 					if asset["type"] == "code":
 						exportedAssetFilePath = path										
@@ -89,21 +131,20 @@ def Export(contentJPath):
 					ramDiskSegmentData += f'.include "{common.DoubleSleshes(exportedAssetFilePath)}"\n'
 				
 				ramDiskSegmentData += f'.align 2\n'
-				ramDiskSegmentData += f'__chunkEnd_bank{bank}_addr{addrS_WO_hexSym}_chunk{chunkN}:\n\n'
-				chunksLayout.append(chunkLayout)
+				ramDiskSegmentData += ChunkEndLabelName(bank, addrS_WO_hexSym, chunkN) + ":\n\n"
 
+			ramDiskSegmentFileNameWOext = RamDiskDataFileName(bank, addrS_WO_hexSym)
+			ramDiskSegmentFilePath = "code\\" + ramDiskSegmentFileNameWOext + extAsm
 			# save a segment data file
-			with open(generatedFolder + ramDiskSegmentFilePath, "w") as file:
-				file.write(ramDiskSegmentData)
-			# export a segment data file
-			if addrS_WO_hexSym == "0" or addrS_WO_hexSym == "0000":
-				segmentStartAddr = build.SEGMENT_0000_7F00_ADDR
-			else:
-				segmentStartAddr = build.SEGMENT_8000_0000_ADDR
-			_, labelsPath, segmentPath, compressedChunkPaths = build.ExportSegment(ramDiskSegmentFilePath, segmentIncludesUpdatedFiles, segmentStartAddr, True, generatedFolder)
-			labelsPaths.append(labelsPath)
-			segmentPaths.append(segmentPath)
-			allCompressedChunkPaths.extend(compressedChunkPaths)
+			if (segmentIncludesUpdatedFiles):
+				with open(generatedFolder + ramDiskSegmentFilePath, "w") as file:
+					file.write(ramDiskSegmentData)
+				# export a segment data file
+				_ = build.ExportSegment(ramDiskSegmentFilePath, segmentIncludesUpdatedFiles, segmentStartAddr, True, generatedFolder)
+			
+			labelsPaths.append(f"{generatedFolder}code\\{ramDiskSegmentFileNameWOext}_labels.asm")
+			segmentPaths.append(f"{binFolder}{ramDiskSegmentFileNameWOext}{extBin}")
+			compressedChunkFileNames.append(RamDiskDataFileName(bank, addrS_WO_hexSym, chunkN, segments))
 	
 	# make ramDiskData.asm
 	ramDiskDataAsm = "; ram-disk data labels\n"
@@ -117,11 +158,28 @@ def Export(contentJPath):
 	ramDiskDataAsm += "\n"
 
 	ramDiskDataAsm += "; compressed ram-disk data. They will be unpacked in a reverse order.\n"
-	for i, compressedChunkPath in enumerate(allCompressedChunkPaths):
-		compressedChunkpathWoExt = os.path.splitext(compressedChunkPath)[0].split(".")[0]
-		compressedChunkName = os.path.basename(compressedChunkpathWoExt)
-		ramDiskDataAsm += f"{compressedChunkName}: ; {chunksLayout[i]}\n"
-		ramDiskDataAsm += f'.incbin "{common.DoubleSleshes(compressedChunkPath)}"\n'
+	for bankJ in contentJ["banks"]:
+		bank = int(bankJ["bank"])
+		for segmentJ in bankJ["segments"]:
+			if segmentJ["name"] == SEGMENT_RESERVED:
+				continue
+			if len(segmentJ["chunks"]) == 0:
+				continue
+			addrS = segmentJ["addr"]
+			addrS_WO_hexSym, segmentStartAddr = AddrWOHexS(addrS)
+
+			for chunkN, chunkJ in enumerate(segmentJ["chunks"]):
+				chunkLayout = []
+				compressedChunkName = RamDiskDataFileName(bank, addrS_WO_hexSym, chunkN, len(segmentJ["chunks"]))
+				compressedChunkPath = binFolder + compressedChunkName + extZx0
+				for asset in chunkJ:
+					path = asset["path"]
+					pathWOExt = os.path.splitext(path)[0]
+					chunkLayout.append(os.path.basename(pathWOExt))
+					
+				ramDiskDataAsm += f"{compressedChunkName}: ; {chunkLayout}\n"
+				ramDiskDataAsm += f'.incbin "{common.DoubleSleshes(compressedChunkPath)}"\n'
+
 	ramDiskDataAsm += "\n"
 
 	ramDiskDataAsm += "; ram-disk data layout\n"
@@ -132,11 +190,10 @@ def Export(contentJPath):
 			name = segmentJ["name"]
 
 			addrS = segmentJ["addr"]
-			addrS_WO_hexSym = addrS
-			if addrS_WO_hexSym[0] == "$":
-				addrS_WO_hexSym = addrS_WO_hexSym[1:]			
-			if (addrS_WO_hexSym == "0"):
-				addrS = "$0000"
+			addrS_WO_hexSym, segmentStartAddr = AddrWOHexS(addrS)
+			if segmentStartAddr == build.SEGMENT_8000_0000_ADDR:
+				addrS_WO_hexSym = "8000"
+			else:
 				addrS_WO_hexSym = "0000"
 
 			description = ""
@@ -144,14 +201,8 @@ def Export(contentJPath):
 				description = segmentJ["description"]
 
 			if name == SEGMENT_RESERVED:
-				ramDiskDataAsm += f"; bank{bank} addr{addrS} [0 free]		- {description}\n"	
-			else:
-			
-				if addrS_WO_hexSym == "0" or addrS_WO_hexSym == "0000":
-					segmentStartAddr = build.SEGMENT_0000_7F00_ADDR
-				else:
-					segmentStartAddr = build.SEGMENT_8000_0000_ADDR			
-				
+				ramDiskDataAsm += f"; bank{bank} addr{addrS_WO_hexSym} [0 free]		- {description}\n"	
+			else:	
 				if bank == bankBackBuffer and segmentStartAddr == build.SEGMENT_8000_0000_ADDR :
 					segmentSizeMax = build.SCR_BUFF_SIZE * 4 - backBufferSize
 				else:
@@ -204,11 +255,9 @@ def Export(contentJPath):
 				continue
 
 			addrS = segmentJ["addr"]
-			addrS_WO_hexSym = addrS
-			if addrS_WO_hexSym[0] == "$":
-				addrS_WO_hexSym = addrS_WO_hexSym[1:]			
+			addrS_WO_hexSym, segmentStartAddr = AddrWOHexS(addrS)
 	
-			ramDiskSegmentFileName = f"ramDiskData_bank{bank}_addr{addrS_WO_hexSym}"
+			ramDiskSegmentFileName = RamDiskDataFileName(bank, addrS_WO_hexSym)
 			ramDiskInitAsm += "	;===============================================\n"
 			ramDiskInitAsm +=f"	;		{name}, bank {bank}, addr {addrS}\n"
 			ramDiskInitAsm += "	;===============================================\n"
@@ -233,8 +282,8 @@ def Export(contentJPath):
 					ramDiskInitAsm +=f"			mvi a, __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F\n"
 					ramDiskInitAsm += "			call dzx0RD\n\n"
 
-					chunkStartAddrS = f"__chunkStart_bank{bank}_addr{addrS_WO_hexSym}_chunk"
-					chunkEndAddrS = f"__chunkEnd_bank{bank}_addr{addrS_WO_hexSym}_chunk"
+					chunkStartAddrS = ChunkStartLabelName(bank, addrS_WO_hexSym)
+					chunkEndAddrS = ChunkEndLabelName(bank, addrS_WO_hexSym)
 					chunkOffsetS = ""
 					if chunk > 0:
 						chunkOffsetS = f" - {chunkEndAddrS}{chunk-1}"
@@ -265,8 +314,9 @@ def Export(contentJPath):
 			elif addrS_WO_hexSym == "0" or addrS_WO_hexSym == "0000":
 
 				# supposed to have just one chunk
-				chunkStartAddrS = f"__chunkStart_bank{bank}_addr{addrS_WO_hexSym}_chunk"
-				chunkEndAddrS = f"__chunkEnd_bank{bank}_addr{addrS_WO_hexSym}_chunk"
+				chunkStartAddrS = ChunkStartLabelName(bank, addrS_WO_hexSym)
+				chunkEndAddrS = ChunkEndLabelName(bank, addrS_WO_hexSym)
+
 				chunkLenS = f"{chunkEndAddrS}0 - {chunkStartAddrS}0"
 
 				ramDiskInitAsm +=f"			; unpack {name} into the ram-disk backbuffer2\n"
@@ -295,3 +345,4 @@ def Export(contentJPath):
 	ramDiskInitPath = f"\\code\\ramDiskInit{extAsm}"
 	with open(generatedFolder + ramDiskInitPath, "w") as file:
 		file.write(ramDiskInitAsm)		
+

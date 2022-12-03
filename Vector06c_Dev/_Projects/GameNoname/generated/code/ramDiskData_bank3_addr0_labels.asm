@@ -1,4 +1,4 @@
-__chunkstart_bank3_addr0_chunk0      = $00
+__chunkstart_bank3_addr0_0           = $00
 __ram_disk_s_level01                 = $1c
 __ram_disk_m_level01                 = $03
 __level01_palette_sprites_tiles_lv01 = $00
@@ -65,4 +65,4 @@ __sprites_tiles_lv01_tile49          = $1706
 __sprites_tiles_lv01_tile50          = $174a
 __sprites_tiles_lv01_tile51          = $17ce
 __sprites_tiles_lv01_tile52          = $1832
-__chunkend_bank3_addr0_chunk0        = $1894
+__chunkend_bank3_addr0_0             = $1894

@@ -129,6 +129,21 @@ def str2bool(v):
     else:
         return False
 
+def RemoveDoubleSlashes(path):
+	res = ""
+	doubledSlashe = False
+	for char in path:
+		if char != '\\':
+			res += char
+			doubledSlashe = False
+		else:
+			if doubledSlashe == False:
+				res += char
+				doubledSlashe = True
+			else:
+				doubledSlashe = False
+	return res
+
 def DoubleSleshes(path):
 	res = ""
 	for char in path:

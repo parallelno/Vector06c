@@ -26,18 +26,20 @@ def ExportAnimSprites(sourcePath, forceExport, sourceFolder = "sources\\", gener
 	sourcePathWOExt = os.path.splitext(sourcePath)[0]
 	sourceName = os.path.basename(sourcePathWOExt)
 	extAsm = ".asm"
+	animFilePath = generatedFolder + sourcePathWOExt + "Anim" + extAsm
+	spriteFilePath = generatedFolder + sourcePathWOExt + "Sprites" + extAsm
 
 	if animSpriteExport.IsFileUpdated(sourceFolder + sourcePath) or forceExport:
 		animSpriteExport.Export(  
 			sourceFolder + sourcePath, 
-			generatedFolder + sourcePathWOExt + "Anim" + extAsm, 
-			generatedFolder + sourcePathWOExt + "Sprites" + extAsm)
+			animFilePath, 
+			spriteFilePath)
 
 		print(f"animSpriteExport: {sourceFolder + sourcePath} got exported.")
-		return True, {"anim" : generatedFolder + sourcePathWOExt + "Anim" + extAsm, "sprites" : generatedFolder + sourcePathWOExt + "Sprites" + extAsm}
+		return True, {"anim" : animFilePath, "sprites" : spriteFilePath}
 	else:
 		#print(f"animSpriteExport: {sourceFolder + sourcePath} is no need to export.")
-		return False, {"anim" : generatedFolder + sourcePathWOExt + "Anim" + extAsm, "sprites" : generatedFolder + sourcePathWOExt + "Sprites" + extAsm}
+		return False, {"anim" : animFilePath, "sprites" : spriteFilePath}
 
 def ExportLevel(sourcePath, forceExport, sourceFolder = "sources\\", generatedFolder = "generated\\"):
 	sourcePathWOExt = os.path.splitext(sourcePath)[0]
@@ -71,26 +73,29 @@ def ExportMusic(sourcePath, forceExport, sourceFolder = "sources\\", generatedFo
 	else:	
 		return False, generatedFolder + sourcePathWOExt + extAsm
 
-def ExportSegment(sourcePath1, forceExport, segmentAddr, externalsOnly = False, generatedFolder = "generated\\", binFolder = "generated\\bin\\", ):
-	sourcePathWOExt = os.path.splitext(sourcePath1)[0]
+def ExportSegment(sourcePath, forceExport, segmentAddr, externalsOnly = False, generatedFolder = "generated\\", binFolder = "generated\\bin\\", ):
+	sourcePathWOExt = os.path.splitext(sourcePath)[0]
 	sourceName = os.path.basename(sourcePathWOExt)
 	extAsm = ".asm"
 
-	if IsAsmUpdated(generatedFolder + sourcePath1) | forceExport:
-		common.RunCommand(f"..\\..\\retroassembler\\retroassembler.exe -x -C=8080 {generatedFolder + sourcePath1} "
-				f" {binFolder}{sourceName}.bin >{generatedFolder + sourcePathWOExt}_labels.asm")
+	labelPath = f"{generatedFolder + sourcePathWOExt}_labels.asm"
+	binFilePath = f"{binFolder}{sourceName}.bin"
 
-		CheckSegmentSize(f"{binFolder}{sourceName}.bin", segmentAddr)
+	if IsAsmUpdated(generatedFolder + sourcePath) | forceExport:
+		common.RunCommand(f"..\\..\\retroassembler\\retroassembler.exe -x -C=8080 {generatedFolder + sourcePath} "
+				f" {binFilePath} >{labelPath}")
 
-		ExportLabels(f"{generatedFolder + sourcePathWOExt}_labels.asm", externalsOnly)
+		CheckSegmentSize(binFilePath, segmentAddr)
 
-		chunkPaths = SplitSegment(f"{binFolder}{sourceName}.bin", f"{generatedFolder + sourcePathWOExt}_labels.asm")
+		ExportLabels(labelPath, externalsOnly)
+
+		chunkPaths = SplitSegment(binFilePath, labelPath)
 		compressedChunkPaths = []
 
 		if len(chunkPaths) == 0:
-			common.DeleteFile(f"{binFolder}{sourceName}.bin.zx0")
-			common.RunCommand(f"tools\\zx0salvador.exe -v -classic {binFolder}{sourceName}.bin {binFolder}{sourceName}.bin.zx0")
-			compressedChunkPaths.append(f"{binFolder}{sourceName}.bin.zx0")
+			common.DeleteFile(f"{binFilePath}.zx0")
+			common.RunCommand(f"tools\\zx0salvador.exe -v -classic {binFilePath} {binFilePath}.zx0")
+			compressedChunkPaths.append(f"{binFilePath}.zx0")
 		else:
 			for chunkPath in chunkPaths:
 				zipfilePathWOExt = os.path.splitext(chunkPath)[0] 
@@ -99,9 +104,9 @@ def ExportSegment(sourcePath1, forceExport, segmentAddr, externalsOnly = False, 
 				compressedChunkPaths.append(f"{zipfilePathWOExt}.bin.zx0")
 		
 		print(f"ExportSegment: {sourceName} segment got exported.")	
-		return True, f"{generatedFolder + sourcePathWOExt}_labels.asm", f"{binFolder}{sourceName}.bin", compressedChunkPaths
+		return True
 	else:
-		return False, f"{generatedFolder + sourcePathWOExt}_labels.asm", f"{binFolder}{sourceName}.bin", compressedChunkPaths
+		return False
 
 def IsAsmUpdated(asmPath):
 	with open(asmPath, "rb") as file:
@@ -115,6 +120,7 @@ def IsAsmUpdated(asmPath):
 		
 		if incIdx != -1 and lineStr[0] != ";":
 			path = lineStr[incIdx + len(incStr)+1:]
+			path = common.RemoveDoubleSlashes(path)
 			pathEndQ1 = path.find('"')
 			pathEndQ2 = path.find("'")
 			if pathEndQ1 != -1:
@@ -126,6 +132,8 @@ def IsAsmUpdated(asmPath):
 	anyIncUpdated = False
 	for incPath in includes:
 		anyIncUpdated |= IsFileUpdated(incPath)
+		if anyIncUpdated:
+			break
 
 	return anyIncUpdated | IsFileUpdated(asmPath)
 
@@ -134,11 +142,11 @@ def IsFileUpdated(path):
 	con = sqlite3.connect(buildDBPath)
 	cur = con.cursor()
 	cur.execute('''CREATE TABLE if not exists files
-			   (path text, modtime real)''')
+			   (path text, modtime integer)''')
 	
 	if not os.path.exists(path):
 		return True
-	modificationTime = os.path.getmtime(path)
+	modificationTime = int(os.path.getmtime(path))
 	
 	
 	res = cur.execute("SELECT * FROM files WHERE path = '%s'" % path)

@@ -1,17 +1,22 @@
-VAMPIRE_HEALTH = 1
-VAMPIRE_RUN_SPEED		= $0100
-VAMPIRE_RUN_SPEED_D	= $ffff - $100 + 1
+SKELETON_RUN_SPEED		= $0100
+SKELETON_RUN_SPEED_NEG	= $ffff - $100 + 1
 
-VAMPIRE_COLLISION_WIDTH = 15
-VAMPIRE_COLLISION_HEIGHT = 10
+; statuses.
+SKELETON_STATUS_IDLE = 0
+SKELETON_STATUS_ATTACK = 1
 
-VAMPIRE_POS_X_MIN = TILE_WIDTH
-VAMPIRE_POS_X_MAX = (ROOM_WIDTH - 2 ) * TILE_WIDTH
-VAMPIRE_POS_Y_MIN = TILE_WIDTH
-VAMPIRE_POS_Y_MAX = (ROOM_HEIGHT - 2 ) * TILE_HEIGHT
+
+SKELETON_POS_X_MIN = TILE_WIDTH
+SKELETON_POS_X_MAX = (ROOM_WIDTH - 2 ) * TILE_WIDTH
+SKELETON_POS_Y_MIN = TILE_WIDTH
+SKELETON_POS_Y_MAX = (ROOM_HEIGHT - 2 ) * TILE_HEIGHT
 
 ; gameplay
-VAMPIRE_DAMAGE = 1
+SKELETON_DAMAGE = 1
+SKELETON_HEALTH = 1
+
+SKELETON_COLLISION_WIDTH = 15
+SKELETON_COLLISION_HEIGHT = 10
 
 ;========================================================
 ; called to spawn this mod
@@ -19,41 +24,41 @@ VAMPIRE_DAMAGE = 1
 ; c - monster idx
 ; out:
 ; a = 0
-VampireInit:
+SkeletonInit:
 			call MonstersGetEmptyDataPtr
 			; hl - ptr to monsterUpdatePtr+1			
-			mvi m, >VampireUpdate
+			mvi m, >SkeletonUpdate
 			dcx h 
-			mvi m, <VampireUpdate
+			mvi m, <SkeletonUpdate
 
 			; TODO: add monsterDataPrevPPtr init
 			; TODO: add monsterDataNextPPtr init
 
 			
-			; advance to VampireDraw
+			; advance to SkeletonDraw
 			LXI_d_TO_DIFF(monsterDrawPtr, monsterUpdatePtr)
 			dad d
 			
-			mvi m, <VampireDraw
+			mvi m, <SkeletonDraw
 			inx h 
-			mvi m, >VampireDraw
+			mvi m, >SkeletonDraw
 			inx h
-			mvi m, <VampireImpact
+			mvi m, <SkeletonImpact
 			inx h
-			mvi m, >VampireImpact
+			mvi m, >SkeletonImpact
 			; advance to monsterType
 			inx h
 			mvi m, 0; MONSTER_TYPE_ENEMY			
 			; advance to monsterHealth
 			inx h
-			mvi m, VAMPIRE_HEALTH
+			mvi m, SKELETON_HEALTH
 
 			LXI_D_TO_DIFF(monsterAnimPtr, monsterHealth)
 			dad d
 			; monsterAnimPtr
-			mvi m, < vampire_run_r
+			mvi m, < skeleton_run_r
 			inx h
-			mvi m, > vampire_run_r
+			mvi m, > skeleton_run_r
 			; advance hl to monsterSpeedY+1
 			LXI_D_TO_DIFF(monsterSpeedY+1, monsterAnimPtr+1)
 			dad d
@@ -66,9 +71,9 @@ VampireInit:
 			dcx h 
 			; advance hl to monsterSpeedX+1
 			; set monsterSpeedX to right 
-			mvi m, >VAMPIRE_RUN_SPEED
+			mvi m, >SKELETON_RUN_SPEED
 			dcx h 
-			mvi m, <VAMPIRE_RUN_SPEED
+			mvi m, <SKELETON_RUN_SPEED
 			dcx h 
 			; advance hl to monsterPosY+1
 			; convert tile idx into the posY and set it
@@ -124,7 +129,7 @@ VampireInit:
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monsterUpdatePtr in the runtime data
-VampireUpdate:
+SkeletonUpdate:
 			mov b, d
 			mov c, e
 			xchg
@@ -200,7 +205,7 @@ VampireUpdate:
 			; check the collision tiles
 			mov d, a
 			mov e, h
-			lxi b, (VAMPIRE_COLLISION_WIDTH-1)<<8 | VAMPIRE_COLLISION_HEIGHT-1
+			lxi b, (SKELETON_COLLISION_WIDTH-1)<<8 | SKELETON_COLLISION_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			jnz @tilesCollide
 
@@ -222,7 +227,7 @@ VampireUpdate:
 			adi HERO_COLLISION_WIDTH-1
 			cmp c
 			rc
-			mvi a, VAMPIRE_COLLISION_WIDTH-1
+			mvi a, SKELETON_COLLISION_WIDTH-1
 			add c
 			cmp b
 			rc
@@ -234,13 +239,13 @@ VampireUpdate:
 			adi HERO_COLLISION_HEIGHT-1
 			cmp c
 			rc
-			mvi a, VAMPIRE_COLLISION_HEIGHT-1
+			mvi a, SKELETON_COLLISION_HEIGHT-1
 			add c
 			cmp b
 			rc
 			; hero collides
 			; send him a damage
-			mvi c, VAMPIRE_DAMAGE
+			mvi c, SKELETON_DAMAGE
 			call HeroImpact
 			ret
 
@@ -265,9 +270,9 @@ VampireUpdate:
 			inx h
 			mov m, a
 			inx h
-			mvi m, < VAMPIRE_RUN_SPEED_D
+			mvi m, < SKELETON_RUN_SPEED_NEG
 			inx h
-			mvi m, > VAMPIRE_RUN_SPEED_D
+			mvi m, > SKELETON_RUN_SPEED_NEG
 			jmp @setAnim
 @speedYp:
 			xra a
@@ -275,53 +280,53 @@ VampireUpdate:
 			inx h
 			mov m, a
 			inx h
-			mvi m, < VAMPIRE_RUN_SPEED
+			mvi m, < SKELETON_RUN_SPEED
 			inx h
-			mvi m, > VAMPIRE_RUN_SPEED
+			mvi m, > SKELETON_RUN_SPEED
 			jmp @setAnim
 @speedXn:
 			xra a
-			mvi m, < VAMPIRE_RUN_SPEED_D
+			mvi m, < SKELETON_RUN_SPEED_NEG
 			inx h
-			mvi m, > VAMPIRE_RUN_SPEED_D
-			inx h
-			mov m, a
+			mvi m, > SKELETON_RUN_SPEED_NEG
 			inx h
 			mov m, a
-			mvi a, > VAMPIRE_RUN_SPEED_D
+			inx h
+			mov m, a
+			mvi a, > SKELETON_RUN_SPEED_NEG
 			jmp @setAnim
 @speedXp:
 			xra a
-			mvi m, < VAMPIRE_RUN_SPEED
+			mvi m, < SKELETON_RUN_SPEED
 			inx h
-			mvi m, > VAMPIRE_RUN_SPEED
-			inx h
-			mov m, a
+			mvi m, > SKELETON_RUN_SPEED
 			inx h
 			mov m, a
-			mvi a, > VAMPIRE_RUN_SPEED
+			inx h
+			mov m, a
+			mvi a, > SKELETON_RUN_SPEED
 @setAnim:
 			; a = speedX
 			ora a
-			; if speedX is positive, then play vampire_run_r
-			; that means a vertical movement plays vampire_run_r anim as well
+			; if speedX is positive, then play skeleton_run_r
+			; that means a vertical movement plays skeleton_run_r anim as well
 			jz @setAnimRunR
 @setAnimRunL:
 			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
 			dad b
-			mvi m, < vampire_run_l
+			mvi m, < skeleton_run_l
 			inx h
-			mvi m, > vampire_run_l
+			mvi m, > skeleton_run_l
 			ret
 @setAnimRunR:
 			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
 			dad b
-			mvi m, < vampire_run_r
+			mvi m, < skeleton_run_r
 			inx h
-			mvi m, > vampire_run_r
+			mvi m, > skeleton_run_r
             ret
 
-VampireImpact:
+SkeletonImpact:
 			; de - ptr to monsterImpactPtr+1
 			LXI_H_TO_DIFF(monsterUpdatePtr+1, monsterImpactPtr+1)
 			dad d
@@ -330,10 +335,10 @@ VampireImpact:
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to monsterDrawPtr in the runtime data
-VampireDraw:
+SkeletonDraw:
 			LXI_H_TO_DIFF(monsterPosX+1, monsterDrawPtr)
 			dad d
-			call SpriteGetScrAddr_vampire
+			call SpriteGetScrAddr_skeleton
 			; hl - ptr to monsterPosY+1
 			; tmpA <- c
 			mov a, c
@@ -351,7 +356,7 @@ VampireDraw:
 			; c - preshifted sprite idx*2 offset
 			call SpriteGetAddr
 
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_VAMPIRE | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_SKELETON | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			pop h
 			inx h
 			; hl - ptr to monsterEraseScrAddr

@@ -240,9 +240,7 @@ def IsFileUpdated(sourceJPath):
 	roomsUpdated = False
 	for roomPathP in roomPaths:
 		roomPath = sourceDir + roomPathP['path']
-		if build.IsFileUpdated(roomPath):
-			roomsUpdated = True
-			break
+		roomsUpdated |= build.IsFileUpdated(roomPath)
 
 	if build.IsFileUpdated(sourceJPath) | build.IsFileUpdated(pngPath) | roomsUpdated:
 		return True

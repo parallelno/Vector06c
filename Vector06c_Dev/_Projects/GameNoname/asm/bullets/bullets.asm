@@ -1,6 +1,7 @@
 ;.include "bulletsConsts.asm"
-.include "bulletsData.asm"
-.include "heroSwordTrail.asm"
+.include "asm\\bullets\\bulletsData.asm"
+.include "asm\\bullets\\heroSwordTrail.asm"
+.include "asm\\bullets\\scythe.asm"
 
 BulletsEraseRuntimeData:
 			mvi a, BULLET_RUNTIME_DATA_LAST
