@@ -21,9 +21,7 @@ ATTK01_COLLISION_OFFSET_X_L = <(-3)
 ATTK01_COLLISION_OFFSET_Y_L = 0
 
 ; in:
-; c - bullet idx
 ; out:
-; a = 0
 HeroSwordTrailInit:
 			call BulletsGetEmptyDataPtr
 			; hl - ptr to bulletUpdatePtr+1
@@ -88,10 +86,6 @@ HeroSwordTrailInit:
 			dcx h
 			; c = posY
 			mov m, c
-
-			; return zero to erase the tile data
-			; there this bullet was in the roomTilesData
-			xra a 
 			ret
 			.closelabels
 

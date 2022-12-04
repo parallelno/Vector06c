@@ -64,9 +64,6 @@ def Export(contentJPath):
 	levelForceExport = globalForceExport | build.IsFileUpdated(dependencyPathsJ["level"])
 	musicForceExport = globalForceExport | build.IsFileUpdated(dependencyPathsJ["music"])
 
-	if globalForceExport or spriteForceExport or levelForceExport or musicForceExport:
-		test = 0
-
 	bankBackBuffer = contentJ["bankBackBuffer"]
 	bankBackBuffer2 = contentJ["bankBackBuffer2"]
 	backBufferSize = contentJ["backBufferSize"]
@@ -108,22 +105,16 @@ def Export(contentJPath):
 						segmentIncludesUpdatedFiles |= exportedfileUpdated
 						spriteAnimsPaths.append(exportedFilePaths["anim"])
 						exportedAssetFilePath = exportedFilePaths["sprites"]
-						if segmentIncludesUpdatedFiles:
-							test = 1
 
 					if asset["type"] == "level":
 						exportedfileUpdated, exportedFilePath = build.ExportLevel(path, levelForceExport, sourceFolder, generatedFolder)
 						segmentIncludesUpdatedFiles |= exportedfileUpdated
 						exportedAssetFilePath = exportedFilePath
-						if segmentIncludesUpdatedFiles:
-							test = 1
 
 					if asset["type"] == "music":
 						exportedfileUpdated, exportedFilePath = build.ExportMusic(path, musicForceExport, sourceFolder, generatedFolder)
 						segmentIncludesUpdatedFiles |= exportedfileUpdated
 						exportedAssetFilePath = exportedFilePath
-						if segmentIncludesUpdatedFiles:
-							test = 1						
 
 					if asset["type"] == "code":
 						exportedAssetFilePath = path										

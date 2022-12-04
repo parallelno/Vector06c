@@ -19,9 +19,10 @@ SKELETON_COLLISION_WIDTH = 15
 SKELETON_COLLISION_HEIGHT = 10
 
 ;========================================================
-; called to spawn this mod
+; called to spawn this monster
 ; in:
-; c - monster idx
+; c - tile idx in the roomTilesData array.
+; a - monster id * 2
 ; out:
 ; a = 0
 SkeletonInit:
@@ -48,7 +49,7 @@ SkeletonInit:
 			mvi m, >SkeletonImpact
 			; advance to monsterType
 			inx h
-			mvi m, 0; MONSTER_TYPE_ENEMY			
+			mvi m, MONSTER_TYPE_ENEMY			
 			; advance to monsterHealth
 			inx h
 			mvi m, SKELETON_HEALTH

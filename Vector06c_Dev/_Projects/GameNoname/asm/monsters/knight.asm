@@ -16,7 +16,8 @@ KNIGHT_DAMAGE = 1
 ;========================================================
 ; called to spawn this mod
 ; in:
-; c - monster idx
+; c - tile idx in the roomTilesData array.
+; a - monster id * 2
 ; out:
 ; a = 0
 KnightInit:
@@ -43,7 +44,7 @@ KnightInit:
 			mvi m, >KnightImpact
 			; advance to monsterType
 			inx h
-			mvi m, 0; MONSTER_TYPE_ENEMY			
+			mvi m, MONSTER_TYPE_ENEMY			
 			; advance to monsterHealth
 			inx h
 			mvi m, KNIGHT_HEALTH

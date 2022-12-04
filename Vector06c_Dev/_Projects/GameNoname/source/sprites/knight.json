@@ -21,10 +21,22 @@
 	"preshifted_sprites" : 4,
 	"mask" : true,
 	"anims" : {
-		"idle_r"	: ["idle_r0"],
-		"idle_l"	: ["idle_l0"],
-		"run_r"	: ["run_r0", "run_r1", "run_r2", "run_r3"],
-		"run_l"	: ["run_l0", "run_l1", "run_l2", "run_l3"]
+		"idle_r"	: {
+			"frames" : ["idle_r0"],
+			"loop" : true
+		},
+		"idle_l"	: {
+			"frames" : ["idle_l0"],
+			"loop" : true
+		},
+		"run_r"	: {
+			"frames" : ["run_r0", "run_r1", "run_r2", "run_r3"],
+			"loop" : true
+		},
+		"run_l"	: {
+			"frames" : ["run_l0", "run_l1", "run_l2", "run_l3"],
+			"loop" : true
+		}
 	},
 	"sprites" : [
 		{

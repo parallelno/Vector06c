@@ -21,7 +21,10 @@
 	"preshifted_sprites" : 4,
 	"mask" : true,
 	"anims" : {
-		"run"	: ["run0", "run1", "run2", "run3"]
+		"run"	: {
+			"frames" : ["run0", "run1", "run2", "run3"],
+			"loop" : false
+		}
 	},
 	"sprites" : [
 		{

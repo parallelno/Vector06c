@@ -21,9 +21,18 @@
 	"preshifted_sprites" : 8,
 	"mask" : true,
 	"anims" : {
-		"delay"		: ["sword_delay"],
-		"attk_r"	: ["sword_r0", "sword_r1"],
-		"attk_l"	: ["sword_l0", "sword_l1"]
+		"delay"		: {
+			"frames" : ["sword_delay"],
+			"loop" : false
+		},
+		"attk_r"	: {
+			"frames" : ["sword_r0", "sword_r1"],
+			"loop" : false
+		},
+		"attk_l"	: {
+			"frames" : ["sword_l0", "sword_l1"],
+			"loop" : false
+		}
 	},
 	"sprites" : [
 		{

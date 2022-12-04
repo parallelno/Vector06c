@@ -139,20 +139,24 @@ def AnimsToAsm(labelPrefix, sourceJ):
 
 		asm += labelPrefix + "_" + animName + ":\n"
  
-		for i, frame in enumerate(sourceJ["anims"][animName]):
+		anims = sourceJ["anims"][animName]["frames"]
+		loop = sourceJ["anims"][animName]["loop"]
+		frameCount = len(sourceJ["anims"][animName]["frames"])
+		for i, frame in enumerate(anims):
 
-			if i < len(sourceJ["anims"][animName])-1:
+			if i < frameCount-1:
 				nextFrameOffset = preshiftedSprites * 2 # every frame consists of preshiftedSprites pointers
 				nextFrameOffset += 1 # increase the offset to save one instruction in the game code
 				asm += "			.byte " + str(nextFrameOffset) + ", 0 ; offset to the next frame\n"
 			else:
-				offsetAddr = 1
-				nextFrameOffsetLow = 255 - (len(sourceJ["anims"][animName]) -1) * (preshiftedSprites + offsetAddr) * 2 + 1
-				nextFrameOffsetLow -= 1 # decrease the offset to save one instruction in the game code
-				if nextFrameOffsetLow == 0:
-					nextFrameOffsetHiStr = "0"
+				nextFrameOffsetHiStr = "$ff"
+				if loop == False:
+					nextFrameOffsetLow = -1
 				else:
-					nextFrameOffsetHiStr = "$ff"
+					offsetAddr = 1
+					nextFrameOffsetLow = 255 - (len(sourceJ["anims"][animName]) -1) * (preshiftedSprites + offsetAddr) * 2 + 1
+					nextFrameOffsetLow -= 1 # decrease the offset to save one instruction in the game code
+					
 				asm += "			.byte " + str(nextFrameOffsetLow) + ", " + nextFrameOffsetHiStr + " ; offset to the first frame\n"
 
 			asm += "			.word "

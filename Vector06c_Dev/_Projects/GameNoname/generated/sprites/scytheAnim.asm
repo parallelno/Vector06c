@@ -12,5 +12,5 @@ scythe_run:
 			.word __scythe_run1_0, __scythe_run1_1, __scythe_run1_2, __scythe_run1_3, 
 			.byte 9, 0 ; offset to the next frame
 			.word __scythe_run2_0, __scythe_run2_1, __scythe_run2_2, __scythe_run2_3, 
-			.byte 225, $ff ; offset to the first frame
+			.byte -1, $ff ; offset to the first frame
 			.word __scythe_run3_0, __scythe_run3_1, __scythe_run3_2, __scythe_run3_3, 

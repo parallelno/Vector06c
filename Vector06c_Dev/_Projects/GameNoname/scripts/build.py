@@ -47,7 +47,7 @@ def ExportLevel(sourcePath, forceExport, sourceFolder = "sources\\", generatedFo
 	extAsm = ".asm"
 
 	if levelExport.IsFileUpdated(sourceFolder + sourcePath) or forceExport:
-		levelExport.Export( 
+		levelExport.Export(
 			sourceFolder + sourcePath, 
 			generatedFolder + sourcePathWOExt + extAsm)
 			

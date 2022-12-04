@@ -21,9 +21,18 @@
 	"preshifted_sprites" : 8,
 	"mask" : true,
 	"anims" : {
-		"idle"	: ["idle0", "idle0", "idle0", "run2"],
-		"run"	: ["run0", "run1", "run2", "run3"],
-		"attk"	: ["attk0", "attk1"]
+		"idle"	: {
+			"frames" : ["idle0", "idle0", "idle0", "run2"],
+			"loop" : true
+		},
+		"run"	: {
+			"frames" : ["run0", "run1", "run2", "run3"],
+			"loop" : true
+		},
+		"attk"	: {
+			"frames" : ["attk0", "attk1"],
+			"loop" : false
+		}
 	},
 	"sprites" : [
 		{
