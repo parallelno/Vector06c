@@ -4,13 +4,12 @@ SpriteGetScrAddr_skeleton = SpriteGetScrAddr4
 skeleton_preshifted_sprites:
 			.byte 4
 skeleton_anims:
-			.word skeleton_idle_r, skeleton_idle_l, skeleton_run_r, skeleton_run_l, 0, 
-skeleton_idle_r:
+			.word skeleton_idle, skeleton_run_r, skeleton_run_l, 0, 
+skeleton_idle:
+			.byte 9, 0 ; offset to the next frame
+			.word __skeleton_idle_0_0, __skeleton_idle_0_1, __skeleton_idle_0_2, __skeleton_idle_0_3, 
 			.byte 245, $ff ; offset to the first frame
-			.word __skeleton_idle_r0_0, __skeleton_idle_r0_1, __skeleton_idle_r0_2, __skeleton_idle_r0_3, 
-skeleton_idle_l:
-			.byte 245, $ff ; offset to the first frame
-			.word __skeleton_idle_l0_0, __skeleton_idle_l0_1, __skeleton_idle_l0_2, __skeleton_idle_l0_3, 
+			.word __skeleton_idle_1_0, __skeleton_idle_1_1, __skeleton_idle_1_2, __skeleton_idle_1_3, 
 skeleton_run_r:
 			.byte 9, 0 ; offset to the next frame
 			.word __skeleton_run_r0_0, __skeleton_run_r0_1, __skeleton_run_r0_2, __skeleton_run_r0_3, 

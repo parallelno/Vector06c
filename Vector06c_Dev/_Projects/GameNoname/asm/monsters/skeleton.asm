@@ -2,8 +2,8 @@ SKELETON_RUN_SPEED		= $0100
 SKELETON_RUN_SPEED_NEG	= $ffff - $100 + 1
 
 ; statuses.
-SKELETON_STATUS_IDLE = 0
-SKELETON_STATUS_ATTACK = 1
+SKELETON_STATUS_DETECT_HERO = 0
+;SKELETON_STATUS_ATTACK = 1
 
 
 SKELETON_POS_X_MIN = TILE_WIDTH
@@ -30,16 +30,9 @@ SkeletonInit:
 			; hl - ptr to monsterUpdatePtr+1			
 			mvi m, >SkeletonUpdate
 			dcx h 
-			mvi m, <SkeletonUpdate
-
-			; TODO: add monsterDataPrevPPtr init
-			; TODO: add monsterDataNextPPtr init
-
-			
+			mvi m, <SkeletonUpdate		
 			; advance to SkeletonDraw
-			LXI_d_TO_DIFF(monsterDrawPtr, monsterUpdatePtr)
-			dad d
-			
+			inx_h(2)
 			mvi m, <SkeletonDraw
 			inx h 
 			mvi m, >SkeletonDraw
@@ -49,77 +42,84 @@ SkeletonInit:
 			mvi m, >SkeletonImpact
 			; advance to monsterType
 			inx h
-			mvi m, MONSTER_TYPE_ENEMY			
+			mvi m, MONSTER_TYPE_ENEMY		
 			; advance to monsterHealth
 			inx h
 			mvi m, SKELETON_HEALTH
-
-			LXI_D_TO_DIFF(monsterAnimPtr, monsterHealth)
-			dad d
-			; monsterAnimPtr
-			mvi m, < skeleton_run_r
+			; advance to monsterStatus
 			inx h
-			mvi m, > skeleton_run_r
-			; advance hl to monsterSpeedY+1
-			LXI_D_TO_DIFF(monsterSpeedY+1, monsterAnimPtr+1)
-			dad d
-			; tmp d = 0
-			mvi d, 0
-			; set monsterSpeedY to zero
-			mov m, d
-			dcx h
-			mov m, d
-			dcx h 
-			; advance hl to monsterSpeedX+1
-			; set monsterSpeedX to right 
-			mvi m, >SKELETON_RUN_SPEED
-			dcx h 
-			mvi m, <SKELETON_RUN_SPEED
-			dcx h 
-			; advance hl to monsterPosY+1
-			; convert tile idx into the posY and set it
-			mov a, c
-			; posY = tile idx % ROOM_WIDTH * TILE_WIDTH
-			ani %11110000
-			mov m, a
-			mov e, a
-			dcx h 
-			mov m, d
-			; advance hl to monsterPosX+1
-			dcx h 			
-			; convert tile idx into the posX and set it
-			mov a, c
+			mvi m, SKELETON_STATUS_DETECT_HERO
+			; advance to monsterStatusTimer
+			inx h
+			mvi m, 0
+			; advance to monsterAnimTimer
+			inx h
+			mvi m, 0
+			; advance to monsterAnimPtr
+			inx h
+			mvi m, < skeleton_idle
+			inx h
+			mvi m, > skeleton_idle
+
 			; posX = tile idx % ROOM_WIDTH * TILE_WIDTH
-			ani %00001111
+			mvi a, %00001111
+			ana c
 			rlc_(4)
-			mov m, a
-			dcx h 
-			mov m, d 
-			; advance hl to monsterEraseWHOld+1
-			dcx h 			
-			mov m, d ; width = 8
-			dcx h 
-			mvi m, 5 ; supported mimimum height
-			; advance hl to monsterEraseWH+1
-			dcx h 			
-			mov m, d ; width = 8
-			dcx h 
-			mvi m, 5 ; supported mimimum height
-			; advance hl to monsterEraseScrAddrOld+1
-			dcx h
-			; a - posX
+			mov b, a
 			; scrX = posX/8 + $a0
 			rrc_(3)
-			ani %00011111			
 			adi SPRITE_X_SCR_ADDR
+			mov d, a 
+			; posY = (tile idx % ROOM_WIDTH) * TILE_WIDTH
+			mvi a, %11110000
+			ana c
+			mvi c, 0
+			; b = posX
+			; d = scrX
+			; a = posY			
+			; c = 0 and SPRITE_W_PACKED_MIN
+
+			; advance to monsterEraseScrAddr
+			inx h
 			mov m, a
-			dcx h 
-			mov m, e
-			; advance hl to monsterEraseScrAddr+1
-			dcx h
+			inx h
+			mov m, d
+			; advance to monsterEraseScrAddrOld
+			inx h
 			mov m, a
-			dcx h 
-			mov m, e
+			inx h
+			mov m, d
+			; advance to monsterEraseWH
+			inx h 			
+			mvi m, SPRITE_H_MIN
+			inx h 
+			mov m, c
+			; advance to monsterEraseWHOld
+			inx h 			
+			mvi m, SPRITE_H_MIN
+			inx h 
+			mov m, c
+			; advance to monsterPosX
+			inx h 			
+			mov m, c
+			inx h 
+			mov m, b
+			; advance to monsterPosY
+			inx h 			
+			mov m, c
+			inx h 
+			mov m, a
+			; advance to monsterSpeedX
+			inx h 			
+			mvi m, <SKELETON_RUN_SPEED
+			inx h 
+			mvi m, >SKELETON_RUN_SPEED
+			; advance to monsterSpeedY
+			inx h 			
+			mov m, c
+			inx h 
+			mov m, c
+
 
 			; return zero to erase the tile data
 			; there this monster was in the roomTilesData
@@ -341,7 +341,7 @@ SkeletonDraw:
 			dad d
 			call SpriteGetScrAddr_skeleton
 			; hl - ptr to monsterPosY+1
-			; tmpA <- c
+			; tmp a = c
 			mov a, c
 
 			; advance to monsterAnimPtr

@@ -76,7 +76,7 @@ HeroInit:
 			xchg
 			shld heroEraseScrAddrOld
 			; 16x15 size
-			lxi h, SPRITE_COPY_TO_SCR_W_PACKED_MIN<<8 | SPRITE_COPY_TO_SCR_H_MIN
+			lxi h, SPRITE_W_PACKED_MIN<<8 | SPRITE_H_MIN
 			shld heroEraseWHOld
 			ret
 

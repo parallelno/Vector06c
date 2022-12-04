@@ -23,7 +23,7 @@
 	"anims" : {
 		"run"	: {
 			"frames" : ["run0", "run1", "run2", "run3"],
-			"loop" : false
+			"loop" : true
 		}
 	},
 	"sprites" : [
