@@ -23,7 +23,7 @@ Random:
 ; returns:   
 ; hl = pseudorandom number
 ; use:
-; a
+; a, hl
 Random:
 			lxi h, 1       ; seed must not be 0
 			mov a, h

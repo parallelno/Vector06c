@@ -13,7 +13,7 @@ $011b 31 00 01   lxi sp,$0100
 $011e cd db 03   call $03db
 $0121 31 fe 7f   lxi sp,$7ffe
 $0124 fb         ei
-$0125 c3 72 2a   jmp $2a72
+$0125 c3 6f 2b   jmp $2b6f
 
 $0128 00 ff 00 ff 00 ff 00 00   .ˇ.ˇ.ˇ..
 $0130 00 00 00 32 00 00 00 00   ...2....
@@ -437,7 +437,7 @@ $03b6 21 31 01   lxi h,$0131
 $03b9 7e         mov a,m
 $03ba 36 00      mvi m,$00
 $03bc 32 30 01   sta $0130
-$03bf cd b5 27   call $27b5
+$03bf cd b2 28   call $28b2
 $03c2 21 33 01   lxi h,$0133
 $03c5 36 32      mvi m,$32
 $03c7 d1         pop d
@@ -451,11 +451,11 @@ $03d1 21 00 00   lxi h,$0000
 $03d4 31 00 00   lxi sp,$0000
 $03d7 fb         ei
 $03d8 c3 00 00   jmp $0000
-$03db 11 36 5a   lxi d,$5a36
+$03db 11 75 5b   lxi d,$5b75
 $03de 01 00 80   lxi b,$8000
 $03e1 3e e3      mvi a,$e3
 $03e3 cd 4d 01   call $014d
-$03e6 11 b5 50   lxi d,$50b5
+$03e6 11 ee 51   lxi d,$51ee
 $03e9 01 00 80   lxi b,$8000
 $03ec 3e e1      mvi a,$e1
 $03ee cd 4d 01   call $014d
@@ -464,18 +464,18 @@ $03f4 21 94 18   lxi h,$1894
 $03f7 01 4a 0c   lxi b,$0c4a
 $03fa 3e fd      mvi a,$fd
 $03fc cd a0 02   call $02a0
-$03ff 11 d5 3a   lxi d,$3ad5
+$03ff 11 0e 3c   lxi d,$3c0e
 $0402 01 00 80   lxi b,$8000
 $0405 3e e2      mvi a,$e2
 $0407 cd 4d 01   call $014d
-$040a 11 98 38   lxi d,$3898
+$040a 11 d1 39   lxi d,$39d1
 $040d 01 00 a0   lxi b,$a000
 $0410 3e e3      mvi a,$e3
 $0412 cd 4d 01   call $014d
 $0415 3e e3      mvi a,$e3
 $0417 32 2f 01   sta $012f
 $041a d3 10      out $10
-$041c 11 8f 2d   lxi d,$2d8f
+$041c 11 8c 2e   lxi d,$2e8c
 $041f 21 00 a0   lxi h,$a000
 $0422 cd 24 83   call $8324
 $0425 af         xra a
@@ -486,14 +486,14 @@ $042e 21 82 38   lxi h,$3882
 $0431 01 41 1c   lxi b,$1c41
 $0434 3e fb      mvi a,$fb
 $0436 cd a0 02   call $02a0
-$0439 11 52 35   lxi d,$3552
+$0439 11 8b 36   lxi d,$368b
 $043c 01 00 a0   lxi b,$a000
 $043f 3e e3      mvi a,$e3
 $0441 cd 4d 01   call $014d
 $0444 3e e3      mvi a,$e3
 $0446 32 2f 01   sta $012f
 $0449 d3 10      out $10
-$044b 11 42 2c   lxi d,$2c42
+$044b 11 3f 2d   lxi d,$2d3f
 $044e 21 00 a0   lxi h,$a000
 $0451 cd 24 83   call $8324
 $0454 af         xra a
@@ -502,7 +502,7 @@ $0458 d3 10      out $10
 $045a 3e e3      mvi a,$e3
 $045c 32 2f 01   sta $012f
 $045f d3 10      out $10
-$0461 11 b1 2c   lxi d,$2cb1
+$0461 11 ae 2d   lxi d,$2dae
 $0464 21 00 a0   lxi h,$a000
 $0467 cd 24 83   call $8324
 $046a af         xra a
@@ -513,14 +513,14 @@ $0473 21 74 40   lxi h,$4074
 $0476 01 3a 20   lxi b,$203a
 $0479 3e f7      mvi a,$f7
 $047b cd a0 02   call $02a0
-$047e 11 5a 37   lxi d,$375a
+$047e 11 93 38   lxi d,$3893
 $0481 01 00 a0   lxi b,$a000
 $0484 3e e3      mvi a,$e3
 $0486 cd 4d 01   call $014d
 $0489 3e e3      mvi a,$e3
 $048b 32 2f 01   sta $012f
 $048e d3 10      out $10
-$0490 11 20 2d   lxi d,$2d20
+$0490 11 1d 2e   lxi d,$2e1d
 $0493 21 8c 5f   lxi h,$5f8c
 $0496 cd 24 83   call $8324
 $0499 af         xra a
@@ -531,14 +531,14 @@ $04a2 21 08 61   lxi h,$6108
 $04a5 01 4a 10   lxi b,$104a
 $04a8 3e f7      mvi a,$f7
 $04aa cd a0 02   call $02a0
-$04ad 11 4c 2e   lxi d,$2e4c
+$04ad 11 49 2f   lxi d,$2f49
 $04b0 01 00 a0   lxi b,$a000
 $04b3 3e e3      mvi a,$e3
 $04b5 cd 4d 01   call $014d
 $04b8 3e e3      mvi a,$e3
 $04ba 32 2f 01   sta $012f
 $04bd d3 10      out $10
-$04bf 11 88 2a   lxi d,$2a88
+$04bf 11 85 2b   lxi d,$2b85
 $04c2 21 00 a0   lxi h,$a000
 $04c5 cd 24 83   call $8324
 $04c8 af         xra a
@@ -549,14 +549,14 @@ $04d1 21 82 38   lxi h,$3882
 $04d4 01 41 1c   lxi b,$1c41
 $04d7 3e f3      mvi a,$f3
 $04d9 cd a0 02   call $02a0
-$04dc 11 81 30   lxi d,$3081
+$04dc 11 7e 31   lxi d,$317e
 $04df 01 00 a0   lxi b,$a000
 $04e2 3e e3      mvi a,$e3
 $04e4 cd 4d 01   call $014d
 $04e7 3e e3      mvi a,$e3
 $04e9 32 2f 01   sta $012f
 $04ec d3 10      out $10
-$04ee 11 45 2b   lxi d,$2b45
+$04ee 11 42 2c   lxi d,$2c42
 $04f1 21 7e 67   lxi h,$677e
 $04f4 cd 24 83   call $8324
 $04f7 af         xra a
@@ -565,7 +565,7 @@ $04fb d3 10      out $10
 $04fd 3e e3      mvi a,$e3
 $04ff 32 2f 01   sta $012f
 $0502 d3 10      out $10
-$0504 11 b2 2b   lxi d,$2bb2
+$0504 11 af 2c   lxi d,$2caf
 $0507 21 7e 67   lxi h,$677e
 $050a cd 24 83   call $8324
 $050d af         xra a
@@ -574,7 +574,7 @@ $0511 d3 10      out $10
 $0513 3e e3      mvi a,$e3
 $0515 32 2f 01   sta $012f
 $0518 d3 10      out $10
-$051a 11 df 2b   lxi d,$2bdf
+$051a 11 dc 2c   lxi d,$2cdc
 $051d 21 7e 67   lxi h,$677e
 $0520 cd 24 83   call $8324
 $0523 af         xra a
@@ -589,8 +589,8 @@ $0537 c9         ret
 
 $0538 00 00 00 00 00 00         ......
 
-$071e 31 26 31 26 31 26 33 26   1&1&1&3&
-$0726 31 26 31 26 31 26 31 26   1&1&1&1&
+$071e 2e 27 2e 27 2e 27 30 27   .'.'.'0'
+$0726 2e 27 2e 27 2e 27 2e 27   .'.'.'.'
 
 $081e 00                        .
 
@@ -2483,7 +2483,7 @@ $120d 7e 12 22 16 15 16 01 64   ~."....d
 $1215 00 00 00 00 00 01 00 00   ........
 $121d 00 00 00 00 00 00 00 00   ........
 $1225 00 00 00 00 00 00 00 00   ........
-$122d 45 1d 42 14 5a 14 34 15   E.B.Z.4.
+$122d 42 1e 42 14 5a 14 34 15   B.B.Z.4.
 $1235 8a 14 fc 13 3d 15 fc 13   ä.¸.=.¸.
 $123d 73 14 3d 15 fc 13 fc 13   s.=.¸.¸.
 $1245 34 15 fc 13 fc 13 fc 13   4.¸.¸.¸.
@@ -2540,7 +2540,7 @@ $12c0 21 00 00   lxi h,$0000
 $12c3 22 29 12   shld $1229
 $12c6 3e 01      mvi a,$01
 $12c8 32 1a 12   sta $121a
-$12cb 21 d9 2a   lxi h,$2ad9
+$12cb 21 d6 2b   lxi h,$2bd6
 $12ce 22 18 12   shld $1218
 $12d1 c3 b5 13   jmp $13b5
 $12d4 fe 9f      cpi $9f
@@ -2550,7 +2550,7 @@ $12dc 22 27 12   shld $1227
 $12df 22 29 12   shld $1229
 $12e2 3e 01      mvi a,$01
 $12e4 32 1a 12   sta $121a
-$12e7 21 d9 2a   lxi h,$2ad9
+$12e7 21 d6 2b   lxi h,$2bd6
 $12ea 22 18 12   shld $1218
 $12ed c3 b5 13   jmp $13b5
 $12f0 fe 3f      cpi $3f
@@ -2561,7 +2561,7 @@ $12fb 21 96 fe   lxi h,$fe96
 $12fe 22 29 12   shld $1229
 $1301 3e 01      mvi a,$01
 $1303 32 1a 12   sta $121a
-$1306 21 d9 2a   lxi h,$2ad9
+$1306 21 d6 2b   lxi h,$2bd6
 $1309 22 18 12   shld $1218
 $130c c3 b5 13   jmp $13b5
 $130f fe ef      cpi $ef
@@ -2572,7 +2572,7 @@ $131a 21 00 00   lxi h,$0000
 $131d 22 29 12   shld $1229
 $1320 af         xra a
 $1321 32 1a 12   sta $121a
-$1324 21 e0 2d   lxi h,$2de0
+$1324 21 dd 2e   lxi h,$2edd
 $1327 22 18 12   shld $1218
 $132a c3 b5 13   jmp $13b5
 $132d fe cf      cpi $cf
@@ -2583,7 +2583,7 @@ $1338 21 6a 01   lxi h,$016a
 $133b 22 29 12   shld $1229
 $133e af         xra a
 $133f 32 1a 12   sta $121a
-$1342 21 e0 2d   lxi h,$2de0
+$1342 21 dd 2e   lxi h,$2edd
 $1345 22 18 12   shld $1218
 $1348 c3 b5 13   jmp $13b5
 $134b fe 6f      cpi $6f
@@ -2593,7 +2593,7 @@ $1353 22 27 12   shld $1227
 $1356 22 29 12   shld $1229
 $1359 af         xra a
 $135a 32 1a 12   sta $121a
-$135d 21 e0 2d   lxi h,$2de0
+$135d 21 dd 2e   lxi h,$2edd
 $1360 22 18 12   shld $1218
 $1363 c3 b5 13   jmp $13b5
 $1366 fe df      cpi $df
@@ -2605,10 +2605,10 @@ $1374 22 29 12   shld $1229
 $1377 3a 1a 12   lda $121a
 $137a b7         ora a
 $137b ca 87 13   jz $1387
-$137e 21 d9 2a   lxi h,$2ad9
+$137e 21 d6 2b   lxi h,$2bd6
 $1381 22 18 12   shld $1218
 $1384 c3 b5 13   jmp $13b5
-$1387 21 e0 2d   lxi h,$2de0
+$1387 21 dd 2e   lxi h,$2edd
 $138a 22 18 12   shld $1218
 $138d c3 b5 13   jmp $13b5
 $1390 fe 7f      cpi $7f
@@ -2620,10 +2620,10 @@ $139c 22 29 12   shld $1229
 $139f 3a 1a 12   lda $121a
 $13a2 b7         ora a
 $13a3 ca af 13   jz $13af
-$13a6 21 d9 2a   lxi h,$2ad9
+$13a6 21 d6 2b   lxi h,$2bd6
 $13a9 22 18 12   shld $1218
 $13ac c3 b5 13   jmp $13b5
-$13af 21 e0 2d   lxi h,$2de0
+$13af 21 dd 2e   lxi h,$2edd
 $13b2 22 18 12   shld $1218
 $13b5 2a 23 12   lhld $1223
 $13b8 eb         xchg
@@ -2642,7 +2642,7 @@ $13ce 01 0a 0e   lxi b,$0e0a
 $13d1 3e 41      mvi a,$41
 $13d3 32 2f 01   sta $012f
 $13d6 d3 10      out $10
-$13d8 cd 60 27   call $2760
+$13d8 cd 5d 28   call $285d
 $13db 3e 00      mvi a,$00
 $13dd 32 2f 01   sta $012f
 $13e0 d3 10      out $10
@@ -2668,12 +2668,12 @@ $1403 01 0a 0e   lxi b,$0e0a
 $1406 3e 41      mvi a,$41
 $1408 32 2f 01   sta $012f
 $140b d3 10      out $10
-$140d cd 32 27   call $2732
+$140d cd 2f 28   call $282f
 $1410 3e 00      mvi a,$00
 $1412 32 2f 01   sta $012f
 $1415 d3 10      out $10
 $1417 c8         rz
-$1418 21 2e 27   lxi h,$272e
+$1418 21 2b 28   lxi h,$282b
 $141b 0e 04      mvi c,$04
 $141d 7e         mov a,m
 $141e e5         push h
@@ -2868,12 +2868,12 @@ $159a 22 29 12   shld $1229
 $159d 3a 1a 12   lda $121a
 $15a0 b7         ora a
 $15a1 ca ad 15   jz $15ad
-$15a4 21 21 2b   lxi h,$2b21
+$15a4 21 1e 2c   lxi h,$2c1e
 $15a7 22 18 12   shld $1218
-$15aa c3 19 22   jmp $2219
-$15ad 21 28 2e   lxi h,$2e28
+$15aa c3 16 23   jmp $2316
+$15ad 21 25 2f   lxi h,$2f25
 $15b0 22 18 12   shld $1218
-$15b3 c3 19 22   jmp $2219
+$15b3 c3 16 23   jmp $2316
 $15b6 21 17 12   lxi h,$1217
 $15b9 7e         mov a,m
 $15ba c6 32      adi $32
@@ -2899,10 +2899,10 @@ $15e1 22 29 12   shld $1229
 $15e4 3a 1a 12   lda $121a
 $15e7 b7         ora a
 $15e8 ca f2 15   jz $15f2
-$15eb 21 91 2a   lxi h,$2a91
+$15eb 21 8e 2b   lxi h,$2b8e
 $15ee 22 18 12   shld $1218
 $15f1 c9         ret
-$15f2 21 98 2d   lxi h,$2d98
+$15f2 21 95 2e   lxi h,$2e95
 $15f5 22 18 12   shld $1218
 $15f8 c9         ret
 $15f9 3a 2a 01   lda $012a
@@ -2925,7 +2925,7 @@ $1618 7e         mov a,m
 $1619 91         sub c
 $161a 77         mov m,a
 $161b f5         push psw
-$161c cd ef 29   call $29ef
+$161c cd ec 2a   call $2aec
 $161f f1         pop psw
 $1620 d0         rnc
 $1621 c9         ret
@@ -3000,7 +3000,7 @@ $169c 57         mov d,a
 $169d 3e 41      mvi a,$41
 $169f 32 2f 01   sta $012f
 $16a2 d3 10      out $10
-$16a4 cd fa 26   call $26fa
+$16a4 cd f7 27   call $27f7
 $16a7 3e 00      mvi a,$00
 $16a9 32 2f 01   sta $012f
 $16ac d3 10      out $10
@@ -3015,2640 +3015,2780 @@ $16bd af         xra a
 $16be 32 2f 01   sta $012f
 $16c1 d3 10      out $10
 $16c3 c9         ret
-$16c4 cd 76 1f   call $1f76
-$16c7 36 17      mvi m,$17
-$16c9 2b         dcx h
-$16ca 36 27      mvi m,$27
-$16cc 23         inx h
-$16cd 23         inx h
-$16ce 36 28      mvi m,$28
-$16d0 23         inx h
-$16d1 36 18      mvi m,$18
-$16d3 23         inx h
-$16d4 36 21      mvi m,$21
-$16d6 23         inx h
-$16d7 36 18      mvi m,$18
-$16d9 23         inx h
-$16da 36 00      mvi m,$00
-$16dc 23         inx h
-$16dd 36 01      mvi m,$01
+$16c4 cd 73 20   call $2073
+$16c7 3e 0f      mvi a,$0f
+$16c9 a1         ana c
+$16ca 07         rlc
+$16cb 07         rlc
+$16cc 07         rlc
+$16cd 07         rlc
+$16ce 47         mov b,a
+$16cf 0f         rrc
+$16d0 0f         rrc
+$16d1 0f         rrc
+$16d2 c6 a0      adi $a0
+$16d4 57         mov d,a
+$16d5 3e f0      mvi a,$f0
+$16d7 a1         ana c
+$16d8 0e 00      mvi c,$00
+$16da 36 17      mvi m,$17
+$16dc 2b         dcx h
+$16dd 36 26      mvi m,$26
 $16df 23         inx h
-$16e0 36 00      mvi m,$00
-$16e2 23         inx h
-$16e3 36 00      mvi m,$00
-$16e5 23         inx h
-$16e6 36 00      mvi m,$00
-$16e8 23         inx h
-$16e9 36 4e      mvi m,$4e
-$16eb 23         inx h
-$16ec 36 2b      mvi m,$2b
-$16ee 3e 0f      mvi a,$0f
-$16f0 a1         ana c
-$16f1 07         rlc
-$16f2 07         rlc
-$16f3 07         rlc
-$16f4 07         rlc
-$16f5 47         mov b,a
-$16f6 0f         rrc
-$16f7 0f         rrc
-$16f8 0f         rrc
-$16f9 c6 a0      adi $a0
-$16fb 57         mov d,a
-$16fc 3e f0      mvi a,$f0
-$16fe a1         ana c
-$16ff 0e 00      mvi c,$00
-$1701 23         inx h
-$1702 77         mov m,a
-$1703 23         inx h
-$1704 72         mov m,d
-$1705 23         inx h
-$1706 77         mov m,a
-$1707 23         inx h
-$1708 72         mov m,d
-$1709 23         inx h
-$170a 36 05      mvi m,$05
-$170c 23         inx h
-$170d 71         mov m,c
-$170e 23         inx h
-$170f 36 05      mvi m,$05
-$1711 23         inx h
-$1712 71         mov m,c
-$1713 23         inx h
-$1714 71         mov m,c
-$1715 23         inx h
-$1716 70         mov m,b
-$1717 23         inx h
-$1718 71         mov m,c
-$1719 23         inx h
-$171a 77         mov m,a
-$171b 23         inx h
-$171c 36 00      mvi m,$00
-$171e 23         inx h
-$171f 36 01      mvi m,$01
-$1721 23         inx h
-$1722 71         mov m,c
-$1723 23         inx h
-$1724 71         mov m,c
-$1725 af         xra a
-$1726 c9         ret
-$1727 42         mov b,d
-$1728 4b         mov c,e
-$1729 eb         xchg
-$172a 22 bc 17   shld $17bc
-$172d 3a 32 01   lda $0132
-$1730 e6 03      ani $03
-$1732 c2 47 17   jnz $1747
-$1735 c5         push b
-$1736 21 0b 00   lxi h,$000b
-$1739 09         dad b
-$173a 5e         mov e,m
-$173b 23         inx h
-$173c 56         mov d,m
-$173d eb         xchg
-$173e 4e         mov c,m
-$173f 23         inx h
-$1740 46         mov b,m
-$1741 09         dad b
-$1742 eb         xchg
-$1743 72         mov m,d
-$1744 2b         dcx h
-$1745 73         mov m,e
-$1746 c1         pop b
-$1747 21 15 00   lxi h,$0015
-$174a 09         dad b
-$174b 22 8b 17   shld $178b
-$174e 4e         mov c,m
-$174f 23         inx h
-$1750 46         mov b,m
-$1751 23         inx h
-$1752 22 91 17   shld $1791
-$1755 5e         mov e,m
-$1756 23         inx h
-$1757 56         mov d,m
-$1758 23         inx h
-$1759 d5         push d
-$175a 5e         mov e,m
-$175b 23         inx h
-$175c 56         mov d,m
-$175d 23         inx h
-$175e eb         xchg
-$175f 09         dad b
-$1760 7c         mov a,h
-$1761 22 34 01   shld $0134
-$1764 eb         xchg
-$1765 5e         mov e,m
-$1766 23         inx h
-$1767 56         mov d,m
-$1768 eb         xchg
-$1769 c1         pop b
-$176a 09         dad b
-$176b 22 36 01   shld $0136
-$176e 57         mov d,a
-$176f 5c         mov e,h
-$1770 01 09 0e   lxi b,$0e09
-$1773 3e 41      mvi a,$41
-$1775 32 2f 01   sta $012f
-$1778 d3 10      out $10
-$177a cd 0c 27   call $270c
-$177d 3e 00      mvi a,$00
-$177f 32 2f 01   sta $012f
-$1782 d3 10      out $10
-$1784 c2 bb 17   jnz $17bb
-$1787 2a 34 01   lhld $0134
-$178a 22 00 00   shld $0000
-$178d 2a 36 01   lhld $0136
-$1790 22 00 00   shld $0000
-$1793 2a 8b 17   lhld $178b
-$1796 23         inx h
-$1797 4e         mov c,m
-$1798 3a 24 12   lda $1224
-$179b 47         mov b,a
-$179c c6 0e      adi $0e
-$179e b9         cmp c
-$179f d8         rc
-$17a0 3e 0e      mvi a,$0e
-$17a2 81         add c
-$17a3 b8         cmp b
-$17a4 d8         rc
-$17a5 23         inx h
-$17a6 23         inx h
-$17a7 4e         mov c,m
-$17a8 3a 26 12   lda $1226
-$17ab 47         mov b,a
-$17ac c6 0a      adi $0a
-$17ae b9         cmp c
-$17af d8         rc
-$17b0 3e 09      mvi a,$09
-$17b2 81         add c
-$17b3 b8         cmp b
-$17b4 d8         rc
-$17b5 0e 01      mvi c,$01
-$17b7 cd 15 16   call $1615
-$17ba c9         ret
-$17bb 01 00 00   lxi b,$0000
-$17be cd 38 01   call $0138
-$17c1 21 19 00   lxi h,$0019
-$17c4 09         dad b
-$17c5 fe 40      cpi $40
-$17c7 da fd 17   jc $17fd
-$17ca fe 80      cpi $80
-$17cc da ee 17   jc $17ee
-$17cf fe c0      cpi $c0
-$17d1 da e1 17   jc $17e1
-$17d4 af         xra a
-$17d5 77         mov m,a
-$17d6 23         inx h
-$17d7 77         mov m,a
-$17d8 23         inx h
+$16e0 23         inx h
+$16e1 36 25      mvi m,$25
+$16e3 23         inx h
+$16e4 36 19      mvi m,$19
+$16e6 23         inx h
+$16e7 36 1e      mvi m,$1e
+$16e9 23         inx h
+$16ea 36 19      mvi m,$19
+$16ec 23         inx h
+$16ed 36 00      mvi m,$00
+$16ef 23         inx h
+$16f0 36 01      mvi m,$01
+$16f2 23         inx h
+$16f3 36 00      mvi m,$00
+$16f5 23         inx h
+$16f6 36 19      mvi m,$19
+$16f8 23         inx h
+$16f9 71         mov m,c
+$16fa 23         inx h
+$16fb 36 4b      mvi m,$4b
+$16fd 23         inx h
+$16fe 36 2c      mvi m,$2c
+$1700 23         inx h
+$1701 77         mov m,a
+$1702 23         inx h
+$1703 72         mov m,d
+$1704 23         inx h
+$1705 77         mov m,a
+$1706 23         inx h
+$1707 72         mov m,d
+$1708 23         inx h
+$1709 36 05      mvi m,$05
+$170b 23         inx h
+$170c 71         mov m,c
+$170d 23         inx h
+$170e 36 05      mvi m,$05
+$1710 23         inx h
+$1711 71         mov m,c
+$1712 23         inx h
+$1713 71         mov m,c
+$1714 23         inx h
+$1715 70         mov m,b
+$1716 23         inx h
+$1717 71         mov m,c
+$1718 23         inx h
+$1719 77         mov m,a
+$171a 23         inx h
+$171b 36 00      mvi m,$00
+$171d 23         inx h
+$171e 36 01      mvi m,$01
+$1720 23         inx h
+$1721 71         mov m,c
+$1722 23         inx h
+$1723 71         mov m,c
+$1724 af         xra a
+$1725 c9         ret
+$1726 21 08 00   lxi h,$0008
+$1729 19         dad d
+$172a 7e         mov a,m
+$172b fe 00      cpi $00
+$172d ca 45 17   jz $1745
+$1730 fe 02      cpi $02
+$1732 ca 1a 18   jz $181a
+$1735 fe 04      cpi $04
+$1737 ca 0b 19   jz $190b
+$173a fe 03      cpi $03
+$173c ca 0c 19   jz $190c
+$173f fe 01      cpi $01
+$1741 ca 9a 17   jz $179a
+$1744 c9         ret
+$1745 01 0e 00   lxi b,$000e
+$1748 09         dad b
+$1749 3a 24 12   lda $1224
+$174c 96         sub m
+$174d da 5a 17   jc $175a
+$1750 fe 2d      cpi $2d
+$1752 da 64 17   jc $1764
+$1755 0e 08      mvi c,$08
+$1757 c3 88 17   jmp $1788
+$175a fe d3      cpi $d3
+$175c d2 64 17   jnc $1764
+$175f 0e 08      mvi c,$08
+$1761 c3 88 17   jmp $1788
+$1764 23         inx h
+$1765 23         inx h
+$1766 3a 26 12   lda $1226
+$1769 96         sub m
+$176a da 77 17   jc $1777
+$176d fe 2d      cpi $2d
+$176f da 81 17   jc $1781
+$1772 0e 08      mvi c,$08
+$1774 c3 91 17   jmp $1791
+$1777 fe d3      cpi $d3
+$1779 d2 81 17   jnc $1781
+$177c 0e 08      mvi c,$08
+$177e c3 91 17   jmp $1791
+$1781 01 f0 ff   lxi b,$fff0
+$1784 09         dad b
+$1785 36 01      mvi m,$01
+$1787 c9         ret
+$1788 01 f4 ff   lxi b,$fff4
+$178b 09         dad b
+$178c 3e 14      mvi a,$14
+$178e c3 0d 19   jmp $190d
+$1791 01 f2 ff   lxi b,$fff2
+$1794 09         dad b
+$1795 3e 14      mvi a,$14
+$1797 c3 0d 19   jmp $190d
+$179a 36 02      mvi m,$02
+$179c 23         inx h
+$179d 36 08      mvi m,$08
+$179f 01 0d 00   lxi b,$000d
+$17a2 09         dad b
+$17a3 3a 24 12   lda $1224
+$17a6 96         sub m
+$17a7 f5         push psw
+$17a8 d2 ad 17   jnc $17ad
+$17ab 2f         cma
+$17ac 3c         inr a
+$17ad 4f         mov c,a
+$17ae 23         inx h
+$17af 23         inx h
+$17b0 3a 26 12   lda $1226
+$17b3 96         sub m
+$17b4 f5         push psw
+$17b5 d2 ba 17   jnc $17ba
+$17b8 2f         cma
+$17b9 3c         inr a
+$17ba b9         cmp c
+$17bb d2 ee 17   jnc $17ee
+$17be 23         inx h
+$17bf f1         pop psw
+$17c0 f1         pop psw
+$17c1 d2 d9 17   jnc $17d9
+$17c4 36 00      mvi m,$00
+$17c6 23         inx h
+$17c7 36 ff      mvi m,$ff
+$17c9 23         inx h
+$17ca 36 00      mvi m,$00
+$17cc 23         inx h
+$17cd 36 00      mvi m,$00
+$17cf 01 ef ff   lxi b,$ffef
+$17d2 09         dad b
+$17d3 36 87      mvi m,$87
+$17d5 23         inx h
+$17d6 36 2c      mvi m,$2c
+$17d8 c9         ret
 $17d9 36 00      mvi m,$00
 $17db 23         inx h
-$17dc 36 ff      mvi m,$ff
-$17de c3 09 18   jmp $1809
-$17e1 af         xra a
-$17e2 77         mov m,a
-$17e3 23         inx h
-$17e4 77         mov m,a
-$17e5 23         inx h
-$17e6 36 00      mvi m,$00
-$17e8 23         inx h
-$17e9 36 01      mvi m,$01
-$17eb c3 09 18   jmp $1809
-$17ee af         xra a
+$17dc 36 01      mvi m,$01
+$17de 23         inx h
+$17df 36 00      mvi m,$00
+$17e1 23         inx h
+$17e2 36 00      mvi m,$00
+$17e4 01 ef ff   lxi b,$ffef
+$17e7 09         dad b
+$17e8 36 5f      mvi m,$5f
+$17ea 23         inx h
+$17eb 36 2c      mvi m,$2c
+$17ed c9         ret
+$17ee 23         inx h
 $17ef 36 00      mvi m,$00
 $17f1 23         inx h
-$17f2 36 ff      mvi m,$ff
+$17f2 36 00      mvi m,$00
 $17f4 23         inx h
-$17f5 77         mov m,a
-$17f6 23         inx h
-$17f7 77         mov m,a
-$17f8 3e ff      mvi a,$ff
-$17fa c3 09 18   jmp $1809
-$17fd af         xra a
-$17fe 36 00      mvi m,$00
-$1800 23         inx h
-$1801 36 01      mvi m,$01
-$1803 23         inx h
-$1804 77         mov m,a
-$1805 23         inx h
-$1806 77         mov m,a
-$1807 3e 01      mvi a,$01
-$1809 b7         ora a
-$180a ca 17 18   jz $1817
-$180d 21 0b 00   lxi h,$000b
-$1810 09         dad b
-$1811 36 8a      mvi m,$8a
-$1813 23         inx h
-$1814 36 2b      mvi m,$2b
-$1816 c9         ret
-$1817 21 0b 00   lxi h,$000b
-$181a 09         dad b
-$181b 36 62      mvi m,$62
+$17f5 f1         pop psw
+$17f6 d2 0a 18   jnc $180a
+$17f9 36 00      mvi m,$00
+$17fb 23         inx h
+$17fc 36 ff      mvi m,$ff
+$17fe 01 ef ff   lxi b,$ffef
+$1801 09         dad b
+$1802 36 87      mvi m,$87
+$1804 23         inx h
+$1805 36 2c      mvi m,$2c
+$1807 c3 18 18   jmp $1818
+$180a 36 00      mvi m,$00
+$180c 23         inx h
+$180d 36 01      mvi m,$01
+$180f 01 ef ff   lxi b,$ffef
+$1812 09         dad b
+$1813 36 5f      mvi m,$5f
+$1815 23         inx h
+$1816 36 2c      mvi m,$2c
+$1818 f1         pop psw
+$1819 c9         ret
+$181a 22 98 18   shld $1898
 $181d 23         inx h
-$181e 36 2b      mvi m,$2b
-$1820 c9         ret
-$1821 21 fc ff   lxi h,$fffc
-$1824 19         dad d
-$1825 c3 9d 1f   jmp $1f9d
-$1828 21 14 00   lxi h,$0014
-$182b 19         dad d
-$182c cd ee 08   call $08ee
-$182f 79         mov a,c
-$1830 01 f3 ff   lxi b,$fff3
-$1833 09         dad b
-$1834 46         mov b,m
-$1835 23         inx h
-$1836 e5         push h
-$1837 66         mov h,m
-$1838 68         mov l,b
-$1839 4f         mov c,a
-$183a cd d3 08   call $08d3
-$183d 3e f3      mvi a,$f3
-$183f 32 2f 01   sta $012f
-$1842 d3 10      out $10
-$1844 cd 83 81   call $8183
-$1847 af         xra a
-$1848 32 2f 01   sta $012f
-$184b d3 10      out $10
-$184d e1         pop h
-$184e 23         inx h
-$184f 71         mov m,c
-$1850 23         inx h
-$1851 70         mov m,b
-$1852 01 03 00   lxi b,$0003
-$1855 09         dad b
-$1856 73         mov m,e
-$1857 23         inx h
-$1858 72         mov m,d
-$1859 c9         ret
-$185a cd 76 1f   call $1f76
-$185d 36 18      mvi m,$18
-$185f 2b         dcx h
-$1860 36 bd      mvi m,$bd
-$1862 11 02 00   lxi d,$0002
-$1865 19         dad d
-$1866 36 be      mvi m,$be
-$1868 23         inx h
-$1869 36 19      mvi m,$19
-$186b 23         inx h
-$186c 36 b7      mvi m,$b7
-$186e 23         inx h
-$186f 36 19      mvi m,$19
+$181e 35         dcr m
+$181f ca 96 18   jz $1896
+$1822 01 0c 00   lxi b,$000c
+$1825 09         dad b
+$1826 22 66 18   shld $1866
+$1829 4e         mov c,m
+$182a 23         inx h
+$182b 46         mov b,m
+$182c 23         inx h
+$182d 22 6c 18   shld $186c
+$1830 5e         mov e,m
+$1831 23         inx h
+$1832 56         mov d,m
+$1833 23         inx h
+$1834 d5         push d
+$1835 5e         mov e,m
+$1836 23         inx h
+$1837 56         mov d,m
+$1838 23         inx h
+$1839 eb         xchg
+$183a 09         dad b
+$183b 7c         mov a,h
+$183c 22 34 01   shld $0134
+$183f eb         xchg
+$1840 5e         mov e,m
+$1841 23         inx h
+$1842 56         mov d,m
+$1843 eb         xchg
+$1844 c1         pop b
+$1845 09         dad b
+$1846 22 36 01   shld $0136
+$1849 57         mov d,a
+$184a 5c         mov e,h
+$184b 01 09 0e   lxi b,$0e09
+$184e 3e 41      mvi a,$41
+$1850 32 2f 01   sta $012f
+$1853 d3 10      out $10
+$1855 cd 09 28   call $2809
+$1858 3e 00      mvi a,$00
+$185a 32 2f 01   sta $012f
+$185d d3 10      out $10
+$185f c2 9d 18   jnz $189d
+$1862 2a 34 01   lhld $0134
+$1865 22 00 00   shld $0000
+$1868 2a 36 01   lhld $0136
+$186b 22 00 00   shld $0000
+$186e 2a 66 18   lhld $1866
 $1871 23         inx h
-$1872 36 00      mvi m,$00
-$1874 23         inx h
-$1875 36 01      mvi m,$01
-$1877 11 04 00   lxi d,$0004
-$187a 19         dad d
-$187b 36 3f      mvi m,$3f
-$187d 23         inx h
-$187e 36 2d      mvi m,$2d
-$1880 11 10 00   lxi d,$0010
-$1883 19         dad d
-$1884 16 00      mvi d,$00
-$1886 72         mov m,d
-$1887 2b         dcx h
-$1888 72         mov m,d
-$1889 2b         dcx h
-$188a 36 01      mvi m,$01
-$188c 2b         dcx h
-$188d 36 00      mvi m,$00
-$188f 2b         dcx h
-$1890 79         mov a,c
-$1891 e6 f0      ani $f0
-$1893 77         mov m,a
-$1894 5f         mov e,a
-$1895 2b         dcx h
-$1896 72         mov m,d
-$1897 2b         dcx h
-$1898 79         mov a,c
-$1899 e6 0f      ani $0f
-$189b 07         rlc
-$189c 07         rlc
-$189d 07         rlc
-$189e 07         rlc
-$189f 77         mov m,a
-$18a0 2b         dcx h
-$18a1 72         mov m,d
-$18a2 2b         dcx h
-$18a3 72         mov m,d
-$18a4 2b         dcx h
-$18a5 36 05      mvi m,$05
-$18a7 2b         dcx h
-$18a8 72         mov m,d
-$18a9 2b         dcx h
-$18aa 36 05      mvi m,$05
-$18ac 2b         dcx h
-$18ad 0f         rrc
-$18ae 0f         rrc
-$18af 0f         rrc
-$18b0 e6 1f      ani $1f
-$18b2 c6 a0      adi $a0
-$18b4 77         mov m,a
-$18b5 2b         dcx h
-$18b6 73         mov m,e
-$18b7 2b         dcx h
-$18b8 77         mov m,a
-$18b9 2b         dcx h
-$18ba 73         mov m,e
-$18bb af         xra a
-$18bc c9         ret
-$18bd 42         mov b,d
-$18be 4b         mov c,e
-$18bf eb         xchg
-$18c0 22 52 19   shld $1952
-$18c3 3a 32 01   lda $0132
-$18c6 e6 03      ani $03
-$18c8 c2 dd 18   jnz $18dd
-$18cb c5         push b
-$18cc 21 0b 00   lxi h,$000b
-$18cf 09         dad b
-$18d0 5e         mov e,m
+$1872 4e         mov c,m
+$1873 3a 24 12   lda $1224
+$1876 47         mov b,a
+$1877 c6 0e      adi $0e
+$1879 b9         cmp c
+$187a d8         rc
+$187b 3e 0e      mvi a,$0e
+$187d 81         add c
+$187e b8         cmp b
+$187f d8         rc
+$1880 23         inx h
+$1881 23         inx h
+$1882 4e         mov c,m
+$1883 3a 26 12   lda $1226
+$1886 47         mov b,a
+$1887 c6 0a      adi $0a
+$1889 b9         cmp c
+$188a d8         rc
+$188b 3e 09      mvi a,$09
+$188d 81         add c
+$188e b8         cmp b
+$188f d8         rc
+$1890 0e 01      mvi c,$01
+$1892 cd 15 16   call $1615
+$1895 c9         ret
+$1896 c9         ret
+$1897 21 00 00   lxi h,$0000
+$189a 36 01      mvi m,$01
+$189c c9         ret
+$189d c9         ret
+$189e 2a 98 18   lhld $1898
+$18a1 36 02      mvi m,$02
+$18a3 23         inx h
+$18a4 36 08      mvi m,$08
+$18a6 eb         xchg
+$18a7 cd 38 01   call $0138
+$18aa 11 10 00   lxi d,$0010
+$18ad 19         dad d
+$18ae fe 40      cpi $40
+$18b0 da e6 18   jc $18e6
+$18b3 fe 80      cpi $80
+$18b5 da d7 18   jc $18d7
+$18b8 fe c0      cpi $c0
+$18ba da ca 18   jc $18ca
+$18bd af         xra a
+$18be 77         mov m,a
+$18bf 23         inx h
+$18c0 77         mov m,a
+$18c1 23         inx h
+$18c2 36 00      mvi m,$00
+$18c4 23         inx h
+$18c5 36 ff      mvi m,$ff
+$18c7 c3 f2 18   jmp $18f2
+$18ca af         xra a
+$18cb 77         mov m,a
+$18cc 23         inx h
+$18cd 77         mov m,a
+$18ce 23         inx h
+$18cf 36 00      mvi m,$00
 $18d1 23         inx h
-$18d2 56         mov d,m
-$18d3 eb         xchg
-$18d4 4e         mov c,m
-$18d5 23         inx h
-$18d6 46         mov b,m
-$18d7 09         dad b
-$18d8 eb         xchg
-$18d9 72         mov m,d
-$18da 2b         dcx h
-$18db 73         mov m,e
-$18dc c1         pop b
-$18dd 21 15 00   lxi h,$0015
-$18e0 09         dad b
-$18e1 22 21 19   shld $1921
-$18e4 4e         mov c,m
-$18e5 23         inx h
-$18e6 46         mov b,m
-$18e7 23         inx h
-$18e8 22 27 19   shld $1927
-$18eb 5e         mov e,m
+$18d2 36 01      mvi m,$01
+$18d4 c3 f2 18   jmp $18f2
+$18d7 af         xra a
+$18d8 36 00      mvi m,$00
+$18da 23         inx h
+$18db 36 ff      mvi m,$ff
+$18dd 23         inx h
+$18de 77         mov m,a
+$18df 23         inx h
+$18e0 77         mov m,a
+$18e1 3e ff      mvi a,$ff
+$18e3 c3 f2 18   jmp $18f2
+$18e6 af         xra a
+$18e7 36 00      mvi m,$00
+$18e9 23         inx h
+$18ea 36 01      mvi m,$01
 $18ec 23         inx h
-$18ed 56         mov d,m
+$18ed 77         mov m,a
 $18ee 23         inx h
-$18ef d5         push d
-$18f0 5e         mov e,m
-$18f1 23         inx h
-$18f2 56         mov d,m
-$18f3 23         inx h
-$18f4 eb         xchg
-$18f5 09         dad b
-$18f6 7c         mov a,h
-$18f7 22 34 01   shld $0134
-$18fa eb         xchg
-$18fb 5e         mov e,m
+$18ef 77         mov m,a
+$18f0 3e 01      mvi a,$01
+$18f2 b7         ora a
+$18f3 ca 00 19   jz $1900
+$18f6 21 0b 00   lxi h,$000b
+$18f9 09         dad b
+$18fa 36 87      mvi m,$87
 $18fc 23         inx h
-$18fd 56         mov d,m
-$18fe eb         xchg
-$18ff c1         pop b
-$1900 09         dad b
-$1901 22 36 01   shld $0136
-$1904 57         mov d,a
-$1905 5c         mov e,h
-$1906 01 09 0e   lxi b,$0e09
-$1909 3e 41      mvi a,$41
-$190b 32 2f 01   sta $012f
-$190e d3 10      out $10
-$1910 cd 0c 27   call $270c
-$1913 3e 00      mvi a,$00
-$1915 32 2f 01   sta $012f
-$1918 d3 10      out $10
-$191a c2 51 19   jnz $1951
-$191d 2a 34 01   lhld $0134
-$1920 22 00 00   shld $0000
-$1923 2a 36 01   lhld $0136
-$1926 22 00 00   shld $0000
-$1929 2a 21 19   lhld $1921
-$192c 23         inx h
-$192d 4e         mov c,m
-$192e 3a 24 12   lda $1224
-$1931 47         mov b,a
-$1932 c6 0e      adi $0e
-$1934 b9         cmp c
-$1935 d8         rc
-$1936 3e 0e      mvi a,$0e
-$1938 81         add c
-$1939 b8         cmp b
-$193a d8         rc
-$193b 23         inx h
-$193c 23         inx h
-$193d 4e         mov c,m
-$193e 3a 26 12   lda $1226
-$1941 47         mov b,a
-$1942 c6 0a      adi $0a
-$1944 b9         cmp c
-$1945 d8         rc
-$1946 3e 09      mvi a,$09
-$1948 81         add c
-$1949 b8         cmp b
-$194a d8         rc
-$194b 0e 01      mvi c,$01
-$194d cd 15 16   call $1615
-$1950 c9         ret
-$1951 01 00 00   lxi b,$0000
-$1954 cd 38 01   call $0138
-$1957 21 19 00   lxi h,$0019
-$195a 09         dad b
-$195b fe 40      cpi $40
-$195d da 93 19   jc $1993
-$1960 fe 80      cpi $80
-$1962 da 84 19   jc $1984
-$1965 fe c0      cpi $c0
-$1967 da 77 19   jc $1977
-$196a af         xra a
-$196b 77         mov m,a
-$196c 23         inx h
-$196d 77         mov m,a
+$18fd 36 2c      mvi m,$2c
+$18ff c9         ret
+$1900 21 0b 00   lxi h,$000b
+$1903 09         dad b
+$1904 36 5f      mvi m,$5f
+$1906 23         inx h
+$1907 36 2c      mvi m,$2c
+$1909 c9         ret
+$190a c9         ret
+$190b c9         ret
+$190c c9         ret
+$190d 86         add m
+$190e 77         mov m,a
+$190f d0         rnc
+$1910 23         inx h
+$1911 5e         mov e,m
+$1912 23         inx h
+$1913 56         mov d,m
+$1914 eb         xchg
+$1915 4e         mov c,m
+$1916 23         inx h
+$1917 46         mov b,m
+$1918 09         dad b
+$1919 eb         xchg
+$191a 72         mov m,d
+$191b 2b         dcx h
+$191c 73         mov m,e
+$191d c9         ret
+$191e 21 fc ff   lxi h,$fffc
+$1921 19         dad d
+$1922 c3 9a 20   jmp $209a
+$1925 21 14 00   lxi h,$0014
+$1928 19         dad d
+$1929 cd ee 08   call $08ee
+$192c 79         mov a,c
+$192d 01 f3 ff   lxi b,$fff3
+$1930 09         dad b
+$1931 46         mov b,m
+$1932 23         inx h
+$1933 e5         push h
+$1934 66         mov h,m
+$1935 68         mov l,b
+$1936 4f         mov c,a
+$1937 cd d3 08   call $08d3
+$193a 3e f3      mvi a,$f3
+$193c 32 2f 01   sta $012f
+$193f d3 10      out $10
+$1941 cd 83 81   call $8183
+$1944 af         xra a
+$1945 32 2f 01   sta $012f
+$1948 d3 10      out $10
+$194a e1         pop h
+$194b 23         inx h
+$194c 71         mov m,c
+$194d 23         inx h
+$194e 70         mov m,b
+$194f 01 03 00   lxi b,$0003
+$1952 09         dad b
+$1953 73         mov m,e
+$1954 23         inx h
+$1955 72         mov m,d
+$1956 c9         ret
+$1957 cd 73 20   call $2073
+$195a 36 19      mvi m,$19
+$195c 2b         dcx h
+$195d 36 ba      mvi m,$ba
+$195f 11 02 00   lxi d,$0002
+$1962 19         dad d
+$1963 36 bb      mvi m,$bb
+$1965 23         inx h
+$1966 36 1a      mvi m,$1a
+$1968 23         inx h
+$1969 36 b4      mvi m,$b4
+$196b 23         inx h
+$196c 36 1a      mvi m,$1a
 $196e 23         inx h
 $196f 36 00      mvi m,$00
 $1971 23         inx h
-$1972 36 ff      mvi m,$ff
-$1974 c3 9f 19   jmp $199f
-$1977 af         xra a
-$1978 77         mov m,a
-$1979 23         inx h
-$197a 77         mov m,a
-$197b 23         inx h
-$197c 36 00      mvi m,$00
-$197e 23         inx h
-$197f 36 01      mvi m,$01
-$1981 c3 9f 19   jmp $199f
-$1984 af         xra a
-$1985 36 00      mvi m,$00
-$1987 23         inx h
-$1988 36 ff      mvi m,$ff
-$198a 23         inx h
-$198b 77         mov m,a
-$198c 23         inx h
-$198d 77         mov m,a
-$198e 3e ff      mvi a,$ff
-$1990 c3 9f 19   jmp $199f
-$1993 af         xra a
-$1994 36 00      mvi m,$00
-$1996 23         inx h
-$1997 36 01      mvi m,$01
-$1999 23         inx h
-$199a 77         mov m,a
-$199b 23         inx h
+$1972 36 01      mvi m,$01
+$1974 11 04 00   lxi d,$0004
+$1977 19         dad d
+$1978 36 3c      mvi m,$3c
+$197a 23         inx h
+$197b 36 2e      mvi m,$2e
+$197d 11 10 00   lxi d,$0010
+$1980 19         dad d
+$1981 16 00      mvi d,$00
+$1983 72         mov m,d
+$1984 2b         dcx h
+$1985 72         mov m,d
+$1986 2b         dcx h
+$1987 36 01      mvi m,$01
+$1989 2b         dcx h
+$198a 36 00      mvi m,$00
+$198c 2b         dcx h
+$198d 79         mov a,c
+$198e e6 f0      ani $f0
+$1990 77         mov m,a
+$1991 5f         mov e,a
+$1992 2b         dcx h
+$1993 72         mov m,d
+$1994 2b         dcx h
+$1995 79         mov a,c
+$1996 e6 0f      ani $0f
+$1998 07         rlc
+$1999 07         rlc
+$199a 07         rlc
+$199b 07         rlc
 $199c 77         mov m,a
-$199d 3e 01      mvi a,$01
-$199f b7         ora a
-$19a0 ca ad 19   jz $19ad
-$19a3 21 0b 00   lxi h,$000b
-$19a6 09         dad b
-$19a7 36 67      mvi m,$67
-$19a9 23         inx h
-$19aa 36 2d      mvi m,$2d
-$19ac c9         ret
-$19ad 21 0b 00   lxi h,$000b
-$19b0 09         dad b
-$19b1 36 3f      mvi m,$3f
-$19b3 23         inx h
-$19b4 36 2d      mvi m,$2d
-$19b6 c9         ret
-$19b7 21 fc ff   lxi h,$fffc
-$19ba 19         dad d
-$19bb c3 9d 1f   jmp $1f9d
-$19be 21 14 00   lxi h,$0014
-$19c1 19         dad d
-$19c2 cd ee 08   call $08ee
-$19c5 79         mov a,c
-$19c6 01 f3 ff   lxi b,$fff3
-$19c9 09         dad b
-$19ca 46         mov b,m
-$19cb 23         inx h
-$19cc e5         push h
-$19cd 66         mov h,m
-$19ce 68         mov l,b
-$19cf 4f         mov c,a
-$19d0 cd d3 08   call $08d3
-$19d3 3e f7      mvi a,$f7
-$19d5 32 2f 01   sta $012f
-$19d8 d3 10      out $10
-$19da cd 83 81   call $8183
-$19dd af         xra a
-$19de 32 2f 01   sta $012f
-$19e1 d3 10      out $10
-$19e3 e1         pop h
+$199d 2b         dcx h
+$199e 72         mov m,d
+$199f 2b         dcx h
+$19a0 72         mov m,d
+$19a1 2b         dcx h
+$19a2 36 05      mvi m,$05
+$19a4 2b         dcx h
+$19a5 72         mov m,d
+$19a6 2b         dcx h
+$19a7 36 05      mvi m,$05
+$19a9 2b         dcx h
+$19aa 0f         rrc
+$19ab 0f         rrc
+$19ac 0f         rrc
+$19ad e6 1f      ani $1f
+$19af c6 a0      adi $a0
+$19b1 77         mov m,a
+$19b2 2b         dcx h
+$19b3 73         mov m,e
+$19b4 2b         dcx h
+$19b5 77         mov m,a
+$19b6 2b         dcx h
+$19b7 73         mov m,e
+$19b8 af         xra a
+$19b9 c9         ret
+$19ba 42         mov b,d
+$19bb 4b         mov c,e
+$19bc eb         xchg
+$19bd 22 4f 1a   shld $1a4f
+$19c0 3a 32 01   lda $0132
+$19c3 e6 03      ani $03
+$19c5 c2 da 19   jnz $19da
+$19c8 c5         push b
+$19c9 21 0b 00   lxi h,$000b
+$19cc 09         dad b
+$19cd 5e         mov e,m
+$19ce 23         inx h
+$19cf 56         mov d,m
+$19d0 eb         xchg
+$19d1 4e         mov c,m
+$19d2 23         inx h
+$19d3 46         mov b,m
+$19d4 09         dad b
+$19d5 eb         xchg
+$19d6 72         mov m,d
+$19d7 2b         dcx h
+$19d8 73         mov m,e
+$19d9 c1         pop b
+$19da 21 15 00   lxi h,$0015
+$19dd 09         dad b
+$19de 22 1e 1a   shld $1a1e
+$19e1 4e         mov c,m
+$19e2 23         inx h
+$19e3 46         mov b,m
 $19e4 23         inx h
-$19e5 71         mov m,c
-$19e6 23         inx h
-$19e7 70         mov m,b
-$19e8 01 03 00   lxi b,$0003
-$19eb 09         dad b
-$19ec 73         mov m,e
-$19ed 23         inx h
-$19ee 72         mov m,d
-$19ef c9         ret
-$19f0 cd 76 1f   call $1f76
-$19f3 36 1a      mvi m,$1a
-$19f5 2b         dcx h
-$19f6 36 53      mvi m,$53
-$19f8 11 02 00   lxi d,$0002
-$19fb 19         dad d
-$19fc 36 54      mvi m,$54
-$19fe 23         inx h
-$19ff 36 1b      mvi m,$1b
-$1a01 23         inx h
-$1a02 36 4d      mvi m,$4d
-$1a04 23         inx h
-$1a05 36 1b      mvi m,$1b
-$1a07 23         inx h
-$1a08 36 00      mvi m,$00
-$1a0a 23         inx h
-$1a0b 36 01      mvi m,$01
-$1a0d 11 04 00   lxi d,$0004
-$1a10 19         dad d
-$1a11 36 d0      mvi m,$d0
-$1a13 23         inx h
-$1a14 36 2c      mvi m,$2c
-$1a16 11 10 00   lxi d,$0010
-$1a19 19         dad d
-$1a1a 16 00      mvi d,$00
-$1a1c 72         mov m,d
-$1a1d 2b         dcx h
-$1a1e 72         mov m,d
-$1a1f 2b         dcx h
-$1a20 36 01      mvi m,$01
-$1a22 2b         dcx h
-$1a23 36 00      mvi m,$00
-$1a25 2b         dcx h
-$1a26 79         mov a,c
-$1a27 e6 f0      ani $f0
-$1a29 77         mov m,a
-$1a2a 5f         mov e,a
-$1a2b 2b         dcx h
-$1a2c 72         mov m,d
-$1a2d 2b         dcx h
-$1a2e 79         mov a,c
-$1a2f e6 0f      ani $0f
-$1a31 07         rlc
-$1a32 07         rlc
-$1a33 07         rlc
-$1a34 07         rlc
-$1a35 77         mov m,a
-$1a36 2b         dcx h
-$1a37 72         mov m,d
-$1a38 2b         dcx h
-$1a39 72         mov m,d
-$1a3a 2b         dcx h
-$1a3b 36 05      mvi m,$05
-$1a3d 2b         dcx h
-$1a3e 72         mov m,d
-$1a3f 2b         dcx h
-$1a40 36 05      mvi m,$05
-$1a42 2b         dcx h
-$1a43 0f         rrc
-$1a44 0f         rrc
-$1a45 0f         rrc
-$1a46 e6 1f      ani $1f
-$1a48 c6 a0      adi $a0
-$1a4a 77         mov m,a
-$1a4b 2b         dcx h
-$1a4c 73         mov m,e
-$1a4d 2b         dcx h
-$1a4e 77         mov m,a
-$1a4f 2b         dcx h
-$1a50 73         mov m,e
-$1a51 af         xra a
-$1a52 c9         ret
-$1a53 42         mov b,d
-$1a54 4b         mov c,e
-$1a55 eb         xchg
-$1a56 22 e8 1a   shld $1ae8
-$1a59 3a 32 01   lda $0132
-$1a5c e6 03      ani $03
-$1a5e c2 73 1a   jnz $1a73
-$1a61 c5         push b
-$1a62 21 0b 00   lxi h,$000b
-$1a65 09         dad b
-$1a66 5e         mov e,m
-$1a67 23         inx h
-$1a68 56         mov d,m
-$1a69 eb         xchg
-$1a6a 4e         mov c,m
+$19e5 22 24 1a   shld $1a24
+$19e8 5e         mov e,m
+$19e9 23         inx h
+$19ea 56         mov d,m
+$19eb 23         inx h
+$19ec d5         push d
+$19ed 5e         mov e,m
+$19ee 23         inx h
+$19ef 56         mov d,m
+$19f0 23         inx h
+$19f1 eb         xchg
+$19f2 09         dad b
+$19f3 7c         mov a,h
+$19f4 22 34 01   shld $0134
+$19f7 eb         xchg
+$19f8 5e         mov e,m
+$19f9 23         inx h
+$19fa 56         mov d,m
+$19fb eb         xchg
+$19fc c1         pop b
+$19fd 09         dad b
+$19fe 22 36 01   shld $0136
+$1a01 57         mov d,a
+$1a02 5c         mov e,h
+$1a03 01 09 0e   lxi b,$0e09
+$1a06 3e 41      mvi a,$41
+$1a08 32 2f 01   sta $012f
+$1a0b d3 10      out $10
+$1a0d cd 09 28   call $2809
+$1a10 3e 00      mvi a,$00
+$1a12 32 2f 01   sta $012f
+$1a15 d3 10      out $10
+$1a17 c2 4e 1a   jnz $1a4e
+$1a1a 2a 34 01   lhld $0134
+$1a1d 22 00 00   shld $0000
+$1a20 2a 36 01   lhld $0136
+$1a23 22 00 00   shld $0000
+$1a26 2a 1e 1a   lhld $1a1e
+$1a29 23         inx h
+$1a2a 4e         mov c,m
+$1a2b 3a 24 12   lda $1224
+$1a2e 47         mov b,a
+$1a2f c6 0e      adi $0e
+$1a31 b9         cmp c
+$1a32 d8         rc
+$1a33 3e 0e      mvi a,$0e
+$1a35 81         add c
+$1a36 b8         cmp b
+$1a37 d8         rc
+$1a38 23         inx h
+$1a39 23         inx h
+$1a3a 4e         mov c,m
+$1a3b 3a 26 12   lda $1226
+$1a3e 47         mov b,a
+$1a3f c6 0a      adi $0a
+$1a41 b9         cmp c
+$1a42 d8         rc
+$1a43 3e 09      mvi a,$09
+$1a45 81         add c
+$1a46 b8         cmp b
+$1a47 d8         rc
+$1a48 0e 01      mvi c,$01
+$1a4a cd 15 16   call $1615
+$1a4d c9         ret
+$1a4e 01 00 00   lxi b,$0000
+$1a51 cd 38 01   call $0138
+$1a54 21 19 00   lxi h,$0019
+$1a57 09         dad b
+$1a58 fe 40      cpi $40
+$1a5a da 90 1a   jc $1a90
+$1a5d fe 80      cpi $80
+$1a5f da 81 1a   jc $1a81
+$1a62 fe c0      cpi $c0
+$1a64 da 74 1a   jc $1a74
+$1a67 af         xra a
+$1a68 77         mov m,a
+$1a69 23         inx h
+$1a6a 77         mov m,a
 $1a6b 23         inx h
-$1a6c 46         mov b,m
-$1a6d 09         dad b
-$1a6e eb         xchg
-$1a6f 72         mov m,d
-$1a70 2b         dcx h
-$1a71 73         mov m,e
-$1a72 c1         pop b
-$1a73 21 15 00   lxi h,$0015
-$1a76 09         dad b
-$1a77 22 b7 1a   shld $1ab7
-$1a7a 4e         mov c,m
+$1a6c 36 00      mvi m,$00
+$1a6e 23         inx h
+$1a6f 36 ff      mvi m,$ff
+$1a71 c3 9c 1a   jmp $1a9c
+$1a74 af         xra a
+$1a75 77         mov m,a
+$1a76 23         inx h
+$1a77 77         mov m,a
+$1a78 23         inx h
+$1a79 36 00      mvi m,$00
 $1a7b 23         inx h
-$1a7c 46         mov b,m
-$1a7d 23         inx h
-$1a7e 22 bd 1a   shld $1abd
-$1a81 5e         mov e,m
-$1a82 23         inx h
-$1a83 56         mov d,m
+$1a7c 36 01      mvi m,$01
+$1a7e c3 9c 1a   jmp $1a9c
+$1a81 af         xra a
+$1a82 36 00      mvi m,$00
 $1a84 23         inx h
-$1a85 d5         push d
-$1a86 5e         mov e,m
+$1a85 36 ff      mvi m,$ff
 $1a87 23         inx h
-$1a88 56         mov d,m
+$1a88 77         mov m,a
 $1a89 23         inx h
-$1a8a eb         xchg
-$1a8b 09         dad b
-$1a8c 7c         mov a,h
-$1a8d 22 34 01   shld $0134
-$1a90 eb         xchg
-$1a91 5e         mov e,m
-$1a92 23         inx h
-$1a93 56         mov d,m
-$1a94 eb         xchg
-$1a95 c1         pop b
-$1a96 09         dad b
-$1a97 22 36 01   shld $0136
-$1a9a 57         mov d,a
-$1a9b 5c         mov e,h
-$1a9c 01 09 0e   lxi b,$0e09
-$1a9f 3e 41      mvi a,$41
-$1aa1 32 2f 01   sta $012f
-$1aa4 d3 10      out $10
-$1aa6 cd 0c 27   call $270c
-$1aa9 3e 00      mvi a,$00
-$1aab 32 2f 01   sta $012f
-$1aae d3 10      out $10
-$1ab0 c2 e7 1a   jnz $1ae7
-$1ab3 2a 34 01   lhld $0134
-$1ab6 22 00 00   shld $0000
-$1ab9 2a 36 01   lhld $0136
-$1abc 22 00 00   shld $0000
-$1abf 2a b7 1a   lhld $1ab7
-$1ac2 23         inx h
-$1ac3 4e         mov c,m
-$1ac4 3a 24 12   lda $1224
-$1ac7 47         mov b,a
-$1ac8 c6 0e      adi $0e
-$1aca b9         cmp c
-$1acb d8         rc
-$1acc 3e 0e      mvi a,$0e
-$1ace 81         add c
-$1acf b8         cmp b
-$1ad0 d8         rc
-$1ad1 23         inx h
-$1ad2 23         inx h
-$1ad3 4e         mov c,m
-$1ad4 3a 26 12   lda $1226
-$1ad7 47         mov b,a
-$1ad8 c6 0a      adi $0a
-$1ada b9         cmp c
-$1adb d8         rc
-$1adc 3e 09      mvi a,$09
-$1ade 81         add c
-$1adf b8         cmp b
-$1ae0 d8         rc
-$1ae1 0e 01      mvi c,$01
-$1ae3 cd 15 16   call $1615
-$1ae6 c9         ret
-$1ae7 01 00 00   lxi b,$0000
-$1aea cd 38 01   call $0138
-$1aed 21 19 00   lxi h,$0019
-$1af0 09         dad b
-$1af1 fe 40      cpi $40
-$1af3 da 29 1b   jc $1b29
-$1af6 fe 80      cpi $80
-$1af8 da 1a 1b   jc $1b1a
-$1afb fe c0      cpi $c0
-$1afd da 0d 1b   jc $1b0d
-$1b00 af         xra a
-$1b01 77         mov m,a
-$1b02 23         inx h
-$1b03 77         mov m,a
+$1a8a 77         mov m,a
+$1a8b 3e ff      mvi a,$ff
+$1a8d c3 9c 1a   jmp $1a9c
+$1a90 af         xra a
+$1a91 36 00      mvi m,$00
+$1a93 23         inx h
+$1a94 36 01      mvi m,$01
+$1a96 23         inx h
+$1a97 77         mov m,a
+$1a98 23         inx h
+$1a99 77         mov m,a
+$1a9a 3e 01      mvi a,$01
+$1a9c b7         ora a
+$1a9d ca aa 1a   jz $1aaa
+$1aa0 21 0b 00   lxi h,$000b
+$1aa3 09         dad b
+$1aa4 36 64      mvi m,$64
+$1aa6 23         inx h
+$1aa7 36 2e      mvi m,$2e
+$1aa9 c9         ret
+$1aaa 21 0b 00   lxi h,$000b
+$1aad 09         dad b
+$1aae 36 3c      mvi m,$3c
+$1ab0 23         inx h
+$1ab1 36 2e      mvi m,$2e
+$1ab3 c9         ret
+$1ab4 21 fc ff   lxi h,$fffc
+$1ab7 19         dad d
+$1ab8 c3 9a 20   jmp $209a
+$1abb 21 14 00   lxi h,$0014
+$1abe 19         dad d
+$1abf cd ee 08   call $08ee
+$1ac2 79         mov a,c
+$1ac3 01 f3 ff   lxi b,$fff3
+$1ac6 09         dad b
+$1ac7 46         mov b,m
+$1ac8 23         inx h
+$1ac9 e5         push h
+$1aca 66         mov h,m
+$1acb 68         mov l,b
+$1acc 4f         mov c,a
+$1acd cd d3 08   call $08d3
+$1ad0 3e f7      mvi a,$f7
+$1ad2 32 2f 01   sta $012f
+$1ad5 d3 10      out $10
+$1ad7 cd 83 81   call $8183
+$1ada af         xra a
+$1adb 32 2f 01   sta $012f
+$1ade d3 10      out $10
+$1ae0 e1         pop h
+$1ae1 23         inx h
+$1ae2 71         mov m,c
+$1ae3 23         inx h
+$1ae4 70         mov m,b
+$1ae5 01 03 00   lxi b,$0003
+$1ae8 09         dad b
+$1ae9 73         mov m,e
+$1aea 23         inx h
+$1aeb 72         mov m,d
+$1aec c9         ret
+$1aed cd 73 20   call $2073
+$1af0 36 1b      mvi m,$1b
+$1af2 2b         dcx h
+$1af3 36 50      mvi m,$50
+$1af5 11 02 00   lxi d,$0002
+$1af8 19         dad d
+$1af9 36 51      mvi m,$51
+$1afb 23         inx h
+$1afc 36 1c      mvi m,$1c
+$1afe 23         inx h
+$1aff 36 4a      mvi m,$4a
+$1b01 23         inx h
+$1b02 36 1c      mvi m,$1c
 $1b04 23         inx h
 $1b05 36 00      mvi m,$00
 $1b07 23         inx h
-$1b08 36 ff      mvi m,$ff
-$1b0a c3 35 1b   jmp $1b35
-$1b0d af         xra a
-$1b0e 77         mov m,a
-$1b0f 23         inx h
-$1b10 77         mov m,a
-$1b11 23         inx h
-$1b12 36 00      mvi m,$00
-$1b14 23         inx h
-$1b15 36 01      mvi m,$01
-$1b17 c3 35 1b   jmp $1b35
-$1b1a af         xra a
-$1b1b 36 00      mvi m,$00
-$1b1d 23         inx h
-$1b1e 36 ff      mvi m,$ff
-$1b20 23         inx h
-$1b21 77         mov m,a
-$1b22 23         inx h
-$1b23 77         mov m,a
-$1b24 3e ff      mvi a,$ff
-$1b26 c3 35 1b   jmp $1b35
-$1b29 af         xra a
-$1b2a 36 00      mvi m,$00
-$1b2c 23         inx h
-$1b2d 36 01      mvi m,$01
-$1b2f 23         inx h
-$1b30 77         mov m,a
-$1b31 23         inx h
+$1b08 36 01      mvi m,$01
+$1b0a 11 04 00   lxi d,$0004
+$1b0d 19         dad d
+$1b0e 36 cd      mvi m,$cd
+$1b10 23         inx h
+$1b11 36 2d      mvi m,$2d
+$1b13 11 10 00   lxi d,$0010
+$1b16 19         dad d
+$1b17 16 00      mvi d,$00
+$1b19 72         mov m,d
+$1b1a 2b         dcx h
+$1b1b 72         mov m,d
+$1b1c 2b         dcx h
+$1b1d 36 01      mvi m,$01
+$1b1f 2b         dcx h
+$1b20 36 00      mvi m,$00
+$1b22 2b         dcx h
+$1b23 79         mov a,c
+$1b24 e6 f0      ani $f0
+$1b26 77         mov m,a
+$1b27 5f         mov e,a
+$1b28 2b         dcx h
+$1b29 72         mov m,d
+$1b2a 2b         dcx h
+$1b2b 79         mov a,c
+$1b2c e6 0f      ani $0f
+$1b2e 07         rlc
+$1b2f 07         rlc
+$1b30 07         rlc
+$1b31 07         rlc
 $1b32 77         mov m,a
-$1b33 3e 01      mvi a,$01
-$1b35 b7         ora a
-$1b36 ca 43 1b   jz $1b43
-$1b39 21 0b 00   lxi h,$000b
-$1b3c 09         dad b
-$1b3d 36 f8      mvi m,$f8
-$1b3f 23         inx h
-$1b40 36 2c      mvi m,$2c
-$1b42 c9         ret
-$1b43 21 0b 00   lxi h,$000b
-$1b46 09         dad b
-$1b47 36 d0      mvi m,$d0
-$1b49 23         inx h
-$1b4a 36 2c      mvi m,$2c
-$1b4c c9         ret
-$1b4d 21 fc ff   lxi h,$fffc
-$1b50 19         dad d
-$1b51 c3 9d 1f   jmp $1f9d
-$1b54 21 14 00   lxi h,$0014
-$1b57 19         dad d
-$1b58 cd ee 08   call $08ee
-$1b5b 79         mov a,c
-$1b5c 01 f3 ff   lxi b,$fff3
-$1b5f 09         dad b
-$1b60 46         mov b,m
-$1b61 23         inx h
-$1b62 e5         push h
-$1b63 66         mov h,m
-$1b64 68         mov l,b
-$1b65 4f         mov c,a
-$1b66 cd d3 08   call $08d3
-$1b69 3e f7      mvi a,$f7
-$1b6b 32 2f 01   sta $012f
-$1b6e d3 10      out $10
-$1b70 cd 83 81   call $8183
-$1b73 af         xra a
-$1b74 32 2f 01   sta $012f
-$1b77 d3 10      out $10
-$1b79 e1         pop h
+$1b33 2b         dcx h
+$1b34 72         mov m,d
+$1b35 2b         dcx h
+$1b36 72         mov m,d
+$1b37 2b         dcx h
+$1b38 36 05      mvi m,$05
+$1b3a 2b         dcx h
+$1b3b 72         mov m,d
+$1b3c 2b         dcx h
+$1b3d 36 05      mvi m,$05
+$1b3f 2b         dcx h
+$1b40 0f         rrc
+$1b41 0f         rrc
+$1b42 0f         rrc
+$1b43 e6 1f      ani $1f
+$1b45 c6 a0      adi $a0
+$1b47 77         mov m,a
+$1b48 2b         dcx h
+$1b49 73         mov m,e
+$1b4a 2b         dcx h
+$1b4b 77         mov m,a
+$1b4c 2b         dcx h
+$1b4d 73         mov m,e
+$1b4e af         xra a
+$1b4f c9         ret
+$1b50 42         mov b,d
+$1b51 4b         mov c,e
+$1b52 eb         xchg
+$1b53 22 e5 1b   shld $1be5
+$1b56 3a 32 01   lda $0132
+$1b59 e6 03      ani $03
+$1b5b c2 70 1b   jnz $1b70
+$1b5e c5         push b
+$1b5f 21 0b 00   lxi h,$000b
+$1b62 09         dad b
+$1b63 5e         mov e,m
+$1b64 23         inx h
+$1b65 56         mov d,m
+$1b66 eb         xchg
+$1b67 4e         mov c,m
+$1b68 23         inx h
+$1b69 46         mov b,m
+$1b6a 09         dad b
+$1b6b eb         xchg
+$1b6c 72         mov m,d
+$1b6d 2b         dcx h
+$1b6e 73         mov m,e
+$1b6f c1         pop b
+$1b70 21 15 00   lxi h,$0015
+$1b73 09         dad b
+$1b74 22 b4 1b   shld $1bb4
+$1b77 4e         mov c,m
+$1b78 23         inx h
+$1b79 46         mov b,m
 $1b7a 23         inx h
-$1b7b 71         mov m,c
-$1b7c 23         inx h
-$1b7d 70         mov m,b
-$1b7e 01 03 00   lxi b,$0003
-$1b81 09         dad b
-$1b82 73         mov m,e
-$1b83 23         inx h
-$1b84 72         mov m,d
-$1b85 c9         ret
-$1b86 cd 76 1f   call $1f76
-$1b89 36 1b      mvi m,$1b
-$1b8b 2b         dcx h
-$1b8c 36 e9      mvi m,$e9
-$1b8e 11 02 00   lxi d,$0002
-$1b91 19         dad d
-$1b92 36 ea      mvi m,$ea
-$1b94 23         inx h
-$1b95 36 1c      mvi m,$1c
-$1b97 23         inx h
-$1b98 36 e3      mvi m,$e3
-$1b9a 23         inx h
-$1b9b 36 1c      mvi m,$1c
-$1b9d 23         inx h
-$1b9e 36 00      mvi m,$00
-$1ba0 23         inx h
-$1ba1 36 01      mvi m,$01
-$1ba3 11 04 00   lxi d,$0004
-$1ba6 19         dad d
-$1ba7 36 61      mvi m,$61
-$1ba9 23         inx h
-$1baa 36 2c      mvi m,$2c
-$1bac 11 10 00   lxi d,$0010
-$1baf 19         dad d
-$1bb0 16 00      mvi d,$00
-$1bb2 72         mov m,d
-$1bb3 2b         dcx h
-$1bb4 72         mov m,d
-$1bb5 2b         dcx h
-$1bb6 36 01      mvi m,$01
-$1bb8 2b         dcx h
-$1bb9 36 00      mvi m,$00
-$1bbb 2b         dcx h
-$1bbc 79         mov a,c
-$1bbd e6 f0      ani $f0
-$1bbf 77         mov m,a
-$1bc0 5f         mov e,a
-$1bc1 2b         dcx h
-$1bc2 72         mov m,d
-$1bc3 2b         dcx h
-$1bc4 79         mov a,c
-$1bc5 e6 0f      ani $0f
-$1bc7 07         rlc
-$1bc8 07         rlc
-$1bc9 07         rlc
-$1bca 07         rlc
-$1bcb 77         mov m,a
-$1bcc 2b         dcx h
-$1bcd 72         mov m,d
-$1bce 2b         dcx h
-$1bcf 72         mov m,d
-$1bd0 2b         dcx h
-$1bd1 36 05      mvi m,$05
-$1bd3 2b         dcx h
-$1bd4 72         mov m,d
-$1bd5 2b         dcx h
-$1bd6 36 05      mvi m,$05
-$1bd8 2b         dcx h
-$1bd9 0f         rrc
-$1bda 0f         rrc
-$1bdb 0f         rrc
-$1bdc e6 1f      ani $1f
-$1bde c6 a0      adi $a0
-$1be0 77         mov m,a
-$1be1 2b         dcx h
-$1be2 73         mov m,e
-$1be3 2b         dcx h
-$1be4 77         mov m,a
-$1be5 2b         dcx h
-$1be6 73         mov m,e
-$1be7 af         xra a
-$1be8 c9         ret
-$1be9 42         mov b,d
-$1bea 4b         mov c,e
-$1beb eb         xchg
-$1bec 22 7e 1c   shld $1c7e
-$1bef 3a 32 01   lda $0132
-$1bf2 e6 03      ani $03
-$1bf4 c2 09 1c   jnz $1c09
-$1bf7 c5         push b
-$1bf8 21 0b 00   lxi h,$000b
-$1bfb 09         dad b
-$1bfc 5e         mov e,m
-$1bfd 23         inx h
-$1bfe 56         mov d,m
-$1bff eb         xchg
-$1c00 4e         mov c,m
+$1b7b 22 ba 1b   shld $1bba
+$1b7e 5e         mov e,m
+$1b7f 23         inx h
+$1b80 56         mov d,m
+$1b81 23         inx h
+$1b82 d5         push d
+$1b83 5e         mov e,m
+$1b84 23         inx h
+$1b85 56         mov d,m
+$1b86 23         inx h
+$1b87 eb         xchg
+$1b88 09         dad b
+$1b89 7c         mov a,h
+$1b8a 22 34 01   shld $0134
+$1b8d eb         xchg
+$1b8e 5e         mov e,m
+$1b8f 23         inx h
+$1b90 56         mov d,m
+$1b91 eb         xchg
+$1b92 c1         pop b
+$1b93 09         dad b
+$1b94 22 36 01   shld $0136
+$1b97 57         mov d,a
+$1b98 5c         mov e,h
+$1b99 01 09 0e   lxi b,$0e09
+$1b9c 3e 41      mvi a,$41
+$1b9e 32 2f 01   sta $012f
+$1ba1 d3 10      out $10
+$1ba3 cd 09 28   call $2809
+$1ba6 3e 00      mvi a,$00
+$1ba8 32 2f 01   sta $012f
+$1bab d3 10      out $10
+$1bad c2 e4 1b   jnz $1be4
+$1bb0 2a 34 01   lhld $0134
+$1bb3 22 00 00   shld $0000
+$1bb6 2a 36 01   lhld $0136
+$1bb9 22 00 00   shld $0000
+$1bbc 2a b4 1b   lhld $1bb4
+$1bbf 23         inx h
+$1bc0 4e         mov c,m
+$1bc1 3a 24 12   lda $1224
+$1bc4 47         mov b,a
+$1bc5 c6 0e      adi $0e
+$1bc7 b9         cmp c
+$1bc8 d8         rc
+$1bc9 3e 0e      mvi a,$0e
+$1bcb 81         add c
+$1bcc b8         cmp b
+$1bcd d8         rc
+$1bce 23         inx h
+$1bcf 23         inx h
+$1bd0 4e         mov c,m
+$1bd1 3a 26 12   lda $1226
+$1bd4 47         mov b,a
+$1bd5 c6 0a      adi $0a
+$1bd7 b9         cmp c
+$1bd8 d8         rc
+$1bd9 3e 09      mvi a,$09
+$1bdb 81         add c
+$1bdc b8         cmp b
+$1bdd d8         rc
+$1bde 0e 01      mvi c,$01
+$1be0 cd 15 16   call $1615
+$1be3 c9         ret
+$1be4 01 00 00   lxi b,$0000
+$1be7 cd 38 01   call $0138
+$1bea 21 19 00   lxi h,$0019
+$1bed 09         dad b
+$1bee fe 40      cpi $40
+$1bf0 da 26 1c   jc $1c26
+$1bf3 fe 80      cpi $80
+$1bf5 da 17 1c   jc $1c17
+$1bf8 fe c0      cpi $c0
+$1bfa da 0a 1c   jc $1c0a
+$1bfd af         xra a
+$1bfe 77         mov m,a
+$1bff 23         inx h
+$1c00 77         mov m,a
 $1c01 23         inx h
-$1c02 46         mov b,m
-$1c03 09         dad b
-$1c04 eb         xchg
-$1c05 72         mov m,d
-$1c06 2b         dcx h
-$1c07 73         mov m,e
-$1c08 c1         pop b
-$1c09 21 15 00   lxi h,$0015
-$1c0c 09         dad b
-$1c0d 22 4d 1c   shld $1c4d
-$1c10 4e         mov c,m
+$1c02 36 00      mvi m,$00
+$1c04 23         inx h
+$1c05 36 ff      mvi m,$ff
+$1c07 c3 32 1c   jmp $1c32
+$1c0a af         xra a
+$1c0b 77         mov m,a
+$1c0c 23         inx h
+$1c0d 77         mov m,a
+$1c0e 23         inx h
+$1c0f 36 00      mvi m,$00
 $1c11 23         inx h
-$1c12 46         mov b,m
-$1c13 23         inx h
-$1c14 22 53 1c   shld $1c53
-$1c17 5e         mov e,m
-$1c18 23         inx h
-$1c19 56         mov d,m
+$1c12 36 01      mvi m,$01
+$1c14 c3 32 1c   jmp $1c32
+$1c17 af         xra a
+$1c18 36 00      mvi m,$00
 $1c1a 23         inx h
-$1c1b d5         push d
-$1c1c 5e         mov e,m
+$1c1b 36 ff      mvi m,$ff
 $1c1d 23         inx h
-$1c1e 56         mov d,m
+$1c1e 77         mov m,a
 $1c1f 23         inx h
-$1c20 eb         xchg
-$1c21 09         dad b
-$1c22 7c         mov a,h
-$1c23 22 34 01   shld $0134
-$1c26 eb         xchg
-$1c27 5e         mov e,m
-$1c28 23         inx h
-$1c29 56         mov d,m
-$1c2a eb         xchg
-$1c2b c1         pop b
-$1c2c 09         dad b
-$1c2d 22 36 01   shld $0136
-$1c30 57         mov d,a
-$1c31 5c         mov e,h
-$1c32 01 09 0e   lxi b,$0e09
-$1c35 3e 41      mvi a,$41
-$1c37 32 2f 01   sta $012f
-$1c3a d3 10      out $10
-$1c3c cd 0c 27   call $270c
-$1c3f 3e 00      mvi a,$00
-$1c41 32 2f 01   sta $012f
-$1c44 d3 10      out $10
-$1c46 c2 7d 1c   jnz $1c7d
-$1c49 2a 34 01   lhld $0134
-$1c4c 22 00 00   shld $0000
-$1c4f 2a 36 01   lhld $0136
-$1c52 22 00 00   shld $0000
-$1c55 2a 4d 1c   lhld $1c4d
-$1c58 23         inx h
-$1c59 4e         mov c,m
-$1c5a 3a 24 12   lda $1224
-$1c5d 47         mov b,a
-$1c5e c6 0e      adi $0e
-$1c60 b9         cmp c
-$1c61 d8         rc
-$1c62 3e 0e      mvi a,$0e
-$1c64 81         add c
-$1c65 b8         cmp b
-$1c66 d8         rc
-$1c67 23         inx h
-$1c68 23         inx h
-$1c69 4e         mov c,m
-$1c6a 3a 26 12   lda $1226
-$1c6d 47         mov b,a
-$1c6e c6 0a      adi $0a
-$1c70 b9         cmp c
-$1c71 d8         rc
-$1c72 3e 09      mvi a,$09
-$1c74 81         add c
-$1c75 b8         cmp b
-$1c76 d8         rc
-$1c77 0e 01      mvi c,$01
-$1c79 cd 15 16   call $1615
-$1c7c c9         ret
-$1c7d 01 00 00   lxi b,$0000
-$1c80 cd 38 01   call $0138
-$1c83 21 19 00   lxi h,$0019
-$1c86 09         dad b
-$1c87 fe 40      cpi $40
-$1c89 da bf 1c   jc $1cbf
-$1c8c fe 80      cpi $80
-$1c8e da b0 1c   jc $1cb0
-$1c91 fe c0      cpi $c0
-$1c93 da a3 1c   jc $1ca3
-$1c96 af         xra a
-$1c97 77         mov m,a
-$1c98 23         inx h
-$1c99 77         mov m,a
+$1c20 77         mov m,a
+$1c21 3e ff      mvi a,$ff
+$1c23 c3 32 1c   jmp $1c32
+$1c26 af         xra a
+$1c27 36 00      mvi m,$00
+$1c29 23         inx h
+$1c2a 36 01      mvi m,$01
+$1c2c 23         inx h
+$1c2d 77         mov m,a
+$1c2e 23         inx h
+$1c2f 77         mov m,a
+$1c30 3e 01      mvi a,$01
+$1c32 b7         ora a
+$1c33 ca 40 1c   jz $1c40
+$1c36 21 0b 00   lxi h,$000b
+$1c39 09         dad b
+$1c3a 36 f5      mvi m,$f5
+$1c3c 23         inx h
+$1c3d 36 2d      mvi m,$2d
+$1c3f c9         ret
+$1c40 21 0b 00   lxi h,$000b
+$1c43 09         dad b
+$1c44 36 cd      mvi m,$cd
+$1c46 23         inx h
+$1c47 36 2d      mvi m,$2d
+$1c49 c9         ret
+$1c4a 21 fc ff   lxi h,$fffc
+$1c4d 19         dad d
+$1c4e c3 9a 20   jmp $209a
+$1c51 21 14 00   lxi h,$0014
+$1c54 19         dad d
+$1c55 cd ee 08   call $08ee
+$1c58 79         mov a,c
+$1c59 01 f3 ff   lxi b,$fff3
+$1c5c 09         dad b
+$1c5d 46         mov b,m
+$1c5e 23         inx h
+$1c5f e5         push h
+$1c60 66         mov h,m
+$1c61 68         mov l,b
+$1c62 4f         mov c,a
+$1c63 cd d3 08   call $08d3
+$1c66 3e f7      mvi a,$f7
+$1c68 32 2f 01   sta $012f
+$1c6b d3 10      out $10
+$1c6d cd 83 81   call $8183
+$1c70 af         xra a
+$1c71 32 2f 01   sta $012f
+$1c74 d3 10      out $10
+$1c76 e1         pop h
+$1c77 23         inx h
+$1c78 71         mov m,c
+$1c79 23         inx h
+$1c7a 70         mov m,b
+$1c7b 01 03 00   lxi b,$0003
+$1c7e 09         dad b
+$1c7f 73         mov m,e
+$1c80 23         inx h
+$1c81 72         mov m,d
+$1c82 c9         ret
+$1c83 cd 73 20   call $2073
+$1c86 36 1c      mvi m,$1c
+$1c88 2b         dcx h
+$1c89 36 e6      mvi m,$e6
+$1c8b 11 02 00   lxi d,$0002
+$1c8e 19         dad d
+$1c8f 36 e7      mvi m,$e7
+$1c91 23         inx h
+$1c92 36 1d      mvi m,$1d
+$1c94 23         inx h
+$1c95 36 e0      mvi m,$e0
+$1c97 23         inx h
+$1c98 36 1d      mvi m,$1d
 $1c9a 23         inx h
 $1c9b 36 00      mvi m,$00
 $1c9d 23         inx h
-$1c9e 36 ff      mvi m,$ff
-$1ca0 c3 cb 1c   jmp $1ccb
-$1ca3 af         xra a
-$1ca4 77         mov m,a
-$1ca5 23         inx h
-$1ca6 77         mov m,a
-$1ca7 23         inx h
-$1ca8 36 00      mvi m,$00
-$1caa 23         inx h
-$1cab 36 01      mvi m,$01
-$1cad c3 cb 1c   jmp $1ccb
-$1cb0 af         xra a
-$1cb1 36 00      mvi m,$00
-$1cb3 23         inx h
-$1cb4 36 ff      mvi m,$ff
-$1cb6 23         inx h
-$1cb7 77         mov m,a
-$1cb8 23         inx h
-$1cb9 77         mov m,a
-$1cba 3e ff      mvi a,$ff
-$1cbc c3 cb 1c   jmp $1ccb
-$1cbf af         xra a
-$1cc0 36 00      mvi m,$00
-$1cc2 23         inx h
-$1cc3 36 01      mvi m,$01
-$1cc5 23         inx h
-$1cc6 77         mov m,a
-$1cc7 23         inx h
+$1c9e 36 01      mvi m,$01
+$1ca0 11 04 00   lxi d,$0004
+$1ca3 19         dad d
+$1ca4 36 5e      mvi m,$5e
+$1ca6 23         inx h
+$1ca7 36 2d      mvi m,$2d
+$1ca9 11 10 00   lxi d,$0010
+$1cac 19         dad d
+$1cad 16 00      mvi d,$00
+$1caf 72         mov m,d
+$1cb0 2b         dcx h
+$1cb1 72         mov m,d
+$1cb2 2b         dcx h
+$1cb3 36 01      mvi m,$01
+$1cb5 2b         dcx h
+$1cb6 36 00      mvi m,$00
+$1cb8 2b         dcx h
+$1cb9 79         mov a,c
+$1cba e6 f0      ani $f0
+$1cbc 77         mov m,a
+$1cbd 5f         mov e,a
+$1cbe 2b         dcx h
+$1cbf 72         mov m,d
+$1cc0 2b         dcx h
+$1cc1 79         mov a,c
+$1cc2 e6 0f      ani $0f
+$1cc4 07         rlc
+$1cc5 07         rlc
+$1cc6 07         rlc
+$1cc7 07         rlc
 $1cc8 77         mov m,a
-$1cc9 3e 01      mvi a,$01
-$1ccb b7         ora a
-$1ccc ca d9 1c   jz $1cd9
-$1ccf 21 0b 00   lxi h,$000b
-$1cd2 09         dad b
-$1cd3 36 89      mvi m,$89
-$1cd5 23         inx h
-$1cd6 36 2c      mvi m,$2c
-$1cd8 c9         ret
-$1cd9 21 0b 00   lxi h,$000b
-$1cdc 09         dad b
-$1cdd 36 61      mvi m,$61
-$1cdf 23         inx h
-$1ce0 36 2c      mvi m,$2c
-$1ce2 c9         ret
-$1ce3 21 fc ff   lxi h,$fffc
-$1ce6 19         dad d
-$1ce7 c3 9d 1f   jmp $1f9d
-$1cea 21 14 00   lxi h,$0014
-$1ced 19         dad d
-$1cee cd ee 08   call $08ee
-$1cf1 79         mov a,c
-$1cf2 01 f3 ff   lxi b,$fff3
-$1cf5 09         dad b
-$1cf6 46         mov b,m
-$1cf7 23         inx h
-$1cf8 e5         push h
-$1cf9 66         mov h,m
-$1cfa 68         mov l,b
-$1cfb 4f         mov c,a
-$1cfc cd d3 08   call $08d3
-$1cff 3e f7      mvi a,$f7
-$1d01 32 2f 01   sta $012f
-$1d04 d3 10      out $10
-$1d06 cd 83 81   call $8183
-$1d09 af         xra a
-$1d0a 32 2f 01   sta $012f
-$1d0d d3 10      out $10
-$1d0f e1         pop h
+$1cc9 2b         dcx h
+$1cca 72         mov m,d
+$1ccb 2b         dcx h
+$1ccc 72         mov m,d
+$1ccd 2b         dcx h
+$1cce 36 05      mvi m,$05
+$1cd0 2b         dcx h
+$1cd1 72         mov m,d
+$1cd2 2b         dcx h
+$1cd3 36 05      mvi m,$05
+$1cd5 2b         dcx h
+$1cd6 0f         rrc
+$1cd7 0f         rrc
+$1cd8 0f         rrc
+$1cd9 e6 1f      ani $1f
+$1cdb c6 a0      adi $a0
+$1cdd 77         mov m,a
+$1cde 2b         dcx h
+$1cdf 73         mov m,e
+$1ce0 2b         dcx h
+$1ce1 77         mov m,a
+$1ce2 2b         dcx h
+$1ce3 73         mov m,e
+$1ce4 af         xra a
+$1ce5 c9         ret
+$1ce6 42         mov b,d
+$1ce7 4b         mov c,e
+$1ce8 eb         xchg
+$1ce9 22 7b 1d   shld $1d7b
+$1cec 3a 32 01   lda $0132
+$1cef e6 03      ani $03
+$1cf1 c2 06 1d   jnz $1d06
+$1cf4 c5         push b
+$1cf5 21 0b 00   lxi h,$000b
+$1cf8 09         dad b
+$1cf9 5e         mov e,m
+$1cfa 23         inx h
+$1cfb 56         mov d,m
+$1cfc eb         xchg
+$1cfd 4e         mov c,m
+$1cfe 23         inx h
+$1cff 46         mov b,m
+$1d00 09         dad b
+$1d01 eb         xchg
+$1d02 72         mov m,d
+$1d03 2b         dcx h
+$1d04 73         mov m,e
+$1d05 c1         pop b
+$1d06 21 15 00   lxi h,$0015
+$1d09 09         dad b
+$1d0a 22 4a 1d   shld $1d4a
+$1d0d 4e         mov c,m
+$1d0e 23         inx h
+$1d0f 46         mov b,m
 $1d10 23         inx h
-$1d11 71         mov m,c
-$1d12 23         inx h
-$1d13 70         mov m,b
-$1d14 01 03 00   lxi b,$0003
-$1d17 09         dad b
-$1d18 73         mov m,e
-$1d19 23         inx h
-$1d1a 72         mov m,d
-$1d1b c9         ret
+$1d11 22 50 1d   shld $1d50
+$1d14 5e         mov e,m
+$1d15 23         inx h
+$1d16 56         mov d,m
+$1d17 23         inx h
+$1d18 d5         push d
+$1d19 5e         mov e,m
+$1d1a 23         inx h
+$1d1b 56         mov d,m
+$1d1c 23         inx h
+$1d1d eb         xchg
+$1d1e 09         dad b
+$1d1f 7c         mov a,h
+$1d20 22 34 01   shld $0134
+$1d23 eb         xchg
+$1d24 5e         mov e,m
+$1d25 23         inx h
+$1d26 56         mov d,m
+$1d27 eb         xchg
+$1d28 c1         pop b
+$1d29 09         dad b
+$1d2a 22 36 01   shld $0136
+$1d2d 57         mov d,a
+$1d2e 5c         mov e,h
+$1d2f 01 09 0e   lxi b,$0e09
+$1d32 3e 41      mvi a,$41
+$1d34 32 2f 01   sta $012f
+$1d37 d3 10      out $10
+$1d39 cd 09 28   call $2809
+$1d3c 3e 00      mvi a,$00
+$1d3e 32 2f 01   sta $012f
+$1d41 d3 10      out $10
+$1d43 c2 7a 1d   jnz $1d7a
+$1d46 2a 34 01   lhld $0134
+$1d49 22 00 00   shld $0000
+$1d4c 2a 36 01   lhld $0136
+$1d4f 22 00 00   shld $0000
+$1d52 2a 4a 1d   lhld $1d4a
+$1d55 23         inx h
+$1d56 4e         mov c,m
+$1d57 3a 24 12   lda $1224
+$1d5a 47         mov b,a
+$1d5b c6 0e      adi $0e
+$1d5d b9         cmp c
+$1d5e d8         rc
+$1d5f 3e 0e      mvi a,$0e
+$1d61 81         add c
+$1d62 b8         cmp b
+$1d63 d8         rc
+$1d64 23         inx h
+$1d65 23         inx h
+$1d66 4e         mov c,m
+$1d67 3a 26 12   lda $1226
+$1d6a 47         mov b,a
+$1d6b c6 0a      adi $0a
+$1d6d b9         cmp c
+$1d6e d8         rc
+$1d6f 3e 09      mvi a,$09
+$1d71 81         add c
+$1d72 b8         cmp b
+$1d73 d8         rc
+$1d74 0e 01      mvi c,$01
+$1d76 cd 15 16   call $1615
+$1d79 c9         ret
+$1d7a 01 00 00   lxi b,$0000
+$1d7d cd 38 01   call $0138
+$1d80 21 19 00   lxi h,$0019
+$1d83 09         dad b
+$1d84 fe 40      cpi $40
+$1d86 da bc 1d   jc $1dbc
+$1d89 fe 80      cpi $80
+$1d8b da ad 1d   jc $1dad
+$1d8e fe c0      cpi $c0
+$1d90 da a0 1d   jc $1da0
+$1d93 af         xra a
+$1d94 77         mov m,a
+$1d95 23         inx h
+$1d96 77         mov m,a
+$1d97 23         inx h
+$1d98 36 00      mvi m,$00
+$1d9a 23         inx h
+$1d9b 36 ff      mvi m,$ff
+$1d9d c3 c8 1d   jmp $1dc8
+$1da0 af         xra a
+$1da1 77         mov m,a
+$1da2 23         inx h
+$1da3 77         mov m,a
+$1da4 23         inx h
+$1da5 36 00      mvi m,$00
+$1da7 23         inx h
+$1da8 36 01      mvi m,$01
+$1daa c3 c8 1d   jmp $1dc8
+$1dad af         xra a
+$1dae 36 00      mvi m,$00
+$1db0 23         inx h
+$1db1 36 ff      mvi m,$ff
+$1db3 23         inx h
+$1db4 77         mov m,a
+$1db5 23         inx h
+$1db6 77         mov m,a
+$1db7 3e ff      mvi a,$ff
+$1db9 c3 c8 1d   jmp $1dc8
+$1dbc af         xra a
+$1dbd 36 00      mvi m,$00
+$1dbf 23         inx h
+$1dc0 36 01      mvi m,$01
+$1dc2 23         inx h
+$1dc3 77         mov m,a
+$1dc4 23         inx h
+$1dc5 77         mov m,a
+$1dc6 3e 01      mvi a,$01
+$1dc8 b7         ora a
+$1dc9 ca d6 1d   jz $1dd6
+$1dcc 21 0b 00   lxi h,$000b
+$1dcf 09         dad b
+$1dd0 36 86      mvi m,$86
+$1dd2 23         inx h
+$1dd3 36 2d      mvi m,$2d
+$1dd5 c9         ret
+$1dd6 21 0b 00   lxi h,$000b
+$1dd9 09         dad b
+$1dda 36 5e      mvi m,$5e
+$1ddc 23         inx h
+$1ddd 36 2d      mvi m,$2d
+$1ddf c9         ret
+$1de0 21 fc ff   lxi h,$fffc
+$1de3 19         dad d
+$1de4 c3 9a 20   jmp $209a
+$1de7 21 14 00   lxi h,$0014
+$1dea 19         dad d
+$1deb cd ee 08   call $08ee
+$1dee 79         mov a,c
+$1def 01 f3 ff   lxi b,$fff3
+$1df2 09         dad b
+$1df3 46         mov b,m
+$1df4 23         inx h
+$1df5 e5         push h
+$1df6 66         mov h,m
+$1df7 68         mov l,b
+$1df8 4f         mov c,a
+$1df9 cd d3 08   call $08d3
+$1dfc 3e f7      mvi a,$f7
+$1dfe 32 2f 01   sta $012f
+$1e01 d3 10      out $10
+$1e03 cd 83 81   call $8183
+$1e06 af         xra a
+$1e07 32 2f 01   sta $012f
+$1e0a d3 10      out $10
+$1e0c e1         pop h
+$1e0d 23         inx h
+$1e0e 71         mov m,c
+$1e0f 23         inx h
+$1e10 70         mov m,b
+$1e11 01 03 00   lxi b,$0003
+$1e14 09         dad b
+$1e15 73         mov m,e
+$1e16 23         inx h
+$1e17 72         mov m,d
+$1e18 c9         ret
 
-$1d1c c4 16 5a 18 f0 19 86 1b   ƒ.Z..Ü.
-$1d24 26 1d 00 00 00 00 00 00   &.......
-$1d2c 00 00 00 00 00 00 00 00   ........
-$1d34 00 00 00 00 00 00 00 00   ........
-$1d3c 00 00 00 00 00 00 00 00   ........
-$1d44 00 00 00 00 00 00 00 00   ........
-$1d4c 00 00 00 00 00 00 00 00   ........
-$1d54 00 00 00 00 00 00 00 00   ........
-$1d5c 00 00 00 00 00 00 00 00   ........
-$1d64 00 00 00 00 00 00 00 00   ........
-$1d6c 00 00 00 00 00 00 00 00   ........
-$1d74 00 00 00 00 00 00 00 00   ........
-$1d7c 00 00 00 00 00 00 00 00   ........
-$1d84 00 00 00 00 00 00 00 00   ........
-$1d8c 00 00 00 00 00 00 00 00   ........
-$1d94 00 00 00 00 00 00 00 00   ........
-$1d9c 00 00 00 00 00 00 00 00   ........
-$1da4 00 00 00 00 00 00 00 00   ........
-$1dac 00 00 00 00 00 00 00 00   ........
-$1db4 00 00 00 00 00 00 00 00   ........
-$1dbc 00 00 00 00 00 00 00 00   ........
-$1dc4 00 00 00 00 00 00 00 00   ........
-$1dcc 00 00 00 00 00 00 00 00   ........
-$1dd4 00 00 00 00 00 00 00 00   ........
-$1ddc 00 00 00 00 00 00 00 00   ........
-$1de4 00 00 00 00 00 00 00 00   ........
-$1dec 00 00 00 00 00 00 00 00   ........
-$1df4 00 00 00 00 00 00 00 00   ........
-$1dfc 00 00 00 00 00 00 00 00   ........
-$1e04 00 00 00 00 00 00 00 00   ........
-$1e0c 00 00 00 00 00 00 00 00   ........
-$1e14 00 00 00 00 00 00 00 00   ........
-$1e1c 00 00 00 00 00 00 00 00   ........
-$1e24 00 00 00 00 00 00 00 00   ........
-$1e2c 00 00 00 00 00 00 00 00   ........
-$1e34 00 00 00 00 00 00 00 00   ........
-$1e3c 00 00 00 00 00 00 00 00   ........
-$1e44 00 00 00 00 00 00 00 00   ........
-$1e4c 00 00 00 00 00 00 00 00   ........
-$1e54 00 00 00 00 00 00 00 00   ........
-$1e5c 00 00 00 00 00 00 00 00   ........
-$1e64 00 00 00 00 00 00 00 00   ........
-$1e6c 00 00 00 00 00 00 00 00   ........
-$1e74 00 00 00 00 00 00 00 00   ........
-$1e7c 00 00 00 00 00 00 00 00   ........
-$1e84 00 00 00 00 00 00 00 00   ........
-$1e8c 00 00 00 00 00 00 00 00   ........
-$1e94 00 00 00 00 00 00 00 00   ........
-$1e9c 00 00 00 00 00 00 00 00   ........
-$1ea4 00 00 00 00 00 00 00 00   ........
-$1eac 00 00 00 00 00 00 00 00   ........
-$1eb4 00 00 00 00 00 00 00 00   ........
-$1ebc 00 00 00 00 00 00 00 00   ........
-$1ec4 00 00 00 00 00 00 00 00   ........
-$1ecc 00 00 00 00 00 00 00 00   ........
-$1ed4 00 00 00 00 00 00 00 00   ........
-$1edc 00 00 00 00 00 00 00 00   ........
-$1ee4 00 00 00 00 00 00 00 00   ........
-$1eec 00 00 00 00 00 00 00 00   ........
-$1ef4 00 00 00 00 00 00 00 00   ........
-$1efc 00 00 00 00 00 00 00 00   ........
-$1f04 00 00 00 00 00 00 00 00   ........
-$1f0c 00 00 00 00 00 00 00 00   ........
-$1f14 00 00 ff                  ..ˇ
+$1e19 c4 16 57 19 ed 1a 83 1c   ƒ.W.Ì.É.
+$1e21 23 1e 00 00 00 00 00 00   #.......
+$1e29 00 00 00 00 00 00 00 00   ........
+$1e31 00 00 00 00 00 00 00 00   ........
+$1e39 00 00 00 00 00 00 00 00   ........
+$1e41 00 00 00 00 00 00 00 00   ........
+$1e49 00 00 00 00 00 00 00 00   ........
+$1e51 00 00 00 00 00 00 00 00   ........
+$1e59 00 00 00 00 00 00 00 00   ........
+$1e61 00 00 00 00 00 00 00 00   ........
+$1e69 00 00 00 00 00 00 00 00   ........
+$1e71 00 00 00 00 00 00 00 00   ........
+$1e79 00 00 00 00 00 00 00 00   ........
+$1e81 00 00 00 00 00 00 00 00   ........
+$1e89 00 00 00 00 00 00 00 00   ........
+$1e91 00 00 00 00 00 00 00 00   ........
+$1e99 00 00 00 00 00 00 00 00   ........
+$1ea1 00 00 00 00 00 00 00 00   ........
+$1ea9 00 00 00 00 00 00 00 00   ........
+$1eb1 00 00 00 00 00 00 00 00   ........
+$1eb9 00 00 00 00 00 00 00 00   ........
+$1ec1 00 00 00 00 00 00 00 00   ........
+$1ec9 00 00 00 00 00 00 00 00   ........
+$1ed1 00 00 00 00 00 00 00 00   ........
+$1ed9 00 00 00 00 00 00 00 00   ........
+$1ee1 00 00 00 00 00 00 00 00   ........
+$1ee9 00 00 00 00 00 00 00 00   ........
+$1ef1 00 00 00 00 00 00 00 00   ........
+$1ef9 00 00 00 00 00 00 00 00   ........
+$1f01 00 00 00 00 00 00 00 00   ........
+$1f09 00 00 00 00 00 00 00 00   ........
+$1f11 00 00 00 00 00 00 00 00   ........
+$1f19 00 00 00 00 00 00 00 00   ........
+$1f21 00 00 00 00 00 00 00 00   ........
+$1f29 00 00 00 00 00 00 00 00   ........
+$1f31 00 00 00 00 00 00 00 00   ........
+$1f39 00 00 00 00 00 00 00 00   ........
+$1f41 00 00 00 00 00 00 00 00   ........
+$1f49 00 00 00 00 00 00 00 00   ........
+$1f51 00 00 00 00 00 00 00 00   ........
+$1f59 00 00 00 00 00 00 00 00   ........
+$1f61 00 00 00 00 00 00 00 00   ........
+$1f69 00 00 00 00 00 00 00 00   ........
+$1f71 00 00 00 00 00 00 00 00   ........
+$1f79 00 00 00 00 00 00 00 00   ........
+$1f81 00 00 00 00 00 00 00 00   ........
+$1f89 00 00 00 00 00 00 00 00   ........
+$1f91 00 00 00 00 00 00 00 00   ........
+$1f99 00 00 00 00 00 00 00 00   ........
+$1fa1 00 00 00 00 00 00 00 00   ........
+$1fa9 00 00 00 00 00 00 00 00   ........
+$1fb1 00 00 00 00 00 00 00 00   ........
+$1fb9 00 00 00 00 00 00 00 00   ........
+$1fc1 00 00 00 00 00 00 00 00   ........
+$1fc9 00 00 00 00 00 00 00 00   ........
+$1fd1 00 00 00 00 00 00 00 00   ........
+$1fd9 00 00 00 00 00 00 00 00   ........
+$1fe1 00 00 00 00 00 00 00 00   ........
+$1fe9 00 00 00 00 00 00 00 00   ........
+$1ff1 00 00 00 00 00 00 00 00   ........
+$1ff9 00 00 00 00 00 00 00 00   ........
+$2001 00 00 00 00 00 00 00 00   ........
+$2009 00 00 00 00 00 00 00 00   ........
+$2011 00 00 ff                  ..ˇ
 
-$1f17 3e fe      mvi a,$fe
-$1f19 32 27 1d   sta $1d27
-$1f1c c9         ret
-$1f1d 32 4d 1f   sta $1f4d
-$1f20 79         mov a,c
-$1f21 32 60 1f   sta $1f60
-$1f24 7c         mov a,h
-$1f25 32 4a 1f   sta $1f4a
-$1f28 7d         mov a,l
-$1f29 32 5d 1f   sta $1f5d
-$1f2c eb         xchg
-$1f2d 7e         mov a,m
-$1f2e fe fc      cpi $fc
-$1f30 da 39 1f   jc $1f39
-$1f33 fe fe      cpi $fe
-$1f35 da 6f 1f   jc $1f6f
-$1f38 c9         ret
-$1f39 e5         push h
-$1f3a 01 05 00   lxi b,$0005
-$1f3d 09         dad b
-$1f3e 7e         mov a,m
-$1f3f fe 01      cpi $01
-$1f41 ca 6e 1f   jz $1f6e
-$1f44 01 10 00   lxi b,$0010
-$1f47 09         dad b
-$1f48 4e         mov c,m
-$1f49 3e 00      mvi a,$00
-$1f4b 47         mov b,a
-$1f4c c6 00      adi $00
-$1f4e b9         cmp c
-$1f4f da 6e 1f   jc $1f6e
-$1f52 3e 0e      mvi a,$0e
-$1f54 81         add c
-$1f55 b8         cmp b
-$1f56 da 6e 1f   jc $1f6e
-$1f59 23         inx h
-$1f5a 23         inx h
-$1f5b 4e         mov c,m
-$1f5c 3e 00      mvi a,$00
-$1f5e 47         mov b,a
-$1f5f c6 00      adi $00
-$1f61 b9         cmp c
-$1f62 da 6e 1f   jc $1f6e
-$1f65 3e 09      mvi a,$09
-$1f67 81         add c
-$1f68 b8         cmp b
-$1f69 da 6e 1f   jc $1f6e
-$1f6c e1         pop h
-$1f6d c9         ret
-$1f6e e1         pop h
-$1f6f 01 21 00   lxi b,$0021
-$1f72 09         dad b
-$1f73 c3 2d 1f   jmp $1f2d
-$1f76 21 27 1d   lxi h,$1d27
-$1f79 7e         mov a,m
-$1f7a fe fd      cpi $fd
-$1f7c c8         rz
-$1f7d da 96 1f   jc $1f96
-$1f80 fe fe      cpi $fe
-$1f82 c2 94 1f   jnz $1f94
-$1f85 eb         xchg
-$1f86 21 21 00   lxi h,$0021
-$1f89 19         dad d
-$1f8a 3e ff      mvi a,$ff
-$1f8c be         cmp m
-$1f8d eb         xchg
-$1f8e c8         rz
-$1f8f eb         xchg
-$1f90 36 fe      mvi m,$fe
-$1f92 eb         xchg
-$1f93 c9         ret
-$1f94 f1         pop psw
-$1f95 c9         ret
-$1f96 11 21 00   lxi d,$0021
-$1f99 19         dad d
-$1f9a c3 79 1f   jmp $1f79
-$1f9d 36 fc      mvi m,$fc
-$1f9f c9         ret
-$1fa0 36 fd      mvi m,$fd
-$1fa2 c9         ret
-$1fa3 22 bb 1f   shld $1fbb
-$1fa6 21 27 1d   lxi h,$1d27
-$1fa9 7e         mov a,m
-$1faa fe fc      cpi $fc
-$1fac da b5 1f   jc $1fb5
-$1faf fe fe      cpi $fe
-$1fb1 da c4 1f   jc $1fc4
-$1fb4 c9         ret
-$1fb5 e5         push h
-$1fb6 11 c3 1f   lxi d,$1fc3
-$1fb9 d5         push d
-$1fba 11 00 00   lxi d,$0000
-$1fbd 19         dad d
-$1fbe 56         mov d,m
-$1fbf 2b         dcx h
-$1fc0 5e         mov e,m
-$1fc1 eb         xchg
-$1fc2 e9         pchl
-$1fc3 e1         pop h
-$1fc4 11 21 00   lxi d,$0021
-$1fc7 19         dad d
-$1fc8 c3 a9 1f   jmp $1fa9
-$1fcb c9         ret
-$1fcc 22 de 1f   shld $1fde
-$1fcf 21 27 1d   lxi h,$1d27
-$1fd2 7e         mov a,m
-$1fd3 fe fd      cpi $fd
-$1fd5 da dc 1f   jc $1fdc
-$1fd8 ca e1 1f   jz $1fe1
-$1fdb c9         ret
-$1fdc e5         push h
-$1fdd cd 00 00   call $0000
-$1fe0 e1         pop h
-$1fe1 11 21 00   lxi d,$0021
-$1fe4 19         dad d
-$1fe5 c3 d2 1f   jmp $1fd2
-$1fe8 c9         ret
-$1fe9 21 00 00   lxi h,$0000
-$1fec c3 a3 1f   jmp $1fa3
-$1fef 21 02 00   lxi h,$0002
-$1ff2 c3 a3 1f   jmp $1fa3
-$1ff5 21 01 20   lxi h,$2001
-$1ff8 c3 cc 1f   jmp $1fcc
-$1ffb 21 55 20   lxi h,$2055
-$1ffe c3 cc 1f   jmp $1fcc
-$2001 11 07 00   lxi d,$0007
-$2004 19         dad d
-$2005 7e         mov a,m
-$2006 fe ff      cpi $ff
-$2008 c8         rz
-$2009 01 05 00   lxi b,$0005
-$200c 09         dad b
-$200d 4e         mov c,m
-$200e 23         inx h
-$200f 46         mov b,m
-$2010 23         inx h
-$2011 5e         mov e,m
-$2012 23         inx h
-$2013 56         mov d,m
-$2014 eb         xchg
-$2015 22 3c 20   shld $203c
-$2018 eb         xchg
-$2019 70         mov m,b
-$201a 2b         dcx h
-$201b 71         mov m,c
-$201c 7a         mov a,d
-$201d b8         cmp b
-$201e da 22 20   jc $2022
-$2021 50         mov d,b
-$2022 7b         mov a,e
-$2023 b9         cmp c
-$2024 da 28 20   jc $2028
-$2027 59         mov e,c
-$2028 d5         push d
-$2029 23         inx h
-$202a 23         inx h
-$202b 50         mov d,b
-$202c 59         mov e,c
-$202d 4e         mov c,m
-$202e 23         inx h
-$202f 46         mov b,m
-$2030 23         inx h
-$2031 eb         xchg
-$2032 09         dad b
-$2033 eb         xchg
-$2034 7e         mov a,m
-$2035 71         mov m,c
-$2036 4f         mov c,a
-$2037 23         inx h
-$2038 7e         mov a,m
-$2039 70         mov m,b
-$203a 47         mov b,a
-$203b 21 00 00   lxi h,$0000
-$203e 09         dad b
-$203f 7c         mov a,h
-$2040 ba         cmp d
-$2041 d2 45 20   jnc $2045
-$2044 62         mov h,d
-$2045 7d         mov a,l
-$2046 bb         cmp e
-$2047 d2 4b 20   jnc $204b
-$204a 6b         mov l,e
-$204b d1         pop d
-$204c 7c         mov a,h
-$204d 92         sub d
-$204e 47         mov b,a
-$204f 7d         mov a,l
-$2050 93         sub e
-$2051 4f         mov c,a
-$2052 c3 01 09   jmp $0901
-$2055 fe fc      cpi $fc
-$2057 ca a0 1f   jz $1fa0
-$205a 11 07 00   lxi d,$0007
-$205d 19         dad d
-$205e 7e         mov a,m
-$205f fe ff      cpi $ff
-$2061 c8         rz
-$2062 11 05 00   lxi d,$0005
-$2065 19         dad d
-$2066 5e         mov e,m
-$2067 23         inx h
-$2068 56         mov d,m
-$2069 01 03 00   lxi b,$0003
-$206c 09         dad b
-$206d 7e         mov a,m
-$206e 23         inx h
-$206f 66         mov h,m
-$2070 6f         mov l,a
-$2071 e5         push h
-$2072 d5         push d
-$2073 3e e0      mvi a,$e0
-$2075 82         add d
-$2076 57         mov d,a
-$2077 3e 41      mvi a,$41
-$2079 32 2f 01   sta $012f
-$207c d3 10      out $10
-$207e cd fa 26   call $26fa
-$2081 3e 00      mvi a,$00
-$2083 32 2f 01   sta $012f
-$2086 d3 10      out $10
-$2088 d1         pop d
-$2089 e1         pop h
-$208a c2 67 0d   jnz $0d67
-$208d 3e ff      mvi a,$ff
-$208f 32 2f 01   sta $012f
-$2092 d3 10      out $10
-$2094 cd 04 80   call $8004
-$2097 af         xra a
-$2098 32 2f 01   sta $012f
-$209b d3 10      out $10
-$209d c9         ret
+$2014 3e fe      mvi a,$fe
+$2016 32 24 1e   sta $1e24
+$2019 c9         ret
+$201a 32 4a 20   sta $204a
+$201d 79         mov a,c
+$201e 32 5d 20   sta $205d
+$2021 7c         mov a,h
+$2022 32 47 20   sta $2047
+$2025 7d         mov a,l
+$2026 32 5a 20   sta $205a
+$2029 eb         xchg
+$202a 7e         mov a,m
+$202b fe fc      cpi $fc
+$202d da 36 20   jc $2036
+$2030 fe fe      cpi $fe
+$2032 da 6c 20   jc $206c
+$2035 c9         ret
+$2036 e5         push h
+$2037 01 05 00   lxi b,$0005
+$203a 09         dad b
+$203b 7e         mov a,m
+$203c fe 01      cpi $01
+$203e ca 6b 20   jz $206b
+$2041 01 10 00   lxi b,$0010
+$2044 09         dad b
+$2045 4e         mov c,m
+$2046 3e 00      mvi a,$00
+$2048 47         mov b,a
+$2049 c6 00      adi $00
+$204b b9         cmp c
+$204c da 6b 20   jc $206b
+$204f 3e 0e      mvi a,$0e
+$2051 81         add c
+$2052 b8         cmp b
+$2053 da 6b 20   jc $206b
+$2056 23         inx h
+$2057 23         inx h
+$2058 4e         mov c,m
+$2059 3e 00      mvi a,$00
+$205b 47         mov b,a
+$205c c6 00      adi $00
+$205e b9         cmp c
+$205f da 6b 20   jc $206b
+$2062 3e 09      mvi a,$09
+$2064 81         add c
+$2065 b8         cmp b
+$2066 da 6b 20   jc $206b
+$2069 e1         pop h
+$206a c9         ret
+$206b e1         pop h
+$206c 01 21 00   lxi b,$0021
+$206f 09         dad b
+$2070 c3 2a 20   jmp $202a
+$2073 21 24 1e   lxi h,$1e24
+$2076 7e         mov a,m
+$2077 fe fd      cpi $fd
+$2079 c8         rz
+$207a da 93 20   jc $2093
+$207d fe fe      cpi $fe
+$207f c2 91 20   jnz $2091
+$2082 eb         xchg
+$2083 21 21 00   lxi h,$0021
+$2086 19         dad d
+$2087 3e ff      mvi a,$ff
+$2089 be         cmp m
+$208a eb         xchg
+$208b c8         rz
+$208c eb         xchg
+$208d 36 fe      mvi m,$fe
+$208f eb         xchg
+$2090 c9         ret
+$2091 f1         pop psw
+$2092 c9         ret
+$2093 11 21 00   lxi d,$0021
+$2096 19         dad d
+$2097 c3 76 20   jmp $2076
+$209a 36 fc      mvi m,$fc
+$209c c9         ret
+$209d 36 fd      mvi m,$fd
+$209f c9         ret
+$20a0 22 b8 20   shld $20b8
+$20a3 21 24 1e   lxi h,$1e24
+$20a6 7e         mov a,m
+$20a7 fe fc      cpi $fc
+$20a9 da b2 20   jc $20b2
+$20ac fe fe      cpi $fe
+$20ae da c1 20   jc $20c1
+$20b1 c9         ret
+$20b2 e5         push h
+$20b3 11 c0 20   lxi d,$20c0
+$20b6 d5         push d
+$20b7 11 00 00   lxi d,$0000
+$20ba 19         dad d
+$20bb 56         mov d,m
+$20bc 2b         dcx h
+$20bd 5e         mov e,m
+$20be eb         xchg
+$20bf e9         pchl
+$20c0 e1         pop h
+$20c1 11 21 00   lxi d,$0021
+$20c4 19         dad d
+$20c5 c3 a6 20   jmp $20a6
+$20c8 c9         ret
+$20c9 22 db 20   shld $20db
+$20cc 21 24 1e   lxi h,$1e24
+$20cf 7e         mov a,m
+$20d0 fe fd      cpi $fd
+$20d2 da d9 20   jc $20d9
+$20d5 ca de 20   jz $20de
+$20d8 c9         ret
+$20d9 e5         push h
+$20da cd 00 00   call $0000
+$20dd e1         pop h
+$20de 11 21 00   lxi d,$0021
+$20e1 19         dad d
+$20e2 c3 cf 20   jmp $20cf
+$20e5 c9         ret
+$20e6 21 00 00   lxi h,$0000
+$20e9 c3 a0 20   jmp $20a0
+$20ec 21 02 00   lxi h,$0002
+$20ef c3 a0 20   jmp $20a0
+$20f2 21 fe 20   lxi h,$20fe
+$20f5 c3 c9 20   jmp $20c9
+$20f8 21 52 21   lxi h,$2152
+$20fb c3 c9 20   jmp $20c9
+$20fe 11 07 00   lxi d,$0007
+$2101 19         dad d
+$2102 7e         mov a,m
+$2103 fe ff      cpi $ff
+$2105 c8         rz
+$2106 01 05 00   lxi b,$0005
+$2109 09         dad b
+$210a 4e         mov c,m
+$210b 23         inx h
+$210c 46         mov b,m
+$210d 23         inx h
+$210e 5e         mov e,m
+$210f 23         inx h
+$2110 56         mov d,m
+$2111 eb         xchg
+$2112 22 39 21   shld $2139
+$2115 eb         xchg
+$2116 70         mov m,b
+$2117 2b         dcx h
+$2118 71         mov m,c
+$2119 7a         mov a,d
+$211a b8         cmp b
+$211b da 1f 21   jc $211f
+$211e 50         mov d,b
+$211f 7b         mov a,e
+$2120 b9         cmp c
+$2121 da 25 21   jc $2125
+$2124 59         mov e,c
+$2125 d5         push d
+$2126 23         inx h
+$2127 23         inx h
+$2128 50         mov d,b
+$2129 59         mov e,c
+$212a 4e         mov c,m
+$212b 23         inx h
+$212c 46         mov b,m
+$212d 23         inx h
+$212e eb         xchg
+$212f 09         dad b
+$2130 eb         xchg
+$2131 7e         mov a,m
+$2132 71         mov m,c
+$2133 4f         mov c,a
+$2134 23         inx h
+$2135 7e         mov a,m
+$2136 70         mov m,b
+$2137 47         mov b,a
+$2138 21 00 00   lxi h,$0000
+$213b 09         dad b
+$213c 7c         mov a,h
+$213d ba         cmp d
+$213e d2 42 21   jnc $2142
+$2141 62         mov h,d
+$2142 7d         mov a,l
+$2143 bb         cmp e
+$2144 d2 48 21   jnc $2148
+$2147 6b         mov l,e
+$2148 d1         pop d
+$2149 7c         mov a,h
+$214a 92         sub d
+$214b 47         mov b,a
+$214c 7d         mov a,l
+$214d 93         sub e
+$214e 4f         mov c,a
+$214f c3 01 09   jmp $0901
+$2152 fe fc      cpi $fc
+$2154 ca 9d 20   jz $209d
+$2157 11 07 00   lxi d,$0007
+$215a 19         dad d
+$215b 7e         mov a,m
+$215c fe ff      cpi $ff
+$215e c8         rz
+$215f 11 05 00   lxi d,$0005
+$2162 19         dad d
+$2163 5e         mov e,m
+$2164 23         inx h
+$2165 56         mov d,m
+$2166 01 03 00   lxi b,$0003
+$2169 09         dad b
+$216a 7e         mov a,m
+$216b 23         inx h
+$216c 66         mov h,m
+$216d 6f         mov l,a
+$216e e5         push h
+$216f d5         push d
+$2170 3e e0      mvi a,$e0
+$2172 82         add d
+$2173 57         mov d,a
+$2174 3e 41      mvi a,$41
+$2176 32 2f 01   sta $012f
+$2179 d3 10      out $10
+$217b cd f7 27   call $27f7
+$217e 3e 00      mvi a,$00
+$2180 32 2f 01   sta $012f
+$2183 d3 10      out $10
+$2185 d1         pop d
+$2186 e1         pop h
+$2187 c2 67 0d   jnz $0d67
+$218a 3e ff      mvi a,$ff
+$218c 32 2f 01   sta $012f
+$218f d3 10      out $10
+$2191 cd 04 80   call $8004
+$2194 af         xra a
+$2195 32 2f 01   sta $012f
+$2198 d3 10      out $10
+$219a c9         ret
 
-$209e a0 20 00 00 00 00 00 00   † ......
-$20a6 00 00 00 00 00 00 00 00   ........
-$20ae 00 00 00 00 00 00 00 00   ........
-$20b6 00 00 00 00 00 00 00 00   ........
-$20be 00 00 00 00 00 00 00 00   ........
-$20c6 00 00 00 00 00 00 00 00   ........
-$20ce 00 00 00 00 00 00 00 00   ........
-$20d6 00 00 00 00 00 00 00 00   ........
-$20de 00 00 00 00 00 00 00 00   ........
-$20e6 00 00 00 00 00 00 00 00   ........
-$20ee 00 00 00 00 00 00 00 00   ........
-$20f6 00 00 00 00 00 00 00 00   ........
-$20fe 00 00 00 00 00 00 00 00   ........
-$2106 00 00 00 00 00 00 00 00   ........
-$210e 00 00 00 00 00 00 00 00   ........
-$2116 00 00 00 00 00 00 00 00   ........
-$211e 00 00 00 00 00 00 00 00   ........
-$2126 00 00 00 00 00 00 00 00   ........
-$212e 00 00 00 00 00 00 00 00   ........
-$2136 00 00 00 00 00 00 00 00   ........
-$213e 00 00 00 00 00 00 00 00   ........
-$2146 00 00 00 00 00 00 00 00   ........
-$214e 00 00 00 00 00 00 00 00   ........
-$2156 00 00 00 00 00 00 00 00   ........
-$215e 00 00 00 00 00 00 00 00   ........
-$2166 00 00 00 00 00 00 00 00   ........
-$216e 00 00 00 00 00 00 00 00   ........
-$2176 00 00 00 00 00 00 00 00   ........
-$217e 00 00 00 00 00 00 00 00   ........
-$2186 00 00 00 00 00 00 00 00   ........
-$218e 00 00 00 00 00 00 00 00   ........
-$2196 00 00 00 00 00 00 00 00   ........
-$219e 00 00 00 00 00 00 00 00   ........
-$21a6 00 00 00 00 00 00 00 00   ........
-$21ae 00 00 00 00 00 00 00 00   ........
-$21b6 00 00 00 00 00 00 00 00   ........
-$21be 00 00 00 00 00 00 00 00   ........
-$21c6 00 00 00 00 00 00 00 00   ........
-$21ce 00 00 00 00 00 00 00 00   ........
-$21d6 00 00 00 00 00 00 00 00   ........
-$21de 00 00 00 00 00 00 00 00   ........
-$21e6 00 00 00 00 00 00 00 00   ........
-$21ee 00 00 00 00 00 00 00 00   ........
-$21f6 00 00 00 00 00 00 00 00   ........
-$21fe 00 00 00 00 00 00 00 00   ........
-$2206 00 00 00 00 00 00 00 00   ........
-$220e 00 00 00 00 00 00 00 00   ........
-$2216 00 00 ff                  ..ˇ
+$219b 9d 21 00 00 00 00 00 00   ù!......
+$21a3 00 00 00 00 00 00 00 00   ........
+$21ab 00 00 00 00 00 00 00 00   ........
+$21b3 00 00 00 00 00 00 00 00   ........
+$21bb 00 00 00 00 00 00 00 00   ........
+$21c3 00 00 00 00 00 00 00 00   ........
+$21cb 00 00 00 00 00 00 00 00   ........
+$21d3 00 00 00 00 00 00 00 00   ........
+$21db 00 00 00 00 00 00 00 00   ........
+$21e3 00 00 00 00 00 00 00 00   ........
+$21eb 00 00 00 00 00 00 00 00   ........
+$21f3 00 00 00 00 00 00 00 00   ........
+$21fb 00 00 00 00 00 00 00 00   ........
+$2203 00 00 00 00 00 00 00 00   ........
+$220b 00 00 00 00 00 00 00 00   ........
+$2213 00 00 00 00 00 00 00 00   ........
+$221b 00 00 00 00 00 00 00 00   ........
+$2223 00 00 00 00 00 00 00 00   ........
+$222b 00 00 00 00 00 00 00 00   ........
+$2233 00 00 00 00 00 00 00 00   ........
+$223b 00 00 00 00 00 00 00 00   ........
+$2243 00 00 00 00 00 00 00 00   ........
+$224b 00 00 00 00 00 00 00 00   ........
+$2253 00 00 00 00 00 00 00 00   ........
+$225b 00 00 00 00 00 00 00 00   ........
+$2263 00 00 00 00 00 00 00 00   ........
+$226b 00 00 00 00 00 00 00 00   ........
+$2273 00 00 00 00 00 00 00 00   ........
+$227b 00 00 00 00 00 00 00 00   ........
+$2283 00 00 00 00 00 00 00 00   ........
+$228b 00 00 00 00 00 00 00 00   ........
+$2293 00 00 00 00 00 00 00 00   ........
+$229b 00 00 00 00 00 00 00 00   ........
+$22a3 00 00 00 00 00 00 00 00   ........
+$22ab 00 00 00 00 00 00 00 00   ........
+$22b3 00 00 00 00 00 00 00 00   ........
+$22bb 00 00 00 00 00 00 00 00   ........
+$22c3 00 00 00 00 00 00 00 00   ........
+$22cb 00 00 00 00 00 00 00 00   ........
+$22d3 00 00 00 00 00 00 00 00   ........
+$22db 00 00 00 00 00 00 00 00   ........
+$22e3 00 00 00 00 00 00 00 00   ........
+$22eb 00 00 00 00 00 00 00 00   ........
+$22f3 00 00 00 00 00 00 00 00   ........
+$22fb 00 00 00 00 00 00 00 00   ........
+$2303 00 00 00 00 00 00 00 00   ........
+$230b 00 00 00 00 00 00 00 00   ........
+$2313 00 00 ff                  ..ˇ
 
-$2219 cd 0e 24   call $240e
-$221c 2b         dcx h
-$221d 36 56      mvi m,$56
-$221f 23         inx h
-$2220 36 22      mvi m,$22
-$2222 23         inx h
-$2223 36 d2      mvi m,$d2
-$2225 23         inx h
-$2226 36 22      mvi m,$22
-$2228 23         inx h
-$2229 36 ff      mvi m,$ff
-$222b 23         inx h
-$222c 36 06      mvi m,$06
-$222e 06 00      mvi b,$00
-$2230 11 0f 00   lxi d,$000f
-$2233 19         dad d
-$2234 3a 26 12   lda $1226
-$2237 4f         mov c,a
-$2238 77         mov m,a
-$2239 2b         dcx h
-$223a 70         mov m,b
-$223b 2b         dcx h
-$223c 3a 24 12   lda $1224
-$223f 77         mov m,a
-$2240 2b         dcx h
-$2241 70         mov m,b
-$2242 2b         dcx h
-$2243 70         mov m,b
-$2244 2b         dcx h
-$2245 36 05      mvi m,$05
-$2247 11 fd ff   lxi d,$fffd
-$224a 19         dad d
-$224b 0f         rrc
-$224c 0f         rrc
-$224d 0f         rrc
-$224e e6 1f      ani $1f
-$2250 c6 a0      adi $a0
-$2252 77         mov m,a
-$2253 2b         dcx h
-$2254 71         mov m,c
-$2255 c9         ret
-$2256 21 04 00   lxi h,$0004
-$2259 19         dad d
-$225a 7e         mov a,m
-$225b fe ff      cpi $ff
-$225d ca 82 22   jz $2282
-$2260 23         inx h
-$2261 35         dcr m
-$2262 ca 7b 22   jz $227b
-$2265 23         inx h
-$2266 7e         mov a,m
-$2267 c6 32      adi $32
-$2269 77         mov m,a
-$226a d2 7a 22   jnc $227a
-$226d 23         inx h
-$226e 5e         mov e,m
-$226f 23         inx h
-$2270 56         mov d,m
-$2271 eb         xchg
-$2272 4e         mov c,m
-$2273 23         inx h
-$2274 46         mov b,m
-$2275 09         dad b
-$2276 eb         xchg
-$2277 72         mov m,d
-$2278 2b         dcx h
-$2279 73         mov m,e
-$227a c9         ret
-$227b 11 fc ff   lxi d,$fffc
-$227e 19         dad d
-$227f c3 35 24   jmp $2435
-$2282 23         inx h
-$2283 35         dcr m
-$2284 c0         rnz
-$2285 36 08      mvi m,$08
-$2287 2b         dcx h
-$2288 36 00      mvi m,$00
-$228a 23         inx h
-$228b 23         inx h
-$228c 36 00      mvi m,$00
-$228e 23         inx h
-$228f 3a 1a 12   lda $121a
-$2292 b7         ora a
-$2293 ca aa 22   jz $22aa
-$2296 36 fa      mvi m,$fa
-$2298 23         inx h
-$2299 36 2b      mvi m,$2b
-$229b 01 0a 00   lxi b,$000a
-$229e 09         dad b
-$229f 56         mov d,m
-$22a0 23         inx h
-$22a1 23         inx h
-$22a2 5e         mov e,m
-$22a3 21 00 08   lxi h,$0800
-$22a6 19         dad d
-$22a7 c3 bb 22   jmp $22bb
-$22aa 36 1e      mvi m,$1e
-$22ac 23         inx h
-$22ad 36 2c      mvi m,$2c
-$22af 01 0a 00   lxi b,$000a
-$22b2 09         dad b
-$22b3 56         mov d,m
-$22b4 23         inx h
-$22b5 23         inx h
-$22b6 5e         mov e,m
-$22b7 21 00 fd   lxi h,$fd00
-$22ba 19         dad d
-$22bb 3e 0a      mvi a,$0a
-$22bd 0e 0f      mvi c,$0f
-$22bf 11 27 1d   lxi d,$1d27
-$22c2 cd 1d 1f   call $1f1d
-$22c5 3e fd      mvi a,$fd
-$22c7 be         cmp m
-$22c8 d8         rc
-$22c9 01 03 00   lxi b,$0003
-$22cc 09         dad b
-$22cd 5e         mov e,m
-$22ce 23         inx h
-$22cf 56         mov d,m
-$22d0 eb         xchg
-$22d1 e9         pchl
-$22d2 21 02 00   lxi h,$0002
-$22d5 19         dad d
-$22d6 7e         mov a,m
-$22d7 fe ff      cpi $ff
-$22d9 c8         rz
-$22da 11 0e 00   lxi d,$000e
-$22dd 19         dad d
-$22de cd da 08   call $08da
-$22e1 79         mov a,c
-$22e2 01 f3 ff   lxi b,$fff3
-$22e5 09         dad b
-$22e6 46         mov b,m
-$22e7 23         inx h
-$22e8 e5         push h
-$22e9 66         mov h,m
-$22ea 68         mov l,b
-$22eb 4f         mov c,a
-$22ec cd d3 08   call $08d3
-$22ef 3e f3      mvi a,$f3
-$22f1 32 2f 01   sta $012f
-$22f4 d3 10      out $10
-$22f6 cd 83 81   call $8183
-$22f9 af         xra a
-$22fa 32 2f 01   sta $012f
-$22fd d3 10      out $10
-$22ff e1         pop h
-$2300 23         inx h
-$2301 71         mov m,c
-$2302 23         inx h
-$2303 70         mov m,b
-$2304 01 03 00   lxi b,$0003
-$2307 09         dad b
-$2308 73         mov m,e
-$2309 23         inx h
-$230a 72         mov m,d
-$230b c9         ret
-$230c cd 0e 24   call $240e
-$230f 2b         dcx h
-$2310 36 4a      mvi m,$4a
-$2312 23         inx h
-$2313 36 23      mvi m,$23
-$2315 23         inx h
-$2316 36 ce      mvi m,$ce
-$2318 23         inx h
-$2319 36 23      mvi m,$23
-$231b 23         inx h
-$231c 36 ff      mvi m,$ff
-$231e 23         inx h
-$231f 36 06      mvi m,$06
-$2321 06 00      mvi b,$00
-$2323 11 0f 00   lxi d,$000f
-$2326 19         dad d
-$2327 3a 26 12   lda $1226
-$232a 4f         mov c,a
-$232b 77         mov m,a
-$232c 2b         dcx h
-$232d 70         mov m,b
-$232e 2b         dcx h
-$232f 3a 24 12   lda $1224
-$2332 77         mov m,a
-$2333 2b         dcx h
-$2334 70         mov m,b
-$2335 2b         dcx h
-$2336 70         mov m,b
-$2337 2b         dcx h
-$2338 36 05      mvi m,$05
-$233a 11 fd ff   lxi d,$fffd
-$233d 19         dad d
-$233e 0f         rrc
-$233f 0f         rrc
-$2340 0f         rrc
-$2341 e6 1f      ani $1f
-$2343 c6 a0      adi $a0
-$2345 77         mov m,a
-$2346 2b         dcx h
-$2347 71         mov m,c
-$2348 af         xra a
-$2349 c9         ret
-$234a 21 04 00   lxi h,$0004
-$234d 19         dad d
-$234e 7e         mov a,m
-$234f fe ff      cpi $ff
-$2351 ca 7e 23   jz $237e
-$2354 23         inx h
-$2355 35         dcr m
-$2356 ca 77 23   jz $2377
-$2359 23         inx h
-$235a 7e         mov a,m
-$235b c6 82      adi $82
-$235d 77         mov m,a
-$235e d2 6e 23   jnc $236e
-$2361 23         inx h
-$2362 5e         mov e,m
-$2363 23         inx h
-$2364 56         mov d,m
-$2365 eb         xchg
-$2366 4e         mov c,m
-$2367 23         inx h
-$2368 46         mov b,m
-$2369 09         dad b
-$236a eb         xchg
-$236b 72         mov m,d
-$236c 2b         dcx h
-$236d 73         mov m,e
-$236e 11 0b 00   lxi d,$000b
-$2371 19         dad d
-$2372 7e         mov a,m
-$2373 c6 04      adi $04
-$2375 77         mov m,a
-$2376 c9         ret
-$2377 11 fc ff   lxi d,$fffc
-$237a 19         dad d
-$237b c3 35 24   jmp $2435
-$237e 23         inx h
-$237f 35         dcr m
-$2380 c0         rnz
-$2381 36 32      mvi m,$32
-$2383 2b         dcx h
-$2384 36 00      mvi m,$00
-$2386 23         inx h
+$2316 cd 0b 25   call $250b
+$2319 2b         dcx h
+$231a 36 53      mvi m,$53
+$231c 23         inx h
+$231d 36 23      mvi m,$23
+$231f 23         inx h
+$2320 36 cf      mvi m,$cf
+$2322 23         inx h
+$2323 36 23      mvi m,$23
+$2325 23         inx h
+$2326 36 ff      mvi m,$ff
+$2328 23         inx h
+$2329 36 06      mvi m,$06
+$232b 06 00      mvi b,$00
+$232d 11 0f 00   lxi d,$000f
+$2330 19         dad d
+$2331 3a 26 12   lda $1226
+$2334 4f         mov c,a
+$2335 77         mov m,a
+$2336 2b         dcx h
+$2337 70         mov m,b
+$2338 2b         dcx h
+$2339 3a 24 12   lda $1224
+$233c 77         mov m,a
+$233d 2b         dcx h
+$233e 70         mov m,b
+$233f 2b         dcx h
+$2340 70         mov m,b
+$2341 2b         dcx h
+$2342 36 05      mvi m,$05
+$2344 11 fd ff   lxi d,$fffd
+$2347 19         dad d
+$2348 0f         rrc
+$2349 0f         rrc
+$234a 0f         rrc
+$234b e6 1f      ani $1f
+$234d c6 a0      adi $a0
+$234f 77         mov m,a
+$2350 2b         dcx h
+$2351 71         mov m,c
+$2352 c9         ret
+$2353 21 04 00   lxi h,$0004
+$2356 19         dad d
+$2357 7e         mov a,m
+$2358 fe ff      cpi $ff
+$235a ca 7f 23   jz $237f
+$235d 23         inx h
+$235e 35         dcr m
+$235f ca 78 23   jz $2378
+$2362 23         inx h
+$2363 7e         mov a,m
+$2364 c6 32      adi $32
+$2366 77         mov m,a
+$2367 d2 77 23   jnc $2377
+$236a 23         inx h
+$236b 5e         mov e,m
+$236c 23         inx h
+$236d 56         mov d,m
+$236e eb         xchg
+$236f 4e         mov c,m
+$2370 23         inx h
+$2371 46         mov b,m
+$2372 09         dad b
+$2373 eb         xchg
+$2374 72         mov m,d
+$2375 2b         dcx h
+$2376 73         mov m,e
+$2377 c9         ret
+$2378 11 fc ff   lxi d,$fffc
+$237b 19         dad d
+$237c c3 32 25   jmp $2532
+$237f 23         inx h
+$2380 35         dcr m
+$2381 c0         rnz
+$2382 36 08      mvi m,$08
+$2384 2b         dcx h
+$2385 36 00      mvi m,$00
 $2387 23         inx h
-$2388 36 00      mvi m,$00
-$238a 23         inx h
-$238b 3a 1a 12   lda $121a
-$238e b7         ora a
-$238f ca a6 23   jz $23a6
-$2392 36 b7      mvi m,$b7
-$2394 23         inx h
-$2395 36 2b      mvi m,$2b
-$2397 01 0a 00   lxi b,$000a
-$239a 09         dad b
-$239b 56         mov d,m
-$239c 23         inx h
+$2388 23         inx h
+$2389 36 00      mvi m,$00
+$238b 23         inx h
+$238c 3a 1a 12   lda $121a
+$238f b7         ora a
+$2390 ca a7 23   jz $23a7
+$2393 36 f7      mvi m,$f7
+$2395 23         inx h
+$2396 36 2c      mvi m,$2c
+$2398 01 0a 00   lxi b,$000a
+$239b 09         dad b
+$239c 56         mov d,m
 $239d 23         inx h
-$239e 5e         mov e,m
-$239f 21 00 00   lxi h,$0000
-$23a2 19         dad d
-$23a3 c3 b7 23   jmp $23b7
-$23a6 36 b7      mvi m,$b7
-$23a8 23         inx h
-$23a9 36 2b      mvi m,$2b
-$23ab 01 0a 00   lxi b,$000a
-$23ae 09         dad b
-$23af 56         mov d,m
-$23b0 23         inx h
+$239e 23         inx h
+$239f 5e         mov e,m
+$23a0 21 00 08   lxi h,$0800
+$23a3 19         dad d
+$23a4 c3 b8 23   jmp $23b8
+$23a7 36 1b      mvi m,$1b
+$23a9 23         inx h
+$23aa 36 2d      mvi m,$2d
+$23ac 01 0a 00   lxi b,$000a
+$23af 09         dad b
+$23b0 56         mov d,m
 $23b1 23         inx h
-$23b2 5e         mov e,m
-$23b3 21 00 00   lxi h,$0000
-$23b6 19         dad d
-$23b7 3e 0b      mvi a,$0b
-$23b9 0e 0b      mvi c,$0b
-$23bb 11 27 1d   lxi d,$1d27
-$23be cd 1d 1f   call $1f1d
-$23c1 3e fd      mvi a,$fd
-$23c3 be         cmp m
-$23c4 d8         rc
-$23c5 01 03 00   lxi b,$0003
-$23c8 09         dad b
-$23c9 5e         mov e,m
-$23ca 23         inx h
-$23cb 56         mov d,m
-$23cc eb         xchg
-$23cd e9         pchl
-$23ce 21 02 00   lxi h,$0002
-$23d1 19         dad d
-$23d2 7e         mov a,m
-$23d3 fe ff      cpi $ff
-$23d5 c8         rz
-$23d6 11 0e 00   lxi d,$000e
-$23d9 19         dad d
-$23da cd ee 08   call $08ee
-$23dd 79         mov a,c
-$23de 01 f3 ff   lxi b,$fff3
-$23e1 09         dad b
-$23e2 46         mov b,m
-$23e3 23         inx h
-$23e4 e5         push h
-$23e5 66         mov h,m
-$23e6 68         mov l,b
-$23e7 4f         mov c,a
-$23e8 cd d3 08   call $08d3
-$23eb 3e f3      mvi a,$f3
-$23ed 32 2f 01   sta $012f
-$23f0 d3 10      out $10
-$23f2 cd 83 81   call $8183
-$23f5 af         xra a
-$23f6 32 2f 01   sta $012f
-$23f9 d3 10      out $10
-$23fb e1         pop h
-$23fc 23         inx h
-$23fd 71         mov m,c
-$23fe 23         inx h
-$23ff 70         mov m,b
-$2400 01 03 00   lxi b,$0003
-$2403 09         dad b
-$2404 73         mov m,e
-$2405 23         inx h
-$2406 72         mov m,d
-$2407 c9         ret
-$2408 3e fe      mvi a,$fe
-$240a 32 a1 20   sta $20a1
-$240d c9         ret
-$240e 21 a1 20   lxi h,$20a1
-$2411 7e         mov a,m
-$2412 fe fd      cpi $fd
-$2414 c8         rz
-$2415 da 2e 24   jc $242e
-$2418 fe fe      cpi $fe
-$241a c2 2c 24   jnz $242c
-$241d eb         xchg
-$241e 21 19 00   lxi h,$0019
-$2421 19         dad d
-$2422 3e ff      mvi a,$ff
-$2424 be         cmp m
-$2425 eb         xchg
-$2426 c8         rz
-$2427 eb         xchg
-$2428 36 fe      mvi m,$fe
-$242a eb         xchg
-$242b c9         ret
-$242c f1         pop psw
-$242d c9         ret
-$242e 11 19 00   lxi d,$0019
-$2431 19         dad d
-$2432 c3 11 24   jmp $2411
-$2435 36 fc      mvi m,$fc
-$2437 c9         ret
-$2438 36 fd      mvi m,$fd
-$243a c9         ret
-$243b 22 53 24   shld $2453
-$243e 21 a1 20   lxi h,$20a1
-$2441 7e         mov a,m
-$2442 fe fc      cpi $fc
-$2444 da 4d 24   jc $244d
-$2447 fe fe      cpi $fe
-$2449 da 5c 24   jc $245c
-$244c c9         ret
-$244d e5         push h
-$244e 11 5b 24   lxi d,$245b
-$2451 d5         push d
-$2452 11 00 00   lxi d,$0000
-$2455 19         dad d
-$2456 56         mov d,m
-$2457 2b         dcx h
-$2458 5e         mov e,m
-$2459 eb         xchg
-$245a e9         pchl
-$245b e1         pop h
-$245c 11 19 00   lxi d,$0019
-$245f 19         dad d
-$2460 c3 41 24   jmp $2441
-$2463 c9         ret
-$2464 22 76 24   shld $2476
-$2467 21 a1 20   lxi h,$20a1
-$246a 7e         mov a,m
-$246b fe fd      cpi $fd
-$246d da 74 24   jc $2474
-$2470 ca 79 24   jz $2479
+$23b2 23         inx h
+$23b3 5e         mov e,m
+$23b4 21 00 fd   lxi h,$fd00
+$23b7 19         dad d
+$23b8 3e 0a      mvi a,$0a
+$23ba 0e 0f      mvi c,$0f
+$23bc 11 24 1e   lxi d,$1e24
+$23bf cd 1a 20   call $201a
+$23c2 3e fd      mvi a,$fd
+$23c4 be         cmp m
+$23c5 d8         rc
+$23c6 01 03 00   lxi b,$0003
+$23c9 09         dad b
+$23ca 5e         mov e,m
+$23cb 23         inx h
+$23cc 56         mov d,m
+$23cd eb         xchg
+$23ce e9         pchl
+$23cf 21 02 00   lxi h,$0002
+$23d2 19         dad d
+$23d3 7e         mov a,m
+$23d4 fe ff      cpi $ff
+$23d6 c8         rz
+$23d7 11 0e 00   lxi d,$000e
+$23da 19         dad d
+$23db cd da 08   call $08da
+$23de 79         mov a,c
+$23df 01 f3 ff   lxi b,$fff3
+$23e2 09         dad b
+$23e3 46         mov b,m
+$23e4 23         inx h
+$23e5 e5         push h
+$23e6 66         mov h,m
+$23e7 68         mov l,b
+$23e8 4f         mov c,a
+$23e9 cd d3 08   call $08d3
+$23ec 3e f3      mvi a,$f3
+$23ee 32 2f 01   sta $012f
+$23f1 d3 10      out $10
+$23f3 cd 83 81   call $8183
+$23f6 af         xra a
+$23f7 32 2f 01   sta $012f
+$23fa d3 10      out $10
+$23fc e1         pop h
+$23fd 23         inx h
+$23fe 71         mov m,c
+$23ff 23         inx h
+$2400 70         mov m,b
+$2401 01 03 00   lxi b,$0003
+$2404 09         dad b
+$2405 73         mov m,e
+$2406 23         inx h
+$2407 72         mov m,d
+$2408 c9         ret
+$2409 cd 0b 25   call $250b
+$240c 2b         dcx h
+$240d 36 47      mvi m,$47
+$240f 23         inx h
+$2410 36 24      mvi m,$24
+$2412 23         inx h
+$2413 36 cb      mvi m,$cb
+$2415 23         inx h
+$2416 36 24      mvi m,$24
+$2418 23         inx h
+$2419 36 ff      mvi m,$ff
+$241b 23         inx h
+$241c 36 06      mvi m,$06
+$241e 06 00      mvi b,$00
+$2420 11 0f 00   lxi d,$000f
+$2423 19         dad d
+$2424 3a 26 12   lda $1226
+$2427 4f         mov c,a
+$2428 77         mov m,a
+$2429 2b         dcx h
+$242a 70         mov m,b
+$242b 2b         dcx h
+$242c 3a 24 12   lda $1224
+$242f 77         mov m,a
+$2430 2b         dcx h
+$2431 70         mov m,b
+$2432 2b         dcx h
+$2433 70         mov m,b
+$2434 2b         dcx h
+$2435 36 05      mvi m,$05
+$2437 11 fd ff   lxi d,$fffd
+$243a 19         dad d
+$243b 0f         rrc
+$243c 0f         rrc
+$243d 0f         rrc
+$243e e6 1f      ani $1f
+$2440 c6 a0      adi $a0
+$2442 77         mov m,a
+$2443 2b         dcx h
+$2444 71         mov m,c
+$2445 af         xra a
+$2446 c9         ret
+$2447 21 04 00   lxi h,$0004
+$244a 19         dad d
+$244b 7e         mov a,m
+$244c fe ff      cpi $ff
+$244e ca 7b 24   jz $247b
+$2451 23         inx h
+$2452 35         dcr m
+$2453 ca 74 24   jz $2474
+$2456 23         inx h
+$2457 7e         mov a,m
+$2458 c6 82      adi $82
+$245a 77         mov m,a
+$245b d2 6b 24   jnc $246b
+$245e 23         inx h
+$245f 5e         mov e,m
+$2460 23         inx h
+$2461 56         mov d,m
+$2462 eb         xchg
+$2463 4e         mov c,m
+$2464 23         inx h
+$2465 46         mov b,m
+$2466 09         dad b
+$2467 eb         xchg
+$2468 72         mov m,d
+$2469 2b         dcx h
+$246a 73         mov m,e
+$246b 11 0b 00   lxi d,$000b
+$246e 19         dad d
+$246f 7e         mov a,m
+$2470 c6 04      adi $04
+$2472 77         mov m,a
 $2473 c9         ret
-$2474 e5         push h
-$2475 cd 00 00   call $0000
-$2478 e1         pop h
-$2479 11 19 00   lxi d,$0019
-$247c 19         dad d
-$247d c3 6a 24   jmp $246a
-$2480 c9         ret
-$2481 21 00 00   lxi h,$0000
-$2484 c3 3b 24   jmp $243b
-$2487 21 02 00   lxi h,$0002
-$248a c3 3b 24   jmp $243b
-$248d 21 99 24   lxi h,$2499
-$2490 c3 64 24   jmp $2464
-$2493 21 ed 24   lxi h,$24ed
-$2496 c3 64 24   jmp $2464
-$2499 11 03 00   lxi d,$0003
-$249c 19         dad d
-$249d 7e         mov a,m
-$249e fe ff      cpi $ff
-$24a0 c8         rz
-$24a1 01 05 00   lxi b,$0005
-$24a4 09         dad b
-$24a5 4e         mov c,m
-$24a6 23         inx h
-$24a7 46         mov b,m
-$24a8 23         inx h
-$24a9 5e         mov e,m
-$24aa 23         inx h
-$24ab 56         mov d,m
-$24ac eb         xchg
-$24ad 22 d4 24   shld $24d4
-$24b0 eb         xchg
-$24b1 70         mov m,b
-$24b2 2b         dcx h
-$24b3 71         mov m,c
-$24b4 7a         mov a,d
-$24b5 b8         cmp b
-$24b6 da ba 24   jc $24ba
-$24b9 50         mov d,b
-$24ba 7b         mov a,e
-$24bb b9         cmp c
-$24bc da c0 24   jc $24c0
-$24bf 59         mov e,c
-$24c0 d5         push d
-$24c1 23         inx h
-$24c2 23         inx h
-$24c3 50         mov d,b
-$24c4 59         mov e,c
-$24c5 4e         mov c,m
-$24c6 23         inx h
-$24c7 46         mov b,m
-$24c8 23         inx h
+$2474 11 fc ff   lxi d,$fffc
+$2477 19         dad d
+$2478 c3 32 25   jmp $2532
+$247b 23         inx h
+$247c 35         dcr m
+$247d c0         rnz
+$247e 36 32      mvi m,$32
+$2480 2b         dcx h
+$2481 36 00      mvi m,$00
+$2483 23         inx h
+$2484 23         inx h
+$2485 36 00      mvi m,$00
+$2487 23         inx h
+$2488 3a 1a 12   lda $121a
+$248b b7         ora a
+$248c ca a3 24   jz $24a3
+$248f 36 b4      mvi m,$b4
+$2491 23         inx h
+$2492 36 2c      mvi m,$2c
+$2494 01 0a 00   lxi b,$000a
+$2497 09         dad b
+$2498 56         mov d,m
+$2499 23         inx h
+$249a 23         inx h
+$249b 5e         mov e,m
+$249c 21 00 00   lxi h,$0000
+$249f 19         dad d
+$24a0 c3 b4 24   jmp $24b4
+$24a3 36 b4      mvi m,$b4
+$24a5 23         inx h
+$24a6 36 2c      mvi m,$2c
+$24a8 01 0a 00   lxi b,$000a
+$24ab 09         dad b
+$24ac 56         mov d,m
+$24ad 23         inx h
+$24ae 23         inx h
+$24af 5e         mov e,m
+$24b0 21 00 00   lxi h,$0000
+$24b3 19         dad d
+$24b4 3e 0b      mvi a,$0b
+$24b6 0e 0b      mvi c,$0b
+$24b8 11 24 1e   lxi d,$1e24
+$24bb cd 1a 20   call $201a
+$24be 3e fd      mvi a,$fd
+$24c0 be         cmp m
+$24c1 d8         rc
+$24c2 01 03 00   lxi b,$0003
+$24c5 09         dad b
+$24c6 5e         mov e,m
+$24c7 23         inx h
+$24c8 56         mov d,m
 $24c9 eb         xchg
-$24ca 09         dad b
-$24cb eb         xchg
-$24cc 7e         mov a,m
-$24cd 71         mov m,c
-$24ce 4f         mov c,a
-$24cf 23         inx h
-$24d0 7e         mov a,m
-$24d1 70         mov m,b
-$24d2 47         mov b,a
-$24d3 21 00 00   lxi h,$0000
-$24d6 09         dad b
-$24d7 7c         mov a,h
-$24d8 ba         cmp d
-$24d9 d2 dd 24   jnc $24dd
-$24dc 62         mov h,d
-$24dd 7d         mov a,l
-$24de bb         cmp e
-$24df d2 e3 24   jnc $24e3
-$24e2 6b         mov l,e
-$24e3 d1         pop d
-$24e4 7c         mov a,h
-$24e5 92         sub d
-$24e6 47         mov b,a
-$24e7 7d         mov a,l
-$24e8 93         sub e
-$24e9 4f         mov c,a
-$24ea c3 01 09   jmp $0901
-$24ed fe fc      cpi $fc
-$24ef ca 38 24   jz $2438
-$24f2 11 03 00   lxi d,$0003
-$24f5 19         dad d
-$24f6 7e         mov a,m
-$24f7 fe ff      cpi $ff
-$24f9 c8         rz
-$24fa 11 05 00   lxi d,$0005
-$24fd 19         dad d
-$24fe 5e         mov e,m
-$24ff 23         inx h
-$2500 56         mov d,m
-$2501 01 03 00   lxi b,$0003
-$2504 09         dad b
-$2505 7e         mov a,m
-$2506 23         inx h
-$2507 66         mov h,m
-$2508 6f         mov l,a
-$2509 e5         push h
-$250a d5         push d
-$250b 3e e0      mvi a,$e0
-$250d 82         add d
-$250e 57         mov d,a
-$250f 3e 41      mvi a,$41
-$2511 32 2f 01   sta $012f
-$2514 d3 10      out $10
-$2516 cd fa 26   call $26fa
-$2519 3e 00      mvi a,$00
-$251b 32 2f 01   sta $012f
-$251e d3 10      out $10
-$2520 d1         pop d
-$2521 e1         pop h
-$2522 c2 67 0d   jnz $0d67
-$2525 3e ff      mvi a,$ff
-$2527 32 2f 01   sta $012f
-$252a d3 10      out $10
-$252c cd 04 80   call $8004
-$252f af         xra a
-$2530 32 2f 01   sta $012f
-$2533 d3 10      out $10
-$2535 c9         ret
-$2536 af         xra a
-$2537 32 3c 05   sta $053c
-$253a c9         ret
-$253b 11 00 00   lxi d,$0000
-$253e 3e 1c      mvi a,$1c
-$2540 cd 55 02   call $0255
-$2543 3e 01      mvi a,$01
-$2545 32 2c 01   sta $012c
-$2548 af         xra a
-$2549 32 3d 05   sta $053d
-$254c 11 12 00   lxi d,$0012
-$254f 3e 1c      mvi a,$1c
-$2551 cd 8e 02   call $028e
-$2554 cd 75 12   call $1275
-$2557 cd 5b 12   call $125b
-$255a c9         ret
-$255b 3a 1e 08   lda $081e
-$255e b7         ora a
-$255f c8         rz
-$2560 fe 01      cpi $01
-$2562 c2 77 25   jnz $2577
-$2565 cd 78 25   call $2578
-$2568 cd 40 26   call $2640
-$256b cd 5b 12   call $125b
-$256e af         xra a
-$256f 3a 2e 01   lda $012e
-$2572 af         xra a
-$2573 32 1e 08   sta $081e
-$2576 c9         ret
-$2577 c9         ret
-$2578 cd 17 1f   call $1f17
-$257b cd 08 24   call $2408
-$257e cd 9b 25   call $259b
-$2581 cd e3 25   call $25e3
-$2584 01 00 00   lxi b,$0000
-$2587 11 bf 00   lxi d,$00bf
-$258a 3e 5f      mvi a,$5f
-$258c 32 2f 01   sta $012f
-$258f d3 10      out $10
-$2591 cd cd 82   call $82cd
-$2594 af         xra a
-$2595 32 2f 01   sta $012f
-$2598 d3 10      out $10
-$259a c9         ret
-$259b 3a 3d 05   lda $053d
-$259e 07         rlc
-$259f 07         rlc
-$25a0 4f         mov c,a
-$25a1 06 00      mvi b,$00
-$25a3 21 16 00   lxi h,$0016
-$25a6 09         dad b
-$25a7 eb         xchg
-$25a8 3e 1c      mvi a,$1c
-$25aa cd 8e 02   call $028e
-$25ad 50         mov d,b
-$25ae 59         mov e,c
-$25af 01 2e 07   lxi b,$072e
-$25b2 21 78 1c   lxi h,$1c78
-$25b5 cd 3d 03   call $033d
-$25b8 21 2e 07   lxi h,$072e
-$25bb 01 3e 05   lxi b,$053e
-$25be 3e f0      mvi a,$f0
-$25c0 f5         push psw
-$25c1 5e         mov e,m
-$25c2 16 00      mvi d,$00
-$25c4 23         inx h
-$25c5 e5         push h
+$24ca e9         pchl
+$24cb 21 02 00   lxi h,$0002
+$24ce 19         dad d
+$24cf 7e         mov a,m
+$24d0 fe ff      cpi $ff
+$24d2 c8         rz
+$24d3 11 0e 00   lxi d,$000e
+$24d6 19         dad d
+$24d7 cd ee 08   call $08ee
+$24da 79         mov a,c
+$24db 01 f3 ff   lxi b,$fff3
+$24de 09         dad b
+$24df 46         mov b,m
+$24e0 23         inx h
+$24e1 e5         push h
+$24e2 66         mov h,m
+$24e3 68         mov l,b
+$24e4 4f         mov c,a
+$24e5 cd d3 08   call $08d3
+$24e8 3e f3      mvi a,$f3
+$24ea 32 2f 01   sta $012f
+$24ed d3 10      out $10
+$24ef cd 83 81   call $8183
+$24f2 af         xra a
+$24f3 32 2f 01   sta $012f
+$24f6 d3 10      out $10
+$24f8 e1         pop h
+$24f9 23         inx h
+$24fa 71         mov m,c
+$24fb 23         inx h
+$24fc 70         mov m,b
+$24fd 01 03 00   lxi b,$0003
+$2500 09         dad b
+$2501 73         mov m,e
+$2502 23         inx h
+$2503 72         mov m,d
+$2504 c9         ret
+$2505 3e fe      mvi a,$fe
+$2507 32 9e 21   sta $219e
+$250a c9         ret
+$250b 21 9e 21   lxi h,$219e
+$250e 7e         mov a,m
+$250f fe fd      cpi $fd
+$2511 c8         rz
+$2512 da 2b 25   jc $252b
+$2515 fe fe      cpi $fe
+$2517 c2 29 25   jnz $2529
+$251a eb         xchg
+$251b 21 19 00   lxi h,$0019
+$251e 19         dad d
+$251f 3e ff      mvi a,$ff
+$2521 be         cmp m
+$2522 eb         xchg
+$2523 c8         rz
+$2524 eb         xchg
+$2525 36 fe      mvi m,$fe
+$2527 eb         xchg
+$2528 c9         ret
+$2529 f1         pop psw
+$252a c9         ret
+$252b 11 19 00   lxi d,$0019
+$252e 19         dad d
+$252f c3 0e 25   jmp $250e
+$2532 36 fc      mvi m,$fc
+$2534 c9         ret
+$2535 36 fd      mvi m,$fd
+$2537 c9         ret
+$2538 22 50 25   shld $2550
+$253b 21 9e 21   lxi h,$219e
+$253e 7e         mov a,m
+$253f fe fc      cpi $fc
+$2541 da 4a 25   jc $254a
+$2544 fe fe      cpi $fe
+$2546 da 59 25   jc $2559
+$2549 c9         ret
+$254a e5         push h
+$254b 11 58 25   lxi d,$2558
+$254e d5         push d
+$254f 11 00 00   lxi d,$0000
+$2552 19         dad d
+$2553 56         mov d,m
+$2554 2b         dcx h
+$2555 5e         mov e,m
+$2556 eb         xchg
+$2557 e9         pchl
+$2558 e1         pop h
+$2559 11 19 00   lxi d,$0019
+$255c 19         dad d
+$255d c3 3e 25   jmp $253e
+$2560 c9         ret
+$2561 22 73 25   shld $2573
+$2564 21 9e 21   lxi h,$219e
+$2567 7e         mov a,m
+$2568 fe fd      cpi $fd
+$256a da 71 25   jc $2571
+$256d ca 76 25   jz $2576
+$2570 c9         ret
+$2571 e5         push h
+$2572 cd 00 00   call $0000
+$2575 e1         pop h
+$2576 11 19 00   lxi d,$0019
+$2579 19         dad d
+$257a c3 67 25   jmp $2567
+$257d c9         ret
+$257e 21 00 00   lxi h,$0000
+$2581 c3 38 25   jmp $2538
+$2584 21 02 00   lxi h,$0002
+$2587 c3 38 25   jmp $2538
+$258a 21 96 25   lxi h,$2596
+$258d c3 61 25   jmp $2561
+$2590 21 ea 25   lxi h,$25ea
+$2593 c3 61 25   jmp $2561
+$2596 11 03 00   lxi d,$0003
+$2599 19         dad d
+$259a 7e         mov a,m
+$259b fe ff      cpi $ff
+$259d c8         rz
+$259e 01 05 00   lxi b,$0005
+$25a1 09         dad b
+$25a2 4e         mov c,m
+$25a3 23         inx h
+$25a4 46         mov b,m
+$25a5 23         inx h
+$25a6 5e         mov e,m
+$25a7 23         inx h
+$25a8 56         mov d,m
+$25a9 eb         xchg
+$25aa 22 d1 25   shld $25d1
+$25ad eb         xchg
+$25ae 70         mov m,b
+$25af 2b         dcx h
+$25b0 71         mov m,c
+$25b1 7a         mov a,d
+$25b2 b8         cmp b
+$25b3 da b7 25   jc $25b7
+$25b6 50         mov d,b
+$25b7 7b         mov a,e
+$25b8 b9         cmp c
+$25b9 da bd 25   jc $25bd
+$25bc 59         mov e,c
+$25bd d5         push d
+$25be 23         inx h
+$25bf 23         inx h
+$25c0 50         mov d,b
+$25c1 59         mov e,c
+$25c2 4e         mov c,m
+$25c3 23         inx h
+$25c4 46         mov b,m
+$25c5 23         inx h
 $25c6 eb         xchg
-$25c7 29         dad h
-$25c8 29         dad h
-$25c9 11 22 00   lxi d,$0022
-$25cc 19         dad d
-$25cd c5         push b
-$25ce eb         xchg
-$25cf 3e 1c      mvi a,$1c
-$25d1 cd 8e 02   call $028e
-$25d4 79         mov a,c
-$25d5 58         mov e,b
-$25d6 c1         pop b
-$25d7 02         stax b
-$25d8 03         inx b
-$25d9 7b         mov a,e
-$25da 02         stax b
-$25db 03         inx b
-$25dc e1         pop h
-$25dd f1         pop psw
-$25de 3d         dcr a
-$25df c2 c0 25   jnz $25c0
-$25e2 c9         ret
-$25e3 3a 3d 05   lda $053d
-$25e6 07         rlc
-$25e7 07         rlc
-$25e8 4f         mov c,a
-$25e9 06 00      mvi b,$00
-$25eb 21 16 00   lxi h,$0016
-$25ee 09         dad b
-$25ef eb         xchg
-$25f0 3e 1c      mvi a,$1c
-$25f2 cd 8e 02   call $028e
-$25f5 21 f2 00   lxi h,$00f2
-$25f8 09         dad b
-$25f9 eb         xchg
-$25fa 01 2e 07   lxi b,$072e
-$25fd 21 78 1c   lxi h,$1c78
-$2600 cd 3d 03   call $033d
-$2603 21 2e 07   lxi h,$072e
-$2606 0e 00      mvi c,$00
-$2608 46         mov b,m
-$2609 c5         push b
-$260a 7e         mov a,m
-$260b e5         push h
-$260c e6 07      ani $07
-$260e 07         rlc
-$260f 5f         mov e,a
-$2610 16 00      mvi d,$00
-$2612 7e         mov a,m
-$2613 0f         rrc
-$2614 0f         rrc
-$2615 0f         rrc
-$2616 e6 1f      ani $1f
-$2618 21 1e 07   lxi h,$071e
-$261b 19         dad d
-$261c 5e         mov e,m
-$261d 23         inx h
-$261e 56         mov d,m
-$261f eb         xchg
-$2620 11 25 26   lxi d,$2625
-$2623 d5         push d
-$2624 e9         pchl
-$2625 e1         pop h
-$2626 c1         pop b
-$2627 77         mov m,a
-$2628 23         inx h
-$2629 0c         inr c
-$262a 3e f0      mvi a,$f0
-$262c b9         cmp c
-$262d c2 08 26   jnz $2608
-$2630 c9         ret
-$2631 78         mov a,b
+$25c7 09         dad b
+$25c8 eb         xchg
+$25c9 7e         mov a,m
+$25ca 71         mov m,c
+$25cb 4f         mov c,a
+$25cc 23         inx h
+$25cd 7e         mov a,m
+$25ce 70         mov m,b
+$25cf 47         mov b,a
+$25d0 21 00 00   lxi h,$0000
+$25d3 09         dad b
+$25d4 7c         mov a,h
+$25d5 ba         cmp d
+$25d6 d2 da 25   jnc $25da
+$25d9 62         mov h,d
+$25da 7d         mov a,l
+$25db bb         cmp e
+$25dc d2 e0 25   jnc $25e0
+$25df 6b         mov l,e
+$25e0 d1         pop d
+$25e1 7c         mov a,h
+$25e2 92         sub d
+$25e3 47         mov b,a
+$25e4 7d         mov a,l
+$25e5 93         sub e
+$25e6 4f         mov c,a
+$25e7 c3 01 09   jmp $0901
+$25ea fe fc      cpi $fc
+$25ec ca 35 25   jz $2535
+$25ef 11 03 00   lxi d,$0003
+$25f2 19         dad d
+$25f3 7e         mov a,m
+$25f4 fe ff      cpi $ff
+$25f6 c8         rz
+$25f7 11 05 00   lxi d,$0005
+$25fa 19         dad d
+$25fb 5e         mov e,m
+$25fc 23         inx h
+$25fd 56         mov d,m
+$25fe 01 03 00   lxi b,$0003
+$2601 09         dad b
+$2602 7e         mov a,m
+$2603 23         inx h
+$2604 66         mov h,m
+$2605 6f         mov l,a
+$2606 e5         push h
+$2607 d5         push d
+$2608 3e e0      mvi a,$e0
+$260a 82         add d
+$260b 57         mov d,a
+$260c 3e 41      mvi a,$41
+$260e 32 2f 01   sta $012f
+$2611 d3 10      out $10
+$2613 cd f7 27   call $27f7
+$2616 3e 00      mvi a,$00
+$2618 32 2f 01   sta $012f
+$261b d3 10      out $10
+$261d d1         pop d
+$261e e1         pop h
+$261f c2 67 0d   jnz $0d67
+$2622 3e ff      mvi a,$ff
+$2624 32 2f 01   sta $012f
+$2627 d3 10      out $10
+$2629 cd 04 80   call $8004
+$262c af         xra a
+$262d 32 2f 01   sta $012f
+$2630 d3 10      out $10
 $2632 c9         ret
-$2633 21 1c 1d   lxi h,$1d1c
-$2636 07         rlc
-$2637 5f         mov e,a
-$2638 16 00      mvi d,$00
-$263a 19         dad d
-$263b 5e         mov e,m
-$263c 23         inx h
-$263d 56         mov d,m
-$263e eb         xchg
-$263f e9         pchl
-$2640 3e 1c      mvi a,$1c
-$2642 32 2f 01   sta $012f
-$2645 d3 10      out $10
-$2647 cd d6 26   call $26d6
-$264a af         xra a
-$264b 32 2f 01   sta $012f
-$264e d3 10      out $10
-$2650 11 00 00   lxi d,$0000
-$2653 21 00 00   lxi h,$0000
-$2656 01 00 03   lxi b,$0300
-$2659 3e 1c      mvi a,$1c
-$265b cd c9 02   call $02c9
-$265e 11 00 00   lxi d,$0000
-$2661 21 00 00   lxi h,$0000
-$2664 01 00 03   lxi b,$0300
-$2667 3e 14      mvi a,$14
-$2669 cd c9 02   call $02c9
-$266c 3e e1      mvi a,$e1
-$266e 32 2f 01   sta $012f
-$2671 d3 10      out $10
-$2673 cd 7d 26   call $267d
-$2676 af         xra a
-$2677 32 2f 01   sta $012f
-$267a d3 10      out $10
-$267c c9         ret
-$267d 1e 00      mvi e,$00
-$267f 21 2e 07   lxi h,$072e
-$2682 16 80      mvi d,$80
-$2684 7e         mov a,m
-$2685 23         inx h
-$2686 12         stax d
-$2687 1c         inr e
-$2688 12         stax d
-$2689 1c         inr e
-$268a 12         stax d
-$268b 1c         inr e
-$268c 12         stax d
-$268d 1c         inr e
-$268e 12         stax d
-$268f 1c         inr e
-$2690 12         stax d
-$2691 1c         inr e
-$2692 12         stax d
-$2693 1c         inr e
-$2694 12         stax d
-$2695 1c         inr e
-$2696 12         stax d
-$2697 1c         inr e
-$2698 12         stax d
-$2699 1c         inr e
-$269a 12         stax d
-$269b 1c         inr e
-$269c 12         stax d
-$269d 1c         inr e
-$269e 12         stax d
-$269f 1c         inr e
-$26a0 12         stax d
-$26a1 1c         inr e
-$26a2 12         stax d
-$26a3 1c         inr e
-$26a4 12         stax d
-$26a5 14         inr d
-$26a6 12         stax d
-$26a7 1d         dcr e
-$26a8 12         stax d
-$26a9 1d         dcr e
-$26aa 12         stax d
-$26ab 1d         dcr e
-$26ac 12         stax d
-$26ad 1d         dcr e
-$26ae 12         stax d
-$26af 1d         dcr e
-$26b0 12         stax d
-$26b1 1d         dcr e
-$26b2 12         stax d
-$26b3 1d         dcr e
-$26b4 12         stax d
-$26b5 1d         dcr e
-$26b6 12         stax d
-$26b7 1d         dcr e
-$26b8 12         stax d
-$26b9 1d         dcr e
-$26ba 12         stax d
-$26bb 1d         dcr e
-$26bc 12         stax d
-$26bd 1d         dcr e
-$26be 12         stax d
-$26bf 1d         dcr e
-$26c0 12         stax d
-$26c1 1d         dcr e
-$26c2 12         stax d
-$26c3 1d         dcr e
-$26c4 12         stax d
-$26c5 14         inr d
-$26c6 3e a0      mvi a,$a0
-$26c8 ba         cmp d
-$26c9 c2 84 26   jnz $2684
-$26cc 3e 10      mvi a,$10
-$26ce 83         add e
-$26cf 5f         mov e,a
-$26d0 fe f0      cpi $f0
-$26d2 da 82 26   jc $2682
-$26d5 c9         ret
-$26d6 1e 00      mvi e,$00
-$26d8 21 3e 05   lxi h,$053e
-$26db 16 80      mvi d,$80
-$26dd 4e         mov c,m
-$26de 23         inx h
-$26df 46         mov b,m
-$26e0 23         inx h
-$26e1 d5         push d
-$26e2 e5         push h
-$26e3 cd 1f 08   call $081f
-$26e6 e1         pop h
-$26e7 d1         pop d
-$26e8 14         inr d
-$26e9 14         inr d
-$26ea 3e a0      mvi a,$a0
-$26ec ba         cmp d
-$26ed c2 dd 26   jnz $26dd
-$26f0 3e 10      mvi a,$10
-$26f2 83         add e
-$26f3 5f         mov e,a
-$26f4 fe f0      cpi $f0
-$26f6 da db 26   jc $26db
-$26f9 c9         ret
-$26fa eb         xchg
-$26fb af         xra a
-$26fc be         cmp m
-$26fd c0         rnz
-$26fe eb         xchg
-$26ff 19         dad d
-$2700 2d         dcr l
-$2701 be         cmp m
-$2702 c0         rnz
-$2703 44         mov b,h
-$2704 62         mov h,d
-$2705 be         cmp m
-$2706 c0         rnz
-$2707 eb         xchg
-$2708 60         mov h,b
-$2709 be         cmp m
-$270a c0         rnz
-$270b c9         ret
-$270c 7a         mov a,d
-$270d 80         add b
-$270e e6 f0      ani $f0
+$2633 af         xra a
+$2634 32 3c 05   sta $053c
+$2637 c9         ret
+$2638 11 00 00   lxi d,$0000
+$263b 3e 1c      mvi a,$1c
+$263d cd 55 02   call $0255
+$2640 3e 01      mvi a,$01
+$2642 32 2c 01   sta $012c
+$2645 af         xra a
+$2646 32 3d 05   sta $053d
+$2649 11 12 00   lxi d,$0012
+$264c 3e 1c      mvi a,$1c
+$264e cd 8e 02   call $028e
+$2651 cd 75 12   call $1275
+$2654 cd 5b 12   call $125b
+$2657 c9         ret
+$2658 3a 1e 08   lda $081e
+$265b b7         ora a
+$265c c8         rz
+$265d fe 01      cpi $01
+$265f c2 74 26   jnz $2674
+$2662 cd 75 26   call $2675
+$2665 cd 3d 27   call $273d
+$2668 cd 5b 12   call $125b
+$266b af         xra a
+$266c 3a 2e 01   lda $012e
+$266f af         xra a
+$2670 32 1e 08   sta $081e
+$2673 c9         ret
+$2674 c9         ret
+$2675 cd 14 20   call $2014
+$2678 cd 05 25   call $2505
+$267b cd 98 26   call $2698
+$267e cd e0 26   call $26e0
+$2681 01 00 00   lxi b,$0000
+$2684 11 bf 00   lxi d,$00bf
+$2687 3e 5f      mvi a,$5f
+$2689 32 2f 01   sta $012f
+$268c d3 10      out $10
+$268e cd cd 82   call $82cd
+$2691 af         xra a
+$2692 32 2f 01   sta $012f
+$2695 d3 10      out $10
+$2697 c9         ret
+$2698 3a 3d 05   lda $053d
+$269b 07         rlc
+$269c 07         rlc
+$269d 4f         mov c,a
+$269e 06 00      mvi b,$00
+$26a0 21 16 00   lxi h,$0016
+$26a3 09         dad b
+$26a4 eb         xchg
+$26a5 3e 1c      mvi a,$1c
+$26a7 cd 8e 02   call $028e
+$26aa 50         mov d,b
+$26ab 59         mov e,c
+$26ac 01 2e 07   lxi b,$072e
+$26af 21 78 1c   lxi h,$1c78
+$26b2 cd 3d 03   call $033d
+$26b5 21 2e 07   lxi h,$072e
+$26b8 01 3e 05   lxi b,$053e
+$26bb 3e f0      mvi a,$f0
+$26bd f5         push psw
+$26be 5e         mov e,m
+$26bf 16 00      mvi d,$00
+$26c1 23         inx h
+$26c2 e5         push h
+$26c3 eb         xchg
+$26c4 29         dad h
+$26c5 29         dad h
+$26c6 11 22 00   lxi d,$0022
+$26c9 19         dad d
+$26ca c5         push b
+$26cb eb         xchg
+$26cc 3e 1c      mvi a,$1c
+$26ce cd 8e 02   call $028e
+$26d1 79         mov a,c
+$26d2 58         mov e,b
+$26d3 c1         pop b
+$26d4 02         stax b
+$26d5 03         inx b
+$26d6 7b         mov a,e
+$26d7 02         stax b
+$26d8 03         inx b
+$26d9 e1         pop h
+$26da f1         pop psw
+$26db 3d         dcr a
+$26dc c2 bd 26   jnz $26bd
+$26df c9         ret
+$26e0 3a 3d 05   lda $053d
+$26e3 07         rlc
+$26e4 07         rlc
+$26e5 4f         mov c,a
+$26e6 06 00      mvi b,$00
+$26e8 21 16 00   lxi h,$0016
+$26eb 09         dad b
+$26ec eb         xchg
+$26ed 3e 1c      mvi a,$1c
+$26ef cd 8e 02   call $028e
+$26f2 21 f2 00   lxi h,$00f2
+$26f5 09         dad b
+$26f6 eb         xchg
+$26f7 01 2e 07   lxi b,$072e
+$26fa 21 78 1c   lxi h,$1c78
+$26fd cd 3d 03   call $033d
+$2700 21 2e 07   lxi h,$072e
+$2703 0e 00      mvi c,$00
+$2705 46         mov b,m
+$2706 c5         push b
+$2707 7e         mov a,m
+$2708 e5         push h
+$2709 e6 07      ani $07
+$270b 07         rlc
+$270c 5f         mov e,a
+$270d 16 00      mvi d,$00
+$270f 7e         mov a,m
 $2710 0f         rrc
 $2711 0f         rrc
 $2712 0f         rrc
-$2713 c6 80      adi $80
-$2715 67         mov h,a
-$2716 7b         mov a,e
-$2717 81         add c
-$2718 6f         mov l,a
-$2719 eb         xchg
-$271a 3e f0      mvi a,$f0
-$271c a4         ana h
-$271d 0f         rrc
-$271e 0f         rrc
-$271f 0f         rrc
-$2720 c6 80      adi $80
-$2722 67         mov h,a
-$2723 7e         mov a,m
-$2724 44         mov b,h
-$2725 62         mov h,d
-$2726 b6         ora m
-$2727 6b         mov l,e
-$2728 b6         ora m
-$2729 60         mov h,b
-$272a b6         ora m
-$272b e6 07      ani $07
+$2713 e6 1f      ani $1f
+$2715 21 1e 07   lxi h,$071e
+$2718 19         dad d
+$2719 5e         mov e,m
+$271a 23         inx h
+$271b 56         mov d,m
+$271c eb         xchg
+$271d 11 22 27   lxi d,$2722
+$2720 d5         push d
+$2721 e9         pchl
+$2722 e1         pop h
+$2723 c1         pop b
+$2724 77         mov m,a
+$2725 23         inx h
+$2726 0c         inr c
+$2727 3e f0      mvi a,$f0
+$2729 b9         cmp c
+$272a c2 05 27   jnz $2705
 $272d c9         ret
+$272e 78         mov a,b
+$272f c9         ret
+$2730 21 19 1e   lxi h,$1e19
+$2733 07         rlc
+$2734 5f         mov e,a
+$2735 16 00      mvi d,$00
+$2737 19         dad d
+$2738 5e         mov e,m
+$2739 23         inx h
+$273a 56         mov d,m
+$273b eb         xchg
+$273c e9         pchl
+$273d 3e 1c      mvi a,$1c
+$273f 32 2f 01   sta $012f
+$2742 d3 10      out $10
+$2744 cd d3 27   call $27d3
+$2747 af         xra a
+$2748 32 2f 01   sta $012f
+$274b d3 10      out $10
+$274d 11 00 00   lxi d,$0000
+$2750 21 00 00   lxi h,$0000
+$2753 01 00 03   lxi b,$0300
+$2756 3e 1c      mvi a,$1c
+$2758 cd c9 02   call $02c9
+$275b 11 00 00   lxi d,$0000
+$275e 21 00 00   lxi h,$0000
+$2761 01 00 03   lxi b,$0300
+$2764 3e 14      mvi a,$14
+$2766 cd c9 02   call $02c9
+$2769 3e e1      mvi a,$e1
+$276b 32 2f 01   sta $012f
+$276e d3 10      out $10
+$2770 cd 7a 27   call $277a
+$2773 af         xra a
+$2774 32 2f 01   sta $012f
+$2777 d3 10      out $10
+$2779 c9         ret
+$277a 1e 00      mvi e,$00
+$277c 21 2e 07   lxi h,$072e
+$277f 16 80      mvi d,$80
+$2781 7e         mov a,m
+$2782 23         inx h
+$2783 12         stax d
+$2784 1c         inr e
+$2785 12         stax d
+$2786 1c         inr e
+$2787 12         stax d
+$2788 1c         inr e
+$2789 12         stax d
+$278a 1c         inr e
+$278b 12         stax d
+$278c 1c         inr e
+$278d 12         stax d
+$278e 1c         inr e
+$278f 12         stax d
+$2790 1c         inr e
+$2791 12         stax d
+$2792 1c         inr e
+$2793 12         stax d
+$2794 1c         inr e
+$2795 12         stax d
+$2796 1c         inr e
+$2797 12         stax d
+$2798 1c         inr e
+$2799 12         stax d
+$279a 1c         inr e
+$279b 12         stax d
+$279c 1c         inr e
+$279d 12         stax d
+$279e 1c         inr e
+$279f 12         stax d
+$27a0 1c         inr e
+$27a1 12         stax d
+$27a2 14         inr d
+$27a3 12         stax d
+$27a4 1d         dcr e
+$27a5 12         stax d
+$27a6 1d         dcr e
+$27a7 12         stax d
+$27a8 1d         dcr e
+$27a9 12         stax d
+$27aa 1d         dcr e
+$27ab 12         stax d
+$27ac 1d         dcr e
+$27ad 12         stax d
+$27ae 1d         dcr e
+$27af 12         stax d
+$27b0 1d         dcr e
+$27b1 12         stax d
+$27b2 1d         dcr e
+$27b3 12         stax d
+$27b4 1d         dcr e
+$27b5 12         stax d
+$27b6 1d         dcr e
+$27b7 12         stax d
+$27b8 1d         dcr e
+$27b9 12         stax d
+$27ba 1d         dcr e
+$27bb 12         stax d
+$27bc 1d         dcr e
+$27bd 12         stax d
+$27be 1d         dcr e
+$27bf 12         stax d
+$27c0 1d         dcr e
+$27c1 12         stax d
+$27c2 14         inr d
+$27c3 3e a0      mvi a,$a0
+$27c5 ba         cmp d
+$27c6 c2 81 27   jnz $2781
+$27c9 3e 10      mvi a,$10
+$27cb 83         add e
+$27cc 5f         mov e,a
+$27cd fe f0      cpi $f0
+$27cf da 7f 27   jc $277f
+$27d2 c9         ret
+$27d3 1e 00      mvi e,$00
+$27d5 21 3e 05   lxi h,$053e
+$27d8 16 80      mvi d,$80
+$27da 4e         mov c,m
+$27db 23         inx h
+$27dc 46         mov b,m
+$27dd 23         inx h
+$27de d5         push d
+$27df e5         push h
+$27e0 cd 1f 08   call $081f
+$27e3 e1         pop h
+$27e4 d1         pop d
+$27e5 14         inr d
+$27e6 14         inr d
+$27e7 3e a0      mvi a,$a0
+$27e9 ba         cmp d
+$27ea c2 da 27   jnz $27da
+$27ed 3e 10      mvi a,$10
+$27ef 83         add e
+$27f0 5f         mov e,a
+$27f1 fe f0      cpi $f0
+$27f3 da d8 27   jc $27d8
+$27f6 c9         ret
+$27f7 eb         xchg
+$27f8 af         xra a
+$27f9 be         cmp m
+$27fa c0         rnz
+$27fb eb         xchg
+$27fc 19         dad d
+$27fd 2d         dcr l
+$27fe be         cmp m
+$27ff c0         rnz
+$2800 44         mov b,h
+$2801 62         mov h,d
+$2802 be         cmp m
+$2803 c0         rnz
+$2804 eb         xchg
+$2805 60         mov h,b
+$2806 be         cmp m
+$2807 c0         rnz
+$2808 c9         ret
+$2809 7a         mov a,d
+$280a 80         add b
+$280b e6 f0      ani $f0
+$280d 0f         rrc
+$280e 0f         rrc
+$280f 0f         rrc
+$2810 c6 80      adi $80
+$2812 67         mov h,a
+$2813 7b         mov a,e
+$2814 81         add c
+$2815 6f         mov l,a
+$2816 eb         xchg
+$2817 3e f0      mvi a,$f0
+$2819 a4         ana h
+$281a 0f         rrc
+$281b 0f         rrc
+$281c 0f         rrc
+$281d c6 80      adi $80
+$281f 67         mov h,a
+$2820 7e         mov a,m
+$2821 44         mov b,h
+$2822 62         mov h,d
+$2823 b6         ora m
+$2824 6b         mov l,e
+$2825 b6         ora m
+$2826 60         mov h,b
+$2827 b6         ora m
+$2828 e6 07      ani $07
+$282a c9         ret
 
-$272e 00 00 00 00               ....
+$282b 00 00 00 00               ....
 
-$2732 7a         mov a,d
-$2733 80         add b
-$2734 e6 f0      ani $f0
-$2736 0f         rrc
-$2737 0f         rrc
-$2738 0f         rrc
-$2739 c6 80      adi $80
-$273b 67         mov h,a
-$273c 7b         mov a,e
-$273d 81         add c
-$273e 6f         mov l,a
-$273f eb         xchg
-$2740 3e f0      mvi a,$f0
-$2742 a4         ana h
-$2743 0f         rrc
-$2744 0f         rrc
-$2745 0f         rrc
-$2746 c6 80      adi $80
-$2748 67         mov h,a
-$2749 4e         mov c,m
-$274a 44         mov b,h
-$274b 62         mov h,d
-$274c 56         mov d,m
-$274d 6b         mov l,e
-$274e 5e         mov e,m
-$274f 60         mov h,b
-$2750 66         mov h,m
-$2751 69         mov l,c
-$2752 22 2e 27   shld $272e
-$2755 eb         xchg
-$2756 22 30 27   shld $2730
-$2759 7c         mov a,h
-$275a b5         ora l
-$275b b2         ora d
-$275c b3         ora e
-$275d e6 07      ani $07
-$275f c9         ret
-$2760 7a         mov a,d
-$2761 80         add b
-$2762 e6 f0      ani $f0
-$2764 0f         rrc
-$2765 0f         rrc
-$2766 0f         rrc
-$2767 c6 80      adi $80
-$2769 67         mov h,a
-$276a 7b         mov a,e
-$276b 81         add c
-$276c 6f         mov l,a
-$276d eb         xchg
-$276e 3e f0      mvi a,$f0
-$2770 a4         ana h
-$2771 0f         rrc
-$2772 0f         rrc
-$2773 0f         rrc
-$2774 c6 80      adi $80
-$2776 67         mov h,a
-$2777 7e         mov a,m
-$2778 c6 01      adi $01
-$277a 3e 00      mvi a,$00
-$277c 17         ral
-$277d 4f         mov c,a
-$277e 44         mov b,h
-$277f 62         mov h,d
-$2780 16 01      mvi d,$01
-$2782 7e         mov a,m
-$2783 82         add d
-$2784 79         mov a,c
-$2785 17         ral
-$2786 4f         mov c,a
-$2787 6b         mov l,e
-$2788 7e         mov a,m
-$2789 82         add d
-$278a 79         mov a,c
-$278b 17         ral
-$278c 4f         mov c,a
-$278d 60         mov h,b
-$278e 7e         mov a,m
-$278f 82         add d
-$2790 79         mov a,c
-$2791 17         ral
-$2792 87         add a
-$2793 4f         mov c,a
-$2794 c9         ret
-$2795 5f         mov e,a
-$2796 01 30 0f   lxi b,$0f30
-$2799 a0         ana b
-$279a fe 0a      cpi $0a
-$279c da a1 27   jc $27a1
-$279f d6 39      sui $39
-$27a1 81         add c
-$27a2 23         inx h
-$27a3 77         mov m,a
-$27a4 2b         dcx h
-$27a5 7b         mov a,e
-$27a6 0f         rrc
-$27a7 0f         rrc
-$27a8 0f         rrc
-$27a9 0f         rrc
-$27aa a0         ana b
-$27ab fe 0a      cpi $0a
-$27ad da b2 27   jc $27b2
-$27b0 d6 39      sui $39
-$27b2 81         add c
-$27b3 77         mov m,a
-$27b4 c9         ret
-$27b5 21 c1 27   lxi h,$27c1
-$27b8 cd 95 27   call $2795
-$27bb 01 ff a0   lxi b,$a0ff
-$27be c3 c4 27   jmp $27c4
+$282f 7a         mov a,d
+$2830 80         add b
+$2831 e6 f0      ani $f0
+$2833 0f         rrc
+$2834 0f         rrc
+$2835 0f         rrc
+$2836 c6 80      adi $80
+$2838 67         mov h,a
+$2839 7b         mov a,e
+$283a 81         add c
+$283b 6f         mov l,a
+$283c eb         xchg
+$283d 3e f0      mvi a,$f0
+$283f a4         ana h
+$2840 0f         rrc
+$2841 0f         rrc
+$2842 0f         rrc
+$2843 c6 80      adi $80
+$2845 67         mov h,a
+$2846 4e         mov c,m
+$2847 44         mov b,h
+$2848 62         mov h,d
+$2849 56         mov d,m
+$284a 6b         mov l,e
+$284b 5e         mov e,m
+$284c 60         mov h,b
+$284d 66         mov h,m
+$284e 69         mov l,c
+$284f 22 2b 28   shld $282b
+$2852 eb         xchg
+$2853 22 2d 28   shld $282d
+$2856 7c         mov a,h
+$2857 b5         ora l
+$2858 b2         ora d
+$2859 b3         ora e
+$285a e6 07      ani $07
+$285c c9         ret
+$285d 7a         mov a,d
+$285e 80         add b
+$285f e6 f0      ani $f0
+$2861 0f         rrc
+$2862 0f         rrc
+$2863 0f         rrc
+$2864 c6 80      adi $80
+$2866 67         mov h,a
+$2867 7b         mov a,e
+$2868 81         add c
+$2869 6f         mov l,a
+$286a eb         xchg
+$286b 3e f0      mvi a,$f0
+$286d a4         ana h
+$286e 0f         rrc
+$286f 0f         rrc
+$2870 0f         rrc
+$2871 c6 80      adi $80
+$2873 67         mov h,a
+$2874 7e         mov a,m
+$2875 c6 01      adi $01
+$2877 3e 00      mvi a,$00
+$2879 17         ral
+$287a 4f         mov c,a
+$287b 44         mov b,h
+$287c 62         mov h,d
+$287d 16 01      mvi d,$01
+$287f 7e         mov a,m
+$2880 82         add d
+$2881 79         mov a,c
+$2882 17         ral
+$2883 4f         mov c,a
+$2884 6b         mov l,e
+$2885 7e         mov a,m
+$2886 82         add d
+$2887 79         mov a,c
+$2888 17         ral
+$2889 4f         mov c,a
+$288a 60         mov h,b
+$288b 7e         mov a,m
+$288c 82         add d
+$288d 79         mov a,c
+$288e 17         ral
+$288f 87         add a
+$2890 4f         mov c,a
+$2891 c9         ret
+$2892 5f         mov e,a
+$2893 01 30 0f   lxi b,$0f30
+$2896 a0         ana b
+$2897 fe 0a      cpi $0a
+$2899 da 9e 28   jc $289e
+$289c d6 39      sui $39
+$289e 81         add c
+$289f 23         inx h
+$28a0 77         mov m,a
+$28a1 2b         dcx h
+$28a2 7b         mov a,e
+$28a3 0f         rrc
+$28a4 0f         rrc
+$28a5 0f         rrc
+$28a6 0f         rrc
+$28a7 a0         ana b
+$28a8 fe 0a      cpi $0a
+$28aa da af 28   jc $28af
+$28ad d6 39      sui $39
+$28af 81         add c
+$28b0 77         mov m,a
+$28b1 c9         ret
+$28b2 21 be 28   lxi h,$28be
+$28b5 cd 92 28   call $2892
+$28b8 01 ff a0   lxi b,$a0ff
+$28bb c3 c1 28   jmp $28c1
 
-$27c1 01 01 00                  ...
+$28be 01 01 00                  ...
 
-$27c4 5e         mov e,m
-$27c5 af         xra a
-$27c6 bb         cmp e
-$27c7 c8         rz
-$27c8 23         inx h
-$27c9 16 00      mvi d,$00
-$27cb e5         push h
-$27cc eb         xchg
-$27cd 29         dad h
-$27ce 29         dad h
-$27cf 29         dad h
-$27d0 11 02 28   lxi d,$2802
-$27d3 19         dad d
-$27d4 eb         xchg
-$27d5 21 00 00   lxi h,$0000
-$27d8 39         dad sp
-$27d9 22 f6 27   shld $27f6
-$27dc eb         xchg
-$27dd 50         mov d,b
-$27de 59         mov e,c
-$27df 4e         mov c,m
-$27e0 23         inx h
-$27e1 46         mov b,m
-$27e2 23         inx h
-$27e3 f9         sphl
-$27e4 eb         xchg
-$27e5 71         mov m,c
-$27e6 2d         dcr l
-$27e7 70         mov m,b
-$27e8 2d         dcr l
-$27e9 c1         pop b
-$27ea 71         mov m,c
-$27eb 2d         dcr l
-$27ec 70         mov m,b
-$27ed 2d         dcr l
-$27ee c1         pop b
-$27ef 71         mov m,c
-$27f0 2d         dcr l
-$27f1 70         mov m,b
-$27f2 2d         dcr l
-$27f3 c1         pop b
-$27f4 71         mov m,c
-$27f5 31 00 00   lxi sp,$0000
-$27f8 01 06 01   lxi b,$0106
-$27fb 09         dad b
-$27fc 44         mov b,h
-$27fd 4d         mov c,l
-$27fe e1         pop h
-$27ff c3 c4 27   jmp $27c4
+$28c1 5e         mov e,m
+$28c2 af         xra a
+$28c3 bb         cmp e
+$28c4 c8         rz
+$28c5 23         inx h
+$28c6 16 00      mvi d,$00
+$28c8 e5         push h
+$28c9 eb         xchg
+$28ca 29         dad h
+$28cb 29         dad h
+$28cc 29         dad h
+$28cd 11 ff 28   lxi d,$28ff
+$28d0 19         dad d
+$28d1 eb         xchg
+$28d2 21 00 00   lxi h,$0000
+$28d5 39         dad sp
+$28d6 22 f3 28   shld $28f3
+$28d9 eb         xchg
+$28da 50         mov d,b
+$28db 59         mov e,c
+$28dc 4e         mov c,m
+$28dd 23         inx h
+$28de 46         mov b,m
+$28df 23         inx h
+$28e0 f9         sphl
+$28e1 eb         xchg
+$28e2 71         mov m,c
+$28e3 2d         dcr l
+$28e4 70         mov m,b
+$28e5 2d         dcr l
+$28e6 c1         pop b
+$28e7 71         mov m,c
+$28e8 2d         dcr l
+$28e9 70         mov m,b
+$28ea 2d         dcr l
+$28eb c1         pop b
+$28ec 71         mov m,c
+$28ed 2d         dcr l
+$28ee 70         mov m,b
+$28ef 2d         dcr l
+$28f0 c1         pop b
+$28f1 71         mov m,c
+$28f2 31 00 00   lxi sp,$0000
+$28f5 01 06 01   lxi b,$0106
+$28f8 09         dad b
+$28f9 44         mov b,h
+$28fa 4d         mov c,l
+$28fb e1         pop h
+$28fc c3 c1 28   jmp $28c1
 
-$2802 00 00 00 00 00 00 00 00   ........
-$280a 38 44 82 fe 82 82 82 00   8DÇ˛ÇÇÇ.
-$2812 fc 82 82 fe 82 82 fc 00   ¸ÇÇ˛ÇÇ¸.
-$281a 3c 42 80 80 80 82 7c 00   <BÄÄÄÇ|.
-$2822 fc 82 82 82 82 82 fc 00   ¸ÇÇÇÇÇ¸.
-$282a fc 82 80 f8 80 82 fc 00   ¸ÇÄ¯ÄÇ¸.
-$2832 fc 82 80 f8 80 80 80 00   ¸ÇÄ¯ÄÄÄ.
-$283a 00 00 00 00 00 00 00 00   ........
-$2842 00 00 00 00 00 00 00 00   ........
-$284a 00 00 00 00 00 00 00 00   ........
-$2852 00 00 00 00 00 00 00 00   ........
-$285a 00 00 00 00 00 00 00 00   ........
-$2862 00 00 00 00 00 00 00 00   ........
-$286a 00 00 00 00 00 00 00 00   ........
-$2872 00 00 00 00 00 00 00 00   ........
-$287a 00 00 00 00 00 00 00 00   ........
-$2882 00 00 00 00 00 00 00 00   ........
-$288a 00 00 00 00 00 00 00 00   ........
-$2892 00 00 00 00 00 00 00 00   ........
-$289a 00 00 00 00 00 00 00 00   ........
-$28a2 00 00 00 00 00 00 00 00   ........
-$28aa 00 00 00 00 00 00 00 00   ........
-$28b2 00 00 00 00 00 00 00 00   ........
-$28ba 00 00 00 00 00 00 00 00   ........
-$28c2 00 00 00 00 00 00 00 00   ........
-$28ca 00 00 00 00 00 00 00 00   ........
-$28d2 00 00 00 00 00 00 00 00   ........
-$28da 00 00 00 00 00 00 00 00   ........
-$28e2 00 00 00 00 00 00 00 00   ........
-$28ea 00 00 00 00 00 00 00 00   ........
-$28f2 00 00 00 00 00 00 00 00   ........
-$28fa 00 00 00 00 00 00 00 00   ........
-$2902 00 00 00 00 00 00 00 00   ........
-$290a 00 00 00 00 00 00 00 00   ........
-$2912 00 00 00 00 00 00 00 00   ........
-$291a 00 00 00 00 00 00 00 00   ........
-$2922 00 00 00 00 00 00 00 00   ........
-$292a 00 00 00 00 00 00 00 00   ........
-$2932 00 00 00 00 00 00 00 00   ........
-$293a 00 00 00 00 00 00 00 00   ........
-$2942 00 00 00 00 00 00 00 00   ........
-$294a 00 00 00 00 00 00 00 00   ........
-$2952 00 00 00 00 00 00 00 00   ........
-$295a 00 00 00 00 00 00 00 00   ........
-$2962 00 00 00 00 00 00 00 00   ........
-$296a 00 00 00 00 00 00 00 00   ........
-$2972 00 00 00 00 00 00 00 00   ........
-$297a 00 00 00 00 00 00 00 00   ........
-$2982 7c 86 8a 92 a2 c2 7c 00   |Üäí¢¬|.
-$298a 18 28 48 08 08 08 1c 00   .(H.....
-$2992 7c 82 0c 70 80 80 fe 00   |Ç.pÄÄ˛.
-$299a 7c 82 02 0c 02 82 7c 00   |Ç...Ç|.
-$29a2 1c 24 44 84 fe 04 04 00   .$DÑ˛...
-$29aa fe 80 80 fc 02 82 7c 00   ˛ÄÄ¸.Ç|.
-$29b2 7c 82 80 fc 82 82 7c 00   |ÇÄ¸ÇÇ|.
-$29ba 7e 82 04 08 10 20 20 00   ~Ç...  .
-$29c2 7c 82 82 7c 82 82 7c 00   |ÇÇ|ÇÇ|.
-$29ca 7c 82 82 fe 04 08 70 00   |ÇÇ˛..p.
-$29d2 6c fa fa fe 7c 38 10 00   l˙˙˛|8..
+$28ff 00 00 00 00 00 00 00 00   ........
+$2907 38 44 82 fe 82 82 82 00   8DÇ˛ÇÇÇ.
+$290f fc 82 82 fe 82 82 fc 00   ¸ÇÇ˛ÇÇ¸.
+$2917 3c 42 80 80 80 82 7c 00   <BÄÄÄÇ|.
+$291f fc 82 82 82 82 82 fc 00   ¸ÇÇÇÇÇ¸.
+$2927 fc 82 80 f8 80 82 fc 00   ¸ÇÄ¯ÄÇ¸.
+$292f fc 82 80 f8 80 80 80 00   ¸ÇÄ¯ÄÄÄ.
+$2937 00 00 00 00 00 00 00 00   ........
+$293f 00 00 00 00 00 00 00 00   ........
+$2947 00 00 00 00 00 00 00 00   ........
+$294f 00 00 00 00 00 00 00 00   ........
+$2957 00 00 00 00 00 00 00 00   ........
+$295f 00 00 00 00 00 00 00 00   ........
+$2967 00 00 00 00 00 00 00 00   ........
+$296f 00 00 00 00 00 00 00 00   ........
+$2977 00 00 00 00 00 00 00 00   ........
+$297f 00 00 00 00 00 00 00 00   ........
+$2987 00 00 00 00 00 00 00 00   ........
+$298f 00 00 00 00 00 00 00 00   ........
+$2997 00 00 00 00 00 00 00 00   ........
+$299f 00 00 00 00 00 00 00 00   ........
+$29a7 00 00 00 00 00 00 00 00   ........
+$29af 00 00 00 00 00 00 00 00   ........
+$29b7 00 00 00 00 00 00 00 00   ........
+$29bf 00 00 00 00 00 00 00 00   ........
+$29c7 00 00 00 00 00 00 00 00   ........
+$29cf 00 00 00 00 00 00 00 00   ........
+$29d7 00 00 00 00 00 00 00 00   ........
+$29df 00 00 00 00 00 00 00 00   ........
+$29e7 00 00 00 00 00 00 00 00   ........
+$29ef 00 00 00 00 00 00 00 00   ........
+$29f7 00 00 00 00 00 00 00 00   ........
+$29ff 00 00 00 00 00 00 00 00   ........
+$2a07 00 00 00 00 00 00 00 00   ........
+$2a0f 00 00 00 00 00 00 00 00   ........
+$2a17 00 00 00 00 00 00 00 00   ........
+$2a1f 00 00 00 00 00 00 00 00   ........
+$2a27 00 00 00 00 00 00 00 00   ........
+$2a2f 00 00 00 00 00 00 00 00   ........
+$2a37 00 00 00 00 00 00 00 00   ........
+$2a3f 00 00 00 00 00 00 00 00   ........
+$2a47 00 00 00 00 00 00 00 00   ........
+$2a4f 00 00 00 00 00 00 00 00   ........
+$2a57 00 00 00 00 00 00 00 00   ........
+$2a5f 00 00 00 00 00 00 00 00   ........
+$2a67 00 00 00 00 00 00 00 00   ........
+$2a6f 00 00 00 00 00 00 00 00   ........
+$2a77 00 00 00 00 00 00 00 00   ........
+$2a7f 7c 86 8a 92 a2 c2 7c 00   |Üäí¢¬|.
+$2a87 18 28 48 08 08 08 1c 00   .(H.....
+$2a8f 7c 82 0c 70 80 80 fe 00   |Ç.pÄÄ˛.
+$2a97 7c 82 02 0c 02 82 7c 00   |Ç...Ç|.
+$2a9f 1c 24 44 84 fe 04 04 00   .$DÑ˛...
+$2aa7 fe 80 80 fc 02 82 7c 00   ˛ÄÄ¸.Ç|.
+$2aaf 7c 82 80 fc 82 82 7c 00   |ÇÄ¸ÇÇ|.
+$2ab7 7e 82 04 08 10 20 20 00   ~Ç...  .
+$2abf 7c 82 82 7c 82 82 7c 00   |ÇÇ|ÇÇ|.
+$2ac7 7c 82 82 fe 04 08 70 00   |ÇÇ˛..p.
+$2acf 6c fa fa fe 7c 38 10 00   l˙˙˛|8..
 
-$29da cd e1 29   call $29e1
-$29dd cd ef 29   call $29ef
-$29e0 c9         ret
-$29e1 21 eb 29   lxi h,$29eb
-$29e4 01 ff a4   lxi b,$a4ff
-$29e7 cd c4 27   call $27c4
-$29ea c9         ret
+$2ad7 cd de 2a   call $2ade
+$2ada cd ec 2a   call $2aec
+$2add c9         ret
+$2ade 21 e8 2a   lxi h,$2ae8
+$2ae1 01 ff a4   lxi b,$a4ff
+$2ae4 cd c1 28   call $28c1
+$2ae7 c9         ret
 
-$29eb 3a 31 30 00               :10.
+$2ae8 3a 31 30 00               :10.
 
-$29ef 21 ec 29   lxi h,$29ec
-$29f2 3a 14 12   lda $1214
-$29f5 cd 95 27   call $2795
-$29f8 21 ec 29   lxi h,$29ec
-$29fb 01 ff a5   lxi b,$a5ff
-$29fe cd c4 27   call $27c4
-$2a01 c9         ret
-$2a02 cd 36 25   call $2536
-$2a05 cd 3b 25   call $253b
-$2a08 cd 78 25   call $2578
-$2a0b cd 40 26   call $2640
-$2a0e cd da 29   call $29da
-$2a11 af         xra a
-$2a12 32 2e 01   sta $012e
-$2a15 76         hlt
-$2a16 3e fa      mvi a,$fa
-$2a18 32 2f 01   sta $012f
-$2a1b d3 10      out $10
-$2a1d cd 05 b1   call $b105
-$2a20 af         xra a
-$2a21 32 2f 01   sta $012f
-$2a24 d3 10      out $10
-$2a26 cd 2f 2a   call $2a2f
-$2a29 cd 52 2a   call $2a52
-$2a2c c3 16 2a   jmp $2a16
-$2a2f 21 32 01   lxi h,$0132
-$2a32 34         inr m
-$2a33 3a 2e 01   lda $012e
-$2a36 b7         ora a
-$2a37 c8         rz
-$2a38 cd 7e 12   call $127e
-$2a3b cd e9 1f   call $1fe9
-$2a3e cd 81 24   call $2481
-$2a41 cd 5b 25   call $255b
-$2a44 2a 28 01   lhld $0128
-$2a47 22 2a 01   shld $012a
-$2a4a 21 2e 01   lxi h,$012e
-$2a4d 35         dcr m
-$2a4e c2 38 2a   jnz $2a38
-$2a51 c9         ret
-$2a52 21 31 01   lxi h,$0131
-$2a55 34         inr m
-$2a56 cd 22 16   call $1622
-$2a59 cd ef 1f   call $1fef
-$2a5c cd 87 24   call $2487
-$2a5f cd 52 16   call $1652
-$2a62 cd f5 1f   call $1ff5
-$2a65 cd 8d 24   call $248d
-$2a68 cd 90 16   call $1690
-$2a6b cd fb 1f   call $1ffb
-$2a6e cd 93 24   call $2493
-$2a71 c9         ret
-$2a72 3e e2      mvi a,$e2
-$2a74 32 2f 01   sta $012f
-$2a77 d3 10      out $10
-$2a79 cd fe b0   call $b0fe
-$2a7c af         xra a
-$2a7d 32 2f 01   sta $012f
-$2a80 d3 10      out $10
-$2a82 cd 02 2a   call $2a02
-$2a85 c3 82 2a   jmp $2a82
+$2aec 21 e9 2a   lxi h,$2ae9
+$2aef 3a 14 12   lda $1214
+$2af2 cd 92 28   call $2892
+$2af5 21 e9 2a   lxi h,$2ae9
+$2af8 01 ff a5   lxi b,$a5ff
+$2afb cd c1 28   call $28c1
+$2afe c9         ret
+$2aff cd 33 26   call $2633
+$2b02 cd 38 26   call $2638
+$2b05 cd 75 26   call $2675
+$2b08 cd 3d 27   call $273d
+$2b0b cd d7 2a   call $2ad7
+$2b0e af         xra a
+$2b0f 32 2e 01   sta $012e
+$2b12 76         hlt
+$2b13 3e fa      mvi a,$fa
+$2b15 32 2f 01   sta $012f
+$2b18 d3 10      out $10
+$2b1a cd 05 b1   call $b105
+$2b1d af         xra a
+$2b1e 32 2f 01   sta $012f
+$2b21 d3 10      out $10
+$2b23 cd 2c 2b   call $2b2c
+$2b26 cd 4f 2b   call $2b4f
+$2b29 c3 13 2b   jmp $2b13
+$2b2c 21 32 01   lxi h,$0132
+$2b2f 34         inr m
+$2b30 3a 2e 01   lda $012e
+$2b33 b7         ora a
+$2b34 c8         rz
+$2b35 cd 7e 12   call $127e
+$2b38 cd e6 20   call $20e6
+$2b3b cd 7e 25   call $257e
+$2b3e cd 58 26   call $2658
+$2b41 2a 28 01   lhld $0128
+$2b44 22 2a 01   shld $012a
+$2b47 21 2e 01   lxi h,$012e
+$2b4a 35         dcr m
+$2b4b c2 35 2b   jnz $2b35
+$2b4e c9         ret
+$2b4f 21 31 01   lxi h,$0131
+$2b52 34         inr m
+$2b53 cd 22 16   call $1622
+$2b56 cd ec 20   call $20ec
+$2b59 cd 84 25   call $2584
+$2b5c cd 52 16   call $1652
+$2b5f cd f2 20   call $20f2
+$2b62 cd 8a 25   call $258a
+$2b65 cd 90 16   call $1690
+$2b68 cd f8 20   call $20f8
+$2b6b cd 90 25   call $2590
+$2b6e c9         ret
+$2b6f 3e e2      mvi a,$e2
+$2b71 32 2f 01   sta $012f
+$2b74 d3 10      out $10
+$2b76 cd fe b0   call $b0fe
+$2b79 af         xra a
+$2b7a 32 2f 01   sta $012f
+$2b7d d3 10      out $10
+$2b7f cd ff 2a   call $2aff
+$2b82 c3 7f 2b   jmp $2b7f
 
-$2a88 08 91 2a d9 2a 21 2b 00   .ë*Ÿ*!+.
-$2a90 00 11 00 02 00 bc 00 d0   .....º.–
-$2a98 01 e4 02 f8 03 0c 05 20   .‰.¯... 
-$2aa0 06 34 07 11 00 02 00 bc   .4.....º
-$2aa8 00 d0 01 e4 02 f8 03 0c   .–.‰.¯..
-$2ab0 05 20 06 34 07 11 00 02   . .4....
-$2ab8 00 bc 00 d0 01 e4 02 f8   .º.–.‰.¯
-$2ac0 03 0c 05 20 06 34 07 ed   ... .4.Ì
-$2ac8 ff d4 18 8e 19 a2 1a b6   ˇ‘.é.¢.∂
-$2ad0 1b ca 1c de 1d f2 1e 06   . .ﬁ.Ú..
-$2ad8 20 11 00 48 08 02 09 16    ..H....
-$2ae0 0a 2a 0b 3e 0c 52 0d 66   .*.>.R.f
-$2ae8 0e 7a 0f 11 00 8e 10 48   .z...é.H
-$2af0 11 5c 12 70 13 84 14 98   .\.p.Ñ.ò
-$2af8 15 ac 16 c0 17 11 00 d4   .¨.¿...‘
-$2b00 18 8e 19 a2 1a b6 1b ca   .é.¢.∂. 
-$2b08 1c de 1d f2 1e 06 20 ed   .ﬁ.Ú.. Ì
-$2b10 ff 1a 21 d4 21 e8 22 fc   ˇ.!‘!Ë"¸
-$2b18 23 10 25 24 26 38 27 4c   #.%$&8'L
-$2b20 28 11 00 60 29 1a 2a d4   (..`).*‘
-$2b28 2a 8e 2b a2 2c b6 2d ca   *é+¢,∂- 
-$2b30 2e de 2f ff ff f2 30 ac   .ﬁ/ˇˇÚ0¨
-$2b38 31 66 32 7a 33 8e 34 a2   1f2z3é4¢
-$2b40 35 b6 36 ca 37 04 4e 2b   5∂6 7.N+
-$2b48 62 2b 8a 2b 00 00 09 00   b+ä+....
-$2b50 84 38 3e 39 52 3a 66 3b   Ñ8>9R:f;
-$2b58 f5 ff 7a 3c 34 3d 48 3e   ıˇz<4=H>
-$2b60 5c 3f 09 00 70 40 2a 41   \?..p@*A
-$2b68 3e 42 52 43 09 00 66 44   >BRC..fD
-$2b70 20 45 34 46 48 47 09 00    E4FHG..
-$2b78 5c 48 16 49 2a 4a 3e 4b   \H.I*J>K
-$2b80 f5 ff 52 4c 0c 4d 20 4e   ıˇRL.M N
-$2b88 34 4f 09 00 48 50 02 51   4O..HP.Q
-$2b90 16 52 2a 53 09 00 3e 54   .R*S..>T
-$2b98 f8 54 0c 56 20 57 09 00   ¯T.V W..
-$2ba0 34 58 ee 58 02 5a 16 5b   4XÓX.Z.[
-$2ba8 f5 ff 2a 5c e4 5c f8 5d   ıˇ*\‰\¯]
-$2bb0 0c 5f 04 b7 2b 00 00 09   ._.∑+...
-$2bb8 00 20 60 62 60 a4 60 04   . `b`§`.
-$2bc0 61 09 00 64 61 fa 61 90   a..da˙aê
-$2bc8 62 de 62 09 00 2c 63 7a   bﬁb..,cz
-$2bd0 63 c8 63 3a 64 ff ff 88   c»c:dˇˇà
-$2bd8 64 1e 65 6c 65 ba 65 08   d.ele∫e.
-$2be0 e8 2b fa 2b 1e 2c 00 00   Ë+˙+.,..
-$2be8 ff ff 50 66 74 66 b6 66   ˇˇPftf∂f
-$2bf0 f8 66 3a 67 7c 67 be 67   ¯f:g|gæg
-$2bf8 00 68 11 00 42 68 f0 68   .h..Bhh
-$2c00 9e 69 4c 6a fa 6a a8 6b   ûiLj˙j®k
-$2c08 56 6c b0 6c ff ff 0a 6d   Vl∞lˇˇ.m
-$2c10 ac 6d 4e 6e f0 6e 92 6f   ¨mNnnío
-$2c18 34 70 d6 70 2a 71 11 00   4p÷p*q..
-$2c20 7e 71 2c 72 da 72 88 73   ~q,r⁄ràs
-$2c28 e2 73 3c 74 ea 74 98 75   ‚s<tÍtòu
-$2c30 ff ff 46 76 e8 76 8a 77   ˇˇFvËväw
-$2c38 2c 78 80 78 d4 78 76 79   ,xÄx‘xvy
-$2c40 18 7a 04 4d 2c 57 2c 61   .z.M,W,a
-$2c48 2c 89 2c 00 00 f5 ff 02   ,â,..ıˇ.
-$2c50 00 bc 00 76 01 8a 02 f5   .º.v.ä.ı
-$2c58 ff 9e 03 58 04 12 05 26   ˇû.X...&
-$2c60 06 09 00 3a 07 f4 07 ae   ...:.Ù.Æ
-$2c68 08 c2 09 09 00 d6 0a 90   .¬...÷.ê
-$2c70 0b 4a 0c 5e 0d 09 00 72   .J.^...r
-$2c78 0e 2c 0f e6 0f fa 10 f5   .,.Ê.˙.ı
-$2c80 ff 0e 12 c8 12 82 13 96   ˇ..».Ç.ñ
-$2c88 14 09 00 aa 15 64 16 1e   ...™.d..
-$2c90 17 32 18 09 00 46 19 00   .2...F..
-$2c98 1a ba 1a ce 1b 09 00 e2   .∫.Œ...‚
-$2ca0 1c 9c 1d 56 1e 6a 1f f5   .ú.V.j.ı
-$2ca8 ff 7e 20 38 21 f2 21 06   ˇ~ 8!Ú!.
-$2cb0 23 04 bc 2c c6 2c d0 2c   #.º,∆,–,
-$2cb8 f8 2c 00 00 f5 ff 1a 24   ¯,..ıˇ.$
-$2cc0 bc 24 5e 25 4e 26 f5 ff   º$^%N&ıˇ
-$2cc8 f0 26 92 27 34 28 24 29   &í'4($)
-$2cd0 09 00 c6 29 68 2a 0a 2b   ..∆)h*.+
-$2cd8 fa 2b 09 00 9c 2c 3e 2d   ˙+..ú,>-
-$2ce0 e0 2d d0 2e 09 00 72 2f   ‡-–...r/
-$2ce8 14 30 b6 30 a6 31 f5 ff   .0∂0¶1ıˇ
-$2cf0 48 32 ea 32 8c 33 7c 34   H2Í2å3|4
-$2cf8 09 00 1e 35 c0 35 62 36   ...5¿5b6
-$2d00 52 37 09 00 f4 37 96 38   R7..Ù7ñ8
-$2d08 38 39 28 3a 09 00 ca 3a   89(:.. :
-$2d10 6c 3b 0e 3c fe 3c f5 ff   l;.<˛<ıˇ
-$2d18 a0 3d 42 3e e4 3e d4 3f   †=B>‰>‘?
-$2d20 04 2b 2d 35 2d 3f 2d 67   .+-5-?-g
-$2d28 2d 00 00 f5 ff 76 40 30   -..ıˇv@0
-$2d30 41 ea 41 fe 42 f5 ff b8   AÍA˛Bıˇ∏
-$2d38 43 72 44 2c 45 40 46 09   CrD,E@F.
-$2d40 00 fa 46 b4 47 6e 48 82   .˙F¥GnHÇ
-$2d48 49 09 00 3c 4a f6 4a b0   I..<JˆJ∞
-$2d50 4b c4 4c 09 00 7e 4d 38   KƒL..~M8
-$2d58 4e f2 4e 06 50 f5 ff c0   NÚN.Pıˇ¿
-$2d60 50 7a 51 34 52 48 53 09   PzQ4RHS.
-$2d68 00 02 54 bc 54 76 55 8a   ..TºTvUä
-$2d70 56 09 00 44 57 fe 57 b8   V..DW˛W∏
-$2d78 58 cc 59 09 00 86 5a 40   XÃY..ÜZ@
-$2d80 5b fa 5b 0e 5d f5 ff c8   [˙[.]ıˇ»
-$2d88 5d 82 5e 3c 5f 50 60 08   ]Ç^<_P`.
-$2d90 98 2d e0 2d 28 2e 00 00   ò-‡-(...
-$2d98 11 00 02 00 bc 00 d0 01   ....º.–.
-$2da0 e4 02 f8 03 0c 05 20 06   ‰.¯... .
-$2da8 34 07 11 00 02 00 bc 00   4.....º.
-$2db0 d0 01 e4 02 f8 03 0c 05   –.‰.¯...
-$2db8 20 06 34 07 11 00 02 00    .4.....
-$2dc0 bc 00 d0 01 e4 02 f8 03   º.–.‰.¯.
-$2dc8 0c 05 20 06 34 07 ed ff   .. .4.Ìˇ
-$2dd0 d4 18 8e 19 a2 1a b6 1b   ‘.é.¢.∂.
-$2dd8 ca 1c de 1d f2 1e 06 20    .ﬁ.Ú.. 
-$2de0 11 00 48 08 02 09 16 0a   ..H.....
-$2de8 2a 0b 3e 0c 52 0d 66 0e   *.>.R.f.
-$2df0 7a 0f 11 00 8e 10 48 11   z...é.H.
-$2df8 5c 12 70 13 84 14 98 15   \.p.Ñ.ò.
-$2e00 ac 16 c0 17 11 00 d4 18   ¨.¿...‘.
-$2e08 8e 19 a2 1a b6 1b ca 1c   é.¢.∂. .
-$2e10 de 1d f2 1e 06 20 ed ff   ﬁ.Ú.. Ìˇ
-$2e18 1a 21 d4 21 e8 22 fc 23   .!‘!Ë"¸#
-$2e20 10 25 24 26 38 27 4c 28   .%$&8'L(
-$2e28 11 00 60 29 1a 2a 2e 2b   ..`).*.+
-$2e30 42 2c 56 2d 6a 2e 7e 2f   B,V-j.~/
-$2e38 38 30 ff ff f2 30 ac 31   80ˇˇÚ0¨1
-$2e40 66 32 7a 33 8e 34 a2 35   f2z3é4¢5
-$2e48 b6 36 ca 37               ∂6 7
+$2b85 08 8e 2b d6 2b 1e 2c 00   .é+÷+.,.
+$2b8d 00 11 00 02 00 bc 00 d0   .....º.–
+$2b95 01 e4 02 f8 03 0c 05 20   .‰.¯... 
+$2b9d 06 34 07 11 00 02 00 bc   .4.....º
+$2ba5 00 d0 01 e4 02 f8 03 0c   .–.‰.¯..
+$2bad 05 20 06 34 07 11 00 02   . .4....
+$2bb5 00 bc 00 d0 01 e4 02 f8   .º.–.‰.¯
+$2bbd 03 0c 05 20 06 34 07 ed   ... .4.Ì
+$2bc5 ff d4 18 8e 19 a2 1a b6   ˇ‘.é.¢.∂
+$2bcd 1b ca 1c de 1d f2 1e 06   . .ﬁ.Ú..
+$2bd5 20 11 00 48 08 02 09 16    ..H....
+$2bdd 0a 2a 0b 3e 0c 52 0d 66   .*.>.R.f
+$2be5 0e 7a 0f 11 00 8e 10 48   .z...é.H
+$2bed 11 5c 12 70 13 84 14 98   .\.p.Ñ.ò
+$2bf5 15 ac 16 c0 17 11 00 d4   .¨.¿...‘
+$2bfd 18 8e 19 a2 1a b6 1b ca   .é.¢.∂. 
+$2c05 1c de 1d f2 1e 06 20 ed   .ﬁ.Ú.. Ì
+$2c0d ff 1a 21 d4 21 e8 22 fc   ˇ.!‘!Ë"¸
+$2c15 23 10 25 24 26 38 27 4c   #.%$&8'L
+$2c1d 28 11 00 60 29 1a 2a d4   (..`).*‘
+$2c25 2a 8e 2b a2 2c b6 2d ca   *é+¢,∂- 
+$2c2d 2e de 2f ff ff f2 30 ac   .ﬁ/ˇˇÚ0¨
+$2c35 31 66 32 7a 33 8e 34 a2   1f2z3é4¢
+$2c3d 35 b6 36 ca 37 04 4b 2c   5∂6 7.K,
+$2c45 5f 2c 87 2c 00 00 09 00   _,á,....
+$2c4d 84 38 3e 39 52 3a 66 3b   Ñ8>9R:f;
+$2c55 f5 ff 7a 3c 34 3d 48 3e   ıˇz<4=H>
+$2c5d 5c 3f 09 00 70 40 2a 41   \?..p@*A
+$2c65 3e 42 52 43 09 00 66 44   >BRC..fD
+$2c6d 20 45 34 46 48 47 09 00    E4FHG..
+$2c75 5c 48 16 49 2a 4a 3e 4b   \H.I*J>K
+$2c7d f5 ff 52 4c 0c 4d 20 4e   ıˇRL.M N
+$2c85 34 4f 09 00 48 50 02 51   4O..HP.Q
+$2c8d 16 52 2a 53 09 00 3e 54   .R*S..>T
+$2c95 f8 54 0c 56 20 57 09 00   ¯T.V W..
+$2c9d 34 58 ee 58 02 5a 16 5b   4XÓX.Z.[
+$2ca5 f5 ff 2a 5c e4 5c f8 5d   ıˇ*\‰\¯]
+$2cad 0c 5f 04 b4 2c 00 00 09   ._.¥,...
+$2cb5 00 20 60 62 60 a4 60 04   . `b`§`.
+$2cbd 61 09 00 64 61 fa 61 90   a..da˙aê
+$2cc5 62 de 62 09 00 2c 63 7a   bﬁb..,cz
+$2ccd 63 c8 63 3a 64 f5 ff 88   c»c:dıˇà
+$2cd5 64 1e 65 6c 65 ba 65 08   d.ele∫e.
+$2cdd e5 2c f7 2c 1b 2d 00 00   Â,˜,.-..
+$2ce5 ff ff 50 66 74 66 b6 66   ˇˇPftf∂f
+$2ced f8 66 3a 67 7c 67 be 67   ¯f:g|gæg
+$2cf5 00 68 11 00 42 68 f0 68   .h..Bhh
+$2cfd 9e 69 4c 6a fa 6a a8 6b   ûiLj˙j®k
+$2d05 56 6c b0 6c ff ff 0a 6d   Vl∞lˇˇ.m
+$2d0d ac 6d 4e 6e f0 6e 92 6f   ¨mNnnío
+$2d15 34 70 d6 70 2a 71 11 00   4p÷p*q..
+$2d1d 7e 71 2c 72 da 72 88 73   ~q,r⁄ràs
+$2d25 e2 73 3c 74 ea 74 98 75   ‚s<tÍtòu
+$2d2d ff ff 46 76 e8 76 8a 77   ˇˇFvËväw
+$2d35 2c 78 80 78 d4 78 76 79   ,xÄx‘xvy
+$2d3d 18 7a 04 4a 2d 54 2d 5e   .z.J-T-^
+$2d45 2d 86 2d 00 00 f5 ff 02   -Ü-..ıˇ.
+$2d4d 00 bc 00 76 01 8a 02 f5   .º.v.ä.ı
+$2d55 ff 9e 03 58 04 12 05 26   ˇû.X...&
+$2d5d 06 09 00 3a 07 f4 07 ae   ...:.Ù.Æ
+$2d65 08 c2 09 09 00 d6 0a 90   .¬...÷.ê
+$2d6d 0b 4a 0c 5e 0d 09 00 72   .J.^...r
+$2d75 0e 2c 0f e6 0f fa 10 f5   .,.Ê.˙.ı
+$2d7d ff 0e 12 c8 12 82 13 96   ˇ..».Ç.ñ
+$2d85 14 09 00 aa 15 64 16 1e   ...™.d..
+$2d8d 17 32 18 09 00 46 19 00   .2...F..
+$2d95 1a ba 1a ce 1b 09 00 e2   .∫.Œ...‚
+$2d9d 1c 9c 1d 56 1e 6a 1f f5   .ú.V.j.ı
+$2da5 ff 7e 20 38 21 f2 21 06   ˇ~ 8!Ú!.
+$2dad 23 04 b9 2d c3 2d cd 2d   #.π-√-Õ-
+$2db5 f5 2d 00 00 f5 ff 1a 24   ı-..ıˇ.$
+$2dbd bc 24 5e 25 4e 26 f5 ff   º$^%N&ıˇ
+$2dc5 f0 26 92 27 34 28 24 29   &í'4($)
+$2dcd 09 00 c6 29 68 2a 0a 2b   ..∆)h*.+
+$2dd5 fa 2b 09 00 9c 2c 3e 2d   ˙+..ú,>-
+$2ddd e0 2d d0 2e 09 00 72 2f   ‡-–...r/
+$2de5 14 30 b6 30 a6 31 f5 ff   .0∂0¶1ıˇ
+$2ded 48 32 ea 32 8c 33 7c 34   H2Í2å3|4
+$2df5 09 00 1e 35 c0 35 62 36   ...5¿5b6
+$2dfd 52 37 09 00 f4 37 96 38   R7..Ù7ñ8
+$2e05 38 39 28 3a 09 00 ca 3a   89(:.. :
+$2e0d 6c 3b 0e 3c fe 3c f5 ff   l;.<˛<ıˇ
+$2e15 a0 3d 42 3e e4 3e d4 3f   †=B>‰>‘?
+$2e1d 04 28 2e 32 2e 3c 2e 64   .(.2.<.d
+$2e25 2e 00 00 f5 ff 76 40 30   ...ıˇv@0
+$2e2d 41 ea 41 fe 42 f5 ff b8   AÍA˛Bıˇ∏
+$2e35 43 72 44 2c 45 40 46 09   CrD,E@F.
+$2e3d 00 fa 46 b4 47 6e 48 82   .˙F¥GnHÇ
+$2e45 49 09 00 3c 4a f6 4a b0   I..<JˆJ∞
+$2e4d 4b c4 4c 09 00 7e 4d 38   KƒL..~M8
+$2e55 4e f2 4e 06 50 f5 ff c0   NÚN.Pıˇ¿
+$2e5d 50 7a 51 34 52 48 53 09   PzQ4RHS.
+$2e65 00 02 54 bc 54 76 55 8a   ..TºTvUä
+$2e6d 56 09 00 44 57 fe 57 b8   V..DW˛W∏
+$2e75 58 cc 59 09 00 86 5a 40   XÃY..ÜZ@
+$2e7d 5b fa 5b 0e 5d f5 ff c8   [˙[.]ıˇ»
+$2e85 5d 82 5e 3c 5f 50 60 08   ]Ç^<_P`.
+$2e8d 95 2e dd 2e 25 2f 00 00   ï.›.%/..
+$2e95 11 00 02 00 bc 00 d0 01   ....º.–.
+$2e9d e4 02 f8 03 0c 05 20 06   ‰.¯... .
+$2ea5 34 07 11 00 02 00 bc 00   4.....º.
+$2ead d0 01 e4 02 f8 03 0c 05   –.‰.¯...
+$2eb5 20 06 34 07 11 00 02 00    .4.....
+$2ebd bc 00 d0 01 e4 02 f8 03   º.–.‰.¯.
+$2ec5 0c 05 20 06 34 07 ed ff   .. .4.Ìˇ
+$2ecd d4 18 8e 19 a2 1a b6 1b   ‘.é.¢.∂.
+$2ed5 ca 1c de 1d f2 1e 06 20    .ﬁ.Ú.. 
+$2edd 11 00 48 08 02 09 16 0a   ..H.....
+$2ee5 2a 0b 3e 0c 52 0d 66 0e   *.>.R.f.
+$2eed 7a 0f 11 00 8e 10 48 11   z...é.H.
+$2ef5 5c 12 70 13 84 14 98 15   \.p.Ñ.ò.
+$2efd ac 16 c0 17 11 00 d4 18   ¨.¿...‘.
+$2f05 8e 19 a2 1a b6 1b ca 1c   é.¢.∂. .
+$2f0d de 1d f2 1e 06 20 ed ff   ﬁ.Ú.. Ìˇ
+$2f15 1a 21 d4 21 e8 22 fc 23   .!‘!Ë"¸#
+$2f1d 10 25 24 26 38 27 4c 28   .%$&8'L(
+$2f25 11 00 60 29 1a 2a 2e 2b   ..`).*.+
+$2f2d 42 2c 56 2d 6a 2e 7e 2f   B,V-j.~/
+$2f35 38 30 ff ff f2 30 ac 31   80ˇˇÚ0¨1
+$2f3d 66 32 7a 33 8e 34 a2 35   f2z3é4¢5
+$2f45 b6 36 ca 37               ∂6 7
