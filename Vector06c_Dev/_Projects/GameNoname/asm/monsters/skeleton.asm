@@ -437,14 +437,22 @@ SkeletonUpdateRun:
 			ret
 
 @setDetectHero:
-			ret
 @restoreStatusPtr:
 			lxi h, TEMP_ADDR ; hl = monsterStatus
-			mvi m, SKELETON_STATUS_CHASE_HERO_INIT
+			mvi m, SKELETON_STATUS_DETECT_HERO
+			inx h 
+			mvi m, SKELETON_STATUS_DETECT_TIME
+			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
+			dad b 
+			mvi m, <skeleton_idle
+			inx h 
+			mvi m, >skeleton_idle
 			ret
 
 @tilesCollide:
-			somewhere here is an issue.
+            ret
+
+			; set random speed
 			lhld @restoreStatusPtr+1
 			mvi m, SKELETON_STATUS_RUN
 			; advance to monsterStatusTimer
@@ -453,7 +461,7 @@ SkeletonUpdateRun:
 
 			xchg
 			call Random
-			LXI_D_TO_DIFF(monsterSpeedX, monsterStatusTimer)
+			LXI_H_TO_DIFF(monsterSpeedX, monsterStatusTimer)
 			dad d
 
 			cpi $40
