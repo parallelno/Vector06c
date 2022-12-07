@@ -11,7 +11,7 @@ BULLET_RUNTIME_DATA_END = $ff ; the end of the data
 ; for ex. HERO_STATUS_ATTACK plays hero_attk_r or hero_attk_l depending on the direction and it spawns a weapon trail
 BULLET_STATUS_INVIS = $ff
 
-BULLET_MOVE_R = 0
-BULLET_MOVE_L = 1
-BULLET_MOVE_U = 2
-BULLET_MOVE_D = 3
+BULLET_DIR_R = 0
+BULLET_DIR_L = 1
+BULLET_DIR_U = 2
+BULLET_DIR_D = 3

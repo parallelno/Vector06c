@@ -55,8 +55,8 @@ BulletsGetEmptyDataPtr:
 
 ; mark a bullet data ptr as it's going to be destroyed
 ; in:
-; hl - bulletUpdate+1 ptr
-; TODO: optimize. fiil up lastRemovedBulletRuntimeDataPtr
+; hl - bulletUpdatePtr+1 ptr
+; TODO: optimize. fill up lastRemovedBulletRuntimeDataPtr
 BulletsSetDestroy:
 			mvi m, BULLET_RUNTIME_DATA_DESTR
 			ret
@@ -64,7 +64,7 @@ BulletsSetDestroy:
 
 ; mark a bullet data as empty
 ; in:
-; hl - bulletUpdate+1 ptr
+; hl - bulletUpdatePtr+1 ptr
 ; TODO: optimize. fiil up lastRemovedBulletRuntimeDataPtr
 BulletsSetEmpty:
 			mvi m, BULLET_RUNTIME_DATA_EMPTY
