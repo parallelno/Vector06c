@@ -2,6 +2,7 @@
 .include "asm\\levels\\levelsMacro.asm"
 .include "asm\\levels\\levelsData.asm"
 
+.include "asm\\bullets\\bulletsConsts.asm"
 .include "asm\\render\\drawTile.asm"
 .include "asm\\render\\sprite.asm"
 .include "asm\\hero.asm"

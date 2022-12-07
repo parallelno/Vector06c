@@ -1,4 +1,5 @@
-SCYTHE_RUN_SPEED	= $0400 ; low byte is a subpixel speed, high byte is a speed in pixels
+SCYTHE_RUN_SPEED		= $0400				; low byte is a subpixel speed, high byte is a speed in pixels
+SCYTHE_RUN_SPEED_NEG	= $ffff - $0400 + 1	; low byte is a subpixel speed, high byte is a speed in pixels
 
 ; statuses.
 ; a status describes what set of animations and behavior is active
@@ -23,11 +24,13 @@ SCYTHE_COLLISION_OFFSET_X_L = 0
 SCYTHE_COLLISION_OFFSET_Y_L = 0
 
 ; in:
-; c - bullet idx
-; out:
-; a = 0
+; bc - caster posX
+; a - direction
 ScytheInit:
+			push psw
 			call BulletsGetEmptyDataPtr
+			pop psw
+			; a - direction (BULLET_MOVE_*)
 			; hl - ptr to bulletUpdatePtr+1
 
 			dcx h
@@ -46,33 +49,24 @@ ScytheInit:
 			inx h
 			mvi m, SCYTHE_STATUS_INVIS_DURATION
 
-			; tmp b = 0
-			mvi b, 0
 			; advance hl to bulletPosY+1
 			LXI_D_TO_DIFF(bulletPosY+1, bulletStatusTimer)
 			dad d
 			; set posY
-			lda heroPosY+1
-			; tmp c = posY
-			mov c, a
-			; set posY
-			mov m, a
-			dcx h 
-			mov m, b
-			; advance hl to bulletPosX+1	
-			dcx h			
-			; set posX
-			lda heroPosX+1
-
-			mov m, a
+			mov m, c
 			dcx h
+			mvi m, 0
+			; advance hl to bulletPosX+1	
+			dcx h	
+			; set posX
 			mov m, b
+			dcx h
+			mvi m, 0
 
 			; advance hl to bulletEraseWHOld+1
 			dcx h
 			; set the mimimum supported width
-			;mvi m, 1 ; width = 8
-			mov m, b ; width = 8
+			mvi m, 0 ; width = 8
 			; advance hl to bulletEraseWHOld
 			dcx h
 			; set the mimimum supported height
@@ -80,6 +74,7 @@ ScytheInit:
 			; advance hl to bulletEraseScrAddrOld+1
 			LXI_D_TO_DIFF(bulletEraseScrAddrOld+1, bulletEraseWHOld)
 			dad d
+			mov a, b
 			; a - posX
 			; scrX = posX/8 + $a0
 			rrc_(3)
@@ -90,10 +85,6 @@ ScytheInit:
 			dcx h
 			; c = posY
 			mov m, c
-
-			; return zero to erase the tile data
-			; there this bullet was in the roomTilesData
-			xra a 
 			ret
 			.closelabels
 
@@ -228,6 +219,8 @@ ScytheUpdate:
 			cmp m
 			rc ; return if no collision
 
+			ret
+/*
 			; advance hl to monsterImpactPtr
 			LXI_B_TO_DIFF(monsterImpactPtr, monsterUpdatePtr+1)
 			dad b
@@ -237,7 +230,7 @@ ScytheUpdate:
 			mov d, m
 			xchg
 			pchl
-
+*/
 
 ; draw a sprite into a backbuffer
 ; in:

@@ -10,3 +10,8 @@ BULLET_RUNTIME_DATA_END = $ff ; the end of the data
 ; a status describes what set of animations and behavior is active
 ; for ex. HERO_STATUS_ATTACK plays hero_attk_r or hero_attk_l depending on the direction and it spawns a weapon trail
 BULLET_STATUS_INVIS = $ff
+
+BULLET_MOVE_R = 0
+BULLET_MOVE_L = 1
+BULLET_MOVE_U = 2
+BULLET_MOVE_D = 3
