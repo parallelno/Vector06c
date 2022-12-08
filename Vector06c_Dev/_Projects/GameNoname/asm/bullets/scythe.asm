@@ -241,7 +241,7 @@ ScytheUpdateMovement:
             lxi h, TEMP_WORD
 @posXPtr:
 			shld TEMP_ADDR
-@newPosY:			
+@newPosY:
 			lxi h, TEMP_WORD
 @posYPtr:
 			shld TEMP_ADDR
