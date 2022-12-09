@@ -326,7 +326,7 @@ BurnerImpact:
 			; de - ptr to monsterImpactPtr+1
 			LXI_H_TO_DIFF(monsterUpdatePtr+1, monsterImpactPtr+1)
 			dad d
-			jmp MonstersSetDestroy
+			jmp MonstersDestroy
 
 ; draw a sprite into a backbuffer
 ; in:

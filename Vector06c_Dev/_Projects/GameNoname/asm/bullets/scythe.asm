@@ -84,10 +84,6 @@ ScytheInit:
 			inx h
 			mvi m, >scythe_run
 
-			; advance hl to bulletEraseScrAddrOld
-			LXI_D_TO_DIFF(bulletEraseScrAddrOld, bulletAnimPtr+1)
-			dad d
-
 			mov a, b
 			; a - posX
 			; scrX = posX/8 + $a0
@@ -101,12 +97,23 @@ ScytheInit:
 			; e = 0 and SPRITE_W_PACKED_MIN
 			; hl - ptr to bulletEraseScrAddrOld			
 			
+			; advance hl to bulletEraseScrAddr
+			inx h
 			mov m, c
 			inx h
 			mov m, a
-
+			; advance hl to bulletEraseScrAddrOld
+			inx h
+			mov m, c
+			inx h
+			mov m, a
+			; advance hl to bulletEraseWH
+			inx h
+			mvi m, SPRITE_H_MIN
+			inx h
+			mov m, e
 			; advance hl to bulletEraseWHOld
-			inx_h(3)
+			inx h
 			mvi m, SPRITE_H_MIN
 			inx h
 			mov m, e
@@ -122,8 +129,8 @@ ScytheInit:
 			mov m, c
 			; advance hl to bulletSpeedX
 			inx h
-@dir:		; a - direction (BULLET_DIR_*)
-			mvi a, TEMP_BYTE
+@dir:
+			mvi a, TEMP_BYTE ; direction (BULLET_DIR_*)
 			cpi BULLET_DIR_R
 			jz @moveRight
 			cpi BULLET_DIR_L
@@ -179,26 +186,32 @@ ScytheUpdate:
 			LXI_H_TO_DIFF(bulletStatus, bulletUpdatePtr)
 			dad d
 			mov a, m
-			cpi SCYTHE_STATUS_MOVE_BACKWARD
-			jz ScytheUpdateMoveBackward
-			jmp ScytheUpdateMoveForward
+			cpi SCYTHE_STATUS_MOVE_FORWARD
+			jz ScytheUpdateMoveForward
+			jmp ScytheUpdateMoveBackward
+
+tmpdie:
+			; hl = bulletStTusTimer
+			; advance hl to bulletUpdatePtr+1
+			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletStatusTimer)
+			dad b
+			jmp BulletsDestroy
 
 ScytheUpdateMoveForward:
 			; hl = bulletStatus
 			; advance hl to bulletStatusTimer
 			inx h
 			dcr m
-			jz ScytheUpdateMoveBackwardInit
+			jz tmpdie;ScytheUpdateMoveBackwardInit
 ScytheUpdateMovement:
 			LXI_B_TO_DIFF(bulletPosX, bulletStatusTimer)
 			dad b
-			shld @posXPtr+1
+			push h ; (stack) <- posX ptr, to restore it in @applyNewPos
 			; bc <- posX
 			mov c, m
 			inx h
 			mov b, m
 			inx h
-			shld @posYPtr+1
 			; stack <- posY
 			mov e, m
 			inx h
@@ -216,7 +229,7 @@ ScytheUpdateMovement:
 			shld @newPosX+1			
 			mov a, h ; posX + speedX for checking a collision
 			xchg
-			; hl points to speedX+1
+			; hl points to speedY
 			; de <- speedY
 			mov e, m
 			inx h
@@ -228,38 +241,49 @@ ScytheUpdateMovement:
 			shld @newPosY+1
 			; a - posX + speedX			
 			; hl - posY + speedY
+			; de - points to speedY+1
 
 			; check the collision tiles
+			;mov d, a
+			;mov e, h
+			;lxi b, (SCYTHE_COLLISION_WIDTH-1)<<8 | SCYTHE_COLLISION_HEIGHT-1
+			;CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			ani %11110000
+			rrc_(3)
+			adi >BACK_BUFF2_ADDR ; $80
 			mov d, a
 			mov e, h
-			lxi b, (SCYTHE_COLLISION_WIDTH-1)<<8 | SCYTHE_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			lxi h, (SPRITE_W16_PACKED)<<8 | SCYTHE_COLLISION_HEIGHT-1
+			CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			jnz @die
 
 @applyNewPos:
-@newPosX:
-            lxi h, TEMP_WORD
-@posXPtr:
-			shld TEMP_ADDR
-@newPosY:
-			lxi h, TEMP_WORD
-@posYPtr:
-			shld TEMP_ADDR
-			
-			lhld @posXPtr+1
-			; hl points to bulletPosX
+			pop h
+			; hl points to posX
+@newPosX:	lxi d, TEMP_WORD
+@newPosY:	lxi b, TEMP_WORD
+			; store a new posX
+			mov m, e
+			inx h
+			mov m, d
+			inx h
+			; store a new posY
+			mov m, c
+			inx h
+			mov m, b		
+			; hl points to bulletPosY+1
 			; advance hl to bulletAnimTimer
-			LXI_B_TO_DIFF(bulletAnimTimer, bulletPosX)
+			LXI_B_TO_DIFF(bulletAnimTimer, bulletPosY+1)
 			dad b
 			mvi a, SCYTHE_ANIM_SPEED_MOVE
 			jmp SkeletonUpdateAnim
 @die:
-			lhld @posXPtr+1
-			; hl = bulletPosX
+			pop h
+			; hl points to posX
 			; advance hl to bulletUpdatePtr+1
 			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletPosX)
 			dad b
-			jmp BulletsSetDestroy
+			jmp BulletsDestroy
 
 ScytheUpdateMoveBackwardInit:
 			; hl - ptr to bulletStatusTimer
@@ -312,7 +336,7 @@ ScytheUpdateMoveBackward:
 			; advance hl to bulletUpdatePtr+1
 			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletStatusTimer)
 			dad b
-			jmp BulletsSetDestroy
+			jmp BulletsDestroy
 
 /*
 @attkUpdate:
@@ -365,7 +389,7 @@ ScytheUpdateMoveBackward:
 @destroy:
 			LXI_D_TO_DIFF(bulletUpdatePtr+1, bulletStatusTimer)
 			dad d
-			jmp BulletsSetDestroy
+			jmp BulletsDestroy
 
 @delayUpdate:
 			; hl - ptr to bulletStatus
@@ -494,4 +518,3 @@ ScytheDraw:
 			inx h
 			mov m, d
 			ret
-			.closelabels

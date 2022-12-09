@@ -57,7 +57,7 @@ BulletsGetEmptyDataPtr:
 ; in:
 ; hl - bulletUpdatePtr+1 ptr
 ; TODO: optimize. fill up lastRemovedBulletRuntimeDataPtr
-BulletsSetDestroy:
+BulletsDestroy:
 			mvi m, BULLET_RUNTIME_DATA_DESTR
 			ret
 			.closelabels
@@ -257,7 +257,7 @@ BulletCopyToScr:
 			jmp SpriteCopyToScrV
 
 
-; erase sprite
+; erase a sprite or restore the background behind a sprite
 ; in:
 ; hl - ptr to bulletUpdatePtr+1 in the runtime data
 ; a - BULLET_RUNTIME_DATA_* status

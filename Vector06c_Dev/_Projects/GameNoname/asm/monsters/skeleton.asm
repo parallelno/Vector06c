@@ -90,7 +90,7 @@ SKELETON_POS_Y_MAX = (ROOM_HEIGHT - 2 ) * TILE_HEIGHT
 SKELETON_MOVE_SPEED		= $0100
 SKELETON_MOVE_SPEED_NEG	= $ffff - $100 + 1
 
-SKELETON_DETECT_HERO_DISTANCE = 45
+SKELETON_DETECT_HERO_DISTANCE = 60
 
 ;========================================================
 ; called to spawn this monster
@@ -126,12 +126,15 @@ SkeletonInit:
 			mvi m, SKELETON_HEALTH
 			; advance hl to monsterStatus
 			inx h
-			mvi m, SKELETON_STATUS_DETECT_HERO_INIT
-			
-			; advance hl to monsterEraseScrAddr
-			LXI_D_TO_DIFF(monsterEraseScrAddr, monsterStatus)
+			mvi m, SKELETON_STATUS_DETECT_HERO_INIT			
+			; advance hl to monsterAnimPtr
+			LXI_D_TO_DIFF(monsterAnimPtr, monsterStatus)
 			dad d
+			mvi m, <skeleton_idle
+			inx h
+			mvi m, >skeleton_idle
 
+			; c - tileIdx
 			; posX = tile idx % ROOM_WIDTH * TILE_WIDTH
 			mvi a, %00001111
 			ana c
@@ -145,12 +148,14 @@ SkeletonInit:
 			mvi a, %11110000
 			ana c
 			mvi e, 0
+			; d = scrX			
 			; b = posX
-			; d = scrX
 			; a = posY
 			; e = 0 and SPRITE_W_PACKED_MIN
 			; hl - ptr to monsterUpdatePtr+1			
 
+			; advance hl to monsterEraseScrAddr
+			inx h
 			mov m, a
 			inx h
 			mov m, d
@@ -525,6 +530,7 @@ SkeletonUpdateShoot:
 			inx_h(2)
 			mov c, m
 			jmp ScytheInit
+
 
 /*
 ; anim and a gameplay logic update
@@ -960,7 +966,7 @@ SkeletonImpact:
 			; de - ptr to monsterImpactPtr+1
 			LXI_H_TO_DIFF(monsterUpdatePtr+1, monsterImpactPtr+1)
 			dad d
-			jmp MonstersSetDestroy
+			jmp MonstersDestroy
 
 ; draw a sprite into a backbuffer
 ; in:

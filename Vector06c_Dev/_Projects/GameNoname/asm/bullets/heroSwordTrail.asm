@@ -143,7 +143,7 @@ HeroSwordTrailUpdate:
 @destroy:
 			LXI_D_TO_DIFF(bulletUpdatePtr+1, bulletStatusTimer)
 			dad d
-			jmp BulletsSetDestroy
+			jmp BulletsDestroy
 
 @delayUpdate:
 			; hl - ptr to bulletStatus

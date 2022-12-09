@@ -136,7 +136,7 @@ MonstersGetEmptyDataPtr:
 ; in:
 ; hl - monsterUpdate+1 ptr
 ; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
-MonstersSetDestroy:
+MonstersDestroy:
 			mvi m, MONSTER_RUNTIME_DATA_DESTR
 			ret
 			.closelabels
@@ -336,7 +336,7 @@ MonsterCopyToScr:
 			jmp SpriteCopyToScrV
 
 
-; erase sprite
+; erase a sprite or restore the background behind a sprite
 ; in:
 ; hl - ptr to monsterUpdatePtr+1 in the runtime data
 ; a - MONSTER_RUNTIME_DATA_* status
@@ -372,7 +372,7 @@ MonsterErase:
 			; check if it needs to restore the background
 			push h
 			push d
-			mvi a, -$20 ; advance DE to SCR_ADDR_0 to check the collision, to decide if we need to restore a beckground
+			mvi a, -$20 ; advance DE to BACK_BUFF2_ADDR to check the collision, to decide if we need to restore a beckground
 			add d
 			mov d, a
 			CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)

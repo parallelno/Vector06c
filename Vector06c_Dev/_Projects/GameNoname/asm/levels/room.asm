@@ -245,7 +245,7 @@ RoomDrawTiles:
 			lxi h, roomTilesAddr
 @newLine
 			; reset the x. it's a high byte of the first screen buffer addr
-			mvi d, $80
+			mvi d, >SCR_BUFF0_ADDR ; $80
 @loop:
 			; DE - screen addr
 			; HL - tile graphics addr
@@ -277,7 +277,7 @@ RoomDrawTiles:
 ; check tiles if they need to be restored. It uses the tiledata buffer in the ram-disk (bank 3 at $8000)
 ; ex. CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
-; de - scr addr
+; de - back buffer2 scr addr
 ; h - width
 ;		00 - 8pxs,
 ;		01 - 16pxs,
@@ -322,14 +322,14 @@ RoomCheckNonZeroTiles:
 ; b - width-1
 ; c - height-1
 ; out:
-; Z flag is off when all tile data is walkable, means tiledata fff == 0
+; Z flag is off when all tile data are walkable (tiledata fff == 0)
 RoomCheckWalkableTiles:
 			; calc the top-right corner addr
 			mov a, d
 			add b
 			ani %11110000
 			rrc_(3)
-			adi $80
+			adi >BACK_BUFF2_ADDR ; $80
 			mov h, a
 			mov a, e
 			add c
@@ -340,7 +340,7 @@ RoomCheckWalkableTiles:
 			mvi a, %11110000
 			ana h
 			rrc_(3)
-			adi $80
+			adi >BACK_BUFF2_ADDR ; $80
 			mov h, a
 
 			; check the bottom-left corner
@@ -378,7 +378,7 @@ RoomGetTileDataAroundSprite:
 			add b
 			ani %11110000
 			rrc_(3)
-			adi $80
+			adi >BACK_BUFF2_ADDR ; $80
 			mov h, a
 			mov a, e
 			add c
@@ -389,7 +389,7 @@ RoomGetTileDataAroundSprite:
 			mvi a, %11110000
 			ana h
 			rrc_(3)
-			adi $80
+			adi >BACK_BUFF2_ADDR ; $80
 			mov h, a
 
 			; check the bottom-left corner
