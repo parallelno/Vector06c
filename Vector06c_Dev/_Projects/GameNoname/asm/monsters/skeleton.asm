@@ -50,9 +50,8 @@
 ;			status = moveInit
 ;		else:
 ;			accept new pos
-;			check mod-hero collision, impact if collides
 ;			updateAnim
-
+;			check mod-hero collision, impact if collides
 
 ; statuses.
 SKELETON_STATUS_DETECT_HERO_INIT	= 0

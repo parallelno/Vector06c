@@ -11,11 +11,14 @@
 ;	else:
 ;		try to move a mob
 ;		if mob collides with tiles:
-;			death
+;			if status = moveBackward:
+;				die
+;			else:
+;				status = moveBackward
 ;		else:
 ;			accept new pos
-;			check mod-hero collision, impact if collides
 ;			updateAnim
+;			check mod-hero collision, impact if collides
 ; moveBackward:
 ;	decr statusTimer
 ;	if statusTimer = 0
@@ -26,8 +29,8 @@
 ;			death
 ;		else:
 ;			accept new pos
-;			check mod-hero collision, impact if collides
 ;			updateAnim
+;			check mod-hero collision, impact if collides
 
 
 SCYTHE_MOVE_SPEED		= $0400				; low byte is a subpixel speed, high byte is a speed in pixels
