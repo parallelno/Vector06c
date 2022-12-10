@@ -283,13 +283,13 @@ SkeletonUpdateDetectHero:
 			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_DETECT_HERO
-			jmp SkeletonUpdateAnim
+			jmp SkeletonUpdateAnimCheckCollisionHero
 @updateAnimHeroDetectY:
 			; advance hl to monsterAnimTimer
 			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_DETECT_HERO
-			jmp SkeletonUpdateAnim
+			jmp SkeletonUpdateAnimCheckCollisionHero
 
 @setMoveInit:
  			; hl - ptr to monsterStatusTimer
@@ -379,13 +379,12 @@ SkeletonUpdateMove:
 @updateMovement:
 			LXI_B_TO_DIFF(monsterPosX, monsterStatusTimer)
 			dad b
-			shld @posXPtr+1
+			push h ; (stack) <- posX ptr, to restore it in @applyNewPos
 			; bc <- posX
 			mov c, m
 			inx h
 			mov b, m
 			inx h
-			shld @posYPtr+1
 			; stack <- posY
 			mov e, m
 			inx h
@@ -403,7 +402,7 @@ SkeletonUpdateMove:
 			shld @newPosX+1			
 			mov a, h ; posX + speedX for checking a collision
 			xchg
-			; hl points to speedX+1
+			; hl points to speedY
 			; de <- speedY
 			mov e, m
 			inx h
@@ -415,33 +414,38 @@ SkeletonUpdateMove:
 			shld @newPosY+1
 			; a - posX + speedX			
 			; hl - posY + speedY
+			; de - points to speedY+1
 
 			; check the collision tiles
 			mov d, a
 			mov e, h
 			lxi b, (SKELETON_COLLISION_WIDTH-1)<<8 | SKELETON_COLLISION_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			jnz @tilesCollide
+			jnz @setMoveInit
 
 @applyNewPos:
-@newPosX:
-            lxi h, TEMP_WORD
-@posXPtr:
-			shld TEMP_ADDR
-@newPosY:			
-			lxi h, TEMP_WORD
-@posYPtr:
-			shld TEMP_ADDR
-			
-			lhld @posXPtr+1
-			; hl points to monsterPosX
+			pop h
+			; hl points to posX
+@newPosX:	lxi d, TEMP_WORD
+@newPosY:	lxi b, TEMP_WORD
+			; store a new posX
+			mov m, e
+			inx h
+			mov m, d
+			inx h
+			; store a new posY
+			mov m, c
+			inx h
+			mov m, b	
+			; hl points to monsterPosY+1
 			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX)
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_MOVE
-			jmp SkeletonUpdateAnim
-@tilesCollide:
-			lhld @posXPtr+1
+			jmp SkeletonUpdateAnimCheckCollisionHero
+
+@setMoveInit:
+			pop h
 			; hl points to monsterPosX
 			; advance hl to monsterStatus
 			LXI_B_TO_DIFF(monsterStatus, monsterPosX)
@@ -465,7 +469,7 @@ SkeletonUpdateRelax:
 			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatusTimer)			
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_RELAX
-			jmp SkeletonUpdateAnim
+			jmp SkeletonUpdateAnimCheckCollisionHero
  @setMoveInit:
  			; hl - ptr to monsterStatusTimer
 			; advance hl to monsterStatus
@@ -483,7 +487,7 @@ SkeletonUpdateShootPrep:
 			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatusTimer)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_SHOOT_PREP
-			jmp SkeletonUpdateAnim
+			jmp SkeletonUpdateAnimCheckCollisionHero
  @setShoot:
   			; hl - ptr to monsterStatusTimer
 			; advance hl to monsterStatus
@@ -531,276 +535,20 @@ SkeletonUpdateShoot:
 			mov c, m
 			jmp ScytheInit
 
-
-/*
-; anim and a gameplay logic update
 ; in:
-; de - ptr to monsterUpdatePtr in the runtime data
-SkeletonUpdate:
-			; advance hl to monsterStatus
-			LXI_H_TO_DIFF(monsterStatus, monsterUpdatePtr)
-			dad d
-			mov a, m
-			cpi SKELETON_STATUS_DETECT_HERO
-			jz SkeletonUpdateHeroDetect
-			cpi SKELETON_STATUS_RUN
-			jz SkeletonUpdateRun
-			cpi SKELETON_STATUS_FIND_PATROL_END_POS
-			jz SkeletonUpdatePatrolRoute
-			cpi SKELETON_STATUS_ATTACK
-			jz SkeletonUpdateAttack
-			cpi SKELETON_STATUS_CHASE_HERO_INIT
-			jz SkeletonUpdateInitChase
-			ret
-
-SkeletonUpdateHeroDetect:
-			; advance hl to monsterPosX+1
-			LXI_B_TO_DIFF(monsterPosX+1, monsterStatus)
-			dad b
-			; check hero-monster posX diff
-			lda heroPosX+1
-			sub m
-			jc @checkNegPosXDiff
-			cpi SKELETON_DETECT_HERO_DISTANCE
-			jc @checkPosYDiff
-			mvi c, SKELETON_ANIM_SPEED_IDLE
-			jmp @updateAnimHeroDetectX
-@checkNegPosXDiff:
-			cpi -SKELETON_DETECT_HERO_DISTANCE
-			jnc @checkPosYDiff
-			mvi c, SKELETON_ANIM_SPEED_IDLE
-			jmp @updateAnimHeroDetectX
-@checkPosYDiff:
-			; advance hl to monsterPosY+1
-			inx_h(2)
-			; check hero-monster posY diff
-			lda heroPosY+1
-			sub m
-			jc @checkNegPosYDiff
-			cpi SKELETON_DETECT_HERO_DISTANCE
-			jc @detectsHero
-			mvi c, SKELETON_ANIM_SPEED_IDLE
-			jmp @updateAnimHeroDetectY
-@checkNegPosYDiff:
-			cpi -SKELETON_DETECT_HERO_DISTANCE
-			jnc @detectsHero
-			mvi c, SKELETON_ANIM_SPEED_IDLE
-			jmp @updateAnimHeroDetectY
-@detectsHero:
-			; hl = monsterPosY+1
-			; advance hl to monsterStatus
-			LXI_B_TO_DIFF(monsterStatus, monsterPosY+1)
-			dad b
-			mvi m, SKELETON_STATUS_CHASE_HERO_INIT
-			ret
-@updateAnimHeroDetectX:
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
-			dad b
-			mvi a, SKELETON_ANIM_SPEED_DETECT
-			jmp SkeletonUpdateAnim
-@updateAnimHeroDetectY:
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
-			dad b
-			mvi a, SKELETON_ANIM_SPEED_DETECT
-			jmp SkeletonUpdateAnim
-
-SkeletonUpdateInitChase:
-			; hl = monsterStatus
-			; a skeleton goes only straight along the shortest path during SKELETON_STATUS_CHASE_TIME
-			mvi m, SKELETON_STATUS_RUN
-			; advance hl to monsterStatusTimer
-			inx h
-			mvi m, SKELETON_STATUS_RUN_TIME
-			; advance hl to monsterPosX+1
-			LXI_B_TO_DIFF(monsterPosX+1, monsterStatusTimer)
-			dad b
-			; calc abs(heroPosX-monsterPosX)
-			lda heroPosX+1
-			sub m
-			push psw ; store to check which direction a monster has to go to chase a hero
-			jnc @skipInversDiffX
-@invertDiffX:
-			cma
-			inr a ; do not inr A. it is a bit less accurate, but faster
-@skipInversDiffX:
-			mov c, a ; c = abs(heroPosX-monsterPosX)
-			; advance hl to monsterPosY+1
-			inx_h(2)
-			; calc abs(heroPosY-monsterPosY)
-			lda heroPosY+1
-			sub m
-			push psw ; store to check which direction a monster has to go to chase a hero
-			jnc @skipInvertDiffY
-@invertDiffY:
-			cma
-			inr a ; do not inr A. it is a bit less accurate, but faster
-@skipInvertDiffY:
-@compareDiffXdiffY:
-			; c - diffX
-			; a - diffY
-			cmp c
-			; if diffY > diffX, monster goes vertical
-			jnc @setMoveVert
-
-@setMoveHoriz:
-			; hl = monsterPosY+1
-			; advance hl to monsterSpeedX
-			inx h
-			pop psw
-			pop psw
-			jnc @setMoveRigh
-@setMoveLeft:
-			; set speedX
-			mvi m, <SKELETON_MOVE_SPEED_NEG
-			inx h
-			mvi m, >SKELETON_MOVE_SPEED_NEG
-			; advance hl to speedY
-			inx h
-			; reset speedY
-			mvi m, 0
-			inx h
-			mvi m, 0
-
-			; advance hl to monsterAnimPtr
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterSpeedY+1)
-			dad b
-			; set anim
-			mvi m, <skeleton_run_l
-			inx h
-			mvi m, >skeleton_run_l
-			ret
-
-@setMoveRigh:			
-			; set speedX
-			mvi m, <SKELETON_MOVE_SPEED
-			inx h
-			mvi m, >SKELETON_MOVE_SPEED
-			; advance hl to speedY
-			inx h
-			; reset speedY
-			mvi m, 0
-			inx h
-			mvi m, 0
-
-			; advance hl to monsterAnimPtr
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterSpeedY+1)
-			dad b
-			; set anim
-			mvi m, <skeleton_run_r
-			inx h
-			mvi m, >skeleton_run_r
-			ret
-
-@setMoveVert:
-			; hl = monsterPosY+1
-			; advance hl to monsterSpeedX
-			inx h
-			; reset monsterSpeedX
-			mvi m, 0
-			inx h
-			mvi m, 0
-			; advance hl to monsterSpeedY
-			inx h
-
-			pop psw
-			jnc @setMoveUp
-@setMoveDown:
-			; set monsterSpeedY
-			mvi m, <SKELETON_MOVE_SPEED_NEG
-			inx h
-			mvi m, >SKELETON_MOVE_SPEED_NEG
-			; advance hl to monsterAnimPtr
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterSpeedY+1)
-			dad b
-			; set anim
-			mvi m, <skeleton_run_l
-			inx h
-			mvi m, >skeleton_run_l
-			jmp @setMoveHorizPopPSW
-
-@setMoveUp:			
-			mvi m, <SKELETON_MOVE_SPEED
-			inx h
-			mvi m, >SKELETON_MOVE_SPEED
-			; advance hl to monsterAnimPtr
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterSpeedY+1)
-			dad b
-			; set anim
-			mvi m, <skeleton_run_r
-			inx h
-			mvi m, >skeleton_run_r
-@setMoveHorizPopPSW:
-			pop psw
-			ret
-
-SkeletonUpdateRun:
-			; hl = monsterStatus
-			shld @restoreStatusPtr+1
-			; advance hl to monsterStatusTimer
-			inx h
-			dcr m
-			jz @setDetectHero
-
-			; update movement
-			LXI_B_TO_DIFF(monsterPosX, monsterStatusTimer)
-			dad b
-			shld @monsterPosXPtr+1
-			; bc <- (posX)
-			mov c, m
-			inx h
-			mov b, m
-			inx h
-			shld @monsterPosYPtr+1
-			; stack <- (posY)
-			mov e, m
-			inx h
-			mov d, m
-			inx h
-			push d
-			; de <- (speedX)
-			mov e, m
-			inx h
-			mov d, m
-			inx h
-			; (charTempX) <- a new posX
-			xchg
-			dad b
-			; a <- x for checking a collision
-			mov a, h
-			shld charTempX
-			xchg
-			; de <- (speedY)
-			mov e, m
-			inx h
-			mov d, m
-			; (charTempY) <- a new posY
-			xchg
-			pop b
-			dad b
-			shld charTempY
-
-			; check the collision tiles
-			mov d, a
-			mov e, h
-			lxi b, (SKELETON_COLLISION_WIDTH-1)<<8 | SKELETON_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			jnz @tilesCollide
-
-@updatePos:
-            lhld charTempX
-@monsterPosXPtr:
-			shld TEMP_ADDR
-			lhld charTempY
-@monsterPosYPtr:
-			shld TEMP_ADDR
+; hl - monsterAnimTimer
+; a - anim speed
+SkeletonUpdateAnimCheckCollisionHero:
+			mvi a, SKELETON_ANIM_SPEED_MOVE
+			call AnimationUpdate
 @heroCollisionCheck:
-			; TODO: check hero-monster collision every second frame
-			lhld @monsterPosXPtr+1
-			inx h
+			; hl points to monsterAnimPtr
+			; TODO: check hero-monster collision not every frame			
+			; advance hl to monsterPosX
+			LXI_B_TO_DIFF(monsterPosX+1, monsterAnimPtr)
+			dad b
 			; horizontal check
-			mov c, m ; monster posX
+			mov c, m ; posX
 			lda heroPosX+1
 			mov b, a ; tmp
 			adi HERO_COLLISION_WIDTH-1
@@ -811,8 +559,9 @@ SkeletonUpdateRun:
 			cmp b
 			rc
 			; vertical check
+			; advance hl to monsterPosY+1
 			inx_h(2)
-			mov c, m ; monster posY
+			mov c, m ; posY
 			lda heroPosY+1
 			mov b, a
 			adi HERO_COLLISION_HEIGHT-1
@@ -822,146 +571,12 @@ SkeletonUpdateRun:
 			add c
 			cmp b
 			rc
+@collidesHero:			
 			; hero collides
 			; send him a damage
 			mvi c, SKELETON_DAMAGE
-			call HeroImpact
-			ret
-
-@setDetectHero:
-@restoreStatusPtr:
-			lxi h, TEMP_ADDR ; hl = monsterStatus
-			mvi m, SKELETON_STATUS_DETECT_HERO
-			inx h 
-			mvi m, SKELETON_STATUS_DETECT_TIME
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
-			dad b 
-			mvi m, <skeleton_idle
-			inx h 
-			mvi m, >skeleton_idle
-			ret
-
-@tilesCollide:
-            ret
-
-			; set random speed
-			lhld @restoreStatusPtr+1
-			mvi m, SKELETON_STATUS_RUN
-			; advance hl to monsterStatusTimer
-			inx h
-			mvi m, SKELETON_STATUS_RUN_TIME
-
-			xchg
-			call Random
-			LXI_H_TO_DIFF(monsterSpeedX, monsterStatusTimer)
-			dad d
-
-			cpi $40
-			jc @speedXp
-			cpi $80
-			jc @speedXn
-			cpi $c0
-			jc @speedYp
-@speedYn:
-			xra a
-			mov m, a
-			inx h
-			mov m, a
-			inx h
-			mvi m, < SKELETON_MOVE_SPEED_NEG
-			inx h
-			mvi m, > SKELETON_MOVE_SPEED_NEG
-			jmp @setAnim
-@speedYp:
-			xra a
-			mov m, a
-			inx h
-			mov m, a
-			inx h
-			mvi m, < SKELETON_MOVE_SPEED
-			inx h
-			mvi m, > SKELETON_MOVE_SPEED
-			jmp @setAnim
-@speedXn:
-			xra a
-			mvi m, < SKELETON_MOVE_SPEED_NEG
-			inx h
-			mvi m, > SKELETON_MOVE_SPEED_NEG
-			inx h
-			mov m, a
-			inx h
-			mov m, a
-			mvi a, > SKELETON_MOVE_SPEED_NEG
-			jmp @setAnim
-@speedXp:
-			xra a
-			mvi m, < SKELETON_MOVE_SPEED
-			inx h
-			mvi m, > SKELETON_MOVE_SPEED
-			inx h
-			mov m, a
-			inx h
-			mov m, a
-			mvi a, > SKELETON_MOVE_SPEED
-@setAnim:
-			; a = speedX
-			ora a
-			; if speedX is positive, then play skeleton_run_r
-			; that means a vertical movement plays skeleton_run_r anim as well
-			jz @setAnimRunR
-@setAnimRunL:
-			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
-			dad b
-			mvi m, < skeleton_run_l
-			inx h
-			mvi m, > skeleton_run_l
-			ret
-@setAnimRunR:
-			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
-			dad b
-			mvi m, < skeleton_run_r
-			inx h
-			mvi m, > skeleton_run_r
-            ret			
-
-
-SkeletonCheckTileCollision:
-			ret
-SkeletonUpdatePatrolRoute:
-			ret
-SkeletonUpdateAttack:
-			ret
-*/
-; in:
-; hl - ptr to monsterAnimTimer
-; a - anim speed
-SkeletonUpdateAnim:
-			; update monsterAnimTimer
-			add m
-			mov m, a
-			rnc
-			; advance hl to monsterAnimPtr
-			inx h
-			; read the ptr to a current frame
-			mov e, m
-			inx h
-			mov d, m
-			xchg
-			; hl - the ptr to a current frame
-			; get the offset to the next frame
-			mov c, m
-			inx h
-			mov b, m
-			; advance the current frame ptr to the next frame
-			dad b
-			xchg
-			; de - the next frame ptr
-			; store de into the monsterAnimPtr
-			mov m, d
-			dcx h
-			mov m, e
-			ret
-
+			jmp HeroImpact
+			
 SkeletonImpact:
 			; de - ptr to monsterImpactPtr+1
 			LXI_H_TO_DIFF(monsterUpdatePtr+1, monsterImpactPtr+1)

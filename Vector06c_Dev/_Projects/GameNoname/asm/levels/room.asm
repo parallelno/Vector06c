@@ -322,7 +322,7 @@ RoomCheckNonZeroTiles:
 ; b - width-1
 ; c - height-1
 ; out:
-; Z flag is off when all tile data are walkable (tiledata fff == 0)
+; Z flag is on when all tile data are walkable (tiledata fff == 0)
 RoomCheckWalkableTiles:
 			; calc the top-right corner addr
 			mov a, d

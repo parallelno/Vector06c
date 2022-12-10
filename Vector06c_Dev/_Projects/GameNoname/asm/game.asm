@@ -5,6 +5,7 @@
 .include "asm\\bullets\\bulletsConsts.asm"
 .include "asm\\render\\drawTile.asm"
 .include "asm\\render\\sprite.asm"
+.include "asm\\render\\animation.asm"
 .include "asm\\hero.asm"
 .include "asm\\monsters\\monsters.asm"
 .include "asm\\bullets\\bullets.asm"

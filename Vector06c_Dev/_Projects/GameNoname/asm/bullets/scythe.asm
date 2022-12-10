@@ -38,8 +38,8 @@ SCYTHE_STATUS_MOVE_FORWARD = 0
 SCYTHE_STATUS_MOVE_BACKWARD = 1
 
 ; status duration in updates.
-SCYTHE_STATUS_MOVE_FORWARD_TIME	= 50
-SCYTHE_STATUS_MOVE_BACKWARD_TIME	= 100
+SCYTHE_STATUS_MOVE_FORWARD_TIME	= 25
+SCYTHE_STATUS_MOVE_BACKWARD_TIME	= 25
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
 SCYTHE_ANIM_SPEED_MOVE	= 130
@@ -190,19 +190,12 @@ ScytheUpdate:
 			jz ScytheUpdateMoveForward
 			jmp ScytheUpdateMoveBackward
 
-tmpdie:
-			; hl = bulletStTusTimer
-			; advance hl to bulletUpdatePtr+1
-			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletStatusTimer)
-			dad b
-			jmp BulletsDestroy
-
 ScytheUpdateMoveForward:
 			; hl = bulletStatus
 			; advance hl to bulletStatusTimer
 			inx h
 			dcr m
-			jz tmpdie;ScytheUpdateMoveBackwardInit
+			jz ScytheUpdateMoveBackwardInit
 ScytheUpdateMovement:
 			LXI_B_TO_DIFF(bulletPosX, bulletStatusTimer)
 			dad b
@@ -244,18 +237,11 @@ ScytheUpdateMovement:
 			; de - points to speedY+1
 
 			; check the collision tiles
-			;mov d, a
-			;mov e, h
-			;lxi b, (SCYTHE_COLLISION_WIDTH-1)<<8 | SCYTHE_COLLISION_HEIGHT-1
-			;CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			ani %11110000
-			rrc_(3)
-			adi >BACK_BUFF2_ADDR ; $80
 			mov d, a
 			mov e, h
-			lxi h, (SPRITE_W16_PACKED)<<8 | SCYTHE_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			jnz @die
+			lxi b, (SCYTHE_COLLISION_WIDTH-1)<<8 | SCYTHE_COLLISION_HEIGHT-1
+			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			jnz @setMoveBackward
 
 @applyNewPos:
 			pop h
@@ -276,12 +262,66 @@ ScytheUpdateMovement:
 			LXI_B_TO_DIFF(bulletAnimTimer, bulletPosY+1)
 			dad b
 			mvi a, SCYTHE_ANIM_SPEED_MOVE
-			jmp SkeletonUpdateAnim
-@die:
+			call AnimationUpdate
+@checkCollisionHero:
+			; hl points to bulletAnimPtr
+			; TODO: check hero-bullet collision not every frame			
+			; advance hl to bulletPosX
+			LXI_B_TO_DIFF(bulletPosX+1, bulletAnimPtr)
+			dad b
+			; horizontal check
+			mov c, m ; posX
+			lda heroPosX+1
+			mov b, a ; tmp
+			adi HERO_COLLISION_WIDTH-1
+			cmp c
+			rc
+			mvi a, SCYTHE_COLLISION_WIDTH-1
+			add c
+			cmp b
+			rc
+			; vertical check
+			; advance hl to bulletPosY+1
+			inx_h(2)
+			mov c, m ; posY
+			lda heroPosY+1
+			mov b, a
+			adi HERO_COLLISION_HEIGHT-1
+			cmp c
+			rc
+			mvi a, SCYTHE_COLLISION_HEIGHT-1
+			add c
+			cmp b
+			rc
+@collidesHero:
+			; hero collides
+			; hl points to bulletPosY+1
+			push h
+			; send him a damage
+			mvi c, SCYTHE_DAMAGE
+			call HeroImpact
+			pop h
+@dieAfterDamage:
+			; advance hl to bulletUpdatePtr+1
+			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletPosY+1)
+			dad b
+			jmp BulletsDestroy
+			
+@setMoveBackward:
 			pop h
 			; hl points to posX
+			; advance hl to bulletStatus
+			LXI_B_TO_DIFF(bulletStatus, bulletPosX)
+			dad b
+			mov a, m
+			cpi SCYTHE_STATUS_MOVE_BACKWARD
+			jz @dieBackward
+			; advance hl to bulletStatusTImer
+			inx h
+			jmp ScytheUpdateMoveBackwardInit
+@dieBackward:
 			; advance hl to bulletUpdatePtr+1
-			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletPosX)
+			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletStatus)
 			dad b
 			jmp BulletsDestroy
 
@@ -337,140 +377,6 @@ ScytheUpdateMoveBackward:
 			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletStatusTimer)
 			dad b
 			jmp BulletsDestroy
-
-/*
-@attkUpdate:
-			; hl - ptr to bulletStatus
-			; advance and decr bulletStatusTimer
-			inx h
-			; check if it's time to die
-			dcr m
-			jz @destroy			
-
-@attkAnimUpdate:
-			; advance to bulletAnimTimer
-			inx h
-			; update it
-			mov a, m
-			adi SCYTHE_ANIM_SPEED_ATTACK
-			mov m, a
-			jnc @skipAnimUpdate
-
-			; advance to bulletAnimPtr
-			inx h			
-			; read the ptr to a current frame
-			mov e, m
-			inx h
-			mov d, m
-			xchg
-			; hl - the ptr to a current frame
-			; get the offset to the next frame
-			mov c, m
-			inx h
-			mov b, m
-			; advance the current frame ptr to the next frame
-			dad b
-			xchg
-			; de - the next frame ptr
-			; store de into the bulletAnimPtr
-			mov m, d
-			dcx h
-			mov m, e
-@skipAnimUpdate:
-@updateMovement:
-			; advance to bulletPosX
-			LXI_D_TO_DIFF(bulletPosX+1, bulletAnimPtr)
-			dad d
-			mov a, m
-			adi >SCYTHE_RUN_SPEED
-			mov m, a
-
-			ret
-@destroy:
-			LXI_D_TO_DIFF(bulletUpdatePtr+1, bulletStatusTimer)
-			dad d
-			jmp BulletsDestroy
-
-@delayUpdate:
-			; hl - ptr to bulletStatus
-			; advance and decr bulletStatusTimer
-			inx h
-			dcr m
-			rnz
-			
-			; hl = bulletStatusDuration
-			; set the attack
-			mvi m, SCYTHE_STATUS_ATTACK_DURATION
-			; advance and set bulletStatus
-			dcx h
-			mvi m, SCYTHE_STATUS_ATTACK
-			
-			; advance and reset bulletAnimTimer
-			inx_h(2)
-			mvi m, 0
-			; advance and set bulletAnimPtr
-			inx h
-			lda heroDirX
-			ora a
-			jz @attkL
-@attkR:
-			mvi m, < scythe_run
-			inx h
-			mvi m, > scythe_run
-
-			; check enemies-attk01 sprite collision
-			; hl - bulletAnimPtr+1
-			; advance hl to bulletPosX+1			
-			LXI_B_TO_DIFF(bulletPosX+1, bulletAnimPtr+1)
-			dad b
-			; add a collision offset
-			mov d, m
-			inx_h(2)
-			mov e, m
-			lxi h, SCYTHE_COLLISION_OFFSET_X_R<<8 | SCYTHE_COLLISION_OFFSET_Y_R
-			dad d			
-
-			jmp @setCollisionSize
-@attkL:			
-			mvi m, < scythe_run
-			inx h
-			mvi m, > scythe_run
-
-			; check enemies-attk01 sprite collision
-			; hl - bulletAnimPtr+1
-			; advance hl to bulletPosX+1			
-			LXI_B_TO_DIFF(bulletPosX+1, bulletAnimPtr+1)
-			dad b
-			; add a collision offset
-			mov d, m
-			inx_h(2)
-			mov e, m
-			lxi h, SCYTHE_COLLISION_OFFSET_X_L<<8 | SCYTHE_COLLISION_OFFSET_Y_L
-			dad d
-
-@setCollisionSize:
-			mvi a, SCYTHE_COLLISION_WIDTH-1
-			mvi c, SCYTHE_COLLISION_HEIGHT-1
-			lxi d, bulletUpdatePtr+1
-			call MonstersGetFirstCollided
-			
-			; check if bullet collides with bullet
-			mvi a, BULLET_RUNTIME_DATA_EMPTY
-			cmp m
-			rc ; return if no collision
-
-			ret
-
-			; advance hl to bulletImpactPtr
-			LXI_B_TO_DIFF(bulletImpactPtr, bulletUpdatePtr+1)
-			dad b
-			; call bulletImpactPtr
-			mov e, m
-			inx h
-			mov d, m
-			xchg
-			pchl
-*/
 
 ; draw a sprite into a backbuffer
 ; in:

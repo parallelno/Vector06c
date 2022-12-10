@@ -13,7 +13,7 @@ HERO_STATUS_ATTACK_DURATION	= 12
 ; animation speed (the less the slower, 0-255, 255 means next frame every update)
 HERO_ANIM_SPEED_MOVE	= 65
 HERO_ANIM_SPEED_IDLE	= 4
-HERO_ANIM_SPEED_ATTACK	= 50
+HERO_ANIM_SPEED_ATTACK	= 80
 
 ; gameplay
 HERO_HEALTH_MAX = 100
