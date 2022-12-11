@@ -63,13 +63,13 @@ SKELETON_STATUS_MOVE_INIT			= 5
 SKELETON_STATUS_MOVE				= 6
 
 ; status duration in updates.
-SKELETON_STATUS_DETECT_HERO_TIME = 50 ; 1 sec
+SKELETON_STATUS_DETECT_HERO_TIME = 50
 SKELETON_STATUS_SHOOT_PREP_TIME = 10
 SKELETON_STATUS_RELAX_TIME = 25
 SKELETON_STATUS_MOVE_TIME = 75
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
-SKELETON_ANIM_SPEED_DETECT_HERO = 40
+SKELETON_ANIM_SPEED_DETECT_HERO = 30
 SKELETON_ANIM_SPEED_RELAX = 20
 SKELETON_ANIM_SPEED_MOVE = 50
 SKELETON_ANIM_SPEED_SHOOT_PREP = 1
@@ -273,9 +273,9 @@ SkeletonUpdateDetectHero:
 			; advance hl to monsterAnimPtr
 			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
 			dad b
-			mvi m, <skeleton_run_r
+			mvi m, <skeleton_idle
 			inx h
-			mvi m, >skeleton_run_r
+			mvi m, >skeleton_idle
 			ret
 @updateAnimHeroDetectX:
 			; advance hl to monsterAnimTimer

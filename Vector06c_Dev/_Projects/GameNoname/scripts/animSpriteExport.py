@@ -154,7 +154,7 @@ def AnimsToAsm(labelPrefix, sourceJ):
 					nextFrameOffsetLow = -1
 				else:
 					offsetAddr = 1
-					nextFrameOffsetLow = 255 - (len(sourceJ["anims"][animName]) -1) * (preshiftedSprites + offsetAddr) * 2 + 1
+					nextFrameOffsetLow = 255 - (frameCount - 1) * (preshiftedSprites + offsetAddr) * 2 + 1
 					nextFrameOffsetLow -= 1 # decrease the offset to save one instruction in the game code
 					
 				asm += "			.byte " + str(nextFrameOffsetLow) + ", " + nextFrameOffsetHiStr + " ; offset to the first frame\n"

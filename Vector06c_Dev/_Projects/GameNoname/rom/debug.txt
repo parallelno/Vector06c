@@ -399,7 +399,7 @@ skeleton_status_detect_hero_time $0032
 skeleton_status_shoot_prep_time $000a
 skeleton_status_relax_time $0019
 skeleton_status_move_time $004b
-skeleton_anim_speed_detect_hero $0028
+skeleton_anim_speed_detect_hero $001e
 skeleton_anim_speed_relax $0014
 skeleton_anim_speed_move $0032
 skeleton_anim_speed_shoot_prep $0001
@@ -1351,8 +1351,8 @@ herol_attk $2fb4
 ramdiskdata_bank0_addr0_0 $2fd8
 ramdiskdata_bank0_addr0_1 $320d
 ramdiskdata_bank1_addr0_0 $371a
-ramdiskdata_bank1_addr0_1 $3922
-ramdiskdata_bank2_addr0 $3a60
-ramdiskdata_bank2_addr8000 $3c9d
-ramdiskdata_bank3_addr0 $527d
-ramdiskdata_bank3_addr8000 $5c04
+ramdiskdata_bank1_addr0_1 $3a8c
+ramdiskdata_bank2_addr0 $3bca
+ramdiskdata_bank2_addr8000 $3e07
+ramdiskdata_bank3_addr0 $53e7
+ramdiskdata_bank3_addr8000 $5d6e

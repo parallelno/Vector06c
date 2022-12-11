@@ -12,7 +12,7 @@ heroL_idle:
 			.word __heroL_idle0_0, __heroL_idle0_1, __heroL_idle0_2, __heroL_idle0_3, __heroL_idle0_4, __heroL_idle0_5, __heroL_idle0_6, __heroL_idle0_7, 
 			.byte 17, 0 ; offset to the next frame
 			.word __heroL_idle0_0, __heroL_idle0_1, __heroL_idle0_2, __heroL_idle0_3, __heroL_idle0_4, __heroL_idle0_5, __heroL_idle0_6, __heroL_idle0_7, 
-			.byte 237, $ff ; offset to the first frame
+			.byte 201, $ff ; offset to the first frame
 			.word __heroL_run2_0, __heroL_run2_1, __heroL_run2_2, __heroL_run2_3, __heroL_run2_4, __heroL_run2_5, __heroL_run2_6, __heroL_run2_7, 
 heroL_run:
 			.byte 17, 0 ; offset to the next frame
@@ -21,7 +21,7 @@ heroL_run:
 			.word __heroL_run1_0, __heroL_run1_1, __heroL_run1_2, __heroL_run1_3, __heroL_run1_4, __heroL_run1_5, __heroL_run1_6, __heroL_run1_7, 
 			.byte 17, 0 ; offset to the next frame
 			.word __heroL_run2_0, __heroL_run2_1, __heroL_run2_2, __heroL_run2_3, __heroL_run2_4, __heroL_run2_5, __heroL_run2_6, __heroL_run2_7, 
-			.byte 237, $ff ; offset to the first frame
+			.byte 201, $ff ; offset to the first frame
 			.word __heroL_run3_0, __heroL_run3_1, __heroL_run3_2, __heroL_run3_3, __heroL_run3_4, __heroL_run3_5, __heroL_run3_6, __heroL_run3_7, 
 heroL_attk:
 			.byte 17, 0 ; offset to the next frame

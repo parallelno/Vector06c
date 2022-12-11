@@ -132,8 +132,8 @@ BurnerUpdate:
 			shld @monsterUpdatePptr+1
 
 			; anim update
-			lda gameUpdateCounter	; update anim every 4th update
-			ani %11
+			lda gameUpdateCounter	; update anim every 16th update
+			ani %1111
 			jnz @skipAnimUpdate
 			; advance the anim to the next frame
 			push b
