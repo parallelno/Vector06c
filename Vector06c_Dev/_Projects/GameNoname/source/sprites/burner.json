@@ -21,12 +21,8 @@
 	"preshifted_sprites" : 4,
 	"mask" : true,	
 	"anims" : {
-		"idle_r"	: {
-			"frames" : ["idle_r0"],
-			"loop" : true
-		},
-		"idle_l"	: {
-			"frames" : ["idle_l0"],
+		"idle"	: {
+			"frames" : ["idle_0", "idle_1"],
 			"loop" : true
 		},
 		"run_r"	: {
@@ -40,7 +36,7 @@
 	},
 	"sprites" : [
 		{
-			"name" : "idle_r0",
+			"name" : "idle_0",
 			"x" : 0,
 			"y"	: 32,
 			"width" : 16,
@@ -52,7 +48,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "idle_l0",
+			"name" : "idle_1",
 			"x" : 0,
 			"y"	: 48,
 			"width" : 16,
@@ -70,8 +66,9 @@
 			"width" : 16,
 			"height" : 13,
 			"offsetX" : 0,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"offsetY" : 1,			
+			"mask_x" : 16,
+			"mask_y" : 64,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -82,8 +79,9 @@
 			"width" : 16,
 			"height" : 13,
 			"offsetX" : 0,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"offsetY" : 2,			
+			"mask_x" : 16,
+			"mask_y" : 80,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -94,8 +92,9 @@
 			"width" : 16,
 			"height" : 13,
 			"offsetX" : 0,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"offsetY" : 1,
+			"mask_x" : 16,
+			"mask_y" : 96,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -106,8 +105,9 @@
 			"width" : 16,
 			"height" : 13,
 			"offsetX" : 0,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"offsetY" : 0,			
+			"mask_x" : 16,
+			"mask_y" : 112,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -143,7 +143,7 @@
 			"y"	: 160,
 			"width" : 16,
 			"height" : 13,
-			"offsetX" : 0,
+			"offsetX" : 1,
 			"offsetY" : 1,
 			"mask_x" : 16,
 			"mask_y" : 160,

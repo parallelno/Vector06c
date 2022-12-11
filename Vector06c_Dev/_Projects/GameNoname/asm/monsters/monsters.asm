@@ -1,4 +1,5 @@
 .include "asm\\monsters\\monstersConsts.asm"
+.include "asm\\monsters\\monsterMacro.asm"
 .include "asm\\monsters\\skeleton.asm"
 .include "asm\\monsters\\vampire.asm"
 .include "asm\\monsters\\burner.asm"

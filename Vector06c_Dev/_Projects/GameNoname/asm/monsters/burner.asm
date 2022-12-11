@@ -1,20 +1,102 @@
-BURNER_HEALTH = 1
-BURNER_RUN_SPEED		= $0100
-BURNER_RUN_SPEED_D	= $ffff - $100 + 1
+; mob AI:
+; init:
+;	 status = detectHeroInit
+; detectHeroInit:
+;	status = detectHero
+;	statusTimer = detectHeroTime
+;	anim = idle.
+; detectHero:
+;	decr statusTimer
+;	if statusTimer == 0:
+;		status = moveInit
+;	else:
+;		if distance(mob, hero) < a dashing radius:
+;			status = dashPrep
+;			statusTimer = dashPrepTime
+;			anim to the hero dir
+;		else:
+;			updateAnim
+;			check mod-hero collision, impact if collides
+; dashPrep:
+;	decr statusTimer
+;	if statusTimer == 0:
+;		status = dash
+;		anim = run
+;		speed directly to the hero pos
+;	else:
+;		updateAnim
+;		check mod-hero collision, impact if collides
+; dash:
+;	decr statusTimer
+;	if statusTimer == 0:
+;		status = relax
+;		statusTimer = relaxTime
+;	else:
+;		move a mob
+;		updateAnim
+;		check mod-hero collision, impact if collides
+; relax:
+;	decr statusTimer
+;	if statusTimer == 0:
+;		status = moveInit
+;	else:
+;		updateAnim
+;		check mod-hero collision, impact if collides
+; moveInit:
+;	status = move
+;	statusTimer = random
+;	speed = random dir
+;	set anim along the dir
+; move:
+;	decr statusTimer
+;	if statusTimer = 0
+;		status = detectHeroInit
+;	else:
+;		try to move a mob
+;		if mob collides with tiles:
+;			status = moveInit
+;		else:
+;			accept new pos
+;			updateAnim
+;			check mod-hero collision, impact if collides
 
-BURNER_COLLISION_WIDTH = 15
-BURNER_COLLISION_HEIGHT = 10
 
-BURNER_POS_X_MIN = TILE_WIDTH
-BURNER_POS_X_MAX = (ROOM_WIDTH - 2 ) * TILE_WIDTH
-BURNER_POS_Y_MIN = TILE_WIDTH
-BURNER_POS_Y_MAX = (ROOM_HEIGHT - 2 ) * TILE_HEIGHT
+; statuses.
+BURNER_STATUS_DETECT_HERO_INIT	= 0
+BURNER_STATUS_DETECT_HERO		= 1
+BURNER_STATUS_DASH_PREP			= 2
+BURNER_STATUS_DASH				= 3
+BURNER_STATUS_RELAX				= 4
+BURNER_STATUS_MOVE_INIT			= 5
+BURNER_STATUS_MOVE				= 6
+
+; status duration in updates.
+BURNER_STATUS_DETECT_HERO_TIME	= 50
+BURNER_STATUS_DASH_PREP_TIME	= 10
+BURNER_STATUS_DASH_TIME			= 5
+BURNER_STATUS_RELAX_TIME		= 25
+BURNER_STATUS_MOVE_TIME			= 75
+
+; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
+BURNER_ANIM_SPEED_DETECT_HERO	= 50
+BURNER_ANIM_SPEED_RELAX			= 20
+BURNER_ANIM_SPEED_MOVE			= 60
+BURNER_ANIM_SPEED_DASH_PREP		= 1
 
 ; gameplay
 BURNER_DAMAGE = 1
+BURNER_HEALTH = 1
+
+BURNER_COLLISION_WIDTH	= 15
+BURNER_COLLISION_HEIGHT	= 10
+
+BURNER_MOVE_SPEED		= $0100
+BURNER_MOVE_SPEED_NEG	= $ffff - $100 + 1
+
+BURNER_DETECT_HERO_DISTANCE = 60
 
 ;========================================================
-; called to spawn this mod
+; called to spawn this monster
 ; in:
 ; c - tile idx in the roomTilesData array.
 ; a - monster id * 2
@@ -22,103 +104,93 @@ BURNER_DAMAGE = 1
 ; a = 0
 BurnerInit:
 			call MonstersGetEmptyDataPtr
-			; hl - ptr to monsterUpdatePtr+1			
-			mvi m, >BurnerUpdate
-			dcx h 
+			; hl - ptr to monsterUpdatePtr+1
+			; advance hl to monsterUpdatePtr
+			dcx h
 			mvi m, <BurnerUpdate
-
-			; TODO: add monsterDataPrevPPtr init
-			; TODO: add monsterDataNextPPtr init
-
-			
-			; advance to BurnerDraw
-			LXI_d_TO_DIFF(monsterDrawPtr, monsterUpdatePtr)
-			dad d
-			
+			inx h
+			mvi m, >BurnerUpdate
+			; advance hl to monsterDrawPtr
+			inx h
 			mvi m, <BurnerDraw
-			inx h 
+			inx h
 			mvi m, >BurnerDraw
+			; advance hl to monsterImpactPtr
 			inx h
 			mvi m, <BurnerImpact
 			inx h
 			mvi m, >BurnerImpact
-			; advance to monsterType
+
+			; advance hl to monsterType
 			inx h
-			mvi m, MONSTER_TYPE_ENEMY			
-			; advance to monsterHealth
+			mvi m, MONSTER_TYPE_ENEMY
+			; advance hl to monsterHealth
 			inx h
 			mvi m, BURNER_HEALTH
-
-			LXI_D_TO_DIFF(monsterAnimPtr, monsterHealth)
-			dad d
-			; monsterAnimPtr
-			mvi m, < burner_run_r
+			; advance hl to monsterStatus
 			inx h
-			mvi m, > burner_run_r
-			; advance hl to monsterSpeedY+1
-			LXI_D_TO_DIFF(monsterSpeedY+1, monsterAnimPtr+1)
+			mvi m, BURNER_STATUS_DETECT_HERO_INIT
+			; advance hl to monsterAnimPtr
+			LXI_D_TO_DIFF(monsterAnimPtr, monsterStatus)
 			dad d
-			; tmp d = 0
-			mvi d, 0
-			; set monsterSpeedY to zero
-			mov m, d
-			dcx h
-			mov m, d
-			dcx h 
-			; advance hl to monsterSpeedX+1
-			; set monsterSpeedX to right 
-			mvi m, >BURNER_RUN_SPEED
-			dcx h 
-			mvi m, <BURNER_RUN_SPEED
-			dcx h 
-			; advance hl to monsterPosY+1
-			; convert tile idx into the posY and set it
-			mov a, c
-			; posY = tile idx % ROOM_WIDTH * TILE_WIDTH
-			ani %11110000
-			mov m, a
-			mov e, a
-			dcx h 
-			mov m, d
-			; advance hl to monsterPosX+1
-			dcx h 			
-			; convert tile idx into the posX and set it
-			mov a, c
+			mvi m, <burner_idle
+			inx h
+			mvi m, >burner_idle
+
+			; c - tileIdx
 			; posX = tile idx % ROOM_WIDTH * TILE_WIDTH
-			ani %00001111
+			mvi a, %00001111
+			ana c
 			rlc_(4)
-			mov m, a
-			dcx h 
-			mov m, d 
-			; advance hl to monsterEraseWHOld+1
-			dcx h 			
-			mov m, d ; width = 8
-			dcx h 
-			mvi m, 5 ; supported mimimum height
-			; advance hl to monsterEraseWH+1
-			dcx h 			
-			mov m, d ; width = 8
-			dcx h 
-			mvi m, 5 ; supported mimimum height
-			; advance hl to monsterEraseScrAddrOld+1
-			dcx h
-			; a - posX
+			mov b, a
 			; scrX = posX/8 + $a0
 			rrc_(3)
-			ani %00011111			
 			adi SPRITE_X_SCR_ADDR
+			mov d, a
+			; posY = (tile idx % ROOM_WIDTH) * TILE_WIDTH
+			mvi a, %11110000
+			ana c
+			mvi e, 0
+			; d = scrX
+			; b = posX
+			; a = posY
+			; e = 0 and SPRITE_W_PACKED_MIN
+			; hl - ptr to monsterUpdatePtr+1
+
+			; advance hl to monsterEraseScrAddr
+			inx h
 			mov m, a
-			dcx h 
-			mov m, e
-			; advance hl to monsterEraseScrAddr+1
-			dcx h
+			inx h
+			mov m, d
+			; advance hl to monsterEraseScrAddrOld
+			inx h
 			mov m, a
-			dcx h 
+			inx h
+			mov m, d
+			; advance hl to monsterEraseWH
+			inx h
+			mvi m, SPRITE_H_MIN
+			inx h
 			mov m, e
+			; advance hl to monsterEraseWHOld
+			inx h
+			mvi m, SPRITE_H_MIN
+			inx h
+			mov m, e
+			; advance hl to monsterPosX
+			inx h
+			mov m, e
+			inx h
+			mov m, b
+			; advance hl to monsterPosY
+			inx h
+			mov m, e
+			inx h
+			mov m, a
 
 			; return zero to erase the tile data
 			; there this monster was in the roomTilesData
-			xra a 
+			xra a
 			ret
 			.closelabels
 
@@ -126,201 +198,383 @@ BurnerInit:
 ; in:
 ; de - ptr to monsterUpdatePtr in the runtime data
 BurnerUpdate:
-			mov b, d
-			mov c, e
-			xchg
-			shld @monsterUpdatePptr+1
+			; advance hl to monsterStatus
+			LXI_H_TO_DIFF(monsterStatus, monsterUpdatePtr)
+			dad d
+			mov a, m
+			; TODO: optimization. think of using a call table
+			cpi BURNER_STATUS_MOVE
+			jz BurnerUpdateMove
+			cpi BURNER_STATUS_DETECT_HERO
+			jz BurnerUpdateDetectHero
+			cpi BURNER_STATUS_DASH
+			jz BurnerUpdateDash		
+			cpi BURNER_STATUS_RELAX
+			jz BurnerUpdateRelax
+			cpi BURNER_STATUS_DASH_PREP
+			jz BurnerUpdateDashPrep
+			cpi BURNER_STATUS_MOVE_INIT
+			jz BurnerUpdateMoveInit
+			cpi BURNER_STATUS_DETECT_HERO_INIT
+			jz BurnerUpdateDetectHeroInit
+			ret
 
-			; anim update
-			lda gameUpdateCounter	; update anim every 16th update
-			ani %1111
-			jnz @skipAnimUpdate
-			; advance the anim to the next frame
-			push b
+BurnerUpdateDetectHeroInit:
+			; hl = monsterStatus
+			mvi m, BURNER_STATUS_DETECT_HERO
+			inx h
+			mvi m, BURNER_STATUS_DETECT_HERO_TIME
+			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
+			dad b
+			mvi m, <burner_idle
+			inx h
+			mvi m, >burner_idle
+			ret
+
+BurnerUpdateDetectHero:
+			; hl = monsterStatus
+			; advance hl to monsterStatusTimer
+			inx h
+			dcr m
+			jz @setMoveInit
+@checkMobHeroDistance:
+			; advance hl to monsterPosX+1
+			LXI_B_TO_DIFF(monsterPosX+1, monsterStatusTimer)
+			dad b
+			; check hero-monster posX diff
+			lda heroPosX+1
+			sub m
+			jc @checkNegPosXDiff
+			cpi BURNER_DETECT_HERO_DISTANCE
+			jc @checkPosYDiff
+			jmp @updateAnimHeroDetectX
+@checkNegPosXDiff:
+			cpi -BURNER_DETECT_HERO_DISTANCE
+			jnc @checkPosYDiff
+			jmp @updateAnimHeroDetectX
+@checkPosYDiff:
+			; advance hl to monsterPosY+1
+			inx_h(2)
+			; check hero-monster posY diff
+			lda heroPosY+1
+			sub m
+			jc @checkNegPosYDiff
+			cpi BURNER_DETECT_HERO_DISTANCE
+			jc @detectsHero
+			jmp @updateAnimHeroDetectY
+@checkNegPosYDiff:
+			cpi -BURNER_DETECT_HERO_DISTANCE
+			jnc @detectsHero
+			jmp @updateAnimHeroDetectY
+@detectsHero:
+			; hl = monsterPosY+1
+			; advance hl to monsterStatus
+			LXI_B_TO_DIFF(monsterStatus, monsterPosY+1)
+			dad b
+			mvi m, BURNER_STATUS_DASH_PREP
+			inx h
+			mvi m, BURNER_STATUS_DASH_PREP_TIME
 			; advance hl to monsterAnimPtr
-			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
+			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
 			dad b
-			; read the ptr to a current frame
-			mov e, m
+			mvi m, <burner_idle
 			inx h
-			mov d, m
-			xchg
-			; hl - the ptr to a current frame
-			; get the offset to the next frame
-			mov c, m
-			inx h
-			mov b, m
-			; advance hl to the current frame ptr to the next frame
+			mvi m, >burner_idle
+			ret
+@updateAnimHeroDetectX:
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
 			dad b
-			xchg
-			; de - the next frame ptr
-			; store de into the monsterAnimPtr
-			mov m, d
+			mvi a, BURNER_ANIM_SPEED_DETECT_HERO
+			jmp BurnerUpdateAnimCheckCollisionHero
+@updateAnimHeroDetectY:
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
+			dad b
+			mvi a, BURNER_ANIM_SPEED_DETECT_HERO
+			jmp BurnerUpdateAnimCheckCollisionHero
+
+@setMoveInit:
+ 			; hl - ptr to monsterStatusTimer
+			; advance hl to monsterStatus
 			dcx h
-			mov m, e
-			pop b
-@skipAnimUpdate:			
-			; update movement
-			LXI_H_TO_DIFF(monsterPosX, monsterUpdatePtr)
+			mvi m, BURNER_STATUS_MOVE_INIT
+			ret
+
+BurnerUpdateMoveInit:
+			; hl = monsterStatus
+			mvi m, BURNER_STATUS_MOVE
+			inx h
+			mvi m, BURNER_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
+
+			xchg
+			call Random
+			; advance hl to monsterSpeedX
+			LXI_H_TO_DIFF(monsterSpeedX, monsterStatusTimer)
+			dad d
+
+			mvi c, 0 ; tmp c=0
+			cpi $40
+			jc @speedXp
+			cpi $80
+			jc @speedYp
+			cpi $c0
+			jc @speedXn
+@speedYn:
+			mov m, c
+			inx h
+			mov m, c
+			inx h
+			mvi m, <BURNER_MOVE_SPEED_NEG
+			inx h
+			mvi m, >BURNER_MOVE_SPEED_NEG
+			jmp @setAnim
+@speedYp:
+			mov m, c
+			inx h
+			mov m, c
+			inx h
+			mvi m, <BURNER_MOVE_SPEED
+			inx h
+			mvi m, >BURNER_MOVE_SPEED
+			jmp @setAnim
+@speedXn:
+			mvi m, <BURNER_MOVE_SPEED_NEG
+			inx h
+			mvi m, >BURNER_MOVE_SPEED_NEG
+			inx h
+			mov m, c
+			inx h
+			mov m, c
+			jmp @setAnim
+@speedXp:
+			mvi m, <BURNER_MOVE_SPEED
+			inx h
+			mvi m, >BURNER_MOVE_SPEED
+			inx h
+			mov m, c
+			inx h
+			mov m, c
+@setAnim:
+			LXI_B_TO_DIFF(monsterAnimPtr, monsterSpeedY+1)
 			dad b
-			shld @monsterPosXPtr+1
-			; bc <- (posX)
+			; a = rnd
+			ora a
+			; if rnd is positive (up or right movement), then play burner_run_r anim
+			jp @setAnimRunR
+@setAnimRunL:
+			mvi m, <burner_run_l
+			inx h
+			mvi m, >burner_run_l
+			ret
+@setAnimRunR:
+			mvi m, <burner_run_r
+			inx h
+			mvi m, >burner_run_r
+            ret
+
+BurnerUpdateMove:
+			; hl = monsterStatus
+			; advance hl to monsterStatusTimer
+			inx h
+			dcr m
+			jz @setDetectHeroInit
+@updateMovement:
+			LXI_B_TO_DIFF(monsterPosX, monsterStatusTimer)
+			dad b
+			push h ; (stack) <- posX ptr, to restore it in @applyNewPos
+			; bc <- posX
 			mov c, m
 			inx h
 			mov b, m
 			inx h
-			shld @monsterPosYPtr+1
-			; stack <- (posY)
+			; stack <- posY
 			mov e, m
 			inx h
 			mov d, m
 			inx h
 			push d
-			; de <- (speedX)
+			; de <- speedX
 			mov e, m
 			inx h
 			mov d, m
 			inx h
-			; (charTempX) <- a new posX
+			; (newPosX) <- posX + speedX
 			xchg
 			dad b
-			; a <- x for checking a collision
-			mov a, h
-			shld charTempX
+			shld @newPosX+1
+			mov a, h ; posX + speedX for checking a collision
 			xchg
-			; de <- (speedY)
+			; hl points to speedY
+			; de <- speedY
 			mov e, m
 			inx h
 			mov d, m
-			; (charTempY) <- a new posY
+			; (newPosY) <- posY + speedY
 			xchg
 			pop b
 			dad b
-			shld charTempY
+			shld @newPosY+1
+			; a - posX + speedX
+			; hl - posY + speedY
+			; de - points to speedY+1
 
 			; check the collision tiles
 			mov d, a
 			mov e, h
 			lxi b, (BURNER_COLLISION_WIDTH-1)<<8 | BURNER_COLLISION_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			jnz @tilesCollide
+			jnz @setMoveInit
 
-@updatePos:
-            lhld charTempX
-@monsterPosXPtr:
-			shld TEMP_ADDR
-			lhld charTempY
-@monsterPosYPtr:
-			shld TEMP_ADDR
-@heroCollisionCheck:
-			; TODO: check hero-monster collision every second frame
-			lhld @monsterPosXPtr+1
+@applyNewPos:
+			pop h
+			; hl points to posX
+@newPosX:	lxi d, TEMP_WORD
+@newPosY:	lxi b, TEMP_WORD
+			; store a new posX
+			mov m, e
 			inx h
-			; horizontal check
-			mov c, m ; monster posX
-			lda heroPosX+1
-			mov b, a ; tmp
-			adi HERO_COLLISION_WIDTH-1
-			cmp c
-			rc
-			mvi a, BURNER_COLLISION_WIDTH-1
-			add c
-			cmp b
-			rc
-			; vertical check
-			inx_h(2)
-			mov c, m ; monster posY
-			lda heroPosY+1
-			mov b, a
-			adi HERO_COLLISION_HEIGHT-1
-			cmp c
-			rc
-			mvi a, BURNER_COLLISION_HEIGHT-1
-			add c
-			cmp b
-			rc
-			; hero collides
-			; send him a damage
-			mvi c, BURNER_DAMAGE
-			call HeroImpact
+			mov m, d
+			inx h
+			; store a new posY
+			mov m, c
+			inx h
+			mov m, b
+			; hl points to monsterPosY+1
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
+			dad b
+			mvi a, BURNER_ANIM_SPEED_MOVE
+			jmp BurnerUpdateAnimCheckCollisionHero
+
+@setMoveInit:
+			pop h
+			; hl points to monsterPosX
+			; advance hl to monsterStatus
+			LXI_B_TO_DIFF(monsterStatus, monsterPosX)
+			dad b
+			mvi m, BURNER_STATUS_MOVE_INIT
+			ret
+@setDetectHeroInit:
+ 			; hl - ptr to monsterStatusTimer
+			; advance hl to monsterStatus
+			dcx h
+			mvi m, BURNER_STATUS_DETECT_HERO_INIT
 			ret
 
-@tilesCollide:
-@monsterUpdatePptr:
-            lxi b, TEMP_ADDR
-			; get speedX addr
-            call Random
-
-			LXI_H_TO_DIFF(monsterSpeedX, monsterUpdatePtr)
+BurnerUpdateRelax:
+			; hl = monsterStatus
+			; advance hl to monsterStatusTimer
+			inx h
+			dcr m
+			jz @setMoveInit
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatusTimer)
 			dad b
+			mvi a, BURNER_ANIM_SPEED_RELAX
+			jmp BurnerUpdateAnimCheckCollisionHero
+ @setMoveInit:
+ 			; hl - ptr to monsterStatusTimer
+			; advance hl to monsterStatus
+			dcx h
+			mvi m, BURNER_STATUS_MOVE_INIT
+			ret
 
-			cpi $40
-			jc @speedXp
-			cpi $80
-			jc @speedXn
-			cpi $c0
-			jc @speedYp
-@speedYn:
-			xra a
-			mov m, a
+BurnerUpdateDashPrep:
+			; hl = monsterStatus
+			; advance hl to monsterStatusTimer
 			inx h
-			mov m, a
+			dcr m
+			jz @setDash
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatusTimer)
+			dad b
+			mvi a, BURNER_ANIM_SPEED_DASH_PREP
+			jmp BurnerUpdateAnimCheckCollisionHero
+ @setDash:
+  			; hl - ptr to monsterStatusTimer
+			mvi m, BURNER_STATUS_DASH_TIME
+			; advance hl to monsterStatus
+			dcx h
+			mvi m, BURNER_STATUS_DASH
+			ret
+
+BurnerUpdateDash:
+			; hl = monsterStatus
+			; advance hl to monsterStatusTimer
 			inx h
-			mvi m, < BURNER_RUN_SPEED_D
+			dcr m
+			jnz @setDashMove
+
+  			; hl - ptr to monsterStatusTimer
+			mvi m, BURNER_STATUS_RELAX_TIME
+			; advance hl to monsterStatus
+			dcx h
+			mvi m, BURNER_STATUS_RELAX
+			ret
+@setDashMove:
+			; hl points to monsterStatusTimer
+			mvi m, BURNER_STATUS_DASH_TIME
+			; advance hl to monsterStatus
+			dcx h
+			mvi m, BURNER_STATUS_MOVE
+
+			LXI_B_TO_DIFF(monsterSpeedX, monsterStatus)
+			mvi m, 0
 			inx h
-			mvi m, > BURNER_RUN_SPEED_D
-			jmp @setAnim
-@speedYp:
-			xra a
-			mov m, a
+			mvi m, 4
 			inx h
-			mov m, a
+			mvi m, 0
 			inx h
-			mvi m, < BURNER_RUN_SPEED
+			mvi m, 0
+			ret	
+
+/*
+			; hl = monsterStatus
+			mvi m, BURNER_STATUS_RELAX
+			; advance hl to monsterStatusTimer
 			inx h
-			mvi m, > BURNER_RUN_SPEED
-			jmp @setAnim
-@speedXn:
-			xra a
-			mvi m, < BURNER_RUN_SPEED_D
+			mvi m, BURNER_STATUS_RELAX_TIME
+
+			LXI_B_TO_DIFF(monsterSpeedX, monsterStatusTimer)
+			dad b
+			mov a, m
 			inx h
-			mvi m, > BURNER_RUN_SPEED_D
-			inx h
-			mov m, a
-			inx h
-			mov m, a
-			mvi a, > BURNER_RUN_SPEED_D
-			jmp @setAnim
-@speedXp:
-			xra a
-			mvi m, < BURNER_RUN_SPEED
-			inx h
-			mvi m, > BURNER_RUN_SPEED
-			inx h
-			mov m, a
-			inx h
-			mov m, a
-			mvi a, > BURNER_RUN_SPEED
-@setAnim:
-			; a = speedX
+			ora m
+			jz @shootVert
+			mov a, m
 			ora a
-			; if speedX is positive, then play burner_run_r
-			; that means a vertical movement plays burner_run_r anim as well
-			jz @setAnimRunR
-@setAnimRunL:
-			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
+			mvi a, BULLET_DIR_R
+			jp @shootRight
+@shootLeft:
+			mvi a, BULLET_DIR_L
+@shootRight:
+			LXI_B_TO_DIFF(monsterPosX+1, monsterSpeedX+1)
+			jmp @setBulletPos
+@shootVert:
+			; advance hl to monsterSpeedY+1
+			inx_h(2)
+			mov a, m
+			ora a
+			mvi a, BULLET_DIR_U
+			jp @shootUp
+@shootDown:
+			mvi a, BULLET_DIR_D
+@shootUp:
+			LXI_B_TO_DIFF(monsterPosX+1, monsterSpeedY+1)
+@setBulletPos:
 			dad b
-			mvi m, < burner_run_l
-			inx h
-			mvi m, > burner_run_l
-			ret
-@setAnimRunR:
-			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
-			dad b
-			mvi m, < burner_run_r
-			inx h
-			mvi m, > burner_run_r
-            ret
+			mov b, m
+			inx_h(2)
+			mov c, m
+			jmp ScytheInit
+			*/
+
+; in:
+; hl - monsterAnimTimer
+; a - anim speed
+BurnerUpdateAnimCheckCollisionHero:
+			MONSTER_UPDATE_ANIM_CHECK_COLLISION_HERO(BURNER_COLLISION_WIDTH, BURNER_COLLISION_HEIGHT, BURNER_DAMAGE)
 
 BurnerImpact:
 			; de - ptr to monsterImpactPtr+1
@@ -332,40 +586,4 @@ BurnerImpact:
 ; in:
 ; de - ptr to monsterDrawPtr in the runtime data
 BurnerDraw:
-			LXI_H_TO_DIFF(monsterPosX+1, monsterDrawPtr)
-			dad d
-			call SpriteGetScrAddr_burner
-			; hl - ptr to monsterPosY+1
-			; tmpA <- c
-			mov a, c
-
-			; advance to monsterAnimPtr
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterPosY+1)
-			dad b
-			mov b, m
-			inx h
-			push h
-			mov h, m
-			mov l, b
-			mov c, a
-			; hl - animPtr
-			; c - preshifted sprite idx*2 offset
-			call SpriteGetAddr
-
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_BURNER | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
-			pop h
-			inx h
-			; hl - ptr to monsterEraseScrAddr
-			; store a current scr addr, into monsterEraseScrAddr
-			mov m, c
-			inx h
-			mov m, b
-			; advance to monsterEraseWH
-			LXI_B_TO_DIFF(monsterEraseWH, monsterEraseScrAddr+1)
-			dad b
-			; store a width and a height into monsterEraseWH
-			mov m, e
-			inx h
-			mov m, d
-			ret
-			.closelabels
+			MONSTER_DRAW(SpriteGetScrAddr_burner, __RAM_DISK_S_BURNER)

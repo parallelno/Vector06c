@@ -63,28 +63,23 @@ SKELETON_STATUS_MOVE_INIT			= 5
 SKELETON_STATUS_MOVE				= 6
 
 ; status duration in updates.
-SKELETON_STATUS_DETECT_HERO_TIME = 50
-SKELETON_STATUS_SHOOT_PREP_TIME = 10
-SKELETON_STATUS_RELAX_TIME = 25
-SKELETON_STATUS_MOVE_TIME = 75
+SKELETON_STATUS_DETECT_HERO_TIME	= 50
+SKELETON_STATUS_SHOOT_PREP_TIME		= 10
+SKELETON_STATUS_RELAX_TIME			= 25
+SKELETON_STATUS_MOVE_TIME			= 75
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
-SKELETON_ANIM_SPEED_DETECT_HERO = 30
-SKELETON_ANIM_SPEED_RELAX = 20
-SKELETON_ANIM_SPEED_MOVE = 50
-SKELETON_ANIM_SPEED_SHOOT_PREP = 1
+SKELETON_ANIM_SPEED_DETECT_HERO	= 30
+SKELETON_ANIM_SPEED_RELAX		= 20
+SKELETON_ANIM_SPEED_MOVE		= 50
+SKELETON_ANIM_SPEED_SHOOT_PREP	= 1
 
 ; gameplay
 SKELETON_DAMAGE = 1
 SKELETON_HEALTH = 1
 
-SKELETON_COLLISION_WIDTH = 15
-SKELETON_COLLISION_HEIGHT = 10
-
-SKELETON_POS_X_MIN = TILE_WIDTH
-SKELETON_POS_X_MAX = (ROOM_WIDTH - 2 ) * TILE_WIDTH
-SKELETON_POS_Y_MIN = TILE_WIDTH
-SKELETON_POS_Y_MAX = (ROOM_HEIGHT - 2 ) * TILE_HEIGHT
+SKELETON_COLLISION_WIDTH	= 15
+SKELETON_COLLISION_HEIGHT	= 10
 
 SKELETON_MOVE_SPEED		= $0100
 SKELETON_MOVE_SPEED_NEG	= $ffff - $100 + 1
@@ -125,7 +120,7 @@ SkeletonInit:
 			mvi m, SKELETON_HEALTH
 			; advance hl to monsterStatus
 			inx h
-			mvi m, SKELETON_STATUS_DETECT_HERO_INIT			
+			mvi m, SKELETON_STATUS_DETECT_HERO_INIT
 			; advance hl to monsterAnimPtr
 			LXI_D_TO_DIFF(monsterAnimPtr, monsterStatus)
 			dad d
@@ -147,11 +142,11 @@ SkeletonInit:
 			mvi a, %11110000
 			ana c
 			mvi e, 0
-			; d = scrX			
+			; d = scrX
 			; b = posX
 			; a = posY
 			; e = 0 and SPRITE_W_PACKED_MIN
-			; hl - ptr to monsterUpdatePtr+1			
+			; hl - ptr to monsterUpdatePtr+1
 
 			; advance hl to monsterEraseScrAddr
 			inx h
@@ -183,7 +178,7 @@ SkeletonInit:
 			mov m, e
 			inx h
 			mov m, a
-			
+
 			; return zero to erase the tile data
 			; there this monster was in the roomTilesData
 			xra a
@@ -206,7 +201,7 @@ SkeletonUpdate:
 			cpi SKELETON_STATUS_RELAX
 			jz SkeletonUpdateRelax
 			cpi SKELETON_STATUS_SHOOT_PREP
-			jz SkeletonUpdateShootPrep	
+			jz SkeletonUpdateShootPrep
 			cpi SKELETON_STATUS_MOVE_INIT
 			jz SkeletonUpdateMoveInit
 			cpi SKELETON_STATUS_DETECT_HERO_INIT
@@ -218,12 +213,12 @@ SkeletonUpdate:
 SkeletonUpdateDetectHeroInit:
 			; hl = monsterStatus
 			mvi m, SKELETON_STATUS_DETECT_HERO
-			inx h 
+			inx h
 			mvi m, SKELETON_STATUS_DETECT_HERO_TIME
 			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
 			dad b
 			mvi m, <skeleton_idle
-			inx h 
+			inx h
 			mvi m, >skeleton_idle
 			ret
 
@@ -398,7 +393,7 @@ SkeletonUpdateMove:
 			; (newPosX) <- posX + speedX
 			xchg
 			dad b
-			shld @newPosX+1			
+			shld @newPosX+1
 			mov a, h ; posX + speedX for checking a collision
 			xchg
 			; hl points to speedY
@@ -411,7 +406,7 @@ SkeletonUpdateMove:
 			pop b
 			dad b
 			shld @newPosY+1
-			; a - posX + speedX			
+			; a - posX + speedX
 			; hl - posY + speedY
 			; de - points to speedY+1
 
@@ -435,7 +430,7 @@ SkeletonUpdateMove:
 			; store a new posY
 			mov m, c
 			inx h
-			mov m, b	
+			mov m, b
 			; hl points to monsterPosY+1
 			; advance hl to monsterAnimTimer
 			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
@@ -456,7 +451,7 @@ SkeletonUpdateMove:
 			; advance hl to monsterStatus
 			dcx h
 			mvi m, SKELETON_STATUS_DETECT_HERO_INIT
-			ret			
+			ret
 
 SkeletonUpdateRelax:
 			; hl = monsterStatus
@@ -465,7 +460,7 @@ SkeletonUpdateRelax:
 			dcr m
 			jz @setMoveInit
 			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatusTimer)			
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatusTimer)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_RELAX
 			jmp SkeletonUpdateAnimCheckCollisionHero
@@ -497,7 +492,7 @@ SkeletonUpdateShootPrep:
 SkeletonUpdateShoot:
 			; hl = monsterStatus
 			mvi m, SKELETON_STATUS_RELAX
-			; advance hl to monsterStatusTimer	
+			; advance hl to monsterStatusTimer
 			inx h
 			mvi m, SKELETON_STATUS_RELAX_TIME
 
@@ -538,44 +533,8 @@ SkeletonUpdateShoot:
 ; hl - monsterAnimTimer
 ; a - anim speed
 SkeletonUpdateAnimCheckCollisionHero:
-			mvi a, SKELETON_ANIM_SPEED_MOVE
-			call AnimationUpdate
-@heroCollisionCheck:
-			; hl points to monsterAnimPtr
-			; TODO: check hero-monster collision not every frame			
-			; advance hl to monsterPosX
-			LXI_B_TO_DIFF(monsterPosX+1, monsterAnimPtr)
-			dad b
-			; horizontal check
-			mov c, m ; posX
-			lda heroPosX+1
-			mov b, a ; tmp
-			adi HERO_COLLISION_WIDTH-1
-			cmp c
-			rc
-			mvi a, SKELETON_COLLISION_WIDTH-1
-			add c
-			cmp b
-			rc
-			; vertical check
-			; advance hl to monsterPosY+1
-			inx_h(2)
-			mov c, m ; posY
-			lda heroPosY+1
-			mov b, a
-			adi HERO_COLLISION_HEIGHT-1
-			cmp c
-			rc
-			mvi a, SKELETON_COLLISION_HEIGHT-1
-			add c
-			cmp b
-			rc
-@collidesHero:			
-			; hero collides
-			; send him a damage
-			mvi c, SKELETON_DAMAGE
-			jmp HeroImpact
-			
+			MONSTER_UPDATE_ANIM_CHECK_COLLISION_HERO(SKELETON_COLLISION_WIDTH, SKELETON_COLLISION_HEIGHT, SKELETON_DAMAGE)
+
 SkeletonImpact:
 			; de - ptr to monsterImpactPtr+1
 			LXI_H_TO_DIFF(monsterUpdatePtr+1, monsterImpactPtr+1)
@@ -586,40 +545,4 @@ SkeletonImpact:
 ; in:
 ; de - ptr to monsterDrawPtr in the runtime data
 SkeletonDraw:
-			LXI_H_TO_DIFF(monsterPosX+1, monsterDrawPtr)
-			dad d
-			call SpriteGetScrAddr_skeleton
-			; hl - ptr to monsterPosY+1
-			; tmp a = c
-			mov a, c
-
-			; advance hl to monsterAnimPtr
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterPosY+1)
-			dad b
-			mov b, m
-			inx h
-			push h
-			mov h, m
-			mov l, b
-			mov c, a
-			; hl - animPtr
-			; c - preshifted sprite idx*2 offset
-			call SpriteGetAddr
-
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_SKELETON | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
-			pop h
-			inx h
-			; hl - ptr to monsterEraseScrAddr
-			; store a current scr addr, into monsterEraseScrAddr
-			mov m, c
-			inx h
-			mov m, b
-			; advance hl to monsterEraseWH
-			LXI_B_TO_DIFF(monsterEraseWH, monsterEraseScrAddr+1)
-			dad b
-			; store a width and a height into monsterEraseWH
-			mov m, e
-			inx h
-			mov m, d
-			ret
-			.closelabels
+			MONSTER_DRAW(SpriteGetScrAddr_skeleton, __RAM_DISK_S_SKELETON)
