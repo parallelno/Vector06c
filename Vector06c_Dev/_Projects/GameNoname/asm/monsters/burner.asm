@@ -73,7 +73,7 @@ BURNER_STATUS_MOVE				= 6
 ; status duration in updates.
 BURNER_STATUS_DETECT_HERO_TIME	= 50
 BURNER_STATUS_DASH_PREP_TIME	= 10
-BURNER_STATUS_DASH_TIME			= 5
+BURNER_STATUS_DASH_TIME			= 16
 BURNER_STATUS_RELAX_TIME		= 25
 BURNER_STATUS_MOVE_TIME			= 75
 
@@ -82,6 +82,7 @@ BURNER_ANIM_SPEED_DETECT_HERO	= 50
 BURNER_ANIM_SPEED_RELAX			= 20
 BURNER_ANIM_SPEED_MOVE			= 60
 BURNER_ANIM_SPEED_DASH_PREP		= 1
+BURNER_ANIM_SPEED_DASH          = 70
 
 ; gameplay
 BURNER_DAMAGE = 1
@@ -497,6 +498,70 @@ BurnerUpdateDashPrep:
 			; advance hl to monsterStatus
 			dcx h
 			mvi m, BURNER_STATUS_DASH
+			; advance hl to monsterPosX
+			LXI_B_TO_DIFF(monsterPosX, monsterStatus)
+			dad b
+			; reset sub pixel posX
+			mvi m, 0
+			; advance hl to posX+1
+			inx h
+			; posDiff =  heroPos - burnerPosX
+			; speed = posDiff / BURNER_STATUS_DASH_TIME
+			lda heroPosX+1
+			sub m
+			mov e, a 
+			mvi a, 0
+			; if posDiffX < 0, then d = $ff, else d = 0
+			sbb a
+			mov d, a
+			xchg
+			; posDiffX / 16 
+			dad h 
+			dad h 
+			dad h 
+			dad h
+			; to fill up L with %1111 if posDiff < 0
+			ani %1111
+			ora l 
+			mov l, a
+			push h
+			xchg
+			; advance hl to posY
+			inx h
+			; reset sub pixel posY
+			mvi m, 0
+			; advance hl to posY+1
+			inx h
+			; do the same for Y
+			lda heroPosY+1
+			sub m
+			mov e, a 
+			mvi a, 0
+			; if posDiffY < 0, then d = $ff, else d = 0
+			sbb a
+			mov d, a 
+			xchg
+			; posDiffY / 16 
+			dad h 
+			dad h 
+			dad h 
+			dad h 
+			; to fill up L with %1111 if posDiff < 0
+			ani %1111
+			ora l 
+			mov l, a
+			xchg
+			; advance hl to speedX
+			inx h 
+			pop b ; speedX
+			mov m, c 
+			inx h 
+			mov m, b
+			; advance hl to speedY
+			inx h
+			mov m, e
+			inx h 
+			mov m, d
 			ret
 
 BurnerUpdateDash:
@@ -504,71 +569,60 @@ BurnerUpdateDash:
 			; advance hl to monsterStatusTimer
 			inx h
 			dcr m
-			jnz @setDashMove
-
+			jm @setDetectHeroInit
+@applyMovement:
   			; hl - ptr to monsterStatusTimer
-			mvi m, BURNER_STATUS_RELAX_TIME
-			; advance hl to monsterStatus
+			; advance hl to monsterSpeedY+1
+			LXI_B_TO_DIFF(monsterSpeedY+1, monsterStatusTimer)
+			dad b
+			; bc <- speedY
+			mov b, m
 			dcx h
-			mvi m, BURNER_STATUS_RELAX
-			ret
-@setDashMove:
+			mov c, m
+			dcx h
+			; stack <- speedX
+			mov d, m
+			dcx h
+			mov e, m
+			dcx h
+			push d
+			; de <- posY
+			mov d, m
+			dcx h
+			mov e, m
+			; (posY) <- posY + speedY
+			xchg
+			dad b
+			xchg
+			mov m, e
+			inx h 
+			mov m, d
+			dcx_h(2)
+			; hl points to speedX+1
+			; de <- posX
+			mov d, m
+			dcx h
+			mov e, m
+			; (posX) <- posX + speedX
+			xchg
+			pop b
+			dad b
+			xchg
+			mov m, e
+			inx h 
+			mov m, d
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
+			dad b
+			mvi a, BURNER_ANIM_SPEED_DASH
+			jmp AnimationUpdate
+@setDetectHeroInit:
 			; hl points to monsterStatusTimer
-			mvi m, BURNER_STATUS_DASH_TIME
 			; advance hl to monsterStatus
 			dcx h
-			mvi m, BURNER_STATUS_MOVE
-
-			LXI_B_TO_DIFF(monsterSpeedX, monsterStatus)
-			mvi m, 0
-			inx h
-			mvi m, 4
-			inx h
-			mvi m, 0
-			inx h
-			mvi m, 0
+			mvi m, BURNER_STATUS_MOVE_INIT
 			ret	
 
-/*
-			; hl = monsterStatus
-			mvi m, BURNER_STATUS_RELAX
-			; advance hl to monsterStatusTimer
-			inx h
-			mvi m, BURNER_STATUS_RELAX_TIME
-
-			LXI_B_TO_DIFF(monsterSpeedX, monsterStatusTimer)
-			dad b
-			mov a, m
-			inx h
-			ora m
-			jz @shootVert
-			mov a, m
-			ora a
-			mvi a, BULLET_DIR_R
-			jp @shootRight
-@shootLeft:
-			mvi a, BULLET_DIR_L
-@shootRight:
-			LXI_B_TO_DIFF(monsterPosX+1, monsterSpeedX+1)
-			jmp @setBulletPos
-@shootVert:
-			; advance hl to monsterSpeedY+1
-			inx_h(2)
-			mov a, m
-			ora a
-			mvi a, BULLET_DIR_U
-			jp @shootUp
-@shootDown:
-			mvi a, BULLET_DIR_D
-@shootUp:
-			LXI_B_TO_DIFF(monsterPosX+1, monsterSpeedY+1)
-@setBulletPos:
-			dad b
-			mov b, m
-			inx_h(2)
-			mov c, m
-			jmp ScytheInit
-			*/
 
 ; in:
 ; hl - monsterAnimTimer
