@@ -22,7 +22,7 @@
 	"mask" : true,	
 	"anims" : {
 		"idle"	: {
-			"frames" : ["idle_0", "idle_1"],
+			"frames" : ["run_r0", "run_r1", "run_r2", "run_r3", "run_l0", "run_l1", "run_l2", "run_l3"],
 			"loop" : true
 		},
 		"run_r"	: {
@@ -32,87 +32,89 @@
 		"run_l"	: {
 			"frames" : ["run_l0", "run_l1", "run_l2", "run_l3"],
 			"loop" : true
+		},
+		"dash"	: {
+			"frames" : ["dash_0", "dash_1", "dash_2", "dash_3"],
+			"loop" : true
 		}
 	},
 	"sprites" : [
 		{
-			"name" : "idle_0",
+			"name" : "dash_0",
 			"x" : 0,
 			"y"	: 32,
 			"width" : 16,
-			"height" : 13,
+			"height" : 14,
 			"offsetX" : 0,
 			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_y" : 32,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
-			"name" : "idle_1",
+			"name" : "dash_1",
 			"x" : 0,
 			"y"	: 48,
 			"width" : 16,
-			"height" : 13,
+			"height" : 14,
 			"offsetX" : 0,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 16,
+			"mask_y" : 48,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_r0",
+			"name" : "dash_2",
 			"x" : 0,
 			"y"	: 64,
 			"width" : 16,
-			"height" : 13,
+			"height" : 14,
 			"offsetX" : 0,
-			"offsetY" : 1,			
 			"mask_x" : 16,
 			"mask_y" : 64,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_r1",
-			"x" : 0, 
+			"name" : "dash_3",
+			"x" : 0,
 			"y"	: 80,
 			"width" : 16,
-			"height" : 13,
+			"height" : 14,
 			"offsetX" : 0,
-			"offsetY" : 2,			
 			"mask_x" : 16,
 			"mask_y" : 80,
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		},
+		},				
 		{
-			"name" : "run_r2",
+			"name" : "run_r0",
 			"x" : 0,
 			"y"	: 96,
 			"width" : 16,
 			"height" : 13,
 			"offsetX" : 0,
-			"offsetY" : 1,
+			"offsetY" : 1,			
 			"mask_x" : 16,
 			"mask_y" : 96,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_r3",
-			"x" : 0,
+			"name" : "run_r1",
+			"x" : 0, 
 			"y"	: 112,
 			"width" : 16,
 			"height" : 13,
 			"offsetX" : 0,
-			"offsetY" : 0,			
+			"offsetY" : 2,			
 			"mask_x" : 16,
 			"mask_y" : 112,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_l0",
+			"name" : "run_r2",
 			"x" : 0,
 			"y"	: 128,
 			"width" : 16,
@@ -125,25 +127,25 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_l1",
-			"x" : 0, 
+			"name" : "run_r3",
+			"x" : 0,
 			"y"	: 144,
 			"width" : 16,
 			"height" : 13,
 			"offsetX" : 0,
-			"offsetY" : 2,
+			"offsetY" : 0,			
 			"mask_x" : 16,
 			"mask_y" : 144,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
-			"name" : "run_l2",
+			"name" : "run_l0",
 			"x" : 0,
 			"y"	: 160,
 			"width" : 16,
 			"height" : 13,
-			"offsetX" : 1,
+			"offsetX" : 0,
 			"offsetY" : 1,
 			"mask_x" : 16,
 			"mask_y" : 160,
@@ -151,15 +153,41 @@
 			"mask_color" : 1
 		},
 		{
+			"name" : "run_l1",
+			"x" : 0, 
+			"y"	: 176,
+			"width" : 16,
+			"height" : 13,
+			"offsetX" : 0,
+			"offsetY" : 2,
+			"mask_x" : 16,
+			"mask_y" : 176,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run_l2",
+			"x" : 0,
+			"y"	: 192,
+			"width" : 16,
+			"height" : 13,
+			"offsetX" : 1,
+			"offsetY" : 1,
+			"mask_x" : 16,
+			"mask_y" : 192,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
 			"name" : "run_l3",
 			"x" : 0,
-			"y"	: 176,
+			"y"	: 208,
 			"width" : 16,
 			"height" : 13,
 			"offsetX" : 0,
 			"offsetY" : 0,
 			"mask_x" : 16,
-			"mask_y" : 176,
+			"mask_y" : 208,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		}

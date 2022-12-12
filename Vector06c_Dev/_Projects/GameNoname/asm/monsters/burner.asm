@@ -81,8 +81,8 @@ BURNER_STATUS_MOVE_TIME			= 75
 BURNER_ANIM_SPEED_DETECT_HERO	= 50
 BURNER_ANIM_SPEED_RELAX			= 20
 BURNER_ANIM_SPEED_MOVE			= 60
-BURNER_ANIM_SPEED_DASH_PREP		= 1
-BURNER_ANIM_SPEED_DASH          = 70
+BURNER_ANIM_SPEED_DASH_PREP		= 100
+BURNER_ANIM_SPEED_DASH			= 150
 
 ; gameplay
 BURNER_DAMAGE = 1
@@ -278,9 +278,9 @@ BurnerUpdateDetectHero:
 			; advance hl to monsterAnimPtr
 			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
 			dad b
-			mvi m, <burner_idle
+			mvi m, <burner_dash
 			inx h
-			mvi m, >burner_idle
+			mvi m, >burner_dash
 			ret
 @updateAnimHeroDetectX:
 			; advance hl to monsterAnimTimer
