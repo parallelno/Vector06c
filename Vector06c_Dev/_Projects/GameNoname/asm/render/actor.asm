@@ -5,7 +5,7 @@
 ; de, bc
 ; out:
 ; hl points to animPtr (bulletAnimPtr or monsterAnimPtr)
-AnimationUpdate:
+ActorAnimUpdate:
 			; update monsterAnimTimer
 			add m
 			mov m, a

@@ -21,12 +21,8 @@
 	"preshifted_sprites" : 4,
 	"mask" : true,
 	"anims" : {
-		"idle_r" : {
-			"frames" : ["idle_r0"],
-			"loop" : true
-		},
-		"idle_l" : {
-			"frames" : ["idle_l0"],
+		"idle" : {
+			"frames" : ["run_r0", "run_r1", "run_r2", "run_r3", "run_l0", "run_l1", "run_l2", "run_l3"],
 			"loop" : true
 		},
 		"run_r"	: {
@@ -40,112 +36,90 @@
 	},
 	"sprites" : [
 		{
-			"name" : "idle_r0",
-			"x" : 0,
-			"y"	: 32,
-			"width" : 16,
-			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
-			"name" : "idle_l0",
-			"x" : 0,
-			"y"	: 48,
-			"width" : 16,
-			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},
-		{
 			"name" : "run_r0",
 			"x" : 0,
-			"y"	: 64,
+			"y"	: 34,
 			"width" : 16,
-			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"height" : 14,
+			"mask_x" : 16,
+			"mask_y" : 34,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
 			"name" : "run_r1",
 			"x" : 0, 
-			"y"	: 80,
+			"y"	: 50,
 			"width" : 16,
-			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"height" : 14,
+			"mask_x" : 16,
+			"mask_y" : 50,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
 			"name" : "run_r2",
 			"x" : 0,
-			"y"	: 96,
+			"y"	: 65,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 16,
+			"mask_y" : 65,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
 			"name" : "run_r3",
 			"x" : 0,
-			"y"	: 112,
+			"y"	: 81,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 16,
+			"mask_y" : 81,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
 			"name" : "run_l0",
 			"x" : 0,
-			"y"	: 128,
+			"y"	: 98,
 			"width" : 16,
-			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"height" : 14,
+			"mask_x" : 16,
+			"mask_y" : 98,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
 			"name" : "run_l1",
 			"x" : 0, 
-			"y"	: 144,
+			"y"	: 114,
 			"width" : 16,
-			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"height" : 14,
+			"mask_x" : 16,
+			"mask_y" : 114,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
 			"name" : "run_l2",
 			"x" : 0,
-			"y"	: 160,
+			"y"	: 129,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 16,
+			"mask_y" : 129,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
 			"name" : "run_l3",
 			"x" : 0,
-			"y"	: 176,
+			"y"	: 145,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 16,
+			"mask_y" : 145,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		}

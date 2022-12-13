@@ -200,110 +200,14 @@ ScytheUpdateMoveForward:
 			dcr m
 			jz ScytheUpdateMoveBackwardInit
 ScytheUpdateMovement:
-			LXI_B_TO_DIFF(bulletPosX, bulletStatusTimer)
-			dad b
-			push h ; (stack) <- posX ptr, to restore it in @applyNewPos
-			; bc <- posX
-			mov c, m
-			inx h
-			mov b, m
-			inx h
-			; stack <- posY
-			mov e, m
-			inx h
-			mov d, m
-			inx h
-			push d
-			; de <- speedX
-			mov e, m
-			inx h
-			mov d, m
-			inx h
-			; (newPosX) <- posX + speedX
-			xchg
-			dad b
-			shld @newPosX+1			
-			mov a, h ; posX + speedX for checking a collision
-			xchg
-			; hl points to speedY
-			; de <- speedY
-			mov e, m
-			inx h
-			mov d, m
-			; (newPosY) <- posY + speedY
-			xchg
-			pop b
-			dad b
-			shld @newPosY+1
-			; a - posX + speedX			
-			; hl - posY + speedY
-			; de - points to speedY+1
-
-			; check the collision tiles
-			mov d, a
-			mov e, h
-			lxi b, (SCYTHE_COLLISION_WIDTH-1)<<8 | SCYTHE_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			jnz @setMoveBackward
-
-@applyNewPos:
-			pop h
-			; hl points to posX
-@newPosX:	lxi d, TEMP_WORD
-@newPosY:	lxi b, TEMP_WORD
-			; store a new posX
-			mov m, e
-			inx h
-			mov m, d
-			inx h
-			; store a new posY
-			mov m, c
-			inx h
-			mov m, b		
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bulletStatusTimer, bulletPosX, SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, @setMoveBackward) 
+			
 			; hl points to bulletPosY+1
 			; advance hl to bulletAnimTimer
 			LXI_B_TO_DIFF(bulletAnimTimer, bulletPosY+1)
 			dad b
 			mvi a, SCYTHE_ANIM_SPEED_MOVE
-			call AnimationUpdate
-@checkCollisionHero:
-			; hl points to bulletAnimPtr
-			; TODO: check hero-bullet collision not every frame			
-			; advance hl to bulletPosX
-			LXI_B_TO_DIFF(bulletPosX+1, bulletAnimPtr)
-			dad b
-			; horizontal check
-			mov c, m ; posX
-			lda heroPosX+1
-			mov b, a ; tmp
-			adi HERO_COLLISION_WIDTH-1
-			cmp c
-			rc
-			mvi a, SCYTHE_COLLISION_WIDTH-1
-			add c
-			cmp b
-			rc
-			; vertical check
-			; advance hl to bulletPosY+1
-			inx_h(2)
-			mov c, m ; posY
-			lda heroPosY+1
-			mov b, a
-			adi HERO_COLLISION_HEIGHT-1
-			cmp c
-			rc
-			mvi a, SCYTHE_COLLISION_HEIGHT-1
-			add c
-			cmp b
-			rc
-@collidesHero:
-			; hero collides
-			; hl points to bulletPosY+1
-			push h
-			; send him a damage
-			mvi c, SCYTHE_DAMAGE
-			call HeroImpact
-			pop h
+			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, SCYTHE_DAMAGE)	
 @dieAfterDamage:
 			; advance hl to bulletUpdatePtr+1
 			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletPosY+1)
@@ -385,45 +289,4 @@ ScytheUpdateMoveBackward:
 ; in:
 ; de - ptr to bulletDrawPtr in the runtime data
 ScytheDraw:
-			; advance to bulletStatus
-			LXI_H_TO_DIFF(bulletStatus, bulletDrawPtr)
-			dad d
-			mov a, m
-			; if it is invisible, return
-			cpi BULLET_STATUS_INVIS
-			rz
-
-			LXI_D_TO_DIFF(bulletPosX+1, bulletStatus)
-			dad d
-			call SpriteGetScrAddr_scythe
-			; hl - ptr to bulletPosY+1
-			; tmpA <- c
-			mov a, c
-			; advance to bulletAnimPtr
-			LXI_B_TO_DIFF(bulletAnimPtr, bulletPosY+1)
-			dad b
-			mov b, m
-			inx h
-			push h
-			mov h, m
-			mov l, b
-			mov c, a
-			; hl - animPtr
-			; c - preshifted sprite idx*2 offset
-			call SpriteGetAddr
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_SCYTHE | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
-			pop h
-			inx h
-			; hl - ptr to bulletEraseScrAddr
-			; store the current scr addr, into bulletEraseScrAddr
-			mov m, c
-			inx h
-			mov m, b
-			; advance to bulletEraseWH
-			LXI_B_TO_DIFF(bulletEraseWH, bulletEraseScrAddr+1)
-			dad b
-			; store a width and a height into bulletEraseWH
-			mov m, e
-			inx h
-			mov m, d
-			ret
+			BULLET_DRAW(SpriteGetScrAddr_scythe, __RAM_DISK_S_SCYTHE)

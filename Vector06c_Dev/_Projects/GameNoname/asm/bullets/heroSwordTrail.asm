@@ -228,46 +228,4 @@ HeroSwordTrailUpdate:
 ; in:
 ; de - ptr to bulletDrawPtr in the runtime data
 HeroSwordTrailDraw:
-			; advance to bulletStatus
-			LXI_H_TO_DIFF(bulletStatus, bulletDrawPtr)
-			dad d
-			mov a, m
-			; if it is invisible, return
-			cpi BULLET_STATUS_INVIS
-			rz
-
-			LXI_D_TO_DIFF(bulletPosX+1, bulletStatus)
-			dad d
-			call SpriteGetScrAddr_hero_attack01
-			; hl - ptr to bulletPosY+1
-			; tmpA <- c
-			mov a, c
-			; advance to bulletAnimPtr
-			LXI_B_TO_DIFF(bulletAnimPtr, bulletPosY+1)
-			dad b
-			mov b, m
-			inx h
-			push h
-			mov h, m
-			mov l, b
-			mov c, a
-			; hl - animPtr
-			; c - preshifted sprite idx*2 offset
-			call SpriteGetAddr
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_HERO_ATTACK01 | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
-			pop h
-			inx h
-			; hl - ptr to bulletEraseScrAddr
-			; store the current scr addr, into bulletEraseScrAddr
-			mov m, c
-			inx h
-			mov m, b
-			; advance to bulletEraseWH
-			LXI_B_TO_DIFF(bulletEraseWH, bulletEraseScrAddr+1)
-			dad b
-			; store a width and a height into bulletEraseWH
-			mov m, e
-			inx h
-			mov m, d
-			ret
-			.closelabels
+			BULLET_DRAW(SpriteGetScrAddr_hero_attack01, __RAM_DISK_S_HERO_ATTACK01)

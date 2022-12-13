@@ -381,66 +381,8 @@ BurnerUpdateMove:
 			dcr m
 			jz @setDetectHeroInit
 @updateMovement:
-			LXI_B_TO_DIFF(monsterPosX, monsterStatusTimer)
-			dad b
-			push h ; (stack) <- posX ptr, to restore it in @applyNewPos
-			; bc <- posX
-			mov c, m
-			inx h
-			mov b, m
-			inx h
-			; stack <- posY
-			mov e, m
-			inx h
-			mov d, m
-			inx h
-			push d
-			; de <- speedX
-			mov e, m
-			inx h
-			mov d, m
-			inx h
-			; (newPosX) <- posX + speedX
-			xchg
-			dad b
-			shld @newPosX+1
-			mov a, h ; posX + speedX for checking a collision
-			xchg
-			; hl points to speedY
-			; de <- speedY
-			mov e, m
-			inx h
-			mov d, m
-			; (newPosY) <- posY + speedY
-			xchg
-			pop b
-			dad b
-			shld @newPosY+1
-			; a - posX + speedX
-			; hl - posY + speedY
-			; de - points to speedY+1
-
-			; check the collision tiles
-			mov d, a
-			mov e, h
-			lxi b, (BURNER_COLLISION_WIDTH-1)<<8 | BURNER_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			jnz @setMoveInit
-
-@applyNewPos:
-			pop h
-			; hl points to posX
-@newPosX:	lxi d, TEMP_WORD
-@newPosY:	lxi b, TEMP_WORD
-			; store a new posX
-			mov m, e
-			inx h
-			mov m, d
-			inx h
-			; store a new posY
-			mov m, c
-			inx h
-			mov m, b
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monsterStatusTimer, monsterPosX, BURNER_COLLISION_WIDTH, BURNER_COLLISION_HEIGHT, @setMoveInit) 
+			
 			; hl points to monsterPosY+1
 			; advance hl to monsterAnimTimer
 			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
@@ -615,7 +557,7 @@ BurnerUpdateDash:
 			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
 			dad b
 			mvi a, BURNER_ANIM_SPEED_DASH
-			jmp AnimationUpdate
+			jmp ActorAnimUpdate
 @setDetectHeroInit:
 			; hl points to monsterStatusTimer
 			; advance hl to monsterStatus

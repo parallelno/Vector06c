@@ -37,9 +37,9 @@ ramDiskData_bank3_addr8000: ; ['spriteRD', 'drawSpriteRD', 'utilsRD', 'spritePre
 ; ram-disk data layout
 ; bank0 addr0 [1096 free]	- sprites:	['heroR', 'skeleton', 'scythe', 'hero_attack01']
 ; bank0 addr$8000 [32768 free]	- empty:
-; bank1 addr0 [5332 free]	- sprites:	['knight', 'burner', 'vampire']
+; bank1 addr0 [6868 free]	- sprites:	['knight', 'burner', 'vampire']
 ; bank1 addr8000 [0 free]		- $8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)
 ; bank2 addr0 [18046 free]	- sprites:	['heroL']
 ; bank2 addr$8000 [19856 free]	- music:	['song01', 'gigachad16PlayerRD']
-; bank3 addr0 [26220 free]	- levels:	['level01']
+; bank3 addr0 [26212 free]	- levels:	['level01']
 ; bank3 addr$8000 [6136 free]	- $8000-$9FFF code library. $A000-$FFFF back buffer

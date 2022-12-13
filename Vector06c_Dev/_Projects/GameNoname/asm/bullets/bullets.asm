@@ -1,3 +1,4 @@
+.include "asm\\bullets\\bulletsMacro.asm"
 .include "asm\\bullets\\bulletsData.asm"
 .include "asm\\bullets\\heroSwordTrail.asm"
 .include "asm\\bullets\\scythe.asm"

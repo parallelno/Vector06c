@@ -42,11 +42,12 @@
 			ret
 .endmacro
 
+
 ; in:
 ; hl - monsterAnimTimer
 ; a - anim speed
 .macro MONSTER_UPDATE_ANIM_CHECK_COLLISION_HERO(MONSTER_COLLISION_WIDTH, MONSTER_COLLISION_HEIGHT, MONSTER_DAMAGE)
-			call AnimationUpdate
+			call ActorAnimUpdate
 @heroCollisionCheck:
 			; hl points to monsterAnimPtr
 			; TODO: check hero-monster collision not every frame
