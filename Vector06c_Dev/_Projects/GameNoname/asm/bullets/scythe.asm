@@ -37,12 +37,11 @@ SCYTHE_MOVE_SPEED		= $0400				; low byte is a subpixel speed, high byte is a spe
 SCYTHE_MOVE_SPEED_NEG	= $ffff - $0400 + 1	; low byte is a subpixel speed, high byte is a speed in pixels
 
 ; statuses.
-SCYTHE_STATUS_MOVE_FORWARD = 0
-SCYTHE_STATUS_MOVE_BACKWARD = 1
+SCYTHE_STATUS_MOVE_THROW = 0
+SCYTHE_STATUS_MOVE_BOUNCE = 1
 
 ; status duration in updates.
-SCYTHE_STATUS_MOVE_FORWARD_TIME	= 25
-SCYTHE_STATUS_MOVE_BACKWARD_TIME	= 25
+SCYTHE_STATUS_MOVE_TIME	= 25
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
 SCYTHE_ANIM_SPEED_MOVE	= 130
@@ -77,10 +76,10 @@ ScytheInit:
 
 			; advance hl to bulletStatus
 			inx h
-			mvi m, SCYTHE_STATUS_MOVE_FORWARD
+			mvi m, SCYTHE_STATUS_MOVE_THROW
 			; advance and set bulletStatusTimer
 			inx h
-			mvi m, SCYTHE_STATUS_MOVE_FORWARD_TIME
+			mvi m, SCYTHE_STATUS_MOVE_TIME
 			; advance hl to bulletAnimPtr
 			inx_h(2)
 			mvi m, <scythe_run
@@ -185,22 +184,14 @@ ScytheInit:
 ; in:
 ; de - ptr to bulletUpdatePtr in the runtime data
 ScytheUpdate:
-			; advance to bulletStatus
-			LXI_H_TO_DIFF(bulletStatus, bulletUpdatePtr)
+			; advance to bulletStatusTimer
+			LXI_H_TO_DIFF(bulletStatusTimer, bulletUpdatePtr)
 			dad d
-			mov a, m
-			cpi SCYTHE_STATUS_MOVE_FORWARD
-			jz ScytheUpdateMoveForward
-			jmp ScytheUpdateMoveBackward
-
-ScytheUpdateMoveForward:
-			; hl = bulletStatus
-			; advance hl to bulletStatusTimer
-			inx h
+@updateMove:
 			dcr m
-			jz ScytheUpdateMoveBackwardInit
-ScytheUpdateMovement:
-			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bulletStatusTimer, bulletPosX, SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, @setMoveBackward) 
+			jz @die
+@updateMovement:
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bulletStatusTimer, bulletPosX, SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, @setBounceAfterTileCollision) 
 			
 			; hl points to bulletPosY+1
 			; advance hl to bulletAnimTimer
@@ -213,31 +204,17 @@ ScytheUpdateMovement:
 			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletPosY+1)
 			dad b
 			jmp BulletsDestroy
-			
-@setMoveBackward:
+@setBounceAfterTileCollision:
 			pop h
 			; hl points to posX
-			; advance hl to bulletStatus
-			LXI_B_TO_DIFF(bulletStatus, bulletPosX)
+			; advance hl to bulletStatusTimer
+			LXI_B_TO_DIFF(bulletStatusTimer, bulletPosX)
 			dad b
-			mov a, m
-			cpi SCYTHE_STATUS_MOVE_BACKWARD
-			jz @dieBackward
-			; advance hl to bulletStatusTImer
-			inx h
-			jmp ScytheUpdateMoveBackwardInit
-@dieBackward:
-			; advance hl to bulletUpdatePtr+1
-			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletStatus)
-			dad b
-			jmp BulletsDestroy
-
-ScytheUpdateMoveBackwardInit:
+@setBounce:
 			; hl - ptr to bulletStatusTimer
-			mvi m, SCYTHE_STATUS_MOVE_BACKWARD_TIME
 			; advance hl to bulletStatus
 			dcx h
-			mvi m, SCYTHE_STATUS_MOVE_BACKWARD
+			mvi m, SCYTHE_STATUS_MOVE_BOUNCE
 			; advance hl to bulletSpeedX
 			LXI_B_TO_DIFF(bulletSpeedX, bulletStatus)
 			dad b
@@ -272,14 +249,8 @@ ScytheUpdateMoveBackwardInit:
 			dcx h
 			mvi m, <SCYTHE_MOVE_SPEED_NEG
 			ret
-
-ScytheUpdateMoveBackward:
-			; hl = bulletStatus
-			; advance hl to bulletStatusTimer
-			inx h
-			dcr m
-			jnz ScytheUpdateMovement
 @die:
+			; hl points to bulletStatusTimer
 			; advance hl to bulletUpdatePtr+1
 			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletStatusTimer)
 			dad b
