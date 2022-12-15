@@ -287,6 +287,7 @@ SkeletonUpdateDetectHero:
 
 @setMoveInit:
  			; hl - ptr to monsterStatusTimer
+			mvi m, SKELETON_STATUS_MOVE_TIME
 			; advance hl to monsterStatus
 			dcx h
 			mvi m, SKELETON_STATUS_MOVE_INIT
@@ -387,6 +388,8 @@ SkeletonUpdateMove:
 			LXI_B_TO_DIFF(monsterStatus, monsterPosX)
 			dad b
 			mvi m, SKELETON_STATUS_MOVE_INIT
+			inx h
+			mvi m, SKELETON_STATUS_MOVE_TIME
 			ret
 @setDetectHeroInit:
  			; hl - ptr to monsterStatusTimer
@@ -409,6 +412,7 @@ SkeletonUpdateRelax:
 			jmp SkeletonUpdateAnimCheckCollisionHero
  @setMoveInit:
  			; hl - ptr to monsterStatusTimer
+			mvi m, SKELETON_STATUS_MOVE_TIME
 			; advance hl to monsterStatus
 			dcx h
 			mvi m, SKELETON_STATUS_MOVE_INIT

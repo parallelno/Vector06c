@@ -75,7 +75,7 @@ BURNER_STATUS_DETECT_HERO_TIME	= 50
 BURNER_STATUS_DASH_PREP_TIME	= 10
 BURNER_STATUS_DASH_TIME			= 16
 BURNER_STATUS_RELAX_TIME		= 25
-BURNER_STATUS_MOVE_TIME			= 40
+BURNER_STATUS_MOVE_TIME			= 60
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
 BURNER_ANIM_SPEED_DETECT_HERO	= 50
@@ -398,6 +398,8 @@ BurnerUpdateMove:
 			LXI_B_TO_DIFF(monsterStatus, monsterPosX)
 			dad b
 			mvi m, BURNER_STATUS_MOVE_INIT
+			inx h
+			mvi m, BURNER_STATUS_MOVE_TIME
 			ret
 @setDetectHeroInit:
  			; hl - ptr to monsterStatusTimer
@@ -419,6 +421,7 @@ BurnerUpdateRelax:
 			jmp BurnerUpdateAnimCheckCollisionHero
  @setMoveInit:
  			; hl - ptr to monsterStatusTimer
+			mvi m, BURNER_STATUS_MOVE_TIME
 			; advance hl to monsterStatus
 			dcx h
 			mvi m, BURNER_STATUS_MOVE_INIT
@@ -512,7 +515,7 @@ BurnerUpdateDash:
 			; advance hl to monsterStatusTimer
 			inx h
 			dcr m
-			jm @setDetectHeroInit
+			jm @setMoveInit
 @applyMovement:
   			; hl - ptr to monsterStatusTimer
 			; advance hl to monsterSpeedY+1
@@ -559,8 +562,9 @@ BurnerUpdateDash:
 			dad b
 			mvi a, BURNER_ANIM_SPEED_DASH
 			jmp ActorAnimUpdate
-@setDetectHeroInit:
+@setMoveInit:
 			; hl points to monsterStatusTimer
+			mvi m, BURNER_STATUS_MOVE_TIME			
 			; advance hl to monsterStatus
 			dcx h
 			mvi m, BURNER_STATUS_MOVE_INIT

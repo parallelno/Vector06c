@@ -66,7 +66,7 @@ VAMPIRE_STATUS_MOVE				= 6
 VAMPIRE_STATUS_DETECT_HERO_TIME	= 50
 VAMPIRE_STATUS_SHOOT_PREP_TIME		= 30
 VAMPIRE_STATUS_RELAX_TIME			= 25
-VAMPIRE_STATUS_MOVE_TIME			= 75
+VAMPIRE_STATUS_MOVE_TIME			= 55
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
 VAMPIRE_ANIM_SPEED_DETECT_HERO	= 30
@@ -81,8 +81,8 @@ VAMPIRE_HEALTH = 1
 VAMPIRE_COLLISION_WIDTH	= 15
 VAMPIRE_COLLISION_HEIGHT	= 10
 
-VAMPIRE_MOVE_SPEED		= $0100
-VAMPIRE_MOVE_SPEED_NEG	= $ffff - $100 + 1
+VAMPIRE_MOVE_SPEED		= $00c0
+VAMPIRE_MOVE_SPEED_NEG	= $ffff - $c0 + 1
 
 VAMPIRE_DETECT_HERO_DISTANCE = 60
 
@@ -388,6 +388,8 @@ VampireUpdateMove:
 			LXI_B_TO_DIFF(monsterStatus, monsterPosX)
 			dad b
 			mvi m, VAMPIRE_STATUS_MOVE_INIT
+			inx h
+			mvi m, VAMPIRE_STATUS_MOVE_TIME
 			ret
 @setDetectHeroInit:
  			; hl - ptr to monsterStatusTimer
@@ -409,6 +411,7 @@ VampireUpdateRelax:
 			jmp VampireUpdateAnimCheckCollisionHero
  @setMoveInit:
  			; hl - ptr to monsterStatusTimer
+			mvi m, VAMPIRE_STATUS_MOVE_TIME
 			; advance hl to monsterStatus
 			dcx h
 			mvi m, VAMPIRE_STATUS_MOVE_INIT
