@@ -66,7 +66,7 @@ SKELETON_STATUS_MOVE				= 6
 SKELETON_STATUS_DETECT_HERO_TIME	= 50
 SKELETON_STATUS_SHOOT_PREP_TIME		= 10
 SKELETON_STATUS_RELAX_TIME			= 25
-SKELETON_STATUS_MOVE_TIME			= 75
+SKELETON_STATUS_MOVE_TIME			= 50
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
 SKELETON_ANIM_SPEED_DETECT_HERO	= 30
@@ -295,13 +295,13 @@ SkeletonUpdateDetectHero:
 SkeletonUpdateMoveInit:
 			; hl = monsterStatus
 			mvi m, SKELETON_STATUS_MOVE
-			inx h
-			mvi m, SKELETON_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
+			;inx h
+			;mvi m, SKELETON_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
 
 			xchg
 			call Random
 			; advance hl to monsterSpeedX
-			LXI_H_TO_DIFF(monsterSpeedX, monsterStatusTimer)
+			LXI_H_TO_DIFF(monsterSpeedX, monsterStatus)
 			dad d
 
 			mvi c, 0 ; tmp c=0
@@ -390,6 +390,7 @@ SkeletonUpdateMove:
 			ret
 @setDetectHeroInit:
  			; hl - ptr to monsterStatusTimer
+			mvi m, SKELETON_STATUS_MOVE_TIME
 			; advance hl to monsterStatus
 			dcx h
 			mvi m, SKELETON_STATUS_DETECT_HERO_INIT

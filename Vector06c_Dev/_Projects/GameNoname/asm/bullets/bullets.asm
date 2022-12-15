@@ -2,6 +2,7 @@
 .include "asm\\bullets\\bulletsData.asm"
 .include "asm\\bullets\\heroSwordTrail.asm"
 .include "asm\\bullets\\scythe.asm"
+.include "asm\\bullets\\bomb_slow.asm"
 
 BulletsEraseRuntimeData:
 			mvi a, BULLET_RUNTIME_DATA_LAST

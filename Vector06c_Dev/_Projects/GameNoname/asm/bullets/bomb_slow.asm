@@ -33,53 +33,53 @@
 ;			check mod-hero collision, impact if collides
 
 
-SCYTHE_MOVE_SPEED		= $0400				; low byte is a subpixel speed, high byte is a speed in pixels
-SCYTHE_MOVE_SPEED_NEG	= $ffff - $0400 + 1	; low byte is a subpixel speed, high byte is a speed in pixels
+BOMB_SLOW_MOVE_SPEED		= $0400				; low byte is a subpixel speed, high byte is a speed in pixels
+BOMB_SLOW_MOVE_SPEED_NEG	= $ffff - $0400 + 1	; low byte is a subpixel speed, high byte is a speed in pixels
 
 ; statuses.
-SCYTHE_STATUS_MOVE_THROW = 0
-SCYTHE_STATUS_MOVE_BOUNCE = 1
+BOMB_SLOW_STATUS_MOVE_THROW = 0
+BOMB_SLOW_STATUS_MOVE_BOUNCE = 1
 
 ; status duration in updates.
-SCYTHE_STATUS_MOVE_TIME	= 25
+BOMB_SLOW_STATUS_MOVE_TIME	= 25
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
-SCYTHE_ANIM_SPEED_MOVE	= 130
+BOMB_SLOW_ANIM_SPEED_MOVE	= 130
 
 ; gameplay
-SCYTHE_DAMAGE = 1
-SCYTHE_COLLISION_WIDTH	= 12
-SCYTHE_COLLISION_HEIGHT	= 12
+BOMB_SLOW_DAMAGE = 1
+BOMB_SLOW_COLLISION_WIDTH	= 10
+BOMB_SLOW_COLLISION_HEIGHT	= 10
 
 ; in:
 ; bc - caster posX
 ; a - direction
-ScytheInit:
+BombSlowInit:
 			sta @dir+1 ; direction (BULLET_DIR_*)
 			call BulletsGetEmptyDataPtr
 			; hl - ptr to bulletUpdatePtr+1
 			; advance hl to bulletUpdatePtr
 			dcx h
-			mvi m, <ScytheUpdate
+			mvi m, <BombSlowUpdate
 			inx h 
-			mvi m, >ScytheUpdate
+			mvi m, >BombSlowUpdate
 			; advance hl to bulletDrawPtr
 			inx h 
-			mvi m, <ScytheDraw
+			mvi m, <BombSlowDraw
 			inx h 
-			mvi m, >ScytheDraw
+			mvi m, >BombSlowDraw
 
 			; advance hl to bulletStatus
 			inx h
-			mvi m, SCYTHE_STATUS_MOVE_THROW
+			mvi m, BOMB_SLOW_STATUS_MOVE_THROW
 			; advance and set bulletStatusTimer
 			inx h
-			mvi m, SCYTHE_STATUS_MOVE_TIME
+			mvi m, BOMB_SLOW_STATUS_MOVE_TIME
 			; advance hl to bulletAnimPtr
 			inx_h(2)
-			mvi m, <scythe_run
+			mvi m, <bomb_slow_run
 			inx h
-			mvi m, >scythe_run
+			mvi m, >bomb_slow_run
 
 			mov a, b
 			; a - posX
@@ -140,9 +140,9 @@ ScytheInit:
 			mov m, e
 			; advance hl to bulletSpeedY
 			inx h
-			mvi m, <SCYTHE_MOVE_SPEED_NEG
+			mvi m, <BOMB_SLOW_MOVE_SPEED_NEG
 			inx h
-			mvi m, >SCYTHE_MOVE_SPEED_NEG
+			mvi m, >BOMB_SLOW_MOVE_SPEED_NEG
 			ret	
 @moveUp:
 			mov m, e
@@ -150,14 +150,14 @@ ScytheInit:
 			mov m, e
 			; advance hl to bulletSpeedY
 			inx h
-			mvi m, <SCYTHE_MOVE_SPEED
+			mvi m, <BOMB_SLOW_MOVE_SPEED
 			inx h
-			mvi m, >SCYTHE_MOVE_SPEED
+			mvi m, >BOMB_SLOW_MOVE_SPEED
 			ret
 @moveLeft:
-			mvi m, <SCYTHE_MOVE_SPEED_NEG
+			mvi m, <BOMB_SLOW_MOVE_SPEED_NEG
 			inx h
-			mvi m, >SCYTHE_MOVE_SPEED_NEG
+			mvi m, >BOMB_SLOW_MOVE_SPEED_NEG
 			; advance hl to bulletSpeedY
 			inx h			
 			mov m, e
@@ -165,9 +165,9 @@ ScytheInit:
 			mov m, e
 			ret			
 @moveRight:
-			mvi m, <SCYTHE_MOVE_SPEED
+			mvi m, <BOMB_SLOW_MOVE_SPEED
 			inx h
-			mvi m, >SCYTHE_MOVE_SPEED
+			mvi m, >BOMB_SLOW_MOVE_SPEED
 			; advance hl to bulletSpeedY
 			inx h			
 			mov m, e
@@ -178,7 +178,7 @@ ScytheInit:
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to bulletUpdatePtr in the runtime data
-ScytheUpdate:
+BombSlowUpdate:
 			; advance to bulletStatusTimer
 			LXI_H_TO_DIFF(bulletStatusTimer, bulletUpdatePtr)
 			dad d
@@ -186,14 +186,14 @@ ScytheUpdate:
 			dcr m
 			jz @die
 @updateMovement:
-			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bulletStatusTimer, bulletPosX, SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, @setBounceAfterTileCollision) 
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bulletStatusTimer, bulletPosX, BOMB_SLOW_COLLISION_WIDTH, BOMB_SLOW_COLLISION_HEIGHT, @setBounceAfterTileCollision) 
 			
 			; hl points to bulletPosY+1
 			; advance hl to bulletAnimTimer
 			LXI_B_TO_DIFF(bulletAnimTimer, bulletPosY+1)
 			dad b
-			mvi a, SCYTHE_ANIM_SPEED_MOVE
-			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, SCYTHE_DAMAGE)	
+			mvi a, BOMB_SLOW_ANIM_SPEED_MOVE
+			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_SLOW_COLLISION_WIDTH, BOMB_SLOW_COLLISION_HEIGHT, BOMB_SLOW_DAMAGE)	
 @dieAfterDamage:
 			; advance hl to bulletUpdatePtr+1
 			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletPosY+1)
@@ -209,7 +209,7 @@ ScytheUpdate:
 			; hl - ptr to bulletStatusTimer
 			; advance hl to bulletStatus
 			dcx h
-			mvi m, SCYTHE_STATUS_MOVE_BOUNCE
+			mvi m, BOMB_SLOW_STATUS_MOVE_BOUNCE
 			; advance hl to bulletSpeedX
 			LXI_B_TO_DIFF(bulletSpeedX, bulletStatus)
 			dad b
@@ -219,14 +219,14 @@ ScytheUpdate:
 			jz @setMoveVert
 			jp @setMoveLeft
 @setMoveRight:
-			mvi m, >SCYTHE_MOVE_SPEED
+			mvi m, >BOMB_SLOW_MOVE_SPEED
 			dcx h
-			mvi m, <SCYTHE_MOVE_SPEED
+			mvi m, <BOMB_SLOW_MOVE_SPEED
 			ret
 @setMoveLeft:
-			mvi m, >SCYTHE_MOVE_SPEED_NEG
+			mvi m, >BOMB_SLOW_MOVE_SPEED_NEG
 			dcx h
-			mvi m, <SCYTHE_MOVE_SPEED_NEG
+			mvi m, <BOMB_SLOW_MOVE_SPEED_NEG
 			ret
 @setMoveVert:		
 			; advance hl to bulletSpeedY+1
@@ -235,14 +235,14 @@ ScytheUpdate:
 			ora a
 			jp @setMoveDown
 @setMoveUp:			
-			mvi m, >SCYTHE_MOVE_SPEED
+			mvi m, >BOMB_SLOW_MOVE_SPEED
 			dcx h
-			mvi m, <SCYTHE_MOVE_SPEED
+			mvi m, <BOMB_SLOW_MOVE_SPEED
 			ret
 @setMoveDown:			
-			mvi m, >SCYTHE_MOVE_SPEED_NEG
+			mvi m, >BOMB_SLOW_MOVE_SPEED_NEG
 			dcx h
-			mvi m, <SCYTHE_MOVE_SPEED_NEG
+			mvi m, <BOMB_SLOW_MOVE_SPEED_NEG
 			ret
 @die:
 			; hl points to bulletStatusTimer
@@ -254,5 +254,5 @@ ScytheUpdate:
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to bulletDrawPtr in the runtime data
-ScytheDraw:
-			BULLET_DRAW(SpriteGetScrAddr_scythe, __RAM_DISK_S_SCYTHE)
+BombSlowDraw:
+			BULLET_DRAW(SpriteGetScrAddr_bomb_slow, __RAM_DISK_S_BOMB_SLOW)

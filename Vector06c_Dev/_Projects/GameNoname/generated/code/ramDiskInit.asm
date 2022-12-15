@@ -92,7 +92,7 @@ RamDiskInit:
 			mvi a, RAM_DISK_S1 | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F
 			call CopyToRamDisk
 
-			; unpack chunk 1 ['vampire'] sprites into the ram-disk back buffer
+			; unpack chunk 1 ['vampire', 'bomb_slow'] sprites into the ram-disk back buffer
 			lxi d, ramDiskData_bank1_addr0_1
 			lxi b, SCR_BUFF1_ADDR
 			mvi a, __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F
@@ -105,7 +105,14 @@ RamDiskInit:
 			call __SpriteDupPreshift
 			RAM_DISK_OFF()
 
-			; copy chunk 1 ['vampire'] sprites to the ram-disk
+			; preshift chunk 1 bomb_slow sprites
+			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
+			lxi d, bomb_slow_preshifted_sprites
+			lxi h, SCR_BUFF1_ADDR - __chunkEnd_bank1_addr0_0
+			call __SpriteDupPreshift
+			RAM_DISK_OFF()
+
+			; copy chunk 1 ['vampire', 'bomb_slow'] sprites to the ram-disk
 			lxi d, SCR_BUFF1_ADDR + (__chunkEnd_bank1_addr0_1 - __chunkEnd_bank1_addr0_0)
 			lxi h, __chunkEnd_bank1_addr0_1
 			lxi b, (__chunkEnd_bank1_addr0_1 - __chunkEnd_bank1_addr0_0) / 2

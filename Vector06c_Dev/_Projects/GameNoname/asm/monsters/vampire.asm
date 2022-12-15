@@ -1,20 +1,93 @@
-VAMPIRE_HEALTH = 1
-VAMPIRE_RUN_SPEED		= $0100
-VAMPIRE_RUN_SPEED_NEG	= $ffff - $100 + 1
+; mob AI:
+; init:
+;	 status = detectHeroInit
+; detectHeroInit:
+;	status = detectHero
+;	statusTimer = detectHeroTime
+;	anim = idle.
+; detectHero:
+;	decr statusTimer
+;	if statusTimer == 0:
+;		status = moveInit
+;	else:
+;		if distance(mob, hero) < a shooting radius:
+;			status = shootPrep
+;			statusTimer = shootPrepTime
+;			anim to the hero dir
+;		else:
+;			updateAnim
+;			check mod-hero collision, impact if collides
+; shootPrep:
+;	decr statusTimer
+;	if statusTimer == 0:
+;		status = shoot
+;	else:
+;		updateAnim
+;		check mod-hero collision, impact if collides
+; shoot:
+;	status = relax
+;	statusTimer = relaxTime
+;	spawn a projectile along the mob dir
+; relax:
+;	decr statusTimer
+;	if statusTimer == 0:
+;		status = moveInit
+;	else:
+;		updateAnim
+;		check mod-hero collision, impact if collides
+; moveInit:
+;	status = move
+;	statusTimer = random
+;	speed = random dir
+;	set anim along the dir
+; move:
+;	decr statusTimer
+;	if statusTimer = 0
+;		status = detectHeroInit
+;	else:
+;		try to move a mob
+;		if mob collides with tiles:
+;			status = moveInit
+;		else:
+;			accept new pos
+;			updateAnim
+;			check mod-hero collision, impact if collides
 
-VAMPIRE_COLLISION_WIDTH = 15
-VAMPIRE_COLLISION_HEIGHT = 10
+; statuses.
+VAMPIRE_STATUS_DETECT_HERO_INIT	= 0
+VAMPIRE_STATUS_DETECT_HERO			= 1
+VAMPIRE_STATUS_SHOOT_PREP			= 2
+VAMPIRE_STATUS_SHOOT				= 3
+VAMPIRE_STATUS_RELAX				= 4
+VAMPIRE_STATUS_MOVE_INIT			= 5
+VAMPIRE_STATUS_MOVE				= 6
 
-VAMPIRE_POS_X_MIN = TILE_WIDTH
-VAMPIRE_POS_X_MAX = (ROOM_WIDTH - 2 ) * TILE_WIDTH
-VAMPIRE_POS_Y_MIN = TILE_WIDTH
-VAMPIRE_POS_Y_MAX = (ROOM_HEIGHT - 2 ) * TILE_HEIGHT
+; status duration in updates.
+VAMPIRE_STATUS_DETECT_HERO_TIME	= 50
+VAMPIRE_STATUS_SHOOT_PREP_TIME		= 30
+VAMPIRE_STATUS_RELAX_TIME			= 25
+VAMPIRE_STATUS_MOVE_TIME			= 75
+
+; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
+VAMPIRE_ANIM_SPEED_DETECT_HERO	= 30
+VAMPIRE_ANIM_SPEED_RELAX		= 20
+VAMPIRE_ANIM_SPEED_MOVE		= 50
+VAMPIRE_ANIM_SPEED_SHOOT_PREP	= 1
 
 ; gameplay
 VAMPIRE_DAMAGE = 1
+VAMPIRE_HEALTH = 1
+
+VAMPIRE_COLLISION_WIDTH	= 15
+VAMPIRE_COLLISION_HEIGHT	= 10
+
+VAMPIRE_MOVE_SPEED		= $0100
+VAMPIRE_MOVE_SPEED_NEG	= $ffff - $100 + 1
+
+VAMPIRE_DETECT_HERO_DISTANCE = 60
 
 ;========================================================
-; called to spawn this mod
+; called to spawn this monster
 ; in:
 ; c - tile idx in the roomTilesData array.
 ; a - monster id * 2
@@ -22,103 +95,93 @@ VAMPIRE_DAMAGE = 1
 ; a = 0
 VampireInit:
 			call MonstersGetEmptyDataPtr
-			; hl - ptr to monsterUpdatePtr+1			
-			mvi m, >VampireUpdate
-			dcx h 
+			; hl - ptr to monsterUpdatePtr+1
+			; advance hl to monsterUpdatePtr
+			dcx h
 			mvi m, <VampireUpdate
-
-			; TODO: add monsterDataPrevPPtr init
-			; TODO: add monsterDataNextPPtr init
-
-			
-			; advance to VampireDraw
-			LXI_d_TO_DIFF(monsterDrawPtr, monsterUpdatePtr)
-			dad d
-			
+			inx h
+			mvi m, >VampireUpdate
+			; advance hl to monsterDrawPtr
+			inx h
 			mvi m, <VampireDraw
-			inx h 
+			inx h
 			mvi m, >VampireDraw
+			; advance hl to monsterImpactPtr
 			inx h
 			mvi m, <VampireImpact
 			inx h
 			mvi m, >VampireImpact
-			; advance to monsterType
+
+			; advance hl to monsterType
 			inx h
-			mvi m, MONSTER_TYPE_ENEMY			
-			; advance to monsterHealth
+			mvi m, MONSTER_TYPE_ENEMY
+			; advance hl to monsterHealth
 			inx h
 			mvi m, VAMPIRE_HEALTH
-
-			LXI_D_TO_DIFF(monsterAnimPtr, monsterHealth)
-			dad d
-			; monsterAnimPtr
-			mvi m, < vampire_run_r
+			; advance hl to monsterStatus
 			inx h
-			mvi m, > vampire_run_r
-			; advance hl to monsterSpeedY+1
-			LXI_D_TO_DIFF(monsterSpeedY+1, monsterAnimPtr+1)
+			mvi m, VAMPIRE_STATUS_DETECT_HERO_INIT
+			; advance hl to monsterAnimPtr
+			LXI_D_TO_DIFF(monsterAnimPtr, monsterStatus)
 			dad d
-			; tmp d = 0
-			mvi d, 0
-			; set monsterSpeedY to zero
-			mov m, d
-			dcx h
-			mov m, d
-			dcx h 
-			; advance hl to monsterSpeedX+1
-			; set monsterSpeedX to right 
-			mvi m, >VAMPIRE_RUN_SPEED
-			dcx h 
-			mvi m, <VAMPIRE_RUN_SPEED
-			dcx h 
-			; advance hl to monsterPosY+1
-			; convert tile idx into the posY and set it
-			mov a, c
-			; posY = tile idx % ROOM_WIDTH * TILE_WIDTH
-			ani %11110000
-			mov m, a
-			mov e, a
-			dcx h 
-			mov m, d
-			; advance hl to monsterPosX+1
-			dcx h 			
-			; convert tile idx into the posX and set it
-			mov a, c
+			mvi m, <vampire_idle
+			inx h
+			mvi m, >vampire_idle
+
+			; c - tileIdx
 			; posX = tile idx % ROOM_WIDTH * TILE_WIDTH
-			ani %00001111
+			mvi a, %00001111
+			ana c
 			rlc_(4)
-			mov m, a
-			dcx h 
-			mov m, d 
-			; advance hl to monsterEraseWHOld+1
-			dcx h 			
-			mov m, d ; width = 8
-			dcx h 
-			mvi m, 5 ; supported mimimum height
-			; advance hl to monsterEraseWH+1
-			dcx h 			
-			mov m, d ; width = 8
-			dcx h 
-			mvi m, 5 ; supported mimimum height
-			; advance hl to monsterEraseScrAddrOld+1
-			dcx h
-			; a - posX
+			mov b, a
 			; scrX = posX/8 + $a0
 			rrc_(3)
-			ani %00011111			
 			adi SPRITE_X_SCR_ADDR
+			mov d, a
+			; posY = (tile idx % ROOM_WIDTH) * TILE_WIDTH
+			mvi a, %11110000
+			ana c
+			mvi e, 0
+			; d = scrX
+			; b = posX
+			; a = posY
+			; e = 0 and SPRITE_W_PACKED_MIN
+			; hl - ptr to monsterUpdatePtr+1
+
+			; advance hl to monsterEraseScrAddr
+			inx h
 			mov m, a
-			dcx h 
-			mov m, e
-			; advance hl to monsterEraseScrAddr+1
-			dcx h
+			inx h
+			mov m, d
+			; advance hl to monsterEraseScrAddrOld
+			inx h
 			mov m, a
-			dcx h 
+			inx h
+			mov m, d
+			; advance hl to monsterEraseWH
+			inx h
+			mvi m, SPRITE_H_MIN
+			inx h
 			mov m, e
+			; advance hl to monsterEraseWHOld
+			inx h
+			mvi m, SPRITE_H_MIN
+			inx h
+			mov m, e
+			; advance hl to monsterPosX
+			inx h
+			mov m, e
+			inx h
+			mov m, b
+			; advance hl to monsterPosY
+			inx h
+			mov m, e
+			inx h
+			mov m, a
 
 			; return zero to erase the tile data
 			; there this monster was in the roomTilesData
-			xra a 
+			xra a
 			ret
 			.closelabels
 
@@ -126,201 +189,294 @@ VampireInit:
 ; in:
 ; de - ptr to monsterUpdatePtr in the runtime data
 VampireUpdate:
-			mov b, d
-			mov c, e
-			xchg
-			shld @monsterUpdatePptr+1
-
-			; anim update
-			lda gameUpdateCounter	; update anim every 4th update
-			ani %11
-			jnz @skipAnimUpdate
-			; advance the anim to the next frame
-			push b
-			; advance hl to monsterAnimPtr
-			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
-			dad b
-			; read the ptr to a current frame
-			mov e, m
-			inx h
-			mov d, m
-			xchg
-			; hl - the ptr to a current frame
-			; get the offset to the next frame
-			mov c, m
-			inx h
-			mov b, m
-			; advance hl to the current frame ptr to the next frame
-			dad b
-			xchg
-			; de - the next frame ptr
-			; store de into the monsterAnimPtr
-			mov m, d
-			dcx h
-			mov m, e
-			pop b
-@skipAnimUpdate:			
-			; update movement
-			LXI_H_TO_DIFF(monsterPosX, monsterUpdatePtr)
-			dad b
-			shld @monsterPosXPtr+1
-			; bc <- (posX)
-			mov c, m
-			inx h
-			mov b, m
-			inx h
-			shld @monsterPosYPtr+1
-			; stack <- (posY)
-			mov e, m
-			inx h
-			mov d, m
-			inx h
-			push d
-			; de <- (speedX)
-			mov e, m
-			inx h
-			mov d, m
-			inx h
-			; (charTempX) <- a new posX
-			xchg
-			dad b
-			; a <- x for checking a collision
-			mov a, h
-			shld charTempX
-			xchg
-			; de <- (speedY)
-			mov e, m
-			inx h
-			mov d, m
-			; (charTempY) <- a new posY
-			xchg
-			pop b
-			dad b
-			shld charTempY
-
-			; check the collision tiles
-			mov d, a
-			mov e, h
-			lxi b, (VAMPIRE_COLLISION_WIDTH-1)<<8 | VAMPIRE_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomCheckWalkableTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			jnz @tilesCollide
-
-@updatePos:
-            lhld charTempX
-@monsterPosXPtr:
-			shld TEMP_ADDR
-			lhld charTempY
-@monsterPosYPtr:
-			shld TEMP_ADDR
-@heroCollisionCheck:
-			; TODO: check hero-monster collision every second frame
-			lhld @monsterPosXPtr+1
-			inx h
-			; horizontal check
-			mov c, m ; monster posX
-			lda heroPosX+1
-			mov b, a ; tmp
-			adi HERO_COLLISION_WIDTH-1
-			cmp c
-			rc
-			mvi a, VAMPIRE_COLLISION_WIDTH-1
-			add c
-			cmp b
-			rc
-			; vertical check
-			inx_h(2)
-			mov c, m ; monster posY
-			lda heroPosY+1
-			mov b, a
-			adi HERO_COLLISION_HEIGHT-1
-			cmp c
-			rc
-			mvi a, VAMPIRE_COLLISION_HEIGHT-1
-			add c
-			cmp b
-			rc
-			; hero collides
-			; send him a damage
-			mvi c, VAMPIRE_DAMAGE
-			call HeroImpact
+			; advance hl to monsterStatus
+			LXI_H_TO_DIFF(monsterStatus, monsterUpdatePtr)
+			dad d
+			mov a, m
+			; TODO: optimization. think of using a call table
+			cpi VAMPIRE_STATUS_MOVE
+			jz VampireUpdateMove
+			cpi VAMPIRE_STATUS_DETECT_HERO
+			jz VampireUpdateDetectHero
+			cpi VAMPIRE_STATUS_RELAX
+			jz VampireUpdateRelax
+			cpi VAMPIRE_STATUS_SHOOT_PREP
+			jz VampireUpdateShootPrep
+			cpi VAMPIRE_STATUS_MOVE_INIT
+			jz VampireUpdateMoveInit
+			cpi VAMPIRE_STATUS_DETECT_HERO_INIT
+			jz VampireUpdateDetectHeroInit
+			cpi VAMPIRE_STATUS_SHOOT
+			jz VampireUpdateShoot
 			ret
 
-@tilesCollide:
-@monsterUpdatePptr:
-            lxi b, TEMP_ADDR
-			; get speedX addr
-            call Random
-
-			LXI_H_TO_DIFF(monsterSpeedX, monsterUpdatePtr)
+VampireUpdateDetectHeroInit:
+			; hl = monsterStatus
+			mvi m, VAMPIRE_STATUS_DETECT_HERO
+			inx h
+			mvi m, VAMPIRE_STATUS_DETECT_HERO_TIME
+			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
 			dad b
+			mvi m, <vampire_idle
+			inx h
+			mvi m, >vampire_idle
+			ret
 
+VampireUpdateDetectHero:
+			; hl = monsterStatus
+			; advance hl to monsterStatusTimer
+			inx h
+			dcr m
+			jz @setMoveInit
+@checkMobHeroDistance:
+			; advance hl to monsterPosX+1
+			LXI_B_TO_DIFF(monsterPosX+1, monsterStatusTimer)
+			dad b
+			; check hero-monster posX diff
+			lda heroPosX+1
+			sub m
+			jc @checkNegPosXDiff
+			cpi VAMPIRE_DETECT_HERO_DISTANCE
+			jc @checkPosYDiff
+			jmp @updateAnimHeroDetectX
+@checkNegPosXDiff:
+			cpi -VAMPIRE_DETECT_HERO_DISTANCE
+			jnc @checkPosYDiff
+			jmp @updateAnimHeroDetectX
+@checkPosYDiff:
+			; advance hl to monsterPosY+1
+			inx_h(2)
+			; check hero-monster posY diff
+			lda heroPosY+1
+			sub m
+			jc @checkNegPosYDiff
+			cpi VAMPIRE_DETECT_HERO_DISTANCE
+			jc @detectsHero
+			jmp @updateAnimHeroDetectY
+@checkNegPosYDiff:
+			cpi -VAMPIRE_DETECT_HERO_DISTANCE
+			jnc @detectsHero
+			jmp @updateAnimHeroDetectY
+@detectsHero:
+			; hl = monsterPosY+1
+			; advance hl to monsterStatus
+			LXI_B_TO_DIFF(monsterStatus, monsterPosY+1)
+			dad b
+			mvi m, VAMPIRE_STATUS_SHOOT_PREP
+			inx h
+			mvi m, VAMPIRE_STATUS_SHOOT_PREP_TIME
+			; advance hl to monsterAnimPtr
+			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
+			dad b
+			mvi m, <vampire_cast
+			inx h
+			mvi m, >vampire_cast
+			ret
+@updateAnimHeroDetectX:
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
+			dad b
+			mvi a, VAMPIRE_ANIM_SPEED_DETECT_HERO
+			jmp VampireUpdateAnimCheckCollisionHero
+@updateAnimHeroDetectY:
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
+			dad b
+			mvi a, VAMPIRE_ANIM_SPEED_DETECT_HERO
+			jmp VampireUpdateAnimCheckCollisionHero
+
+@setMoveInit:
+ 			; hl - ptr to monsterStatusTimer
+			mvi m, VAMPIRE_STATUS_MOVE_TIME
+			; advance hl to monsterStatus
+			dcx h
+			mvi m, VAMPIRE_STATUS_MOVE_INIT
+			ret
+
+VampireUpdateMoveInit:
+			; hl = monsterStatus
+			mvi m, VAMPIRE_STATUS_MOVE
+			;inx h
+			;mvi m, VAMPIRE_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
+
+			xchg
+			call Random
+			; advance hl to monsterSpeedX
+			LXI_H_TO_DIFF(monsterSpeedX, monsterStatus)
+			dad d
+
+			mvi c, 0 ; tmp c=0
 			cpi $40
 			jc @speedXp
 			cpi $80
-			jc @speedXn
-			cpi $c0
 			jc @speedYp
+			cpi $c0
+			jc @speedXn
 @speedYn:
-			xra a
-			mov m, a
+			mov m, c
 			inx h
-			mov m, a
+			mov m, c
 			inx h
-			mvi m, < VAMPIRE_RUN_SPEED_NEG
+			mvi m, <VAMPIRE_MOVE_SPEED_NEG
 			inx h
-			mvi m, > VAMPIRE_RUN_SPEED_NEG
+			mvi m, >VAMPIRE_MOVE_SPEED_NEG
 			jmp @setAnim
 @speedYp:
-			xra a
-			mov m, a
+			mov m, c
 			inx h
-			mov m, a
+			mov m, c
 			inx h
-			mvi m, < VAMPIRE_RUN_SPEED
+			mvi m, <VAMPIRE_MOVE_SPEED
 			inx h
-			mvi m, > VAMPIRE_RUN_SPEED
+			mvi m, >VAMPIRE_MOVE_SPEED
 			jmp @setAnim
 @speedXn:
-			xra a
-			mvi m, < VAMPIRE_RUN_SPEED_NEG
+			mvi m, <VAMPIRE_MOVE_SPEED_NEG
 			inx h
-			mvi m, > VAMPIRE_RUN_SPEED_NEG
+			mvi m, >VAMPIRE_MOVE_SPEED_NEG
 			inx h
-			mov m, a
+			mov m, c
 			inx h
-			mov m, a
-			mvi a, > VAMPIRE_RUN_SPEED_NEG
+			mov m, c
 			jmp @setAnim
 @speedXp:
-			xra a
-			mvi m, < VAMPIRE_RUN_SPEED
+			mvi m, <VAMPIRE_MOVE_SPEED
 			inx h
-			mvi m, > VAMPIRE_RUN_SPEED
+			mvi m, >VAMPIRE_MOVE_SPEED
 			inx h
-			mov m, a
+			mov m, c
 			inx h
-			mov m, a
-			mvi a, > VAMPIRE_RUN_SPEED
+			mov m, c
 @setAnim:
-			; a = speedX
-			ora a
-			; if speedX is positive, then play vampire_run_r
-			; that means a vertical movement plays vampire_run_r anim as well
-			jz @setAnimRunR
-@setAnimRunL:
-			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
+			LXI_B_TO_DIFF(monsterAnimPtr, monsterSpeedY+1)
 			dad b
-			mvi m, < vampire_run_l
+			; a = rnd
+			ora a
+			; if rnd is positive (up or right movement), then play vampire_run_r anim
+			jp @setAnimRunR
+@setAnimRunL:
+			mvi m, <vampire_run_l
 			inx h
-			mvi m, > vampire_run_l
+			mvi m, >vampire_run_l
 			ret
 @setAnimRunR:
-			LXI_H_TO_DIFF(monsterAnimPtr, monsterUpdatePtr)
-			dad b
-			mvi m, < vampire_run_r
+			mvi m, <vampire_run_r
 			inx h
-			mvi m, > vampire_run_r
+			mvi m, >vampire_run_r
             ret
+
+VampireUpdateMove:
+			; hl = monsterStatus
+			; advance hl to monsterStatusTimer
+			inx h
+			dcr m
+			jz @setDetectHeroInit
+@updateMovement:
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monsterStatusTimer, monsterPosX, VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, @setMoveInit) 
+			
+			; hl points to monsterPosY+1
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
+			dad b
+			mvi a, VAMPIRE_ANIM_SPEED_MOVE
+			jmp VampireUpdateAnimCheckCollisionHero
+
+@setMoveInit:
+			pop h
+			; hl points to monsterPosX
+			; advance hl to monsterStatus
+			LXI_B_TO_DIFF(monsterStatus, monsterPosX)
+			dad b
+			mvi m, VAMPIRE_STATUS_MOVE_INIT
+			ret
+@setDetectHeroInit:
+ 			; hl - ptr to monsterStatusTimer
+			; advance hl to monsterStatus
+			dcx h
+			mvi m, VAMPIRE_STATUS_DETECT_HERO_INIT
+			ret
+
+VampireUpdateRelax:
+			; hl = monsterStatus
+			; advance hl to monsterStatusTimer
+			inx h
+			dcr m
+			jz @setMoveInit
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatusTimer)
+			dad b
+			mvi a, VAMPIRE_ANIM_SPEED_RELAX
+			jmp VampireUpdateAnimCheckCollisionHero
+ @setMoveInit:
+ 			; hl - ptr to monsterStatusTimer
+			; advance hl to monsterStatus
+			dcx h
+			mvi m, VAMPIRE_STATUS_MOVE_INIT
+			ret
+
+VampireUpdateShootPrep:
+			; hl = monsterStatus
+			; advance hl to monsterStatusTimer
+			inx h
+			dcr m
+			jz @setShoot
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatusTimer)
+			dad b
+			mvi a, VAMPIRE_ANIM_SPEED_SHOOT_PREP
+			jmp VampireUpdateAnimCheckCollisionHero
+ @setShoot:
+  			; hl - ptr to monsterStatusTimer
+			; advance hl to monsterStatus
+			dcx h
+			mvi m, VAMPIRE_STATUS_SHOOT
+			ret
+
+VampireUpdateShoot:
+			; hl = monsterStatus
+			mvi m, VAMPIRE_STATUS_RELAX
+			; advance hl to monsterStatusTimer
+			inx h
+			mvi m, VAMPIRE_STATUS_RELAX_TIME
+
+			LXI_B_TO_DIFF(monsterSpeedX, monsterStatusTimer)
+			dad b
+			mov a, m
+			inx h
+			ora m
+			jz @shootVert
+			mov a, m
+			ora a
+			mvi a, BULLET_DIR_R
+			jp @shootRight
+@shootLeft:
+			mvi a, BULLET_DIR_L
+@shootRight:
+			LXI_B_TO_DIFF(monsterPosX+1, monsterSpeedX+1)
+			jmp @setBulletPos
+@shootVert:
+			; advance hl to monsterSpeedY+1
+			inx_h(2)
+			mov a, m
+			ora a
+			mvi a, BULLET_DIR_U
+			jp @shootUp
+@shootDown:
+			mvi a, BULLET_DIR_D
+@shootUp:
+			LXI_B_TO_DIFF(monsterPosX+1, monsterSpeedY+1)
+@setBulletPos:
+			dad b
+			mov b, m
+			inx_h(2)
+			mov c, m
+			jmp BombSlowInit
+
+; in:
+; hl - monsterAnimTimer
+; a - anim speed
+VampireUpdateAnimCheckCollisionHero:
+			MONSTER_UPDATE_ANIM_CHECK_COLLISION_HERO(VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, VAMPIRE_DAMAGE)
 
 VampireImpact:
 			; de - ptr to monsterImpactPtr+1
@@ -332,40 +488,4 @@ VampireImpact:
 ; in:
 ; de - ptr to monsterDrawPtr in the runtime data
 VampireDraw:
-			LXI_H_TO_DIFF(monsterPosX+1, monsterDrawPtr)
-			dad d
-			call SpriteGetScrAddr_vampire
-			; hl - ptr to monsterPosY+1
-			; tmpA <- c
-			mov a, c
-
-			; advance to monsterAnimPtr
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterPosY+1)
-			dad b
-			mov b, m
-			inx h
-			push h
-			mov h, m
-			mov l, b
-			mov c, a
-			; hl - animPtr
-			; c - preshifted sprite idx*2 offset
-			call SpriteGetAddr
-
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_VAMPIRE | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
-			pop h
-			inx h
-			; hl - ptr to monsterEraseScrAddr
-			; store a current scr addr, into monsterEraseScrAddr
-			mov m, c
-			inx h
-			mov m, b
-			; advance to monsterEraseWH
-			LXI_B_TO_DIFF(monsterEraseWH, monsterEraseScrAddr+1)
-			dad b
-			; store a width and a height into monsterEraseWH
-			mov m, e
-			inx h
-			mov m, d
-			ret
-			.closelabels
+			MONSTER_DRAW(SpriteGetScrAddr_vampire, __RAM_DISK_S_VAMPIRE)

@@ -12,6 +12,7 @@ RAM_DISK_M = RAM_DISK_M1
 __chunkEnd_bank1_addr0_0:
 
 .include "generated\\sprites\\vampireSprites.asm"
+.include "generated\\sprites\\bomb_slowSprites.asm"
 .align 2
 __chunkEnd_bank1_addr0_1:
 

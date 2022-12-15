@@ -5,6 +5,8 @@
 		"level" : "scripts\\levelExport.py",
 		"music" : "scripts\\musicExport.py",
 		"global" : [
+			"source\\code\\ramDiskData.json",
+			"scripts\\ramDiskDataExport.py",
 			"scripts\\task_buildRun.py",
 			"scripts\\build.py",
 			"scripts\\common.py"
@@ -84,7 +86,11 @@
 							{
 								"type" : "sprite",
 								"path" : "sprites\\vampire.json"
-							}
+							},
+							{
+								"type" : "sprite",
+								"path" : "sprites\\bomb_slow.json"
+							}							
 						]
 					]
 				},

@@ -32,7 +32,11 @@
 		"run_l"	: {
 			"frames" : ["run_l0", "run_l1", "run_l2", "run_l3"],
 			"loop" : true
-		}
+		},
+		"cast"	: {
+			"frames" : ["cast_0"],
+			"loop" : true
+		}		
 	},
 	"sprites" : [
 		{
@@ -120,6 +124,17 @@
 			"height" : 15,
 			"mask_x" : 16,
 			"mask_y" : 145,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "cast_0",
+			"x" : 0,
+			"y"	: 160,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 16,
+			"mask_y" : 160,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		}

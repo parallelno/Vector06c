@@ -75,7 +75,7 @@ BURNER_STATUS_DETECT_HERO_TIME	= 50
 BURNER_STATUS_DASH_PREP_TIME	= 10
 BURNER_STATUS_DASH_TIME			= 16
 BURNER_STATUS_RELAX_TIME		= 25
-BURNER_STATUS_MOVE_TIME			= 75
+BURNER_STATUS_MOVE_TIME			= 40
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
 BURNER_ANIM_SPEED_DETECT_HERO	= 50
@@ -297,6 +297,7 @@ BurnerUpdateDetectHero:
 
 @setMoveInit:
  			; hl - ptr to monsterStatusTimer
+			mvi m, BURNER_STATUS_MOVE_TIME
 			; advance hl to monsterStatus
 			dcx h
 			mvi m, BURNER_STATUS_MOVE_INIT
@@ -305,13 +306,13 @@ BurnerUpdateDetectHero:
 BurnerUpdateMoveInit:
 			; hl = monsterStatus
 			mvi m, BURNER_STATUS_MOVE
-			inx h
-			mvi m, BURNER_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
+			;inx h
+			;mvi m, BURNER_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
 
 			xchg
 			call Random
 			; advance hl to monsterSpeedX
-			LXI_H_TO_DIFF(monsterSpeedX, monsterStatusTimer)
+			LXI_H_TO_DIFF(monsterSpeedX, monsterStatus)
 			dad d
 
 			mvi c, 0 ; tmp c=0

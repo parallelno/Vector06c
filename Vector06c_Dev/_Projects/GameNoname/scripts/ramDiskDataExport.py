@@ -218,7 +218,7 @@ def Export(contentJPath):
 					else:
 						description = "empty:"
 
-				ramDiskDataAsm += f"; bank{bank} addr{addrS} [{segmentSizeMax - segmentSize} free]	- {description}\n"
+				ramDiskDataAsm += f"; bank{bank} addr{addrS_WO_hexSym} [{segmentSizeMax - segmentSize} free]	- {description}\n"
 
 	# save ramDiskData.asm
 	ramDiskDataPath = f"\\code\\ramDiskData{extAsm}"
