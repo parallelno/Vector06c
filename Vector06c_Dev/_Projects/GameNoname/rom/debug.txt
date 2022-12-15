@@ -497,7 +497,7 @@ vampire_collision_width $000f
 vampire_collision_height $000a
 vampire_move_speed $00c0
 vampire_move_speed_neg $ff40
-vampire_detect_hero_distance $003c
+vampire_detect_hero_distance $005a
 vampireinit $195e
 lxi_d_to_diff_2.offsetaddr $0003
 vampireupdate $19b4

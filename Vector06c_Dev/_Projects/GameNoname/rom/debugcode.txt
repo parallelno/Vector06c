@@ -3517,10 +3517,10 @@ $19f4 09         dad b
 $19f5 3a 4b 12   lda $124b
 $19f8 96         sub m
 $19f9 da 04 1a   jc $1a04
-$19fc fe 3c      cpi $3c
+$19fc fe 5a      cpi $5a
 $19fe da 0c 1a   jc $1a0c
 $1a01 c3 38 1a   jmp $1a38
-$1a04 fe c4      cpi $c4
+$1a04 fe a6      cpi $a6
 $1a06 d2 0c 1a   jnc $1a0c
 $1a09 c3 38 1a   jmp $1a38
 $1a0c 23         inx h
@@ -3528,10 +3528,10 @@ $1a0d 23         inx h
 $1a0e 3a 4d 12   lda $124d
 $1a11 96         sub m
 $1a12 da 1d 1a   jc $1a1d
-$1a15 fe 3c      cpi $3c
+$1a15 fe 5a      cpi $5a
 $1a17 da 25 1a   jc $1a25
 $1a1a c3 41 1a   jmp $1a41
-$1a1d fe c4      cpi $c4
+$1a1d fe a6      cpi $a6
 $1a1f d2 25 1a   jnc $1a25
 $1a22 c3 41 1a   jmp $1a41
 $1a25 01 f0 ff   lxi b,$fff0

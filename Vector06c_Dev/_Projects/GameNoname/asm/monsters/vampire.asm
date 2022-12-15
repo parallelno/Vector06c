@@ -84,7 +84,7 @@ VAMPIRE_COLLISION_HEIGHT	= 10
 VAMPIRE_MOVE_SPEED		= $00c0
 VAMPIRE_MOVE_SPEED_NEG	= $ffff - $c0 + 1
 
-VAMPIRE_DETECT_HERO_DISTANCE = 60
+VAMPIRE_DETECT_HERO_DISTANCE = 90
 
 ;========================================================
 ; called to spawn this monster
