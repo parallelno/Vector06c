@@ -461,14 +461,14 @@ BurnerUpdateDashPrep:
 			sbb a
 			mov d, a
 			xchg
-			; posDiffX / 16 
+			; posDiffX / BURNER_STATUS_DASH_TIME 
 			dad h 
 			dad h 
 			dad h 
 			dad h
 			; to fill up L with %1111 if posDiff < 0
-			ani %1111
-			ora l 
+			ani %1111 ; <(%0000000011111111 / BURNER_STATUS_DASH_TIME)
+			ora l
 			mov l, a
 			push h
 			xchg
@@ -487,13 +487,13 @@ BurnerUpdateDashPrep:
 			sbb a
 			mov d, a 
 			xchg
-			; posDiffY / 16 
+			; posDiffY / BURNER_STATUS_DASH_TIME 
 			dad h 
 			dad h 
 			dad h 
 			dad h 
 			; to fill up L with %1111 if posDiff < 0
-			ani %1111
+			ani %1111 ; <(%0000000011111111 / BURNER_STATUS_DASH_TIME)
 			ora l 
 			mov l, a
 			xchg
@@ -517,6 +517,8 @@ BurnerUpdateDash:
 			dcr m
 			jm @setMoveInit
 @applyMovement:
+			ACTOR_UPDATE_MOVEMENT(monsterStatusTimer, monsterSpeedY)
+			/*
   			; hl - ptr to monsterStatusTimer
 			; advance hl to monsterSpeedY+1
 			LXI_B_TO_DIFF(monsterSpeedY+1, monsterStatusTimer)
@@ -557,6 +559,7 @@ BurnerUpdateDash:
 			mov m, e
 			inx h 
 			mov m, d
+			*/
 			; advance hl to monsterAnimTimer
 			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
 			dad b

@@ -10,21 +10,22 @@
 ;	if statusTimer == 0:
 ;		status = moveInit
 ;	else:
-;		if distance(mob, hero) < a shooting radius:
-;			status = shootPrep
-;			statusTimer = shootPrepTime
-;			anim to the hero dir
+;		if distance(mob, hero) < a casting radius:
+;			status = castPrep
+;			statusTimer = castPrepTime
+;			anim = cast
 ;		else:
 ;			updateAnim
 ;			check mod-hero collision, impact if collides
-; shootPrep:
+; castPrep:
 ;	decr statusTimer
 ;	if statusTimer == 0:
-;		status = shoot
+;		status = cast
+;		anim = cast
 ;	else:
 ;		updateAnim
 ;		check mod-hero collision, impact if collides
-; shoot:
+; cast:
 ;	status = relax
 ;	statusTimer = relaxTime
 ;	spawn a projectile along the mob dir
@@ -442,33 +443,8 @@ VampireUpdateShoot:
 			inx h
 			mvi m, VAMPIRE_STATUS_RELAX_TIME
 
-			LXI_B_TO_DIFF(monsterSpeedX, monsterStatusTimer)
-			dad b
-			mov a, m
-			inx h
-			ora m
-			jz @shootVert
-			mov a, m
-			ora a
-			mvi a, BULLET_DIR_R
-			jp @shootRight
-@shootLeft:
-			mvi a, BULLET_DIR_L
-@shootRight:
-			LXI_B_TO_DIFF(monsterPosX+1, monsterSpeedX+1)
-			jmp @setBulletPos
-@shootVert:
-			; advance hl to monsterSpeedY+1
-			inx_h(2)
-			mov a, m
-			ora a
-			mvi a, BULLET_DIR_U
-			jp @shootUp
-@shootDown:
-			mvi a, BULLET_DIR_D
-@shootUp:
-			LXI_B_TO_DIFF(monsterPosX+1, monsterSpeedY+1)
-@setBulletPos:
+			; advance hl to monsterPosX+1
+			LXI_B_TO_DIFF(monsterPosX+1, monsterStatusTimer)
 			dad b
 			mov b, m
 			inx_h(2)

@@ -52,7 +52,7 @@ SCYTHE_COLLISION_WIDTH	= 12
 SCYTHE_COLLISION_HEIGHT	= 12
 
 ; in:
-; bc - caster posX
+; bc - caster pos
 ; a - direction
 ScytheInit:
 			sta @dir+1 ; direction (BULLET_DIR_*)

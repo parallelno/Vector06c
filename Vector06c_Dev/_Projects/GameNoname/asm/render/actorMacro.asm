@@ -1,5 +1,53 @@
+; hl points to actorStatusTimer
 ; out:
-; hl points to monsterPosY+1
+; hl points to actorPosX+1
+.macro ACTOR_UPDATE_MOVEMENT(actorStatusTimer, actorSpeedY)
+ 			; hl - ptr to actorStatusTimer
+			; advance hl to actorSpeedY+1
+			LXI_B_TO_DIFF(actorSpeedY+1, actorStatusTimer)
+			dad b
+			; bc <- speedY
+			mov b, m
+			dcx h
+			mov c, m
+			dcx h
+			; stack <- speedX
+			mov d, m
+			dcx h
+			mov e, m
+			dcx h
+			push d
+			; de <- posY
+			mov d, m
+			dcx h
+			mov e, m
+			; (posY) <- posY + speedY
+			xchg
+			dad b
+			xchg
+			mov m, e
+			inx h 
+			mov m, d
+			dcx_h(2)
+			; hl points to speedX+1
+			; de <- posX
+			mov d, m
+			dcx h
+			mov e, m
+			; (posX) <- posX + speedX
+			xchg
+			pop b
+			dad b
+			xchg
+			mov m, e
+			inx h 
+			mov m, d
+.endmacro
+
+; in:
+; hl points to actorStatusTimer
+; out:
+; hl points to actorPosY+1
 .macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actorStatusTimer, actorPosX, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, CollisionHandler) 
 			LXI_B_TO_DIFF(actorPosX, actorStatusTimer)
 			dad b

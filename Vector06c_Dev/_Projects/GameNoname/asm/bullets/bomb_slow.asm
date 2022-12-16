@@ -38,10 +38,9 @@ BOMB_SLOW_MOVE_SPEED_NEG	= $ffff - $0400 + 1	; low byte is a subpixel speed, hig
 
 ; statuses.
 BOMB_SLOW_STATUS_MOVE_THROW = 0
-BOMB_SLOW_STATUS_MOVE_BOUNCE = 1
 
 ; status duration in updates.
-BOMB_SLOW_STATUS_MOVE_TIME	= 25
+BOMB_SLOW_STATUS_MOVE_TIME	= 32
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
 BOMB_SLOW_ANIM_SPEED_MOVE	= 130
@@ -52,10 +51,9 @@ BOMB_SLOW_COLLISION_WIDTH	= 10
 BOMB_SLOW_COLLISION_HEIGHT	= 10
 
 ; in:
-; bc - caster posX
+; bc - caster pos
 ; a - direction
 BombSlowInit:
-			sta @dir+1 ; direction (BULLET_DIR_*)
 			call BulletsGetEmptyDataPtr
 			; hl - ptr to bulletUpdatePtr+1
 			; advance hl to bulletUpdatePtr
@@ -124,55 +122,59 @@ BombSlowInit:
 			mov m, e
 			inx h
 			mov m, c
-			; advance hl to bulletSpeedX
+			
+			; b = posX
+			; c = posY	
+			; set a projectile speed towards the hero
+			; posDiff =  heroPos - burnerPosX
+			; speed = posDiff / VAMPIRE_STATUS_DASH_TIME			
+			lda heroPosX+1
+			sub b
+			mov e, a
+			mvi a, 0
+			; if posDiffX < 0, then d = $ff, else d = 0
+			sbb a
+			mov d, a
+			xchg
+			; posDiffX / BOMB_SLOW_STATUS_MOVE_TIME
+			dad h 
+			dad h 
+			dad h
+			; to fill up L with %1111 if posDiff < 0
+			ani %111 ; <(%0000000011111111 / BOMB_SLOW_STATUS_DASH_TIME)
+			ora l 
+			mov l, a
+			push h
+			xchg
+			; do the same for Y
+			lda heroPosY+1
+			sub c
+			mov e, a 
+			mvi a, 0
+			; if posDiffY < 0, then d = $ff, else d = 0
+			sbb a
+			mov d, a 
+			xchg
+			; posDiffY / BOMB_SLOW_STATUS_MOVE_TIME 
+			dad h 
+			dad h 
+			dad h 
+			; to fill up L with %1111 if posDiff < 0
+			ani %111 ; <(%0000000011111111 / BOMB_SLOW_STATUS_DASH_TIME)
+			ora l 
+			mov l, a
+			xchg
+			; advance hl to speedX
+			inx h 
+			pop b ; speedX
+			mov m, c 
+			inx h 
+			mov m, b
+			; advance hl to speedY
 			inx h
-@dir:
-			mvi a, TEMP_BYTE ; direction (BULLET_DIR_*)
-			cpi BULLET_DIR_R
-			jz @moveRight
-			cpi BULLET_DIR_L
-			jz @moveLeft
-			cpi BULLET_DIR_U
-			jz @moveUp
-@moveDown:
 			mov m, e
-			inx h
-			mov m, e
-			; advance hl to bulletSpeedY
-			inx h
-			mvi m, <BOMB_SLOW_MOVE_SPEED_NEG
-			inx h
-			mvi m, >BOMB_SLOW_MOVE_SPEED_NEG
-			ret	
-@moveUp:
-			mov m, e
-			inx h
-			mov m, e
-			; advance hl to bulletSpeedY
-			inx h
-			mvi m, <BOMB_SLOW_MOVE_SPEED
-			inx h
-			mvi m, >BOMB_SLOW_MOVE_SPEED
-			ret
-@moveLeft:
-			mvi m, <BOMB_SLOW_MOVE_SPEED_NEG
-			inx h
-			mvi m, >BOMB_SLOW_MOVE_SPEED_NEG
-			; advance hl to bulletSpeedY
-			inx h			
-			mov m, e
-			inx h
-			mov m, e
-			ret			
-@moveRight:
-			mvi m, <BOMB_SLOW_MOVE_SPEED
-			inx h
-			mvi m, >BOMB_SLOW_MOVE_SPEED
-			; advance hl to bulletSpeedY
-			inx h			
-			mov m, e
-			inx h
-			mov m, e
+			inx h 
+			mov m, d	
 			ret
 			
 ; anim and a gameplay logic update
@@ -186,11 +188,51 @@ BombSlowUpdate:
 			dcr m
 			jz @die
 @updateMovement:
-			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bulletStatusTimer, bulletPosX, BOMB_SLOW_COLLISION_WIDTH, BOMB_SLOW_COLLISION_HEIGHT, @setBounceAfterTileCollision) 
+			; hl - ptr to bulletStatusTimer
+			; advance hl to bulletSpeedY+1
+			LXI_B_TO_DIFF(bulletSpeedY+1, bulletStatusTimer)
+			dad b
+			; bc <- speedY
+			mov b, m
+			dcx h
+			mov c, m
+			dcx h
+			; stack <- speedX
+			mov d, m
+			dcx h
+			mov e, m
+			dcx h
+			push d
+			; de <- posY
+			mov d, m
+			dcx h
+			mov e, m
+			; (posY) <- posY + speedY
+			xchg
+			dad b
+			xchg
+			; pos = heroPos-pos/8
+			mov m, e
+			inx h 
+			mov m, d
+			dcx_h(2)
+			; hl points to speedX+1
+			; de <- posX
+			mov d, m
+			dcx h
+			mov e, m
+			; (posX) <- posX + speedX
+			xchg
+			pop b
+			dad b
+			xchg
+			mov m, e
+			inx h 
+			mov m, d
 			
-			; hl points to bulletPosY+1
+			; hl points to bulletPosX+1
 			; advance hl to bulletAnimTimer
-			LXI_B_TO_DIFF(bulletAnimTimer, bulletPosY+1)
+			LXI_B_TO_DIFF(bulletAnimTimer, bulletPosX+1)
 			dad b
 			mvi a, BOMB_SLOW_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_SLOW_COLLISION_WIDTH, BOMB_SLOW_COLLISION_HEIGHT, BOMB_SLOW_DAMAGE)	
@@ -199,51 +241,6 @@ BombSlowUpdate:
 			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletPosY+1)
 			dad b
 			jmp BulletsDestroy
-@setBounceAfterTileCollision:
-			pop h
-			; hl points to posX
-			; advance hl to bulletStatusTimer
-			LXI_B_TO_DIFF(bulletStatusTimer, bulletPosX)
-			dad b
-@setBounce:
-			; hl - ptr to bulletStatusTimer
-			; advance hl to bulletStatus
-			dcx h
-			mvi m, BOMB_SLOW_STATUS_MOVE_BOUNCE
-			; advance hl to bulletSpeedX
-			LXI_B_TO_DIFF(bulletSpeedX, bulletStatus)
-			dad b
-			mov a, m
-			inx h
-			ora m
-			jz @setMoveVert
-			jp @setMoveLeft
-@setMoveRight:
-			mvi m, >BOMB_SLOW_MOVE_SPEED
-			dcx h
-			mvi m, <BOMB_SLOW_MOVE_SPEED
-			ret
-@setMoveLeft:
-			mvi m, >BOMB_SLOW_MOVE_SPEED_NEG
-			dcx h
-			mvi m, <BOMB_SLOW_MOVE_SPEED_NEG
-			ret
-@setMoveVert:		
-			; advance hl to bulletSpeedY+1
-			inx_h(2)
-			mov a, m
-			ora a
-			jp @setMoveDown
-@setMoveUp:			
-			mvi m, >BOMB_SLOW_MOVE_SPEED
-			dcx h
-			mvi m, <BOMB_SLOW_MOVE_SPEED
-			ret
-@setMoveDown:			
-			mvi m, >BOMB_SLOW_MOVE_SPEED_NEG
-			dcx h
-			mvi m, <BOMB_SLOW_MOVE_SPEED_NEG
-			ret
 @die:
 			; hl points to bulletStatusTimer
 			; advance hl to bulletUpdatePtr+1

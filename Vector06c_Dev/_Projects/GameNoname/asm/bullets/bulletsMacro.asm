@@ -52,7 +52,7 @@
 ; in:
 ; hl - bulletAnimTimer
 ; a - anim speed
-; out: 
+; out with no ret: 
 ; hl - bulletPosY+1
 .macro BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BULLET_COLLISION_WIDTH, BULLET_COLLISION_HEIGHT, BULLET_DAMAGE)
 			call ActorAnimUpdate
