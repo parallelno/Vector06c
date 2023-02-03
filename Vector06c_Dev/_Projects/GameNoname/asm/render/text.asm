@@ -40,21 +40,26 @@ HexToAskii:
 ; BC, DE, HL
 FPS_SCR_ADDR = $a0ff
 DrawFps:
+			lhld DrawText_restoreSP+1
+			shld @tmpRestoreSP
 			lxi h, @fpsText
 			call HexToAskii
 
 			lxi b, FPS_SCR_ADDR
-			jmp DrawText
+			call DrawText
+			lhld @tmpRestoreSP
+			shld DrawText_restoreSP+1
+			ret
 
 @fpsText:
 			.byte 1,1,0
-			.closelabels
+@tmpRestoreSP:
+            .word TEMP_ADDR
 
 ; input:
 ; hl - text addr
 ; bc - screen addr
 DrawText:
-@nextChar:
 			; get a char
 			mov e, m
 			; return if its code 0
@@ -62,7 +67,7 @@ DrawText:
 			cmp e
 			rz
 			inx h
-			mvi d, 0
+			mvi d, 0 // TODO: mov d, a ;optimization
 			push h
 
 			; get the char gfx addr
@@ -78,13 +83,13 @@ DrawText:
 			; store SP
 			lxi h, 0
 			dad sp
-			shld @restoreSP + 1
+			shld DrawText_restoreSP + 1
 			; HL - char gfx addr
 			xchg
 			; DE - scr addr
 			mov d, b
 			mov e, c
-			; load BC to prevent interuption to corrupt the font data
+			; load BC to prevent an interuption func to corrupt the font data
 			mov c, m
 			inx h
 			mov b, m
@@ -93,7 +98,7 @@ DrawText:
 			xchg
 
 			DRAW_CHAR()
-@restoreSP:
+DrawText_restoreSP:
 			lxi sp, TEMP_ADDR
 			; move XY to the next char pos
 			lxi b, $0106
@@ -102,7 +107,7 @@ DrawText:
 			mov c, l
 
 			pop h
-			jmp @nextChar
+			jmp DrawText
 			.closelabels
 			
 

@@ -518,48 +518,6 @@ BurnerUpdateDash:
 			jm @setMoveInit
 @applyMovement:
 			ACTOR_UPDATE_MOVEMENT(monsterStatusTimer, monsterSpeedY)
-			/*
-  			; hl - ptr to monsterStatusTimer
-			; advance hl to monsterSpeedY+1
-			LXI_B_TO_DIFF(monsterSpeedY+1, monsterStatusTimer)
-			dad b
-			; bc <- speedY
-			mov b, m
-			dcx h
-			mov c, m
-			dcx h
-			; stack <- speedX
-			mov d, m
-			dcx h
-			mov e, m
-			dcx h
-			push d
-			; de <- posY
-			mov d, m
-			dcx h
-			mov e, m
-			; (posY) <- posY + speedY
-			xchg
-			dad b
-			xchg
-			mov m, e
-			inx h 
-			mov m, d
-			dcx_h(2)
-			; hl points to speedX+1
-			; de <- posX
-			mov d, m
-			dcx h
-			mov e, m
-			; (posX) <- posX + speedX
-			xchg
-			pop b
-			dad b
-			xchg
-			mov m, e
-			inx h 
-			mov m, d
-			*/
 			; advance hl to monsterAnimTimer
 			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
 			dad b

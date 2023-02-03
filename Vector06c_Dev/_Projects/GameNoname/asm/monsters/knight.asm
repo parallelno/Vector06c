@@ -1,20 +1,77 @@
-KNIGHT_HEALTH = 1
-KNIGHT_RUN_SPEED		= $0100
-KNIGHT_RUN_SPEED_NEG	= $ffff - $100 + 1
+; mob AI:
+; init:
+;	 status = detectHeroInit
+; detectHeroInit:
+;	status = detectHero
+;	statusTimer = detectHeroTime
+;	anim = idle.
+; detectHero:
+;	decr statusTimer
+;	if statusTimer == 0:
+;		status = moveInit
+;	else:
+;		if distance(mob, hero) < a defence radius:
+;			status = defence
+;			anim to the hero dir
+;			anim = run
+;		else:
+;			updateAnim
+;			check mod-hero collision, impact if collides
+; defence:
+;	if distance(mob, hero) < a defence radius:
+;		try to move a mob toward a hero, reset one coord to move along one axis
+;		if mob do not collides with tiles:
+;			accept new pos
+;		updateAnim
+;		check mod-hero collision, impact if collides
+;	else:
+;		status = detectHeroInit
+; moveInit:
+;	status = move
+;	statusTimer = random
+;	speed = random dir only along one axis
+;	set anim along the dir
+; move:
+;	decr statusTimer
+;	if statusTimer = 0
+;		status = detectHeroInit
+;	else:
+;		try to move a mob
+;		if mob collides with tiles:
+;			status = moveInit
+;		else:
+;			accept new pos
+;			updateAnim
+;			check mod-hero collision, impact if collides
 
-KNIGHT_COLLISION_WIDTH = 15
-KNIGHT_COLLISION_HEIGHT = 10
+; statuses.
+KNIGHT_STATUS_DETECT_HERO_INIT	= 0
+KNIGHT_STATUS_DETECT_HERO		= 1
+KNIGHT_STATUS_DEFENCE			= 2
+KNIGHT_STATUS_MOVE_INIT			= 3
+KNIGHT_STATUS_MOVE				= 4
 
-KNIGHT_POS_X_MIN = TILE_WIDTH
-KNIGHT_POS_X_MAX = (ROOM_WIDTH - 2 ) * TILE_WIDTH
-KNIGHT_POS_Y_MIN = TILE_WIDTH
-KNIGHT_POS_Y_MAX = (ROOM_HEIGHT - 2 ) * TILE_HEIGHT
+; status duration in updates.
+KNIGHT_STATUS_DETECT_HERO_TIME	= 100
+KNIGHT_STATUS_MOVE				= 25
+
+; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
+KNIGHT_ANIM_SPEED_DETECT_HERO	= 30
+KNIGHT_ANIM_SPEED_DEFENCE		= 100
+KNIGHT_ANIM_SPEED_MOVE			= 50
 
 ; gameplay
 KNIGHT_DAMAGE = 1
+KNIGHT_HEALTH = 1
+
+KNIGHT_COLLISION_WIDTH	= 15
+KNIGHT_COLLISION_HEIGHT	= 10
+
+KNIGHT_MOVE_SPEED		= $0090
+KNIGHT_MOVE_SPEED_NEG	= $ffff - $90 + 1
 
 ;========================================================
-; called to spawn this mod
+; called to spawn this monster
 ; in:
 ; c - tile idx in the roomTilesData array.
 ; a - monster id * 2
@@ -328,44 +385,14 @@ KnightImpact:
 			dad d
 			jmp MonstersDestroy
 
+; in:
+; hl - monsterAnimTimer
+; a - anim speed
+KnightUpdateAnimCheckCollisionHero:
+			MONSTER_UPDATE_ANIM_CHECK_COLLISION_HERO(KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, KNIGHT_DAMAGE)
+
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to monsterDrawPtr in the runtime data
 KnightDraw:
-			LXI_H_TO_DIFF(monsterPosX+1, monsterDrawPtr)
-			dad d
-			call SpriteGetScrAddr_knight
-			; hl - ptr to monsterPosY+1
-			; tmpA <- c
-			mov a, c
-
-			; advance to monsterAnimPtr
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterPosY+1)
-			dad b
-			mov b, m
-			inx h
-			push h
-			mov h, m
-			mov l, b
-			mov c, a
-			; hl - animPtr
-			; c - preshifted sprite idx*2 offset
-			call SpriteGetAddr
-
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_KNIGHT | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
-			pop h
-			inx h
-			; hl - ptr to monsterEraseScrAddr
-			; store a current scr addr, into monsterEraseScrAddr
-			mov m, c
-			inx h
-			mov m, b
-			; advance to monsterEraseWH
-			LXI_B_TO_DIFF(monsterEraseWH, monsterEraseScrAddr+1)
-			dad b
-			; store a width and a height into monsterEraseWH
-			mov m, e
-			inx h
-			mov m, d
-			ret
-			.closelabels
+			MONSTER_DRAW(SpriteGetScrAddr_knight, __RAM_DISK_S_KNIGHT)
