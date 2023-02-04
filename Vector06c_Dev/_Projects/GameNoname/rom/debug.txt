@@ -1458,4 +1458,4 @@ ramdiskdata_bank1_addr0_1 $3f58
 ramdiskdata_bank2_addr0 $42e8
 ramdiskdata_bank2_addr8000 $4525
 ramdiskdata_bank3_addr0 $5b05
-ramdiskdata_bank3_addr8000 $649c
+ramdiskdata_bank3_addr8000 $64a4

@@ -13,6 +13,7 @@ monsterRuntimeDataSorted:
 MONSTER_RUNTIME_DATA_LEN = 33
 
 ; a list of monster runtime data structs.
+; TODO: optimization. consider using jmp_4 instead of func ptrs like monsterUpdatePtr
 monstersRuntimeData:
 monsterUpdatePtr:		.word TEMP_ADDR
 monsterDrawPtr:			.word TEMP_ADDR
