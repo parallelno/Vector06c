@@ -460,7 +460,7 @@ RoomCheckTileDataCollisionPxl:
 ; b - width-1
 ; c - height-1
 ; out:
-; c - collision data * 2
+; c - collision data x 4 to make a ptr to a jmp table with 4 byte alignment
 		; a bits layout in C register:
 		; 0,0,0,0, (bottom-left), (bottom-right), (top_right), (top-left), 0
 		; if it's collision, bit is ON.
@@ -518,9 +518,7 @@ RoomCheckTileDataCollision:
 			add d
 			mov a, c
 			ral
-			; x2 to make a ptr offset
+			add a 
 			add a
-			mov c, a
-			; collision data bits layout in C register:
-			; (bottom-left), (bottom-right), (top_right), (top-left), 0
+			mov c, a			
 			ret

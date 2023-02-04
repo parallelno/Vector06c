@@ -43,12 +43,11 @@
 .endmacro
 
 
+; update the anim, then check the monster collision with a hero
+; ex MONSTER_CHECK_COLLISION_HERO(VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, VAMPIRE_DAMAGE)
 ; in:
-; hl - monsterAnimTimer
-; a - anim speed
-.macro MONSTER_UPDATE_ANIM_CHECK_COLLISION_HERO(MONSTER_COLLISION_WIDTH, MONSTER_COLLISION_HEIGHT, MONSTER_DAMAGE)
-			call ActorAnimUpdate
-@heroCollisionCheck:
+; hl points to monsterAnimPtr
+.macro MONSTER_CHECK_COLLISION_HERO(MONSTER_COLLISION_WIDTH, MONSTER_COLLISION_HEIGHT, MONSTER_DAMAGE)
 			; hl points to monsterAnimPtr
 			; TODO: check hero-monster collision not every frame
 			; advance hl to monsterPosX
@@ -83,4 +82,97 @@
 			; send him a damage
 			mvi c, MONSTER_DAMAGE
 			jmp HeroImpact
+.endmacro
+
+; monster initialization
+;ex. MONSTER_INIT(KnightUpdate, KnightDraw, KnightImpact, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
+.macro MONSTER_INIT(MONSTER_UPDATE, MONSTER_DRAW, MONSTER_IMPACT, MONSTER_HEALTH, MONSTER_STATUS_DETECT_HERO_INIT, MONSTER_ANIM)
+			call MonstersGetEmptyDataPtr
+			; hl - ptr to monsterUpdatePtr+1
+			; advance hl to monsterUpdatePtr
+			dcx h
+			mvi m, <MONSTER_UPDATE
+			inx h
+			mvi m, >MONSTER_UPDATE
+			; advance hl to monsterDrawPtr
+			inx h
+			mvi m, <MONSTER_DRAW
+			inx h
+			mvi m, >MONSTER_DRAW
+			; advance hl to monsterImpactPtr
+			inx h
+			mvi m, <MONSTER_IMPACT
+			inx h
+			mvi m, >MONSTER_IMPACT
+
+			; advance hl to monsterType
+			inx h
+			mvi m, MONSTER_TYPE_ENEMY
+			; advance hl to monsterHealth
+			inx h
+			mvi m, MONSTER_HEALTH
+			; advance hl to monsterStatus
+			inx h
+			mvi m, MONSTER_STATUS_DETECT_HERO_INIT
+			; advance hl to monsterAnimPtr
+			LXI_D_TO_DIFF(monsterAnimPtr, monsterStatus)
+			dad d
+			mvi m, <MONSTER_ANIM
+			inx h
+			mvi m, >MONSTER_ANIM
+
+			; c - tileIdx
+			; posX = tile idx % ROOM_WIDTH * TILE_WIDTH
+			mvi a, %00001111
+			ana c
+			rlc_(4)
+			mov b, a
+			; scrX = posX/8 + $a0
+			rrc_(3)
+			adi SPRITE_X_SCR_ADDR
+			mov d, a
+			; posY = (tile idx % ROOM_WIDTH) * TILE_WIDTH
+			mvi a, %11110000
+			ana c
+			mvi e, 0
+			; d = scrX
+			; b = posX
+			; a = posY
+			; e = 0 and SPRITE_W_PACKED_MIN
+			; hl - ptr to monsterUpdatePtr+1
+
+			; advance hl to monsterEraseScrAddr
+			inx h
+			mov m, a
+			inx h
+			mov m, d
+			; advance hl to monsterEraseScrAddrOld
+			inx h
+			mov m, a
+			inx h
+			mov m, d
+			; advance hl to monsterEraseWH
+			inx h
+			mvi m, SPRITE_H_MIN
+			inx h
+			mov m, e
+			; advance hl to monsterEraseWHOld
+			inx h
+			mvi m, SPRITE_H_MIN
+			inx h
+			mov m, e
+			; advance hl to monsterPosX
+			inx h
+			mov m, e
+			inx h
+			mov m, b
+			; advance hl to monsterPosY
+			inx h
+			mov m, e
+			inx h
+			mov m, a
+
+			; return zero to erase the tile data
+			; there this monster was in the roomTilesData
+			xra a
 .endmacro

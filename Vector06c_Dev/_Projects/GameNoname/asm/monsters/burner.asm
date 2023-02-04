@@ -104,94 +104,7 @@ BURNER_DETECT_HERO_DISTANCE = 60
 ; out:
 ; a = 0
 BurnerInit:
-			call MonstersGetEmptyDataPtr
-			; hl - ptr to monsterUpdatePtr+1
-			; advance hl to monsterUpdatePtr
-			dcx h
-			mvi m, <BurnerUpdate
-			inx h
-			mvi m, >BurnerUpdate
-			; advance hl to monsterDrawPtr
-			inx h
-			mvi m, <BurnerDraw
-			inx h
-			mvi m, >BurnerDraw
-			; advance hl to monsterImpactPtr
-			inx h
-			mvi m, <BurnerImpact
-			inx h
-			mvi m, >BurnerImpact
-
-			; advance hl to monsterType
-			inx h
-			mvi m, MONSTER_TYPE_ENEMY
-			; advance hl to monsterHealth
-			inx h
-			mvi m, BURNER_HEALTH
-			; advance hl to monsterStatus
-			inx h
-			mvi m, BURNER_STATUS_DETECT_HERO_INIT
-			; advance hl to monsterAnimPtr
-			LXI_D_TO_DIFF(monsterAnimPtr, monsterStatus)
-			dad d
-			mvi m, <burner_idle
-			inx h
-			mvi m, >burner_idle
-
-			; c - tileIdx
-			; posX = tile idx % ROOM_WIDTH * TILE_WIDTH
-			mvi a, %00001111
-			ana c
-			rlc_(4)
-			mov b, a
-			; scrX = posX/8 + $a0
-			rrc_(3)
-			adi SPRITE_X_SCR_ADDR
-			mov d, a
-			; posY = (tile idx % ROOM_WIDTH) * TILE_WIDTH
-			mvi a, %11110000
-			ana c
-			mvi e, 0
-			; d = scrX
-			; b = posX
-			; a = posY
-			; e = 0 and SPRITE_W_PACKED_MIN
-			; hl - ptr to monsterUpdatePtr+1
-
-			; advance hl to monsterEraseScrAddr
-			inx h
-			mov m, a
-			inx h
-			mov m, d
-			; advance hl to monsterEraseScrAddrOld
-			inx h
-			mov m, a
-			inx h
-			mov m, d
-			; advance hl to monsterEraseWH
-			inx h
-			mvi m, SPRITE_H_MIN
-			inx h
-			mov m, e
-			; advance hl to monsterEraseWHOld
-			inx h
-			mvi m, SPRITE_H_MIN
-			inx h
-			mov m, e
-			; advance hl to monsterPosX
-			inx h
-			mov m, e
-			inx h
-			mov m, b
-			; advance hl to monsterPosY
-			inx h
-			mov m, e
-			inx h
-			mov m, a
-
-			; return zero to erase the tile data
-			; there this monster was in the roomTilesData
-			xra a
+			MONSTER_INIT(BurnerUpdate, BurnerDraw, BurnerImpact, BURNER_HEALTH, BURNER_STATUS_DETECT_HERO_INIT, burner_idle)
 			ret
 			.closelabels
 
@@ -536,7 +449,8 @@ BurnerUpdateDash:
 ; hl - monsterAnimTimer
 ; a - anim speed
 BurnerUpdateAnimCheckCollisionHero:
-			MONSTER_UPDATE_ANIM_CHECK_COLLISION_HERO(BURNER_COLLISION_WIDTH, BURNER_COLLISION_HEIGHT, BURNER_DAMAGE)
+			call ActorAnimUpdate
+			MONSTER_CHECK_COLLISION_HERO(BURNER_COLLISION_WIDTH, BURNER_COLLISION_HEIGHT, BURNER_DAMAGE)
 
 BurnerImpact:
 			; de - ptr to monsterImpactPtr+1

@@ -46,25 +46,32 @@ heroDataNextPPtr:		.word monsterDataNextPPtr
 ;
 heroCollisionFuncTable:
 			; bit layout:
-			; (bottom-left), (bottom-right), (top_right), (top-left), 0
-			; 							00010,					01000,					00110,
-			; 01000,					01010,					01100,					01110,
-			; 10000,					10010,					10100,					10110, 
-			; 11000,					11010,					11100,					11110           
-			.word 				   	 	HeroCheckCollisionTL,	HeroCheckCollisionTR,	HeroMoveHorizontally
-			.word HeroCheckCollisionBR,	HeroDontMove,			HeroMoveVertically,		HeroDontMove
-			.word HeroCheckCollisionBL,	HeroMoveVertically,		HeroDontMove,			HeroDontMove
-			.word HeroMoveHorizontally,	HeroDontMove,			HeroDontMove,			HeroDontMove
+			; (bottom-left), (bottom-right), (top_right), (top-left), 0         
+			JMP_4(HeroCheckCollisionTL)
+			JMP_4(HeroCheckCollisionTR)
+			JMP_4(HeroMoveHorizontally)
+			JMP_4(HeroCheckCollisionBR)
+			JMP_4(HeroDontMove)
+			JMP_4(HeroMoveVertically)
+			JMP_4(HeroDontMove)
+			JMP_4(HeroCheckCollisionBL)
+			JMP_4(HeroMoveVertically)
+			JMP_4(HeroDontMove)
+			JMP_4(HeroDontMove)
+			JMP_4(HeroMoveHorizontally)
+			JMP_4(HeroDontMove)
+			JMP_4(HeroDontMove)
+			JMP_4(HeroDontMove)
 
 ; funcs to handle the tile data. more info is in levelGlobalData.asm->roomTilesData
 HeroTileFuncTable:
-			.word 0						; funcId == 1
-			.word 0						; funcId == 2
-			.word 0						; funcId == 3
-			.word HeroTileFuncTeleport	; funcId == 4
-			.word 0						; funcId == 5
-			.word 0						; funcId == 6
-			.word HeroTileFuncNothing	; funcId == 7 (collision) called only when a hero has got stuck into a collision tiles
+			JMP_4(0)					; funcId == 1
+			JMP_4(0)					; funcId == 2
+			JMP_4(0)					; funcId == 3
+			JMP_4(HeroTileFuncTeleport)	; funcId == 4
+			JMP_4(0)					; funcId == 5
+			JMP_4(0)					; funcId == 6
+			JMP_4(HeroTileFuncNothing)	; funcId == 7 (collision) called only when a hero has got stuck into a collision tiles
 
 HeroInit:
 			call HeroIdleStart
@@ -290,13 +297,9 @@ HeroUpdatePos:
 @collides:
 			; handle a collision data around a hero
 			; if a hero is inside the collision, move him out
-			lxi h, heroCollisionFuncTable-2 ; C==0 is no case, skip it
+			lxi h, heroCollisionFuncTable-4 ; C==0 is no case, skip it			
 			mvi b, 0
 			dad b
-			mov e, m
-			inx h
-			mov d, m
-			xchg
 			pchl
 
 HeroMove:
@@ -317,7 +320,7 @@ HeroDontMove:
 
 			lxi h, roomTileCollisionData
 			mvi c, 4
-@loop:		TILE_DATA_HANDLE_FUNC_CALL(HeroTileFuncTable-2, true)
+@loop:		TILE_DATA_HANDLE_FUNC_CALL(HeroTileFuncTable-4, true)
 			inx h
 			dcr c
 			jnz @loop

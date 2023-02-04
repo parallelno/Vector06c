@@ -20,22 +20,18 @@
 			jz @funcReturnAddr
 		.endif
 			rlc
+			add a ; to make a ptr to a jmp table with 4 byte allignment
 			mov e, a
 			mvi d, 0
 			; extract a func argument
 			mov a, m
 			rrc_(3)
 			ani %00011111
-			; get the func addr which handles that tile data
 			lxi h, funcTable
 			dad d
-			mov e, m
-			inx h
-			mov d, m
-			xchg
 			lxi d, @funcReturnAddr
 			push d
 			pchl
 @funcReturnAddr:
-			pop h		
+			pop h
 .endmacro

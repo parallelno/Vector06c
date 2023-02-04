@@ -238,3 +238,7 @@
 		.endif
 .endmacro
 		
+.macro	JMP_4(DST_ADDR)
+			jmp DST_ADDR
+			nop
+.endmacro

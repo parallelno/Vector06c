@@ -53,7 +53,7 @@ KNIGHT_STATUS_MOVE				= 4
 
 ; status duration in updates.
 KNIGHT_STATUS_DETECT_HERO_TIME	= 100
-KNIGHT_STATUS_MOVE				= 25
+KNIGHT_STATUS_MOVE_TIME				= 25
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
 KNIGHT_ANIM_SPEED_DETECT_HERO	= 30
@@ -78,6 +78,9 @@ KNIGHT_MOVE_SPEED_NEG	= $ffff - $90 + 1
 ; out:
 ; a = 0
 KnightInit:
+			ret
+/*
+			MONSTER_INIT(KnightUpdate, KnightDraw, KnightImpact, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 			call MonstersGetEmptyDataPtr
 			; hl - ptr to monsterUpdatePtr+1			
 			mvi m, >KnightUpdate
@@ -384,12 +387,13 @@ KnightImpact:
 			LXI_H_TO_DIFF(monsterUpdatePtr+1, monsterImpactPtr+1)
 			dad d
 			jmp MonstersDestroy
-
+*/
 ; in:
 ; hl - monsterAnimTimer
 ; a - anim speed
 KnightUpdateAnimCheckCollisionHero:
-			MONSTER_UPDATE_ANIM_CHECK_COLLISION_HERO(KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, KNIGHT_DAMAGE)
+			call ActorAnimUpdate
+			MONSTER_CHECK_COLLISION_HERO(KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, KNIGHT_DAMAGE)
 
 ; draw a sprite into a backbuffer
 ; in:

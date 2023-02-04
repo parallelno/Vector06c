@@ -95,96 +95,8 @@ VAMPIRE_DETECT_HERO_DISTANCE = 90
 ; out:
 ; a = 0
 VampireInit:
-			call MonstersGetEmptyDataPtr
-			; hl - ptr to monsterUpdatePtr+1
-			; advance hl to monsterUpdatePtr
-			dcx h
-			mvi m, <VampireUpdate
-			inx h
-			mvi m, >VampireUpdate
-			; advance hl to monsterDrawPtr
-			inx h
-			mvi m, <VampireDraw
-			inx h
-			mvi m, >VampireDraw
-			; advance hl to monsterImpactPtr
-			inx h
-			mvi m, <VampireImpact
-			inx h
-			mvi m, >VampireImpact
-
-			; advance hl to monsterType
-			inx h
-			mvi m, MONSTER_TYPE_ENEMY
-			; advance hl to monsterHealth
-			inx h
-			mvi m, VAMPIRE_HEALTH
-			; advance hl to monsterStatus
-			inx h
-			mvi m, VAMPIRE_STATUS_DETECT_HERO_INIT
-			; advance hl to monsterAnimPtr
-			LXI_D_TO_DIFF(monsterAnimPtr, monsterStatus)
-			dad d
-			mvi m, <vampire_idle
-			inx h
-			mvi m, >vampire_idle
-
-			; c - tileIdx
-			; posX = tile idx % ROOM_WIDTH * TILE_WIDTH
-			mvi a, %00001111
-			ana c
-			rlc_(4)
-			mov b, a
-			; scrX = posX/8 + $a0
-			rrc_(3)
-			adi SPRITE_X_SCR_ADDR
-			mov d, a
-			; posY = (tile idx % ROOM_WIDTH) * TILE_WIDTH
-			mvi a, %11110000
-			ana c
-			mvi e, 0
-			; d = scrX
-			; b = posX
-			; a = posY
-			; e = 0 and SPRITE_W_PACKED_MIN
-			; hl - ptr to monsterUpdatePtr+1
-
-			; advance hl to monsterEraseScrAddr
-			inx h
-			mov m, a
-			inx h
-			mov m, d
-			; advance hl to monsterEraseScrAddrOld
-			inx h
-			mov m, a
-			inx h
-			mov m, d
-			; advance hl to monsterEraseWH
-			inx h
-			mvi m, SPRITE_H_MIN
-			inx h
-			mov m, e
-			; advance hl to monsterEraseWHOld
-			inx h
-			mvi m, SPRITE_H_MIN
-			inx h
-			mov m, e
-			; advance hl to monsterPosX
-			inx h
-			mov m, e
-			inx h
-			mov m, b
-			; advance hl to monsterPosY
-			inx h
-			mov m, e
-			inx h
-			mov m, a
-
-			; return zero to erase the tile data
-			; there this monster was in the roomTilesData
-			xra a
+			MONSTER_INIT(VampireUpdate, VampireDraw, VampireImpact, VAMPIRE_HEALTH, VAMPIRE_STATUS_DETECT_HERO_INIT, vampire_idle)
 			ret
-			.closelabels
 
 ; anim and a gameplay logic update
 ; in:
@@ -455,7 +367,8 @@ VampireUpdateShoot:
 ; hl - monsterAnimTimer
 ; a - anim speed
 VampireUpdateAnimCheckCollisionHero:
-			MONSTER_UPDATE_ANIM_CHECK_COLLISION_HERO(VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, VAMPIRE_DAMAGE)
+			call ActorAnimUpdate
+			MONSTER_CHECK_COLLISION_HERO(VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, VAMPIRE_DAMAGE)
 
 VampireImpact:
 			; de - ptr to monsterImpactPtr+1

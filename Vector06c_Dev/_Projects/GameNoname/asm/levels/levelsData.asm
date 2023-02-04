@@ -37,7 +37,14 @@ roomTilesAddr:
 
 ; this functions are used when the room initialized. check room.asm RoomInitTilesData func
 roomFuncTable:		
-			.word RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy, RoomMonsterSpawn, RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy, RoomTileDataCopy
+			JMP_4(RoomTileDataCopy)
+			JMP_4(RoomTileDataCopy)
+			JMP_4(RoomTileDataCopy)
+			JMP_4(RoomMonsterSpawn)
+			JMP_4(RoomTileDataCopy)
+			JMP_4(RoomTileDataCopy)
+			JMP_4(RoomTileDataCopy)
+			JMP_4(RoomTileDataCopy)
 
 roomTilesData:
 			.storage ROOM_WIDTH * ROOM_HEIGHT
