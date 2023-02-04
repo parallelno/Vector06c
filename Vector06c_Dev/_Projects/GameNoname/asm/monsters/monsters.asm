@@ -180,7 +180,7 @@ MonstersDataFuncCaller:
 			; read the func addr
 			mov d, m 
 			dcx h
-			mov e, m 
+			mov e, m
 			xchg
 			; call a func
 			pchl

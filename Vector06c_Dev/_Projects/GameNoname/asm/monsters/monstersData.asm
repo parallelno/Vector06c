@@ -1,10 +1,10 @@
 ; a newly inited room uses this list to find an Init func of a monster that has to be spawn
 ; it's ordered by monsterId (see tile data format in levelsData.asm)
 monstersInits:
-			.word SkeletonInit
-			.word VampireInit
-			.word BurnerInit
-			.word KnightInit
+			JMP_4(SkeletonInit)
+			JMP_4(VampireInit)
+			JMP_4(BurnerInit)
+			JMP_4(KnightInit)
 
 ; ptr to the first monster data in the sorted list
 monsterRuntimeDataSorted:

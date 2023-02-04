@@ -19,8 +19,7 @@
 			; if funcId == 0, that means it is an walkable (non-interactable) tile, we skip it.
 			jz @funcReturnAddr
 		.endif
-			rlc
-			add a ; to make a ptr to a jmp table with 4 byte allignment
+			add_a(2) ; to make a ptr to a jmp table with 4 byte allignment
 			mov e, a
 			mvi d, 0
 			; extract a func argument

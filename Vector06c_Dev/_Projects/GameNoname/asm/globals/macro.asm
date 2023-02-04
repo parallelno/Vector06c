@@ -88,6 +88,12 @@
 		.endloop
 .endmacro
 
+.macro ADD_A(i)
+		.loop i
+			add a
+		.endloop
+.endmacro	
+
 .macro LXI_B_TO_DIFF(offsetTo, offsetFrom)
 		offsetAddr = offsetTo - offsetFrom
 		.if offsetAddr > 0
@@ -238,7 +244,7 @@
 		.endif
 .endmacro
 		
-.macro	JMP_4(DST_ADDR)
+.macro	JMP_4(DST_ADDR) ; for a jmp table with 4 byte allignment
 			jmp DST_ADDR
 			nop
 .endmacro

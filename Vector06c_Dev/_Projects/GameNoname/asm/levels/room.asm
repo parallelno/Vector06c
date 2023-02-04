@@ -142,16 +142,11 @@ RoomTileDataCopy:
 RoomMonsterSpawn:
 			; get a monster init func addr ptr
 			lxi h, monstersInits
-			rlc
+			add_a(2) ; to make a JMP_4 ptr
 			mov e, a
 			mvi d, 0
 			dad d
-			; get a monster init func addr
-			mov e, m
-			inx h
-			mov d, m
 			; call a monster init func
-			xchg
 			pchl
 			.closelabels
 

@@ -92,19 +92,15 @@ SpriteCopyToScrV:
 @skipMaxH:
 
 			; BC = an offset in the copy routine table
-			rlc
+			add_a(2) ; to make a JMP_4 ptr
+
 			mov c, a
 			mov a, b ; temp a = width
 			mvi b, 0
 
 			; hl - an addr of a copy routine
-			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * ADDR_LEN
+			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * JMP_4_LEN
 			dad b
-			mov b, m
-			inx h
-			mov h, m
-			mov l, b
-
 			; run the copy routine
 			pchl
 
@@ -126,22 +122,22 @@ SpriteCopyToScrV:
 @h20:		COPY_SPRITE_TO_SCR(20)
 
 @copyRoutineAddrs:
-			.word @h05
-			.word @h06
-			.word @h07
-			.word @h08
-			.word @h09
-			.word @h10
-			.word @h11
-			.word @h12
-			.word @h13
-			.word @h14
-			.word @h15
-			.word @h16
-			.word @h17
-			.word @h18
-			.word @h19
-			.word @h20		
+			JMP_4(@h05)
+			JMP_4(@h06)
+			JMP_4(@h07)
+			JMP_4(@h08)
+			JMP_4(@h09)
+			JMP_4(@h10)
+			JMP_4(@h11)
+			JMP_4(@h12)
+			JMP_4(@h13)
+			JMP_4(@h14)
+			JMP_4(@h15)
+			JMP_4(@h16)
+			JMP_4(@h17)
+			JMP_4(@h18)
+			JMP_4(@h19)
+			JMP_4(@h20)		
 
 .macro COPY_SPRITE_TO_SCR_PB(moveUp = true)
 			pop b
@@ -239,7 +235,7 @@ SpriteCopyToBackBuffV:
 @doNotSetMin:
 
 			; BC = an offset in the copy routine table
-			rlc
+			add_a(2)	; to make a JMP_4 ptr
 			mov c, a
 			mvi b, 0
 			; temp a = width
@@ -251,13 +247,8 @@ SpriteCopyToBackBuffV:
 			shld RestoreSP + 1
 
 			; hl - an addr of a copy routine
-			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * ADDR_LEN
+			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * JMP_4_LEN
 			dad b
-			mov b, m
-			inx h
-			mov h, m
-			mov l, b
-
 			; run the copy routine
 			pchl
 
@@ -279,22 +270,22 @@ SpriteCopyToBackBuffV:
 @h20:		COPY_SPRITE_TO_SCR2(20)
 
 @copyRoutineAddrs:
-			.word @h05
-			.word @h06
-			.word @h07
-			.word @h08
-			.word @h09
-			.word @h10
-			.word @h11
-			.word @h12
-			.word @h13
-			.word @h14
-			.word @h15
-			.word @h16
-			.word @h17
-			.word @h18
-			.word @h19
-			.word @h20		
+			JMP_4(@h05)
+			JMP_4(@h06)
+			JMP_4(@h07)
+			JMP_4(@h08)
+			JMP_4(@h09)
+			JMP_4(@h10)
+			JMP_4(@h11)
+			JMP_4(@h12)
+			JMP_4(@h13)
+			JMP_4(@h14)
+			JMP_4(@h15)
+			JMP_4(@h16)
+			JMP_4(@h17)
+			JMP_4(@h18)
+			JMP_4(@h19)
+			JMP_4(@h20)					
 
 .macro COPY_SPRITE_TO_SCR_PB2(moveUp = true)
 			pop b

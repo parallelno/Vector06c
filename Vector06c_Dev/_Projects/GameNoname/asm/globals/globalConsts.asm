@@ -30,6 +30,7 @@ STACK_TMP_MAIN_PROGRAM_ADDR = $100
 BYTE_LEN                = 1
 WORD_LEN                = 2
 ADDR_LEN                = 2
+JMP_4_LEN               = 4
 
 TEMP_BYTE				= $00
 TEMP_WORD				= $0000
