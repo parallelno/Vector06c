@@ -4,13 +4,12 @@ SpriteGetScrAddr_knight = SpriteGetScrAddr4
 knight_preshifted_sprites:
 			.byte 4
 knight_anims:
-			.word knight_idle_r, knight_idle_l, knight_run_r, knight_run_l, 0, 
-knight_idle_r:
-			.byte 255, $ff ; offset to the first frame
-			.word __knight_idle_r0_0, __knight_idle_r0_1, __knight_idle_r0_2, __knight_idle_r0_3, 
-knight_idle_l:
-			.byte 255, $ff ; offset to the first frame
-			.word __knight_idle_l0_0, __knight_idle_l0_1, __knight_idle_l0_2, __knight_idle_l0_3, 
+			.word knight_idle, knight_run_r, knight_run_l, 0, 
+knight_idle:
+			.byte 9, 0 ; offset to the next frame
+			.word __knight_idle_0_0, __knight_idle_0_1, __knight_idle_0_2, __knight_idle_0_3, 
+			.byte 245, $ff ; offset to the first frame
+			.word __knight_idle_1_0, __knight_idle_1_1, __knight_idle_1_2, __knight_idle_1_3, 
 knight_run_r:
 			.byte 9, 0 ; offset to the next frame
 			.word __knight_run_r0_0, __knight_run_r0_1, __knight_run_r0_2, __knight_run_r0_3, 

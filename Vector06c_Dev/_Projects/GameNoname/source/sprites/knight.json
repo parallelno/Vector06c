@@ -21,12 +21,8 @@
 	"preshifted_sprites" : 4,
 	"mask" : true,
 	"anims" : {
-		"idle_r"	: {
-			"frames" : ["idle_r0"],
-			"loop" : true
-		},
-		"idle_l"	: {
-			"frames" : ["idle_l0"],
+		"idle" : {
+			"frames" : ["idle_0", "idle_1"],
 			"loop" : true
 		},
 		"run_r"	: {
@@ -40,24 +36,24 @@
 	},
 	"sprites" : [
 		{
-			"name" : "idle_r0",
+			"name" : "idle_0",
 			"x" : 0,
 			"y"	: 32,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 24,
+			"mask_y" : 32,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
-			"name" : "idle_l0",
+			"name" : "idle_1",
 			"x" : 0,
 			"y"	: 48,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 24,
+			"mask_y" : 48,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -67,8 +63,8 @@
 			"y"	: 64,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 24,
+			"mask_y" : 64,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -78,8 +74,8 @@
 			"y"	: 80,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 24,
+			"mask_y" : 80,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -89,8 +85,8 @@
 			"y"	: 96,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 24,
+			"mask_y" : 96,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -100,8 +96,8 @@
 			"y"	: 112,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 24,
+			"mask_y" : 112,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -111,8 +107,8 @@
 			"y"	: 128,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 24,
+			"mask_y" : 128,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -122,8 +118,8 @@
 			"y"	: 144,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 24,
+			"mask_y" : 144,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -133,8 +129,8 @@
 			"y"	: 160,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 24,
+			"mask_y" : 160,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -144,10 +140,10 @@
 			"y"	: 176,
 			"width" : 16,
 			"height" : 15,
-			"mask_x" : 0,
-			"mask_y" : 60,
+			"mask_x" : 24,
+			"mask_y" : 176,
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		}
+		}	
 	]
 }

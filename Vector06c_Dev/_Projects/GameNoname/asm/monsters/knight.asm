@@ -11,12 +11,15 @@
 ;		status = moveInit
 ;	else:
 ;		if distance(mob, hero) < a defence radius:
-;			status = defence
-;			anim to the hero dir
-;			anim = run
+;			status = defencePrep
 ;		else:
 ;			updateAnim
 ;			check mod-hero collision, impact if collides
+; defencePrep:
+;	status = defence
+;	statusTimer = defenceTime
+;	anim = run to the hero dir
+;	
 ; defence:
 ;	if distance(mob, hero) < a defence radius:
 ;		try to move a mob toward a hero, reset one coord to move along one axis
@@ -47,13 +50,15 @@
 ; statuses.
 KNIGHT_STATUS_DETECT_HERO_INIT	= 0
 KNIGHT_STATUS_DETECT_HERO		= 1
-KNIGHT_STATUS_DEFENCE			= 2
-KNIGHT_STATUS_MOVE_INIT			= 3
-KNIGHT_STATUS_MOVE				= 4
+KNIGHT_STATUS_DEFENCE_PREP		= 2
+KNIGHT_STATUS_DEFENCE			= 3
+KNIGHT_STATUS_MOVE_INIT			= 4
+KNIGHT_STATUS_MOVE				= 5
 
 ; status duration in updates.
 KNIGHT_STATUS_DETECT_HERO_TIME	= 100
-KNIGHT_STATUS_MOVE_TIME				= 25
+KNIGHT_STATUS_DEFENCE_TIME		= 50
+KNIGHT_STATUS_MOVE_TIME			= 25
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
 KNIGHT_ANIM_SPEED_DETECT_HERO	= 30
@@ -69,6 +74,8 @@ KNIGHT_COLLISION_HEIGHT	= 10
 
 KNIGHT_MOVE_SPEED		= $0090
 KNIGHT_MOVE_SPEED_NEG	= $ffff - $90 + 1
+
+KNIGHT_DETECT_HERO_DISTANCE = 30
 
 ;========================================================
 ; called to spawn this monster
@@ -95,9 +102,11 @@ KnightUpdate:
 			cpi KNIGHT_STATUS_DETECT_HERO
 			jz KnightUpdateDetectHero
 			cpi KNIGHT_STATUS_DEFENCE
-			jz KnightUpdateDefence
+			jz KnightUpdateDefence			
 			cpi KNIGHT_STATUS_MOVE_INIT
 			jz KnightUpdateMoveInit
+			cpi KNIGHT_STATUS_DEFENCE_PREP
+			jz KnightUpdateDefencePrep	
 			cpi KNIGHT_STATUS_DETECT_HERO_INIT
 			jz KnightUpdateDetectHeroInit
 			ret
@@ -114,7 +123,201 @@ KnightUpdateDetectHeroInit:
 			mvi m, >knight_idle
 			ret
 
+KnightUpdateDetectHero:
+			; hl = monsterStatus
+			; advance hl to monsterStatusTimer
+			inx h
+			dcr m
+			jz @setMoveInit
+@checkMobHeroDistance:
+			; advance hl to monsterPosX+1
+			LXI_B_TO_DIFF(monsterPosX+1, monsterStatusTimer)
+			dad b
+			; check hero-monster posX diff
+			lda heroPosX+1
+			sub m
+			jc @checkNegPosXDiff
+			cpi KNIGHT_DETECT_HERO_DISTANCE
+			jc @checkPosYDiff
+			jmp @updateAnimHeroDetectX
+@checkNegPosXDiff:
+			cpi -KNIGHT_DETECT_HERO_DISTANCE
+			jnc @checkPosYDiff
+			jmp @updateAnimHeroDetectX
+@checkPosYDiff:
+			; advance hl to monsterPosY+1
+			inx_h(2)
+			; check hero-monster posY diff
+			lda heroPosY+1
+			sub m
+			jc @checkNegPosYDiff
+			cpi KNIGHT_DETECT_HERO_DISTANCE
+			jc @heroDetected
+			jmp @updateAnimHeroDetectY
+@checkNegPosYDiff:
+			cpi -KNIGHT_DETECT_HERO_DISTANCE
+			jnc @heroDetected
+			jmp @updateAnimHeroDetectY
+@heroDetected:
+			; hl = monsterPosY+1
+			; advance hl to monsterStatus
+			LXI_B_TO_DIFF(monsterStatus, monsterPosY+1)
+			dad b
+			mvi m, KNIGHT_STATUS_DEFENCE_PREP
+			ret
+			
+@updateAnimHeroDetectX:
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
+			dad b
+			mvi a, KNIGHT_ANIM_SPEED_DETECT_HERO
+			jmp KnightUpdateAnimCheckCollisionHero
+@updateAnimHeroDetectY:
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
+			dad b
+			mvi a, KNIGHT_ANIM_SPEED_DETECT_HERO
+			jmp KnightUpdateAnimCheckCollisionHero
 
+@setMoveInit:
+ 			; hl - ptr to monsterStatusTimer
+			mvi m, KNIGHT_STATUS_MOVE_TIME
+			; advance hl to monsterStatus
+			dcx h
+			mvi m, KNIGHT_STATUS_MOVE_INIT
+			ret
+
+KnightUpdateDefencePrep
+			; hl - ptr to monsterStatus
+			mvi m, KNIGHT_STATUS_DEFENCE
+			; advance hl to monsterStatusTimer
+			inx h
+			mvi m, KNIGHT_STATUS_DEFENCE_TIME
+@checkAnimDirection:
+			; aim the monster to the hero dir
+
+			; advance hl to monsterAnimPtr
+			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
+			dad b			
+			mvi m, <knight_run_r
+			inx h
+			mvi m, >knight_run_r
+			ret
+
+KnightUpdateDefence:
+			; hl = monsterStatus
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatus)
+			dad b
+			mvi a, KNIGHT_ANIM_SPEED_DEFENCE
+			jmp KnightUpdateAnimCheckCollisionHero
+			ret
+
+KnightUpdateMoveInit:
+			; hl = monsterStatus
+			mvi m, KNIGHT_STATUS_MOVE
+			;inx h
+			;mvi m, KNIGHT_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
+
+			xchg
+			call Random
+			; advance hl to monsterSpeedX
+			LXI_H_TO_DIFF(monsterSpeedX, monsterStatus)
+			dad d
+
+			mvi c, 0 ; tmp c=0
+			cpi $40
+			jc @speedXp
+			cpi $80
+			jc @speedYp
+			cpi $c0
+			jc @speedXn
+@speedYn:
+			mov m, c
+			inx h
+			mov m, c
+			inx h
+			mvi m, <KNIGHT_MOVE_SPEED_NEG
+			inx h
+			mvi m, >KNIGHT_MOVE_SPEED_NEG
+			jmp @setAnim
+@speedYp:
+			mov m, c
+			inx h
+			mov m, c
+			inx h
+			mvi m, <KNIGHT_MOVE_SPEED
+			inx h
+			mvi m, >KNIGHT_MOVE_SPEED
+			jmp @setAnim
+@speedXn:
+			mvi m, <KNIGHT_MOVE_SPEED_NEG
+			inx h
+			mvi m, >KNIGHT_MOVE_SPEED_NEG
+			inx h
+			mov m, c
+			inx h
+			mov m, c
+			jmp @setAnim
+@speedXp:
+			mvi m, <KNIGHT_MOVE_SPEED
+			inx h
+			mvi m, >KNIGHT_MOVE_SPEED
+			inx h
+			mov m, c
+			inx h
+			mov m, c
+@setAnim:
+			LXI_B_TO_DIFF(monsterAnimPtr, monsterSpeedY+1)
+			dad b
+			; a = rnd
+			ora a
+			; if rnd is positive (up or right movement), then play knight_run_r anim
+			jp @setAnimRunR
+@setAnimRunL:
+			mvi m, <knight_run_l
+			inx h
+			mvi m, >knight_run_l
+			ret
+@setAnimRunR:
+			mvi m, <knight_run_r
+			inx h
+			mvi m, >knight_run_r
+            ret
+
+KnightUpdateMove:
+			; hl = monsterStatus
+			; advance hl to monsterStatusTimer
+			inx h
+			dcr m
+			jz @setDetectHeroInit
+@updateMovement:
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monsterStatusTimer, monsterPosX, KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, @setMoveInit) 
+			
+			; hl points to monsterPosY+1
+			; advance hl to monsterAnimTimer
+			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
+			dad b
+			mvi a, KNIGHT_ANIM_SPEED_MOVE
+			jmp KnightUpdateAnimCheckCollisionHero
+
+@setMoveInit:
+			pop h
+			; hl points to monsterPosX
+			; advance hl to monsterStatus
+			LXI_B_TO_DIFF(monsterStatus, monsterPosX)
+			dad b
+			mvi m, KNIGHT_STATUS_MOVE_INIT
+			inx h
+			mvi m, KNIGHT_STATUS_MOVE_TIME
+			ret
+@setDetectHeroInit:
+ 			; hl - ptr to monsterStatusTimer
+			mvi m, KNIGHT_STATUS_MOVE_TIME
+			; advance hl to monsterStatus
+			dcx h
+			mvi m, KNIGHT_STATUS_DETECT_HERO_INIT
+			ret
 
 
 ; in:

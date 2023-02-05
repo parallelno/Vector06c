@@ -174,13 +174,13 @@ BurnerUpdateDetectHero:
 			sub m
 			jc @checkNegPosYDiff
 			cpi BURNER_DETECT_HERO_DISTANCE
-			jc @detectsHero
+			jc @heroDetected
 			jmp @updateAnimHeroDetectY
 @checkNegPosYDiff:
 			cpi -BURNER_DETECT_HERO_DISTANCE
-			jnc @detectsHero
+			jnc @heroDetected
 			jmp @updateAnimHeroDetectY
-@detectsHero:
+@heroDetected:
 			; hl = monsterPosY+1
 			; advance hl to monsterStatus
 			LXI_B_TO_DIFF(monsterStatus, monsterPosY+1)
@@ -195,6 +195,7 @@ BurnerUpdateDetectHero:
 			inx h
 			mvi m, >burner_dash
 			ret
+			
 @updateAnimHeroDetectX:
 			; advance hl to monsterAnimTimer
 			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)

@@ -164,13 +164,13 @@ VampireUpdateDetectHero:
 			sub m
 			jc @checkNegPosYDiff
 			cpi VAMPIRE_DETECT_HERO_DISTANCE
-			jc @detectsHero
+			jc @heroDetected
 			jmp @updateAnimHeroDetectY
 @checkNegPosYDiff:
 			cpi -VAMPIRE_DETECT_HERO_DISTANCE
-			jnc @detectsHero
+			jnc @heroDetected
 			jmp @updateAnimHeroDetectY
-@detectsHero:
+@heroDetected:
 			; hl = monsterPosY+1
 			; advance hl to monsterStatus
 			LXI_B_TO_DIFF(monsterStatus, monsterPosY+1)
