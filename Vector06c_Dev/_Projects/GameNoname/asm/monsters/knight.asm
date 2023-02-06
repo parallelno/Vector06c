@@ -221,8 +221,14 @@ KnightUpdateMoveInit:
 
 			xchg
 			call Random
+
 			; advance hl to monsterSpeedX
-			LXI_H_TO_DIFF(monsterSpeedX, monsterStatus)
+			LXI_H_TO_DIFF(monsterId, monsterStatus)
+			dad d
+			mov b, m
+
+			; advance hl to monsterSpeedX
+			LXI_H_TO_DIFF(monsterSpeedX, monsterId)
 			dad d
 
 			mvi c, 0 ; tmp c=0

@@ -25,9 +25,10 @@ roomTilesAddr:
 ;		monsterId = 0 - skeleton (tiledata = 3+0=3)
 ;		monsterId = 1 - vampire (tiledata = 3+1*8=11) 
 ;		monsterId = 2 - burner (tiledata = 3+2*8=19)
-;		monsterId = 3 - knight (tiledata = 3+3*8=27)
-;		monsterId = 4 - chest with money
-;		monsterId = 5 - chest with monster
+;		monsterId = 3 - knight horizontal walk (tiledata = 3+3*8=27)
+;		monsterId = 4 - knight vertical walk (tiledata = 3+4*8=35)
+;		monsterId = 5 - chest with money
+;		monsterId = 6 - chest with monster
 ; fff == 4, teleport, roomId = d, go to 0-31 room , ex. tileData = %1100 (12) - teleport to the roomId=1, %100 (4) teleport to the roomId=0
 ; fff == 5, teleport, roomId = d+32, go to 32-63 room
 ; fff == 6, ???
