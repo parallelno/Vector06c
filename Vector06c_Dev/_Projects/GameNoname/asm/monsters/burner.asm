@@ -211,7 +211,7 @@ BurnerUpdateDetectHero:
 
 @setMoveInit:
  			; hl - ptr to monsterStatusTimer
-			mvi m, BURNER_STATUS_MOVE_TIME
+			mvi m, BURNER_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
 			; advance hl to monsterStatus
 			dcx h
 			mvi m, BURNER_STATUS_MOVE_INIT
@@ -220,8 +220,6 @@ BurnerUpdateDetectHero:
 BurnerUpdateMoveInit:
 			; hl = monsterStatus
 			mvi m, BURNER_STATUS_MOVE
-			;inx h
-			;mvi m, BURNER_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
 
 			xchg
 			call Random

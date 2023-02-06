@@ -181,7 +181,7 @@ KnightUpdateDetectHero:
 
 @setMoveInit:
  			; hl - ptr to monsterStatusTimer
-			mvi m, KNIGHT_STATUS_MOVE_TIME
+			mvi m, KNIGHT_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
 			; advance hl to monsterStatus
 			dcx h
 			mvi m, KNIGHT_STATUS_MOVE_INIT
@@ -216,28 +216,31 @@ KnightUpdateDefence:
 KnightUpdateMoveInit:
 			; hl = monsterStatus
 			mvi m, KNIGHT_STATUS_MOVE
-			;inx h
-			;mvi m, KNIGHT_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
-
-			xchg
-			call Random
+			; advance hl to monsterStatusTimer
 
 			; advance hl to monsterSpeedX
-			LXI_H_TO_DIFF(monsterId, monsterStatus)
+			LXI_D_TO_DIFF(monsterId, monsterStatus)
 			dad d
-			mov b, m
-
+			mov a, m
+			cpi <KnightHorizId
+			lxi b, (%10000000)<<8 ; tmp c = 0 
+			jnz @verticalMovement
+			mvi b, %00000000
+@verticalMovement:			
+			xchg
+			call Random
+			ani %01111111 ; to clear the last bit
+			ora b
 			; advance hl to monsterSpeedX
 			LXI_H_TO_DIFF(monsterSpeedX, monsterId)
 			dad d
 
-			mvi c, 0 ; tmp c=0
 			cpi $40
 			jc @speedXp
 			cpi $80
-			jc @speedYp
-			cpi $c0
 			jc @speedXn
+			cpi $c0
+			jc @speedYp
 @speedYn:
 			mov m, c
 			inx h
@@ -277,7 +280,8 @@ KnightUpdateMoveInit:
 			LXI_B_TO_DIFF(monsterAnimPtr, monsterSpeedY+1)
 			dad b
 			; a = rnd
-			ora a
+			;ora a
+			adi $40
 			; if rnd is positive (up or right movement), then play knight_run_r anim
 			jp @setAnimRunR
 @setAnimRunL:

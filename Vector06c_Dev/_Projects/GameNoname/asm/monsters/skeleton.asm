@@ -163,13 +163,13 @@ SkeletonUpdateDetectHero:
 			sub m
 			jc @checkNegPosYDiff
 			cpi SKELETON_DETECT_HERO_DISTANCE
-			jc @heroDetected
+			jc @detectsHero
 			jmp @updateAnimHeroDetectY
 @checkNegPosYDiff:
 			cpi -SKELETON_DETECT_HERO_DISTANCE
-			jnc @heroDetected
+			jnc @detectsHero
 			jmp @updateAnimHeroDetectY
-@heroDetected:
+@detectsHero:
 			; hl = monsterPosY+1
 			; advance hl to monsterStatus
 			LXI_B_TO_DIFF(monsterStatus, monsterPosY+1)

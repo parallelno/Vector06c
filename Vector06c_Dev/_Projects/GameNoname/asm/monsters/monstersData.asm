@@ -10,8 +10,8 @@ monstersInit4:JMP_4(KnightInit)
 SkeletonId = (monstersInit0-monstersInits) / JMP_4_LEN
 VampireId = (monstersInit1-monstersInits) / JMP_4_LEN
 BurnerId = (monstersInit2-monstersInits) / JMP_4_LEN
-KnighHorizId = (monstersInit3-monstersInits) / JMP_4_LEN
-KnighVertId = (monstersInit4-monstersInits) / JMP_4_LEN
+KnightHorizId = (monstersInit3-monstersInits) / JMP_4_LEN
+KnightVertId = (monstersInit4-monstersInits) / JMP_4_LEN
 
 ; ptr to the first monster data in the sorted list
 monsterRuntimeDataSorted:
