@@ -7,11 +7,10 @@ RAM_DISK_S = RAM_DISK_S1
 RAM_DISK_M = RAM_DISK_M1
 
 .include "generated\\sprites\\knightSprites.asm"
-.include "generated\\sprites\\burnerSprites.asm"
 .align 2
 __chunkEnd_bank1_addr0_0:
 
-.include "generated\\sprites\\vampireSprites.asm"
+.include "generated\\sprites\\burnerSprites.asm"
 .include "generated\\sprites\\bomb_slowSprites.asm"
 .align 2
 __chunkEnd_bank1_addr0_1:

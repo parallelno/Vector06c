@@ -76,16 +76,12 @@
 							{
 								"type" : "sprite",
 								"path" : "sprites\\knight.json"
-							},
-							{
-								"type" : "sprite",
-								"path" : "sprites\\burner.json"
 							}
 						],
 						[
 							{
 								"type" : "sprite",
-								"path" : "sprites\\vampire.json"
+								"path" : "sprites\\burner.json"
 							},
 							{
 								"type" : "sprite",
@@ -114,6 +110,10 @@
 							{
 								"type" : "sprite",
 								"path" : "sprites\\heroL.json"
+							},
+							{
+								"type" : "sprite",
+								"path" : "sprites\\vampire.json"
 							}
 						]
 					]

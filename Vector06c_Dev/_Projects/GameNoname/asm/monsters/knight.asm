@@ -58,10 +58,10 @@ KNIGHT_STATUS_MOVE				= 5
 ; status duration in updates.
 KNIGHT_STATUS_DETECT_HERO_TIME	= 100
 KNIGHT_STATUS_DEFENCE_TIME		= 50
-KNIGHT_STATUS_MOVE_TIME			= 25
+KNIGHT_STATUS_MOVE_TIME			= 50
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
-KNIGHT_ANIM_SPEED_DETECT_HERO	= 30
+KNIGHT_ANIM_SPEED_DETECT_HERO	= 10
 KNIGHT_ANIM_SPEED_DEFENCE		= 100
 KNIGHT_ANIM_SPEED_MOVE			= 50
 
@@ -72,8 +72,8 @@ KNIGHT_HEALTH = 1
 KNIGHT_COLLISION_WIDTH	= 15
 KNIGHT_COLLISION_HEIGHT	= 10
 
-KNIGHT_MOVE_SPEED		= $0090
-KNIGHT_MOVE_SPEED_NEG	= $ffff - $90 + 1
+KNIGHT_MOVE_SPEED		= $0060
+KNIGHT_MOVE_SPEED_NEG	= $ffff - $60 + 1
 
 KNIGHT_DETECT_HERO_DISTANCE = 30
 
@@ -199,9 +199,9 @@ KnightUpdateDefencePrep
 			; advance hl to monsterAnimPtr
 			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
 			dad b			
-			mvi m, <knight_run_r
+			mvi m, <knight_defence_r
 			inx h
-			mvi m, >knight_run_r
+			mvi m, >knight_defence_r
 			ret
 
 KnightUpdateDefence:
