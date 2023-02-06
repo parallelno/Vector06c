@@ -35,6 +35,11 @@ HeroSwordTrailInit:
 			inx h 
 			mvi m, >HeroSwordTrailDraw
 
+			; advance hl to bulletId
+			inx h
+;@bulletId:	mvi a, TEMP_BYTE
+			;mov m, a
+
 			; advance hl to bulletStatus
 			inx h
 			mvi m, BULLET_STATUS_INVIS

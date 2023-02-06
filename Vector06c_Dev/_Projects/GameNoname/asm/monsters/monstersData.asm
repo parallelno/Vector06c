@@ -7,11 +7,11 @@ monstersInit2:JMP_4(BurnerInit)
 monstersInit3:JMP_4(KnightInit)
 monstersInit4:JMP_4(KnightInit)
 
-SkeletonId = (monstersInit0-monstersInits) / JMP_4_LEN
-VampireId = (monstersInit1-monstersInits) / JMP_4_LEN
-BurnerId = (monstersInit2-monstersInits) / JMP_4_LEN
-KnightHorizId = (monstersInit3-monstersInits) / JMP_4_LEN
-KnightVertId = (monstersInit4-monstersInits) / JMP_4_LEN
+SKELETON_ID = (monstersInit0-monstersInits) / JMP_4_LEN
+VAMPIRE_ID = (monstersInit1-monstersInits) / JMP_4_LEN
+BURNER_ID = (monstersInit2-monstersInits) / JMP_4_LEN
+KNIGHT_HORIZ_ID = (monstersInit3-monstersInits) / JMP_4_LEN
+KNIGHT_VERT_ID = (monstersInit4-monstersInits) / JMP_4_LEN
 
 ; ptr to the first monster data in the sorted list
 monsterRuntimeDataSorted:
@@ -40,9 +40,9 @@ monsterSpeedX:			.word TEMP_WORD
 monsterSpeedY:			.word TEMP_WORD
 monsterDataPrevPPtr:	.word TEMP_WORD
 monsterDataNextPPtr:	.word TEMP_WORD
-monsterDataEnd:
+monsterRuntimeDataEnd:
 
-MONSTER_RUNTIME_DATA_LEN = monsterDataEnd - monstersRuntimeData
+MONSTER_RUNTIME_DATA_LEN = monsterRuntimeDataEnd - monstersRuntimeData
 
 ; the same structs for the rest of the monsters
 .storage MONSTER_RUNTIME_DATA_LEN * (MONSTERS_MAX-1), 0

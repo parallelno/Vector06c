@@ -2,24 +2,26 @@
 bulletRuntimeDataSorted:
 			.word bulletUpdatePtr
 
-BULLET_RUNTIME_DATA_LEN = 25
-
 ; a list of bullet runtime data structs.
 bulletsRuntimeData:
-bulletUpdatePtr:		.word TEMP_ADDR ; $2375
-bulletDrawPtr:			.word TEMP_ADDR ; 
+bulletUpdatePtr:		.word TEMP_ADDR 
+bulletDrawPtr:			.word TEMP_ADDR  
+bulletId:				.byte TEMP_BYTE
 bulletStatus:			.byte TEMP_BYTE
-bulletStatusTimer:		.byte TEMP_BYTE ; $2375
-bulletAnimTimer:		.byte TEMP_BYTE ; $237b
-bulletAnimPtr:			.word TEMP_ADDR ; $237c
+bulletStatusTimer:		.byte TEMP_BYTE 
+bulletAnimTimer:		.byte TEMP_BYTE 
+bulletAnimPtr:			.word TEMP_ADDR 
 bulletEraseScrAddr:		.word TEMP_WORD
 bulletEraseScrAddrOld:	.word TEMP_ADDR
 bulletEraseWH:			.word TEMP_WORD
-bulletEraseWHOld:		.word TEMP_WORD ; 
-bulletPosX:				.word TEMP_WORD ; $2386
-bulletPosY:				.word TEMP_WORD ; $2388
-bulletSpeedX:			.word TEMP_WORD ; 238a
-bulletSpeedY:			.word TEMP_WORD ; $238c
+bulletEraseWHOld:		.word TEMP_WORD 
+bulletPosX:				.word TEMP_WORD 
+bulletPosY:				.word TEMP_WORD 
+bulletSpeedX:			.word TEMP_WORD 
+bulletSpeedY:			.word TEMP_WORD 
+bulletRuntimeDataEnd:
+
+BULLET_RUNTIME_DATA_LEN = bulletRuntimeDataEnd-bulletsRuntimeData ;25
 
 ; the same structs for the rest of the bullets
 .storage BULLET_RUNTIME_DATA_LEN * (BULLETS_MAX-1), 0

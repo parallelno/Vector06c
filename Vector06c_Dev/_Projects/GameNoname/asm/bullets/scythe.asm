@@ -55,7 +55,7 @@ SCYTHE_COLLISION_HEIGHT	= 12
 ; bc - caster pos
 ; a - direction
 ScytheInit:
-			sta @dir+1 ; direction (BULLET_DIR_*)
+			sta @dir+1 ; direction (BULLET_DIR_*) ; TODO: move dir calc over this func. use A reg for a bulletId
 			call BulletsGetEmptyDataPtr
 			; hl - ptr to bulletUpdatePtr+1
 			; advance hl to bulletUpdatePtr
@@ -68,6 +68,11 @@ ScytheInit:
 			mvi m, <ScytheDraw
 			inx h 
 			mvi m, >ScytheDraw
+			
+			; advance hl to bulletId
+			inx h
+;@bulletId:	mvi a, TEMP_BYTE
+			;mov m, a
 
 			; advance hl to bulletStatus
 			inx h

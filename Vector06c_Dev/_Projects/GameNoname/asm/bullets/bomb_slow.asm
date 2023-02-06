@@ -52,8 +52,9 @@ BOMB_SLOW_COLLISION_HEIGHT	= 10
 
 ; in:
 ; bc - caster pos
-; a - direction
+; a - projectileId
 BombSlowInit:
+			sta @bulletId+1
 			call BulletsGetEmptyDataPtr
 			; hl - ptr to bulletUpdatePtr+1
 			; advance hl to bulletUpdatePtr
@@ -67,6 +68,11 @@ BombSlowInit:
 			inx h 
 			mvi m, >BombSlowDraw
 
+			; advance hl to bulletId
+			inx h
+@bulletId:	mvi a, TEMP_BYTE
+			mov m, a
+
 			; advance hl to bulletStatus
 			inx h
 			mvi m, BOMB_SLOW_STATUS_MOVE_THROW
@@ -75,10 +81,20 @@ BombSlowInit:
 			mvi m, BOMB_SLOW_STATUS_MOVE_TIME
 			; advance hl to bulletAnimPtr
 			inx_h(2)
+			
+			; a - bulletId
+			cpi BOMB_SLOW_ID
+			jz @bombSlow
+@bombDmg:
+			mvi m, <bomb_slow_dmg
+			inx h
+			mvi m, >bomb_slow_dmg
+			jmp @eraseScrAddr
+@bombSlow:
 			mvi m, <bomb_slow_run
 			inx h
-			mvi m, >bomb_slow_run
-
+			mvi m, >bomb_slow_run			
+@eraseScrAddr:
 			mov a, b
 			; a - posX
 			; scrX = posX/8 + $a0

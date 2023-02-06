@@ -24,6 +24,10 @@
 		"run"	: {
 			"frames" : ["run0", "run1"],
 			"loop" : true
+		},		
+		"dmg"	: {
+			"frames" : ["dmg0", "dmg1"],
+			"loop" : true
 		}
 	},
 	"sprites" : [
@@ -35,7 +39,7 @@
 			"height" : 6,
 			"offsetY" : 4,
 			"mask_x" : 8,
-			"mask_y" : 96,
+			"mask_y" : 96, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
@@ -50,6 +54,30 @@
 			"mask_y" : 103,
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		}
+		},
+		{
+			"name" : "dmg0",
+			"x" : 16,
+			"y"	: 96,
+			"width" : 8,
+			"height" : 6,
+			"offsetY" : 4,
+			"mask_x" : 24,
+			"mask_y" : 96,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "dmg1",  
+			"x" : 16,
+			"y"	: 103,
+			"width" : 8,
+			"height" : 6,
+			"offsetY" : 4,
+			"mask_x" : 24,
+			"mask_y" : 103,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		}		
 	]
 }

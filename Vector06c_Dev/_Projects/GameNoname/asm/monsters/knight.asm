@@ -75,7 +75,7 @@ KNIGHT_COLLISION_HEIGHT	= 10
 KNIGHT_MOVE_SPEED		= $0060
 KNIGHT_MOVE_SPEED_NEG	= $ffff - $60 + 1
 
-KNIGHT_DETECT_HERO_DISTANCE = 30
+KNIGHT_DETECT_HERO_DISTANCE = 60
 
 ;========================================================
 ; called to spawn this monster
@@ -222,7 +222,7 @@ KnightUpdateMoveInit:
 			LXI_D_TO_DIFF(monsterId, monsterStatus)
 			dad d
 			mov a, m
-			cpi <KnightHorizId
+			cpi <KNIGHT_HORIZ_ID
 			lxi b, (%10000000)<<8 ; tmp c = 0 
 			jnz @verticalMovement
 			mvi b, %00000000
@@ -318,12 +318,10 @@ KnightUpdateMove:
 			LXI_B_TO_DIFF(monsterStatus, monsterPosX)
 			dad b
 			mvi m, KNIGHT_STATUS_MOVE_INIT
-			inx h
-			mvi m, KNIGHT_STATUS_MOVE_TIME
 			ret
 @setDetectHeroInit:
  			; hl - ptr to monsterStatusTimer
-			mvi m, KNIGHT_STATUS_MOVE_TIME
+			mvi m, KNIGHT_STATUS_DETECT_HERO_TIME ; TODO: seems unnecessary code
 			; advance hl to monsterStatus
 			dcx h
 			mvi m, KNIGHT_STATUS_DETECT_HERO_INIT

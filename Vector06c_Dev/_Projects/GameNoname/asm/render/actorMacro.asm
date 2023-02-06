@@ -96,7 +96,7 @@
 			jnz CollisionHandler
 
 @applyNewPos:
-			pop h
+			pop h ; move it above jnz CollisionHandler to make outs being obvious
 			; hl points to posX
 @newPosX:	lxi d, TEMP_WORD
 @newPosY:	lxi b, TEMP_WORD

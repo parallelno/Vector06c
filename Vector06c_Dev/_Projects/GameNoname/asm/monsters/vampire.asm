@@ -361,6 +361,7 @@ VampireUpdateShoot:
 			mov b, m
 			inx_h(2)
 			mov c, m
+			mvi a, BOMB_DMG_ID
 			jmp BombSlowInit
 
 ; in:
