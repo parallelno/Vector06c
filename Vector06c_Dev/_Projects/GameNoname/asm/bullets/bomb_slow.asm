@@ -152,8 +152,8 @@ BombSlowInit:
 			sbb a
 			mov d, a
 			xchg
-			; posDiffX / BOMB_SLOW_STATUS_MOVE_TIME
-			dad h 
+			; posDiffX / BOMB_SLOW_STATUS_MOVE_TIME (it uses the fact that HL>>5 the same as HL<<3)
+			dad h
 			dad h 
 			dad h
 			; to fill up L with %1111 if posDiff < 0
