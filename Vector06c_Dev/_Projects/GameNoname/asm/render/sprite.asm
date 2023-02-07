@@ -180,7 +180,7 @@ SpriteCopyToScrV:
 @nextColumn:
 			RAM_DISK_ON(__RAM_DISK_S_BACKBUFF | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			; read without a stack operations because
-			; we need fill up BC prior to use POP B
+			; we have to load BC before using POP B
 			mov b, m
 			dcr l
 			mov c, m
@@ -202,6 +202,9 @@ SpriteCopyToScrV:
 			lxi h, $2000-height+2-1
 	.endif
 			dad sp
+			; set sp to a safe place, because an interuption break can happen
+			; between sta and out $10 in RAM_DISK_ON(__RAM_DISK_S_BACKBUFF) in the code above
+			lxi sp, STACK_INTERRUPTION_ADDR
 
 			jnc @nextColumn
 			; advance Y to the next column
