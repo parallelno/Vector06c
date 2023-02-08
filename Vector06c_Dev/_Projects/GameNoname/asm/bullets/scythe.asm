@@ -55,7 +55,7 @@ SCYTHE_COLLISION_HEIGHT	= 12
 ; bc - caster pos
 ; a - direction
 ScytheInit:
-			sta @dir+1 ; direction (BULLET_DIR_*) ; TODO: move dir calc over this func. use A reg for a bulletId
+			sta @dir+1 ; direction (BULLET_DIR_*) ; TODO: move dir calc over this func. use A reg for a bullet_id
 			call BulletsGetEmptyDataPtr
 			; hl - ptr to bullet_update_ptr+1
 			; advance hl to bullet_update_ptr
@@ -69,15 +69,15 @@ ScytheInit:
 			inx h 
 			mvi m, >ScytheDraw
 			
-			; advance hl to bulletId
+			; advance hl to bullet_id
 			inx h
-;@bulletId:	mvi a, TEMP_BYTE
+;@bullet_id:	mvi a, TEMP_BYTE
 			;mov m, a
 
-			; advance hl to bulletStatus
+			; advance hl to bullet_status
 			inx h
 			mvi m, SCYTHE_STATUS_MOVE_THROW
-			; advance and set bulletStatusTimer
+			; advance and set bullet_status_timer
 			inx h
 			mvi m, SCYTHE_STATUS_MOVE_TIME
 			; advance hl to bulletAnimPtr
@@ -184,18 +184,18 @@ ScytheInit:
 ; in:
 ; de - ptr to bullet_update_ptr in the runtime data
 ScytheUpdate:
-			; advance to bulletStatusTimer
-			LXI_H_TO_DIFF(bulletStatusTimer, bullet_update_ptr)
+			; advance to bullet_status_timer
+			LXI_H_TO_DIFF(bullet_status_timer, bullet_update_ptr)
 			dad d
 @updateMove:
 			dcr m
 			jz @die
 @updateMovement:
-			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bulletStatusTimer, bulletPosX, SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, @setBounceAfterTileCollision) 
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bullet_status_timer, bulletPosX, SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, @setBounceAfterTileCollision) 
 			
 			; hl points to bulletPosY+1
-			; advance hl to bulletAnimTimer
-			LXI_B_TO_DIFF(bulletAnimTimer, bulletPosY+1)
+			; advance hl to bullet_anim_timer
+			LXI_B_TO_DIFF(bullet_anim_timer, bulletPosY+1)
 			dad b
 			mvi a, SCYTHE_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, SCYTHE_DAMAGE)	
@@ -207,16 +207,16 @@ ScytheUpdate:
 @setBounceAfterTileCollision:
 			pop h
 			; hl points to posX
-			; advance hl to bulletStatusTimer
-			LXI_B_TO_DIFF(bulletStatusTimer, bulletPosX)
+			; advance hl to bullet_status_timer
+			LXI_B_TO_DIFF(bullet_status_timer, bulletPosX)
 			dad b
 @setBounce:
-			; hl - ptr to bulletStatusTimer
-			; advance hl to bulletStatus
+			; hl - ptr to bullet_status_timer
+			; advance hl to bullet_status
 			dcx h
 			mvi m, SCYTHE_STATUS_MOVE_BOUNCE
 			; advance hl to bulletSpeedX
-			LXI_B_TO_DIFF(bulletSpeedX, bulletStatus)
+			LXI_B_TO_DIFF(bulletSpeedX, bullet_status)
 			dad b
 			mov a, m
 			inx h
@@ -250,9 +250,9 @@ ScytheUpdate:
 			mvi m, <SCYTHE_MOVE_SPEED_NEG
 			ret
 @die:
-			; hl points to bulletStatusTimer
+			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			LXI_B_TO_DIFF(bullet_update_ptr+1, bulletStatusTimer)
+			LXI_B_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
 			dad b
 			jmp BulletsDestroy
 

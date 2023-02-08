@@ -839,10 +839,10 @@ bullet_runtime_data_sorted $25d1
 bulletsruntimedata $25d3
 bullet_update_ptr $25d3
 bullet_draw_ptr $25d5
-bulletid $25d7
-bulletstatus $25d8
-bulletstatustimer $25d9
-bulletanimtimer $25da
+bullet_id $25d7
+bullet_status $25d8
+bullet_status_timer $25d9
+bullet_anim_timer $25da
 bulletanimptr $25db
 bulleterasescraddr $25dd
 bulleterasescraddrold $25df
@@ -942,7 +942,7 @@ bomb_slow_damage $0001
 bomb_slow_collision_width $000a
 bomb_slow_collision_height $000a
 bomb_slow_init $29cc
-@bulletid $29df
+@bullet_id $29df
 @bombdmg $29ef
 @bombslow $29f7
 @erasescraddr $29fc

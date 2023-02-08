@@ -163,8 +163,8 @@ bullets_erase:
 ; in:
 ; hl - ptr to bullet_update_ptr+1 in the runtime data
 BulletCopyToScr:
-			; advance to bulletStatus
-			LXI_D_TO_DIFF(bulletStatus, bullet_update_ptr+1)
+			; advance to bullet_status
+			LXI_D_TO_DIFF(bullet_status, bullet_update_ptr+1)
 			dad d
 			; if it is invisible, return
 			mov a, m
@@ -172,7 +172,7 @@ BulletCopyToScr:
 			rz
 
 			; advance to bulletEraseScrAddr
-			LXI_B_TO_DIFF(bulletEraseScrAddr, bulletStatus)			
+			LXI_B_TO_DIFF(bulletEraseScrAddr, bullet_status)			
 			dad b
 			; read bulletEraseScrAddr
 			mov c, m
@@ -268,8 +268,8 @@ BulletErase:
 			cpi BULLET_RUNTIME_DATA_DESTR
 			jz BulletsSetEmpty
 
-			; advance to bulletStatus
-			LXI_D_TO_DIFF(bulletStatus, bullet_update_ptr+1)
+			; advance to bullet_status
+			LXI_D_TO_DIFF(bullet_status, bullet_update_ptr+1)
 			dad d
 			; if it is invisible, return
 			mov a, m
@@ -277,7 +277,7 @@ BulletErase:
 			rz
 
 			; advance to bulletEraseScrAddr
-			LXI_D_TO_DIFF(bulletEraseScrAddr, bulletStatus)
+			LXI_D_TO_DIFF(bulletEraseScrAddr, bullet_status)
 			dad d
 			mov e, m
 			inx h

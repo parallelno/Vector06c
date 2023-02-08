@@ -35,22 +35,22 @@ HeroSwordTrailInit:
 			inx h 
 			mvi m, >HeroSwordTrailDraw
 
-			; advance hl to bulletId
+			; advance hl to bullet_id
 			inx h
-;@bulletId:	mvi a, TEMP_BYTE
+;@bullet_id:	mvi a, TEMP_BYTE
 			;mov m, a
 
-			; advance hl to bulletStatus
+			; advance hl to bullet_status
 			inx h
 			mvi m, BULLET_STATUS_INVIS
-			; advance and set bulletStatusTimer
+			; advance and set bullet_status_timer
 			inx h
 			mvi m, ATTK01_STATUS_INVIS_DURATION
 
 			; tmp b = 0
 			mvi b, 0
 			; advance hl to bulletPosY+1
-			LXI_D_TO_DIFF(bulletPosY+1, bulletStatusTimer)
+			LXI_D_TO_DIFF(bulletPosY+1, bullet_status_timer)
 			dad d
 			; set posY
 			lda heroPosY+1
@@ -98,23 +98,23 @@ HeroSwordTrailInit:
 ; in:
 ; de - ptr to bullet_update_ptr in the runtime data
 HeroSwordTrailUpdate:
-			; advance to bulletStatus
-			LXI_H_TO_DIFF(bulletStatus, bullet_update_ptr)
+			; advance to bullet_status
+			LXI_H_TO_DIFF(bullet_status, bullet_update_ptr)
 			dad d
 			mov a, m
 			cpi BULLET_STATUS_INVIS
 			jz @delayUpdate
 
 @attkUpdate:
-			; hl - ptr to bulletStatus
-			; advance and decr bulletStatusTimer
+			; hl - ptr to bullet_status
+			; advance and decr bullet_status_timer
 			inx h
 			; check if it's time to die
 			dcr m
 			jz @destroy			
 
 @attkAnimUpdate:
-			; advance to bulletAnimTimer
+			; advance to bullet_anim_timer
 			inx h
 			; update it
 			mov a, m
@@ -146,13 +146,13 @@ HeroSwordTrailUpdate:
 			; update movement if needed
 			ret
 @destroy:
-			LXI_D_TO_DIFF(bullet_update_ptr+1, bulletStatusTimer)
+			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
 			dad d
 			jmp BulletsDestroy
 
 @delayUpdate:
-			; hl - ptr to bulletStatus
-			; advance and decr bulletStatusTimer
+			; hl - ptr to bullet_status
+			; advance and decr bullet_status_timer
 			inx h
 			dcr m
 			rnz
@@ -160,11 +160,11 @@ HeroSwordTrailUpdate:
 			; hl = bulletStatusDuration
 			; set the attack
 			mvi m, ATTK01_STATUS_ATTACK_DURATION
-			; advance and set bulletStatus
+			; advance and set bullet_status
 			dcx h
 			mvi m, ATTK01_STATUS_ATTACK
 			
-			; advance and reset bulletAnimTimer
+			; advance and reset bullet_anim_timer
 			inx_h(2)
 			mvi m, 0
 			; advance and set bulletAnimPtr

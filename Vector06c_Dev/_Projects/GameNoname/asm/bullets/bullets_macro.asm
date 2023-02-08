@@ -4,15 +4,15 @@
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
 .macro BULLET_DRAW(SpriteGetScrAddr_bullet, __RAM_DISK_S_BULLET)
-			; advance to bulletStatus
-			LXI_H_TO_DIFF(bulletStatus, bullet_draw_ptr)
+			; advance to bullet_status
+			LXI_H_TO_DIFF(bullet_status, bullet_draw_ptr)
 			dad d
 			mov a, m
 			; if it is invisible, return
 			cpi BULLET_STATUS_INVIS
 			rz
 
-			LXI_D_TO_DIFF(bulletPosX+1, bulletStatus)
+			LXI_D_TO_DIFF(bulletPosX+1, bullet_status)
 			dad d
 			call SpriteGetScrAddr_bullet
 			; hl - ptr to bulletPosY+1
@@ -50,7 +50,7 @@
 
 ; update anim, check collision with a hero
 ; in:
-; hl - bulletAnimTimer
+; hl - bullet_anim_timer
 ; a - anim speed
 ; out with no ret: 
 ; hl - bulletPosY+1

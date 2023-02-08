@@ -54,7 +54,7 @@ BOMB_SLOW_COLLISION_HEIGHT	= 10
 ; bc - caster pos
 ; a - projectileId
 bomb_slow_init:
-			sta @bulletId+1
+			sta @bullet_id+1
 			call BulletsGetEmptyDataPtr
 			; hl - ptr to bullet_update_ptr+1
 			; advance hl to bullet_update_ptr
@@ -68,21 +68,21 @@ bomb_slow_init:
 			inx h 
 			mvi m, >bomb_slow_draw
 
-			; advance hl to bulletId
+			; advance hl to bullet_id
 			inx h
-@bulletId:	mvi a, TEMP_BYTE
+@bullet_id:	mvi a, TEMP_BYTE
 			mov m, a
 
-			; advance hl to bulletStatus
+			; advance hl to bullet_status
 			inx h
 			mvi m, BOMB_SLOW_STATUS_MOVE_THROW
-			; advance and set bulletStatusTimer
+			; advance and set bullet_status_timer
 			inx h
 			mvi m, BOMB_SLOW_STATUS_MOVE_TIME
 			; advance hl to bulletAnimPtr
 			inx_h(2)
 			
-			; a - bulletId
+			; a - bullet_id
 			cpi BOMB_SLOW_ID
 			jz @bombSlow
 @bombDmg:
@@ -197,16 +197,16 @@ bomb_slow_init:
 ; in:
 ; de - ptr to bullet_update_ptr in the runtime data
 bomb_slow_update:
-			; advance to bulletStatusTimer
-			LXI_H_TO_DIFF(bulletStatusTimer, bullet_update_ptr)
+			; advance to bullet_status_timer
+			LXI_H_TO_DIFF(bullet_status_timer, bullet_update_ptr)
 			dad d
 @updateMove:
 			dcr m
 			jz @die
 @updateMovement:
-			; hl - ptr to bulletStatusTimer
+			; hl - ptr to bullet_status_timer
 			; advance hl to bulletSpeedY+1
-			LXI_B_TO_DIFF(bulletSpeedY+1, bulletStatusTimer)
+			LXI_B_TO_DIFF(bulletSpeedY+1, bullet_status_timer)
 			dad b
 			; bc <- speedY
 			mov b, m
@@ -247,8 +247,8 @@ bomb_slow_update:
 			mov m, d
 			
 			; hl points to bulletPosX+1
-			; advance hl to bulletAnimTimer
-			LXI_B_TO_DIFF(bulletAnimTimer, bulletPosX+1)
+			; advance hl to bullet_anim_timer
+			LXI_B_TO_DIFF(bullet_anim_timer, bulletPosX+1)
 			dad b
 			mvi a, BOMB_SLOW_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_SLOW_COLLISION_WIDTH, BOMB_SLOW_COLLISION_HEIGHT, BOMB_SLOW_DAMAGE)	
@@ -258,9 +258,9 @@ bomb_slow_update:
 			dad b
 			jmp BulletsDestroy
 @die:
-			; hl points to bulletStatusTimer
+			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			LXI_B_TO_DIFF(bullet_update_ptr+1, bulletStatusTimer)
+			LXI_B_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
 			dad b
 			jmp BulletsDestroy
 

@@ -6,10 +6,10 @@ bullet_runtime_data_sorted:
 bulletsRuntimeData:
 bullet_update_ptr:		.word TEMP_ADDR 
 bullet_draw_ptr:		.word TEMP_ADDR  
-bulletId:				.byte TEMP_BYTE
-bulletStatus:			.byte TEMP_BYTE
-bulletStatusTimer:		.byte TEMP_BYTE 
-bulletAnimTimer:		.byte TEMP_BYTE 
+bullet_id:				.byte TEMP_BYTE
+bullet_status:			.byte TEMP_BYTE
+bullet_status_timer:		.byte TEMP_BYTE 
+bullet_anim_timer:		.byte TEMP_BYTE 
 bulletAnimPtr:			.word TEMP_ADDR 
 bulletEraseScrAddr:		.word TEMP_WORD
 bulletEraseScrAddrOld:	.word TEMP_ADDR

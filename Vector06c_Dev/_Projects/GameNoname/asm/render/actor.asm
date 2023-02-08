@@ -1,5 +1,5 @@
 ; in:
-; hl - ptr to animTimer (monsterAnimTimer or bulletAnimTimer)
+; hl - ptr to animTimer (monsterAnimTimer or bullet_anim_timer)
 ; a - anim speed
 ; use:
 ; de, bc, hl
