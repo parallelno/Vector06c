@@ -16,7 +16,7 @@
 .include "asm\\render\\text.asm"
 .include "asm\\ui.asm"
 
-GameInit:
+game_init:
 			call levels_init
 			call level_init			
 			call room_init

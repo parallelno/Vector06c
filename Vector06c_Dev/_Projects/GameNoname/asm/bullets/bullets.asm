@@ -4,9 +4,9 @@
 .include "asm\\bullets\\scythe.asm"
 .include "asm\\bullets\\bomb_slow.asm"
 
-BulletsEraseRuntimeData:
+bullets_erase_runtime_data:
 			mvi a, BULLET_RUNTIME_DATA_LAST
-			sta bullet_update_ptr+1
+			sta bullet_update_ptr + 1
 			ret
 			.closelabels
 
@@ -15,13 +15,13 @@ BulletsEraseRuntimeData:
 ; in: 
 ; none
 ; return:
-; hl - a ptr to bullet_update_ptr+1 of an empty bullet runtime data
+; hl - a ptr to bullet_update_ptr + 1 of an empty bullet runtime data
 ; uses:
 ; de, a
 
-; TODO: optimize. use a lastRemovedBulletRuntimeDataPtr as a starter to find an empty data
-BulletsGetEmptyDataPtr:
-			lxi h, bullet_update_ptr+1
+; TODO: optimize. use a last_removed_bullet_runtime_data_ptr as a starter to find an empty data
+bullets_get_empty_data_ptr:
+			lxi h, bullet_update_ptr + 1
 @loop:
 			mov a, m
 			cpi BULLET_RUNTIME_DATA_EMPTY
@@ -59,7 +59,7 @@ BulletsGetEmptyDataPtr:
 ; in:
 ; hl - bullet_update_ptr+1 ptr
 ; TODO: optimize. fill up lastRemovedBulletRuntimeDataPtr
-BulletsDestroy:
+bullets_destroy:
 			mvi m, BULLET_RUNTIME_DATA_DESTR
 			ret
 			.closelabels
@@ -68,7 +68,7 @@ BulletsDestroy:
 ; in:
 ; hl - bullet_update_ptr+1 ptr
 ; TODO: optimize. fiil up lastRemovedBulletRuntimeDataPtr
-BulletsSetEmpty:
+bullets_set_empty:
 			mvi m, BULLET_RUNTIME_DATA_EMPTY
 			ret
 			.closelabels
@@ -266,7 +266,7 @@ BulletCopyToScr:
 BulletErase:
 			; if a bullet is destroyed mark its data as empty
 			cpi BULLET_RUNTIME_DATA_DESTR
-			jz BulletsSetEmpty
+			jz bullets_set_empty
 
 			; advance to bullet_status
 			LXI_D_TO_DIFF(bullet_status, bullet_update_ptr+1)

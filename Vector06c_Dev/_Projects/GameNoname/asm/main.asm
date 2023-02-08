@@ -3,7 +3,7 @@
 .include "asm\\globals\\macro.asm"
 .include "asm\\globals\\global_consts.asm"
 ; init.asm must be the first code inclusion
-.include "asm\\globals\\init.asm"
+.include "asm\\globals\\main_init.asm"
 .include "asm\\globals\\global_vars.asm"
 
 .include "asm\\globals\\utils.asm"
@@ -15,8 +15,10 @@ main_start:
 			CALL_RAM_DISK_FUNC(__GCPlayerInit, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 @mainLoop:
 			;call MainMenu
-			call GameInit
+			call game_init
 			jmp @mainLoop
 
+
+main_ram_seg_end:
 .include "generated\\code\\ram_disk_data.asm"
 .end

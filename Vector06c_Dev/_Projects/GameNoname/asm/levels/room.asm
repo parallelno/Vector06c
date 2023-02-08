@@ -1,6 +1,6 @@
 room_init:
 			call MonstersEraseRuntimeData
-			call BulletsEraseRuntimeData
+			call bullets_erase_runtime_data
 			call RoomInitTiles
 			call RoomInitTilesData
 			; erase a back buffer $a000-$ffff in the ram-disk

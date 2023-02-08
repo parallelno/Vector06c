@@ -23,7 +23,7 @@ ATTK01_COLLISION_OFFSET_Y_L = 0
 ; in:
 ; out:
 HeroSwordTrailInit:
-			call BulletsGetEmptyDataPtr
+			call bullets_get_empty_data_ptr
 			; hl - ptr to bullet_update_ptr+1
 
 			dcx h
@@ -148,7 +148,7 @@ HeroSwordTrailUpdate:
 @destroy:
 			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
 			dad d
-			jmp BulletsDestroy
+			jmp bullets_destroy
 
 @delayUpdate:
 			; hl - ptr to bullet_status

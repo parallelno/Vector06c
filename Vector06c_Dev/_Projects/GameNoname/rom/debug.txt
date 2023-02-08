@@ -86,7 +86,7 @@ opcode_mov_m_a $0077
 opcode_pop_b $00c1
 opcode_stc $0037
 opcode_inx_d $0013
-maininit $0100
+main_init $0100
 key_code $0128
 key_code_old $012a
 bordercoloridx $012c
@@ -964,13 +964,13 @@ lxi_h_to_diff_22.offsetaddr $0003
 lxi_d_to_diff_14.offsetaddr $000e
 lxi_b_to_diff_96.offsetaddr $fffffffffffffff3
 lxi_b_to_diff_97.offsetaddr $0003
-bulletseraseruntimedata $2af3
-bulletsgetemptydataptr $2af9
+bullets_erase_runtime_data $2af3
+bullets_get_empty_data_ptr $2af9
 @loop_14 $2afc
 @bulletstoomany $2b17
 @nextdata_5 $2b19
-bulletsdestroy $2b20
-bulletssetempty $2b23
+bullets_destroy $2b20
+bullets_set_empty $2b23
 bulletsdatafunccaller $2b26
 @loop_15 $2b2c
 @callfunc_3 $2b38
@@ -1037,7 +1037,7 @@ game_ui_init $30cf
 gameuipaneldraw $30d6
 gameuihealthbartext $30e0
 gameuihealthdraw $30e4
-gameinit $30f7
+game_init $30f7
 @gameloop $310b
 game_update $3124
 @updateloop $312d
@@ -1045,6 +1045,7 @@ draw_back_sprite $3147
 game_draw $3155
 main_start $3185
 @mainloop $3195
+code_seg_end $319b
 __chunk_start_bank0_addr0_0 $0000
 __ram_disk_s_hero_r $0010
 __ram_disk_m_hero_r $0000
