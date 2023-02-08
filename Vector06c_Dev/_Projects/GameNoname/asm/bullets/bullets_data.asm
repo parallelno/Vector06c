@@ -1,11 +1,11 @@
 ; ptr to the first bullet data in the sorted list
-bulletRuntimeDataSorted:
-			.word bulletUpdatePtr
+bullet_runtime_data_sorted:
+			.word bullet_update_ptr
 
 ; a list of bullet runtime data structs.
 bulletsRuntimeData:
-bulletUpdatePtr:		.word TEMP_ADDR 
-bulletDrawPtr:			.word TEMP_ADDR  
+bullet_update_ptr:		.word TEMP_ADDR 
+bullet_draw_ptr:		.word TEMP_ADDR  
 bulletId:				.byte TEMP_BYTE
 bulletStatus:			.byte TEMP_BYTE
 bulletStatusTimer:		.byte TEMP_BYTE 
