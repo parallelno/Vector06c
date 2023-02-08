@@ -17,6 +17,7 @@
 		{"x": 224,	"y" : 0},
 		{"x": 240,	"y" : 0}
 	],
+	"asset_type" : "sprite",	
 	"pngPath" : "art\\sprites_projectiles.png",
 	"preshifted_sprites" : 4,
 	"mask" : true,

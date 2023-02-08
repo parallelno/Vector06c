@@ -3,7 +3,7 @@ HERO_RUN_SPEED_D	= $016a ; for diagonal moves
 
 ; hero statuses.
 ; a status describes what set of animations and behavior is active
-; for ex. HERO_STATUS_ATTACK plays heroR_attk or heroL_attk depending on the direction and it spawns a weapon trail
+; for ex. HERO_STATUS_ATTACK plays hero_r_attk or hero_l_attk depending on the direction and it spawns a weapon trail
 HERO_STATUS_IDLE	= 0
 HERO_STATUS_ATTACK	= 1
 
@@ -23,8 +23,8 @@ HERO_COLLISION_HEIGHT = 11
 
 ; hero runtime data
 ; this's a struct. do not change the layout
-heroUpdatePtr:			.word HeroUpdate
-heroDrawPtr:			.word HeroDraw
+heroUpdatePtr:			.word hero_update
+heroDrawPtr:			.word hero_draw
 heroImpactPtr:			.word HeroImpact
 heroType:				.byte MONSTER_TYPE_ALLY
 heroHealth:				.byte HERO_HEALTH_MAX
@@ -76,7 +76,7 @@ HeroTileFuncTable:
 HeroInit:
 			call HeroIdleStart
 			lxi h, KEY_NO << 8 | KEY_NO
-			shld keyCode
+			shld key_code
 
 			lxi h, heroPosX+1
 			call SpriteGetScrAddr8
@@ -116,14 +116,14 @@ HeroSetPos:
 @skipAnimUpdate:
 .endmacro
 
-HeroUpdate:
+hero_update:
 			; check if a current animation is an attack
 			lda heroStatus
 			cpi HERO_STATUS_ATTACK
 			jz HeroAttackUpdate
 
 			; check if an attack key pressed
-			lhld keyCode
+			lhld key_code
 			mvi a, KEY_SPACE
 			cmp h
 			jz HeroAttackStart
@@ -136,13 +136,13 @@ HeroUpdate:
 
 @checkMoveKeys:
 			; check if the same arrow keys pressed the prev update
-			lda keyCodeOld
+			lda key_code_old
 			cmp l
 			jnz @moveKeysPressed
 
 			; update a move anim
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_MOVE)
-			jmp HeroUpdatePos
+			jmp hero_update_pos
 
 @moveKeysPressed:
 			mov a, l
@@ -157,9 +157,9 @@ HeroUpdate:
 
 			mvi a, 1
 			sta heroDirX
-			lxi h, heroR_run
+			lxi h, hero_r_run
 			shld heroAnimAddr
-			jmp HeroUpdatePos
+			jmp hero_update_pos
 
 @setAnimRunRU:
 			cpi KEY_RIGHT & KEY_UP
@@ -171,9 +171,9 @@ HeroUpdate:
 
 			mvi a, 1
 			sta heroDirX
-			lxi h, heroR_run
+			lxi h, hero_r_run
 			shld heroAnimAddr
-			jmp HeroUpdatePos
+			jmp hero_update_pos
 
 @setAnimRunRD:
 			cpi KEY_RIGHT & KEY_DOWN
@@ -186,9 +186,9 @@ HeroUpdate:
 
 			mvi a, 1
 			sta heroDirX
-			lxi h, heroR_run
+			lxi h, hero_r_run
 			shld heroAnimAddr
-			jmp HeroUpdatePos
+			jmp hero_update_pos
 
 @setAnimRunL:
 			cpi KEY_LEFT
@@ -201,9 +201,9 @@ HeroUpdate:
 
 			xra a
 			sta heroDirX
-			lxi h, heroL_run
+			lxi h, hero_l_run
 			shld heroAnimAddr
-			jmp HeroUpdatePos
+			jmp hero_update_pos
 
 @setAnimRunLU:
 			cpi KEY_LEFT & KEY_UP
@@ -216,9 +216,9 @@ HeroUpdate:
 
 			xra a
 			sta heroDirX
-			lxi h, heroL_run
+			lxi h, hero_l_run
 			shld heroAnimAddr
-			jmp HeroUpdatePos
+			jmp hero_update_pos
 
 @setAnimRunLD:
 			cpi KEY_LEFT & KEY_DOWN
@@ -230,9 +230,9 @@ HeroUpdate:
 
 			xra a
 			sta heroDirX
-			lxi h, heroL_run
+			lxi h, hero_l_run
 			shld heroAnimAddr
-			jmp HeroUpdatePos
+			jmp hero_update_pos
 
 @setAnimRunU:
 			cpi KEY_UP
@@ -247,13 +247,13 @@ HeroUpdate:
 			ora a
 			jz @setAnimRunUfaceL
 
-			lxi h, heroR_run
+			lxi h, hero_r_run
 			shld heroAnimAddr
-			jmp HeroUpdatePos
+			jmp hero_update_pos
 @setAnimRunUfaceL:
-			lxi h, heroL_run
+			lxi h, hero_l_run
 			shld heroAnimAddr
-			jmp HeroUpdatePos
+			jmp hero_update_pos
 @setAnimRunD:
 			cpi KEY_DOWN
 			rnz
@@ -266,15 +266,15 @@ HeroUpdate:
 			lda heroDirX
 			ora a
 			jz @setAnimRunDfaceL
-			lxi h, heroR_run
+			lxi h, hero_r_run
 			shld heroAnimAddr
-			jmp HeroUpdatePos
+			jmp hero_update_pos
 @setAnimRunDfaceL:
-			lxi h, heroL_run
+			lxi h, hero_l_run
 			shld heroAnimAddr
-			;jmp HeroUpdatePos
+			;jmp hero_update_pos
 
-HeroUpdatePos:
+hero_update_pos:
 			; apply the hero speed
 			lhld heroPosX
 			xchg
@@ -495,7 +495,7 @@ HeroMoveVertically:
 			jmp HeroCheckTileData
 
 HeroTileFuncNothing:
-			; bypass "ret"s to return from the HeroUpdate func
+			; bypass "ret"s to return from the hero_update func
 			pop psw
 			pop psw
 			ret
@@ -514,7 +514,7 @@ HeroTileFuncTeleport:
 			sta levelCommand
 			; bypassing the HeroCheckTileData:@loop because the hero is teleporting
 			; so we don't need to handle the rest of the colllided tiles.
-			; return to the func that called HeroUpdate
+			; return to the func that called hero_update
 			pop b
 
 			; check if the teleport on the left or right side
@@ -570,11 +570,11 @@ HeroAttackStart:
 			ora a
 			jz @setAnimAttkL
 
-			lxi h, heroR_attk
+			lxi h, hero_r_attk
 			shld heroAnimAddr
 			jmp  HeroSwordTrailInit
 @setAnimAttkL:
-			lxi h, heroL_attk
+			lxi h, hero_l_attk
 			shld heroAnimAddr
 			jmp HeroSwordTrailInit
 			.closelabels
@@ -606,17 +606,17 @@ HeroIdleStart:
 			ora a
 			jz @setAnimIdleL
 
-			lxi h, heroR_idle
+			lxi h, hero_r_idle
 			shld heroAnimAddr
 			ret
 @setAnimIdleL:
-			lxi h, heroL_idle
+			lxi h, hero_l_idle
 			shld heroAnimAddr
 			ret
 
 HeroIdleUpdate:
 			; check if the same keys pressed the prev update
-			lda keyCodeOld
+			lda key_code_old
 			cmp l
 			jnz HeroIdleStart
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_IDLE)
@@ -640,19 +640,19 @@ HeroImpact:
 			; TODO: teleport the hero to the catacombs entrance if a boss killed him
 			ret
 
-HeroDraw:
+hero_draw:
 			lxi h, heroPosX+1
-			call SpriteGetScrAddr_heroR
+			call SpriteGetScrAddr_hero_r
 
 			lhld heroAnimAddr
 			call SpriteGetAddr
 
 			lda heroDirX
 			ora a
-			mvi a, <(__RAM_DISK_S_HEROR | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+			mvi a, <(__RAM_DISK_S_HERO_R | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			jnz @spriteR
 @spriteL:
-			mvi a, <(__RAM_DISK_S_HEROL | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+			mvi a, <(__RAM_DISK_S_HERO_L | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 @spriteR:			
 
 			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
@@ -667,7 +667,7 @@ HeroDraw:
 			shld heroEraseWH
 			ret
 
-HeroCopyToScr:
+hero_copy_to_scr:
 			; get min(h, d), min(e,l)
 			lhld heroEraseScrAddrOld
 			xchg
@@ -722,7 +722,7 @@ HeroCopyToScr:
 			mov c, a
 			jmp SpriteCopyToScrV
 
-HeroErase:
+hero_erase:
 			; TODO: optimize. erase only that is outside of the updated hero region
 			lhld heroEraseScrAddr
 			xchg

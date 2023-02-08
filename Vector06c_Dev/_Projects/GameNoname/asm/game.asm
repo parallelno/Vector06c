@@ -1,11 +1,12 @@
-.include "asm\\levels\\levelsConst.asm"
-.include "asm\\levels\\levelsMacro.asm"
-.include "asm\\levels\\levelsData.asm"
+.include "asm\\levels\\levels_const.asm"
+.include "asm\\levels\\levels_macro.asm"
+.include "asm\\levels\\levels_data.asm"
 
-.include "asm\\bullets\\bulletsConsts.asm"
-.include "asm\\render\\drawTile.asm"
+.include "asm\\bullets\\bullets_consts.asm"
+.include "asm\\render\\draw_tile.asm"
+.include "asm\\render\\draw_back.asm"
 .include "asm\\render\\sprite.asm"
-.include "asm\\render\\actorMacro.asm"
+.include "asm\\render\\actor_macro.asm"
 .include "asm\\render\\actor.asm"
 .include "asm\\hero.asm"
 .include "asm\\monsters\\monsters.asm"
@@ -16,59 +17,78 @@
 .include "asm\\ui.asm"
 
 GameInit:
-			call LevelsInit
-			call LevelInit			
-			call RoomInit
-			call RoomDraw
-			call GameUIInit			
+			call levels_init
+			call level_init			
+			call room_init
+			call room_draw
+			call game_ui_init			
 
 			xra a
-			sta updateRequestCounter
+			sta update_request_counter
 			hlt
 @gameLoop:
 			CALL_RAM_DISK_FUNC(__GCPlayerStartRepeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
-			call GameUpdate
-			call GameDraw
+			call game_update
+			call game_draw
 			jmp	 @gameLoop
 
-GameUpdate:
-			lxi h, gameUpdateCounter
+game_update:
+			lxi h, game_update_counter
 			inr m
 
 			; check if an interuption happened
-			lda updateRequestCounter
+			lda update_request_counter
 			ora a
 			rz
 @updateLoop:
-			call HeroUpdate
-			call MonstersUpdate
-			call BulletsUpdate
-			call LevelUpdate
+			call hero_update
+			call monsters_update
+			call bullets_update
+			call level_update
 
 			; to check repeated key-pressing
-			lhld keyCode
-			shld keyCodeOld
+			lhld key_code
+			shld key_code_old
 
-			lxi h, updateRequestCounter
+			lxi h, update_request_counter
 			dcr m
 			jnz @updateLoop
 			ret
 
-GameDraw:
-			lxi h, gameDrawsCounter
+; TODO: tmp
+draw_back_sprite:
+			; DE - screen addr
+			; HL - tile graphics addr
+			lxi d, $8280
+			lxi h, room_tiles_addr + (13*16+3)*2
+			mov c, m
+			inx h
+			mov b, m
+			inx h
+			call draw_back_v
+			ret
+; TODO: end tmp
+
+game_draw:
+			lxi h, game_draws_counter
 			inr m
 
-			call HeroDraw
-			call MonstersDraw
-			call BulletsDraw
+			; TODO: tmp
+			CALL_RAM_DISK_FUNC(draw_back_sprite, <__RAM_DISK_S_LEVEL01)
+		
+			; TODO: end tmp
 
-			call HeroCopyToScr
-			call MonstersCopyToScr
-			call BulletsCopyToScr
+			call hero_draw
+			call monsters_draw
+			call bullets_draw
 
-			call HeroErase
-			call MonstersErase
-			call BulletsErase
+			call hero_copy_to_scr
+			call monsters_copy_to_scr
+			call bullets_copy_to_scr
+
+			call hero_erase
+			call monsters_erase
+			call bullets_erase
 			ret
 
 

@@ -1,4 +1,4 @@
-RoomInit:
+room_init:
 			call MonstersEraseRuntimeData
 			call BulletsEraseRuntimeData
 			call RoomInitTiles
@@ -37,7 +37,7 @@ RoomInitTiles:
 
 			; convert tile idxs into tile gfx addrs
 			lxi h, roomTilesData
-			lxi b, roomTilesAddr
+			lxi b, room_tiles_addr
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
 			; hl - current room tile indexes
 			; bc - current room tile graphics table
@@ -150,7 +150,7 @@ RoomMonsterSpawn:
 			pchl
 			.closelabels
 
-RoomDraw:
+room_draw:
 			; main scr
 			CALL_RAM_DISK_FUNC(RoomDrawTiles, <__RAM_DISK_S_LEVEL01)
 
@@ -160,14 +160,14 @@ RoomDraw:
 			lxi h, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi b, SCR_BUFF_LEN * 3 / 32
 			mvi a, __RAM_DISK_S_BACKBUFF
-			call CopyToRamDisk32
+			call copy_to_ram_disk32
 
 			; copy $a000-$ffff scr buffs to the ram-disk back buffer2 (to restore the background in the back buffer)
 			lxi d, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi h, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi b, SCR_BUFF_LEN * 3 / 32
 			mvi a, __RAM_DISK_S_BACKBUFF2
-			call CopyToRamDisk32
+			call copy_to_ram_disk32
 
 			; convert roomTilesData into $8000 tiledata buffer in the ram-disk
 			;call RoomTileDataBuff
@@ -231,13 +231,13 @@ RoomTileDataBuff:
 
 ;=========================================================
 ; draw a room tiles. It might be a main screen, or a back buffer
-; call ex. CALL_RAM_DISK_FUNC(RoomDrawTiles, RAM_DISK_S<n>)
-; RAM_DISK_S<n> - ram-disk activation command where stored tile gfx
+; call ex. CALL_RAM_DISK_FUNC(RoomDrawTiles, <__RAM_DISK_S_LEVEL01)
+; __RAM_DISK_S_LEVEL01 - ram-disk activation command where tile gfx stored
 RoomDrawTiles:
 			; set y = 0
 			mvi e, 0
 			; set a pointer to the first item in the list of addrs of tile graphics
-			lxi h, roomTilesAddr
+			lxi h, room_tiles_addr
 @newLine
 			; reset the x. it's a high byte of the first screen buffer addr
 			mvi d, >SCR_BUFF0_ADDR ; $80

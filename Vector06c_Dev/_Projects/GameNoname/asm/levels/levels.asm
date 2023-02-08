@@ -1,7 +1,7 @@
 ;================================================================
 ;	initialization levels data every game start
 ;
-LevelsInit:
+levels_init:
 			xra a
 			sta levelIdx
 			ret
@@ -9,7 +9,7 @@ LevelsInit:
 ;================================================================
 ;	initialization level data every game start
 ;
-LevelInit:
+level_init:
 			lxi d, __level01_palette_sprites_tiles_lv01
             mvi a, <__RAM_DISK_S_LEVEL01
 			call SetPaletteFromRamDisk
@@ -26,19 +26,19 @@ LevelInit:
 			ret
 			.closelabels
 
-LevelUpdate:
+level_update:
 			lda levelCommand
 			ora a
 			rz
 			cpi LEVEL_COMMAND_LOAD_DRAW_ROOM
 			jnz @nextCommandCheck
 			; load a new room
-			call RoomInit
-			call RoomDraw
+			call room_init
+			call room_draw
 
 			call HeroInit
 			xra a
-			lda	updateRequestCounter
+			lda	update_request_counter
 			; reset the command
 			xra a
 			sta levelCommand

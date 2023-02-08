@@ -1,6 +1,6 @@
-.include "asm\\bullets\\bulletsMacro.asm"
-.include "asm\\bullets\\bulletsData.asm"
-.include "asm\\bullets\\heroSwordTrail.asm"
+.include "asm\\bullets\\bullets_macro.asm"
+.include "asm\\bullets\\bullets_data.asm"
+.include "asm\\bullets\\hero_sword_trail.asm"
 .include "asm\\bullets\\scythe.asm"
 .include "asm\\bullets\\bomb_slow.asm"
 
@@ -143,19 +143,19 @@ BulletsCommonFuncCaller:
 			ret
 			.closelabels
 			
-BulletsUpdate:
+bullets_update:
 			lxi h, 0
 			jmp BulletsDataFuncCaller
 
-BulletsDraw:
+bullets_draw:
 			lxi h, bulletDrawPtr - bulletUpdatePtr
 			jmp BulletsDataFuncCaller
 
-BulletsCopyToScr:
+bullets_copy_to_scr:
 			lxi h, BulletCopyToScr
 			jmp BulletsCommonFuncCaller
 
-BulletsErase:
+bullets_erase:
 			lxi h, BulletErase
 			jmp BulletsCommonFuncCaller
 

@@ -1,10 +1,10 @@
-.include "asm\\monsters\\monstersConsts.asm"
-.include "asm\\monsters\\monsterMacro.asm"
+.include "asm\\monsters\\monsters_consts.asm"
+.include "asm\\monsters\\monster_macro.asm"
 .include "asm\\monsters\\skeleton.asm"
 .include "asm\\monsters\\vampire.asm"
 .include "asm\\monsters\\burner.asm"
 .include "asm\\monsters\\knight.asm"
-.include "asm\\monsters\\monstersData.asm"
+.include "asm\\monsters\\monsters_data.asm"
 
 MonstersEraseRuntimeData:
 			mvi a, MONSTER_RUNTIME_DATA_LAST
@@ -158,7 +158,7 @@ MonstersSetEmpty:
 ; 		ex.: the offset to monsterUpdatePtr is zero
 ; use:
 ; de, a
-MonstersDataFuncCaller:
+monsters_data_func_caller:
 			shld @funcPtrOffset+1
 			lxi h, monsterUpdatePtr+1
 @loop:
@@ -221,19 +221,19 @@ MonstersCommonFuncCaller:
 			ret
 			.closelabels
 			
-MonstersUpdate:
+monsters_update:
 			lxi h, 0
-			jmp MonstersDataFuncCaller
+			jmp monsters_data_func_caller
 
-MonstersDraw:
+monsters_draw:
 			lxi h, monsterDrawPtr - monsterUpdatePtr
-			jmp MonstersDataFuncCaller
+			jmp monsters_data_func_caller
 
-MonstersCopyToScr:
+monsters_copy_to_scr:
 			lxi h, MonsterCopyToScr
 			jmp MonstersCommonFuncCaller
 
-MonstersErase:
+monsters_erase:
 			lxi h, MonsterErase
 			jmp MonstersCommonFuncCaller
 

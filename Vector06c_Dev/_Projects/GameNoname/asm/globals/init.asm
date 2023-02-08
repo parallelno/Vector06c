@@ -7,11 +7,11 @@ MainInit:
 			sta INT_ADDR
 			lxi h, MainInit
 			shld RESTART_ADDR + 1
-			lxi h, Interruption2
+			lxi h, interruption
 			shld INT_ADDR + 1
 			lxi sp, STACK_TMP_MAIN_PROGRAM_ADDR
-			call RamDiskInit
+			call ram_disk_init
 			lxi sp, STACK_MAIN_PROGRAM_ADDR
 			ei
-            jmp MainStart
+            jmp main_start
 

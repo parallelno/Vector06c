@@ -209,7 +209,7 @@ GetWordFromRamDisk:
 ; a - ram-disk activation command
 ; use:
 ; all
-CopyToRamDisk:
+copy_to_ram_disk:
 			shld @restoreTargetAddr+1
 			; store sp
 			lxi h, $0000
@@ -252,7 +252,7 @@ CopyToRamDisk:
 ; a - ram-disk activation command
 ; use:
 ; all
-CopyToRamDisk32:
+copy_to_ram_disk32:
 			shld @restoreTargetAddr+1
 			; store sp
 			lxi h, $0000

@@ -1,0 +1,187 @@
+{
+	"dependencies" :
+	{
+		"sprite" : "scripts\\export_sprite.py",
+		"back" : "scripts\\export_back.py",
+		"level" : "scripts\\export_level.py",
+		"music" : "scripts\\export_music.py",
+		"global" : [
+			"source\\code\\ram_disk_data.json",
+			"scripts\\export_ram_disk_data.py",
+			"scripts\\task_build_run.py",
+			"scripts\\build.py",
+			"scripts\\common.py"
+		]
+	},
+	"paths" :
+	{
+		"source" : "source\\",
+		"generated" : "generated\\",
+		"bin" : "generated\\bin\\",
+		"rom" : "rom\\"
+	},
+	"buildDBPath" : "generated\\build.db",
+	"bankBackBuffer" : 3,
+	"bankBackBuffer2" : 1,
+	"backBufferSize" : 24578,
+	"banks" :
+	[
+		{
+			"bank" :	0,
+			"segments" :
+			[
+				{
+					"name" : "sprites",
+					"addr" : "0",
+					"chunks" :
+					[
+						[
+							{
+								"type" : "sprite",
+								"path" : "sprites\\hero_r.json"
+							}
+						],
+						[
+							{
+								"type" : "sprite",
+								"path" : "sprites\\skeleton.json"
+							},
+							{
+								"type" : "sprite",
+								"path" : "sprites\\scythe.json"
+							},
+							{
+								"type" : "sprite",
+								"path" : "sprites\\hero_attack01.json"
+							}
+						]
+					]
+				},
+				{
+					"name" : "sprites",
+					"addr" : "$8000",
+					"chunks" : 
+					[]
+				}
+			]
+		},
+		{
+			"bank" :	1,
+			"segments" :
+			[
+				{
+					"name" : "sprites",
+					"addr" : "0",
+					"chunks" :
+					[
+						[
+							{
+								"type" : "sprite",
+								"path" : "sprites\\knight.json"
+							}
+						],
+						[
+							{
+								"type" : "sprite",
+								"path" : "sprites\\burner.json"
+							},
+							{
+								"type" : "sprite",
+								"path" : "sprites\\bomb_slow.json"
+							}
+						]
+					]
+				},
+				{
+					"name" : "reserved",
+					"addr" : "$8000",
+					"description" : "$8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)"
+				}
+			]
+		},
+		{
+			"bank" :	2,
+			"segments" :
+			[
+				{
+					"name" : "sprites",
+					"addr" : "0",
+					"chunks" :
+					[
+						[
+							{
+								"type" : "sprite",
+								"path" : "sprites\\hero_l.json"
+							},
+							{
+								"type" : "sprite",
+								"path" : "sprites\\vampire.json"
+							}
+						]
+					]
+				},
+				{
+					"name" : "music",
+					"addr" : "$8000",
+					"chunks" :
+					[
+						[
+							{
+								"type" : "music",
+								"path" : "music\\song01.ym"
+							},
+							{
+								"type" : "code",
+								"path": "asm\\globals\\gigachad_player_rd.asm"
+							}
+						]
+					]
+				}
+			]
+		},		{
+			"bank" :	3,
+			"segments" :
+			[
+				{
+					"name" : "levels",
+					"addr" : "0",
+					"chunks" :
+					[
+						[
+							{
+								"type" : "level",
+								"path" : "levels\\level01.json"
+							}
+						]
+					]
+				},
+				{
+					"name" : "code library",
+					"addr" : "$8000",
+					"description" : "$8000-$9FFF code library. $A000-$FFFF back buffer",
+					"chunks" :
+					[
+						[
+							{
+								"type" : "code",
+								"path" : "asm\\render\\sprite_rd.asm"
+							},
+							{
+								"type" : "code",
+								"path": "asm\\render\\draw_sprite_rd.asm"
+							},
+							{
+								"type" : "code",
+								"path" : "asm\\globals\\utils_rd.asm"
+							},
+							{
+								"type" : "code",
+								"path" : "asm\\render\\sprite_preshift_rd.asm"
+							}
+						]
+					]
+				}
+			]
+		}
+	]
+}

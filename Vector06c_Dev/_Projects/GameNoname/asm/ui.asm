@@ -1,6 +1,6 @@
 ;.include "text.asm"
 
-GameUIInit:
+game_ui_init:
 			call GameUIPanelDraw
 			call GameUIHealthDraw
 			ret

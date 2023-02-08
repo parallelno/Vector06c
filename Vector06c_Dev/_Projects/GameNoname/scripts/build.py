@@ -1,12 +1,14 @@
 import os
 import sqlite3
 import common
-import animSpriteExport
-import levelExport
-import musicExport
+import export_sprite
+import export_back
+import export_level
+import export_music
 
-
-buildDBPath = "generated\\build_default.db"
+DIR_BIN = "bin\\"
+DIR_GENERATED = "generated\\"
+buildDBPath = f"{DIR_GENERATED}build_default.db"
 SEGMENT_0000_7F00_ADDR = 0x0000
 SEGMENT_8000_0000_ADDR = 0x8000
 
@@ -15,6 +17,11 @@ SEGMENT_8000_0000_SIZE_MAX = 2 ** 15
 
 SCR_BUFF_SIZE = 8192
 
+ASSET_TYPE_BACK		= "back"
+ASSET_TYPE_SPRITE	= "sprite"
+ASSET_TYPE_LEVEL	= "level"
+ASSET_TYPE_MUSIC	= "music"
+
 def SetBuildDBPath(_buildDBPath):
 	global buildDBPath
 	buildDBPath = _buildDBPath
@@ -22,58 +29,59 @@ def SetBuildDBPath(_buildDBPath):
 def DelBuildDB():
 	common.RunCommand("del " + buildDBPath, "Build DB was deleted")
 
-def ExportAnimSprites(sourcePath, forceExport, sourceFolder = "sources\\", generatedFolder = "generated\\"):
+def ExportAnimSprites(sourcePath, forceExport, sourceFolder, generatedFolder):
 	sourcePathWOExt = os.path.splitext(sourcePath)[0]
 	sourceName = os.path.basename(sourcePathWOExt)
 	extAsm = ".asm"
-	animFilePath = generatedFolder + sourcePathWOExt + "Anim" + extAsm
-	spriteFilePath = generatedFolder + sourcePathWOExt + "Sprites" + extAsm
+	animFilePath = generatedFolder + sourcePathWOExt + "_anim" + extAsm
+	spriteFilePath = generatedFolder + sourcePathWOExt + "_sprites" + extAsm
 
-	if animSpriteExport.IsFileUpdated(sourceFolder + sourcePath) or forceExport:
-		animSpriteExport.Export(  
+	if export_sprite.IsFileUpdated(sourceFolder + sourcePath) or forceExport:
+		export_sprite.Export(  
 			sourceFolder + sourcePath, 
 			animFilePath, 
 			spriteFilePath)
 
-		print(f"animSpriteExport: {sourceFolder + sourcePath} got exported.")
+		print(f"export_sprite: {sourceFolder + sourcePath} got exported.")
 		return True, {"anim" : animFilePath, "sprites" : spriteFilePath}
 	else:
-		#print(f"animSpriteExport: {sourceFolder + sourcePath} is no need to export.")
+		#print(f"export_sprite: {sourceFolder + sourcePath} is no need to export.")
 		return False, {"anim" : animFilePath, "sprites" : spriteFilePath}
 
-def ExportLevel(sourcePath, forceExport, sourceFolder = "sources\\", generatedFolder = "generated\\"):
+def ExportLevel(sourcePath, forceExport, sourceFolder, generatedFolder):
 	sourcePathWOExt = os.path.splitext(sourcePath)[0]
 	sourceName = os.path.basename(sourcePathWOExt)
 	extAsm = ".asm"
 
-	if levelExport.IsFileUpdated(sourceFolder + sourcePath) or forceExport:
-		levelExport.Export(
+	if export_level.IsFileUpdated(sourceFolder + sourcePath) or forceExport:
+		export_level.Export(
 			sourceFolder + sourcePath, 
 			generatedFolder + sourcePathWOExt + extAsm)
 			
-		print(f"levelExport: {sourceFolder + sourcePath} got exported.")		
+		print(f"export_level: {sourceFolder + sourcePath} got exported.")		
 		return True, generatedFolder + sourcePathWOExt + extAsm
 	else:
-		#print(f"levelExport: {sourceFolder + sourcePath} is no need to export.")		
+		#print(f"export_level: {sourceFolder + sourcePath} is no need to export.")		
 		return False, generatedFolder + sourcePathWOExt + extAsm
 
-def ExportMusic(sourcePath, forceExport, sourceFolder = "sources\\", generatedFolder = "generated\\"):
+def ExportMusic(sourcePath, forceExport, sourceFolder, generatedFolder):
 	sourcePathWOExt = os.path.splitext(sourcePath)[0]
 	sourceName = os.path.basename(sourcePathWOExt)
 	extAsm = ".asm"	
 	extYm = ".ym"
 
 	if IsFileUpdated(sourceFolder + sourcePath) or forceExport:
-		musicExport.Export( 
+		export_music.Export( 
 			sourceFolder + sourcePath, 
 			generatedFolder + sourcePathWOExt + extAsm)
 			
-		print(f"musicExport: {sourceFolder + sourcePath} got exported.")		
+		print(f"export_music: {sourceFolder + sourcePath} got exported.")		
 		return True, generatedFolder + sourcePathWOExt + extAsm
 	else:	
 		return False, generatedFolder + sourcePathWOExt + extAsm
 
-def ExportSegment(sourcePath, forceExport, segmentAddr, externalsOnly = False, generatedFolder = "generated\\", binFolder = "generated\\bin\\", ):
+def ExportSegment(sourcePath, forceExport, segmentAddr, externalsOnly, generatedFolder):
+	binFolder = generatedFolder + DIR_BIN
 	sourcePathWOExt = os.path.splitext(sourcePath)[0]
 	sourceName = os.path.basename(sourcePathWOExt)
 	extAsm = ".asm"
@@ -138,7 +146,6 @@ def IsAsmUpdated(asmPath):
 	return anyIncUpdated | IsFileUpdated(asmPath)
 
 def IsFileUpdated(path):
-	
 	con = sqlite3.connect(buildDBPath)
 	cur = con.cursor()
 	cur.execute('''CREATE TABLE if not exists files
@@ -238,7 +245,7 @@ def SplitSegment(segmentPath, segmentLabelsPath):
 	splitAddrs = []
 	for line in labels:
 		label = line.decode('ascii').lower()
-		if label.find("__chunkend") != -1:
+		if label.find("__chunk_end") != -1:
 			splitAddrStr = label[label.find("$")+1:]
 			splitAddr = int(splitAddrStr, 16) - firstLabelAddr
 			splitAddrs.append(splitAddr)

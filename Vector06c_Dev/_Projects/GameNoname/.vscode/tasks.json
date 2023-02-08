@@ -6,7 +6,7 @@
         {
             "label": "build_run",
             "type": "shell",
-            "command": "python scripts\\task_buildRun.py",
+            "command": "python scripts\\task_build_run.py",
             "group": {
                 "kind": "build",
                 "isDefault": true

@@ -5,11 +5,11 @@
 			mvi a, %11111110
 			out 3
 			in 2
-			sta keyCode
+			sta key_code
 			mvi a, %01111111
 			out 3
 			in 2
-			sta keyCode+1		
+			sta key_code+1		
 			; a border color, scrolling set up
 			mvi a, PORT0_OUT_OUT
 			out 0
@@ -23,22 +23,21 @@
 			rrc
 			sta @updateSkipper+1
 			jnc @skipUpdate
-			lxi h, updateRequestCounter
+			lxi h, update_request_counter
 			inr m
 @skipUpdate:
 			; fps update
 			lxi h, intsPerSecCounter
 			dcr m
 			jnz @skipSavingFps
-			lxi h, gameDrawsCounter
+			lxi h, game_draws_counter
 			mov a, m
 			mvi m, 0			
 			sta currentFps
 			call DrawFps
 			lxi h, intsPerSecCounter
 			mvi m, INTS_PER_SEC
-@skipSavingFps:
-			
+@skipSavingFps:	
 .endmacro
 
 ;----------------------------------------------------------------
@@ -54,7 +53,7 @@
 ; has to have two extra bytes 0,0 stored in front of the actual data
 ; to not let the "push PC" corrupts the data before BC pair gets it.
 
-Interruption2:
+Interruption:
 			; get the return addr which this interruption call stored into the stack
 			xthl
 			shld @return + 1
@@ -97,23 +96,3 @@ Interruption2:
 			ei
 @return:	jmp TEMP_ADDR
 			.closelabels
-
-;----------------------------------------------------------------
-; Common interruption sub
-/*
-Interruption1:
-			push psw
-			push b
-			push d
-			push h
-
-			INTERRUPTION_MAIN_LOGIC()
-
-			pop h
-			pop d
-			pop b
-			pop psw
-			ie
-			ret
-			.closelabels
-*/
