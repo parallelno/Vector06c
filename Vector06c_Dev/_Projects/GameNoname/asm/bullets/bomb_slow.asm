@@ -53,20 +53,20 @@ BOMB_SLOW_COLLISION_HEIGHT	= 10
 ; in:
 ; bc - caster pos
 ; a - projectileId
-BombSlowInit:
+bomb_slow_init:
 			sta @bulletId+1
 			call BulletsGetEmptyDataPtr
-			; hl - ptr to bulletUpdatePtr+1
-			; advance hl to bulletUpdatePtr
+			; hl - ptr to bullet_update_ptr+1
+			; advance hl to bullet_update_ptr
 			dcx h
-			mvi m, <BombSlowUpdate
+			mvi m, <bomb_slow_update
 			inx h 
-			mvi m, >BombSlowUpdate
-			; advance hl to bulletDrawPtr
+			mvi m, >bomb_slow_update
+			; advance hl to bullet_draw_ptr
 			inx h 
-			mvi m, <BombSlowDraw
+			mvi m, <bomb_slow_draw
 			inx h 
-			mvi m, >BombSlowDraw
+			mvi m, >bomb_slow_draw
 
 			; advance hl to bulletId
 			inx h
@@ -195,10 +195,10 @@ BombSlowInit:
 			
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to bulletUpdatePtr in the runtime data
-BombSlowUpdate:
+; de - ptr to bullet_update_ptr in the runtime data
+bomb_slow_update:
 			; advance to bulletStatusTimer
-			LXI_H_TO_DIFF(bulletStatusTimer, bulletUpdatePtr)
+			LXI_H_TO_DIFF(bulletStatusTimer, bullet_update_ptr)
 			dad d
 @updateMove:
 			dcr m
@@ -253,19 +253,19 @@ BombSlowUpdate:
 			mvi a, BOMB_SLOW_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_SLOW_COLLISION_WIDTH, BOMB_SLOW_COLLISION_HEIGHT, BOMB_SLOW_DAMAGE)	
 @dieAfterDamage:
-			; advance hl to bulletUpdatePtr+1
-			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletPosY+1)
+			; advance hl to bullet_update_ptr+1
+			LXI_B_TO_DIFF(bullet_update_ptr+1, bulletPosY+1)
 			dad b
 			jmp BulletsDestroy
 @die:
 			; hl points to bulletStatusTimer
-			; advance hl to bulletUpdatePtr+1
-			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletStatusTimer)
+			; advance hl to bullet_update_ptr+1
+			LXI_B_TO_DIFF(bullet_update_ptr+1, bulletStatusTimer)
 			dad b
 			jmp BulletsDestroy
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to bulletDrawPtr in the runtime data
-BombSlowDraw:
+; de - ptr to bullet_draw_ptr in the runtime data
+bomb_slow_draw:
 			BULLET_DRAW(SpriteGetScrAddr_bomb_slow, __RAM_DISK_S_BOMB_SLOW)

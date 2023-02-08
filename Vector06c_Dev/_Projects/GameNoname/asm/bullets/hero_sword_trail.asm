@@ -24,7 +24,7 @@ ATTK01_COLLISION_OFFSET_Y_L = 0
 ; out:
 HeroSwordTrailInit:
 			call BulletsGetEmptyDataPtr
-			; hl - ptr to bulletUpdatePtr+1
+			; hl - ptr to bullet_update_ptr+1
 
 			dcx h
 			mvi m, <HeroSwordTrailUpdate
@@ -96,10 +96,10 @@ HeroSwordTrailInit:
 
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to bulletUpdatePtr in the runtime data
+; de - ptr to bullet_update_ptr in the runtime data
 HeroSwordTrailUpdate:
 			; advance to bulletStatus
-			LXI_H_TO_DIFF(bulletStatus, bulletUpdatePtr)
+			LXI_H_TO_DIFF(bulletStatus, bullet_update_ptr)
 			dad d
 			mov a, m
 			cpi BULLET_STATUS_INVIS
@@ -146,7 +146,7 @@ HeroSwordTrailUpdate:
 			; update movement if needed
 			ret
 @destroy:
-			LXI_D_TO_DIFF(bulletUpdatePtr+1, bulletStatusTimer)
+			LXI_D_TO_DIFF(bullet_update_ptr+1, bulletStatusTimer)
 			dad d
 			jmp BulletsDestroy
 
@@ -231,6 +231,6 @@ HeroSwordTrailUpdate:
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to bulletDrawPtr in the runtime data
+; de - ptr to bullet_draw_ptr in the runtime data
 HeroSwordTrailDraw:
 			BULLET_DRAW(SpriteGetScrAddr_hero_attack01, __RAM_DISK_S_HERO_ATTACK01)

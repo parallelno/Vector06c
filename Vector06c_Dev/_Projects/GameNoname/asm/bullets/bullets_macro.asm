@@ -2,10 +2,10 @@
 ; draw a bullet sprite into a backbuffer
 ; ex. BULLET_DRAW(SpriteGetScrAddr_scythe, __RAM_DISK_S_SCYTHE)
 ; in:
-; de - ptr to bulletDrawPtr in the runtime data
+; de - ptr to bullet_draw_ptr in the runtime data
 .macro BULLET_DRAW(SpriteGetScrAddr_bullet, __RAM_DISK_S_BULLET)
 			; advance to bulletStatus
-			LXI_H_TO_DIFF(bulletStatus, bulletDrawPtr)
+			LXI_H_TO_DIFF(bulletStatus, bullet_draw_ptr)
 			dad d
 			mov a, m
 			; if it is invisible, return

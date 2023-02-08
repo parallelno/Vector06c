@@ -6,7 +6,7 @@
 
 BulletsEraseRuntimeData:
 			mvi a, BULLET_RUNTIME_DATA_LAST
-			sta bulletUpdatePtr+1
+			sta bullet_update_ptr+1
 			ret
 			.closelabels
 
@@ -15,13 +15,13 @@ BulletsEraseRuntimeData:
 ; in: 
 ; none
 ; return:
-; hl - a ptr to bulletUpdatePtr+1 of an empty bullet runtime data
+; hl - a ptr to bullet_update_ptr+1 of an empty bullet runtime data
 ; uses:
 ; de, a
 
 ; TODO: optimize. use a lastRemovedBulletRuntimeDataPtr as a starter to find an empty data
 BulletsGetEmptyDataPtr:
-			lxi h, bulletUpdatePtr+1
+			lxi h, bullet_update_ptr+1
 @loop:
 			mov a, m
 			cpi BULLET_RUNTIME_DATA_EMPTY
@@ -57,7 +57,7 @@ BulletsGetEmptyDataPtr:
 
 ; mark a bullet data ptr as it's going to be destroyed
 ; in:
-; hl - bulletUpdatePtr+1 ptr
+; hl - bullet_update_ptr+1 ptr
 ; TODO: optimize. fill up lastRemovedBulletRuntimeDataPtr
 BulletsDestroy:
 			mvi m, BULLET_RUNTIME_DATA_DESTR
@@ -66,7 +66,7 @@ BulletsDestroy:
 
 ; mark a bullet data as empty
 ; in:
-; hl - bulletUpdatePtr+1 ptr
+; hl - bullet_update_ptr+1 ptr
 ; TODO: optimize. fiil up lastRemovedBulletRuntimeDataPtr
 BulletsSetEmpty:
 			mvi m, BULLET_RUNTIME_DATA_EMPTY
@@ -74,15 +74,15 @@ BulletsSetEmpty:
 			.closelabels
 
 ; call all active bullets' Update/Draw func
-; a func will get DE pointing to a func ptr (ex.:bulletUpdatePtr or bulletDrawPtr) in the runtime data
+; a func will get DE pointing to a func ptr (ex.:bullet_update_ptr or bullet_draw_ptr) in the runtime data
 ; in:
-; hl - an offset to a func ptr relative to bulletUpdatePtr in the runtime data
-; 		ex.: the offset to bulletUpdatePtr is zero
+; hl - an offset to a func ptr relative to bullet_update_ptr in the runtime data
+; 		ex.: the offset to bullet_update_ptr is zero
 ; use:
 ; de, a
 BulletsDataFuncCaller:
 			shld @funcPtrOffset+1
-			lxi h, bulletUpdatePtr+1
+			lxi h, bullet_update_ptr+1
 @loop:
 			mov a, m
 			cpi BULLET_RUNTIME_DATA_DESTR
@@ -116,14 +116,14 @@ BulletsDataFuncCaller:
 			.closelabels
 
 ; call a provided func (BulletCopyToScr, BulletErase) if a bullet is alive
-; a func will get HL pointing to a bulletUpdatePtr+1 in the runtime data, and A holding a BULLET_RUNTIME_DATA_* status
+; a func will get HL pointing to a bullet_update_ptr+1 in the runtime data, and A holding a BULLET_RUNTIME_DATA_* status
 ; in:
 ; hl - a func addr
 ; use:
 ; de, a
 BulletsCommonFuncCaller:
 			shld @funcPtr+1
-			lxi h, bulletUpdatePtr+1
+			lxi h, bullet_update_ptr+1
 @loop:
 			mov a, m
 			cpi BULLET_RUNTIME_DATA_EMPTY
@@ -148,7 +148,7 @@ bullets_update:
 			jmp BulletsDataFuncCaller
 
 bullets_draw:
-			lxi h, bulletDrawPtr - bulletUpdatePtr
+			lxi h, bullet_draw_ptr - bullet_update_ptr
 			jmp BulletsDataFuncCaller
 
 bullets_copy_to_scr:
@@ -161,10 +161,10 @@ bullets_erase:
 
 ; copy sprites from a backbuffer to a scr
 ; in:
-; hl - ptr to bulletUpdatePtr+1 in the runtime data
+; hl - ptr to bullet_update_ptr+1 in the runtime data
 BulletCopyToScr:
 			; advance to bulletStatus
-			LXI_D_TO_DIFF(bulletStatus, bulletUpdatePtr+1)
+			LXI_D_TO_DIFF(bulletStatus, bullet_update_ptr+1)
 			dad d
 			; if it is invisible, return
 			mov a, m
@@ -261,7 +261,7 @@ BulletCopyToScr:
 
 ; erase a sprite or restore the background behind a sprite
 ; in:
-; hl - ptr to bulletUpdatePtr+1 in the runtime data
+; hl - ptr to bullet_update_ptr+1 in the runtime data
 ; a - BULLET_RUNTIME_DATA_* status
 BulletErase:
 			; if a bullet is destroyed mark its data as empty
@@ -269,7 +269,7 @@ BulletErase:
 			jz BulletsSetEmpty
 
 			; advance to bulletStatus
-			LXI_D_TO_DIFF(bulletStatus, bulletUpdatePtr+1)
+			LXI_D_TO_DIFF(bulletStatus, bullet_update_ptr+1)
 			dad d
 			; if it is invisible, return
 			mov a, m

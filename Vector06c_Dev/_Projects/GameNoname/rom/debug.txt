@@ -835,10 +835,10 @@ monstererase $2588
 lxi_d_to_diff_7.offsetaddr $0008
 lxi_d_to_diff_8.offsetaddr $0005
 lxi_b_to_diff_76.offsetaddr $0003
-bulletruntimedatasorted $25d1
+bullet_runtime_data_sorted $25d1
 bulletsruntimedata $25d3
-bulletupdateptr $25d3
-bulletdrawptr $25d5
+bullet_update_ptr $25d3
+bullet_draw_ptr $25d5
 bulletid $25d7
 bulletstatus $25d8
 bulletstatustimer $25d9
@@ -941,12 +941,12 @@ bomb_slow_anim_speed_move $0082
 bomb_slow_damage $0001
 bomb_slow_collision_width $000a
 bomb_slow_collision_height $000a
-bombslowinit $29cc
+bomb_slow_init $29cc
 @bulletid $29df
 @bombdmg $29ef
 @bombslow $29f7
 @erasescraddr $29fc
-bombslowupdate $2a4f
+bomb_slow_update $2a4f
 lxi_h_to_diff_21.offsetaddr $0006
 @updatemove_2 $2a53
 @updatemovement_7 $2a57
@@ -959,7 +959,7 @@ bullet_update_anim_check_collision_hero_2.@collideshero $2aa4
 lxi_b_to_diff_94.offsetaddr $ffffffffffffffec
 @die_2 $2ab2
 lxi_b_to_diff_95.offsetaddr $fffffffffffffffb
-bombslowdraw $2ab9
+bomb_slow_draw $2ab9
 lxi_h_to_diff_22.offsetaddr $0003
 lxi_d_to_diff_14.offsetaddr $000e
 lxi_b_to_diff_96.offsetaddr $fffffffffffffff3

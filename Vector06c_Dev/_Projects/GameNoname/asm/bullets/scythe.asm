@@ -57,13 +57,13 @@ SCYTHE_COLLISION_HEIGHT	= 12
 ScytheInit:
 			sta @dir+1 ; direction (BULLET_DIR_*) ; TODO: move dir calc over this func. use A reg for a bulletId
 			call BulletsGetEmptyDataPtr
-			; hl - ptr to bulletUpdatePtr+1
-			; advance hl to bulletUpdatePtr
+			; hl - ptr to bullet_update_ptr+1
+			; advance hl to bullet_update_ptr
 			dcx h
 			mvi m, <ScytheUpdate
 			inx h 
 			mvi m, >ScytheUpdate
-			; advance hl to bulletDrawPtr
+			; advance hl to bullet_draw_ptr
 			inx h 
 			mvi m, <ScytheDraw
 			inx h 
@@ -182,10 +182,10 @@ ScytheInit:
 			
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to bulletUpdatePtr in the runtime data
+; de - ptr to bullet_update_ptr in the runtime data
 ScytheUpdate:
 			; advance to bulletStatusTimer
-			LXI_H_TO_DIFF(bulletStatusTimer, bulletUpdatePtr)
+			LXI_H_TO_DIFF(bulletStatusTimer, bullet_update_ptr)
 			dad d
 @updateMove:
 			dcr m
@@ -200,8 +200,8 @@ ScytheUpdate:
 			mvi a, SCYTHE_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, SCYTHE_DAMAGE)	
 @dieAfterDamage:
-			; advance hl to bulletUpdatePtr+1
-			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletPosY+1)
+			; advance hl to bullet_update_ptr+1
+			LXI_B_TO_DIFF(bullet_update_ptr+1, bulletPosY+1)
 			dad b
 			jmp BulletsDestroy
 @setBounceAfterTileCollision:
@@ -251,13 +251,13 @@ ScytheUpdate:
 			ret
 @die:
 			; hl points to bulletStatusTimer
-			; advance hl to bulletUpdatePtr+1
-			LXI_B_TO_DIFF(bulletUpdatePtr+1, bulletStatusTimer)
+			; advance hl to bullet_update_ptr+1
+			LXI_B_TO_DIFF(bullet_update_ptr+1, bulletStatusTimer)
 			dad b
 			jmp BulletsDestroy
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to bulletDrawPtr in the runtime data
+; de - ptr to bullet_draw_ptr in the runtime data
 ScytheDraw:
 			BULLET_DRAW(SpriteGetScrAddr_scythe, __RAM_DISK_S_SCYTHE)
