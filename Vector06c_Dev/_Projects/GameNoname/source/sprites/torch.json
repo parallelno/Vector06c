@@ -18,7 +18,7 @@
 		{"x": 240,	"y" : 0}
 	],
 	"asset_type" : "back",
-	"pngPath" : "art\\sprites_background.png",
+	"png_path" : "art\\sprites_background.png",
 	"anims" : {
 		"front"	: {
 			"frames" : ["front0", "front1", "front2", "front3"],

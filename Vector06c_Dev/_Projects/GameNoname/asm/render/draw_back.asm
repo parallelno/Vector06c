@@ -7,15 +7,22 @@
 
 ; data format:
 ; .word - two safety bytes to prevent a data corruption by the interruption  func
-; .byte -   0 means width=8 pxls
-;			1 means width=16 pxls
 ; .byte - height
+; .byte - width
+; 		0 - one byte width, 
+;		1 - two bytes width, 
 ; pixel format:
-; $80 screen buff : two bytes from left to right
-; $a0 screen buff : same
-; $c0 screen buff : same
-; $e0 screen buff : same
-; repeat for the next line above.
+; 1st screen buff : 1 -> 2
+; 2nd screen buff : 4 <- 3
+; 3rd screen buff : 6 <- 5
+; 4rd screen buff : 8 <- 7
+; y++
+; 4rd screen buff : 7 -> 8
+; 3nd screen buff : 10 <- 9
+; 2st screen buff : 12 <- 11
+; 1st screen buff : 14 <- 13
+; y++
+; repeat for the next lines of the art data
 DRAW_BACK_SPRITE_8 = 0
 DRAW_BACK_SPRITE_16 = 1
 
@@ -30,9 +37,9 @@ draw_back_v:
 			sphl
 			pop b
 			xchg
-			mov d, b
+			mov d, c
 			xra a
-			cmp e
+			cmp b
 			jnz @drawWidth16
 @drawWidth8:			
 ; TODO: support width = 8
@@ -41,43 +48,73 @@ draw_back_v:
 ; hl - scr addr
 ; sp - pixel data
 ; d - height
+
+@width16 = 2
 @drawWidth16:
 			mov a, h
-			sta @scr8+1
+			adi @width16-1
+			sta @scr82 + 1
 			adi $20
-			sta @scrA+1
+			sta @scrA + 1
+			sta @scrA2 + 1
 			adi $20
 			mov e, a
 			adi $20
-			
+
 @nextLine:
-			pop b					; (12)
-			mov m, c				; (8)
-			inr h					; (8)
-			mov m, b				; (8)
-@scrA:		mvi h, TEMP_BYTE		; (8)
+			pop b					
+			mov m, c				
+			inr h					
+			mov m, b				
+@scrA:		mvi h, TEMP_BYTE		
 
-			pop b					; (12)
-			mov m, c				; (8)
-			inr h					; (8)
-			mov m, b				; (8)
-@scrC:		mov h, e				; (8)
+			pop b					
+			mov m, c				
+			dcr h					
+			mov m, b				
+@scrC:		mov h, e				
 
-			pop b					; (12)
-			mov m, c				; (8)
-			inr h					; (8)
-			mov m, b				; (8)
-@scrE:		mov h, a				; (8)
+			pop b					
+			mov m, c				
+			dcr h					
+			mov m, b				
+@scrE:		mov h, a				
 
-			pop b					; (12)
-			mov m, c				; (8)
-			inr h					; (8)
-			mov m, b				; (8)
-@scr8:		mvi h, TEMP_BYTE		; (8)
+			pop b					
+			mov m, c				
+			dcr h					
+			mov m, b				
 			
 			inr l
 			dcr d
-			jnz @nextLine
+			jz @restoreSP
+@scrE2:
+			pop b					
+			mov m, c				
+			inr h					
+			mov m, b				
+@scrC2:		mov h, e				
+
+			pop b					
+			mov m, c				
+			dcr h					
+			mov m, b				
+@scrA2:		mvi h, TEMP_BYTE		
+
+			pop b					
+			mov m, c				
+			dcr h					
+			mov m, b				
+@scr82:		mvi h, TEMP_BYTE		
+
+			pop b					
+			mov m, c				
+			dcr h					
+			mov m, b			
+			
+			inr l
+			dcr d
+			jnz @nextLine			
 
 @restoreSP:		
 			lxi sp, TEMP_ADDR

@@ -1,4 +1,5 @@
 {
+	"asset_type" : "ram_disk_data",
 	"dependencies" :
 	{
 		"sprite" : "scripts\\export_sprite.py",
@@ -8,130 +9,149 @@
 		"global" : [
 			"source\\code\\ram_disk_data.json",
 			"scripts\\export_ram_disk_data.py",
+			"scripts\\export_ram_disk_data_asm.py",
+			"scripts\\export_segment.py",
 			"scripts\\task_build_run.py",
 			"scripts\\build.py",
 			"scripts\\common.py"
 		]
 	},
-	"paths" :
+	"dirs" :
 	{
-		"source" : "source\\",
-		"generated" : "generated\\",
-		"bin" : "generated\\bin\\",
-		"rom" : "rom\\"
+		"generated_code" : "generated\\code\\",
+		"generated_bin" : "generated\\bin\\"
 	},
-	"buildDBPath" : "generated\\build.db",
+	"build_db_path" : "generated\\build.db",
 	"bankBackBuffer" : 3,
 	"bankBackBuffer2" : 1,
 	"backBufferSize" : 24578,
 	"banks" :
 	[
 		{
-			"bank" :	0,
+			"bank_id" :	0,
 			"segments" :
 			[
 				{
-					"name" : "sprites",
+					"reserved" : false,
 					"addr" : "0",
 					"chunks" :
 					[
 						[
 							{
-								"type" : "sprite",
-								"path" : "sprites\\hero_r.json"
+								"asset_type" : "sprite",
+								"path" : "source\\sprites\\hero_r.json",
+								"export_dir" : "generated\\sprites\\"
 							}
 						],
 						[
 							{
-								"type" : "sprite",
-								"path" : "sprites\\skeleton.json"
+								"asset_type" : "sprite",
+								"path" : "source\\sprites\\skeleton.json",
+								"export_dir" : "generated\\sprites\\"
 							},
 							{
-								"type" : "sprite",
-								"path" : "sprites\\scythe.json"
+								"asset_type" : "sprite",
+								"path" : "source\\sprites\\scythe.json",
+								"export_dir" : "generated\\sprites\\"
 							},
 							{
-								"type" : "sprite",
-								"path" : "sprites\\hero_attack01.json"
+								"asset_type" : "sprite",
+								"path" : "source\\sprites\\hero_attack01.json",
+								"export_dir" : "generated\\sprites\\"
 							}
 						]
 					]
 				},
 				{
-					"name" : "sprites",
+					"reserved" : false,
 					"addr" : "$8000",
 					"chunks" : 
-					[]
+					[
+						[
+							{
+								"asset_type" : "back",
+								"path" : "source\\sprites\\torch.json",
+								"export_dir" : "generated\\sprites\\"
+							}
+						]
+					]
 				}
 			]
 		},
 		{
-			"bank" :	1,
+			"bank_id" :	1,
 			"segments" :
 			[
 				{
-					"name" : "sprites",
+					"reserved" : false,
 					"addr" : "0",
 					"chunks" :
 					[
 						[
 							{
-								"type" : "sprite",
-								"path" : "sprites\\knight.json"
+								"asset_type" : "sprite",
+								"path" : "source\\sprites\\knight.json",
+								"export_dir" : "generated\\sprites\\"
 							}
 						],
 						[
 							{
-								"type" : "sprite",
-								"path" : "sprites\\burner.json"
+								"asset_type" : "sprite",
+								"path" : "source\\sprites\\burner.json",
+								"export_dir" : "generated\\sprites\\"
 							},
 							{
-								"type" : "sprite",
-								"path" : "sprites\\bomb_slow.json"
+								"asset_type" : "sprite",
+								"path" : "source\\sprites\\bomb_slow.json",
+								"export_dir" : "generated\\sprites\\"
 							}
 						]
 					]
 				},
 				{
-					"name" : "reserved",
+					"reserved" : true,
 					"addr" : "$8000",
 					"description" : "$8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)"
 				}
 			]
 		},
 		{
-			"bank" :	2,
+			"bank_id" :	2,
 			"segments" :
 			[
 				{
-					"name" : "sprites",
+					"reserved" : false,
 					"addr" : "0",
 					"chunks" :
 					[
 						[
 							{
-								"type" : "sprite",
-								"path" : "sprites\\hero_l.json"
+								"asset_type" : "sprite",
+								"path" : "source\\sprites\\hero_l.json",
+								"export_dir" : "generated\\sprites\\"
 							},
 							{
-								"type" : "sprite",
-								"path" : "sprites\\vampire.json"
+								"asset_type" : "sprite",
+								"path" : "source\\sprites\\vampire.json",
+								"export_dir" : "generated\\sprites\\"
 							}
 						]
 					]
 				},
 				{
-					"name" : "music",
+					"reserved" : false,
 					"addr" : "$8000",
+					"description" : "Music player and songs",
 					"chunks" :
 					[
 						[
 							{
-								"type" : "music",
-								"path" : "music\\song01.ym"
+								"asset_type" : "music",
+								"path" : "source\\music\\song01.ym"
+								,"export_dir" : "generated\\music\\"
 							},
 							{
-								"type" : "code",
+								"asset_type" : "code",
 								"path": "asm\\globals\\gigachad_player_rd.asm"
 							}
 						]
@@ -139,43 +159,44 @@
 				}
 			]
 		},		{
-			"bank" :	3,
+			"bank_id" :	3,
 			"segments" :
 			[
 				{
-					"name" : "levels",
+					"reserved" : false,
 					"addr" : "0",
 					"chunks" :
 					[
 						[
 							{
-								"type" : "level",
-								"path" : "levels\\level01.json"
+								"asset_type" : "level",
+								"path" : "source\\levels\\level01.json",
+								"export_dir" : "generated\\levels\\"
 							}
 						]
 					]
 				},
 				{
-					"name" : "code library",
+					"reserved" : false,
 					"addr" : "$8000",
 					"description" : "$8000-$9FFF code library. $A000-$FFFF back buffer",
 					"chunks" :
 					[
 						[
 							{
-								"type" : "code",
+								"asset_type" : "code",
 								"path" : "asm\\render\\sprite_rd.asm"
 							},
 							{
-								"type" : "code",
+								"asset_type" : "code",
 								"path": "asm\\render\\draw_sprite_rd.asm"
 							},
 							{
-								"type" : "code",
+								"asset_type" : "code",
 								"path" : "asm\\globals\\utils_rd.asm"
 							},
 							{
-								"type" : "code",
+								"asset_type" : "code",
 								"path" : "asm\\render\\sprite_preshift_rd.asm"
 							}
 						]

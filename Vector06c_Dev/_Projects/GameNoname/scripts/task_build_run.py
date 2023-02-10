@@ -3,21 +3,27 @@ import export_ram_disk_data
 import common
           
 print(f"ram-disk data export:")
-export_ram_disk_data.Export("source\\code\\ram_disk_data.json")
+export_ram_disk_data.export("source\\code\\ram_disk_data.json")
 
 print("")
 ######################################################################################
-print(f"build a game rom:")
+print("build a rom file:")
  
-mainAsm = "asm\\main"
-romPath = "rom\\"
+source_path = "asm\\main.asm"
+romDir = "rom\\"
 romName = os.path.basename(os.getcwd())
-romExt = ".rom"
-binExt = ".bin"
+bin_path = romDir + romName + export_ram_disk_data.build.EXT_BIN
+romPath = romDir + romName + export_ram_disk_data.build.EXT_ROM
 
-common.DeleteFile(romPath + romName + romExt)
-common.DeleteFile(romPath + romName + binExt)
+common.delete_file(bin_path)
+common.delete_file(romPath)
 
-common.RunCommand(f"..\\..\\retroassembler\\retroassembler.exe -C=8080 {mainAsm}.asm {romPath + romName + binExt}", "", f"{mainAsm}.asm")
-common.RunCommand(f"ren {romPath}*.bin *" + romExt)
-common.RunCommand(f"..\\..\\Emu80\\Emu80qt.exe {romPath + romName + romExt}", "", romPath + romName + romExt)
+common.run_command(f"..\\..\\retroassembler\\retroassembler.exe -C=8080 {source_path} {bin_path}", "", source_path)
+
+if not os.path.exists(bin_path):
+	print(f'ERROR: compilation error, path: {source_path}')
+	print("Stop export")
+	exit(1)
+
+common.run_command(f"ren {bin_path} {romPath}")    
+common.run_command(f"..\\..\\Emu80\\Emu80qt.exe {romPath}", "", romPath)

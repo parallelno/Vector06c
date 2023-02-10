@@ -69,7 +69,7 @@ ClearMemSP:
 			ret
 			.closelabels
 
-ClearRamDisk:
+clear_ram_disk:
 			lxi b, $0000
 			lxi d, $10000/32 - 1
 			mvi a, RAM_DISK_S0

@@ -241,13 +241,17 @@ __DrawSpriteV:
 ; de	screen address
 ; use: a, hl, sp
 
-; the sprite format:
-; 0, 0 - safety bytes
-; offsetY, offsetX
-; height, width
-	; width: 0 - one byte width, 1 - two bytes width, 2 - three bytes width
+; data format:
+; .word - two safety bytes to prevent a data corruption by the interruption  func
+; .byte - offsetY
+; .byte - offsetX
+; .byte - height
+; .byte - width
+; 		0 - one byte width, 
+;		1 - two bytes width, 
+;		2 - three bytes width
 
-; art data:
+; pixel format:
 ; 1st screen buff : 1 -> 2
 ; 2nd screen buff : 4 <- 3
 ; 3rd screen buff : 6 <- 5

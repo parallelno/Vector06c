@@ -1,4 +1,5 @@
 __chunk_start_bank3_addr0_0          = $00
+__level01_rd_data_start              = $00
 __ram_disk_s_level01                 = $1c
 __ram_disk_m_level01                 = $03
 __level01_palette_sprites_tiles_lv01 = $00
@@ -66,4 +67,5 @@ __sprites_tiles_lv01_tile50          = $170e
 __sprites_tiles_lv01_tile51          = $1752
 __sprites_tiles_lv01_tile52          = $17d6
 __sprites_tiles_lv01_tile53          = $183a
+__level01_rd_data_end                = $189c
 __chunk_end_bank3_addr0_0            = $189c

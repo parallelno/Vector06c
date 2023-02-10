@@ -5,8 +5,8 @@ import json
 import common
 import build
 
-def RoomTilesToAsm(roomJ, roomPath, remapIdxs, sourceDir):
-	asm = "; " + sourceDir + roomPath + "\n"
+def RoomTilesToAsm(roomJ, roomPath, remapIdxs, source_dir):
+	asm = "; " + source_dir + roomPath + "\n"
 	roomPathWOExt = os.path.splitext(roomPath)[0]
 	labelPrefix = os.path.basename(roomPathWOExt)
 	asm += "__" + labelPrefix + ":\n"
@@ -23,8 +23,8 @@ def RoomTilesToAsm(roomJ, roomPath, remapIdxs, sourceDir):
 		asm += "\n"
 	return asm, size
 
-def RoomTilesDataToAsm(roomJ, roomPath, sourceDir):
-	asm = "; " + sourceDir + roomPath + "\n"
+def RoomTilesDataToAsm(roomJ, roomPath, source_dir):
+	asm = "; " + source_dir + roomPath + "\n"
 	roomPathWOExt = os.path.splitext(roomPath)[0]
 	labelPrefix = os.path.basename(roomPathWOExt)
 	asm += "__" + labelPrefix + "_tilesData:\n"
@@ -41,14 +41,14 @@ def RoomTilesDataToAsm(roomJ, roomPath, sourceDir):
 		asm += "\n"
 	return asm, size
 
-def TileData(bytes0, bytes1, bytes2, bytes3):
+def get_tile_data(bytes0, bytes1, bytes2, bytes3):
 	allBytes = [bytes0, bytes1, bytes2, bytes3]
 	# data structure description is in drawTile.asm
 	mask = 0
 	data = []
 	for bytes in allBytes:
 		mask >>=  1
-		if common.IsBytesZeros(bytes) : 
+		if common.is_bytes_zeros(bytes) : 
 			continue
 		mask += 8
 
@@ -91,16 +91,16 @@ def TilesToAsm(roomJ, image, path, remapIdxs, labelPrefix):
 			#y += 1
 		
 		# convert indexes into bit lists.
-		bits0, bits1, bits2, bits3 = common.IndexesToBitLists(tileImg)
+		bits0, bits1, bits2, bits3 = common.indexes_to_bit_lists(tileImg)
 
 		# combite bits into byte lists
-		bytes0 = common.CombineBitsToBytes(bits0) # 8000-9FFF # from left to right, from bottom to top
-		bytes1 = common.CombineBitsToBytes(bits1) # A000-BFFF
-		bytes2 = common.CombineBitsToBytes(bits2) # C000-DFFF
-		bytes3 = common.CombineBitsToBytes(bits3) # E000-FFFF
+		bytes0 = common.combine_bits_to_bytes(bits0) # 8000-9FFF # from left to right, from bottom to top
+		bytes1 = common.combine_bits_to_bytes(bits1) # A000-BFFF
+		bytes2 = common.combine_bits_to_bytes(bits2) # C000-DFFF
+		bytes3 = common.combine_bits_to_bytes(bits3) # E000-FFFF
 
 		# to support a tile render function
-		data, mask = TileData(bytes0, bytes1, bytes2, bytes3)
+		data, mask = get_tile_data(bytes0, bytes1, bytes2, bytes3)
 
 
 		# two empty bytes prior every data to support a stack renderer
@@ -108,12 +108,12 @@ def TilesToAsm(roomJ, image, path, remapIdxs, labelPrefix):
 		asm += labelPrefix + "_tile" + str(remapIdxs[tidx]) + ":\n"
 		asm += "			.byte " + str(mask) + " ; mask\n"
 		asm += "			.byte 4 ; counter\n"
-		asm += common.BytesToAsm(data)
+		asm += common.bytes_to_asm(data)
 		size += len(data)
 
 	return asm, size
 
-def RemapIndex(roomsJ):
+def remap_index(roomsJ):
 	uniqueIdxs = [] # old idx : new idx
 	for roomJ in roomsJ:
 		for idx in roomJ["layers"][0]["data"]:
@@ -155,81 +155,96 @@ def GetListOfTiles(remapIdxs, labelPrefix, pngLabelPrefix):
 	asm += "\n"
 	return asm, size
 
-def StartPosToAsm(sourceJ, labelPrefix):
+def StartPosToAsm(source_j, labelPrefix):
 	asm = ("\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n" + 
 			"__" + labelPrefix + "_startPos:\n			.byte " + 
-			str(sourceJ["startPos"]["y"]) + ", " + 
-			str(sourceJ["startPos"]["x"]) + "\n")
+			str(source_j["startPos"]["y"]) + ", " + 
+			str(source_j["startPos"]["x"]) + "\n")
 	return asm, 4
 
 #=====================================================
-def Export(sourceJPath, exportPath):
+def export_if_updated(source_path, generated_dir, force_export):
+	source_path_wo_ext = os.path.splitext(source_path)[0]
+	source_name = os.path.basename(source_path_wo_ext)
+	export_paths = {"ram_disk" : generated_dir + source_name + build.EXT_ASM }
 
-	exportDir = str(Path(exportPath).parent) + "\\"
+	if force_export or is_source_updated(source_path):
+		export(
+			source_path, 
+			export_paths["ram_disk"])
+			
+		print(f"level: {source_path} got exported.")		
+		return True, export_paths
+	else:
+		return False, export_paths
 
-	with open(sourceJPath, "rb") as file:
-		sourceJ = json.load(file)
+def export(source_j_path, export_path):
 
-	sourceDir = str(Path(sourceJPath).parent) + "\\"
+	exportDir = str(Path(export_path).parent) + "\\"
 
-	if "asset_type" not in sourceJ or sourceJ["asset_type"] != build.ASSET_TYPE_LEVEL :
-		print(f'level_export ERROR: asset_type != "{build.ASSET_TYPE_LEVEL}", path: {sourceJPath}')
+	with open(source_j_path, "rb") as file:
+		source_j = json.load(file)
+
+	source_dir = str(Path(source_j_path).parent) + "\\"
+
+	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_LEVEL :
+		print(f'level_export ERROR: asset_type != "{build.ASSET_TYPE_LEVEL}", path: {source_j_path}')
 		print("Stop export")
 		exit(1)
 
-	pngPath = sourceDir + sourceJ["pngPath"]
-	image = Image.open(pngPath)
+	png_path = source_dir + source_j["png_path"]
+	image = Image.open(png_path)
 
-	sourcePathWOExt = os.path.splitext(sourceJPath)[0]
-	sourceName = os.path.basename(sourcePathWOExt)
+	source_path_wo_ext = os.path.splitext(source_j_path)[0]
+	source_name = os.path.basename(source_path_wo_ext)
 
-	asm = f"__RAM_DISK_S_{sourceName.upper()} = RAM_DISK_S\n"
-	asm += f"__RAM_DISK_M_{sourceName.upper()} = RAM_DISK_M\n"
+	asm = f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S\n"
+	asm += f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M\n"
 	
-	paletteAsm, colors = common.PaletteToAsm(image, sourceJ, pngPath, "__" + sourceName)
+	paletteAsm, colors = common.palette_to_asm(image, source_j, png_path, "__" + source_name)
 	asm += paletteAsm
 
 	dataSize = len(colors)
-	asmStartPos, size = StartPosToAsm(sourceJ, sourceName)
+	asmStartPos, size = StartPosToAsm(source_j, source_name)
 	asm += asmStartPos
 	dataSize += size
-	image = common.RemapColors(image, colors)
+	image = common.remap_colors(image, colors)
 
-	roomPaths = sourceJ["rooms"]
+	roomPaths = source_j["rooms"]
 	roomsJ = []
 	# load and parse tiled map
 	for roomPathP in roomPaths:
-		roomPath = sourceDir + roomPathP['path']
+		roomPath = source_dir + roomPathP['path']
 		with open(roomPath, "rb") as file:
 			roomsJ.append(json.load(file))
 		
 	# make a tile index remap dictionary, to have the first idx = 0
-	remapIdxs = RemapIndex(roomsJ)
+	remapIdxs = remap_index(roomsJ)
 
-	pngPathWOExt = os.path.splitext(pngPath)[0]
+	pngPathWOExt = os.path.splitext(png_path)[0]
 	pngName = os.path.basename(pngPathWOExt)
 
 	# list of rooms
-	asmL, size = GetListOfRooms(roomPaths, "__" + sourceName)
+	asmL, size = GetListOfRooms(roomPaths, "__" + source_name)
 	asm += asmL
 	dataSize += size
 	# list of tiles addreses
-	asmLT, size = GetListOfTiles(remapIdxs, "__" + sourceName, pngName)
+	asmLT, size = GetListOfTiles(remapIdxs, "__" + source_name, pngName)
 	asm += asmLT
 	dataSize += size
 	# every room data
 	for i, roomJ in enumerate(roomsJ):
-		asmRT, size = RoomTilesToAsm(roomJ["layers"][0], roomPaths[i]['path'], remapIdxs, sourceDir)
+		asmRT, size = RoomTilesToAsm(roomJ["layers"][0], roomPaths[i]['path'], remapIdxs, source_dir)
 		asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 		asm += asmRT
 		dataSize += size
-		asmRTD, size = RoomTilesDataToAsm(roomJ["layers"][1], roomPaths[i]['path'], sourceDir)
+		asmRTD, size = RoomTilesDataToAsm(roomJ["layers"][1], roomPaths[i]['path'], source_dir)
 		asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 		asm += asmRTD
 		dataSize += size
 
 	# tile art data to asm
-	asmT, size = TilesToAsm(roomsJ[0], image, pngPath, remapIdxs, "__" + pngName)
+	asmT, size = TilesToAsm(roomsJ[0], image, png_path, remapIdxs, "__" + pngName)
 	asm += asmT
 	dataSize += size
 
@@ -237,23 +252,23 @@ def Export(sourceJPath, exportPath):
 	if not os.path.exists(exportDir):
 		os.mkdir(exportDir)
 
-	with open(exportPath, "w") as file:
+	with open(export_path, "w") as file:
 		file.write(asm)
 
-def IsFileUpdated(sourceJPath):
-	with open(sourceJPath, "rb") as file:
-		sourceJ = json.load(file)
+def is_source_updated(source_j_path):
+	with open(source_j_path, "rb") as file:
+		source_j = json.load(file)
 	
-	sourceDir = str(Path(sourceJPath).parent) + "\\"
-	pngPath = sourceDir + sourceJ["pngPath"]
+	source_dir = str(Path(source_j_path).parent) + "\\"
+	png_path = source_dir + source_j["png_path"]
 
-	roomPaths = sourceJ["rooms"]
+	roomPaths = source_j["rooms"]
 	roomsUpdated = False
 	for roomPathP in roomPaths:
-		roomPath = sourceDir + roomPathP['path']
-		roomsUpdated |= build.IsFileUpdated(roomPath)
+		roomPath = source_dir + roomPathP['path']
+		roomsUpdated |= build.is_file_updated(roomPath)
 
-	if build.IsFileUpdated(sourceJPath) | build.IsFileUpdated(pngPath) | roomsUpdated:
+	if build.is_file_updated(source_j_path) | build.is_file_updated(png_path) | roomsUpdated:
 		return True
 	return False
 

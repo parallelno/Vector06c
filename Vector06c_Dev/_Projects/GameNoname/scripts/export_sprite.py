@@ -79,7 +79,6 @@ def SpriteData(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 	# sprite uses only 3 out of 4 screen buffers.
 	# the width is devided by 8 because there is 8 pixels per a byte
 	width = w // 8
-	#mask = 0
 	data = []
 	for y in range(h):
 		evenLine = y % 2 == 0
@@ -118,10 +117,10 @@ def SpriteData(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 
 	return [data]
 
-def AnimsToAsm(labelPrefix, sourceJ):
+def AnimsToAsm(labelPrefix, source_j):
 	asm = ""
 	# preshifted sprites
-	preshiftedSprites = sourceJ["preshifted_sprites"]
+	preshiftedSprites = source_j["preshifted_sprites"]
 	asm += f"SpriteGetScrAddr_{labelPrefix} = SpriteGetScrAddr{preshiftedSprites}\n\n"
 	asm += labelPrefix + "_preshifted_sprites:\n"
 	asm += f"			.byte " + str(preshiftedSprites) + "\n"
@@ -130,18 +129,18 @@ def AnimsToAsm(labelPrefix, sourceJ):
 	# make a list of animNames
 	asm += labelPrefix + "_anims:\n"
 	asm += "			.word "
-	for animName in sourceJ["anims"]:
+	for animName in source_j["anims"]:
 		asm += labelPrefix + "_" + animName + ", "
 	asm += "0, \n"
 
 	# make a list of sprites for an every anim
-	for animName in sourceJ["anims"]:
+	for animName in source_j["anims"]:
 
 		asm += labelPrefix + "_" + animName + ":\n"
  
-		anims = sourceJ["anims"][animName]["frames"]
-		loop = sourceJ["anims"][animName]["loop"]
-		frameCount = len(sourceJ["anims"][animName]["frames"])
+		anims = source_j["anims"][animName]["frames"]
+		loop = source_j["anims"][animName]["loop"]
+		frameCount = len(source_j["anims"][animName]["frames"])
 		for i, frame in enumerate(anims):
 
 			if i < frameCount-1:
@@ -204,12 +203,12 @@ def MakeEmptySpriteData(hasMask, width, height):
 
 	return [data]
 
-def SpritesToAsm(labelPrefix, sourceJ, image, hasMask):
-	spritesJ = sourceJ["sprites"]
+def SpritesToAsm(labelPrefix, source_j, image, hasMask):
+	spritesJ = source_j["sprites"]
 	asm = labelPrefix + "_sprites:"
 
 	# preshifted sprites
-	preshiftedSprites = sourceJ["preshifted_sprites"]
+	preshiftedSprites = source_j["preshifted_sprites"]
 
 	for sprite in spritesJ:
 		spriteName = sprite["name"]
@@ -235,13 +234,13 @@ def SpritesToAsm(labelPrefix, sourceJ, image, hasMask):
 			spriteImg.append(line)
 
 		# convert indexes into bit lists.
-		bits0, bits1, bits2, bits3 = common.IndexesToBitLists(spriteImg)
+		bits0, bits1, bits2, bits3 = common.indexes_to_bit_lists(spriteImg)
 
 		# combite bits into byte lists
-		#bytes0 = common.CombineBitsToBytes(bits0) # 8000-9FFF # from left to right, from bottom to top
-		bytes1 = common.CombineBitsToBytes(bits1) # A000-BFFF
-		bytes2 = common.CombineBitsToBytes(bits2) # C000-DFFF
-		bytes3 = common.CombineBitsToBytes(bits3) # E000-FFFF
+		#bytes0 = common.combine_bits_to_bytes(bits0) # 8000-9FFF # from left to right, from bottom to top
+		bytes1 = common.combine_bits_to_bytes(bits1) # A000-BFFF
+		bytes2 = common.combine_bits_to_bytes(bits2) # C000-DFFF
+		bytes3 = common.combine_bits_to_bytes(bits3) # E000-FFFF
 
 		mask_alpha = sprite["mask_alpha"]
 		mask_color = sprite["mask_color"]
@@ -261,7 +260,7 @@ def SpritesToAsm(labelPrefix, sourceJ, image, hasMask):
 					else:
 						maskImg.append(0)
 
-			maskBytes = common.CombineBitsToBytes(maskImg)
+			maskBytes = common.combine_bits_to_bytes(maskImg)
 
 		# to support a sprite render function
 		data = SpriteData(bytes1, bytes2, bytes3, width, height, maskBytes)
@@ -315,35 +314,52 @@ def SpritesToAsm(labelPrefix, sourceJ, image, hasMask):
 
 	return asm
 
-def Export(sourceJPath, asmAnimPath, asmSpritePath):
-	
-	sourcePathWOExt = os.path.splitext(sourceJPath)[0]
-	sourceName = os.path.basename(sourcePathWOExt)
-	sourceDir = str(Path(sourceJPath).parent) + "\\"
+def export_if_updated(source_path, generated_dir, force_export):
+	source_name = common.path_to_filename(source_path)
+
+	anim_path = generated_dir + source_name + "_anim" + build.EXT_ASM
+	sprite_path = generated_dir + source_name + "_sprites" + build.EXT_ASM
+
+	export_paths = {"ram" : anim_path, "ram_disk" : sprite_path }
+
+	if force_export or is_source_updated(source_path):
+		export(
+			source_path,
+			anim_path, 
+			sprite_path)
+
+		print(f"sprite: {source_path} got exported.")
+		return True, export_paths
+	else:
+		return False, export_paths
+
+def export(source_j_path, asmAnimPath, asmSpritePath):
+	source_name = common.path_to_filename(source_j_path)
+	source_dir = str(Path(source_j_path).parent) + "\\"
 	asmAnimDir = str(Path(asmAnimPath).parent) + "\\"
 	asmSpriteDir = str(Path(asmSpritePath).parent) + "\\"
 
-	with open(sourceJPath, "rb") as file:
-		sourceJ = json.load(file)
+	with open(source_j_path, "rb") as file:
+		source_j = json.load(file)
 
-	if "asset_type" not in sourceJ or sourceJ["asset_type"] != build.ASSET_TYPE_SPRITE :
-		print(f'export_sprite ERROR: asset_type != "{build.ASSET_TYPE_SPRITE}", path: {sourceJPath}')
+	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_SPRITE :
+		print(f'export_sprite ERROR: asset_type != "{build.ASSET_TYPE_SPRITE}", path: {source_j_path}')
 		print("Stop export")
 		exit(1)
 
-	pngPath = sourceDir + sourceJ["pngPath"]
-	hasMask = str(sourceJ["mask"])
-	image = Image.open(pngPath)
+	png_path = source_dir + source_j["png_path"]
+	hasMask = str(source_j["mask"])
+	image = Image.open(png_path)
 
-	_, colors = common.PaletteToAsm(image, sourceJ)
+	_, colors = common.palette_to_asm(image, source_j)
 
-	image = common.RemapColors(image, colors)
+	image = common.remap_colors(image, colors)
 
-	asm = "; " + sourceJPath + "\n"
-	asmAnims = asm + AnimsToAsm(sourceName, sourceJ)
-	asmSprites = asm + f"__RAM_DISK_S_{sourceName.upper()} = RAM_DISK_S" + "\n"
-	asmSprites += asm + f"__RAM_DISK_M_{sourceName.upper()} = RAM_DISK_M" + "\n"
-	asmSprites += SpritesToAsm("__" + sourceName, sourceJ, image, hasMask)
+	asm = "; " + source_j_path + "\n"
+	asmAnims = asm + AnimsToAsm(source_name, source_j)
+	asmSprites = asm + f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S" + "\n"
+	asmSprites += asm + f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M" + "\n"
+	asmSprites += SpritesToAsm("__" + source_name, source_j, image, hasMask)
 
 	# save asm
 	if not os.path.exists(asmAnimDir):
@@ -358,14 +374,14 @@ def Export(sourceJPath, asmAnimPath, asmSpritePath):
 	with open(asmSpritePath, "w") as file:
 		file.write(asmSprites)
 
-def IsFileUpdated(sourceJPath):
-	with open(sourceJPath, "rb") as file:
-		sourceJ = json.load(file)
+def is_source_updated(source_j_path):
+	with open(source_j_path, "rb") as file:
+		source_j = json.load(file)
 	
-	sourceDir = str(Path(sourceJPath).parent) + "\\"
-	pngPath = sourceDir + sourceJ["pngPath"]
+	source_dir = str(Path(source_j_path).parent) + "\\"
+	png_path = source_dir + source_j["png_path"]
 
-	if build.IsFileUpdated(sourceJPath) | build.IsFileUpdated(pngPath):
+	if build.is_file_updated(source_j_path) | build.is_file_updated(png_path):
 		return True
 	return False
 

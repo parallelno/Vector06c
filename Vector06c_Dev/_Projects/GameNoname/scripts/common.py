@@ -1,6 +1,6 @@
 import os
 
-def PaletteToAsm(image, charJ, path = "", labelPrefix = ""):
+def palette_to_asm(image, charJ, path = "", labelPrefix = ""):
 	# usially there are color tiles in top row in the image.
 	paletteCoords = charJ["palette"]
 	colors = {}
@@ -30,7 +30,7 @@ def PaletteToAsm(image, charJ, path = "", labelPrefix = ""):
 		
 	return asm + "\n", colors
 
-def  RemapColors(image, colors):
+def  remap_colors(image, colors):
 	palette = image.getpalette()
 	colorMatchingTable = {}
 	
@@ -54,7 +54,7 @@ def  RemapColors(image, colors):
 			image.putpixel((x,y), newColorIdx)
 	return image
 
-colorIndexToBit = [
+color_index_to_bit = [
 		(0,0,0,0), # color idx = 0
 		(0,0,0,1),
 		(0,0,1,0), # color idx = 2
@@ -73,21 +73,21 @@ colorIndexToBit = [
 		(1,1,1,1),
 	]
 
-def IndexesToBitLists(tileImg):
+def indexes_to_bit_lists(tileImg):
 	bits0 = [] # 8000-9FFF # from left to right, from bottom to top
 	bits1 = [] # A000-BFFF
 	bits2 = [] # C000-DFFF
 	bits3 = [] # E000-FFFF
 	for line in tileImg:
 		for colorIdx in line:
-			bit0, bit1, bit2, bit3 = colorIndexToBit[colorIdx]
+			bit0, bit1, bit2, bit3 = color_index_to_bit[colorIdx]
 			bits0.append(bit0) 
 			bits1.append(bit1)
 			bits2.append(bit2)
 			bits3.append(bit3)
 	return bits0, bits1, bits2, bits3
 
-def CombineBitsToBytes(_bits):
+def combine_bits_to_bytes(_bits):
 	bytes = []
 	i = 0
 	while i < len(_bits):
@@ -98,30 +98,50 @@ def CombineBitsToBytes(_bits):
 		bytes.append(byte)
 	return bytes
 
-def IsBytesZeros(bytes):
+def path_to_filename(path):
+	path_wo_ext = os.path.splitext(path)[0]
+	name = os.path.basename(path_wo_ext)
+	return name
+
+def is_bytes_zeros(bytes):
 	for byte in bytes: 
 		if byte != 0 : return False
 	return True
 
-def BytesToAsm(data):
+def bytes_to_asm(data):
 	asm = "			.byte "
 	for i, byte in enumerate(data):
 		asm += str(byte) + ","
 	return asm + "\n"
 
-def RunCommand(command, comment = "", checkPath = ""):
+def bin_to_asm(path, outPath):
+	with open(path, "rb") as file:
+		txt = ""
+		while True:
+			data = file.read(32)
+			if data:
+				txt += "\n.byte "
+				for byte in data:
+					txt += str(byte) + ", " 
+			else: break
+		
+		with open(outPath, "w") as fw:
+			fw.write(txt)
+
+def run_command(command, comment = "", checkPath = ""):
 	if comment != "" : 
 		print(comment)
 	if checkPath == "" or os.path.isfile(checkPath):
 		os.system(command)
 	else:
-		print(f"command {command} is failed. file {checkPath} doesn't exist")
+		print(f"run_command ERROR: command: {command} is failed. file {checkPath} doesn't exist")
+		exit(1)
 
-def DeleteFile(path):
+def delete_file(path):
 	if os.path.isfile(f"{path}"):
 		os.remove(f"{path}")
 
-def str2bool(v):
+def str_to_bool(v):
     if isinstance(v, bool):
         return v
     if v.lower() in ('yes', 'true', 't', 'y', '1'):
@@ -129,7 +149,7 @@ def str2bool(v):
     else:
         return False
 
-def RemoveDoubleSlashes(path):
+def remove_double_slashes(path):
 	res = ""
 	doubledSlashe = False
 	for char in path:
@@ -144,10 +164,45 @@ def RemoveDoubleSlashes(path):
 				doubledSlashe = False
 	return res
 
-def DoubleSleshes(path):
+def double_slashes(path):
 	res = ""
 	for char in path:
 		res += char
 		if char == '\\':
 			res += char
 	return res
+
+def get_addr_wo_prefix(addr_s):
+	if addr_s[0] == "$":
+		addr_s = addr_s[1:]
+	elif len(addr_s) > 1 and addr_s[1] == "x":
+		addr_s = addr_s[2:]
+
+	if int(addr_s, 16) == 0:
+		addr_s = "0"
+
+	return addr_s
+
+def align_string(str, allign, to_left = False):
+	addition = "                   "
+	if to_left:
+		str = addition + str
+		return str[-allign:]
+	else:
+		str += addition
+		return str[0:allign]
+
+def get_label_addr(path, _label):
+	with open(path, "rb") as file:
+		labels = file.readlines()
+
+	if len(labels) == 0:
+		return 0
+
+	for line_a in labels:
+		line = line_a.decode('ascii')
+		if line.find(_label) != -1:
+			addr_s = line[line.find("$")+1:]
+			return int(addr_s, 16)
+
+	return -1

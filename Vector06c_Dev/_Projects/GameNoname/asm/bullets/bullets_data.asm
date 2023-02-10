@@ -8,7 +8,7 @@ bullet_update_ptr:		.word TEMP_ADDR
 bullet_draw_ptr:		.word TEMP_ADDR  
 bullet_id:				.byte TEMP_BYTE
 bullet_status:			.byte TEMP_BYTE
-bullet_status_timer:		.byte TEMP_BYTE 
+bullet_status_timer:	.byte TEMP_BYTE 
 bullet_anim_timer:		.byte TEMP_BYTE 
 bulletAnimPtr:			.word TEMP_ADDR 
 bulletEraseScrAddr:		.word TEMP_WORD

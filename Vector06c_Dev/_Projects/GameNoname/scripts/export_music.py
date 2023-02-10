@@ -4,6 +4,7 @@ import sys
 import os
 from pathlib import Path
 import common
+import build
 
 #from utils import *
 import lhafile      # pip3 install lhafile
@@ -72,20 +73,35 @@ def readym(filename):
 	return [regs, comment1, comment2, comment3]
 
 #=====================================================
-def Export(sourcePath, exportPath, cleanTmp = True):
+def export_if_updated(source_path, generated_dir, force_export):
+	source_path_wo_ext = os.path.splitext(source_path)[0]
+	source_name = os.path.basename(source_path_wo_ext)
+	export_paths = {"ram_disk" : generated_dir + source_name + build.EXT_ASM }
 
-	sourceName = os.path.splitext(sourcePath)[0]
-	exportDir = str(Path(exportPath).parent) + "\\"
+	if force_export or build.is_file_updated(source_path):
+		export(
+			source_path, 
+			export_paths["ram_disk"])
+			
+		print(f"music: {source_path} got exported.")		
+		return True, export_paths
+	else:
+		return False, export_paths
+
+def export(source_path, export_path, cleanTmp = True):
+
+	source_name = os.path.splitext(source_path)[0]
+	exportDir = str(Path(export_path).parent) + "\\"
 	if not os.path.exists(exportDir):
 		os.mkdir(exportDir)
 
 	try:
-		[regData, comment1, comment2, comment3] = readym(sourcePath)
+		[regData, comment1, comment2, comment3] = readym(source_path)
 	except:
-		sys.stderr.write(f'musicExport: error reading f{sourcePath}\n')
+		sys.stderr.write(f'musicExport: error reading f{source_path}\n')
 		exit(1)
 
-	with open(exportPath, "w") as fileInc:
+	with open(export_path, "w") as fileInc:
 		# task stacks
 		fileInc.write(f'GCP_WORD_LEN = 2\n')
 		fileInc.write(f'GCP_TEMP_ADDR = 0\n')
@@ -101,13 +117,13 @@ def Export(sourcePath, exportPath, cleanTmp = True):
 		fileInc.write(f'\n')
 
 		for i, c in enumerate(regData[0:14]):
-			binFile = f"sourceName{i:02d}.bin"
-			zx0File = f"sourceName{i:02d}.zx0"
+			binFile = f"source_name{i:02d}.bin"
+			zx0File = f"source_name{i:02d}.zx0"
 			with open(binFile, "wb") as f:
 				f.write(c)
 			
-			common.DeleteFile(zx0File)
-			common.RunCommand(f"tools\\zx0salvador.exe -v -classic -w 256 {binFile} {zx0File}")
+			common.delete_file(zx0File)
+			common.run_command(f"tools\\zx0salvador.exe -v -classic -w 256 {binFile} {zx0File}")
 
 			with open(zx0File, "rb") as f:
 				dbname = f"ayRegData{i:02d}"
@@ -115,8 +131,8 @@ def Export(sourcePath, exportPath, cleanTmp = True):
 				fileInc.write(f'{dbname}: .byte ' + ",".join("$%02x" % x for x in data) + "\n")
 			if cleanTmp:
 				print("musicExport: clean up tmp resources")
-				common.DeleteFile(binFile)
-				common.DeleteFile(zx0File)
+				common.delete_file(binFile)
+				common.delete_file(zx0File)
 
 		fileInc.write(f'; buffers for unpacking the streams, must be aligned to 256 byte boundary\n')
 		fileInc.write(f'.align $100\n')
