@@ -61,6 +61,7 @@ __hero_r_attk1_6                      = $36b6
 __hero_r_attk1_7                      = $37ca
 __hero_r_sprites_rd_data_end          = $3882
 __chunk_end_bank0_addr0_0             = $3882
+__chunk_start_bank0_addr0_1           = $3882
 __skeleton_sprites_rd_data_start      = $3882
 __ram_disk_s_skeleton                 = $10
 __ram_disk_m_skeleton                 = $00

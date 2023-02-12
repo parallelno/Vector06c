@@ -227,7 +227,7 @@ def SpritesToAsm(labelPrefix, source_j, image):
 	return asm
 
 def export_if_updated(source_path, generated_dir, force_export):
-	source_name = common.path_to_filename(source_path)
+	source_name = common.path_to_basename(source_path)
 
 	anim_path = generated_dir + source_name + "_anim" + build.EXT_ASM
 	sprite_path = generated_dir + source_name + "_sprites" + build.EXT_ASM
@@ -246,7 +246,7 @@ def export_if_updated(source_path, generated_dir, force_export):
 		return False, export_paths
 
 def export(source_j_path, asm_anim_path, asm_sprite_path):
-	source_name = common.path_to_filename(source_j_path)
+	source_name = common.path_to_basename(source_j_path)
 	source_dir = str(Path(source_j_path).parent) + "\\"
 	asm_anim_dir = str(Path(asm_anim_path).parent) + "\\"
 	asm_sprite_dir = str(Path(asm_sprite_path).parent) + "\\"

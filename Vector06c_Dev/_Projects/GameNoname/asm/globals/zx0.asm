@@ -100,7 +100,7 @@ dzx0:
 ; bc - uncompressed data addr
 ; a - ram-disk activation command
 
-dzx0RD:
+dzx0_rd:
 		sta @ramDiskCmd1+1
 		sta @ramDiskCmd2+1
 

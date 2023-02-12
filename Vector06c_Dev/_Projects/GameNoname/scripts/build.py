@@ -133,8 +133,14 @@ def get_segment_size_max(segment_addr):
 	else:
 		return SEGMENT_8000_0000_SIZE_MAX
 
-def get_segment_name(bank_id, addr_s_wo_hex_sym, chunk_n = "", chunks = 2):
-	result = f'segment_bank{bank_id}_addr{addr_s_wo_hex_sym}'
-	if chunk_n != "" and chunks > 1:
-		result += "_" + str(chunk_n)
-	return result		
+def get_segment_name(bank_id, addr_s_wo_hex_sym):
+	return f'segment_bank{bank_id}_addr{addr_s_wo_hex_sym}'
+
+def get_chunk_name(bank_id, addr_s_wo_hex_sym, chunk_id):
+	return f'chunk_bank{bank_id}_addr{addr_s_wo_hex_sym}' + "_" + str(chunk_id)
+
+def get_chunk_start_label_name(bank_id, addr_s_wo_hex_sym, chunk_id):
+	return f'__chunk_start_bank{bank_id}_addr{addr_s_wo_hex_sym}_{chunk_id}'
+
+def get_chunk_end_label_name(bank_id, addr_s_wo_hex_sym, chunk_id):
+	return f'__chunk_end_bank{bank_id}_addr{addr_s_wo_hex_sym}_{chunk_id}'

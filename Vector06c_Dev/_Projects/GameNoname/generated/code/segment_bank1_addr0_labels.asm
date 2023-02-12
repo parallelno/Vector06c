@@ -77,6 +77,7 @@ __knight_defence_l3_2             = $3e0c
 __knight_defence_l3_3             = $3f0e
 __knight_sprites_rd_data_end      = $400e
 __chunk_end_bank1_addr0_0         = $400e
+__chunk_start_bank1_addr0_1       = $400e
 __burner_sprites_rd_data_start    = $400e
 __ram_disk_s_burner               = $14
 __ram_disk_m_burner               = $01

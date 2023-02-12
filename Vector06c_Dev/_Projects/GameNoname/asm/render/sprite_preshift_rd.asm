@@ -14,7 +14,7 @@ MASK_BYTE_COLOR_BYTE_LEN = 2
 ; hl - sprite data offset in the ram-disk
 ; used:
 ; de, bc, a
-__SpriteDupPreshift:
+__sprite_dup_preshift:
 			shld @dataOffset0+1
 			shld @dataOffset1+1
 

@@ -4,8 +4,7 @@ def palette_to_asm(image, charJ, path = "", labelPrefix = ""):
 	# usially there are color tiles in top row in the image.
 	paletteCoords = charJ["palette"]
 	colors = {}
-	pathWOExt = os.path.splitext(path)[0]
-	labelPostfix = os.path.basename(pathWOExt)
+	labelPostfix = path_to_basename(path)
 	asm = "; " + path + "\n"
 	asm += labelPrefix + "_palette_" + labelPostfix + ":\n"
 	palette = image.getpalette()
@@ -98,7 +97,7 @@ def combine_bits_to_bytes(_bits):
 		bytes.append(byte)
 	return bytes
 
-def path_to_filename(path):
+def path_to_basename(path):
 	path_wo_ext = os.path.splitext(path)[0]
 	name = os.path.basename(path_wo_ext)
 	return name

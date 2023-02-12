@@ -58,7 +58,7 @@ SCR_BUFF1_ADDR			= $A000
 SCR_BUFF2_ADDR			= $C000
 SCR_BUFF3_ADDR			= $E000
 SCR_BUFF_LEN            = $2000
-BACK_BUFF_ADDR          = $8000
+BACK_BUFF_ADDR          = $A000
 BACK_BUFF2_ADDR         = $8000
 
 ; sprite

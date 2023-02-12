@@ -9,7 +9,7 @@
 		"global" : [
 			"source\\code\\ram_disk_data.json",
 			"scripts\\export_ram_disk_data.py",
-			"scripts\\export_ram_disk_data_asm.py",
+			"scripts\\export_ram_disk_init.py",
 			"scripts\\export_segment.py",
 			"scripts\\task_build_run.py",
 			"scripts\\build.py",
@@ -22,9 +22,10 @@
 		"generated_bin" : "generated\\bin\\"
 	},
 	"build_db_path" : "generated\\build.db",
-	"bankBackBuffer" : 3,
-	"bankBackBuffer2" : 1,
-	"backBufferSize" : 24578,
+	"bank_id_backbuffer" : 3,
+	"bank_id_backbuffer2" : 1,
+	"back_buffer_size" : 24578,
+	"chunk_size_limit_rule" : "if a chunk contains sprites, its size has to be < $6000",
 	"banks" :
 	[
 		{
@@ -32,34 +33,38 @@
 			"segments" :
 			[
 				{
-					"reserved" : false,
 					"addr" : "0",
 					"chunks" :
 					[
-						[
-							{
-								"asset_type" : "sprite",
-								"path" : "source\\sprites\\hero_r.json",
-								"export_dir" : "generated\\sprites\\"
-							}
-						],
-						[
-							{
-								"asset_type" : "sprite",
-								"path" : "source\\sprites\\skeleton.json",
-								"export_dir" : "generated\\sprites\\"
-							},
-							{
-								"asset_type" : "sprite",
-								"path" : "source\\sprites\\scythe.json",
-								"export_dir" : "generated\\sprites\\"
-							},
-							{
-								"asset_type" : "sprite",
-								"path" : "source\\sprites\\hero_attack01.json",
-								"export_dir" : "generated\\sprites\\"
-							}
-						]
+						{
+							"unpack_priority" : 0,
+							"assets" : [
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\hero_r.json",
+									"export_dir" : "generated\\sprites\\"
+								}
+							]
+						},
+						{
+							"assets" : [
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\skeleton.json",
+									"export_dir" : "generated\\sprites\\"
+								},
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\scythe.json",
+									"export_dir" : "generated\\sprites\\"
+								},
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\hero_attack01.json",
+									"export_dir" : "generated\\sprites\\"
+								}
+							]
+						}
 					]
 				},
 				{
@@ -67,13 +72,16 @@
 					"addr" : "$8000",
 					"chunks" : 
 					[
-						[
-							{
-								"asset_type" : "back",
-								"path" : "source\\sprites\\torch.json",
-								"export_dir" : "generated\\sprites\\"
-							}
-						]
+						{
+							"unpack_priority" : 0,
+							"assets" : [
+								{
+									"asset_type" : "back",
+									"path" : "source\\sprites\\torch.json",
+									"export_dir" : "generated\\sprites\\"
+								}
+							]
+						}
 					]
 				}
 			]
@@ -87,25 +95,31 @@
 					"addr" : "0",
 					"chunks" :
 					[
-						[
-							{
-								"asset_type" : "sprite",
-								"path" : "source\\sprites\\knight.json",
-								"export_dir" : "generated\\sprites\\"
-							}
-						],
-						[
-							{
-								"asset_type" : "sprite",
-								"path" : "source\\sprites\\burner.json",
-								"export_dir" : "generated\\sprites\\"
-							},
-							{
-								"asset_type" : "sprite",
-								"path" : "source\\sprites\\bomb_slow.json",
-								"export_dir" : "generated\\sprites\\"
-							}
-						]
+						{
+							"unpack_priority" : 0,
+							"assets" : [
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\knight.json",
+									"export_dir" : "generated\\sprites\\"
+								}
+							]
+						},
+						{
+							"unpack_priority" : 0,
+							"assets" : [
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\burner.json",
+									"export_dir" : "generated\\sprites\\"
+								},
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\bomb_slow.json",
+									"export_dir" : "generated\\sprites\\"
+								}
+							]
+						}
 					]
 				},
 				{
@@ -124,18 +138,24 @@
 					"addr" : "0",
 					"chunks" :
 					[
-						[
-							{
-								"asset_type" : "sprite",
-								"path" : "source\\sprites\\hero_l.json",
-								"export_dir" : "generated\\sprites\\"
-							},
-							{
-								"asset_type" : "sprite",
-								"path" : "source\\sprites\\vampire.json",
-								"export_dir" : "generated\\sprites\\"
-							}
-						]
+						{
+							"assets" : [
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\hero_l.json",
+									"export_dir" : "generated\\sprites\\"
+								}
+							]
+						},
+						{
+							"assets" : [
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\vampire.json",
+									"export_dir" : "generated\\sprites\\"
+								}
+							]
+						}
 					]
 				},
 				{
@@ -144,17 +164,20 @@
 					"description" : "Music player and songs",
 					"chunks" :
 					[
-						[
-							{
-								"asset_type" : "music",
-								"path" : "source\\music\\song01.ym"
-								,"export_dir" : "generated\\music\\"
-							},
-							{
-								"asset_type" : "code",
-								"path": "asm\\globals\\gigachad_player_rd.asm"
-							}
-						]
+						{
+							"unpack_priority" : 100,
+							"assets" : [
+								{
+									"asset_type" : "music",
+									"path" : "source\\music\\song01.ym"
+									,"export_dir" : "generated\\music\\"
+								},
+								{
+									"asset_type" : "code",
+									"path": "asm\\globals\\gigachad_player_rd.asm"
+								}
+							]
+						}
 					]
 				}
 			]
@@ -167,13 +190,16 @@
 					"addr" : "0",
 					"chunks" :
 					[
-						[
-							{
-								"asset_type" : "level",
-								"path" : "source\\levels\\level01.json",
-								"export_dir" : "generated\\levels\\"
-							}
-						]
+						{
+							"unpack_priority" : 10,
+							"assets" : [
+								{
+									"asset_type" : "level",
+									"path" : "source\\levels\\level01.json",
+									"export_dir" : "generated\\levels\\"
+								}
+							]
+						}
 					]
 				},
 				{
@@ -182,24 +208,27 @@
 					"description" : "$8000-$9FFF code library. $A000-$FFFF back buffer",
 					"chunks" :
 					[
-						[
-							{
-								"asset_type" : "code",
-								"path" : "asm\\render\\sprite_rd.asm"
-							},
-							{
-								"asset_type" : "code",
-								"path": "asm\\render\\draw_sprite_rd.asm"
-							},
-							{
-								"asset_type" : "code",
-								"path" : "asm\\globals\\utils_rd.asm"
-							},
-							{
-								"asset_type" : "code",
-								"path" : "asm\\render\\sprite_preshift_rd.asm"
-							}
-						]
+						{
+							"unpack_priority" : 100500,
+							"assets" : [
+								{
+									"asset_type" : "code",
+									"path" : "asm\\render\\sprite_rd.asm"
+								},
+								{
+									"asset_type" : "code",
+									"path": "asm\\render\\draw_sprite_rd.asm"
+								},
+								{
+									"asset_type" : "code",
+									"path" : "asm\\globals\\utils_rd.asm"
+								},
+								{
+									"asset_type" : "code",
+									"path" : "asm\\render\\sprite_preshift_rd.asm"
+								}
+							]
+						}
 					]
 				}
 			]
