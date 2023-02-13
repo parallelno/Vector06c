@@ -1,5 +1,5 @@
 ; source\sprites\bomb_slow.json
-SpriteGetScrAddr_bomb_slow = SpriteGetScrAddr4
+sprite_get_scr_addr_bomb_slow = sprite_get_scr_addr4
 
 bomb_slow_preshifted_sprites:
 			.byte 4

@@ -1,7 +1,7 @@
 ;.include "text.asm"
 
 game_ui_init:
-			call GameUIPanelDraw
+			call game_ui_panel_draw
 			call game_ui_health_draw
 			ret
 /*
@@ -9,26 +9,26 @@ GameUIUpdate:
 			ret
 */
 
-GameUIPanelDraw:
+game_ui_panel_draw:
 			; hl - text addr
 			; bc - screen addr
-			lxi h, gameUIHealthBarText
+			lxi h, game_ui_health_bar_text
 			lxi b, $a4ff			
-			call DrawText
+			call draw_text
 			ret
-gameUIHealthBarText:
+game_ui_health_bar_text:
 			.byte $3a,$31,$30,0
 
 game_ui_health_draw:
-			lxi h, gameUIHealthBarText+1
+			lxi h, game_ui_health_bar_text+1
 			lda hero_health
-			call HexToAskii
+			call hex_to_askii
 
 			; hl - text addr
 			; bc - screen addr
-			lxi h, gameUIHealthBarText+1
+			lxi h, game_ui_health_bar_text+1
 			lxi b, $a5ff		
-			call DrawText
+			call draw_text
 			ret
 
 

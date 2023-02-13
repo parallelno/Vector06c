@@ -171,29 +171,29 @@ BulletCopyToScr:
 			cpi BULLET_STATUS_INVIS
 			rz
 
-			; advance to bulletEraseScrAddr
-			LXI_B_TO_DIFF(bulletEraseScrAddr, bullet_status)			
+			; advance to bullet_erase_scr_addr
+			LXI_B_TO_DIFF(bullet_erase_scr_addr, bullet_status)			
 			dad b
-			; read bulletEraseScrAddr
+			; read bullet_erase_scr_addr
 			mov c, m
 			inx h
 			mov b, m
 			inx h
-			; read bulletEraseScrAddrOld
+			; read bullet_erase_scr_addr_old
 			mov e, m
 			inx h
 			mov d, m
-			; store bulletEraseScrAddr temp
+			; store bullet_erase_scr_addr temp
 			xchg
 			shld @oldTopRightConner+1
 			xchg
-			; store bulletEraseScrAddr to bulletEraseScrAddrOld
+			; store bullet_erase_scr_addr to bullet_erase_scr_addr_old
 			mov m, b
 			dcx h
 			mov m, c
 			; bc - hero_erase_scr_addr
 			; de - hero_erase_scr_addr_old
-			; hl - ptr to bulletEraseScrAddrOld
+			; hl - ptr to bullet_erase_scr_addr_old
 			; get min(b, d), min(c, e)
 			mov a, d
 			cmp b
@@ -207,12 +207,12 @@ BulletCopyToScr:
 @keepOldY:
 			; tmp store a scr addr to copy
 			push d
-			; bc - bulletEraseScrAddr
-			; calc top-right corner addr (hero_erase_scr_addr + bulletEraseWH)
+			; bc - bullet_erase_scr_addr
+			; calc top-right corner addr (hero_erase_scr_addr + bullet_erase_wh)
 			inx_h(2)
 			mov d, b
 			mov e, c
-			; bc - bulletEraseWH
+			; bc - bullet_erase_wh
 			mov c, m
 			inx h
 			mov b, m
@@ -220,8 +220,8 @@ BulletCopyToScr:
 			xchg
 			dad b
 			xchg
-			; bc - bulletEraseWHOld
-			; store bulletEraseWH to bulletEraseWHOld
+			; bc - bullet_erase_wh_old
+			; store bullet_erase_wh to bullet_erase_wh_old
 			mov a, m
 			mov m, c
 			mov c, a
@@ -229,12 +229,12 @@ BulletCopyToScr:
 			mov a, m
 			mov m, b
 			mov b, a
-			; calc old top-right corner addr (hero_erase_scr_addr_old + bulletEraseWHOld)
+			; calc old top-right corner addr (hero_erase_scr_addr_old + bullet_erase_wh_old)
 @oldTopRightConner:
 			lxi h, TEMP_WORD
 			dad b
-			; hl - hero_erase_scr_addr_old + bulletEraseWHOld
-			; de - hero_erase_scr_addr + bulletEraseWH
+			; hl - hero_erase_scr_addr_old + bullet_erase_wh_old
+			; de - hero_erase_scr_addr + bullet_erase_wh
 			; get max(h, d), max(l, e)
 			mov a, h
 			cmp d
@@ -276,21 +276,21 @@ BulletErase:
 			cpi BULLET_STATUS_INVIS
 			rz
 
-			; advance to bulletEraseScrAddr
-			LXI_D_TO_DIFF(bulletEraseScrAddr, bullet_status)
+			; advance to bullet_erase_scr_addr
+			LXI_D_TO_DIFF(bullet_erase_scr_addr, bullet_status)
 			dad d
 			mov e, m
 			inx h
 			mov d, m
 
-			LXI_B_TO_DIFF(bulletEraseWH, bulletEraseScrAddr+1)
+			LXI_B_TO_DIFF(bullet_erase_wh, bullet_erase_scr_addr+1)
 			dad b
 			mov a, m
 			inx h
 			mov h, m			
 			mov l, a
-			; hl - bulletEraseWH
-			; de - bulletEraseScrAddr
+			; hl - bullet_erase_wh
+			; de - bullet_erase_scr_addr
 
 			; check if it needs to restore the background
 			push h

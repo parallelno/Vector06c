@@ -1,5 +1,5 @@
 ; a newly inited room uses this list to call a monster Init func
-; it's ordered by monsterId (see tile data format in levelsData.asm)
+; it's ordered by monster_id (see tile data format in levelsData.asm)
 monstersInits:
 monstersInit0:JMP_4(SkeletonInit)
 monstersInit1:JMP_4(VampireInit)
@@ -15,15 +15,15 @@ KNIGHT_VERT_ID = (monstersInit4-monstersInits) / JMP_4_LEN
 
 ; ptr to the first monster data in the sorted list
 monsterRuntimeDataSorted:
-			.word monsterUpdatePtr
+			.word monster_update_ptr
 
 ; a list of monster runtime data structs.
-; TODO: optimization. consider using jmp_4 instead of func ptrs like monsterUpdatePtr
+; TODO: optimization. consider using jmp_4 instead of func ptrs like monster_update_ptr
 monstersRuntimeData:
-monsterUpdatePtr:		.word TEMP_ADDR
+monster_update_ptr:		.word TEMP_ADDR
 monsterDrawPtr:			.word TEMP_ADDR
-monsterImpactPtr:		.word TEMP_WORD ; called by hero bullet, another monster, etc. to affect this monster
-monsterId:				.byte TEMP_BYTE
+monster_impact_ptr:		.word TEMP_WORD ; called by hero bullet, another monster, etc. to affect this monster
+monster_id:				.byte TEMP_BYTE
 monsterType:			.byte TEMP_BYTE
 monsterHealth:			.byte TEMP_BYTE
 monsterStatus:			.byte TEMP_BYTE

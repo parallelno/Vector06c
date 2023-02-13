@@ -8,7 +8,7 @@
 
 MonstersEraseRuntimeData:
 			mvi a, MONSTER_RUNTIME_DATA_LAST
-			sta monsterUpdatePtr+1
+			sta monster_update_ptr+1
 			ret
 			.closelabels
 
@@ -21,7 +21,7 @@ MonstersEraseRuntimeData:
 ; collision 	- (hl) < MONSTER_RUNTIME_DATA_LAST
 ; no collision 	- (hl) >= MONSTER_RUNTIME_DATA_LAST
 
-MonstersGetFirstCollided:
+monsters_get_first_collided:
 			sta @colliderWidth+1
 			mov a, c
 			sta @colliderHeight+1
@@ -42,7 +42,7 @@ MonstersGetFirstCollided:
 @checkCollision:
 			push h
 			; advance hl to monsterType
-			LXI_B_TO_DIFF(monsterType, monsterUpdatePtr+1)
+			LXI_B_TO_DIFF(monsterType, monster_update_ptr+1)
 			dad b
 			mov a, m
 			cpi MONSTER_TYPE_ALLY
@@ -93,13 +93,13 @@ MonstersGetFirstCollided:
 ; in: 
 ; none
 ; return:
-; hl - a ptr to monsterUpdatePtr+1 of an empty monster runtime data
+; hl - a ptr to monster_update_ptr+1 of an empty monster runtime data
 ; uses:
 ; de, a
 
 ; TODO: optimize. use a lastRemovedMonsterRuntimeDataPtr as a starter to find an empty data
 MonstersGetEmptyDataPtr:
-			lxi h, monsterUpdatePtr+1
+			lxi h, monster_update_ptr+1
 @loop:
 			mov a, m
 			cpi MONSTER_RUNTIME_DATA_EMPTY
@@ -152,15 +152,15 @@ MonstersSetEmpty:
 			.closelabels
 
 ; call all active monsters' Update/Draw func
-; a func will get DE pointing to a func ptr (ex.:monsterUpdatePtr or monsterDrawPtr) in the runtime data
+; a func will get DE pointing to a func ptr (ex.:monster_update_ptr or monsterDrawPtr) in the runtime data
 ; in:
-; hl - an offset to a func ptr relative to monsterUpdatePtr in the runtime data
-; 		ex.: the offset to monsterUpdatePtr is zero
+; hl - an offset to a func ptr relative to monster_update_ptr in the runtime data
+; 		ex.: the offset to monster_update_ptr is zero
 ; use:
 ; de, a
 monsters_data_func_caller:
 			shld @funcPtrOffset+1
-			lxi h, monsterUpdatePtr+1
+			lxi h, monster_update_ptr+1
 @loop:
 			mov a, m
 			cpi MONSTER_RUNTIME_DATA_DESTR
@@ -194,14 +194,14 @@ monsters_data_func_caller:
 			.closelabels
 
 ; call a provided func (MonsterCopyToScr, MonsterErase) if a monster is alive
-; a func will get HL pointing to a monsterUpdatePtr+1 in the runtime data, and A holding a MONSTER_RUNTIME_DATA_* status
+; a func will get HL pointing to a monster_update_ptr+1 in the runtime data, and A holding a MONSTER_RUNTIME_DATA_* status
 ; in:
 ; hl - a func addr
 ; use:
 ; de, a
 MonstersCommonFuncCaller:
 			shld @funcPtr+1
-			lxi h, monsterUpdatePtr+1
+			lxi h, monster_update_ptr+1
 @loop:
 			mov a, m
 			cpi MONSTER_RUNTIME_DATA_EMPTY
@@ -226,7 +226,7 @@ monsters_update:
 			jmp monsters_data_func_caller
 
 monsters_draw:
-			lxi h, monsterDrawPtr - monsterUpdatePtr
+			lxi h, monsterDrawPtr - monster_update_ptr
 			jmp monsters_data_func_caller
 
 monsters_copy_to_scr:
@@ -239,10 +239,10 @@ monsters_erase:
 
 ; copy sprites from a backbuffer to a scr
 ; in:
-; hl - ptr to monsterUpdatePtr+1 in the runtime data
+; hl - ptr to monster_update_ptr+1 in the runtime data
 MonsterCopyToScr:
 			; advance to monsterStatus
-			LXI_D_TO_DIFF(monsterStatus, monsterUpdatePtr+1)
+			LXI_D_TO_DIFF(monsterStatus, monster_update_ptr+1)
 			dad d
 			; if it is invisible, return
 			mov a, m
@@ -339,7 +339,7 @@ MonsterCopyToScr:
 
 ; erase a sprite or restore the background behind a sprite
 ; in:
-; hl - ptr to monsterUpdatePtr+1 in the runtime data
+; hl - ptr to monster_update_ptr+1 in the runtime data
 ; a - MONSTER_RUNTIME_DATA_* status
 MonsterErase:
 			; if a monster is destroyed mark its data as empty
@@ -347,7 +347,7 @@ MonsterErase:
 			jz MonstersSetEmpty
 
 			; advance to monsterStatus
-			LXI_D_TO_DIFF(monsterStatus, monsterUpdatePtr+1)
+			LXI_D_TO_DIFF(monsterStatus, monster_update_ptr+1)
 			dad d
 			; if it is invisible, return
 			mov a, m

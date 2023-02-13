@@ -5,7 +5,7 @@
 ; modified:
 ; bc, de, a
 
-HexToAskii:
+hex_to_askii:
 			mov e, a ; tmp
 			lxi b, $0f30 ; $30 - char 0 code
 			
@@ -43,10 +43,10 @@ DrawFps:
 			lhld DrawText_restoreSP+1
 			shld @tmpRestoreSP
 			lxi h, @fpsText
-			call HexToAskii
+			call hex_to_askii
 
 			lxi b, FPS_SCR_ADDR
-			call DrawText
+			call draw_text
 			lhld @tmpRestoreSP
 			shld DrawText_restoreSP+1
 			ret
@@ -59,7 +59,7 @@ DrawFps:
 ; input:
 ; hl - text addr
 ; bc - screen addr
-DrawText:
+draw_text:
 			; get a char
 			mov e, m
 			; return if its code 0
@@ -107,7 +107,7 @@ DrawText_restoreSP:
 			mov c, l
 
 			pop h
-			jmp DrawText
+			jmp draw_text
 			.closelabels
 			
 

@@ -1,5 +1,5 @@
 ; source\sprites\burner.json
-SpriteGetScrAddr_burner = SpriteGetScrAddr4
+sprite_get_scr_addr_burner = sprite_get_scr_addr4
 
 burner_preshifted_sprites:
 			.byte 4

@@ -12,9 +12,9 @@
 .include "asm\\game.asm"
 
 main_start:
-			CALL_RAM_DISK_FUNC(__GCPlayerInit, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(__gc_player_init, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 @mainLoop:
-			;call MainMenu
+			;call main_menu
 			call game_init
 			jmp @mainLoop
 

@@ -38,7 +38,7 @@ sprite_get_scr_addr8:
 			mov	d, a
 			ret
 			.closelabels
-SpriteGetScrAddr4:
+sprite_get_scr_addr4:
 			; calc screen addr X
 			mov	a, m
 			ani (SPRITES_PRESHIFTED_4 - 1) * 2

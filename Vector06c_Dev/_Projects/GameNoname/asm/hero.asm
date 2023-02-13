@@ -25,7 +25,7 @@ HERO_COLLISION_HEIGHT = 11
 ; this's a struct. do not change the layout
 hero_update_ptr:		.word hero_update
 hero_draw_ptr:			.word hero_draw
-hero_impact_ptr:		.word HeroImpact
+hero_impact_ptr:		.word hero_impact
 hero_type:				.byte MONSTER_TYPE_ALLY
 hero_health:			.byte HERO_HEALTH_MAX
 hero_status:			.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
@@ -63,7 +63,7 @@ hero_collision_func_table:
 			JMP_4(hero_dont_move)
 			JMP_4(hero_dont_move)
 
-; funcs to handle the tile data. more info is in levelGlobalData.asm->roomTilesData
+; funcs to handle the tile data. more info is in levelGlobalData.asm->room_tiles_data
 hero_tile_func_table:
 			JMP_4(0)					; funcId == 1
 			JMP_4(0)					; funcId == 2
@@ -511,7 +511,7 @@ hero_tile_func_teleport:
 			sta roomIdx
 			; requesting room loading
 			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
-			sta levelCommand
+			sta level_command
 			; bypassing the hero_check_tile_data:@loop because the hero is teleporting
 			; so we don't need to handle the rest of the colllided tiles.
 			; return to the func that called hero_update
@@ -625,7 +625,7 @@ HeroIdleUpdate:
 ; handle the damage
 ; in:
 ; c - damage (positive number)
-HeroImpact:
+hero_impact:
 			lxi h, hero_health
 			mov a, m
 			sub c
@@ -656,7 +656,7 @@ hero_draw:
 @spriteR:			
 
 			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
-			CALL_RAM_DISK_FUNC_BANK(__DrawSpriteVM)
+			CALL_RAM_DISK_FUNC_BANK(__draw_sprite_vm)
 
 			; store an old scr addr, width, and height
 			lxi h, hero_erase_scr_addr

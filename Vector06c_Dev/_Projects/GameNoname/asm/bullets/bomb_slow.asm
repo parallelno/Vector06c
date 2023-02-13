@@ -79,7 +79,7 @@ bomb_slow_init:
 			; advance and set bullet_status_timer
 			inx h
 			mvi m, BOMB_SLOW_STATUS_MOVE_TIME
-			; advance hl to bulletAnimPtr
+			; advance hl to bullet_anim_ptr
 			inx_h(2)
 			
 			; a - bullet_id
@@ -106,34 +106,34 @@ bomb_slow_init:
 			; b = posX
 			; c = posY			
 			; e = 0 and SPRITE_W_PACKED_MIN
-			; hl - ptr to bulletEraseScrAddrOld			
+			; hl - ptr to bullet_erase_scr_addr_old			
 			
-			; advance hl to bulletEraseScrAddr
+			; advance hl to bullet_erase_scr_addr
 			inx h
 			mov m, c
 			inx h
 			mov m, a
-			; advance hl to bulletEraseScrAddrOld
+			; advance hl to bullet_erase_scr_addr_old
 			inx h
 			mov m, c
 			inx h
 			mov m, a
-			; advance hl to bulletEraseWH
+			; advance hl to bullet_erase_wh
 			inx h
 			mvi m, SPRITE_H_MIN
 			inx h
 			mov m, e
-			; advance hl to bulletEraseWHOld
+			; advance hl to bullet_erase_wh_old
 			inx h
 			mvi m, SPRITE_H_MIN
 			inx h
 			mov m, e
-			; advance hl to bulletPosX
+			; advance hl to bullet_pos_x
 			inx h
 			mov m, e
 			inx h
 			mov m, b
-			; advance hl to bulletPosY
+			; advance hl to bullet_pos_y
 			inx h
 			mov m, e
 			inx h
@@ -205,8 +205,8 @@ bomb_slow_update:
 			jz @die
 @updateMovement:
 			; hl - ptr to bullet_status_timer
-			; advance hl to bulletSpeedY+1
-			LXI_B_TO_DIFF(bulletSpeedY+1, bullet_status_timer)
+			; advance hl to bullet_speed_y+1
+			LXI_B_TO_DIFF(bullet_speed_y+1, bullet_status_timer)
 			dad b
 			; bc <- speedY
 			mov b, m
@@ -246,15 +246,15 @@ bomb_slow_update:
 			inx h 
 			mov m, d
 			
-			; hl points to bulletPosX+1
+			; hl points to bullet_pos_x+1
 			; advance hl to bullet_anim_timer
-			LXI_B_TO_DIFF(bullet_anim_timer, bulletPosX+1)
+			LXI_B_TO_DIFF(bullet_anim_timer, bullet_pos_x+1)
 			dad b
 			mvi a, BOMB_SLOW_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_SLOW_COLLISION_WIDTH, BOMB_SLOW_COLLISION_HEIGHT, BOMB_SLOW_DAMAGE)	
 @dieAfterDamage:
 			; advance hl to bullet_update_ptr+1
-			LXI_B_TO_DIFF(bullet_update_ptr+1, bulletPosY+1)
+			LXI_B_TO_DIFF(bullet_update_ptr+1, bullet_pos_y+1)
 			dad b
 			jmp bullets_destroy
 @die:
@@ -268,4 +268,4 @@ bomb_slow_update:
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
 bomb_slow_draw:
-			BULLET_DRAW(SpriteGetScrAddr_bomb_slow, __RAM_DISK_S_BOMB_SLOW)
+			BULLET_DRAW(sprite_get_scr_addr_bomb_slow, __RAM_DISK_S_BOMB_SLOW)

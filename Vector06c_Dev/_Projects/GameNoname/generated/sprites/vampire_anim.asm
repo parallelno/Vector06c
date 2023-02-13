@@ -1,5 +1,5 @@
 ; source\sprites\vampire.json
-SpriteGetScrAddr_vampire = SpriteGetScrAddr4
+sprite_get_scr_addr_vampire = sprite_get_scr_addr4
 
 vampire_preshifted_sprites:
 			.byte 4

@@ -27,7 +27,7 @@ level_init:
 			.closelabels
 
 level_update:
-			lda levelCommand
+			lda level_command
 			ora a
 			rz
 			cpi LEVEL_COMMAND_LOAD_DRAW_ROOM
@@ -41,7 +41,7 @@ level_update:
 			lda	update_request_counter
 			; reset the command
 			xra a
-			sta levelCommand
+			sta level_command
 			ret
 @nextCommandCheck:
             ret

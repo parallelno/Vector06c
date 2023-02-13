@@ -22,20 +22,20 @@ ayRegData12: .byte $80,$00,$15,$45,$5c,$00,$02
 ayRegData13: .byte $85,$ff,$5b,$0c,$81,$f4,$55,$40,$a1,$ff,$a1,$0c,$50,$56,$85,$ff,$68,$0c,$55,$55,$5a,$0e,$e5,$fe,$51,$c0,$00,$20
 ; buffers for unpacking the streams, must be aligned to 256 byte boundary
 .align $100
-GCPlayerBuffer00 : .storage $100
-GCPlayerBuffer01 : .storage $100
-GCPlayerBuffer02 : .storage $100
-GCPlayerBuffer03 : .storage $100
-GCPlayerBuffer04 : .storage $100
-GCPlayerBuffer05 : .storage $100
-GCPlayerBuffer06 : .storage $100
-GCPlayerBuffer07 : .storage $100
-GCPlayerBuffer08 : .storage $100
-GCPlayerBuffer09 : .storage $100
-GCPlayerBuffer10 : .storage $100
-GCPlayerBuffer11 : .storage $100
-GCPlayerBuffer12 : .storage $100
-GCPlayerBuffer13 : .storage $100
+gc_player_buffer00 : .storage $100
+gc_player_buffer01 : .storage $100
+gc_player_buffer02 : .storage $100
+gc_player_buffer03 : .storage $100
+gc_player_buffer04 : .storage $100
+gc_player_buffer05 : .storage $100
+gc_player_buffer06 : .storage $100
+gc_player_buffer07 : .storage $100
+gc_player_buffer08 : .storage $100
+gc_player_buffer09 : .storage $100
+gc_player_buffer10 : .storage $100
+gc_player_buffer11 : .storage $100
+gc_player_buffer12 : .storage $100
+gc_player_buffer13 : .storage $100
 ; array of task stack pointers. GCPlayerTaskSPs[i] = taskSP
 GCPlayerTaskSPs: .storage GCP_WORD_LEN * GC_PLAYER_TASKS
 GCPlayerTaskSPsEnd     = *

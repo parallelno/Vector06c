@@ -51,7 +51,7 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths,
 				chunks.append(chunk_j)
 
 	# sort chunks by the unpack priority
-	sorted_chunks = sorted(chunks, key=get_unpack_priority, reverse=True)
+	sorted_chunks = sorted(chunks, key=get_unpack_priority)
 
 	for chunk_j in sorted_chunks:
 		bank_id = chunk_j["bank_id"]

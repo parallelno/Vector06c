@@ -2,7 +2,7 @@ room_init:
 			call MonstersEraseRuntimeData
 			call bullets_erase_runtime_data
 			call RoomInitTiles
-			call RoomInitTilesData
+			call room_init_tiles_data
 			; erase a back buffer $a000-$ffff in the ram-disk
 			; TODO: perhaps we do not need to erase a back buffer.
 			; because we will restore a background tiles
@@ -11,10 +11,10 @@ room_init:
 			CALL_RAM_DISK_FUNC(__ClearMemSP, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_CLEAR_MEM | RAM_DISK_M_89)
 			ret
 
-; it copies the tile idxs of the current room into roomTilesData as a temp storrage
+; it copies the tile idxs of the current room into room_tiles_data as a temp storrage
 ; then it converts idxs into tile gfx addrs
 RoomInitTiles:
-			; copy the tiles idxs from the ram-disk to the roomTilesData buffer
+			; copy the tiles idxs from the ram-disk to the room_tiles_data buffer
 			lda roomIdx
 			; double the room index to get an address offset in the level01_roomsAddr array
 			rlc
@@ -31,12 +31,12 @@ RoomInitTiles:
 			mov d, b
 			mov e, c
 
-			lxi b, roomTilesData ; the tile data buffer is used as a temp buffer
+			lxi b, room_tiles_data ; the tile data buffer is used as a temp buffer
 			lxi h, <__RAM_DISK_S_LEVEL01<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
 			call CopyFromRamDisk
 
 			; convert tile idxs into tile gfx addrs
-			lxi h, roomTilesData
+			lxi h, room_tiles_data
 			lxi b, room_tiles_addr
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
 			; hl - current room tile indexes
@@ -82,7 +82,7 @@ RoomInitTiles:
 
 ; copies the tiles data of the current room into the main memory.
 ; calls the tile data handler func to spawn spawn a monster, etc
-RoomInitTilesData:
+room_init_tiles_data:
 			; copy the tiles data from the ram-disk
 			lda roomIdx
 			; double a room index to get a room pointer
@@ -101,17 +101,17 @@ RoomInitTilesData:
 			dad b
 
 			xchg
-			lxi b, roomTilesData
+			lxi b, room_tiles_data
 			lxi h, <__RAM_DISK_S_LEVEL01<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
 			call CopyFromRamDisk
 
 			; handle the tile data calling tile data funcs
-			lxi h, roomTilesData
+			lxi h, room_tiles_data
 			mvi c, 0
 @loop:
 			mov b, m
 			push b
-			TILE_DATA_HANDLE_FUNC_CALL(roomFuncTable)
+			TILE_DATA_HANDLE_FUNC_CALL(room_func_table)
 			pop b
 			mov m, a
 			inx h
@@ -124,12 +124,12 @@ RoomInitTilesData:
 
 
 ; this is a dummy tile data handler.
-; it copies the tile data byte into the roomTilesData as it is
+; it copies the tile data byte into the room_tiles_data as it is
 ; input:
 ; b - tile data
 ; return:
 ; a - tile data that will be saved into the room tile data array
-RoomTileDataCopy:
+room_tile_data_copy:
             ; just return the same tile data
 			mov a, b
 			ret
@@ -137,9 +137,9 @@ RoomTileDataCopy:
 
 ; a tile data handler to spawn a monster by its id.
 ; input:
-; c - tile idx in the roomTilesData array.
+; c - tile idx in the room_tiles_data array.
 ; a - monster id
-RoomMonsterSpawn:
+room_monster_spawn:
 			; get a monster init func addr ptr
 			lxi h, monstersInits
 			add_a(2) ; to make a JMP_4 ptr
@@ -169,19 +169,19 @@ room_draw:
 			mvi a, __RAM_DISK_S_BACKBUFF2
 			call copy_to_ram_disk32
 
-			; convert roomTilesData into $8000 tiledata buffer in the ram-disk
+			; convert room_tiles_data into $8000 tiledata buffer in the ram-disk
 			;call RoomTileDataBuff
 			CALL_RAM_DISK_FUNC(RoomTileDataBuff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
 			ret
 
 
 ;=========================================================
-; convert roomTilesData into the tiledata buffer in the ram-disk (bank 3 at $8000)
+; convert room_tiles_data into the tiledata buffer in the ram-disk (bank 3 at $8000)
 ; call ex. CALL_RAM_DISK_FUNC(RoomTileDataBuff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
 RoomTileDataBuff:
 			; set y = 0
 			mvi e, 0
-			lxi h, roomTilesData
+			lxi h, room_tiles_data
 @newLine
 			; reset the x. it's a high byte of the first screen buffer addr
 			mvi d, $80

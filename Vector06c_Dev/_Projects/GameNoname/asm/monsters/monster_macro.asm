@@ -1,6 +1,6 @@
 
 ; draw a monster sprite into a backbuffer
-; ex. MONSTER_DRAW(SpriteGetScrAddr_skeleton, __RAM_DISK_S_SKELETON)
+; ex. MONSTER_DRAW(sprite_get_scr_addr_skeleton, __RAM_DISK_S_SKELETON)
 ; in:
 ; de - ptr to monsterDrawPtr in the runtime data
 .macro MONSTER_DRAW(SpriteGetScrAddr_monster, __RAM_DISK_S_MONSTER)
@@ -24,7 +24,7 @@
 			; c - preshifted sprite idx*2 offset
 			call sprite_get_addr
 
-			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_MONSTER | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_MONSTER | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			pop h
 			inx h
 			; hl - ptr to monsterEraseScrAddr
@@ -81,20 +81,20 @@
 			; hero collides
 			; send him a damage
 			mvi c, MONSTER_DAMAGE
-			jmp HeroImpact
+			jmp hero_impact
 .endmacro
 
 ; monster initialization
 ; in:
-; c - tile idx in the roomTilesData array.
+; c - tile idx in the room_tiles_data array.
 ; a - monster id * 4
 ;ex. MONSTER_INIT(KnightUpdate, KnightDraw, KnightImpact, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 .macro MONSTER_INIT(MONSTER_UPDATE, MONSTER_DRAW, MONSTER_IMPACT, MONSTER_HEALTH, MONSTER_STATUS_DETECT_HERO_INIT, MONSTER_ANIM)
 			rrc_(2) ; to get monsterID
-			sta @monsterId+1
+			sta @monster_id+1
 			call MonstersGetEmptyDataPtr
-			; hl - ptr to monsterUpdatePtr+1
-			; advance hl to monsterUpdatePtr
+			; hl - ptr to monster_update_ptr+1
+			; advance hl to monster_update_ptr
 			dcx h
 			mvi m, <MONSTER_UPDATE
 			inx h
@@ -104,15 +104,15 @@
 			mvi m, <MONSTER_DRAW
 			inx h
 			mvi m, >MONSTER_DRAW
-			; advance hl to monsterImpactPtr
+			; advance hl to monster_impact_ptr
 			inx h
 			mvi m, <MONSTER_IMPACT
 			inx h
 			mvi m, >MONSTER_IMPACT
 
-			; advance hl to monsterId
+			; advance hl to monster_id
 			inx h
-@monsterId:	mvi m, TEMP_BYTE
+@monster_id:	mvi m, TEMP_BYTE
 
 			; advance hl to monsterType
 			inx h
@@ -148,7 +148,7 @@
 			; b = posX
 			; a = posY
 			; e = 0 and SPRITE_W_PACKED_MIN
-			; hl - ptr to monsterUpdatePtr+1
+			; hl - ptr to monster_update_ptr+1
 
 			; advance hl to monsterEraseScrAddr
 			inx h
@@ -182,6 +182,6 @@
 			mov m, a
 
 			; return zero to erase the tile data
-			; there this monster was in the roomTilesData
+			; there this monster was in the room_tiles_data
 			xra a
 .endmacro

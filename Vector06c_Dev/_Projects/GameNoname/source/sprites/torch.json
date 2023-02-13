@@ -25,7 +25,7 @@
 			"loop" : true
 		}
 	},
-	"sprites" : [
+	"sprites" : [ 
 		{
 			"name" : "front0",
 			"x" : 0,

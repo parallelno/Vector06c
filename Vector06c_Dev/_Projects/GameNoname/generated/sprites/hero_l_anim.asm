@@ -1,5 +1,5 @@
 ; source\sprites\hero_l.json
-SpriteGetScrAddr_hero_l = sprite_get_scr_addr8
+sprite_get_scr_addr_hero_l = sprite_get_scr_addr8
 
 hero_l_preshifted_sprites:
 			.byte 8

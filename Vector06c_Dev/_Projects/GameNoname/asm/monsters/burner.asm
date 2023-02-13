@@ -99,7 +99,7 @@ BURNER_DETECT_HERO_DISTANCE = 60
 ;========================================================
 ; called to spawn this monster
 ; in:
-; c - tile idx in the roomTilesData array.
+; c - tile idx in the room_tiles_data array.
 ; a - monster id * 4
 ; out:
 ; a = 0
@@ -110,10 +110,10 @@ BurnerInit:
 
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to monsterUpdatePtr in the runtime data
+; de - ptr to monster_update_ptr in the runtime data
 BurnerUpdate:
 			; advance hl to monsterStatus
-			LXI_H_TO_DIFF(monsterStatus, monsterUpdatePtr)
+			LXI_H_TO_DIFF(monsterStatus, monster_update_ptr)
 			dad d
 			mov a, m
 			; TODO: optimization. think of using a call table
@@ -434,7 +434,7 @@ BurnerUpdateDash:
 			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
 			dad b
 			mvi a, BURNER_ANIM_SPEED_DASH
-			jmp ActorAnimUpdate
+			jmp actor_anim_update
 @setMoveInit:
 			; hl points to monsterStatusTimer
 			mvi m, BURNER_STATUS_MOVE_TIME			
@@ -448,12 +448,12 @@ BurnerUpdateDash:
 ; hl - monsterAnimTimer
 ; a - anim speed
 BurnerUpdateAnimCheckCollisionHero:
-			call ActorAnimUpdate
+			call actor_anim_update
 			MONSTER_CHECK_COLLISION_HERO(BURNER_COLLISION_WIDTH, BURNER_COLLISION_HEIGHT, BURNER_DAMAGE)
 
 BurnerImpact:
-			; de - ptr to monsterImpactPtr+1
-			LXI_H_TO_DIFF(monsterUpdatePtr+1, monsterImpactPtr+1)
+			; de - ptr to monster_impact_ptr+1
+			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impact_ptr+1)
 			dad d
 			jmp MonstersDestroy
 
@@ -461,4 +461,4 @@ BurnerImpact:
 ; in:
 ; de - ptr to monsterDrawPtr in the runtime data
 BurnerDraw:
-			MONSTER_DRAW(SpriteGetScrAddr_burner, __RAM_DISK_S_BURNER)
+			MONSTER_DRAW(sprite_get_scr_addr_burner, __RAM_DISK_S_BURNER)

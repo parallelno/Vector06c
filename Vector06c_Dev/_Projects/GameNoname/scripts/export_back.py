@@ -107,6 +107,7 @@ def sprite_data(bytes0, bytes1, bytes2, bytes3, w, h):
 				data.append(bytes1[i])
 			for x in range(width):
 				i = y*width+width-x-1		
+				data.append(bytes0[i])
 
 	return [data]
 

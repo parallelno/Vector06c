@@ -1,5 +1,5 @@
 ; source\sprites\scythe.json
-SpriteGetScrAddr_scythe = SpriteGetScrAddr4
+sprite_get_scr_addr_scythe = sprite_get_scr_addr4
 
 scythe_preshifted_sprites:
 			.byte 4

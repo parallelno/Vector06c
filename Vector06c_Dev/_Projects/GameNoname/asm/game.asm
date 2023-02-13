@@ -27,7 +27,7 @@ game_init:
 			sta update_request_counter
 			hlt
 @gameLoop:
-			CALL_RAM_DISK_FUNC(__GCPlayerStartRepeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(__gc_player_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 			call game_update
 			call game_draw
 			jmp	 @gameLoop

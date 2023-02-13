@@ -121,7 +121,7 @@ def anims_to_asm(labelPrefix, source_j):
 	asm = ""
 	# preshifted sprites
 	preshiftedSprites = source_j["preshifted_sprites"]
-	asm += f"SpriteGetScrAddr_{labelPrefix} = SpriteGetScrAddr{preshiftedSprites}\n\n"
+	asm += f"sprite_get_scr_addr_{labelPrefix} = sprite_get_scr_addr{preshiftedSprites}\n\n"
 	asm += labelPrefix + "_preshifted_sprites:\n"
 	asm += f"			.byte " + str(preshiftedSprites) + "\n"
 

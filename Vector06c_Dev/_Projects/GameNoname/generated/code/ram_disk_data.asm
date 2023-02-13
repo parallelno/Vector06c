@@ -19,12 +19,6 @@
 .include "generated\\sprites\\hero_l_anim.asm"
 .include "generated\\sprites\\vampire_anim.asm"
 
-chunk_bank3_addr8000_0:
-.incbin "generated\\bin\\chunk_bank3_addr8000_0.bin.zx0"
-chunk_bank2_addr8000_0:
-.incbin "generated\\bin\\chunk_bank2_addr8000_0.bin.zx0"
-chunk_bank3_addr0_0:
-.incbin "generated\\bin\\chunk_bank3_addr0_0.bin.zx0"
 chunk_bank0_addr0_0:
 .incbin "generated\\bin\\chunk_bank0_addr0_0.bin.zx0"
 chunk_bank0_addr0_1:
@@ -39,12 +33,18 @@ chunk_bank2_addr0_0:
 .incbin "generated\\bin\\chunk_bank2_addr0_0.bin.zx0"
 chunk_bank2_addr0_1:
 .incbin "generated\\bin\\chunk_bank2_addr0_1.bin.zx0"
+chunk_bank3_addr0_0:
+.incbin "generated\\bin\\chunk_bank3_addr0_0.bin.zx0"
+chunk_bank2_addr8000_0:
+.incbin "generated\\bin\\chunk_bank2_addr8000_0.bin.zx0"
+chunk_bank3_addr8000_0:
+.incbin "generated\\bin\\chunk_bank3_addr8000_0.bin.zx0"
 
 ; ram-disk data layout
 ; bank0 addr0    [ 1054 free] description: 
 ;                             hero_r_sprites [14466], skeleton_sprites [10140], scythe_sprites [1626], hero_attack01_sprites [5226], 
-; bank0 addr8000 [32552 free] description: 
-;                             torch_sprites [216], 
+; bank0 addr8000 [32528 free] description: 
+;                             torch_sprites [240], 
 ; bank1 addr0    [ 5554 free] description: 
 ;                             knight_sprites [16398], burner_sprites [9600], bomb_slow_sprites [960], 
 ; bank1 addr8000 [    0 free] description: $8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)
@@ -56,4 +56,4 @@ chunk_bank2_addr0_1:
 ;                             level01 [6300], 
 ; bank3 addr8000 [ 6136 free] description: $8000-$9FFF code library. $A000-$FFFF back buffer
 ;                             sprite_rd [173], draw_sprite_rd [544], utils_rd [87], sprite_preshift_rd [1538], 
-; [101526 total free]
+; [101502 total free]

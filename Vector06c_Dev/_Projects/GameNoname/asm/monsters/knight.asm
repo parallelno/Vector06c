@@ -83,7 +83,7 @@ KNIGHT_DETECT_HERO_DISTANCE = 60
 ;========================================================
 ; called to spawn this monster
 ; in:
-; c - tile idx in the roomTilesData array.
+; c - tile idx in the room_tiles_data array.
 ; a - monster id * 4
 ; out:
 ; a = 0
@@ -93,10 +93,10 @@ KnightInit:
 
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to monsterUpdatePtr in the runtime data
+; de - ptr to monster_update_ptr in the runtime data
 KnightUpdate:
 			; advance hl to monsterStatus
-			LXI_H_TO_DIFF(monsterStatus, monsterUpdatePtr)
+			LXI_H_TO_DIFF(monsterStatus, monster_update_ptr)
 			dad d
 			mov a, m
 			; TODO: optimization. think of using a call table
@@ -215,16 +215,16 @@ KnightUpdateDefenceInit:
 			inx h
 			mov m, d
 
-			; set the speed according to a monsterId (KNIGHT_HORIZ_ID / KNIGHT_VERT_ID)
-			; advance hl to monsterId
-			LXI_B_TO_DIFF(monsterId, monsterAnimPtr+1)
+			; set the speed according to a monster_id (KNIGHT_HORIZ_ID / KNIGHT_VERT_ID)
+			; advance hl to monster_id
+			LXI_B_TO_DIFF(monster_id, monsterAnimPtr+1)
 			dad b
 			mov a, m		
 			cpi <KNIGHT_HORIZ_ID
 			jnz @speedVert
 @speedHoriz:
 			; advance hl to monsterSpeedX
-			LXI_B_TO_DIFF(monsterSpeedX, monsterId)
+			LXI_B_TO_DIFF(monsterSpeedX, monster_id)
 			dad b
 			; dir positive if e == knight_defence_r and vise versa
 			mvi a, <knight_defence_r
@@ -246,7 +246,7 @@ KnightUpdateDefenceInit:
 			ret
 @speedVert:
 			; advance hl to monsterPosY+1
-			LXI_B_TO_DIFF(monsterPosY+1, monsterId)
+			LXI_B_TO_DIFF(monsterPosY+1, monster_id)
 			dad b
 			lda hero_pos_y+1
 			cmp m
@@ -306,7 +306,7 @@ KnightUpdateMoveInit:
 			; advance hl to monsterStatusTimer
 
 			; advance hl to monsterSpeedX
-			LXI_D_TO_DIFF(monsterId, monsterStatus)
+			LXI_D_TO_DIFF(monster_id, monsterStatus)
 			dad d
 			mov a, m
 			cpi <KNIGHT_HORIZ_ID
@@ -319,7 +319,7 @@ KnightUpdateMoveInit:
 			ani %01111111 ; to clear the last bit
 			ora b
 			; advance hl to monsterSpeedX
-			LXI_H_TO_DIFF(monsterSpeedX, monsterId)
+			LXI_H_TO_DIFF(monsterSpeedX, monster_id)
 			dad d
 
 			cpi $40
@@ -419,12 +419,12 @@ KnightUpdateMove:
 ; hl - monsterAnimTimer
 ; a - anim speed
 KnightUpdateAnimCheckCollisionHero:
-			call ActorAnimUpdate
+			call actor_anim_update
 			MONSTER_CHECK_COLLISION_HERO(KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, KNIGHT_DAMAGE)
 
 KnightImpact:
-			; de - ptr to monsterImpactPtr+1
-			LXI_H_TO_DIFF(monsterUpdatePtr+1, monsterImpactPtr+1)
+			; de - ptr to monster_impact_ptr+1
+			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impact_ptr+1)
 			dad d
 			jmp MonstersDestroy			
 
@@ -432,4 +432,4 @@ KnightImpact:
 ; in:
 ; de - ptr to monsterDrawPtr in the runtime data
 KnightDraw:
-			MONSTER_DRAW(SpriteGetScrAddr_knight, __RAM_DISK_S_KNIGHT)
+			MONSTER_DRAW(sprite_get_scr_addr_knight, __RAM_DISK_S_KNIGHT)

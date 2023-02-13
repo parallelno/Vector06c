@@ -49,8 +49,8 @@ hero_sword_trail_init:
 
 			; tmp b = 0
 			mvi b, 0
-			; advance hl to bulletPosY+1
-			LXI_D_TO_DIFF(bulletPosY+1, bullet_status_timer)
+			; advance hl to bullet_pos_y+1
+			LXI_D_TO_DIFF(bullet_pos_y+1, bullet_status_timer)
 			dad d
 			; set posY
 			lda hero_pos_y+1
@@ -60,7 +60,7 @@ hero_sword_trail_init:
 			mov m, a
 			dcx h 
 			mov m, b
-			; advance hl to bulletPosX+1	
+			; advance hl to bullet_pos_x+1	
 			dcx h			
 			; set posX
 			lda hero_pos_x+1
@@ -69,17 +69,17 @@ hero_sword_trail_init:
 			dcx h
 			mov m, b
 
-			; advance hl to bulletEraseWHOld+1
+			; advance hl to bullet_erase_wh_old+1
 			dcx h
 			; set the mimimum supported width
 			;mvi m, 1 ; width = 8
 			mov m, b ; width = 8
-			; advance hl to bulletEraseWHOld
+			; advance hl to bullet_erase_wh_old
 			dcx h
 			; set the mimimum supported height
 			mvi m, 5
-			; advance hl to bulletEraseScrAddrOld+1
-			LXI_D_TO_DIFF(bulletEraseScrAddrOld+1, bulletEraseWHOld)
+			; advance hl to bullet_erase_scr_addr_old+1
+			LXI_D_TO_DIFF(bullet_erase_scr_addr_old+1, bullet_erase_wh_old)
 			dad d
 			; a - posX
 			; scrX = posX/8 + $a0
@@ -87,7 +87,7 @@ hero_sword_trail_init:
 			ani %00011111
 			adi SPRITE_X_SCR_ADDR
 			mov m, a
-			; advance hl to bulletEraseScrAddrOld
+			; advance hl to bullet_erase_scr_addr_old
 			dcx h
 			; c = posY
 			mov m, c
@@ -122,7 +122,7 @@ HeroSwordTrailUpdate:
 			mov m, a
 			jnc @skipAnimUpdate
 
-			; advance to bulletAnimPtr
+			; advance to bullet_anim_ptr
 			inx h			
 			; read the ptr to a current frame
 			mov e, m
@@ -138,7 +138,7 @@ HeroSwordTrailUpdate:
 			dad b
 			xchg
 			; de - the next frame ptr
-			; store de into the bulletAnimPtr
+			; store de into the bullet_anim_ptr
 			mov m, d
 			dcx h
 			mov m, e
@@ -167,7 +167,7 @@ HeroSwordTrailUpdate:
 			; advance and reset bullet_anim_timer
 			inx_h(2)
 			mvi m, 0
-			; advance and set bulletAnimPtr
+			; advance and set bullet_anim_ptr
 			inx h
 			lda hero_dir_x
 			ora a
@@ -178,9 +178,9 @@ HeroSwordTrailUpdate:
 			mvi m, > hero_attack01_attk_r
 
 			; check enemies-attk01 sprite collision
-			; hl - bulletAnimPtr+1
-			; advance hl to bulletPosX+1			
-			LXI_B_TO_DIFF(bulletPosX+1, bulletAnimPtr+1)
+			; hl - bullet_anim_ptr+1
+			; advance hl to bullet_pos_x+1			
+			LXI_B_TO_DIFF(bullet_pos_x+1, bullet_anim_ptr+1)
 			dad b
 			; add a collision offset
 			mov d, m
@@ -196,9 +196,9 @@ HeroSwordTrailUpdate:
 			mvi m, > hero_attack01_attk_l
 
 			; check enemies-attk01 sprite collision
-			; hl - bulletAnimPtr+1
-			; advance hl to bulletPosX+1			
-			LXI_B_TO_DIFF(bulletPosX+1, bulletAnimPtr+1)
+			; hl - bullet_anim_ptr+1
+			; advance hl to bullet_pos_x+1			
+			LXI_B_TO_DIFF(bullet_pos_x+1, bullet_anim_ptr+1)
 			dad b
 			; add a collision offset
 			mov d, m
@@ -210,16 +210,16 @@ HeroSwordTrailUpdate:
 @setCollisionSize:
 			mvi a, ATTK01_COLLISION_WIDTH-1
 			mvi c, ATTK01_COLLISION_HEIGHT-1
-			lxi d, monsterUpdatePtr+1
-			call MonstersGetFirstCollided
+			lxi d, monster_update_ptr+1
+			call monsters_get_first_collided
 			
 			; check if bullet collides with monster
 			mvi a, BULLET_RUNTIME_DATA_EMPTY
 			cmp m
 			rc ; return if no collision
 
-			; advance hl to monsterImpactPtr
-			LXI_B_TO_DIFF(monsterImpactPtr, monsterUpdatePtr+1)
+			; advance hl to monster_impact_ptr
+			LXI_B_TO_DIFF(monster_impact_ptr, monster_update_ptr+1)
 			dad b
 			; call bulletImpactPtr
 			mov e, m
@@ -233,4 +233,4 @@ HeroSwordTrailUpdate:
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
 HeroSwordTrailDraw:
-			BULLET_DRAW(SpriteGetScrAddr_hero_attack01, __RAM_DISK_S_HERO_ATTACK01)
+			BULLET_DRAW(sprite_get_scr_addr_hero_attack01, __RAM_DISK_S_HERO_ATTACK01)
