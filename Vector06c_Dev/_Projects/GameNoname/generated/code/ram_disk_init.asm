@@ -55,7 +55,7 @@ ram_disk_init:
 			; preshift hero_r sprites
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, hero_r_preshifted_sprites
-			lxi h, SCR_BUFF1_ADDR - __chunk_start_bank0_addr0_0
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank0_addr0_0)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
 
@@ -79,21 +79,21 @@ ram_disk_init:
 			; preshift skeleton sprites
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, skeleton_preshifted_sprites
-			lxi h, SCR_BUFF1_ADDR - __chunk_start_bank0_addr0_1
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank0_addr0_1)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
 
 			; preshift scythe sprites
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, scythe_preshifted_sprites
-			lxi h, SCR_BUFF1_ADDR - __chunk_start_bank0_addr0_1
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank0_addr0_1)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
 
 			; preshift hero_attack01 sprites
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, hero_attack01_preshifted_sprites
-			lxi h, SCR_BUFF1_ADDR - __chunk_start_bank0_addr0_1
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank0_addr0_1)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
 
@@ -127,7 +127,7 @@ ram_disk_init:
 			; preshift knight sprites
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, knight_preshifted_sprites
-			lxi h, SCR_BUFF1_ADDR - __chunk_start_bank1_addr0_0
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank1_addr0_0)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
 
@@ -151,14 +151,14 @@ ram_disk_init:
 			; preshift burner sprites
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, burner_preshifted_sprites
-			lxi h, SCR_BUFF1_ADDR - __chunk_start_bank1_addr0_1
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank1_addr0_1)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
 
 			; preshift bomb_slow sprites
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, bomb_slow_preshifted_sprites
-			lxi h, SCR_BUFF1_ADDR - __chunk_start_bank1_addr0_1
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank1_addr0_1)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
 
@@ -182,7 +182,7 @@ ram_disk_init:
 			; preshift hero_l sprites
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, hero_l_preshifted_sprites
-			lxi h, SCR_BUFF1_ADDR - __chunk_start_bank2_addr0_0
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank2_addr0_0)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
 
@@ -206,7 +206,7 @@ ram_disk_init:
 			; preshift vampire sprites
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, vampire_preshifted_sprites
-			lxi h, SCR_BUFF1_ADDR - __chunk_start_bank2_addr0_1
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank2_addr0_1)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
 

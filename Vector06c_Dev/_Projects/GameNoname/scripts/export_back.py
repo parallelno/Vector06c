@@ -5,7 +5,7 @@ import json
 import common
 import build
 
-def BytesToAsmTiled(data):
+def bytes_to_asm_tiled(data):
 	asm = ""
 	for tile in data:
 		asm += "			.byte "
@@ -14,7 +14,7 @@ def BytesToAsmTiled(data):
 		asm += "\n"
 	return asm
 
-def MaskData(maskBytes, w, h ):
+def mask_data(maskBytes, w, h ):
 	# sprite data structure description is in drawSprite.asm
 	# sprite uses only 3 out of 4 screen buffers.
 	# the width is devided by 8 because there is 8 pixels per a byte
@@ -39,7 +39,7 @@ def MaskData(maskBytes, w, h ):
 # sprite uses only 3 out of 4 screen buffers.
 # the width is devided by 8 because there is 8 pixels per a byte
 
-def SpriteDataBB(bytes1, bytes2, bytes3, w, h, maskBytes = None):
+def sprite_data_bb(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 	bytesAll = [bytes1, bytes2, bytes3]
 	width = w // 8
 	data = []
@@ -55,7 +55,7 @@ def SpriteDataBB(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 	return data
 
 # tiles 8*8pxs for 3 scr fuffers
-def SpriteDataTiled(bytes1, bytes2, bytes3, w, h, maskBytes = None):
+def sprite_data_tiled(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 	# sprite data structure description is in drawSprite.asm
 	# sprite uses only 3 out of 4 screen buffers.
 	# the width is devided by 8 because there is 8 pixels per a byte
@@ -74,7 +74,7 @@ def SpriteDataTiled(bytes1, bytes2, bytes3, w, h, maskBytes = None):
 			data.append(tile)
 	return data
 
-def SpriteData(bytes0, bytes1, bytes2, bytes3, w, h):
+def sprite_data(bytes0, bytes1, bytes2, bytes3, w, h):
 	# data format is described in draw_back.asm
 	# sprite uses 4 screen buffers without a mask
 	# the width is devided by 8 because there is 8 pixels per a byte
@@ -110,7 +110,7 @@ def SpriteData(bytes0, bytes1, bytes2, bytes3, w, h):
 
 	return [data]
 
-def AnimsToAsm(labelPrefix, source_j):
+def anims_to_asm(labelPrefix, source_j):
 	asm = ""
 	preshiftedSprites = 1 # means no preshifted sprites
 
@@ -148,7 +148,7 @@ def AnimsToAsm(labelPrefix, source_j):
 
 # find the most leftest or rightest pixel in a sprite
 # return its dx
-def FindSpriteHorizBorder(forwardSearch, spriteImg, mask_alpha, width, height):
+def find_sprite_horiz_border(forwardSearch, spriteImg, mask_alpha, width, height):
 	stopFlag = False
 	for dx in range(width):
 		for dy in range(height):
@@ -163,7 +163,7 @@ def FindSpriteHorizBorder(forwardSearch, spriteImg, mask_alpha, width, height):
 		if stopFlag: break
 	return dx2  
 
-def GetSpriteParams(labelPrefix, spriteName, dxL, dxR, spriteImg, mask_alpha, width, height, shift):
+def get_sprite_params(labelPrefix, spriteName, dxL, dxR, spriteImg, mask_alpha, width, height, shift):
 	#if labelPrefix == 'burner' and spriteName == 'idle_l0':
 	#	test= 10 
 	shiftedDxL = shift + dxL
@@ -173,7 +173,7 @@ def GetSpriteParams(labelPrefix, spriteName, dxL, dxR, spriteImg, mask_alpha, wi
 	widthNew = (shiftedDxR//8+1) * 8 - offsetXPreshiftedLocal
 	return offsetXPreshiftedLocal, widthNew
 
-def MakeEmptySpriteData(width, height, srcBuffCount):
+def make_empty_sprite_data(width, height, srcBuffCount):
 	data = []
 	for dy in range(height):
 		for dx in range(width // 8 * srcBuffCount):
@@ -181,7 +181,7 @@ def MakeEmptySpriteData(width, height, srcBuffCount):
 
 	return [data]
 
-def SpritesToAsm(labelPrefix, source_j, image):
+def sprites_to_asm(labelPrefix, source_j, image):
 	spritesJ = source_j["sprites"]
 	asm = labelPrefix + "_sprites:"
 
@@ -212,7 +212,7 @@ def SpritesToAsm(labelPrefix, source_j, image):
 		bytes3 = common.combine_bits_to_bytes(bits3) # E000-FFFF
 
 		# to support a sprite render function
-		data = SpriteData(bytes0, bytes1, bytes2, bytes3, width, height)
+		data = sprite_data(bytes0, bytes1, bytes2, bytes3, width, height)
 
 		asm += "\n"
 		# two empty bytes prior every sprite data to support a stack renderer
@@ -221,7 +221,7 @@ def SpritesToAsm(labelPrefix, source_j, image):
 
 		widthPacked = width//8 - 1
 		asm += "			.byte " + str( height ) + ", " +  str( widthPacked ) + "; height, width\n"
-		asm += BytesToAsmTiled(data)
+		asm += bytes_to_asm_tiled(data)
 		asm += "\n"
 
 	return asm
@@ -267,10 +267,10 @@ def export(source_j_path, asm_anim_path, asm_sprite_path):
 	image = common.remap_colors(image, colors)
 
 	asm = "; " + source_j_path + "\n"
-	asmAnims = asm + AnimsToAsm(source_name, source_j)
+	asmAnims = asm + anims_to_asm(source_name, source_j)
 	asmSprites = asm + f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S" + "\n"
 	asmSprites += asm + f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M" + "\n"
-	asmSprites += SpritesToAsm("__" + source_name, source_j, image)
+	asmSprites += sprites_to_asm("__" + source_name, source_j, image) 
 
 	# save asm
 	if not os.path.exists(asm_anim_dir):

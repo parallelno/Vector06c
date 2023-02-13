@@ -140,14 +140,6 @@ def delete_file(path):
 	if os.path.isfile(f"{path}"):
 		os.remove(f"{path}")
 
-def str_to_bool(v):
-    if isinstance(v, bool):
-        return v
-    if v.lower() in ('yes', 'true', 't', 'y', '1'):
-        return True
-    else:
-        return False
-
 def remove_double_slashes(path):
 	res = ""
 	doubledSlashe = False

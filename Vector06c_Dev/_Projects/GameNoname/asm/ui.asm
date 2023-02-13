@@ -2,7 +2,7 @@
 
 game_ui_init:
 			call GameUIPanelDraw
-			call GameUIHealthDraw
+			call game_ui_health_draw
 			ret
 /*
 GameUIUpdate:
@@ -19,9 +19,9 @@ GameUIPanelDraw:
 gameUIHealthBarText:
 			.byte $3a,$31,$30,0
 
-GameUIHealthDraw:
+game_ui_health_draw:
 			lxi h, gameUIHealthBarText+1
-			lda heroHealth
+			lda hero_health
 			call HexToAskii
 
 			; hl - text addr

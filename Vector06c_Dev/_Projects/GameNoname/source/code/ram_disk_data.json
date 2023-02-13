@@ -9,6 +9,7 @@
 		"global" : [
 			"source\\code\\ram_disk_data.json",
 			"scripts\\export_ram_disk_data.py",
+			"scripts\\export_ram_disk_data_asm.py",
 			"scripts\\export_ram_disk_init.py",
 			"scripts\\export_segment.py",
 			"scripts\\task_build_run.py",

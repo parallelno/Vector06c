@@ -21,7 +21,7 @@ level_init:
 			lxi d, __level01_startPos
 			mvi a, <__RAM_DISK_S_LEVEL01
 			call GetWordFromRamDisk
-			call HeroSetPos
+			call hero_set_pos
 			call HeroInit
 			ret
 			.closelabels

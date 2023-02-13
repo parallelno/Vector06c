@@ -34,5 +34,5 @@ intsPerSecCounter:
 			.byte INTS_PER_SEC 
 
 ; used for the movement
-charTempX:	.word 0 ; temporal X
-charTempY:	.word 0 ; temporal Y
+char_temp_x:	.word 0 ; temporal X
+char_temp_y:	.word 0 ; temporal Y

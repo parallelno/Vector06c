@@ -269,8 +269,8 @@ MonsterCopyToScr:
 			mov m, b
 			dcx h
 			mov m, c
-			; bc - heroEraseScrAddr
-			; de - heroEraseScrAddrOld
+			; bc - hero_erase_scr_addr
+			; de - hero_erase_scr_addr_old
 			; hl - ptr to monsterEraseScrAddrOld
 			; get min(b, d), min(c, e)
 			mov a, d
@@ -286,7 +286,7 @@ MonsterCopyToScr:
 			; tmp store a scr addr to copy
 			push d
 			; bc - monsterEraseScrAddr
-			; calc top-right corner addr (heroEraseScrAddr + monsterEraseWH)
+			; calc top-right corner addr (hero_erase_scr_addr + monsterEraseWH)
 			inx_h(2)
 			mov d, b
 			mov e, c
@@ -307,12 +307,12 @@ MonsterCopyToScr:
 			mov a, m
 			mov m, b
 			mov b, a
-			; calc old top-right corner addr (heroEraseScrAddrOld + monsterEraseWHOld)
+			; calc old top-right corner addr (hero_erase_scr_addr_old + monsterEraseWHOld)
 @oldTopRightConner:
 			lxi h, TEMP_WORD
 			dad b
-			; hl - heroEraseScrAddrOld + monsterEraseWHOld
-			; de - heroEraseScrAddr + monsterEraseWH
+			; hl - hero_erase_scr_addr_old + monsterEraseWHOld
+			; de - hero_erase_scr_addr + monsterEraseWH
 			; get max(h, d), max(l, e)
 			mov a, h
 			cmp d
@@ -334,7 +334,7 @@ MonsterCopyToScr:
 			mov a, l
 			sub e
 			mov c, a 
-			jmp SpriteCopyToScrV
+			jmp sprite_copy_to_scr_v
 
 
 ; erase a sprite or restore the background behind a sprite
@@ -376,9 +376,9 @@ MonsterErase:
 			mvi a, -$20 ; advance DE to BACK_BUFF2_ADDR to check the collision, to decide if we need to restore a beckground
 			add d
 			mov d, a
-			CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(room_check_non_zero_tiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			pop d
 			pop h
-			jnz SpriteCopyToBackBuffV ; restore a background
-			CALL_RAM_DISK_FUNC(__EraseSprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
+			jnz sprite_copy_to_back_buff_v ; restore a background
+			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 			ret

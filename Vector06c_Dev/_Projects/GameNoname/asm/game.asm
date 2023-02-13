@@ -58,13 +58,17 @@ game_update:
 ; TODO: tmp
 draw_back_sprite:
 			; DE - screen addr
-			; HL - tile graphics addr
-			lxi d, $8280
+			; HL - pointer to sprite ptr
+			lxi d, $8060
+			/*
 			lxi h, room_tiles_addr + (13*16+3)*2
 			mov c, m
 			inx h
 			mov b, m
 			inx h
+			call draw_back_v
+			*/
+			lxi b, __torch_front1
 			call draw_back_v
 			ret
 ; TODO: end tmp
@@ -74,7 +78,7 @@ game_draw:
 			inr m
 
 			; TODO: tmp
-			CALL_RAM_DISK_FUNC(draw_back_sprite, <__RAM_DISK_S_LEVEL01)
+			CALL_RAM_DISK_FUNC(draw_back_sprite, <__RAM_DISK_S_TORCH)
 		
 			; TODO: end tmp
 

@@ -1,5 +1,5 @@
 ; source\sprites\hero_attack01.json
-SpriteGetScrAddr_hero_attack01 = SpriteGetScrAddr8
+SpriteGetScrAddr_hero_attack01 = sprite_get_scr_addr8
 
 hero_attack01_preshifted_sprites:
 			.byte 8

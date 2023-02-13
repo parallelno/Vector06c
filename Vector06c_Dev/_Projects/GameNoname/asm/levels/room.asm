@@ -270,7 +270,7 @@ RoomDrawTiles:
 			ret
 
 ; check tiles if they need to be restored. It uses the tiledata buffer in the ram-disk (bank 3 at $8000)
-; ex. CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+; ex. CALL_RAM_DISK_FUNC(room_check_non_zero_tiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; de - back buffer2 scr addr
 ; h - width
@@ -283,7 +283,7 @@ RoomDrawTiles:
 ; Z flag is OFF if an area needs to be restored
 ; change:
 ; a, hl, de, b
-RoomCheckNonZeroTiles:
+room_check_non_zero_tiles:
 			xchg
 			xra a
 			; check the bottom-left corner
@@ -355,19 +355,19 @@ RoomCheckWalkableTiles:
 
 ; collects tiledata of tiles which intersect with a sprite
 ; this func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
-; ex. CALL_RAM_DISK_FUNC(RoomGetTileDataAroundSprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+; ex. CALL_RAM_DISK_FUNC(room_get_tile_data_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; d - posX
 ; e - posY
 ; b - width-1
 ; c - height-1
 ; out:
-roomTileCollisionData:
+room_tile_collision_data:
 			; tileData layout:
 			; (bottom-left), (top-left), (top_right), (bottom-right)
 			.byte 0, 0, 0, 0,		
 ; Z flag = 1 if all tiles have tileData func==0
-RoomGetTileDataAroundSprite:
+room_get_tile_data_around_sprite:
 			; calc the top-right corner addr
 			mov a, d
 			add b
@@ -405,12 +405,12 @@ RoomGetTileDataAroundSprite:
 			; h (top-left), 	e (top_right)
 			; l (bottom-left), 	d (bottom-right)
 
-			; tileData layout in roomTileCollisionData:
+			; tileData layout in room_tile_collision_data:
 			; (bottom-left), (top-left), (top_right), (bottom-right)
 
-			shld roomTileCollisionData
+			shld room_tile_collision_data
 			xchg
-			shld roomTileCollisionData+2
+			shld room_tile_collision_data+2
 
 			mov a, h
 			ora l

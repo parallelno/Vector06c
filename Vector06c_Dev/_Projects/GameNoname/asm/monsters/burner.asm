@@ -156,7 +156,7 @@ BurnerUpdateDetectHero:
 			LXI_B_TO_DIFF(monsterPosX+1, monsterStatusTimer)
 			dad b
 			; check hero-monster posX diff
-			lda heroPosX+1
+			lda hero_pos_x+1
 			sub m
 			jc @checkNegPosXDiff
 			cpi BURNER_DETECT_HERO_DISTANCE
@@ -170,7 +170,7 @@ BurnerUpdateDetectHero:
 			; advance hl to monsterPosY+1
 			inx_h(2)
 			; check hero-monster posY diff
-			lda heroPosY+1
+			lda hero_pos_y+1
 			sub m
 			jc @checkNegPosYDiff
 			cpi BURNER_DETECT_HERO_DISTANCE
@@ -365,7 +365,7 @@ BurnerUpdateDashPrep:
 			inx h
 			; posDiff =  heroPos - burnerPosX
 			; speed = posDiff / BURNER_STATUS_DASH_TIME
-			lda heroPosX+1
+			lda hero_pos_x+1
 			sub m
 			mov e, a 
 			mvi a, 0
@@ -391,7 +391,7 @@ BurnerUpdateDashPrep:
 			; advance hl to posY+1
 			inx h
 			; do the same for Y
-			lda heroPosY+1
+			lda hero_pos_y+1
 			sub m
 			mov e, a 
 			mvi a, 0

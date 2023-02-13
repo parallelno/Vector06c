@@ -3,13 +3,13 @@ import json
 import common
 import build
 
-def sort_chunk_by_unpack_priority(dictionary):
+def get_unpack_priority(dictionary):
 	if 'unpack_priority' in dictionary:
 		return dictionary['unpack_priority']
 	return 0
 
 # make ram_disk_init.asm
-def export(source_j, generated_code_dir, segments_paths, 
+def export(source_j, generated_code_dir, 
 		bank_id_backbuffer, bank_id_backbuffer2):
 	
 	# collect all chunks
@@ -36,7 +36,7 @@ def export(source_j, generated_code_dir, segments_paths,
 				chunks.append(chunk_j)
 
 	# sort chunks by the unpack priority
-	sorted_chunks = sorted(chunks, key=sort_chunk_by_unpack_priority, reverse=True)
+	sorted_chunks = sorted(chunks, key=get_unpack_priority, reverse=True)
 
 	asm = ""
 	asm += f'__RAM_DISK_S_BACKBUFF = RAM_DISK_S{bank_id_backbuffer}\n'
@@ -83,7 +83,7 @@ def export(source_j, generated_code_dir, segments_paths,
 				asm +=f"			; preshift {asset_name} sprites\n"
 				asm +=f"			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)\n"
 				asm +=f"			lxi d, {asset_name}_preshifted_sprites\n"
-				asm +=f"			lxi h, SCR_BUFF1_ADDR - {chunk_start_addr_s}\n"
+				asm +=f"			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - {chunk_start_addr_s})\n"
 				asm +=f"			call __sprite_dup_preshift\n"
 				asm +=f"			RAM_DISK_OFF()\n"
 				asm +="\n"

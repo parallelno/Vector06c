@@ -4,7 +4,7 @@
 ; c - preshifted sprite idx*2 offset based on posX then +2
 ; out:
 ; bc - ptr to a sprite
-SpriteGetAddr:
+sprite_get_addr:
 			mvi b, 0
 			dad b
 			mov c, m
@@ -20,7 +20,7 @@ SpriteGetAddr:
 ; c - preshifted sprite idx*2 offset based on posX then +2
 ; hl - ptr to posY+1
 ; use: a
-SpriteGetScrAddr8:
+sprite_get_scr_addr8:
 			; calc screen addr X
 			mov	a, m
 			ani SPRITES_PRESHIFTED_8 - 1
@@ -66,7 +66,7 @@ SpriteGetScrAddr4:
 ;		11 - 32pxs
 ; c - height
 
-SpriteCopyToScrV:
+sprite_copy_to_scr_v:
 			; store sp
 			lxi h, 0
 			dad	sp
@@ -225,7 +225,7 @@ SpriteCopyToScrV:
 ;		11 - 32pxs
 ; l - height
 
-SpriteCopyToBackBuffV:
+sprite_copy_to_back_buff_v:
 			; Y -= 1 because we start copying bytes with dec Y
 			inr e
 

@@ -1,7 +1,7 @@
 __chunk_start_bank3_addr8000_0     = $8000
 __sprite_rd_rd_data_start          = $8000
 __ram_disk_m_erase_sprite          = $03
-__erasesprite                      = $8004
+__erase_sprite                     = $8004
 __sprite_rd_rd_data_end            = $80ad
 __draw_sprite_rd_rd_data_start     = $80ad
 __drawspritev                      = $80b7

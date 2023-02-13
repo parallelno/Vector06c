@@ -144,7 +144,7 @@ bomb_slow_init:
 			; set a projectile speed towards the hero
 			; posDiff =  heroPos - burnerPosX
 			; speed = posDiff / VAMPIRE_STATUS_DASH_TIME			
-			lda heroPosX+1
+			lda hero_pos_x+1
 			sub b
 			mov e, a
 			mvi a, 0
@@ -163,7 +163,7 @@ bomb_slow_init:
 			push h
 			xchg
 			; do the same for Y
-			lda heroPosY+1
+			lda hero_pos_y+1
 			sub c
 			mov e, a 
 			mvi a, 0

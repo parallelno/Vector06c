@@ -22,7 +22,7 @@ ATTK01_COLLISION_OFFSET_Y_L = 0
 
 ; in:
 ; out:
-HeroSwordTrailInit:
+hero_sword_trail_init:
 			call bullets_get_empty_data_ptr
 			; hl - ptr to bullet_update_ptr+1
 
@@ -53,7 +53,7 @@ HeroSwordTrailInit:
 			LXI_D_TO_DIFF(bulletPosY+1, bullet_status_timer)
 			dad d
 			; set posY
-			lda heroPosY+1
+			lda hero_pos_y+1
 			; tmp c = posY
 			mov c, a
 			; set posY
@@ -63,7 +63,7 @@ HeroSwordTrailInit:
 			; advance hl to bulletPosX+1	
 			dcx h			
 			; set posX
-			lda heroPosX+1
+			lda hero_pos_x+1
 
 			mov m, a
 			dcx h
@@ -169,7 +169,7 @@ HeroSwordTrailUpdate:
 			mvi m, 0
 			; advance and set bulletAnimPtr
 			inx h
-			lda heroDirX
+			lda hero_dir_x
 			ora a
 			jz @attkL
 @attkR:

@@ -5,7 +5,7 @@ import json
 import common
 import build
 
-def RoomTilesToAsm(roomJ, roomPath, remapIdxs, source_dir):
+def room_tiles_to_asm(roomJ, roomPath, remapIdxs, source_dir):
 	asm = "; " + source_dir + roomPath + "\n"
 	roomPathWOExt = os.path.splitext(roomPath)[0]
 	labelPrefix = os.path.basename(roomPathWOExt)
@@ -23,7 +23,7 @@ def RoomTilesToAsm(roomJ, roomPath, remapIdxs, source_dir):
 		asm += "\n"
 	return asm, size
 
-def RoomTilesDataToAsm(roomJ, roomPath, source_dir):
+def room_tiles_data_to_asm(roomJ, roomPath, source_dir):
 	asm = "; " + source_dir + roomPath + "\n"
 	roomPathWOExt = os.path.splitext(roomPath)[0]
 	labelPrefix = os.path.basename(roomPathWOExt)
@@ -63,7 +63,7 @@ def get_tile_data(bytes0, bytes1, bytes2, bytes3):
 
 	return data, mask
 	
-def TilesToAsm(roomJ, image, path, remapIdxs, labelPrefix):
+def tiles_to_asm(roomJ, image, path, remapIdxs, labelPrefix):
 	size = 0
 	asm = "; " + path + "\n"
 	asm += labelPrefix + "_tiles:\n"
@@ -126,7 +126,7 @@ def remap_index(roomsJ):
 	
 	return remapIdxs
 
-def GetListOfRooms(roomPaths, labelPrefix):
+def get_list_of_rooms(roomPaths, labelPrefix):
 	size = 0
 	asm = "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 	asm += labelPrefix + "_roomsAddr:\n			.word "
@@ -142,7 +142,7 @@ def GetListOfRooms(roomPaths, labelPrefix):
 	asm += "\n"
 	return asm, size
 
-def GetListOfTiles(remapIdxs, labelPrefix, pngLabelPrefix):
+def get_list_of_tiles(remapIdxs, labelPrefix, pngLabelPrefix):
 	size = 0
 	asm = "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 	asm += labelPrefix + "_tilesAddr:\n			.word "
@@ -155,7 +155,7 @@ def GetListOfTiles(remapIdxs, labelPrefix, pngLabelPrefix):
 	asm += "\n"
 	return asm, size
 
-def StartPosToAsm(source_j, labelPrefix):
+def start_pos_to_asm(source_j, labelPrefix):
 	asm = ("\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n" + 
 			"__" + labelPrefix + "_startPos:\n			.byte " + 
 			str(source_j["startPos"]["y"]) + ", " + 
@@ -205,7 +205,7 @@ def export(source_j_path, export_path):
 	asm += paletteAsm
 
 	dataSize = len(colors)
-	asmStartPos, size = StartPosToAsm(source_j, source_name)
+	asmStartPos, size = start_pos_to_asm(source_j, source_name)
 	asm += asmStartPos
 	dataSize += size
 	image = common.remap_colors(image, colors)
@@ -225,26 +225,26 @@ def export(source_j_path, export_path):
 	pngName = os.path.basename(pngPathWOExt)
 
 	# list of rooms
-	asmL, size = GetListOfRooms(roomPaths, "__" + source_name)
+	asmL, size = get_list_of_rooms(roomPaths, "__" + source_name)
 	asm += asmL
 	dataSize += size
 	# list of tiles addreses
-	asmLT, size = GetListOfTiles(remapIdxs, "__" + source_name, pngName)
+	asmLT, size = get_list_of_tiles(remapIdxs, "__" + source_name, pngName)
 	asm += asmLT
 	dataSize += size
 	# every room data
 	for i, roomJ in enumerate(roomsJ):
-		asmRT, size = RoomTilesToAsm(roomJ["layers"][0], roomPaths[i]['path'], remapIdxs, source_dir)
+		asmRT, size = room_tiles_to_asm(roomJ["layers"][0], roomPaths[i]['path'], remapIdxs, source_dir)
 		asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 		asm += asmRT
 		dataSize += size
-		asmRTD, size = RoomTilesDataToAsm(roomJ["layers"][1], roomPaths[i]['path'], source_dir)
+		asmRTD, size = room_tiles_data_to_asm(roomJ["layers"][1], roomPaths[i]['path'], source_dir)
 		asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 		asm += asmRTD
 		dataSize += size
 
 	# tile art data to asm
-	asmT, size = TilesToAsm(roomsJ[0], image, png_path, remapIdxs, "__" + pngName)
+	asmT, size = tiles_to_asm(roomsJ[0], image, png_path, remapIdxs, "__" + pngName)
 	asm += asmT
 	dataSize += size
 

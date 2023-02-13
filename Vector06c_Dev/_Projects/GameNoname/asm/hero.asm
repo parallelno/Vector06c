@@ -23,68 +23,68 @@ HERO_COLLISION_HEIGHT = 11
 
 ; hero runtime data
 ; this's a struct. do not change the layout
-heroUpdatePtr:			.word hero_update
-heroDrawPtr:			.word hero_draw
-heroImpactPtr:			.word HeroImpact
-heroType:				.byte MONSTER_TYPE_ALLY
-heroHealth:				.byte HERO_HEALTH_MAX
-heroStatus:				.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
-heroStatusTimer:		.byte 0	; a duration of the status. ticks every update
-heroAnimTimer:			.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
-heroAnimAddr:			.word TEMP_ADDR ; holds the current frame ptr
-heroDirX:				.byte 1 		; 1-right, 0-left
-heroEraseScrAddr:		.word TEMP_ADDR
-heroEraseScrAddrOld		.word TEMP_ADDR
-heroEraseWH:			.word TEMP_WORD
-heroEraseWHOld:			.word TEMP_WORD
-heroPosX:				.word TEMP_WORD
-heroPosY:				.word TEMP_WORD
-heroSpeedX:				.word TEMP_WORD
-heroSpeedY:				.word TEMP_WORD
-heroDataPrevPPtr:		.word DRAW_LIST_FIRST_DATA_MARKER
-heroDataNextPPtr:		.word monsterDataNextPPtr
+hero_update_ptr:		.word hero_update
+hero_draw_ptr:			.word hero_draw
+hero_impact_ptr:		.word HeroImpact
+hero_type:				.byte MONSTER_TYPE_ALLY
+hero_health:			.byte HERO_HEALTH_MAX
+hero_status:			.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
+hero_status_timer:		.byte 0	; a duration of the status. ticks every update
+hero_anim_timer:		.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
+hero_anim_addr:			.word TEMP_ADDR ; holds the current frame ptr
+hero_dir_x:				.byte 1 		; 1-right, 0-left
+hero_erase_scr_addr:	.word TEMP_ADDR
+hero_erase_scr_addr_old .word TEMP_ADDR
+hero_erase_wh:			.word TEMP_WORD
+hero_erase_wh_old:		.word TEMP_WORD
+hero_pos_x:				.word TEMP_WORD
+hero_pos_y:				.word TEMP_WORD
+hero_speed_x:			.word TEMP_WORD
+hero_speed_y:			.word TEMP_WORD
+hero_data_prev_pptr:	.word DRAW_LIST_FIRST_DATA_MARKER
+hero_data_next_pptr:	.word monsterDataNextPPtr
 ;
-heroCollisionFuncTable:
+hero_collision_func_table:
 			; bit layout:
 			; (bottom-left), (bottom-right), (top_right), (top-left), 0         
-			JMP_4(HeroCheckCollisionTL)
-			JMP_4(HeroCheckCollisionTR)
-			JMP_4(HeroMoveHorizontally)
-			JMP_4(HeroCheckCollisionBR)
-			JMP_4(HeroDontMove)
-			JMP_4(HeroMoveVertically)
-			JMP_4(HeroDontMove)
-			JMP_4(HeroCheckCollisionBL)
-			JMP_4(HeroMoveVertically)
-			JMP_4(HeroDontMove)
-			JMP_4(HeroDontMove)
-			JMP_4(HeroMoveHorizontally)
-			JMP_4(HeroDontMove)
-			JMP_4(HeroDontMove)
-			JMP_4(HeroDontMove)
+			JMP_4(hero_check_collision_top_left)
+			JMP_4(hero_check_collision_top_right)
+			JMP_4(hero_move_horizontally)
+			JMP_4(hero_check_collision_bottom_right)
+			JMP_4(hero_dont_move)
+			JMP_4(hero_move_vertically)
+			JMP_4(hero_dont_move)
+			JMP_4(hero_check_collision_bottom_left)
+			JMP_4(hero_move_vertically)
+			JMP_4(hero_dont_move)
+			JMP_4(hero_dont_move)
+			JMP_4(hero_move_horizontally)
+			JMP_4(hero_dont_move)
+			JMP_4(hero_dont_move)
+			JMP_4(hero_dont_move)
 
 ; funcs to handle the tile data. more info is in levelGlobalData.asm->roomTilesData
-HeroTileFuncTable:
+hero_tile_func_table:
 			JMP_4(0)					; funcId == 1
 			JMP_4(0)					; funcId == 2
 			JMP_4(0)					; funcId == 3
-			JMP_4(HeroTileFuncTeleport)	; funcId == 4
+			JMP_4(hero_tile_func_teleport)	; funcId == 4
 			JMP_4(0)					; funcId == 5
 			JMP_4(0)					; funcId == 6
-			JMP_4(HeroTileFuncNothing)	; funcId == 7 (collision) called only when a hero has got stuck into a collision tiles
+			JMP_4(hero_tile_func_nothing)	; funcId == 7 (collision) called only when a hero has got stuck into a collision tiles
 
 HeroInit:
-			call HeroIdleStart
+			call hero_idle_start
 			lxi h, KEY_NO << 8 | KEY_NO
 			shld key_code
 
-			lxi h, heroPosX+1
-			call SpriteGetScrAddr8
+			lxi h, hero_pos_x+1
+			call sprite_get_scr_addr8
 			xchg
-			shld heroEraseScrAddrOld
+			shld hero_erase_scr_addr_old
 			; 16x15 size
 			lxi h, SPRITE_W_PACKED_MIN<<8 | SPRITE_H_MIN
-			shld heroEraseWHOld
+			shld hero_erase_wh_old
 			ret
 
 ; input:
@@ -92,41 +92,41 @@ HeroInit:
 ; c - posY
 ; use:
 ; a
-HeroSetPos:
+hero_set_pos:
 			mov a, b
-			sta heroPosX+1
+			sta hero_pos_x+1
 			mov a, c
-			sta heroPosY+1
+			sta hero_pos_y+1
 			ret
 			.closelabels
 
-.macro HERO_UPDATE_ANIM(animSpeed)
+.macro HERO_UPDATE_ANIM(anim_speed)
 			; anim idle update
-			lxi h, heroAnimTimer
+			lxi h, hero_anim_timer
 			mov a, m
-			adi animSpeed
+			adi anim_speed
 			mov m, a
 			jnc @skipAnimUpdate
-			lhld heroAnimAddr
+			lhld hero_anim_addr
 			mov e, m
 			inx h
 			mov d, m
 			dad d
-			shld heroAnimAddr
+			shld hero_anim_addr
 @skipAnimUpdate:
 .endmacro
 
 hero_update:
 			; check if a current animation is an attack
-			lda heroStatus
+			lda hero_status
 			cpi HERO_STATUS_ATTACK
-			jz HeroAttackUpdate
+			jz hero_attack_update
 
 			; check if an attack key pressed
 			lhld key_code
 			mvi a, KEY_SPACE
 			cmp h
-			jz HeroAttackStart
+			jz hero_attack_start
 
 			; check if no arrow key pressed
 			mvi a, KEY_LEFT & KEY_RIGHT & KEY_UP & KEY_DOWN
@@ -151,14 +151,14 @@ hero_update:
 			jnz @setAnimRunRU
 
 			lxi h, HERO_RUN_SPEED
-			shld heroSpeedX
+			shld hero_speed_x
 			lxi h, 0
-			shld heroSpeedY
+			shld hero_speed_y
 
 			mvi a, 1
-			sta heroDirX
+			sta hero_dir_x
 			lxi h, hero_r_run
-			shld heroAnimAddr
+			shld hero_anim_addr
 			jmp hero_update_pos
 
 @setAnimRunRU:
@@ -166,13 +166,13 @@ hero_update:
 			jnz @setAnimRunRD
 
 			lxi h, HERO_RUN_SPEED_D
-			shld heroSpeedX
-			shld heroSpeedY
+			shld hero_speed_x
+			shld hero_speed_y
 
 			mvi a, 1
-			sta heroDirX
+			sta hero_dir_x
 			lxi h, hero_r_run
-			shld heroAnimAddr
+			shld hero_anim_addr
 			jmp hero_update_pos
 
 @setAnimRunRD:
@@ -180,14 +180,14 @@ hero_update:
 			jnz @setAnimRunL
 
 			lxi h, HERO_RUN_SPEED_D
-			shld heroSpeedX
+			shld hero_speed_x
 			LXI_H_NEG(HERO_RUN_SPEED_D)
-			shld heroSpeedY
+			shld hero_speed_y
 
 			mvi a, 1
-			sta heroDirX
+			sta hero_dir_x
 			lxi h, hero_r_run
-			shld heroAnimAddr
+			shld hero_anim_addr
 			jmp hero_update_pos
 
 @setAnimRunL:
@@ -195,14 +195,14 @@ hero_update:
 			jnz @setAnimRunLU
 
 			LXI_H_NEG(HERO_RUN_SPEED)
-			shld heroSpeedX
+			shld hero_speed_x
 			lxi h, 0
-			shld heroSpeedY
+			shld hero_speed_y
 
 			xra a
-			sta heroDirX
+			sta hero_dir_x
 			lxi h, hero_l_run
-			shld heroAnimAddr
+			shld hero_anim_addr
 			jmp hero_update_pos
 
 @setAnimRunLU:
@@ -210,14 +210,14 @@ hero_update:
 			jnz @setAnimRunLD
 
 			LXI_H_NEG(HERO_RUN_SPEED_D)
-			shld heroSpeedX
+			shld hero_speed_x
 			lxi h, HERO_RUN_SPEED_D
-			shld heroSpeedY
+			shld hero_speed_y
 
 			xra a
-			sta heroDirX
+			sta hero_dir_x
 			lxi h, hero_l_run
-			shld heroAnimAddr
+			shld hero_anim_addr
 			jmp hero_update_pos
 
 @setAnimRunLD:
@@ -225,13 +225,13 @@ hero_update:
 			jnz @setAnimRunU
 
 			LXI_H_NEG(HERO_RUN_SPEED_D)
-			shld heroSpeedX
-			shld heroSpeedY
+			shld hero_speed_x
+			shld hero_speed_y
 
 			xra a
-			sta heroDirX
+			sta hero_dir_x
 			lxi h, hero_l_run
-			shld heroAnimAddr
+			shld hero_anim_addr
 			jmp hero_update_pos
 
 @setAnimRunU:
@@ -239,262 +239,262 @@ hero_update:
 			jnz @setAnimRunD
 
 			lxi h, 0
-			shld heroSpeedX
+			shld hero_speed_x
 			lxi h, HERO_RUN_SPEED
-			shld heroSpeedY
+			shld hero_speed_y
 
-			lda heroDirX
+			lda hero_dir_x
 			ora a
 			jz @setAnimRunUfaceL
 
 			lxi h, hero_r_run
-			shld heroAnimAddr
+			shld hero_anim_addr
 			jmp hero_update_pos
 @setAnimRunUfaceL:
 			lxi h, hero_l_run
-			shld heroAnimAddr
+			shld hero_anim_addr
 			jmp hero_update_pos
 @setAnimRunD:
 			cpi KEY_DOWN
 			rnz
 
 			lxi h, 0
-			shld heroSpeedX
+			shld hero_speed_x
 			LXI_H_NEG(HERO_RUN_SPEED)
-			shld heroSpeedY
+			shld hero_speed_y
 
-			lda heroDirX
+			lda hero_dir_x
 			ora a
 			jz @setAnimRunDfaceL
 			lxi h, hero_r_run
-			shld heroAnimAddr
+			shld hero_anim_addr
 			jmp hero_update_pos
 @setAnimRunDfaceL:
 			lxi h, hero_l_run
-			shld heroAnimAddr
+			shld hero_anim_addr
 			;jmp hero_update_pos
 
 hero_update_pos:
 			; apply the hero speed
-			lhld heroPosX
+			lhld hero_pos_x
 			xchg
-			lhld heroSpeedX
+			lhld hero_speed_x
 			dad d
-			shld charTempX
+			shld char_temp_x
 			mov b, h			
-			lhld heroPosY
+			lhld hero_pos_y
 			xchg
-			lhld heroSpeedY
+			lhld hero_speed_y
 			dad d
-			shld charTempY
+			shld char_temp_y
 			
 			; check the collision tiles
 			mov d, b ; posX
 			mov e, h ; posY
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
 			CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			jz HeroMove
+			jz hero_move
 @collides:
 			; handle a collision data around a hero
 			; if a hero is inside the collision, move him out
-			lxi h, heroCollisionFuncTable-4 ; C==0 is no case, skip it			
+			lxi h, hero_collision_func_table-4 ; C==0 is no case, skip it			
 			mvi b, 0
 			dad b
 			pchl
 
-HeroMove:
-			lhld charTempX
-			shld heroPosX
-			lhld charTempY
-			shld heroPosY
+hero_move:
+			lhld char_temp_x
+			shld hero_pos_x
+			lhld char_temp_y
+			shld hero_pos_y
 ; handle tileData around a hero.
-HeroCheckTileData:
-HeroDontMove:
-			lxi h, heroPosX+1
+hero_check_tile_data:
+hero_dont_move:
+			lxi h, hero_pos_x+1
 			mov d, m
 			inx_h(2)
 			mov e, m
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomGetTileDataAroundSprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(room_get_tile_data_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			rz
 
-			lxi h, roomTileCollisionData
+			lxi h, room_tile_collision_data
 			mvi c, 4
-@loop:		TILE_DATA_HANDLE_FUNC_CALL(HeroTileFuncTable-4, true)
+@loop:		TILE_DATA_HANDLE_FUNC_CALL(hero_tile_func_table-4, true)
 			inx h
 			dcr c
 			jnz @loop
 			ret
 
-HeroCheckCollisionTL:
-			lda charTempX+1
+hero_check_collision_top_left:
+			lda char_temp_x+1
 			; get the inverted offsetX inside the tile
 			cma
 			ani %00001111
 			mov c, a
-			lda charTempY+1
+			lda char_temp_y+1
 			adi HERO_COLLISION_HEIGHT-1
 			; get the offsetY inside the tile
 			ani %00001111
 			cmp c
-			jz HeroMoveTileBR
-			jnc HeroMoveTileR
-			jmp HeroMoveTileB
+			jz hero_move_tile_br
+			jnc hero_move_tile_r
+			jmp hero_move_tile_b
 			
-HeroCheckCollisionTR:
-			lda charTempX+1
+hero_check_collision_top_right:
+			lda char_temp_x+1
 			adi HERO_COLLISION_WIDTH-1
 			; get the offset inside the tile
 			ani %00001111
 			mov c, a
-			lda charTempY+1
+			lda char_temp_y+1
 			adi HERO_COLLISION_HEIGHT-1
 			; get the offset inside the tile
 			ani %00001111
 			cmp c
-			jz HeroMoveTileBL
-			jc HeroMoveTileB
-			jmp HeroMoveTileL
+			jz hero_move_tile_bl
+			jc hero_move_tile_b
+			jmp hero_move_tile_l
 
-HeroCheckCollisionBL:
-			lda charTempX+1
+hero_check_collision_bottom_left:
+			lda char_temp_x+1
 			; get the offset inside the tile
 			cma
 			ani %00001111
 			mov c, a
-			lda charTempY+1
+			lda char_temp_y+1
 			; get the offset inside the tile
 			cma
 			ani %00001111
 			cmp c
-			jz HeroMoveTileTR
-			jc HeroMoveTileT
-			jmp HeroMoveTileR
+			jz hero_move_tile_tr
+			jc hero_move_tile_t
+			jmp hero_move_tile_r
 
-HeroCheckCollisionBR:
-			lda charTempX+1
+hero_check_collision_bottom_right:
+			lda char_temp_x+1
 			adi HERO_COLLISION_WIDTH-1
 			; get the offset inside the tile
 			ani %00001111
 			mov c, a
-			lda charTempY+1
+			lda char_temp_y+1
 			; get the offset inside the tile
 			cma
 			ani %00001111
 			cmp c
-			jz HeroMoveTileTL
-			jc HeroMoveTileT
-			jmp HeroMoveTileL
+			jz hero_move_tile_tl
+			jc hero_move_tile_t
+			jmp hero_move_tile_l
 
 ; move the hero to the right out of of the collided tile
-HeroMoveTileR:
-			lda charTempX+1
+hero_move_tile_r:
+			lda char_temp_x+1
 			stc		; to move outside the current tile
 			adc c
-			sta heroPosX+1
-			lhld charTempY
-			shld heroPosY
-			jmp HeroCheckTileData
+			sta hero_pos_x+1
+			lhld char_temp_y
+			shld hero_pos_y
+			jmp hero_check_tile_data
 
 ; move the hero under the collided tile
-HeroMoveTileB:
-			lhld charTempX
-			shld heroPosX
+hero_move_tile_b:
+			lhld char_temp_x
+			shld hero_pos_x
 			mov c, a
-			lda charTempY+1
+			lda char_temp_y+1
 			stc		; to move outside the current tile
 			sbb c
-			sta heroPosY+1
-			jmp HeroCheckTileData
+			sta hero_pos_y+1
+			jmp hero_check_tile_data
 
 ; move the hero to the bottom-right corner of the collided tile
-HeroMoveTileBR:
-			lxi h, charTempX+1
+hero_move_tile_br:
+			lxi h, char_temp_x+1
 			stc		; to move outside the current tile
 			adc m
-			sta heroPosX+1
+			sta hero_pos_x+1
 			inx_h(2)
 			mov a, m
 			stc		; to move outside the current tile
 			sbb c
-			sta heroPosY+1
-			jmp HeroCheckTileData
+			sta hero_pos_y+1
+			jmp hero_check_tile_data
 
 ; move the hero to the left out of of the collided tile
-HeroMoveTileL:
-			lda charTempX+1
+hero_move_tile_l:
+			lda char_temp_x+1
 			stc		; to move outside the current tile
 			sbb c
-			sta heroPosX+1
-			lhld charTempY
-			shld heroPosY
-			jmp HeroCheckTileData
+			sta hero_pos_x+1
+			lhld char_temp_y
+			shld hero_pos_y
+			jmp hero_check_tile_data
 
 ; move the hero to the bottom-left corner of the collided tile
-HeroMoveTileBL:
-			lxi h, charTempX+1
+hero_move_tile_bl:
+			lxi h, char_temp_x+1
 			sub m
 			cma
-			sta heroPosX+1
+			sta hero_pos_x+1
 			inx_h(2)
 			mov a, m
 			stc		; to move outside the current tile
 			sbb c
-			sta heroPosY+1
-			jmp HeroCheckTileData
+			sta hero_pos_y+1
+			jmp hero_check_tile_data
 
 ; move the hero on top of the collided tile
-HeroMoveTileT:
-			lhld charTempX
-			shld heroPosX
+hero_move_tile_t:
+			lhld char_temp_x
+			shld hero_pos_x
 			mov c, a
-			lda charTempY+1
+			lda char_temp_y+1
 			stc		; to move outside the current tile
 			adc c
-			sta heroPosY+1
-			jmp HeroCheckTileData
+			sta hero_pos_y+1
+			jmp hero_check_tile_data
 
 ; move the hero to the top-right corner of the collided tile
-HeroMoveTileTR:
-			lxi h, charTempX+1
+hero_move_tile_tr:
+			lxi h, char_temp_x+1
 			stc		; to move outside the current tile
 			adc m
-			sta heroPosX+1
+			sta hero_pos_x+1
 			inx_h(2)
 			mov a, m
 			stc		; to move outside the current tile
 			adc c
-			sta heroPosY+1
-			jmp HeroCheckTileData
+			sta hero_pos_y+1
+			jmp hero_check_tile_data
 
 ; move the hero to the top-left corner of the collided tile
-HeroMoveTileTL:			
-			lxi h, charTempX+1
+hero_move_tile_tl:			
+			lxi h, char_temp_x+1
 			sub m
 			cma
-			sta heroPosX+1
+			sta hero_pos_x+1
 			inx_h(2)
 			mov a, m
 			stc		; to move outside the current tile
 			adc c
-			sta heroPosY+1
-			jmp HeroCheckTileData
+			sta hero_pos_y+1
+			jmp hero_check_tile_data
 
 ; when the hero runs into a tile from top or bottom, move him only horizontally
-HeroMoveHorizontally:
+hero_move_horizontally:
 			; do not move vertically
-			lhld charTempX
-			shld heroPosX	
-			jmp HeroCheckTileData
+			lhld char_temp_x
+			shld hero_pos_x	
+			jmp hero_check_tile_data
 
 ; when the hero runs into a tile from left or right, move him only vertically
-HeroMoveVertically:
+hero_move_vertically:
 			; do not move horizontally
-			lhld charTempY
-			shld heroPosY			
-			jmp HeroCheckTileData
+			lhld char_temp_y
+			shld hero_pos_y			
+			jmp hero_check_tile_data
 
-HeroTileFuncNothing:
+hero_tile_func_nothing:
 			; bypass "ret"s to return from the hero_update func
 			pop psw
 			pop psw
@@ -504,7 +504,7 @@ HeroTileFuncNothing:
 ; appropriate position based on his current posXY
 ; input:
 ; a - roomId
-HeroTileFuncTeleport:
+hero_tile_func_teleport:
 			pop h
 
 			; update a room id to teleport there
@@ -512,19 +512,19 @@ HeroTileFuncTeleport:
 			; requesting room loading
 			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
 			sta levelCommand
-			; bypassing the HeroCheckTileData:@loop because the hero is teleporting
+			; bypassing the hero_check_tile_data:@loop because the hero is teleporting
 			; so we don't need to handle the rest of the colllided tiles.
 			; return to the func that called hero_update
 			pop b
 
 			; check if the teleport on the left or right side
-			lda heroPosX+1
+			lda hero_pos_x+1
 			cpi (ROOM_WIDTH - 1 ) * TILE_WIDTH - HERO_COLLISION_WIDTH
 			jnc @teleportRightToLeft
 			cpi TILE_WIDTH
 			jc @teleportLeftToRight
 			; check if the teleport on the top or bottom side
-			lda heroPosY+1
+			lda hero_pos_y+1
 			cpi (ROOM_HEIGHT - 1 ) * TILE_HEIGHT - HERO_COLLISION_HEIGHT
 			jnc @teleportTopToBottom
 			cpi TILE_HEIGHT
@@ -534,91 +534,91 @@ HeroTileFuncTeleport:
 
 @teleportRightToLeft:
 			mvi a, TILE_WIDTH
-			sta heroPosX+1
+			sta hero_pos_x+1
 			ret
 
 @teleportLeftToRight:
 			mvi a, (ROOM_WIDTH - 1 ) * TILE_WIDTH - HERO_COLLISION_WIDTH
-			sta heroPosX+1
+			sta hero_pos_x+1
 			ret
 
 @teleportTopToBottom:
 			mvi a, TILE_HEIGHT
-			sta heroPosY+1
+			sta hero_pos_y+1
 			ret
 @teleportBottomToTop:
 			mvi a, (ROOM_HEIGHT - 1 ) * TILE_HEIGHT - HERO_COLLISION_HEIGHT
-			sta heroPosY+1
+			sta hero_pos_y+1
 			ret
 
-HeroAttackStart:
+hero_attack_start:
 			; set status
 			mvi a, HERO_STATUS_ATTACK
-			sta heroStatus
+			sta hero_status
 			mvi a, HERO_STATUS_ATTACK_DURATION
-			sta heroStatusTimer
+			sta hero_status_timer
 			; reset anim timer
 			xra a
-			sta heroAnimTimer			
+			sta hero_anim_timer			
 
 			; speed = 0
 			lxi h, 0
-			shld heroSpeedX
-			shld heroSpeedY
+			shld hero_speed_x
+			shld hero_speed_y
 			; set direction
-			lda heroDirX
+			lda hero_dir_x
 			ora a
 			jz @setAnimAttkL
 
 			lxi h, hero_r_attk
-			shld heroAnimAddr
-			jmp  HeroSwordTrailInit
+			shld hero_anim_addr
+			jmp  hero_sword_trail_init
 @setAnimAttkL:
 			lxi h, hero_l_attk
-			shld heroAnimAddr
-			jmp HeroSwordTrailInit
+			shld hero_anim_addr
+			jmp hero_sword_trail_init
 			.closelabels
 
-HeroAttackUpdate:
+hero_attack_update:
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_ATTACK)
-			lxi h, heroStatusTimer
+			lxi h, hero_status_timer
 			dcr m
 			rnz
 
 			; if the timer == 0, set the status to Idle
-			jmp HeroIdleStart
+			jmp hero_idle_start
 			.closelabels
 
-HeroIdleStart:
+hero_idle_start:
 			; set status
 			mvi a, HERO_STATUS_IDLE
-			sta heroStatus
+			sta hero_status
 			; reset anim timer
 			xra a
-			sta heroAnimTimer
+			sta hero_anim_timer
 
 			; speed = 0
 			lxi h, 0
-			shld heroSpeedX
-			shld heroSpeedY
+			shld hero_speed_x
+			shld hero_speed_y
 			; set direction
-			lda heroDirX
+			lda hero_dir_x
 			ora a
 			jz @setAnimIdleL
 
 			lxi h, hero_r_idle
-			shld heroAnimAddr
+			shld hero_anim_addr
 			ret
 @setAnimIdleL:
 			lxi h, hero_l_idle
-			shld heroAnimAddr
+			shld hero_anim_addr
 			ret
 
 HeroIdleUpdate:
 			; check if the same keys pressed the prev update
 			lda key_code_old
 			cmp l
-			jnz HeroIdleStart
+			jnz hero_idle_start
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_IDLE)
 			ret
 
@@ -626,13 +626,13 @@ HeroIdleUpdate:
 ; in:
 ; c - damage (positive number)
 HeroImpact:
-			lxi h, heroHealth
+			lxi h, hero_health
 			mov a, m
 			sub c
 			mov m, a
 			; check if he dies
 			push psw
-			call GameUIHealthDraw
+			call game_ui_health_draw
 			pop psw
 			rnc
 			; hero's dead
@@ -641,13 +641,13 @@ HeroImpact:
 			ret
 
 hero_draw:
-			lxi h, heroPosX+1
-			call SpriteGetScrAddr_hero_r
+			lxi h, hero_pos_x+1
+			call sprite_get_scr_addr_hero_r
 
-			lhld heroAnimAddr
-			call SpriteGetAddr
+			lhld hero_anim_addr
+			call sprite_get_addr
 
-			lda heroDirX
+			lda hero_dir_x
 			ora a
 			mvi a, <(__RAM_DISK_S_HERO_R | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			jnz @spriteR
@@ -659,19 +659,19 @@ hero_draw:
 			CALL_RAM_DISK_FUNC_BANK(__DrawSpriteVM)
 
 			; store an old scr addr, width, and height
-			lxi h, heroEraseScrAddr
+			lxi h, hero_erase_scr_addr
 			mov m, c
 			inx h
 			mov m, b
 			xchg
-			shld heroEraseWH
+			shld hero_erase_wh
 			ret
 
 hero_copy_to_scr:
 			; get min(h, d), min(e,l)
-			lhld heroEraseScrAddrOld
+			lhld hero_erase_scr_addr_old
 			xchg
-			lhld heroEraseScrAddr
+			lhld hero_erase_scr_addr
 			mov a, h
 			cmp d
 			jc @keepCurrentX
@@ -685,16 +685,16 @@ hero_copy_to_scr:
 			; hl - a scr addr to copy
 			push h
 			; de - an old sprite scr addr
-			lhld heroEraseWHOld
+			lhld hero_erase_wh_old
 			dad d
 			push h
-			lhld heroEraseScrAddr
+			lhld hero_erase_scr_addr
 			; store as old
-			shld heroEraseScrAddrOld
+			shld hero_erase_scr_addr_old
 			xchg
-			lhld heroEraseWH
+			lhld hero_erase_wh
 			; store as old
-			shld heroEraseWHOld
+			shld hero_erase_wh_old
 			dad d
 			; hl - current sprite top-right corner scr addr
 			; de - old sprite top-right corner scr addr
@@ -720,13 +720,13 @@ hero_copy_to_scr:
 			mov a, l
 			sub e
 			mov c, a
-			jmp SpriteCopyToScrV
+			jmp sprite_copy_to_scr_v
 
 hero_erase:
 			; TODO: optimize. erase only that is outside of the updated hero region
-			lhld heroEraseScrAddr
+			lhld hero_erase_scr_addr
 			xchg
-			lhld heroEraseWH
+			lhld hero_erase_wh
 
 			; check if it needs to restore the background
 			push h
@@ -734,10 +734,10 @@ hero_erase:
 			mvi a, -$20 ; advance DE to SCR_ADDR_0 to check the collision, to decide if we need to restore a beckground
 			add d
 			mov d, a
-			CALL_RAM_DISK_FUNC(RoomCheckNonZeroTiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(room_check_non_zero_tiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			pop d
 			pop h
-			jnz SpriteCopyToBackBuffV ; restore a background
-			CALL_RAM_DISK_FUNC(__EraseSprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
+			jnz sprite_copy_to_back_buff_v ; restore a background
+			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 			ret
 			.closelabels	

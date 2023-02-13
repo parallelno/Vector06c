@@ -22,7 +22,7 @@
 			mov c, a
 			; hl - animPtr
 			; c - preshifted sprite idx*2 offset
-			call SpriteGetAddr
+			call sprite_get_addr
 
 			CALL_RAM_DISK_FUNC(__DrawSpriteVM, __RAM_DISK_S_MONSTER | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			pop h
@@ -55,7 +55,7 @@
 			dad b
 			; horizontal check
 			mov c, m ; posX
-			lda heroPosX+1
+			lda hero_pos_x+1
 			mov b, a ; tmp
 			adi HERO_COLLISION_WIDTH-1
 			cmp c
@@ -68,7 +68,7 @@
 			; advance hl to monsterPosY+1
 			inx_h(2)
 			mov c, m ; posY
-			lda heroPosY+1
+			lda hero_pos_y+1
 			mov b, a
 			adi HERO_COLLISION_HEIGHT-1
 			cmp c

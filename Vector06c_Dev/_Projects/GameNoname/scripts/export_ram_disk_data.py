@@ -60,7 +60,7 @@ def export(source_j_path):
 
 	# generate ram_disk_data.asm. it includes all ram-disk data
 	if ram_disk_data_asm_force_export:
-		export_ram_disk_data_asm.export(source_j, generated_code_dir, segments_paths, 
+		export_ram_disk_data_asm.export(source_j, generated_code_dir, generated_bin_dir, segments_paths, 
 										bank_id_backbuffer, back_buffer_size )
-		export_ram_disk_init.export(source_j, generated_code_dir, segments_paths, 
+		export_ram_disk_init.export(source_j, generated_code_dir, 
 										bank_id_backbuffer, bank_id_backbuffer2)

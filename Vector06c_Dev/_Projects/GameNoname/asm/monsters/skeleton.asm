@@ -145,7 +145,7 @@ SkeletonUpdateDetectHero:
 			LXI_B_TO_DIFF(monsterPosX+1, monsterStatusTimer)
 			dad b
 			; check hero-monster posX diff
-			lda heroPosX+1
+			lda hero_pos_x+1
 			sub m
 			jc @checkNegPosXDiff
 			cpi SKELETON_DETECT_HERO_DISTANCE
@@ -159,7 +159,7 @@ SkeletonUpdateDetectHero:
 			; advance hl to monsterPosY+1
 			inx_h(2)
 			; check hero-monster posY diff
-			lda heroPosY+1
+			lda hero_pos_y+1
 			sub m
 			jc @checkNegPosYDiff
 			cpi SKELETON_DETECT_HERO_DISTANCE

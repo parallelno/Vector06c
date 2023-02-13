@@ -68,7 +68,6 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 	export_paths = {
 		"labels_path" : labels_path,
 		"segment_bin_path" : segment_bin_path,
-		"zx0_chunk_paths" : []
 	}
 
 	if force_export:
@@ -91,7 +90,6 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 
 			common.delete_file(zx0_chunk_path)
 			common.run_command(f"tools\\zx0salvador.exe -v -classic {chunk_path} {zx0_chunk_path}")
-			export_paths["zx0_chunk_paths"].append(zx0_chunk_path)
 		
 		print(f"segment: {source_name} got exported.")	
 

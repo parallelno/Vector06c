@@ -19,7 +19,7 @@ rom_path = romDir + romName + build.EXT_ROM
 
 
 common.delete_file(bin_path)
-common.delete_file(rom_path)
+common.delete_file(rom_path) 
 
 common.run_command(f"..\\..\\retroassembler\\retroassembler.exe -C=8080 {source_path} {bin_path}", "", source_path)
 
