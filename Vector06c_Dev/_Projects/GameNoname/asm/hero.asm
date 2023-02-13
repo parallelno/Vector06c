@@ -71,7 +71,7 @@ hero_tile_func_table:
 			JMP_4(hero_tile_func_teleport)	; func_id == 4
 			JMP_4(0)						; func_id == 5
 			JMP_4(0)						; func_id == 6
-			JMP_4(hero_tile_func_nothing)	; func_id == 7 (collision) called only when a hero has got stuck into a collision tiles
+			JMP_4(hero_tile_func_nothing)	; func_id == 7 (collision) called only when a hero is stuck into collision tiles
 
 HeroInit:
 			call hero_idle_start

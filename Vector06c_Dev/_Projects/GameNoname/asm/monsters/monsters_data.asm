@@ -19,7 +19,7 @@ monster_runtime_data_sorted:
 
 ; a list of monster runtime data structs.
 ; TODO: optimization. consider using jmp_4 instead of func ptrs like monster_update_ptr
-monstersRuntimeData:
+monsters_runtime_data:
 monster_update_ptr:			.word TEMP_ADDR
 monster_draw_ptr:			.word TEMP_ADDR
 monster_impact_ptr:			.word TEMP_WORD ; called by hero bullet, another monster, etc. to affect this monster
@@ -42,7 +42,7 @@ monster_data_prev_pptr:		.word TEMP_WORD
 monster_data_next_pptr:		.word TEMP_WORD
 monster_runtime_data_end_addr:
 
-MONSTER_RUNTIME_DATA_LEN = monster_runtime_data_end_addr - monstersRuntimeData
+MONSTER_RUNTIME_DATA_LEN = monster_runtime_data_end_addr - monsters_runtime_data
 
 ; the same structs for the rest of the monsters
 .storage MONSTER_RUNTIME_DATA_LEN * (MONSTERS_MAX-1), 0
