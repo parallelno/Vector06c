@@ -3,7 +3,7 @@
 monstersInits:
 monstersInit0:JMP_4(SkeletonInit)
 monstersInit1:JMP_4(VampireInit)
-monstersInit2:JMP_4(BurnerInit)
+monstersInit2:JMP_4(burner_init)
 monstersInit3:JMP_4(KnightInit)
 monstersInit4:JMP_4(KnightInit)
 
@@ -14,36 +14,36 @@ KNIGHT_HORIZ_ID = (monstersInit3-monstersInits) / JMP_4_LEN
 KNIGHT_VERT_ID = (monstersInit4-monstersInits) / JMP_4_LEN
 
 ; ptr to the first monster data in the sorted list
-monsterRuntimeDataSorted:
+monster_runtime_data_sorted:
 			.word monster_update_ptr
 
 ; a list of monster runtime data structs.
 ; TODO: optimization. consider using jmp_4 instead of func ptrs like monster_update_ptr
 monstersRuntimeData:
-monster_update_ptr:		.word TEMP_ADDR
-monsterDrawPtr:			.word TEMP_ADDR
-monster_impact_ptr:		.word TEMP_WORD ; called by hero bullet, another monster, etc. to affect this monster
-monster_id:				.byte TEMP_BYTE
-monsterType:			.byte TEMP_BYTE
-monsterHealth:			.byte TEMP_BYTE
-monsterStatus:			.byte TEMP_BYTE
-monsterStatusTimer:		.byte TEMP_BYTE
-monsterAnimTimer:		.byte TEMP_BYTE
-monsterAnimPtr:			.word TEMP_ADDR
-monsterEraseScrAddr:	.word TEMP_WORD
-monsterEraseScrAddrOld:	.word TEMP_ADDR
-monsterEraseWH:			.word TEMP_WORD
-monsterEraseWHOld:		.word TEMP_WORD
-monsterPosX:			.word TEMP_WORD
-monsterPosY:			.word TEMP_WORD
-monsterSpeedX:			.word TEMP_WORD
-monsterSpeedY:			.word TEMP_WORD
-monsterDataPrevPPtr:	.word TEMP_WORD
-monsterDataNextPPtr:	.word TEMP_WORD
-monsterRuntimeDataEnd:
+monster_update_ptr:			.word TEMP_ADDR
+monster_draw_ptr:			.word TEMP_ADDR
+monster_impact_ptr:			.word TEMP_WORD ; called by hero bullet, another monster, etc. to affect this monster
+monster_id:					.byte TEMP_BYTE
+monster_type:				.byte TEMP_BYTE
+monster_health:				.byte TEMP_BYTE
+monster_status:				.byte TEMP_BYTE
+monster_status_timer:		.byte TEMP_BYTE
+monster_anim_timer:			.byte TEMP_BYTE
+monster_anim_ptr:			.word TEMP_ADDR
+monster_erase_scr_addr:		.word TEMP_WORD
+monster_erase_scr_addr_old:	.word TEMP_ADDR
+monster_erase_wh:			.word TEMP_WORD
+monster_erase_wh_old:		.word TEMP_WORD
+monster_pos_x:				.word TEMP_WORD
+monster_pos_y:				.word TEMP_WORD
+monster_speed_x:			.word TEMP_WORD
+monster_speed_y:			.word TEMP_WORD
+monster_data_prev_pptr:		.word TEMP_WORD
+monster_data_next_pptr:		.word TEMP_WORD
+monster_runtime_data_end_addr:
 
-MONSTER_RUNTIME_DATA_LEN = monsterRuntimeDataEnd - monstersRuntimeData
+MONSTER_RUNTIME_DATA_LEN = monster_runtime_data_end_addr - monstersRuntimeData
 
 ; the same structs for the rest of the monsters
 .storage MONSTER_RUNTIME_DATA_LEN * (MONSTERS_MAX-1), 0
-monstersRuntimeDataEnd:	.word MONSTER_RUNTIME_DATA_END << 8
+monsters_runtime_data_end_addr:	.word MONSTER_RUNTIME_DATA_END << 8

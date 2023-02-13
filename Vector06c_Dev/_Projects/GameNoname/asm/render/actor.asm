@@ -1,16 +1,16 @@
 ; in:
-; hl - ptr to animTimer (monsterAnimTimer or bullet_anim_timer)
+; hl - ptr to animTimer (monster_anim_timer or bullet_anim_timer)
 ; a - anim speed
 ; use:
 ; de, bc, hl
 ; out:
-; hl points to animPtr (bullet_anim_ptr or monsterAnimPtr)
+; hl points to animPtr (bullet_anim_ptr or monster_anim_ptr)
 actor_anim_update:
-			; update monsterAnimTimer
+			; update monster_anim_timer
 			add m
 			mov m, a
-			; advance hl to monsterAnimPtr
-			inx h ; to make hl point to monsterAnimPtr when it returns
+			; advance hl to monster_anim_ptr
+			inx h ; to make hl point to monster_anim_ptr when it returns
 			rnc
 			; read the ptr to a current frame
 			mov e, m
@@ -26,8 +26,8 @@ actor_anim_update:
 			dad b
 			xchg
 			; de - the next frame ptr
-			; hl points to monsterAnimPtr+1
-			; store de into the monsterAnimPtr
+			; hl points to monster_anim_ptr+1
+			; store de into the monster_anim_ptr
 			mov m, d
 			dcx h
 			mov m, e

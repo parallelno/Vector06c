@@ -25,4 +25,4 @@ BULLET_RUNTIME_DATA_LEN = bullet_runtime_data_end_addr-bullets_runtime_data
 
 ; the same structs for the rest of the bullets
 .storage BULLET_RUNTIME_DATA_LEN * (BULLETS_MAX-1), 0
-bulletsRuntimeDataEnd:		.word BULLET_RUNTIME_DATA_END << 8
+bullets_runtime_data_end_addr:		.word BULLET_RUNTIME_DATA_END << 8

@@ -1,16 +1,16 @@
 ; TODO: do we need it?
 ; list of adresses of compressed levels 
-levelsAddr:		.word TEMP_ADDR, 0
+levels_addr:		.word TEMP_ADDR, 0
 ; TODO: do we need it?
-; current level index in levelsAddr
-levelIdx:
+; current level index in levels_addr
+level_idx:
 				.byte 0
 ; current room index in roomsAddr of the current level
-roomIdx:
+room_idx:
 				.byte 0 ; 0 - 127 ; TODO: find why it says it's <128
 
-; the address table to tile graphics
-room_tiles_addr:
+; the address table of tile graphics
+room_tiles_gfx_ptrs:
 				.storage ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
 
 ; tile data format: 
@@ -37,7 +37,10 @@ room_tiles_addr:
 ; fff == 7, d == 0, no collision, restore background (tiledata = 7)
 ; fff == 7, d != %11111, ???
 
-; this functions are used during a room initialization. check room.asm room_init_tiles_data func
+room_tiles_data:
+			.storage ROOM_WIDTH * ROOM_HEIGHT
+
+; to init each tile data in a room during a room initialization. check room.asm room_init_tiles_data func
 room_func_table:		
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
@@ -47,9 +50,6 @@ room_func_table:
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
-
-room_tiles_data:
-			.storage ROOM_WIDTH * ROOM_HEIGHT
 
 ; command that are handled by the level update func
 LEVEL_COMMAND_NONE = 0

@@ -3,7 +3,7 @@
 ;
 levels_init:
 			xra a
-			sta levelIdx
+			sta level_idx
 			ret
 
 ;================================================================
@@ -16,11 +16,11 @@ level_init:
 			mvi a, 1
 			sta borderColorIdx
 			xra a
-			sta roomIdx
+			sta room_idx
 
 			lxi d, __level01_startPos
 			mvi a, <__RAM_DISK_S_LEVEL01
-			call GetWordFromRamDisk
+			call get_word_from_ram_disk
 			call hero_set_pos
 			call HeroInit
 			ret

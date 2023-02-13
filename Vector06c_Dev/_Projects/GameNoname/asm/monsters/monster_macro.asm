@@ -2,17 +2,17 @@
 ; draw a monster sprite into a backbuffer
 ; ex. MONSTER_DRAW(sprite_get_scr_addr_skeleton, __RAM_DISK_S_SKELETON)
 ; in:
-; de - ptr to monsterDrawPtr in the runtime data
+; de - ptr to monster_draw_ptr in the runtime data
 .macro MONSTER_DRAW(SpriteGetScrAddr_monster, __RAM_DISK_S_MONSTER)
-			LXI_H_TO_DIFF(monsterPosX+1, monsterDrawPtr)
+			LXI_H_TO_DIFF(monster_pos_x+1, monster_draw_ptr)
 			dad d
 			call SpriteGetScrAddr_monster
-			; hl - ptr to monsterPosY+1
+			; hl - ptr to monster_pos_y+1
 			; tmp a = c
 			mov a, c
 
-			; advance hl to monsterAnimPtr
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterPosY+1)
+			; advance hl to monster_anim_ptr
+			LXI_B_TO_DIFF(monster_anim_ptr, monster_pos_y+1)
 			dad b
 			mov b, m
 			inx h
@@ -27,15 +27,15 @@
 			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_MONSTER | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			pop h
 			inx h
-			; hl - ptr to monsterEraseScrAddr
-			; store a current scr addr, into monsterEraseScrAddr
+			; hl - ptr to monster_erase_scr_addr
+			; store a current scr addr, into monster_erase_scr_addr
 			mov m, c
 			inx h
 			mov m, b
-			; advance hl to monsterEraseWH
-			LXI_B_TO_DIFF(monsterEraseWH, monsterEraseScrAddr+1)
+			; advance hl to monster_erase_wh
+			LXI_B_TO_DIFF(monster_erase_wh, monster_erase_scr_addr+1)
 			dad b
-			; store a width and a height into monsterEraseWH
+			; store a width and a height into monster_erase_wh
 			mov m, e
 			inx h
 			mov m, d
@@ -46,12 +46,12 @@
 ; update the anim, then check the monster collision with a hero
 ; ex MONSTER_CHECK_COLLISION_HERO(VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, VAMPIRE_DAMAGE)
 ; in:
-; hl points to monsterAnimPtr
+; hl points to monster_anim_ptr
 .macro MONSTER_CHECK_COLLISION_HERO(MONSTER_COLLISION_WIDTH, MONSTER_COLLISION_HEIGHT, MONSTER_DAMAGE)
-			; hl points to monsterAnimPtr
+			; hl points to monster_anim_ptr
 			; TODO: check hero-monster collision not every frame
-			; advance hl to monsterPosX
-			LXI_B_TO_DIFF(monsterPosX+1, monsterAnimPtr)
+			; advance hl to monster_pos_x
+			LXI_B_TO_DIFF(monster_pos_x+1, monster_anim_ptr)
 			dad b
 			; horizontal check
 			mov c, m ; posX
@@ -65,7 +65,7 @@
 			cmp b
 			rc
 			; vertical check
-			; advance hl to monsterPosY+1
+			; advance hl to monster_pos_y+1
 			inx_h(2)
 			mov c, m ; posY
 			lda hero_pos_y+1
@@ -99,7 +99,7 @@
 			mvi m, <MONSTER_UPDATE
 			inx h
 			mvi m, >MONSTER_UPDATE
-			; advance hl to monsterDrawPtr
+			; advance hl to monster_draw_ptr
 			inx h
 			mvi m, <MONSTER_DRAW
 			inx h
@@ -114,17 +114,17 @@
 			inx h
 @monster_id:	mvi m, TEMP_BYTE
 
-			; advance hl to monsterType
+			; advance hl to monster_type
 			inx h
 			mvi m, MONSTER_TYPE_ENEMY
-			; advance hl to monsterHealth
+			; advance hl to monster_health
 			inx h
 			mvi m, MONSTER_HEALTH
-			; advance hl to monsterStatus
+			; advance hl to monster_status
 			inx h
 			mvi m, MONSTER_STATUS_DETECT_HERO_INIT
-			; advance hl to monsterAnimPtr
-			LXI_D_TO_DIFF(monsterAnimPtr, monsterStatus)
+			; advance hl to monster_anim_ptr
+			LXI_D_TO_DIFF(monster_anim_ptr, monster_status)
 			dad d
 			mvi m, <MONSTER_ANIM
 			inx h
@@ -150,32 +150,32 @@
 			; e = 0 and SPRITE_W_PACKED_MIN
 			; hl - ptr to monster_update_ptr+1
 
-			; advance hl to monsterEraseScrAddr
+			; advance hl to monster_erase_scr_addr
 			inx h
 			mov m, a
 			inx h
 			mov m, d
-			; advance hl to monsterEraseScrAddrOld
+			; advance hl to monster_erase_scr_addr_old
 			inx h
 			mov m, a
 			inx h
 			mov m, d
-			; advance hl to monsterEraseWH
+			; advance hl to monster_erase_wh
 			inx h
 			mvi m, SPRITE_H_MIN
 			inx h
 			mov m, e
-			; advance hl to monsterEraseWHOld
+			; advance hl to monster_erase_wh_old
 			inx h
 			mvi m, SPRITE_H_MIN
 			inx h
 			mov m, e
-			; advance hl to monsterPosX
+			; advance hl to monster_pos_x
 			inx h
 			mov m, e
 			inx h
 			mov m, b
-			; advance hl to monsterPosY
+			; advance hl to monster_pos_y
 			inx h
 			mov m, e
 			inx h

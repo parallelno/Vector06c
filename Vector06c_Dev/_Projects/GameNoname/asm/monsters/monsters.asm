@@ -41,15 +41,15 @@ monsters_get_first_collided:
 			ret
 @checkCollision:
 			push h
-			; advance hl to monsterType
-			LXI_B_TO_DIFF(monsterType, monster_update_ptr+1)
+			; advance hl to monster_type
+			LXI_B_TO_DIFF(monster_type, monster_update_ptr+1)
 			dad b
 			mov a, m
 			cpi MONSTER_TYPE_ALLY
 			jz @noCollision
 
-			; advance hl to monsterPosX+1
-			LXI_B_TO_DIFF(monsterPosX+1, monsterType)
+			; advance hl to monster_pos_x+1
+			LXI_B_TO_DIFF(monster_pos_x+1, monster_type)
 			dad b
 			; horizontal check
 			mov c, m 	; monster posX
@@ -152,7 +152,7 @@ MonstersSetEmpty:
 			.closelabels
 
 ; call all active monsters' Update/Draw func
-; a func will get DE pointing to a func ptr (ex.:monster_update_ptr or monsterDrawPtr) in the runtime data
+; a func will get DE pointing to a func ptr (ex.:monster_update_ptr or monster_draw_ptr) in the runtime data
 ; in:
 ; hl - an offset to a func ptr relative to monster_update_ptr in the runtime data
 ; 		ex.: the offset to monster_update_ptr is zero
@@ -226,7 +226,7 @@ monsters_update:
 			jmp monsters_data_func_caller
 
 monsters_draw:
-			lxi h, monsterDrawPtr - monster_update_ptr
+			lxi h, monster_draw_ptr - monster_update_ptr
 			jmp monsters_data_func_caller
 
 monsters_copy_to_scr:
@@ -241,37 +241,37 @@ monsters_erase:
 ; in:
 ; hl - ptr to monster_update_ptr+1 in the runtime data
 MonsterCopyToScr:
-			; advance to monsterStatus
-			LXI_D_TO_DIFF(monsterStatus, monster_update_ptr+1)
+			; advance to monster_status
+			LXI_D_TO_DIFF(monster_status, monster_update_ptr+1)
 			dad d
 			; if it is invisible, return
 			mov a, m
 			cpi MONSTER_STATUS_INVIS
 			rz
 
-			; advance to monsterEraseScrAddr
-			LXI_B_TO_DIFF(monsterEraseScrAddr, monsterStatus)			
+			; advance to monster_erase_scr_addr
+			LXI_B_TO_DIFF(monster_erase_scr_addr, monster_status)			
 			dad b
-			; read monsterEraseScrAddr
+			; read monster_erase_scr_addr
 			mov c, m
 			inx h
 			mov b, m
 			inx h
-			; read monsterEraseScrAddrOld
+			; read monster_erase_scr_addr_old
 			mov e, m
 			inx h
 			mov d, m
-			; store monsterEraseScrAddr temp
+			; store monster_erase_scr_addr temp
 			xchg
 			shld @oldTopRightConner+1
 			xchg
-			; store monsterEraseScrAddr to monsterEraseScrAddrOld
+			; store monster_erase_scr_addr to monster_erase_scr_addr_old
 			mov m, b
 			dcx h
 			mov m, c
 			; bc - hero_erase_scr_addr
 			; de - hero_erase_scr_addr_old
-			; hl - ptr to monsterEraseScrAddrOld
+			; hl - ptr to monster_erase_scr_addr_old
 			; get min(b, d), min(c, e)
 			mov a, d
 			cmp b
@@ -285,12 +285,12 @@ MonsterCopyToScr:
 @keepOldY:
 			; tmp store a scr addr to copy
 			push d
-			; bc - monsterEraseScrAddr
-			; calc top-right corner addr (hero_erase_scr_addr + monsterEraseWH)
+			; bc - monster_erase_scr_addr
+			; calc top-right corner addr (hero_erase_scr_addr + monster_erase_wh)
 			inx_h(2)
 			mov d, b
 			mov e, c
-			; bc - monsterEraseWH
+			; bc - monster_erase_wh
 			mov c, m
 			inx h
 			mov b, m
@@ -298,8 +298,8 @@ MonsterCopyToScr:
 			xchg
 			dad b
 			xchg
-			; bc - monsterEraseWHOld
-			; store monsterEraseWH to monsterEraseWHOld
+			; bc - monster_erase_wh_old
+			; store monster_erase_wh to monster_erase_wh_old
 			mov a, m
 			mov m, c
 			mov c, a
@@ -307,12 +307,12 @@ MonsterCopyToScr:
 			mov a, m
 			mov m, b
 			mov b, a
-			; calc old top-right corner addr (hero_erase_scr_addr_old + monsterEraseWHOld)
+			; calc old top-right corner addr (hero_erase_scr_addr_old + monster_erase_wh_old)
 @oldTopRightConner:
 			lxi h, TEMP_WORD
 			dad b
-			; hl - hero_erase_scr_addr_old + monsterEraseWHOld
-			; de - hero_erase_scr_addr + monsterEraseWH
+			; hl - hero_erase_scr_addr_old + monster_erase_wh_old
+			; de - hero_erase_scr_addr + monster_erase_wh
 			; get max(h, d), max(l, e)
 			mov a, h
 			cmp d
@@ -346,29 +346,29 @@ MonsterErase:
 			cpi MONSTER_RUNTIME_DATA_DESTR
 			jz MonstersSetEmpty
 
-			; advance to monsterStatus
-			LXI_D_TO_DIFF(monsterStatus, monster_update_ptr+1)
+			; advance to monster_status
+			LXI_D_TO_DIFF(monster_status, monster_update_ptr+1)
 			dad d
 			; if it is invisible, return
 			mov a, m
 			cpi MONSTER_STATUS_INVIS
 			rz
 
-			; advance to monsterEraseScrAddr
-			LXI_D_TO_DIFF(monsterEraseScrAddr, monsterStatus)
+			; advance to monster_erase_scr_addr
+			LXI_D_TO_DIFF(monster_erase_scr_addr, monster_status)
 			dad d
 			mov e, m
 			inx h
 			mov d, m
 
-			LXI_B_TO_DIFF(monsterEraseWH, monsterEraseScrAddr+1)
+			LXI_B_TO_DIFF(monster_erase_wh, monster_erase_scr_addr+1)
 			dad b
 			mov a, m
 			inx h
 			mov h, m			
 			mov l, a
-			; hl - monsterEraseWH
-			; de - monsterEraseScrAddr
+			; hl - monster_erase_wh
+			; de - monster_erase_scr_addr
 
 			; check if it needs to restore the background
 			push h

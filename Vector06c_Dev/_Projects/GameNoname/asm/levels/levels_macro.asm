@@ -16,7 +16,7 @@
 			; extract a function
 			ani TILE_DATA_FUNC_MASK
 		.if skipFuncZero
-			; if funcId == 0, that means it is an walkable (non-interactable) tile, we skip it.
+			; if func_id == 0, that means it is an walkable (non-interactable) tile, we skip it.
 			jz @funcReturnAddr
 		.endif
 			add_a(2) ; to make a ptr to a jmp table with 4 byte allignment

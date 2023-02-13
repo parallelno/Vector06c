@@ -61,7 +61,7 @@ draw_back_sprite:
 			; HL - pointer to sprite ptr
 			lxi d, $8060
 			/*
-			lxi h, room_tiles_addr + (13*16+3)*2
+			lxi h, room_tiles_gfx_ptrs + (13*16+3)*2
 			mov c, m
 			inx h
 			mov b, m

@@ -186,7 +186,7 @@ SetPaletteFromRamDisk:
 ; bc - data
 
 ; TODO: optimize. make a special version of that func for accessing $8000 and higher with a direct access
-GetWordFromRamDisk:
+get_word_from_ram_disk:
 			; store sp
 			lxi h, $0000
 			dad sp
@@ -284,7 +284,7 @@ copy_to_ram_disk32:
 
 ; TODO: optimize. check if it is more efficient to copy a data stored
 ; in $8000 and higher with a direct access like mov
-CopyFromRamDisk:
+copy_from_ram_disk:
 			; store sp
 			push h
 			lxi h, $0002

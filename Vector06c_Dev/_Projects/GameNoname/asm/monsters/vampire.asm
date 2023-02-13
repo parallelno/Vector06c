@@ -102,8 +102,8 @@ VampireInit:
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data
 VampireUpdate:
-			; advance hl to monsterStatus
-			LXI_H_TO_DIFF(monsterStatus, monster_update_ptr)
+			; advance hl to monster_status
+			LXI_H_TO_DIFF(monster_status, monster_update_ptr)
 			dad d
 			mov a, m
 			; TODO: optimization. think of using a call table
@@ -124,11 +124,11 @@ VampireUpdate:
 			ret
 
 VampireUpdateDetectHeroInit:
-			; hl = monsterStatus
+			; hl = monster_status
 			mvi m, VAMPIRE_STATUS_DETECT_HERO
 			inx h
 			mvi m, VAMPIRE_STATUS_DETECT_HERO_TIME
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
+			LXI_B_TO_DIFF(monster_anim_ptr, monster_status_timer)
 			dad b
 			mvi m, <vampire_idle
 			inx h
@@ -136,14 +136,14 @@ VampireUpdateDetectHeroInit:
 			ret
 
 VampireUpdateDetectHero:
-			; hl = monsterStatus
-			; advance hl to monsterStatusTimer
+			; hl = monster_status
+			; advance hl to monster_status_timer
 			inx h
 			dcr m
 			jz @setMoveInit
 @checkMobHeroDistance:
-			; advance hl to monsterPosX+1
-			LXI_B_TO_DIFF(monsterPosX+1, monsterStatusTimer)
+			; advance hl to monster_pos_x+1
+			LXI_B_TO_DIFF(monster_pos_x+1, monster_status_timer)
 			dad b
 			; check hero-monster posX diff
 			lda hero_pos_x+1
@@ -157,7 +157,7 @@ VampireUpdateDetectHero:
 			jnc @checkPosYDiff
 			jmp @updateAnimHeroDetectX
 @checkPosYDiff:
-			; advance hl to monsterPosY+1
+			; advance hl to monster_pos_y+1
 			inx_h(2)
 			; check hero-monster posY diff
 			lda hero_pos_y+1
@@ -171,51 +171,51 @@ VampireUpdateDetectHero:
 			jnc @heroDetected
 			jmp @updateAnimHeroDetectY
 @heroDetected:
-			; hl = monsterPosY+1
-			; advance hl to monsterStatus
-			LXI_B_TO_DIFF(monsterStatus, monsterPosY+1)
+			; hl = monster_pos_y+1
+			; advance hl to monster_status
+			LXI_B_TO_DIFF(monster_status, monster_pos_y+1)
 			dad b
 			mvi m, VAMPIRE_STATUS_SHOOT_PREP
 			inx h
 			mvi m, VAMPIRE_STATUS_SHOOT_PREP_TIME
-			; advance hl to monsterAnimPtr
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
+			; advance hl to monster_anim_ptr
+			LXI_B_TO_DIFF(monster_anim_ptr, monster_status_timer)
 			dad b
 			mvi m, <vampire_cast
 			inx h
 			mvi m, >vampire_cast
 			ret
 @updateAnimHeroDetectX:
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
+			; advance hl to monster_anim_timer
+			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_x+1)
 			dad b
 			mvi a, VAMPIRE_ANIM_SPEED_DETECT_HERO
 			jmp VampireUpdateAnimCheckCollisionHero
 @updateAnimHeroDetectY:
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
+			; advance hl to monster_anim_timer
+			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_y+1)
 			dad b
 			mvi a, VAMPIRE_ANIM_SPEED_DETECT_HERO
 			jmp VampireUpdateAnimCheckCollisionHero
 
 @setMoveInit:
- 			; hl - ptr to monsterStatusTimer
+ 			; hl - ptr to monster_status_timer
 			mvi m, VAMPIRE_STATUS_MOVE_TIME
-			; advance hl to monsterStatus
+			; advance hl to monster_status
 			dcx h
 			mvi m, VAMPIRE_STATUS_MOVE_INIT
 			ret
 
 VampireUpdateMoveInit:
-			; hl = monsterStatus
+			; hl = monster_status
 			mvi m, VAMPIRE_STATUS_MOVE
 			;inx h
 			;mvi m, VAMPIRE_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
 
 			xchg
 			call Random
-			; advance hl to monsterSpeedX
-			LXI_H_TO_DIFF(monsterSpeedX, monsterStatus)
+			; advance hl to monster_speed_x
+			LXI_H_TO_DIFF(monster_speed_x, monster_status)
 			dad d
 
 			mvi c, 0 ; tmp c=0
@@ -261,7 +261,7 @@ VampireUpdateMoveInit:
 			inx h
 			mov m, c
 @setAnim:
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterSpeedY+1)
+			LXI_B_TO_DIFF(monster_anim_ptr, monster_speed_y+1)
 			dad b
 			; a = rnd
 			ora a
@@ -279,84 +279,84 @@ VampireUpdateMoveInit:
             ret
 
 VampireUpdateMove:
-			; hl = monsterStatus
-			; advance hl to monsterStatusTimer
+			; hl = monster_status
+			; advance hl to monster_status_timer
 			inx h
 			dcr m
 			jz @setDetectHeroInit
 @updateMovement:
-			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monsterStatusTimer, monsterPosX, VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, @setMoveInit) 
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, @setMoveInit) 
 			
-			; hl points to monsterPosY+1
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
+			; hl points to monster_pos_y+1
+			; advance hl to monster_anim_timer
+			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_y+1)
 			dad b
 			mvi a, VAMPIRE_ANIM_SPEED_MOVE
 			jmp VampireUpdateAnimCheckCollisionHero
 
 @setMoveInit:
 			pop h
-			; hl points to monsterPosX
-			; advance hl to monsterStatus
-			LXI_B_TO_DIFF(monsterStatus, monsterPosX)
+			; hl points to monster_pos_x
+			; advance hl to monster_status
+			LXI_B_TO_DIFF(monster_status, monster_pos_x)
 			dad b
 			mvi m, VAMPIRE_STATUS_MOVE_INIT
 			inx h
 			mvi m, VAMPIRE_STATUS_MOVE_TIME
 			ret
 @setDetectHeroInit:
- 			; hl - ptr to monsterStatusTimer
-			; advance hl to monsterStatus
+ 			; hl - ptr to monster_status_timer
+			; advance hl to monster_status
 			dcx h
 			mvi m, VAMPIRE_STATUS_DETECT_HERO_INIT
 			ret
 
 VampireUpdateRelax:
-			; hl = monsterStatus
-			; advance hl to monsterStatusTimer
+			; hl = monster_status
+			; advance hl to monster_status_timer
 			inx h
 			dcr m
 			jz @setMoveInit
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatusTimer)
+			; advance hl to monster_anim_timer
+			LXI_B_TO_DIFF(monster_anim_timer, monster_status_timer)
 			dad b
 			mvi a, VAMPIRE_ANIM_SPEED_RELAX
 			jmp VampireUpdateAnimCheckCollisionHero
  @setMoveInit:
- 			; hl - ptr to monsterStatusTimer
+ 			; hl - ptr to monster_status_timer
 			mvi m, VAMPIRE_STATUS_MOVE_TIME
-			; advance hl to monsterStatus
+			; advance hl to monster_status
 			dcx h
 			mvi m, VAMPIRE_STATUS_MOVE_INIT
 			ret
 
 VampireUpdateShootPrep:
-			; hl = monsterStatus
-			; advance hl to monsterStatusTimer
+			; hl = monster_status
+			; advance hl to monster_status_timer
 			inx h
 			dcr m
 			jz @setShoot
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatusTimer)
+			; advance hl to monster_anim_timer
+			LXI_B_TO_DIFF(monster_anim_timer, monster_status_timer)
 			dad b
 			mvi a, VAMPIRE_ANIM_SPEED_SHOOT_PREP
 			jmp VampireUpdateAnimCheckCollisionHero
  @setShoot:
-  			; hl - ptr to monsterStatusTimer
-			; advance hl to monsterStatus
+  			; hl - ptr to monster_status_timer
+			; advance hl to monster_status
 			dcx h
 			mvi m, VAMPIRE_STATUS_SHOOT
 			ret
 
 VampireUpdateShoot:
-			; hl = monsterStatus
+			; hl = monster_status
 			mvi m, VAMPIRE_STATUS_RELAX
-			; advance hl to monsterStatusTimer
+			; advance hl to monster_status_timer
 			inx h
 			mvi m, VAMPIRE_STATUS_RELAX_TIME
 
-			; advance hl to monsterPosX+1
-			LXI_B_TO_DIFF(monsterPosX+1, monsterStatusTimer)
+			; advance hl to monster_pos_x+1
+			LXI_B_TO_DIFF(monster_pos_x+1, monster_status_timer)
 			dad b
 			mov b, m
 			inx_h(2)
@@ -365,7 +365,7 @@ VampireUpdateShoot:
 			jmp bomb_slow_init
 
 ; in:
-; hl - monsterAnimTimer
+; hl - monster_anim_timer
 ; a - anim speed
 VampireUpdateAnimCheckCollisionHero:
 			call actor_anim_update
@@ -379,6 +379,6 @@ VampireImpact:
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to monsterDrawPtr in the runtime data
+; de - ptr to monster_draw_ptr in the runtime data
 VampireDraw:
 			MONSTER_DRAW(sprite_get_scr_addr_vampire, __RAM_DISK_S_VAMPIRE)

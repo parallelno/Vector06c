@@ -42,7 +42,7 @@ hero_pos_y:				.word TEMP_WORD
 hero_speed_x:			.word TEMP_WORD
 hero_speed_y:			.word TEMP_WORD
 hero_data_prev_pptr:	.word DRAW_LIST_FIRST_DATA_MARKER
-hero_data_next_pptr:	.word monsterDataNextPPtr
+hero_data_next_pptr:	.word monster_data_next_pptr
 ;
 hero_collision_func_table:
 			; bit layout:
@@ -63,15 +63,15 @@ hero_collision_func_table:
 			JMP_4(hero_dont_move)
 			JMP_4(hero_dont_move)
 
-; funcs to handle the tile data. more info is in levelGlobalData.asm->room_tiles_data
+; funcs to handle the tile data. more info is in level_data.asm->room_tiles_data
 hero_tile_func_table:
-			JMP_4(0)					; funcId == 1
-			JMP_4(0)					; funcId == 2
-			JMP_4(0)					; funcId == 3
-			JMP_4(hero_tile_func_teleport)	; funcId == 4
-			JMP_4(0)					; funcId == 5
-			JMP_4(0)					; funcId == 6
-			JMP_4(hero_tile_func_nothing)	; funcId == 7 (collision) called only when a hero has got stuck into a collision tiles
+			JMP_4(0)						; func_id == 1
+			JMP_4(0)						; func_id == 2
+			JMP_4(0)						; func_id == 3
+			JMP_4(hero_tile_func_teleport)	; func_id == 4
+			JMP_4(0)						; func_id == 5
+			JMP_4(0)						; func_id == 6
+			JMP_4(hero_tile_func_nothing)	; func_id == 7 (collision) called only when a hero has got stuck into a collision tiles
 
 HeroInit:
 			call hero_idle_start
@@ -292,7 +292,7 @@ hero_update_pos:
 			mov d, b ; posX
 			mov e, h ; posY
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(RoomCheckTileDataCollision, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(room_check_tile_data_collision, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			jz hero_move
 @collides:
 			; handle a collision data around a hero
@@ -508,7 +508,7 @@ hero_tile_func_teleport:
 			pop h
 
 			; update a room id to teleport there
-			sta roomIdx
+			sta room_idx
 			; requesting room loading
 			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
 			sta level_command

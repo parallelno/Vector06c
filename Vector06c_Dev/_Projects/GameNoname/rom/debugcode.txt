@@ -611,22 +611,22 @@ $0571 c9         ret
 
 $0572 00 00 00 00 00 00         ......
 
-$0758 c3 5a 2d   jmp $2d5a
-$075b 00         nop
-$075c c3 5a 2d   jmp $2d5a
-$075f 00         nop
-$0760 c3 5a 2d   jmp $2d5a
-$0763 00         nop
-$0764 c3 5c 2d   jmp $2d5c
-$0767 00         nop
-$0768 c3 5a 2d   jmp $2d5a
-$076b 00         nop
-$076c c3 5a 2d   jmp $2d5a
-$076f 00         nop
-$0770 c3 5a 2d   jmp $2d5a
-$0773 00         nop
-$0774 c3 5a 2d   jmp $2d5a
-$0777 00         nop
+$0848 c3 5a 2d   jmp $2d5a
+$084b 00         nop
+$084c c3 5a 2d   jmp $2d5a
+$084f 00         nop
+$0850 c3 5a 2d   jmp $2d5a
+$0853 00         nop
+$0854 c3 5c 2d   jmp $2d5c
+$0857 00         nop
+$0858 c3 5a 2d   jmp $2d5a
+$085b 00         nop
+$085c c3 5a 2d   jmp $2d5a
+$085f 00         nop
+$0860 c3 5a 2d   jmp $2d5a
+$0863 00         nop
+$0864 c3 5a 2d   jmp $2d5a
+$0867 00         nop
 
 $0868 00                        .
 
@@ -6066,10 +6066,10 @@ $2cd4 3e 1c      mvi a,$1c
 $2cd6 cd 8e 02   call $028e
 $2cd9 50         mov d,b
 $2cda 59         mov e,c
-$2cdb 01 78 07   lxi b,$0778
+$2cdb 01 58 07   lxi b,$0758
 $2cde 21 78 1c   lxi h,$1c78
 $2ce1 cd 3d 03   call $033d
-$2ce4 21 78 07   lxi h,$0778
+$2ce4 21 58 07   lxi h,$0758
 $2ce7 01 78 05   lxi b,$0578
 $2cea 3e f0      mvi a,$f0
 $2cec f5         push psw
@@ -6112,10 +6112,10 @@ $2d1e cd 8e 02   call $028e
 $2d21 21 f2 00   lxi h,$00f2
 $2d24 09         dad b
 $2d25 eb         xchg
-$2d26 01 78 07   lxi b,$0778
+$2d26 01 58 07   lxi b,$0758
 $2d29 21 78 1c   lxi h,$1c78
 $2d2c cd 3d 03   call $033d
-$2d2f 21 78 07   lxi h,$0778
+$2d2f 21 58 07   lxi h,$0758
 $2d32 0e 00      mvi c,$00
 $2d34 46         mov b,m
 $2d35 c5         push b
@@ -6131,7 +6131,7 @@ $2d40 0f         rrc
 $2d41 0f         rrc
 $2d42 0f         rrc
 $2d43 e6 1f      ani $1f
-$2d45 21 58 07   lxi h,$0758
+$2d45 21 48 08   lxi h,$0848
 $2d48 19         dad d
 $2d49 11 4e 2d   lxi d,$2d4e
 $2d4c d5         push d
@@ -6180,7 +6180,7 @@ $2d9d 32 2f 01   sta $012f
 $2da0 d3 10      out $10
 $2da2 c9         ret
 $2da3 1e 00      mvi e,$00
-$2da5 21 78 07   lxi h,$0778
+$2da5 21 58 07   lxi h,$0758
 $2da8 16 80      mvi d,$80
 $2daa 7e         mov a,m
 $2dab 23         inx h

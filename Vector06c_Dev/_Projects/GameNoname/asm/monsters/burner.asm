@@ -103,57 +103,57 @@ BURNER_DETECT_HERO_DISTANCE = 60
 ; a - monster id * 4
 ; out:
 ; a = 0
-BurnerInit:
-			MONSTER_INIT(BurnerUpdate, BurnerDraw, BurnerImpact, BURNER_HEALTH, BURNER_STATUS_DETECT_HERO_INIT, burner_idle)
+burner_init:
+			MONSTER_INIT(burner_update, burner_draw, burner_impact, BURNER_HEALTH, BURNER_STATUS_DETECT_HERO_INIT, burner_idle)
 			ret
 			.closelabels
 
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data
-BurnerUpdate:
-			; advance hl to monsterStatus
-			LXI_H_TO_DIFF(monsterStatus, monster_update_ptr)
+burner_update:
+			; advance hl to monster_status
+			LXI_H_TO_DIFF(monster_status, monster_update_ptr)
 			dad d
 			mov a, m
 			; TODO: optimization. think of using a call table
 			cpi BURNER_STATUS_MOVE
-			jz BurnerUpdateMove
+			jz burner_update_move
 			cpi BURNER_STATUS_DETECT_HERO
-			jz BurnerUpdateDetectHero
+			jz burner_update_detect_hero
 			cpi BURNER_STATUS_DASH
-			jz BurnerUpdateDash		
+			jz burner_update_dash		
 			cpi BURNER_STATUS_RELAX
-			jz BurnerUpdateRelax
+			jz burner_update_relax
 			cpi BURNER_STATUS_DASH_PREP
-			jz BurnerUpdateDashPrep
+			jz burner_update_dash_prep
 			cpi BURNER_STATUS_MOVE_INIT
-			jz BurnerUpdateMoveInit
+			jz burner_update_move_init
 			cpi BURNER_STATUS_DETECT_HERO_INIT
-			jz BurnerUpdateDetectHeroInit
+			jz burner_update_detect_hero_init
 			ret
 
-BurnerUpdateDetectHeroInit:
-			; hl = monsterStatus
+burner_update_detect_hero_init:
+			; hl = monster_status
 			mvi m, BURNER_STATUS_DETECT_HERO
 			inx h
 			mvi m, BURNER_STATUS_DETECT_HERO_TIME
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
+			LXI_B_TO_DIFF(monster_anim_ptr, monster_status_timer)
 			dad b
 			mvi m, <burner_idle
 			inx h
 			mvi m, >burner_idle
 			ret
 
-BurnerUpdateDetectHero:
-			; hl = monsterStatus
-			; advance hl to monsterStatusTimer
+burner_update_detect_hero:
+			; hl = monster_status
+			; advance hl to monster_status_timer
 			inx h
 			dcr m
 			jz @setMoveInit
 @checkMobHeroDistance:
-			; advance hl to monsterPosX+1
-			LXI_B_TO_DIFF(monsterPosX+1, monsterStatusTimer)
+			; advance hl to monster_pos_x+1
+			LXI_B_TO_DIFF(monster_pos_x+1, monster_status_timer)
 			dad b
 			; check hero-monster posX diff
 			lda hero_pos_x+1
@@ -167,7 +167,7 @@ BurnerUpdateDetectHero:
 			jnc @checkPosYDiff
 			jmp @updateAnimHeroDetectX
 @checkPosYDiff:
-			; advance hl to monsterPosY+1
+			; advance hl to monster_pos_y+1
 			inx_h(2)
 			; check hero-monster posY diff
 			lda hero_pos_y+1
@@ -181,15 +181,15 @@ BurnerUpdateDetectHero:
 			jnc @heroDetected
 			jmp @updateAnimHeroDetectY
 @heroDetected:
-			; hl = monsterPosY+1
-			; advance hl to monsterStatus
-			LXI_B_TO_DIFF(monsterStatus, monsterPosY+1)
+			; hl = monster_pos_y+1
+			; advance hl to monster_status
+			LXI_B_TO_DIFF(monster_status, monster_pos_y+1)
 			dad b
 			mvi m, BURNER_STATUS_DASH_PREP
 			inx h
 			mvi m, BURNER_STATUS_DASH_PREP_TIME
-			; advance hl to monsterAnimPtr
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterStatusTimer)
+			; advance hl to monster_anim_ptr
+			LXI_B_TO_DIFF(monster_anim_ptr, monster_status_timer)
 			dad b
 			mvi m, <burner_dash
 			inx h
@@ -197,34 +197,34 @@ BurnerUpdateDetectHero:
 			ret
 			
 @updateAnimHeroDetectX:
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
+			; advance hl to monster_anim_timer
+			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_x+1)
 			dad b
 			mvi a, BURNER_ANIM_SPEED_DETECT_HERO
-			jmp BurnerUpdateAnimCheckCollisionHero
+			jmp burner_update_anim_check_collision_hero
 @updateAnimHeroDetectY:
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
+			; advance hl to monster_anim_timer
+			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_y+1)
 			dad b
 			mvi a, BURNER_ANIM_SPEED_DETECT_HERO
-			jmp BurnerUpdateAnimCheckCollisionHero
+			jmp burner_update_anim_check_collision_hero
 
 @setMoveInit:
- 			; hl - ptr to monsterStatusTimer
+ 			; hl - ptr to monster_status_timer
 			mvi m, BURNER_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
-			; advance hl to monsterStatus
+			; advance hl to monster_status
 			dcx h
 			mvi m, BURNER_STATUS_MOVE_INIT
 			ret
 
-BurnerUpdateMoveInit:
-			; hl = monsterStatus
+burner_update_move_init:
+			; hl = monster_status
 			mvi m, BURNER_STATUS_MOVE
 
 			xchg
 			call Random
-			; advance hl to monsterSpeedX
-			LXI_H_TO_DIFF(monsterSpeedX, monsterStatus)
+			; advance hl to monster_speed_x
+			LXI_H_TO_DIFF(monster_speed_x, monster_status)
 			dad d
 
 			mvi c, 0 ; tmp c=0
@@ -270,7 +270,7 @@ BurnerUpdateMoveInit:
 			inx h
 			mov m, c
 @setAnim:
-			LXI_B_TO_DIFF(monsterAnimPtr, monsterSpeedY+1)
+			LXI_B_TO_DIFF(monster_anim_ptr, monster_speed_y+1)
 			dad b
 			; a = rnd
 			ora a
@@ -287,77 +287,77 @@ BurnerUpdateMoveInit:
 			mvi m, >burner_run_r
             ret
 
-BurnerUpdateMove:
-			; hl = monsterStatus
-			; advance hl to monsterStatusTimer
+burner_update_move:
+			; hl = monster_status
+			; advance hl to monster_status_timer
 			inx h
 			dcr m
 			jz @setDetectHeroInit
 @updateMovement:
-			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monsterStatusTimer, monsterPosX, BURNER_COLLISION_WIDTH, BURNER_COLLISION_HEIGHT, @setMoveInit) 
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, BURNER_COLLISION_WIDTH, BURNER_COLLISION_HEIGHT, @setMoveInit) 
 			
-			; hl points to monsterPosY+1
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosY+1)
+			; hl points to monster_pos_y+1
+			; advance hl to monster_anim_timer
+			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_y+1)
 			dad b
 			mvi a, BURNER_ANIM_SPEED_MOVE
-			jmp BurnerUpdateAnimCheckCollisionHero
+			jmp burner_update_anim_check_collision_hero
 
 @setMoveInit:
 			pop h
-			; hl points to monsterPosX
-			; advance hl to monsterStatus
-			LXI_B_TO_DIFF(monsterStatus, monsterPosX)
+			; hl points to monster_pos_x
+			; advance hl to monster_status
+			LXI_B_TO_DIFF(monster_status, monster_pos_x)
 			dad b
 			mvi m, BURNER_STATUS_MOVE_INIT
 			inx h
 			mvi m, BURNER_STATUS_MOVE_TIME
 			ret
 @setDetectHeroInit:
- 			; hl - ptr to monsterStatusTimer
-			; advance hl to monsterStatus
+ 			; hl - ptr to monster_status_timer
+			; advance hl to monster_status
 			dcx h
 			mvi m, BURNER_STATUS_DETECT_HERO_INIT
 			ret
 
-BurnerUpdateRelax:
-			; hl = monsterStatus
-			; advance hl to monsterStatusTimer
+burner_update_relax:
+			; hl = monster_status
+			; advance hl to monster_status_timer
 			inx h
 			dcr m
 			jz @setMoveInit
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatusTimer)
+			; advance hl to monster_anim_timer
+			LXI_B_TO_DIFF(monster_anim_timer, monster_status_timer)
 			dad b
 			mvi a, BURNER_ANIM_SPEED_RELAX
-			jmp BurnerUpdateAnimCheckCollisionHero
+			jmp burner_update_anim_check_collision_hero
  @setMoveInit:
- 			; hl - ptr to monsterStatusTimer
+ 			; hl - ptr to monster_status_timer
 			mvi m, BURNER_STATUS_MOVE_TIME
-			; advance hl to monsterStatus
+			; advance hl to monster_status
 			dcx h
 			mvi m, BURNER_STATUS_MOVE_INIT
 			ret
 
-BurnerUpdateDashPrep:
-			; hl = monsterStatus
-			; advance hl to monsterStatusTimer
+burner_update_dash_prep:
+			; hl = monster_status
+			; advance hl to monster_status_timer
 			inx h
 			dcr m
 			jz @setDash
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterStatusTimer)
+			; advance hl to monster_anim_timer
+			LXI_B_TO_DIFF(monster_anim_timer, monster_status_timer)
 			dad b
 			mvi a, BURNER_ANIM_SPEED_DASH_PREP
-			jmp BurnerUpdateAnimCheckCollisionHero
+			jmp burner_update_anim_check_collision_hero
  @setDash:
-  			; hl - ptr to monsterStatusTimer
+  			; hl - ptr to monster_status_timer
 			mvi m, BURNER_STATUS_DASH_TIME
-			; advance hl to monsterStatus
+			; advance hl to monster_status
 			dcx h
 			mvi m, BURNER_STATUS_DASH
-			; advance hl to monsterPosX
-			LXI_B_TO_DIFF(monsterPosX, monsterStatus)
+			; advance hl to monster_pos_x
+			LXI_B_TO_DIFF(monster_pos_x, monster_status)
 			dad b
 			; reset sub pixel posX
 			mvi m, 0
@@ -422,36 +422,36 @@ BurnerUpdateDashPrep:
 			mov m, d
 			ret
 
-BurnerUpdateDash:
-			; hl = monsterStatus
-			; advance hl to monsterStatusTimer
+burner_update_dash:
+			; hl = monster_status
+			; advance hl to monster_status_timer
 			inx h
 			dcr m
 			jm @setMoveInit
 @applyMovement:
-			ACTOR_UPDATE_MOVEMENT(monsterStatusTimer, monsterSpeedY)
-			; advance hl to monsterAnimTimer
-			LXI_B_TO_DIFF(monsterAnimTimer, monsterPosX+1)
+			ACTOR_UPDATE_MOVEMENT(monster_status_timer, monster_speed_y)
+			; advance hl to monster_anim_timer
+			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_x+1)
 			dad b
 			mvi a, BURNER_ANIM_SPEED_DASH
 			jmp actor_anim_update
 @setMoveInit:
-			; hl points to monsterStatusTimer
+			; hl points to monster_status_timer
 			mvi m, BURNER_STATUS_MOVE_TIME			
-			; advance hl to monsterStatus
+			; advance hl to monster_status
 			dcx h
 			mvi m, BURNER_STATUS_MOVE_INIT
 			ret	
 
 
 ; in:
-; hl - monsterAnimTimer
+; hl - monster_anim_timer
 ; a - anim speed
-BurnerUpdateAnimCheckCollisionHero:
+burner_update_anim_check_collision_hero:
 			call actor_anim_update
 			MONSTER_CHECK_COLLISION_HERO(BURNER_COLLISION_WIDTH, BURNER_COLLISION_HEIGHT, BURNER_DAMAGE)
 
-BurnerImpact:
+burner_impact:
 			; de - ptr to monster_impact_ptr+1
 			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impact_ptr+1)
 			dad d
@@ -459,6 +459,6 @@ BurnerImpact:
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to monsterDrawPtr in the runtime data
-BurnerDraw:
+; de - ptr to monster_draw_ptr in the runtime data
+burner_draw:
 			MONSTER_DRAW(sprite_get_scr_addr_burner, __RAM_DISK_S_BURNER)
