@@ -130,7 +130,7 @@
 			inx h
 			mvi m, >MONSTER_ANIM
 
-			; c - tileIdx
+			; c - tile_idx
 			; posX = tile idx % ROOM_WIDTH * TILE_WIDTH
 			mvi a, %00001111
 			ana c

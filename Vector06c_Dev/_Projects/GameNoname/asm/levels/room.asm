@@ -363,10 +363,10 @@ room_check_walkable_tiles:
 ; c - height-1
 ; out:
 room_tile_collision_data:
-			; tileData layout:
+			; tile_data layout:
 			; (bottom-left), (top-left), (top_right), (bottom-right)
 			.byte 0, 0, 0, 0,		
-; Z flag = 1 if all tiles have tileData func==0
+; Z flag = 1 if all tiles have tile_data func==0
 room_get_tile_data_around_sprite:
 			; calc the top-right corner addr
 			mov a, d
@@ -401,11 +401,11 @@ room_get_tile_data_around_sprite:
 			mov h, m
 			mov l, c
 			
-			; tileData layout in registers:
+			; tile_data layout in registers:
 			; h (top-left), 	e (top_right)
 			; l (bottom-left), 	d (bottom-right)
 
-			; tileData layout in room_tile_collision_data:
+			; tile_data layout in room_tile_collision_data:
 			; (bottom-left), (top-left), (top_right), (bottom-right)
 
 			shld room_tile_collision_data

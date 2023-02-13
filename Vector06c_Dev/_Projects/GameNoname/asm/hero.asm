@@ -66,12 +66,20 @@ hero_collision_func_table:
 ; funcs to handle the tile data. more info is in level_data.asm->room_tiles_data
 hero_tile_func_table:
 			JMP_4(0)						; func_id == 1
-			JMP_4(0)						; func_id == 2
+			JMP_4(hero_tile_func_teleport)	; func_id == 2
 			JMP_4(0)						; func_id == 3
-			JMP_4(hero_tile_func_teleport)	; func_id == 4
+			JMP_4(0)						; func_id == 4
 			JMP_4(0)						; func_id == 5
 			JMP_4(0)						; func_id == 6
-			JMP_4(hero_tile_func_nothing)	; func_id == 7 (collision) called only when a hero is stuck into collision tiles
+			JMP_4(0)						; func_id == 7
+			JMP_4(0)						; func_id == 8
+			JMP_4(0)						; func_id == 9
+			JMP_4(0)						; func_id == 10
+			JMP_4(0)						; func_id == 11
+			JMP_4(0)						; func_id == 12
+			JMP_4(0)						; func_id == 13
+			JMP_4(0)						; func_id == 14
+			JMP_4(hero_tile_func_nothing)	; func_id == 15 (collision) called only when a hero is stuck into collision tiles
 
 HeroInit:
 			call hero_idle_start
@@ -307,7 +315,7 @@ hero_move:
 			shld hero_pos_x
 			lhld char_temp_y
 			shld hero_pos_y
-; handle tileData around a hero.
+; handle tile_data around a hero.
 hero_check_tile_data:
 hero_dont_move:
 			lxi h, hero_pos_x+1
@@ -500,10 +508,10 @@ hero_tile_func_nothing:
 			pop psw
 			ret
 
-; load a new room with roomId, move the hero to an
+; load a new room with room_id, move the hero to an
 ; appropriate position based on his current posXY
 ; input:
-; a - roomId
+; a - room_id
 hero_tile_func_teleport:
 			pop h
 
