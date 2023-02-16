@@ -89,6 +89,23 @@ monsters_get_first_collided:
 			dad b
 			jmp @loop
 
+; a tile data handler to spawn a monster by its id.
+; input:
+; b - tile data
+; c - tile idx in the room_tiles_data array.
+; a - monster_id
+; out:
+; a - tile_data that will be saved back into room_tiles_data
+monsters_spawn:
+			; get a monster init func addr ptr
+			lxi h, monstersInits
+			add_a(2) ; to make a JMP_4 ptr
+			mov e, a
+			mvi d, 0
+			dad d
+			; call a monster init func
+			pchl
+
 ; look up the empty spot in the monster runtime data
 ; in: 
 ; none
@@ -219,7 +236,6 @@ MonstersCommonFuncCaller:
 			dad d
 			jmp @loop
 			ret
-			.closelabels
 			
 monsters_update:
 			lxi h, 0

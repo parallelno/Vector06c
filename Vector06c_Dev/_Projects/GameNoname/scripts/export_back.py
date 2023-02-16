@@ -113,6 +113,14 @@ def sprite_data(bytes0, bytes1, bytes2, bytes3, w, h):
 
 def anims_to_asm(labelPrefix, source_j):
 	asm = ""
+
+	# make a list of animNames
+	asm += labelPrefix + "_anims:\n"
+	asm += "			.word "
+	for animName in source_j["anims"]:
+		asm += labelPrefix + "_" + animName + ", "
+	asm += "\n"
+	
 	preshiftedSprites = 1 # means no preshifted sprites
 
 	# make a list of sprites for an every anim
@@ -192,6 +200,12 @@ def sprites_to_asm(labelPrefix, source_j, image):
 		y = sprite["y"]
 		width = sprite["width"]
 		height = sprite["height"]
+		offsetX = 0
+		if sprite.get("offsetX") is not None:
+			offsetX = sprite["offsetX"]
+		offsetY = 0
+		if sprite.get("offsetY") is not None:
+			offsetY = sprite["offsetY"]
 
 		# get a sprite as a color index 2d array
 		spriteImg = []
@@ -221,6 +235,8 @@ def sprites_to_asm(labelPrefix, source_j, image):
 		asm += f"{labelPrefix}_{spriteName}:\n"
 
 		widthPacked = width//8 - 1
+		offsetXPacked = offsetX//8
+		asm += "			.byte " + str( offsetY ) + ", " +  str( offsetXPacked ) + "; offsetY, offsetX\n"
 		asm += "			.byte " + str( height ) + ", " +  str( widthPacked ) + "; height, width\n"
 		asm += bytes_to_asm_tiled(data)
 		asm += "\n"

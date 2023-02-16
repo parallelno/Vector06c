@@ -1,10 +1,10 @@
 ; max bullets in the room
 BULLETS_MAX = 15
 
-BULLET_RUNTIME_DATA_DESTR = $fc ; a bullet is ready to be destroyed
-BULLET_RUNTIME_DATA_EMPTY = $fd ; a bullet data is available for a new bullet
-BULLET_RUNTIME_DATA_LAST = $fe ; the end of the last existing bullet data
-BULLET_RUNTIME_DATA_END = $ff ; the end of the data
+BULLET_RUNTIME_DATA_DESTR   = $fc ; a bullet is ready to be destroyed
+BULLET_RUNTIME_DATA_EMPTY   = $fd ; a bullet data is available for a new bullet
+BULLET_RUNTIME_DATA_LAST    = $fe ; the end of the last existing bullet data
+BULLET_RUNTIME_DATA_END     = $ff ; the end of the data
 
 ; statuses.
 ; a status describes what set of animations and behavior is active

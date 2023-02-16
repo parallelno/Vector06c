@@ -4,7 +4,7 @@
 ; hl
 ; out:
 ; a - random number
-Random:
+random:
 @mainCodeAddr:
 			lxi h, $100
 @rnd:
@@ -24,7 +24,7 @@ Random:
 ; hl = pseudorandom number
 ; use:
 ; a, hl
-Random:
+random:
 			lxi h, 1       ; seed must not be 0
 			mov a, h
 			rar
@@ -40,7 +40,7 @@ Random:
 			mov l, a
 			xra h
 			mov h, a
-			shld Random+1		; 116
+			shld random+1		; 116
 			ret
 		
 /*
@@ -52,7 +52,7 @@ Random:
 ; http://www.z80.info/pseudo-random.txt
 
 RndVal		.byte 34
-Random:
+random:
 			lxi	h, RndVal
 			mov a, m
 			rrc
@@ -72,7 +72,7 @@ Random:
 ; M: HL, AF
 
 RndVal		.byte 1
-Random:
+random:
 			lxi	h, RndVal
 			mov	a, m
 			add	a

@@ -35,8 +35,12 @@ draw_back_v:
 			mov h, b
 			mov l, c
 			sphl
-			pop b
 			xchg
+			; b - offsetX
+			; c - offsetY
+			pop b
+			dad b
+			pop b
 			mov d, c
 			xra a
 			cmp b

@@ -4,10 +4,10 @@ MONSTERS_MAX = 15
 MONSTER_TYPE_ENEMY = 0
 MONSTER_TYPE_ALLY = 1
 
-MONSTER_RUNTIME_DATA_DESTR = $fc ; a monster is ready to be destroyed
-MONSTER_RUNTIME_DATA_EMPTY = $fd ; a monster data is available for a new monster
-MONSTER_RUNTIME_DATA_LAST = $fe ; the end of the last existing monster data
-MONSTER_RUNTIME_DATA_END = $ff ; the end of the data
+MONSTER_RUNTIME_DATA_DESTR  = $fc ; a monster is ready to be destroyed
+MONSTER_RUNTIME_DATA_EMPTY  = $fd ; a monster data is available for a new monster
+MONSTER_RUNTIME_DATA_LAST   = $fe ; the end of the last existing monster data
+MONSTER_RUNTIME_DATA_END    = $ff ; the end of the data
 
 ; statuses.
 ; a status describes what set of animations and behavior is active

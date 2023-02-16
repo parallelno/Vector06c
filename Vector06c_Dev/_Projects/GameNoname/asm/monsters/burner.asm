@@ -222,7 +222,7 @@ burner_update_move_init:
 			mvi m, BURNER_STATUS_MOVE
 
 			xchg
-			call Random
+			call random
 			; advance hl to monster_speed_x
 			LXI_H_TO_DIFF(monster_speed_x, monster_status)
 			dad d

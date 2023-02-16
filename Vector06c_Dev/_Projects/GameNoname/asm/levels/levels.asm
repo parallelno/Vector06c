@@ -31,11 +31,10 @@ level_update:
 			ora a
 			rz
 			cpi LEVEL_COMMAND_LOAD_DRAW_ROOM
-			jnz @nextCommandCheck
+			jnz @nextCommandCheck			
 			; load a new room
 			call room_init
 			call room_draw
-
 			call HeroInit
 			xra a
 			lda	update_request_counter

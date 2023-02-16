@@ -1,6 +1,7 @@
 room_init:
 			call MonstersEraseRuntimeData
 			call bullets_erase_runtime_data
+			call backs_init
 			call room_init_tiles_gfx
 			call room_init_tiles_data
 			; erase a back buffer $a000-$ffff in the ram-disk
@@ -113,7 +114,7 @@ room_init_tiles_data:
 			push b
 			TILE_DATA_HANDLE_FUNC_CALL(room_func_table)
 			pop b
-			mov m, a
+			mov m, a ; save tile_data back into room_tiles_data. funcs (ex. burner_init etc.) can replace A with 0 to make it walkable
 			inx h
 			inr c
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
@@ -127,28 +128,12 @@ room_init_tiles_data:
 ; it copies the tile data byte into the room_tiles_data as it is
 ; input:
 ; b - tile data
-; return:
-; a - tile data that will be saved into the room tile data array
+; out:
+; a - tile_data that will be saved back into room_tiles_data
 room_tile_data_copy:
             ; just return the same tile data
 			mov a, b
 			ret
-			.closelabels
-
-; a tile data handler to spawn a monster by its id.
-; input:
-; c - tile idx in the room_tiles_data array.
-; a - monster id
-room_monster_spawn:
-			; get a monster init func addr ptr
-			lxi h, monstersInits
-			add_a(2) ; to make a JMP_4 ptr
-			mov e, a
-			mvi d, 0
-			dad d
-			; call a monster init func
-			pchl
-			.closelabels
 
 room_draw:
 			; main scr

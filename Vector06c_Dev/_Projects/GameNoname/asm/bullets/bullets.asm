@@ -10,7 +10,6 @@ bullets_erase_runtime_data:
 			ret
 			.closelabels
 
-
 ; look up the empty spot in the bullet runtime data
 ; in: 
 ; none

@@ -52,7 +52,9 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths,
 
 	# sort chunks by the unpack priority
 	sorted_chunks = sorted(chunks, key=get_unpack_priority)
-
+	
+	# print in the order which they will be unpacked and moved into the ram-disk
+	asm += "ram_disk_data: ; the addr of this label has to be < $8000\n"
 	for chunk_j in sorted_chunks:
 		bank_id = chunk_j["bank_id"]
 		addr_s = chunk_j["segment_addr_s"]

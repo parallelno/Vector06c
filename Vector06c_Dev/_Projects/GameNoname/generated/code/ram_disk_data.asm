@@ -12,13 +12,14 @@
 .include "generated\\sprites\\skeleton_anim.asm"
 .include "generated\\sprites\\scythe_anim.asm"
 .include "generated\\sprites\\hero_attack01_anim.asm"
-.include "generated\\sprites\\torch_anim.asm"
+.include "generated\\sprites\\backs_anim.asm"
 .include "generated\\sprites\\knight_anim.asm"
 .include "generated\\sprites\\burner_anim.asm"
 .include "generated\\sprites\\bomb_slow_anim.asm"
 .include "generated\\sprites\\hero_l_anim.asm"
 .include "generated\\sprites\\vampire_anim.asm"
 
+ram_disk_data: ; the addr of this label has to be < $8000
 chunk_bank0_addr0_0:
 .incbin "generated\\bin\\chunk_bank0_addr0_0.bin.zx0"
 chunk_bank0_addr0_1:
@@ -43,8 +44,8 @@ chunk_bank3_addr8000_0:
 ; ram-disk data layout
 ; bank0 addr0    [ 1054 free] description: 
 ;                             hero_r_sprites [14466], skeleton_sprites [10140], scythe_sprites [1626], hero_attack01_sprites [5226], 
-; bank0 addr8000 [32528 free] description: 
-;                             torch_sprites [240], 
+; bank0 addr8000 [32304 free] description: 
+;                             backs_sprites [464], 
 ; bank1 addr0    [ 5554 free] description: 
 ;                             knight_sprites [16398], burner_sprites [9600], bomb_slow_sprites [960], 
 ; bank1 addr8000 [    0 free] description: $8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)
@@ -56,4 +57,4 @@ chunk_bank3_addr8000_0:
 ;                             level01 [6300], 
 ; bank3 addr8000 [ 6136 free] description: $8000-$9FFF code library. $A000-$FFFF back buffer
 ;                             sprite_rd [173], draw_sprite_rd [544], utils_rd [87], sprite_preshift_rd [1538], 
-; [101502 total free]
+; [101278 total free]

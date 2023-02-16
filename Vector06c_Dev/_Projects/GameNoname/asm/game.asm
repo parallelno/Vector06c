@@ -13,6 +13,7 @@
 .include "asm\\bullets\\bullets.asm"
 .include "asm\\levels\\levels.asm"
 .include "asm\\levels\\room.asm"
+.include "asm\\levels\\backs.asm"
 .include "asm\\render\\text.asm"
 .include "asm\\ui.asm"
 
@@ -45,6 +46,7 @@ game_update:
 			call monsters_update
 			call bullets_update
 			call level_update
+			call backs_update
 
 			; to check repeated key-pressing
 			lhld key_code
@@ -55,32 +57,11 @@ game_update:
 			jnz @updateLoop
 			ret
 
-; TODO: tmp
-draw_back_sprite:
-			; DE - screen addr
-			; HL - pointer to sprite ptr
-			lxi d, $8060
-			/*
-			lxi h, room_tiles_gfx_ptrs + (13*16+3)*2
-			mov c, m
-			inx h
-			mov b, m
-			inx h
-			call draw_back_v
-			*/
-			lxi b, __torch_front1
-			call draw_back_v
-			ret
-; TODO: end tmp
-
 game_draw:
 			lxi h, game_draws_counter
 			inr m
 
-			; TODO: tmp
-			CALL_RAM_DISK_FUNC(draw_back_sprite, <__RAM_DISK_S_TORCH)
-		
-			; TODO: end tmp
+			call backs_draw
 
 			call hero_draw
 			call monsters_draw

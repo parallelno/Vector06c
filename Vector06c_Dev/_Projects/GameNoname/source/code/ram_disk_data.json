@@ -78,7 +78,7 @@
 							"assets" : [
 								{
 									"asset_type" : "back",
-									"path" : "source\\sprites\\torch.json",
+									"path" : "source\\sprites\\backs.json",
 									"export_dir" : "generated\\sprites\\"
 								}
 							]

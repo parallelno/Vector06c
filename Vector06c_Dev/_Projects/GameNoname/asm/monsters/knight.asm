@@ -315,7 +315,7 @@ KnightUpdateMoveInit:
 			mvi b, %00000000
 @verticalMovement:			
 			xchg
-			call Random
+			call random
 			ani %01111111 ; to clear the last bit
 			ora b
 			; advance hl to monster_speed_x

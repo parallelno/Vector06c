@@ -212,7 +212,7 @@ SkeletonUpdateMoveInit:
 			;mvi m, SKELETON_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
 
 			xchg
-			call Random
+			call random
 			; advance hl to monster_speed_x
 			LXI_H_TO_DIFF(monster_speed_x, monster_status)
 			dad d

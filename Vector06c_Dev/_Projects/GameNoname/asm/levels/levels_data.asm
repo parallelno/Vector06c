@@ -45,8 +45,8 @@ room_tiles_data:
 
 ; to init each tile data in a room during a room initialization. check room.asm room_init_tiles_data func
 room_func_table:
-			JMP_4(room_tile_data_copy) ; func_id = 0
-			JMP_4(room_monster_spawn)
+			JMP_4(room_tile_data_copy)	; func_id = 0
+			JMP_4(monsters_spawn)
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
@@ -55,12 +55,12 @@ room_func_table:
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
+			JMP_4(backs_spawn)			; func_id = 10
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy) ; func_id = 15
+			JMP_4(room_tile_data_copy)	; func_id = 15
 
 ; command that are handled by the level update func
 LEVEL_COMMAND_NONE = 0

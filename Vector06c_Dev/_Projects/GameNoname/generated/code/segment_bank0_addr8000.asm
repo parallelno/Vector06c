@@ -6,9 +6,9 @@ RAM_DISK_M = RAM_DISK_M0
 
 __chunk_start_bank0_addr8000_0:
 
-__torch_sprites_rd_data_start:
-.include "generated\\sprites\\torch_sprites.asm"
-__torch_sprites_rd_data_end:
+__backs_sprites_rd_data_start:
+.include "generated\\sprites\\backs_sprites.asm"
+__backs_sprites_rd_data_end:
 
 .align 2
 __chunk_end_bank0_addr8000_0:

@@ -18,7 +18,9 @@ main_start:
 			call game_init
 			jmp @mainLoop
 
-
-main_ram_seg_end:
+code_seg_end:
+; the ram disk data below will be moved into the ram-disk before the game starts. 
+; that means if it is stored at the end of the program, everything that is go
+; to the ram-disk can overlap the screen addrs.
 .include "generated\\code\\ram_disk_data.asm"
 .end

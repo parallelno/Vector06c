@@ -5,7 +5,6 @@
 ; call a handler func with DDDD stored in a, bc passed in the func depends on the context
 ; input:
 ; hl - a pointer to a tile data in a format ffffDDDD.
-
 ; keeps hl unchanged
 ; use:
 ; de, a
