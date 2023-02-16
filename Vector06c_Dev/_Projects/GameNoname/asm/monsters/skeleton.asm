@@ -93,36 +93,36 @@ SKELETON_DETECT_HERO_DISTANCE = 60
 ; a - monster id * 4
 ; out:
 ; a = 0
-SkeletonInit:
-			MONSTER_INIT(SkeletonUpdate, SkeletonDraw, SkeletonImpact, SKELETON_HEALTH, SKELETON_STATUS_DETECT_HERO_INIT, skeleton_idle)
+skeleton_init:
+			MONSTER_INIT(skeleton_update, skeleton_draw, skeleton_impact, SKELETON_HEALTH, SKELETON_STATUS_DETECT_HERO_INIT, skeleton_idle)
 			ret
 
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data
-SkeletonUpdate:
+skeleton_update:
 			; advance hl to monster_status
 			LXI_H_TO_DIFF(monster_status, monster_update_ptr)
 			dad d
 			mov a, m
 			; TODO: optimization. think of using a call table
 			cpi SKELETON_STATUS_MOVE
-			jz SkeletonUpdateMove
+			jz skeleton_update_move
 			cpi SKELETON_STATUS_DETECT_HERO
-			jz SkeletonUpdateDetectHero
+			jz skeleton_update_detect_hero
 			cpi SKELETON_STATUS_RELAX
-			jz SkeletonUpdateRelax
+			jz skeleton_update_relax
 			cpi SKELETON_STATUS_SHOOT_PREP
-			jz SkeletonUpdateShootPrep
+			jz skeleton_update_shoot_prep
 			cpi SKELETON_STATUS_MOVE_INIT
-			jz SkeletonUpdateMoveInit
+			jz skeleton_update_move_init
 			cpi SKELETON_STATUS_DETECT_HERO_INIT
-			jz SkeletonUpdateDetectHeroInit
+			jz skeleton_update_detect_hero_init
 			cpi SKELETON_STATUS_SHOOT
-			jz SkeletonUpdateShoot
+			jz skeleton_update_shoot
 			ret
 
-SkeletonUpdateDetectHeroInit:
+skeleton_update_detect_hero_init:
 			; hl = monster_status
 			mvi m, SKELETON_STATUS_DETECT_HERO
 			inx h
@@ -134,7 +134,7 @@ SkeletonUpdateDetectHeroInit:
 			mvi m, >skeleton_idle
 			ret
 
-SkeletonUpdateDetectHero:
+skeleton_update_detect_hero:
 			; hl = monster_status
 			; advance hl to monster_status_timer
 			inx h
@@ -189,13 +189,13 @@ SkeletonUpdateDetectHero:
 			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_x+1)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_DETECT_HERO
-			jmp SkeletonUpdateAnimCheckCollisionHero
+			jmp skeleton_update_anim_check_collision_hero
 @updateAnimHeroDetectY:
 			; advance hl to monster_anim_timer
 			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_y+1)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_DETECT_HERO
-			jmp SkeletonUpdateAnimCheckCollisionHero
+			jmp skeleton_update_anim_check_collision_hero
 
 @setMoveInit:
  			; hl - ptr to monster_status_timer
@@ -205,7 +205,7 @@ SkeletonUpdateDetectHero:
 			mvi m, SKELETON_STATUS_MOVE_INIT
 			ret
 
-SkeletonUpdateMoveInit:
+skeleton_update_move_init:
 			; hl = monster_status
 			mvi m, SKELETON_STATUS_MOVE
 			;inx h
@@ -277,7 +277,7 @@ SkeletonUpdateMoveInit:
 			mvi m, >skeleton_run_r
             ret
 
-SkeletonUpdateMove:
+skeleton_update_move:
 			; hl = monster_status
 			; advance hl to monster_status_timer
 			inx h
@@ -291,7 +291,7 @@ SkeletonUpdateMove:
 			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_y+1)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_MOVE
-			jmp SkeletonUpdateAnimCheckCollisionHero
+			jmp skeleton_update_anim_check_collision_hero
 
 @setMoveInit:
 			pop h
@@ -311,7 +311,7 @@ SkeletonUpdateMove:
 			mvi m, SKELETON_STATUS_DETECT_HERO_INIT
 			ret
 
-SkeletonUpdateRelax:
+skeleton_update_relax:
 			; hl = monster_status
 			; advance hl to monster_status_timer
 			inx h
@@ -321,7 +321,7 @@ SkeletonUpdateRelax:
 			LXI_B_TO_DIFF(monster_anim_timer, monster_status_timer)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_RELAX
-			jmp SkeletonUpdateAnimCheckCollisionHero
+			jmp skeleton_update_anim_check_collision_hero
  @setMoveInit:
  			; hl - ptr to monster_status_timer
 			mvi m, SKELETON_STATUS_MOVE_TIME
@@ -330,7 +330,7 @@ SkeletonUpdateRelax:
 			mvi m, SKELETON_STATUS_MOVE_INIT
 			ret
 
-SkeletonUpdateShootPrep:
+skeleton_update_shoot_prep:
 			; hl = monster_status
 			; advance hl to monster_status_timer
 			inx h
@@ -340,7 +340,7 @@ SkeletonUpdateShootPrep:
 			LXI_B_TO_DIFF(monster_anim_timer, monster_status_timer)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_SHOOT_PREP
-			jmp SkeletonUpdateAnimCheckCollisionHero
+			jmp skeleton_update_anim_check_collision_hero
  @setShoot:
   			; hl - ptr to monster_status_timer
 			; advance hl to monster_status
@@ -348,7 +348,7 @@ SkeletonUpdateShootPrep:
 			mvi m, SKELETON_STATUS_SHOOT
 			ret
 
-SkeletonUpdateShoot:
+skeleton_update_shoot:
 			; hl = monster_status
 			mvi m, SKELETON_STATUS_RELAX
 			; advance hl to monster_status_timer
@@ -386,16 +386,16 @@ SkeletonUpdateShoot:
 			mov b, m
 			inx_h(2)
 			mov c, m
-			jmp ScytheInit
+			jmp scythe_init
 
 ; in:
 ; hl - monster_anim_timer
 ; a - anim speed
-SkeletonUpdateAnimCheckCollisionHero:
+skeleton_update_anim_check_collision_hero:
 			call actor_anim_update
 			MONSTER_CHECK_COLLISION_HERO(SKELETON_COLLISION_WIDTH, SKELETON_COLLISION_HEIGHT, SKELETON_DAMAGE)
 
-SkeletonImpact:
+skeleton_impact:
 			; de - ptr to monster_impact_ptr+1
 			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impact_ptr+1)
 			dad d
@@ -404,5 +404,5 @@ SkeletonImpact:
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to monster_draw_ptr in the runtime data
-SkeletonDraw:
+skeleton_draw:
 			MONSTER_DRAW(sprite_get_scr_addr_skeleton, __RAM_DISK_S_SKELETON)

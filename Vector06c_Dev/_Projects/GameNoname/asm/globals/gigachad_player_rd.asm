@@ -10,41 +10,41 @@
 __RAM_DISK_S_GCPLAYER = RAM_DISK_S
 __RAM_DISK_M_GCPLAYER = RAM_DISK_M
 
-; ex. CALL_RAM_DISK_FUNC(__gc_player_init, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
-__gc_player_init:
-			call gc_player_mute
-			call gc_player_clear_buffers
+; ex. CALL_RAM_DISK_FUNC(__gcplayer_init, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
+__gcplayer_init:
+			call gcplayer_mute
+			call gcplayer_clear_buffers
 			ret
 
-; ex. CALL_RAM_DISK_FUNC(__gc_player_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
-__gc_player_start_repeat:
-			lda __gc_player_update 
+; ex. CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
+__gcplayer_start_repeat:
+			lda __gcplayer_update 
 			ora a
 			rz
 
-			call gc_player_tasks_init
-			call gc_player_scheduler_init
+			call gcplayer_tasks_init
+			call gcplayer_scheduler_init
 
 			; set bufferIdx GC_PLAYER_TASKS bytes prior to the init unpacking addr (0),
 			; to let zx0 unpack data for GC_PLAYER_TASKS number of regs
 			; that means the music will be GC_PLAYER_TASKS number of frames delayed
 			mvi a, -GC_PLAYER_TASKS
-			sta gc_player_buffer_idx
+			sta gcplayer_buffer_idx
 			mvi a, -1
-			sta gc_player_task_id
+			sta gcplayer_task_id
 			; turn on the updates
 			xra a
-			sta __gc_player_update
+			sta __gcplayer_update
 			ret
 			.closelabels
 
 ; this function has to be called from an unterruption routine
-; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(__gc_player_update, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
-__gc_player_update:
+; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(__gcplayer_update, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
+__gcplayer_update:
 			; ret will be replaced with NOP when the player inited
 			ret
 			; handle the current task
-			lxi h, gc_player_task_id
+			lxi h, gcplayer_task_id
 			mov a, m
 			inr a
 			ani $f
@@ -52,25 +52,25 @@ __gc_player_update:
 			; if the task idx is higher GC_PLAYER_TASKS number, skip it
 			cpi GC_PLAYER_TASKS
 			jnc @skip
-			call gc_player_scheduler_update
+			call gcplayer_scheduler_update
 @skip:
-			lxi h, gc_player_buffer_idx
+			lxi h, gcplayer_buffer_idx
 			inr m
-			call gc_player_ay_update
+			call gcplayer_ay_update
 			ret
 			.closelabels
 
 ; bufferN[bufferIdx] data will be send to AY for each register accordingly
-gc_player_buffer_idx:
+gcplayer_buffer_idx:
 			.byte TEMP_BYTE
-gc_player_task_id:
+gcplayer_task_id:
 			.byte TEMP_BYTE
 			.closelabels
 
 ;==========================================
 ; create a GCPlayerUnpack tasks
 ;
-gc_player_tasks_init:
+gcplayer_tasks_init:
 			di
 			lxi h, 0
 			dad sp
@@ -87,7 +87,7 @@ gc_player_tasks_init:
 			; store the buffer addr to a task stack
 			mov a, c
 			rrc
-			adi >gc_player_buffer00
+			adi >gcplayer_buffer00
 			mov h, a
 			mov l, b
 			push h
@@ -122,7 +122,7 @@ gc_player_tasks_init:
 			.closelabels
 
 ; Set the current task stack pointer to the first task stack pointer
-gc_player_scheduler_init:
+gcplayer_scheduler_init:
 			lxi h, GCPlayerTaskSPs
 			shld GCPlayerCurrentTaskSPp
 			ret
@@ -132,9 +132,9 @@ gc_player_scheduler_init:
 ; to prevent player to play gugbage data 
 ; when it repeats the current song or
 ; play a new one
-gc_player_clear_buffers:
-			mvi h, >gc_player_buffer00
-			mvi a, (>gc_player_buffer13) + 1
+gcplayer_clear_buffers:
+			mvi h, >gcplayer_buffer00
+			mvi a, (>gcplayer_buffer13) + 1
 @nextBuff:
 			mvi l, -GC_PLAYER_TASKS
 @loop:
@@ -150,7 +150,7 @@ gc_player_clear_buffers:
 ; this func restores the context of the current task
 ; then calls GCPlayerUnpack to let it continue unpacking regData
 ; this code is performed during an interruption
-gc_player_scheduler_update:
+gcplayer_scheduler_update:
 			lxi h, 0
 			dad sp
 			shld GCPlayerSchedulerRestoreSp+1
@@ -170,7 +170,7 @@ gc_player_scheduler_update:
 
 ; GCPlayerUnpack task calls this after unpacking 16 bytes.
 ; it stores all the registers of the current task
-GCPlayerSchedulerStoreTaskContext:
+gcplayer_scheduler_store_task_context:
 			push b
 			push d
 			push h
@@ -205,7 +205,7 @@ GCPlayerSchedulerRestoreSp:
 ; DE: source address (compressed data)
 ; BC: destination address (decompressing)
 ; unpack every 16 bytes into a current task circular buffer, 
-; then call GCPlayerSchedulerStoreTaskContext
+; then call gcplayer_scheduler_store_task_context
 GCPlayerUnpack:
 			lxi h, $ffff
 			push h
@@ -222,7 +222,7 @@ GCPlayerUnpack:
 			; check if it's time to have a break
 			mvi a, $0f
 			ana c
-			cz GCPlayerSchedulerStoreTaskContext 
+			cz gcplayer_scheduler_store_task_context 
 
 			dcx h
 			mov a, h
@@ -251,7 +251,7 @@ GCPlayerUnpack:
 			; check if it's time to have a break
 			mvi a, $0f
 			ana c
-			cz GCPlayerSchedulerStoreTaskContext 
+			cz gcplayer_scheduler_store_task_context 
 
 			dcx h
 			mov a, h
@@ -307,13 +307,13 @@ GCPlayerUnpack:
 			; restore sp
 			lhld GCPlayerSchedulerRestoreSp+1
 			sphl
-			; pop gc_player_scheduler_update return addr 
-			; to return right to the func that called __gc_player_update
+			; pop gcplayer_scheduler_update return addr 
+			; to return right to the func that called __gcplayer_update
 			pop psw
 			; turn off the current music
 			mvi a, OPCODE_RET
-			sta __gc_player_update
-			; return to the func that called __gc_player_update		
+			sta __gcplayer_update
+			; return to the func that called __gcplayer_update		
 			ret
 			.closelabels
 		
@@ -326,10 +326,10 @@ GCPlayerUnpack:
 AY_PORT_REG		= $15
 AY_PORT_DATA	= $14
 
-gc_player_ay_update:
+gcplayer_ay_update:
 			mvi e, GC_PLAYER_TASKS - 1
 			mov c, m
-			mvi b, (>gc_player_buffer00) + GC_PLAYER_TASKS - 1
+			mvi b, (>gcplayer_buffer00) + GC_PLAYER_TASKS - 1
 			ldax b
 			cpi $ff
 			jz @doNotSendData
@@ -345,7 +345,7 @@ gc_player_ay_update:
 			ret
 			.closelabels
 
-gc_player_mute:
+gcplayer_mute:
 			mvi e, GC_PLAYER_TASKS - 1
 @sendData:
 			mov a, e

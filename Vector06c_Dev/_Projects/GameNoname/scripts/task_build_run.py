@@ -21,7 +21,7 @@ rom_path = romDir + romName + build.EXT_ROM
 common.delete_file(bin_path)
 common.delete_file(rom_path) 
 
-common.run_command(f"..\\..\\retroassembler\\retroassembler.exe -C=8080 {source_path} {bin_path}", "", source_path)
+common.run_command(f"..\\..\\retroassembler\\retroassembler.exe -C=8080 -c {source_path} {bin_path}", "", source_path)
 
 if not os.path.exists(bin_path):
 	print(f'ERROR: compilation error, path: {source_path}')

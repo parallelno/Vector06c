@@ -1,94 +1,94 @@
-.macro HLT_(i)
+.macro hlt_(i)
 		.loop i
 			hlt
 		.endloop
 .endmacro
 
-.macro RRC_(i)
+.macro rrc_(i)
 		.loop i
 			rrc
 		.endloop
 .endmacro
 
-.macro RAL_(i)
+.macro ral_(i)
 		.loop i
 			ral
 		.endloop
 .endmacro
 
-.macro RLC_(i)
+.macro rlc_(i)
 		.loop i
 			rlc
 		.endloop
 .endmacro
 
-.macro PUSH_B(i)
+.macro push_b(i)
 		.loop i
 			push b
 		.endloop
 .endmacro
 
-.macro PUSH_H(i)
+.macro push_h(i)
 		.loop i
 			push h
 		.endloop
 .endmacro
 
-.macro POP_H(i)
+.macro pop_h(i)
 		.loop i
 			pop h
 		.endloop
 .endmacro
 
-.macro INR_D(i)
+.macro inr_d(i)
 		.loop i
 			inr d
 		.endloop
 .endmacro
 
-.macro INX_H(i)
+.macro inx_h(i)
 		.loop i
 			inx h
 		.endloop
 .endmacro
 
-.macro INX_D(i)
+.macro inx_d(i)
 		.loop i
 			inx d
 		.endloop
 .endmacro
 
-.macro DCX_H(i)
+.macro dcx_h(i)
 		.loop i
 			dcx h
 		.endloop
 .endmacro
 
-.macro INR_L(i)
+.macro inr_l(i)
 		.loop i
 			inr l
 		.endloop
 .endmacro
 
-.macro INR_H(i)
+.macro inr_h(i)
 		.loop i
 			inr h
 		.endloop
 .endmacro
 
-.macro INR_A(i)
+.macro inr_a(i)
 		.loop i
 			inr a
 		.endloop
 .endmacro
 
-.macro NOP_(i)
+.macro nop_(i)
 		.loop i
 			nop
 		.endloop
 .endmacro
 
-.macro ADD_A(i)
+.macro add_a(i)
 		.loop i
 			add a
 		.endloop
@@ -144,21 +144,21 @@
 .endmacro
 ; restore the ram-disk mode
 .macro RAM_DISK_RESTORE()
-			lda ramDiskMode
+			lda ram_disk_mode
 			out $10
 .endmacro
 ; mount the ram-disk
 ; has to be placed right BEFORE lxi sp, addr, and sphl
 .macro RAM_DISK_ON(_command)
 			mvi a, <_command
-			sta ramDiskMode
+			sta ram_disk_mode
 			out $10
 .endmacro
 ; mount the ram-disk
 ; has to be placed right BEFORE lxi sp, addr, and sphl
 ; a - ram disk activation command
 .macro RAM_DISK_ON_BANK()
-			sta ramDiskMode
+			sta ram_disk_mode
 			out $10
 .endmacro
 
@@ -175,7 +175,7 @@
 		.if useXRA == false
 			mvi a, 0
 		.endif
-			sta ramDiskMode			
+			sta ram_disk_mode			
 			out $10
 .endmacro
 ; dismount the ram-disk w/o storing mode
@@ -233,7 +233,7 @@
 			out 0
 			mvi a, _borderColorIdx
 			out 2
-			lda scrOffsetY
+			lda scr_offset_y
 			out 3
 		.endif
 .endmacro

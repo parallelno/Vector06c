@@ -14,7 +14,7 @@
 ; 3rd screen buff : same
 ; 4rd screen buff : same
 
-DrawTile16x16:
+draw_tile_16x16:
 			; store sp
 			lxi h, $0000		; (12)
 			dad sp				; (12)

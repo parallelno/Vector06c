@@ -79,7 +79,7 @@ bullets_set_empty:
 ; 		ex.: the offset to bullet_update_ptr is zero
 ; use:
 ; de, a
-BulletsDataFuncCaller:
+bullets_data_func_caller:
 			shld @funcPtrOffset+1
 			lxi h, bullet_update_ptr+1
 @loop:
@@ -114,13 +114,13 @@ BulletsDataFuncCaller:
 			ret			
 			.closelabels
 
-; call a provided func (BulletCopyToScr, BulletErase) if a bullet is alive
+; call a provided func (bullet_copy_to_scr, bullet_erase) if a bullet is alive
 ; a func will get HL pointing to a bullet_update_ptr+1 in the runtime data, and A holding a BULLET_RUNTIME_DATA_* status
 ; in:
 ; hl - a func addr
 ; use:
 ; de, a
-BulletsCommonFuncCaller:
+bullets_common_func_caller:
 			shld @funcPtr+1
 			lxi h, bullet_update_ptr+1
 @loop:
@@ -144,24 +144,24 @@ BulletsCommonFuncCaller:
 			
 bullets_update:
 			lxi h, 0
-			jmp BulletsDataFuncCaller
+			jmp bullets_data_func_caller
 
 bullets_draw:
 			lxi h, bullet_draw_ptr - bullet_update_ptr
-			jmp BulletsDataFuncCaller
+			jmp bullets_data_func_caller
 
 bullets_copy_to_scr:
-			lxi h, BulletCopyToScr
-			jmp BulletsCommonFuncCaller
+			lxi h, bullet_copy_to_scr
+			jmp bullets_common_func_caller
 
 bullets_erase:
-			lxi h, BulletErase
-			jmp BulletsCommonFuncCaller
+			lxi h, bullet_erase
+			jmp bullets_common_func_caller
 
 ; copy sprites from a backbuffer to a scr
 ; in:
 ; hl - ptr to bullet_update_ptr+1 in the runtime data
-BulletCopyToScr:
+bullet_copy_to_scr:
 			; advance to bullet_status
 			LXI_D_TO_DIFF(bullet_status, bullet_update_ptr+1)
 			dad d
@@ -262,7 +262,7 @@ BulletCopyToScr:
 ; in:
 ; hl - ptr to bullet_update_ptr+1 in the runtime data
 ; a - BULLET_RUNTIME_DATA_* status
-BulletErase:
+bullet_erase:
 			; if a bullet is destroyed mark its data as empty
 			cpi BULLET_RUNTIME_DATA_DESTR
 			jz bullets_set_empty

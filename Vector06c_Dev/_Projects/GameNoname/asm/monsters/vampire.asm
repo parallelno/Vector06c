@@ -94,7 +94,7 @@ VAMPIRE_DETECT_HERO_DISTANCE = 90
 ; a - monster id * 4
 ; out:
 ; a = 0
-VampireInit:
+vampire_init:
 			MONSTER_INIT(VampireUpdate, VampireDraw, VampireImpact, VAMPIRE_HEALTH, VAMPIRE_STATUS_DETECT_HERO_INIT, vampire_idle)
 			ret
 

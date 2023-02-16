@@ -7,19 +7,19 @@ key_code:
 key_code_old:
 			.word KEY_NO << 8 | ~KEY_NO
 
-borderColorIdx:
+border_color_idx:
 			.byte TEMP_BYTE
-scrOffsetY:
+scr_offset_y:
 			.byte 255
 
-; it is used to check how many updates needs to happened to sync with Interruptions
+; it is used to check how many updates needs to happened to sync with interruptions
 update_request_counter:
 			.byte TEMP_BYTE
 
-ramDiskMode:
+ram_disk_mode:
 			.byte TEMP_BYTE
 ; it gets updated every second
-currentFps:
+current_fps:
 			.byte TEMP_BYTE
 ; a lopped counter increased every game draw
 game_draws_counter:
@@ -30,7 +30,7 @@ game_update_counter:
 			.byte TEMP_BYTE
 
 ; a counter decreased from INTS_PER_SEC to 0 every iterruption
-intsPerSecCounter:
+ints_per_sec_counter:
 			.byte INTS_PER_SEC 
 
 ; used for the movement

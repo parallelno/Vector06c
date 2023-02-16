@@ -68,7 +68,7 @@ __erase_sprite:
 	.loop 3
 			col = col+1
 			sphl
-			PUSH_B(8)
+			push_b(8)
 		.if nextColumn == true || col < 3
 			dad d
 		.endif

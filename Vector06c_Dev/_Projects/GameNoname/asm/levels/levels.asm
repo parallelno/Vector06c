@@ -12,9 +12,9 @@ levels_init:
 level_init:
 			lxi d, __level01_palette_sprites_tiles_lv01
             mvi a, <__RAM_DISK_S_LEVEL01
-			call SetPaletteFromRamDisk
+			call set_palette_from_ram_disk
 			mvi a, 1
-			sta borderColorIdx
+			sta border_color_idx
 			xra a
 			sta room_idx
 
@@ -22,7 +22,7 @@ level_init:
 			mvi a, <__RAM_DISK_S_LEVEL01
 			call get_word_from_ram_disk
 			call hero_set_pos
-			call HeroInit
+			call hero_init
 			ret
 			.closelabels
 
@@ -35,7 +35,7 @@ level_update:
 			; load a new room
 			call room_init
 			call room_draw
-			call HeroInit
+			call hero_init
 			xra a
 			lda	update_request_counter
 			; reset the command

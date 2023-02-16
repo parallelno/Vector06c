@@ -27,13 +27,13 @@ hero_sword_trail_init:
 			; hl - ptr to bullet_update_ptr+1
 
 			dcx h
-			mvi m, <HeroSwordTrailUpdate
+			mvi m, <hero_sword_trail_update
 			inx h 
-			mvi m, >HeroSwordTrailUpdate
+			mvi m, >hero_sword_trail_update
 			inx h 
-			mvi m, <HeroSwordTrailDraw
+			mvi m, <hero_sword_trail_draw
 			inx h 
-			mvi m, >HeroSwordTrailDraw
+			mvi m, >hero_sword_trail_draw
 
 			; advance hl to bullet_id
 			inx h
@@ -97,7 +97,7 @@ hero_sword_trail_init:
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to bullet_update_ptr in the runtime data
-HeroSwordTrailUpdate:
+hero_sword_trail_update:
 			; advance to bullet_status
 			LXI_H_TO_DIFF(bullet_status, bullet_update_ptr)
 			dad d
@@ -232,5 +232,5 @@ HeroSwordTrailUpdate:
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
-HeroSwordTrailDraw:
+hero_sword_trail_draw:
 			BULLET_DRAW(sprite_get_scr_addr_hero_attack01, __RAM_DISK_S_HERO_ATTACK01)

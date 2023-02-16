@@ -9,12 +9,12 @@
 ; use:
 ; de, a
 ; bc - depends on the func in the func_table
-.macro TILE_DATA_HANDLE_FUNC_CALL(func_table, skipFuncZero = false)
+.macro TILE_DATA_HANDLE_FUNC_CALL(func_table, skip_func_zero = false)
 			mov a, m
 			push h	
 			; extract a function
 			ani TILE_DATA_FUNC_MASK
-		.if skipFuncZero
+		.if skip_func_zero
 			; if func_id == 0, that means it is an walkable (non-interactable) tile, we skip it.
 			jz @funcReturnAddr
 		.endif

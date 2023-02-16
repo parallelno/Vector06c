@@ -71,7 +71,7 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 	}
 
 	if force_export:
-		common.run_command(f"..\\..\\retroassembler\\retroassembler.exe -x -C=8080 {source_path} "
+		common.run_command(f"..\\..\\retroassembler\\retroassembler.exe -x -C=8080 -c {source_path} "
 				f" {segment_bin_path} >{labels_path}")
 
 		if not os.path.exists(segment_bin_path):

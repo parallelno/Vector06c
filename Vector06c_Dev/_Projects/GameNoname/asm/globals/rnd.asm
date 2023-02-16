@@ -1,22 +1,5 @@
-/*
-; 8-bit pseudo rnd. it uses 256 bytes of a main program as a seed.
-; use:
-; hl
-; out:
-; a - random number
-random:
-@mainCodeAddr:
-			lxi h, $100
-@rnd:
-			sbi 1
-			rrc
-			xra m
-			inr l
-			sbb m
-			shld @mainCodeAddr+1
-			sta @rnd+1				; 84
-			ret
-*/
+
+; TODO: optimization. try to use faster rnd.
 
 ; 16-bit xorshift pseudorandom number generator
 ; http://www.retroprogramming.com/2017/07/xorshift-pseudorandom-numbers-in-z80.html?m=1
@@ -42,7 +25,27 @@ random:
 			mov h, a
 			shld random+1		; 116
 			ret
-		
+
+/*
+; 8-bit pseudo rnd. it uses 256 bytes of a main program as a seed.
+; use:
+; hl
+; out:
+; a - random number
+random:
+@mainCodeAddr:
+			lxi h, $100
+@rnd:
+			sbi 1
+			rrc
+			xra m
+			inr l
+			sbb m
+			shld @mainCodeAddr+1
+			sta @rnd+1				; 84
+			ret
+*/
+
 /*
 ; An 8-bit pseudo-random number generator,
 ; R = random number seed an integer in the range [1, 256]

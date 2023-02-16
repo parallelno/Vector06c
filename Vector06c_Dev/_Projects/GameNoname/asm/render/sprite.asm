@@ -70,7 +70,7 @@ sprite_copy_to_scr_v:
 			; store sp
 			lxi h, 0
 			dad	sp
-			shld RestoreSP + 1
+			shld restore_sp + 1
 
 			; Y -= 1 because we start copying bytes with dec Y
 			inr e
@@ -212,7 +212,7 @@ sprite_copy_to_scr_v:
 			mov h, e
 			dcr d
 			jp @nextColumn
-			jmp RestoreSP
+			jmp restore_sp
 .endmacro
 
 ; copy a sprite from backbuff1 to backbuff2
@@ -247,7 +247,7 @@ sprite_copy_to_back_buff_v:
 			; store sp
 			lxi h, 0
 			dad	sp
-			shld RestoreSP + 1
+			shld restore_sp + 1
 
 			; hl - an addr of a copy routine
 			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * JMP_4_LEN
@@ -359,6 +359,6 @@ sprite_copy_to_back_buff_v:
 			mov h, a
 			dcr d
 			jp @nextColumn
-			jmp RestoreSP
+			jmp restore_sp
 .endmacro
 

@@ -1,7 +1,7 @@
 __chunk_start_bank0_addr8000_0  = $8000
 __backs_sprites_rd_data_start   = $8000
-__ram_disk_s_backs              = $10
-__ram_disk_m_backs              = $00
+__RAM_DISK_S_BACKS              = $10
+__RAM_DISK_M_BACKS              = $00
 __backs_sprites                 = $8000
 __backs_torch_front0            = $8002
 __backs_torch_front1            = $8040

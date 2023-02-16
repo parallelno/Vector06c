@@ -54,20 +54,20 @@ SCYTHE_COLLISION_HEIGHT	= 12
 ; in:
 ; bc - caster pos
 ; a - direction
-ScytheInit:
+scythe_init:
 			sta @dir+1 ; direction (BULLET_DIR_*) ; TODO: move dir calc over this func. use A reg for a bullet_id
 			call bullets_get_empty_data_ptr
 			; hl - ptr to bullet_update_ptr+1
 			; advance hl to bullet_update_ptr
 			dcx h
-			mvi m, <ScytheUpdate
+			mvi m, <scythe_update
 			inx h 
-			mvi m, >ScytheUpdate
+			mvi m, >scythe_update
 			; advance hl to bullet_draw_ptr
 			inx h 
-			mvi m, <ScytheDraw
+			mvi m, <scythe_draw
 			inx h 
-			mvi m, >ScytheDraw
+			mvi m, >scythe_draw
 			
 			; advance hl to bullet_id
 			inx h
@@ -183,7 +183,7 @@ ScytheInit:
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to bullet_update_ptr in the runtime data
-ScytheUpdate:
+scythe_update:
 			; advance to bullet_status_timer
 			LXI_H_TO_DIFF(bullet_status_timer, bullet_update_ptr)
 			dad d
@@ -259,5 +259,5 @@ ScytheUpdate:
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
-ScytheDraw:
+scythe_draw:
 			BULLET_DRAW(sprite_get_scr_addr_scythe, __RAM_DISK_S_SCYTHE)

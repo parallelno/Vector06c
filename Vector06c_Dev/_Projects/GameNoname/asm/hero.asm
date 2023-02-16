@@ -81,7 +81,7 @@ hero_tile_func_table:
 			JMP_4(0)						; func_id == 14
 			JMP_4(hero_tile_func_nothing)	; func_id == 15 (collision) called only when a hero is stuck into collision tiles
 
-HeroInit:
+hero_init:
 			call hero_idle_start
 			lxi h, KEY_NO << 8 | KEY_NO
 			shld key_code
@@ -140,7 +140,7 @@ hero_update:
 			mvi a, KEY_LEFT & KEY_RIGHT & KEY_UP & KEY_DOWN
 			ora l
 			inr a
-			jz HeroIdleUpdate
+			jz hero_idle_update
 
 @checkMoveKeys:
 			; check if the same arrow keys pressed the prev update
@@ -622,7 +622,7 @@ hero_idle_start:
 			shld hero_anim_addr
 			ret
 
-HeroIdleUpdate:
+hero_idle_update:
 			; check if the same keys pressed the prev update
 			lda key_code_old
 			cmp l

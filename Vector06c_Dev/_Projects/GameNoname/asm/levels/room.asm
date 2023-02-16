@@ -9,7 +9,7 @@ room_init:
 			; because we will restore a background tiles
 			lxi b, $0000
 			lxi d, $6000 / 128 - 1
-			CALL_RAM_DISK_FUNC(__ClearMemSP, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_CLEAR_MEM | RAM_DISK_M_89)
+			CALL_RAM_DISK_FUNC(__clear_mem_sp, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_CLEAR_MEM | RAM_DISK_M_89)
 			ret
 
 ; it copies the tile idxs of the current room into room_tiles_data as a temporally,
@@ -235,7 +235,7 @@ room_draw_tiles:
 			inx h
 			push d
 			push h
-			call DrawTile16x16
+			call draw_tile_16x16
 			pop h
 			pop d
 

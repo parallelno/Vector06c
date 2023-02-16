@@ -3,7 +3,7 @@
 
 ; sharetable chunk of code to restore SP
 ; and dismount the ram-disk
-RestoreSP:
+restore_sp:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
 			ret
@@ -15,7 +15,7 @@ RestoreSP:
 ; bc - length
 ; use:
 ; a
-ClearMem:
+clear_mem:
 @loop:
 			xra a
 			mov m, a
@@ -42,13 +42,13 @@ ClearMem:
 		.if disableInt
 			di
 		.endif
-			call ClearMemSP
+			call clear_mem_sp
 		.if disableInt
 			ei
 		.endif			
 .endmacro
 
-ClearMemSP:
+clear_mem_sp:
 			lxi h, $0000
 			dad sp
 			shld @restoreSP + 1
@@ -102,7 +102,7 @@ INIT_COLOR_IDX = 15
 ; Set palette
 ; input: hl - the addr of the last item in the palette
 ; use: hl, b, a
-SetPalette:
+set_palette:
 			hlt
 			mvi	a, PORT0_OUT_OUT
 			out	0
@@ -132,12 +132,12 @@ SetPalette:
 ; hl, bc, a
 PALETTE_COLORS = 16
 
-SetPaletteFromRamDisk:
+set_palette_from_ram_disk:
 			hlt
 			; store sp
 			lxi h, $0000
 			dad sp
-			shld RestoreSP+1
+			shld restore_sp+1
 			; copy unpacked data into the ram_disk
 			xchg
 			RAM_DISK_ON_BANK()
@@ -173,7 +173,7 @@ SetPaletteFromRamDisk:
 			mov a, e
 			cpi PALETTE_COLORS
 			jnz	@loop
-			jmp RestoreSP
+			jmp restore_sp
 			.closelabels
 
 ; Read a word from the ram-disk w/o blocking interruptions
@@ -190,13 +190,13 @@ get_word_from_ram_disk:
 			; store sp
 			lxi h, $0000
 			dad sp
-			shld RestoreSP+1
+			shld restore_sp+1
 			; copy unpacked data into the ram_disk
 			xchg
 			RAM_DISK_ON_BANK()
 			sphl
 			pop b ; bc has to be used when interruptions is on
-			jmp RestoreSP
+			jmp restore_sp
 			.closelabels
 
 ;========================================
@@ -289,7 +289,7 @@ copy_from_ram_disk:
 			push h
 			lxi h, $0002
 			dad sp
-			shld RestoreSP+1
+			shld restore_sp+1
 			; copy unpacked data into the ram_disk
 			xchg
 			pop d
@@ -307,4 +307,4 @@ copy_from_ram_disk:
 			inx h
 			dcr e;a
 			jnz @loop
-			jmp RestoreSP
+			jmp restore_sp
