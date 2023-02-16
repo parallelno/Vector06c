@@ -12,10 +12,10 @@ print("")
 print("build a rom file:")
  
 source_path = "asm\\main.asm"
-romDir = "rom\\"
-romName = os.path.basename(os.getcwd())
-bin_path = romDir + romName + build.EXT_BIN
-rom_path = romDir + romName + build.EXT_ROM
+rom_dir = "rom\\"
+rom_name = os.path.basename(os.getcwd())
+bin_path = rom_dir + rom_name + build.EXT_BIN
+rom_path = rom_dir + rom_name + build.EXT_ROM
 
 
 common.delete_file(bin_path)
@@ -28,5 +28,5 @@ if not os.path.exists(bin_path):
 	print("Stop export")
 	exit(1) 
 
-common.run_command(f"ren {bin_path} {romName + build.EXT_ROM}")    
+common.run_command(f"ren {bin_path} {rom_name + build.EXT_ROM}")    
 common.run_command(f"..\\..\\Emu80\\Emu80qt.exe {rom_path}", "", rom_path)

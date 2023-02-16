@@ -142,8 +142,8 @@ bomb_slow_init:
 			; b = posX
 			; c = posY	
 			; set a projectile speed towards the hero
-			; posDiff =  heroPos - burnerPosX
-			; speed = posDiff / VAMPIRE_STATUS_DASH_TIME			
+			; pos_diff =  hero_pos - burnerPosX
+			; speed = pos_diff / VAMPIRE_STATUS_DASH_TIME			
 			lda hero_pos_x+1
 			sub b
 			mov e, a
@@ -156,7 +156,7 @@ bomb_slow_init:
 			dad h
 			dad h 
 			dad h
-			; to fill up L with %1111 if posDiff < 0
+			; to fill up L with %1111 if pos_diff < 0
 			ani %111 ; <(%0000000011111111 / BOMB_SLOW_STATUS_DASH_TIME)
 			ora l 
 			mov l, a
@@ -175,7 +175,7 @@ bomb_slow_init:
 			dad h 
 			dad h 
 			dad h 
-			; to fill up L with %1111 if posDiff < 0
+			; to fill up L with %1111 if pos_diff < 0
 			ani %111 ; <(%0000000011111111 / BOMB_SLOW_STATUS_DASH_TIME)
 			ora l 
 			mov l, a
@@ -227,7 +227,7 @@ bomb_slow_update:
 			xchg
 			dad b
 			xchg
-			; pos = heroPos-pos/8
+			; pos = hero_pos-pos/8
 			mov m, e
 			inx h 
 			mov m, d

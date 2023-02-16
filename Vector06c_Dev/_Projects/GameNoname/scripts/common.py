@@ -1,15 +1,15 @@
 import os
 
-def palette_to_asm(image, charJ, path = "", labelPrefix = ""):
+def palette_to_asm(image, char_j, path = "", label_prefix = ""):
 	# usially there are color tiles in top row in the image.
-	paletteCoords = charJ["palette"]
+	palette_coords = char_j["palette"]
 	colors = {}
-	labelPostfix = path_to_basename(path)
+	label_postfix = path_to_basename(path)
 	asm = "; " + path + "\n"
-	asm += labelPrefix + "_palette_" + labelPostfix + ":\n"
+	asm += label_prefix + "_palette_" + label_postfix + ":\n"
 	palette = image.getpalette()
 
-	for i, pos in enumerate(paletteCoords):
+	for i, pos in enumerate(palette_coords):
 		x = pos["x"]
 		y = pos["y"]
 		idx = image.getpixel((x, y))
@@ -29,9 +29,9 @@ def palette_to_asm(image, charJ, path = "", labelPrefix = ""):
 		
 	return asm + "\n", colors
 
-def  remap_colors(image, colors):
+def remap_colors(image, colors):
 	palette = image.getpalette()
-	colorMatchingTable = {}
+	color_matching_table = {}
 	
 	for idx in range(len(palette) //3):
 		r = palette[idx*3]
@@ -41,16 +41,16 @@ def  remap_colors(image, colors):
 		if rgb not in colors: 
 			continue
 		cidx = colors[rgb]
-		colorMatchingTable[idx] = cidx
+		color_matching_table[idx] = cidx
 	
 	w = image.width
 	h = image.height
 
 	for y in range(h) :
 		for x in range(w) :
-			colorIdx = image.getpixel((x, y))
-			newColorIdx = colorMatchingTable[colorIdx]
-			image.putpixel((x,y), newColorIdx)
+			color_idx = image.getpixel((x, y))
+			new_color_idx = color_matching_table[color_idx]
+			image.putpixel((x,y), new_color_idx)
 	return image
 
 color_index_to_bit = [
@@ -72,14 +72,14 @@ color_index_to_bit = [
 		(1,1,1,1),
 	]
 
-def indexes_to_bit_lists(tileImg):
+def indexes_to_bit_lists(tile_img):
 	bits0 = [] # 8000-9FFF # from left to right, from bottom to top
 	bits1 = [] # A000-BFFF
 	bits2 = [] # C000-DFFF
 	bits3 = [] # E000-FFFF
-	for line in tileImg:
-		for colorIdx in line:
-			bit0, bit1, bit2, bit3 = color_index_to_bit[colorIdx]
+	for line in tile_img:
+		for color_idx in line:
+			bit0, bit1, bit2, bit3 = color_index_to_bit[color_idx]
 			bits0.append(bit0) 
 			bits1.append(bit1)
 			bits2.append(bit2)

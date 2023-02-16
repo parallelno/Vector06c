@@ -399,7 +399,7 @@ skeleton_impact:
 			; de - ptr to monster_impact_ptr+1
 			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impact_ptr+1)
 			dad d
-			jmp MonstersDestroy
+			jmp monsters_destroy
 
 ; draw a sprite into a backbuffer
 ; in:

@@ -40,19 +40,19 @@ def is_asm_updated(asmPath):
 		
 	includes = []
 	for line in lines:
-		lineStr = line.decode('ascii')
-		incStr = ".include "
-		incIdx = lineStr.find(incStr)
+		line_str = line.decode('ascii')
+		inc_str = ".include "
+		inc_idx = line_str.find(inc_str)
 		
-		if incIdx != -1 and lineStr[0] != ";":
-			path = lineStr[incIdx + len(incStr)+1:]
+		if inc_idx != -1 and line_str[0] != ";":
+			path = line_str[inc_idx + len(inc_str)+1:]
 			path = common.remove_double_slashes(path)
-			pathEndQ1 = path.find('"')
-			pathEndQ2 = path.find("'")
-			if pathEndQ1 != -1:
-				includes.append(path[:pathEndQ1])
-			elif pathEndQ2 != -1:
-				includes.append(path[:pathEndQ2])
+			path_end_q1 = path.find('"')
+			path_end_q2 = path.find("'")
+			if path_end_q1 != -1:
+				includes.append(path[:path_end_q1])
+			elif path_end_q2 != -1:
+				includes.append(path[:path_end_q2])
 			continue
 
 	anyIncUpdated = False
@@ -100,17 +100,17 @@ def export_labels(path, externals_only = False):
 	with open(path, "rb") as file:
 		lines = file.readlines()
 		
-	getAllNextLines = False
+	get_all_next_lines = False
 	labels = ""
 	for line in lines:
-		lineStr = line.decode('ascii')
-		if getAllNextLines:
-			if not externals_only or (externals_only and lineStr[0:2] == "__"):
-				labels += lineStr
+		line_str = line.decode('ascii')
+		if get_all_next_lines:
+			if not externals_only or (externals_only and line_str[0:2] == "__"):
+				labels += line_str
 			continue
 
-		if lineStr.find("Segment: Code") != -1:
-			getAllNextLines = True
+		if line_str.find("Segment: Code") != -1:
+			get_all_next_lines = True
 
 	with open(path, "w") as file:
 		file.write(labels) 

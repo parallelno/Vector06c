@@ -36,7 +36,7 @@
 			"y"	: 32,
 			"width" : 16,
 			"height" : 7,
-			"offsetY": 9
+			"offset_y": 9
 		},
 		{
 			"name" : "torch_front1",
@@ -44,7 +44,7 @@
 			"y"	: 48,
 			"width" : 16,
 			"height" : 7,
-			"offsetY": 9
+			"offset_y": 9
 		},
 		{
 			"name" : "torch_front2",
@@ -52,7 +52,7 @@
 			"y"	: 64,
 			"width" : 16,
 			"height" : 7,
-			"offsetY": 9
+			"offset_y": 9
 		},
 		{
 			"name" : "torch_front3",
@@ -60,7 +60,7 @@
 			"y"	: 80,
 			"width" : 16,
 			"height" : 7,
-			"offsetY": 9
+			"offset_y": 9
 		},
 		{
 			"name" : "flag_front0",
@@ -68,7 +68,7 @@
 			"y"	: 39,
 			"width" : 16,
 			"height" : 6,
-			"offsetY": 3
+			"offset_y": 3
 		},
 		{
 			"name" : "flag_front1",
@@ -76,7 +76,7 @@
 			"y"	: 55,
 			"width" : 16,
 			"height" : 6,
-			"offsetY": 3
+			"offset_y": 3
 		},
 		{
 			"name" : "flag_front2",
@@ -84,7 +84,7 @@
 			"y"	: 71,
 			"width" : 16,
 			"height" : 6,
-			"offsetY": 3
+			"offset_y": 3
 		},
 		{
 			"name" : "flag_front3",
@@ -92,7 +92,7 @@
 			"y"	: 87,
 			"width" : 16,
 			"height" : 6,
-			"offsetY": 3
+			"offset_y": 3
 		}				
 	]
 }

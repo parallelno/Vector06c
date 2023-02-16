@@ -363,8 +363,8 @@ burner_update_dash_prep:
 			mvi m, 0
 			; advance hl to posX+1
 			inx h
-			; posDiff =  heroPos - burnerPosX
-			; speed = posDiff / BURNER_STATUS_DASH_TIME
+			; pos_diff =  hero_pos - burnerPosX
+			; speed = pos_diff / BURNER_STATUS_DASH_TIME
 			lda hero_pos_x+1
 			sub m
 			mov e, a 
@@ -378,7 +378,7 @@ burner_update_dash_prep:
 			dad h 
 			dad h 
 			dad h
-			; to fill up L with %1111 if posDiff < 0
+			; to fill up L with %1111 if pos_diff < 0
 			ani %1111 ; <(%0000000011111111 / BURNER_STATUS_DASH_TIME)
 			ora l
 			mov l, a
@@ -404,7 +404,7 @@ burner_update_dash_prep:
 			dad h 
 			dad h 
 			dad h 
-			; to fill up L with %1111 if posDiff < 0
+			; to fill up L with %1111 if pos_diff < 0
 			ani %1111 ; <(%0000000011111111 / BURNER_STATUS_DASH_TIME)
 			ora l 
 			mov l, a
@@ -455,7 +455,7 @@ burner_impact:
 			; de - ptr to monster_impact_ptr+1
 			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impact_ptr+1)
 			dad d
-			jmp MonstersDestroy
+			jmp monsters_destroy
 
 ; draw a sprite into a backbuffer
 ; in:

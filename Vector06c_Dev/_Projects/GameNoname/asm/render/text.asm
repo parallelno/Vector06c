@@ -39,7 +39,7 @@ hex_to_askii:
 ; uses:
 ; BC, DE, HL
 FPS_SCR_ADDR = $a0ff
-DrawFps:
+draw_fps:
 			lhld DrawText_restoreSP+1
 			shld @tmpRestoreSP
 			lxi h, @fpsText
@@ -76,7 +76,7 @@ draw_text:
 			dad h
 			dad h
 			dad h
-			lxi d, testFont
+			lxi d, test_font
 			dad d
 			xchg
 
@@ -128,7 +128,7 @@ DrawText_restoreSP:
 .endmacro
 
 
-testFont:
+test_font:
 			; space ($00)
 			.byte 0,0,0,0
 			.byte 0,0,0,0

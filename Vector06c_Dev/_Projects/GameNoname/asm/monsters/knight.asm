@@ -87,34 +87,34 @@ KNIGHT_DETECT_HERO_DISTANCE = 60
 ; a - monster id * 4
 ; out:
 ; a = 0
-KnightInit:
-			MONSTER_INIT(KnightUpdate, KnightDraw, KnightImpact, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
+knight_init:
+			MONSTER_INIT(knight_update, knight_draw, knight_impact, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 			ret
 
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data
-KnightUpdate:
+knight_update:
 			; advance hl to monster_status
 			LXI_H_TO_DIFF(monster_status, monster_update_ptr)
 			dad d
 			mov a, m
 			; TODO: optimization. think of using a call table
 			cpi KNIGHT_STATUS_MOVE
-			jz KnightUpdateMove
+			jz knight_update_move
 			cpi KNIGHT_STATUS_DETECT_HERO
-			jz KnightUpdateDetectHero
+			jz knight_update_detect_hero
 			cpi KNIGHT_STATUS_DEFENCE
-			jz KnightUpdateDefence			
+			jz knight_update_defence			
 			cpi KNIGHT_STATUS_MOVE_INIT
-			jz KnightUpdateMoveInit
+			jz knight_update_move_init
 			cpi KNIGHT_STATUS_DEFENCE_INIT
-			jz KnightUpdateDefenceInit
+			jz knight_update_defence_init
 			cpi KNIGHT_STATUS_DETECT_HERO_INIT
-			jz KnightUpdateDetectHeroInit
+			jz knight_update_detect_hero_init
 			ret
 
-KnightUpdateDetectHeroInit:
+knight_update_detect_hero_init:
 			; hl = monster_status
 			mvi m, KNIGHT_STATUS_DETECT_HERO
 			inx h
@@ -126,7 +126,7 @@ KnightUpdateDetectHeroInit:
 			mvi m, >knight_idle
 			ret
 
-KnightUpdateDetectHero:
+knight_update_detect_hero:
 			; hl = monster_status
 			; advance hl to monster_status_timer
 			inx h
@@ -174,13 +174,13 @@ KnightUpdateDetectHero:
 			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_x+1)
 			dad b
 			mvi a, KNIGHT_ANIM_SPEED_DETECT_HERO
-			jmp KnightUpdateAnimCheckCollisionHero
+			jmp knight_update_anim_check_collision_hero
 @updateAnimHeroDetectY:
 			; advance hl to monster_anim_timer
 			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_y+1)
 			dad b
 			mvi a, KNIGHT_ANIM_SPEED_DETECT_HERO
-			jmp KnightUpdateAnimCheckCollisionHero
+			jmp knight_update_anim_check_collision_hero
 
 @setMoveInit:
  			; hl - ptr to monster_status_timer
@@ -190,7 +190,7 @@ KnightUpdateDetectHero:
 			mvi m, KNIGHT_STATUS_MOVE_INIT
 			ret
 
-KnightUpdateDefenceInit:
+knight_update_defence_init:
 			; hl - ptr to monster_status
 			mvi m, KNIGHT_STATUS_DEFENCE
 			; advance hl to monster_status_timer
@@ -268,7 +268,7 @@ KnightUpdateDefenceInit:
 			mov m, d
 			ret
 
-KnightUpdateDefence:
+knight_update_defence:
 			; hl = monster_status
 			; advance hl to monster_status_timer
 			inx h
@@ -282,7 +282,7 @@ KnightUpdateDefence:
 			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_y+1)
 			dad b
 			mvi a, KNIGHT_ANIM_SPEED_DEFENCE
-			jmp KnightUpdateAnimCheckCollisionHero
+			jmp knight_update_anim_check_collision_hero
 
 @collidedWithTiles:
 			pop h
@@ -300,7 +300,7 @@ KnightUpdateDefence:
 			mvi m, KNIGHT_STATUS_DETECT_HERO_INIT
 			ret	
 
-KnightUpdateMoveInit:
+knight_update_move_init:
 			; hl = monster_status
 			mvi m, KNIGHT_STATUS_MOVE
 			; advance hl to monster_status_timer
@@ -382,7 +382,7 @@ KnightUpdateMoveInit:
 			mvi m, >knight_run_r
             ret
 
-KnightUpdateMove:
+knight_update_move:
 			; hl = monster_status
 			; advance hl to monster_status_timer
 			inx h
@@ -396,7 +396,7 @@ KnightUpdateMove:
 			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_y+1)
 			dad b
 			mvi a, KNIGHT_ANIM_SPEED_MOVE
-			jmp KnightUpdateAnimCheckCollisionHero
+			jmp knight_update_anim_check_collision_hero
 
 @setMoveInit:
 			pop h
@@ -418,18 +418,18 @@ KnightUpdateMove:
 ; in:
 ; hl - monster_anim_timer
 ; a - anim speed
-KnightUpdateAnimCheckCollisionHero:
+knight_update_anim_check_collision_hero:
 			call actor_anim_update
 			MONSTER_CHECK_COLLISION_HERO(KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, KNIGHT_DAMAGE)
 
-KnightImpact:
+knight_impact:
 			; de - ptr to monster_impact_ptr+1
 			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impact_ptr+1)
 			dad d
-			jmp MonstersDestroy			
+			jmp monsters_destroy			
 
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to monster_draw_ptr in the runtime data
-KnightDraw:
+knight_draw:
 			MONSTER_DRAW(sprite_get_scr_addr_knight, __RAM_DISK_S_KNIGHT)

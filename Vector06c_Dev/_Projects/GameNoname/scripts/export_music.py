@@ -91,9 +91,9 @@ def export_if_updated(source_path, generated_dir, force_export):
 def export(source_path, export_path, cleanTmp = True):
 
 	source_name = os.path.splitext(source_path)[0]
-	exportDir = str(Path(export_path).parent) + "\\"
-	if not os.path.exists(exportDir):
-		os.mkdir(exportDir)
+	export_dir = str(Path(export_path).parent) + "\\"
+	if not os.path.exists(export_dir):
+		os.mkdir(export_dir)
 
 	try:
 		[regData, comment1, comment2, comment3] = readym(source_path)

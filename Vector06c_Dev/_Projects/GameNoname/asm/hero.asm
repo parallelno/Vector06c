@@ -336,13 +336,13 @@ hero_dont_move:
 
 hero_check_collision_top_left:
 			lda char_temp_x+1
-			; get the inverted offsetX inside the tile
+			; get the inverted offset_x inside the tile
 			cma
 			ani %00001111
 			mov c, a
 			lda char_temp_y+1
 			adi HERO_COLLISION_HEIGHT-1
-			; get the offsetY inside the tile
+			; get the offset_y inside the tile
 			ani %00001111
 			cmp c
 			jz hero_move_tile_br

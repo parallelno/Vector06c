@@ -34,7 +34,7 @@
 			mov a, m
 			mvi m, 0			
 			sta current_fps
-			call DrawFps
+			call draw_fps
 			lxi h, ints_per_sec_counter
 			mvi m, INTS_PER_SEC
 @skipSavingFps:	

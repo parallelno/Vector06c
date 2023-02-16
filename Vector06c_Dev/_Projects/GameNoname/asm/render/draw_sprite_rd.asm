@@ -17,11 +17,11 @@ drawSpriteWidthHeight_ramDisk__:
 			.closelabels
 			
 ; =============================================
-; Draw a sprite without a mask in three consiquence screen buffs with offsetX and offsetY
+; Draw a sprite without a mask in three consiquence screen buffs with offset_x and offset_y
 ; width is 1-3 bytes
 ; height is 0-255
-; offsetX in bytes
-; offsetY in pixels
+; offset_x in bytes
+; offset_y in pixels
 ; it uses sp to read the sprite data
 
 ; input:
@@ -31,7 +31,7 @@ drawSpriteWidthHeight_ramDisk__:
 
 ; the sprite format:
 ; 0, 0 - safety bytes
-; offsetY, offsetX
+; offset_y, offset_x
 ; height, width
 	; width: 0 - one byte width, 1 - two bytes width, 2 - three bytes width
 
@@ -62,8 +62,8 @@ __DrawSpriteV:
 			mov	l, c
 			sphl
 			xchg
-			; b - offsetX
-			; c - offsetY
+			; b - offset_x
+			; c - offset_y
 			pop b
 			dad b
 			; store a sprite screen addr to return it from this func
@@ -229,11 +229,11 @@ __DrawSpriteV:
 
 
 ; =============================================
-; Draw a sprite with a mask in three consiquence screen buffs with offsetX and offsetY
+; Draw a sprite with a mask in three consiquence screen buffs with offset_x and offset_y
 ; width is 1-3 bytes
 ; height is 0-255
-; offsetX in bytes
-; offsetY in pixels
+; offset_x in bytes
+; offset_y in pixels
 ; it uses sp to read the sprite data
 ; ex. CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_HERO_ATTACK01 | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 ; input:
@@ -243,8 +243,8 @@ __DrawSpriteV:
 
 ; data format:
 ; .word - two safety bytes to prevent a data corruption by the interruption  func
-; .byte - offsetY
-; .byte - offsetX
+; .byte - offset_y
+; .byte - offset_x
 ; .byte - height
 ; .byte - width
 ; 		0 - one byte width, 
@@ -281,8 +281,8 @@ __draw_sprite_vm:
 			mov	l, c
 			sphl
 			xchg
-			; b - offsetX
-			; c - offsetY
+			; b - offset_x
+			; c - offset_y
 			pop b
 			dad b
 			; store a sprite screen addr to return it from this func

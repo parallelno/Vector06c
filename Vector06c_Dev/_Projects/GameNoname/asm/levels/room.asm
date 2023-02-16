@@ -1,5 +1,5 @@
 room_init:
-			call MonstersEraseRuntimeData
+			call monsters_erase_runtime_data
 			call bullets_erase_runtime_data
 			call backs_init
 			call room_init_tiles_gfx
@@ -410,8 +410,8 @@ room_get_tile_data_around_sprite:
 ; in:
 ; d - posX
 ; e - posY
-; b - offsetX
-; c - offsetY
+; b - offset_x
+; c - offset_y
 ; out:
 ; Z flag = 1 if no collision
 room_check_tile_data_collision_pxl:

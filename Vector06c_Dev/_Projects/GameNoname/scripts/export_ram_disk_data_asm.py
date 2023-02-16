@@ -85,17 +85,17 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths,
 				assets_s = ""
 			else:
 				if bank_id == bank_id_backbuffer and segment_addr == build.SEGMENT_8000_0000_ADDR :
-					segmentSizeMax = build.SCR_BUFF_SIZE * 4 - back_buffer_size
+					segment_size_max = build.SCR_BUFF_SIZE * 4 - back_buffer_size
 				else:
-					segmentSizeMax = build.get_segment_size_max(segment_addr)
+					segment_size_max = build.get_segment_size_max(segment_addr)
 
 				segment_name = build.get_segment_name(bank_id, addr_s_wo_hex_sym)
 
 				if len(segment_j["chunks"]) > 0:
-					segmentPath = segments_paths[segment_name]["segment_bin_path"]
-					segmentSize = os.path.getsize(segmentPath)
+					segment_path = segments_paths[segment_name]["segment_bin_path"]
+					segment_size = os.path.getsize(segment_path)
 				else:
-					segmentSize = 0
+					segment_size = 0
 
 				labels_path = segments_paths[segment_name]["labels_path"]
 
@@ -113,7 +113,7 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths,
 				else:
 					assets_s = ["empty"]
 					
-				free_space = segmentSizeMax - segmentSize
+				free_space = segment_size_max - segment_size
 				total_free_space += free_space
 				
 			segment_free_space_s_aligned = common.align_string(f"{free_space}", 5, True)

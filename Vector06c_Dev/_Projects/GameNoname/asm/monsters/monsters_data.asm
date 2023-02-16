@@ -1,17 +1,17 @@
 ; a newly inited room uses this list to call a monster Init func
 ; it's ordered by monster_id (see tile data format in levelsData.asm)
-monstersInits:
-monstersInit0:JMP_4(skeleton_init)
-monstersInit1:JMP_4(vampire_init)
-monstersInit2:JMP_4(burner_init)
-monstersInit3:JMP_4(KnightInit)
-monstersInit4:JMP_4(KnightInit)
+monsters_inits:
+monsters_init0:JMP_4(skeleton_init)
+monsters_init1:JMP_4(vampire_init)
+monsters_init2:JMP_4(burner_init)
+monsters_init3:JMP_4(knight_init)
+monsters_init4:JMP_4(knight_init)
 
-SKELETON_ID = (monstersInit0-monstersInits) / JMP_4_LEN
-VAMPIRE_ID = (monstersInit1-monstersInits) / JMP_4_LEN
-BURNER_ID = (monstersInit2-monstersInits) / JMP_4_LEN
-KNIGHT_HORIZ_ID = (monstersInit3-monstersInits) / JMP_4_LEN
-KNIGHT_VERT_ID = (monstersInit4-monstersInits) / JMP_4_LEN
+SKELETON_ID = (monsters_init0-monsters_inits) / JMP_4_LEN
+VAMPIRE_ID = (monsters_init1-monsters_inits) / JMP_4_LEN
+BURNER_ID = (monsters_init2-monsters_inits) / JMP_4_LEN
+KNIGHT_HORIZ_ID = (monsters_init3-monsters_inits) / JMP_4_LEN
+KNIGHT_VERT_ID = (monsters_init4-monsters_inits) / JMP_4_LEN
 
 ; ptr to the first monster data in the sorted list
 monster_runtime_data_sorted:

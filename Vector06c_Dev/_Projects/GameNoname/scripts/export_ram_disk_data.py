@@ -18,16 +18,16 @@ def export(source_j_path):
 	# set the global build_db_path
 	build.build_db_init(source_j["build_db_path"])
 
-	dependencyPathsJ = source_j["dependencies"]
+	dependency_paths_j = source_j["dependencies"]
 	# check dependencies
 	global_force_export = False
-	for path in dependencyPathsJ["global"]:
+	for path in dependency_paths_j["global"]:
 		global_force_export |= build.is_file_updated(path)
 
-	sprite_force_export = build.is_file_updated(dependencyPathsJ["sprite"])
-	back_force_export = build.is_file_updated(dependencyPathsJ["back"])
-	level_force_export = build.is_file_updated(dependencyPathsJ["level"])
-	music_force_export = build.is_file_updated(dependencyPathsJ["music"])
+	sprite_force_export = build.is_file_updated(dependency_paths_j["sprite"])
+	back_force_export = build.is_file_updated(dependency_paths_j["back"])
+	level_force_export = build.is_file_updated(dependency_paths_j["level"])
+	music_force_export = build.is_file_updated(dependency_paths_j["music"])
 
 	generated_code_dir = source_j["dirs"]["generated_code"]
 	generated_bin_dir = source_j["dirs"]["generated_bin"]

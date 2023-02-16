@@ -14,7 +14,7 @@ def bytes_to_asm_tiled(data):
 		asm += "\n"
 	return asm
 
-def mask_data(maskBytes, w, h ):
+def mask_data(mask_bytes, w, h ):
 	# sprite data structure description is in drawSprite.asm
 	# sprite uses only 3 out of 4 screen buffers.
 	# the width is devided by 8 because there is 8 pixels per a byte
@@ -22,15 +22,15 @@ def mask_data(maskBytes, w, h ):
 	#mask = 0
 	data = []
 	for y in range(h):
-		evenLine = y % 2 == 0
-		if evenLine:
+		even_line = y % 2 == 0
+		if even_line:
 			for x in range(width):
 				i = y*width+x
-				data.append(maskBytes[i])
+				data.append(mask_bytes[i])
 		else:
 			for x in range(width):
 				i = y*width+x
-				data.append(maskBytes[i])
+				data.append(mask_bytes[i])
 	return data
 
 # from left-bottom corner by columns all the data for the first scr buff
@@ -39,202 +39,202 @@ def mask_data(maskBytes, w, h ):
 # sprite uses only 3 out of 4 screen buffers.
 # the width is devided by 8 because there is 8 pixels per a byte
 
-def sprite_data_bb(bytes1, bytes2, bytes3, w, h, maskBytes = None):
-	bytesAll = [bytes1, bytes2, bytes3]
+def sprite_data_bb(bytes1, bytes2, bytes3, w, h, mask_bytes = None):
+	bytes_all = [bytes1, bytes2, bytes3]
 	width = w // 8
 	data = []
-	for bytes in bytesAll:
-		scrBuff = []
+	for bytes in bytes_all:
+		scr_buff = []
 		for x in range(width):
 			for y in reversed(range(0, h)):
 				i = y*width + x
-				scrBuff.append(bytes[i])
-				if maskBytes:
-					scrBuff.append(maskBytes[i])
-		data.append(scrBuff)
+				scr_buff.append(bytes[i])
+				if mask_bytes:
+					scr_buff.append(mask_bytes[i])
+		data.append(scr_buff)
 	return data
 
 # tiles 8*8pxs for 3 scr fuffers
-def sprite_data_tiled(bytes1, bytes2, bytes3, w, h, maskBytes = None):
+def sprite_data_tiled(bytes1, bytes2, bytes3, w, h, mask_bytes = None):
 	# sprite data structure description is in drawSprite.asm
 	# sprite uses only 3 out of 4 screen buffers.
 	# the width is devided by 8 because there is 8 pixels per a byte
-	bytesAll = [bytes1, bytes2, bytes3]
+	bytes_all = [bytes1, bytes2, bytes3]
 	width = w // 8
 	data = []
 	for x in range(width):
 		for y in range(0, h, 8):
 			tile = []
-			for bytes in bytesAll:
+			for bytes in bytes_all:
 				for dy in range(8):
 					i = y*width + x
 					tile.append(bytes[i])
-					if maskBytes:
-						tile.append(maskBytes[i])
+					if mask_bytes:
+						tile.append(mask_bytes[i])
 			data.append(tile)
 	return data
 
-def sprite_data(bytes1, bytes2, bytes3, w, h, maskBytes = None):
+def sprite_data(bytes1, bytes2, bytes3, w, h, mask_bytes = None):
 	# sprite data structure description is in drawSprite.asm
 	# sprite uses only 3 out of 4 screen buffers.
 	# the width is devided by 8 because there is 8 pixels per a byte
 	width = w // 8
 	data = []
 	for y in range(h):
-		evenLine = y % 2 == 0
-		if evenLine:
+		even_line = y % 2 == 0
+		if even_line:
 			for x in range(width):
 				i = y*width+x
-				if maskBytes:
-					data.append(maskBytes[i])
+				if mask_bytes:
+					data.append(mask_bytes[i])
 				data.append(bytes1[i])
 			for x in range(width):
 				i = y*width+width-x-1
-				if maskBytes:
-					data.append(maskBytes[i])
+				if mask_bytes:
+					data.append(mask_bytes[i])
 				data.append(bytes2[i])
 			for x in range(width):
 				i = y*width+width-x-1
-				if maskBytes:
-					data.append(maskBytes[i])
+				if mask_bytes:
+					data.append(mask_bytes[i])
 				data.append(bytes3[i])
 		else:
 			for x in range(width):
 				i = y*width+x
-				if maskBytes:
-					data.append(maskBytes[i])
+				if mask_bytes:
+					data.append(mask_bytes[i])
 				data.append(bytes3[i])
 			for x in range(width):
 				i = y*width+width-x-1
-				if maskBytes:
-					data.append(maskBytes[i])
+				if mask_bytes:
+					data.append(mask_bytes[i])
 				data.append(bytes2[i])
 			for x in range(width):
 				i = y*width+width-x-1
-				if maskBytes:
-					data.append(maskBytes[i])
+				if mask_bytes:
+					data.append(mask_bytes[i])
 				data.append(bytes1[i])
 
 	return [data]
 
-def anims_to_asm(labelPrefix, source_j):
+def anims_to_asm(label_prefix, source_j):
 	asm = ""
 	# preshifted sprites
-	preshiftedSprites = source_j["preshifted_sprites"]
-	asm += f"sprite_get_scr_addr_{labelPrefix} = sprite_get_scr_addr{preshiftedSprites}\n\n"
-	asm += labelPrefix + "_preshifted_sprites:\n"
-	asm += f"			.byte " + str(preshiftedSprites) + "\n"
+	preshifted_sprites = source_j["preshifted_sprites"]
+	asm += f"sprite_get_scr_addr_{label_prefix} = sprite_get_scr_addr{preshifted_sprites}\n\n"
+	asm += label_prefix + "_preshifted_sprites:\n"
+	asm += f"			.byte " + str(preshifted_sprites) + "\n"
 
 
 	# make a list of animNames
-	asm += labelPrefix + "_anims:\n"
+	asm += label_prefix + "_anims:\n"
 	asm += "			.word "
 	for animName in source_j["anims"]:
-		asm += labelPrefix + "_" + animName + ", "
+		asm += label_prefix + "_" + animName + ", "
 	asm += "0, \n"
 
 	# make a list of sprites for an every anim
 	for animName in source_j["anims"]:
 
-		asm += labelPrefix + "_" + animName + ":\n"
+		asm += label_prefix + "_" + animName + ":\n"
  
 		anims = source_j["anims"][animName]["frames"]
 		loop = source_j["anims"][animName]["loop"]
-		frameCount = len(source_j["anims"][animName]["frames"])
+		frame_count = len(source_j["anims"][animName]["frames"])
 		for i, frame in enumerate(anims):
 
-			if i < frameCount-1:
-				nextFrameOffset = preshiftedSprites * 2 # every frame consists of preshiftedSprites pointers
-				nextFrameOffset += 1 # increase the offset to save one instruction in the game code
-				asm += "			.byte " + str(nextFrameOffset) + ", 0 ; offset to the next frame\n"
+			if i < frame_count-1:
+				next_frame_offset = preshifted_sprites * 2 # every frame consists of preshifted_sprites pointers
+				next_frame_offset += 1 # increase the offset to save one instruction in the game code
+				asm += "			.byte " + str(next_frame_offset) + ", 0 ; offset to the next frame\n"
 			else:
-				nextFrameOffsetHiStr = "$ff"
+				next_frame_offset_hi_str = "$ff"
 				if loop == False:
-					nextFrameOffsetLow = -1
+					next_frame_offset_low = -1
 				else:
-					offsetAddr = 1
-					nextFrameOffsetLow = 255 - (frameCount - 1) * (preshiftedSprites + offsetAddr) * 2 + 1
-					nextFrameOffsetLow -= 1 # decrease the offset to save one instruction in the game code
+					offset_addr = 1
+					next_frame_offset_low = 255 - (frame_count - 1) * (preshifted_sprites + offset_addr) * 2 + 1
+					next_frame_offset_low -= 1 # decrease the offset to save one instruction in the game code
 					
-				asm += "			.byte " + str(nextFrameOffsetLow) + ", " + nextFrameOffsetHiStr + " ; offset to the first frame\n"
+				asm += "			.byte " + str(next_frame_offset_low) + ", " + next_frame_offset_hi_str + " ; offset to the first frame\n"
 
 			asm += "			.word "
-			for i in range(preshiftedSprites):
-				asm += "__" + labelPrefix + "_" + str(frame) + "_" + str(i) + ", "
+			for i in range(preshifted_sprites):
+				asm += "__" + label_prefix + "_" + str(frame) + "_" + str(i) + ", "
 			asm += "\n"
 
 	return asm
 
 # find the most leftest or rightest pixel in a sprite
 # return its dx
-def find_sprite_horiz_border(forwardSearch, spriteImg, mask_alpha, width, height):
-	stopFlag = False
+def find_sprite_horiz_border(forwardSearch, sprite_img, mask_alpha, width, height):
+	stop_flag = False
 	for dx in range(width):
 		for dy in range(height):
 			if forwardSearch:
 				dx2 = dx
 			else:
 				dx2 = width - 1 - dx
-			colorIdx = spriteImg[dy][dx2]
-			if colorIdx != mask_alpha:
-				stopFlag = True
+			color_idx = sprite_img[dy][dx2]
+			if color_idx != mask_alpha:
+				stop_flag = True
 				break
-		if stopFlag: break
+		if stop_flag: break
 	return dx2  
 
-def get_sprite_params(labelPrefix, spriteName, dxL, dxR, spriteImg, mask_alpha, width, height, shift):
-	#if labelPrefix == 'burner' and spriteName == 'idle_l0':
+def get_sprite_params(label_prefix, sprite_name, dx_l, dx_r, sprite_img, mask_alpha, width, height, shift):
+	#if label_prefix == 'burner' and sprite_name == 'idle_l0':
 	#	test= 10 
-	shiftedDxL = shift + dxL
-	shiftedDxR = shift + dxR
+	shifted_dx_l = shift + dx_l
+	shifted_dx_r = shift + dx_r
 
-	offsetXPreshiftedLocal = shiftedDxL//8 * 8
-	widthNew = (shiftedDxR//8+1) * 8 - offsetXPreshiftedLocal
-	return offsetXPreshiftedLocal, widthNew
+	offset_x_preshifted_local = shifted_dx_l//8 * 8
+	width_new = (shifted_dx_r//8+1) * 8 - offset_x_preshifted_local
+	return offset_x_preshifted_local, width_new
 
-def make_empty_sprite_data(hasMask, width, height):
-	srcBuffCount = 3
+def make_empty_sprite_data(has_mask, width, height):
+	src_buff_count = 3
 	data = []
 	for dy in range(height):
-		for dx in range(width // 8 * srcBuffCount):		
-			if hasMask:
+		for dx in range(width // 8 * src_buff_count):		
+			if has_mask:
 				data.append(255)
 			data.append(0)
 
 	return [data]
 
-def sprites_to_asm(labelPrefix, source_j, image, hasMask):
-	spritesJ = source_j["sprites"]
-	asm = labelPrefix + "_sprites:"
+def sprites_to_asm(label_prefix, source_j, image, has_mask):
+	sprites_j = source_j["sprites"]
+	asm = label_prefix + "_sprites:"
 
 	# preshifted sprites
-	preshiftedSprites = source_j["preshifted_sprites"]
+	preshifted_sprites = source_j["preshifted_sprites"]
 
-	for sprite in spritesJ:
-		spriteName = sprite["name"]
+	for sprite in sprites_j:
+		sprite_name = sprite["name"]
 		x = sprite["x"]
 		y = sprite["y"]
 		width = sprite["width"]
 		height = sprite["height"]
-		offsetX = 0
-		if sprite.get("offsetX") is not None:
-			offsetX = sprite["offsetX"]
-		offsetY = 0
-		if sprite.get("offsetY") is not None:
-			offsetY = sprite["offsetY"]
+		offset_x = 0
+		if sprite.get("offset_x") is not None:
+			offset_x = sprite["offset_x"]
+		offset_y = 0
+		if sprite.get("offset_y") is not None:
+			offset_y = sprite["offset_y"]
 
 		# get a sprite as a color index 2d array
-		spriteImg = []
+		sprite_img = []
 		for py in reversed(range(y, y + height)) : # Y is reversed because it is from bottomto top in the game
 			line = []
 			for px in range(x, x+width) :
-				colorIdx = image.getpixel((px, py))
-				line.append(colorIdx)
+				color_idx = image.getpixel((px, py))
+				line.append(color_idx)
 
-			spriteImg.append(line)
+			sprite_img.append(line)
 
 		# convert indexes into bit lists.
-		bits0, bits1, bits2, bits3 = common.indexes_to_bit_lists(spriteImg)
+		bits0, bits1, bits2, bits3 = common.indexes_to_bit_lists(sprite_img)
 
 		# combite bits into byte lists
 		#bytes0 = common.combine_bits_to_bytes(bits0) # 8000-9FFF # from left to right, from bottom to top
@@ -245,72 +245,72 @@ def sprites_to_asm(labelPrefix, source_j, image, hasMask):
 		mask_alpha = sprite["mask_alpha"]
 		mask_color = sprite["mask_color"]
 
-		maskBytes = None
-		if hasMask:
+		mask_bytes = None
+		if has_mask:
 			# get a sprite as a color index 2d array
 			x = sprite["mask_x"]
 			y = sprite["mask_y"]
 
-			maskImg = []
+			mask_img = []
 			for py in reversed(range(y, y + height)) : # Y is reversed because it is from bottomto top in the game
 				for px in range(x, x+width) :
-					colorIdx = image.getpixel((px, py))
-					if colorIdx == mask_alpha:
-						maskImg.append(1)
+					color_idx = image.getpixel((px, py))
+					if color_idx == mask_alpha:
+						mask_img.append(1)
 					else:
-						maskImg.append(0)
+						mask_img.append(0)
 
-			maskBytes = common.combine_bits_to_bytes(maskImg)
+			mask_bytes = common.combine_bits_to_bytes(mask_img)
 
 		# to support a sprite render function
-		data = sprite_data(bytes1, bytes2, bytes3, width, height, maskBytes)
+		data = sprite_data(bytes1, bytes2, bytes3, width, height, mask_bytes)
 
-		if hasMask:
-			maskFlag = 1
+		if has_mask:
+			mask_flag = 1
 		else: 
-			maskFlag = 0
+			mask_flag = 0
 
 		asm += "\n"
 		# two empty bytes prior every sprite data to support a stack renderer
-		asm += f"			.byte {maskFlag},1  ; safety pair of bytes to support a stack renderer, and also (maskFlag, preshifting is done)\n"
-		asm += labelPrefix + "_" + spriteName + "_0:\n"
+		asm += f"			.byte {mask_flag},1  ; safety pair of bytes to support a stack renderer, and also (mask_flag, preshifting is done)\n"
+		asm += label_prefix + "_" + sprite_name + "_0:\n"
 
-		widthPacked = width//8 - 1
-		offsetXPacked = offsetX//8
-		asm += "			.byte " + str( offsetY ) + ", " +  str( offsetXPacked ) + "; offsetY, offsetX\n"
-		asm += "			.byte " + str( height ) + ", " +  str( widthPacked ) + "; height, width\n"
+		width_packed = width//8 - 1
+		offset_x_packed = offset_x//8
+		asm += "			.byte " + str( offset_y ) + ", " +  str( offset_x_packed ) + "; offset_y, offset_x\n"
+		asm += "			.byte " + str( height ) + ", " +  str( width_packed ) + "; height, width\n"
 
 		asm += bytes_to_asm_tiled(data)
 
  
 		# find leftest pixel dx
-		dxL = find_sprite_horiz_border(True, spriteImg, mask_alpha, width, height)
+		dx_l = find_sprite_horiz_border(True, sprite_img, mask_alpha, width, height)
 		# find rightest pixel dx
-		dxR = find_sprite_horiz_border(False, spriteImg, mask_alpha, width, height) 
+		dx_r = find_sprite_horiz_border(False, sprite_img, mask_alpha, width, height) 
 
 		# calculate preshifted sprite data
-		for i in range(1, preshiftedSprites):
-			shift = 8//preshiftedSprites * i
+		for i in range(1, preshifted_sprites):
+			shift = 8//preshifted_sprites * i
 
-			offsetXPreshiftedLocal, widthPreshifted = get_sprite_params(labelPrefix, spriteName, dxL, dxR, spriteImg, mask_alpha, width, height, shift)
-			offsetXPreshifted = offsetX + offsetXPreshiftedLocal
+			offset_x_preshifted_local, width_preshifted = get_sprite_params(label_prefix, sprite_name, dx_l, dx_r, sprite_img, mask_alpha, width, height, shift)
+			offset_x_preshifted = offset_x + offset_x_preshifted_local
 			asm += "\n"
 
-			copyFromBuffOffset = offsetXPreshiftedLocal//8
-			if widthPreshifted == 8: 
-				copyFromBuffOffset -= 1
+			copy_from_buff_offset = offset_x_preshifted_local//8
+			if width_preshifted == 8: 
+				copy_from_buff_offset -= 1
 
 			# two empty bytes prior every sprite data to support a stack renderer
-			asm += "			.byte " + str(copyFromBuffOffset) + ", "+ str(maskFlag) + " ; safety pair of bytes to support a stack renderer and also (copyFromBuffOffset, maskFlag)\n"
-			asm += labelPrefix + "_" + spriteName + "_" + str(i) + ":\n"
+			asm += "			.byte " + str(copy_from_buff_offset) + ", "+ str(mask_flag) + " ; safety pair of bytes to support a stack renderer and also (copy_from_buff_offset, mask_flag)\n"
+			asm += label_prefix + "_" + sprite_name + "_" + str(i) + ":\n"
 
-			widthPreshiftedPacked = widthPreshifted//8 - 1
-			offsetXPreshiftedPacked = offsetXPreshifted//8
-			asm += "			.byte " + str( offsetY ) + ", " +  str( offsetXPreshiftedPacked ) + "; offsetY, offsetX\n"
-			asm += "			.byte " + str( height ) + ", " +  str( widthPreshiftedPacked ) + "; height, width\n"
+			width_preshifted_packed = width_preshifted//8 - 1
+			offset_x_preshifted_packed = offset_x_preshifted//8
+			asm += "			.byte " + str( offset_y ) + ", " +  str( offset_x_preshifted_packed ) + "; offset_y, offset_x\n"
+			asm += "			.byte " + str( height ) + ", " +  str( width_preshifted_packed ) + "; height, width\n"
 
-			emptyData = make_empty_sprite_data(hasMask, widthPreshifted, height)
-			asm += bytes_to_asm_tiled(emptyData)
+			empty_data = make_empty_sprite_data(has_mask, width_preshifted, height)
+			asm += bytes_to_asm_tiled(empty_data)
 
 	return asm
 
@@ -336,8 +336,8 @@ def export_if_updated(source_path, generated_dir, force_export):
 def export(source_j_path, asmAnimPath, asmSpritePath):
 	source_name = common.path_to_basename(source_j_path)
 	source_dir = str(Path(source_j_path).parent) + "\\"
-	asmAnimDir = str(Path(asmAnimPath).parent) + "\\"
-	asmSpriteDir = str(Path(asmSpritePath).parent) + "\\"
+	asm_anim_dir = str(Path(asmAnimPath).parent) + "\\"
+	asm_sprite_dir = str(Path(asmSpritePath).parent) + "\\"
 
 	with open(source_j_path, "rb") as file:
 		source_j = json.load(file)
@@ -348,7 +348,7 @@ def export(source_j_path, asmAnimPath, asmSpritePath):
 		exit(1)
 
 	png_path = source_dir + source_j["png_path"]
-	hasMask = str(source_j["mask"])
+	has_mask = str(source_j["mask"])
 	image = Image.open(png_path)
 
 	_, colors = common.palette_to_asm(image, source_j)
@@ -356,23 +356,23 @@ def export(source_j_path, asmAnimPath, asmSpritePath):
 	image = common.remap_colors(image, colors)
 
 	asm = "; " + source_j_path + "\n"
-	asmAnims = asm + anims_to_asm(source_name, source_j)
-	asmSprites = asm + f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S" + "\n"
-	asmSprites += asm + f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M" + "\n"
-	asmSprites += sprites_to_asm("__" + source_name, source_j, image, hasMask)
+	asm_anims = asm + anims_to_asm(source_name, source_j)
+	asm_sprites = asm + f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S" + "\n"
+	asm_sprites += asm + f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M" + "\n"
+	asm_sprites += sprites_to_asm("__" + source_name, source_j, image, has_mask)
 
 	# save asm
-	if not os.path.exists(asmAnimDir):
-		os.mkdir(asmAnimDir)
+	if not os.path.exists(asm_anim_dir):
+		os.mkdir(asm_anim_dir)
 
 	with open(asmAnimPath, "w") as file:
-		file.write(asmAnims)
+		file.write(asm_anims)
 
-	if not os.path.exists(asmSpriteDir):
-		os.mkdir(asmSpriteDir)
+	if not os.path.exists(asm_sprite_dir):
+		os.mkdir(asm_sprite_dir)
 
 	with open(asmSpritePath, "w") as file:
-		file.write(asmSprites)
+		file.write(asm_sprites)
 
 def is_source_updated(source_j_path):
 	with open(source_j_path, "rb") as file:

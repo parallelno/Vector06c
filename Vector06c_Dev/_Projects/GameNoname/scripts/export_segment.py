@@ -13,15 +13,15 @@ def check_segment_size(path, segment_addr):
 		print("Stop export")
 		exit(1)
 
-	segmentSize = os.path.getsize(path)
-	segmentSizeMax = build.get_segment_size_max(segment_addr)
+	segment_size = os.path.getsize(path)
+	segment_size_max = build.get_segment_size_max(segment_addr)
 
-	if segmentSize > segmentSizeMax:
-			print(f"ERROR: {path} is bigger than {segmentSizeMax} bytes")
+	if segment_size > segment_size_max:
+			print(f"ERROR: {path} is bigger than {segment_size_max} bytes")
 			print("Stop export")
 			exit(1)
 
-def split_segment(segmentPath, segmentLabelsPath):
+def split_segment(segment_path, segmentLabelsPath):
 	with open(segmentLabelsPath, "rb") as file:
 		labels = file.readlines()
 
@@ -42,13 +42,13 @@ def split_segment(segmentPath, segmentLabelsPath):
 	chunks_paths = []
 
 	chunk_count = len(chunk_start_addrs)
-	with open(segmentPath, "rb") as file:
+	with open(segment_path, "rb") as file:
 		for i in range(chunk_count):
 			
 			chunk_size = chunk_end_addrs[i] - chunk_start_addrs[i]
 			data = file.read(chunk_size)
-			chunk_dir = os.path.dirname(segmentPath) + "\\"
-			segment_basename = common.path_to_basename(segmentPath)
+			chunk_dir = os.path.dirname(segment_path) + "\\"
+			segment_basename = common.path_to_basename(segment_path)
 			segment_idx = segment_basename.find("_")
 			chunk_name = "chunk" + segment_basename[segment_idx:]
 			

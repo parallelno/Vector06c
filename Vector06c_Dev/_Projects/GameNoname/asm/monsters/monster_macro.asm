@@ -88,11 +88,11 @@
 ; in:
 ; c - tile idx in the room_tiles_data array.
 ; a - monster id * 4
-;ex. MONSTER_INIT(KnightUpdate, KnightDraw, KnightImpact, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
+;ex. MONSTER_INIT(knight_update, knight_draw, knight_impact, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 .macro MONSTER_INIT(MONSTER_UPDATE, MONSTER_DRAW, MONSTER_IMPACT, MONSTER_HEALTH, MONSTER_STATUS_DETECT_HERO_INIT, MONSTER_ANIM)
 			rrc_(2) ; to get monsterID
 			sta @monster_id+1
-			call MonstersGetEmptyDataPtr
+			call monsters_get_empty_data_ptr
 			; hl - ptr to monster_update_ptr+1
 			; advance hl to monster_update_ptr
 			dcx h

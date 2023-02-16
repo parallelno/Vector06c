@@ -6,7 +6,7 @@
 .include "asm\\monsters\\knight.asm"
 .include "asm\\monsters\\monsters_data.asm"
 
-MonstersEraseRuntimeData:
+monsters_erase_runtime_data:
 			mvi a, MONSTER_RUNTIME_DATA_LAST
 			sta monster_update_ptr+1
 			ret
@@ -98,7 +98,7 @@ monsters_get_first_collided:
 ; a - tile_data that will be saved back into room_tiles_data
 monsters_spawn:
 			; get a monster init func addr ptr
-			lxi h, monstersInits
+			lxi h, monsters_inits
 			add_a(2) ; to make a JMP_4 ptr
 			mov e, a
 			mvi d, 0
@@ -115,7 +115,7 @@ monsters_spawn:
 ; de, a
 
 ; TODO: optimize. use a lastRemovedMonsterRuntimeDataPtr as a starter to find an empty data
-MonstersGetEmptyDataPtr:
+monsters_get_empty_data_ptr:
 			lxi h, monster_update_ptr+1
 @loop:
 			mov a, m
@@ -154,7 +154,7 @@ MonstersGetEmptyDataPtr:
 ; in:
 ; hl - monsterUpdate+1 ptr
 ; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
-MonstersDestroy:
+monsters_destroy:
 			mvi m, MONSTER_RUNTIME_DATA_DESTR
 			ret
 			.closelabels
@@ -163,7 +163,7 @@ MonstersDestroy:
 ; in:
 ; hl - monsterUpdate+1 ptr
 ; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
-MonstersSetEmpty:
+monsters_set_empty:
 			mvi m, MONSTER_RUNTIME_DATA_EMPTY
 			ret
 			.closelabels
@@ -210,13 +210,13 @@ monsters_data_func_caller:
 			ret			
 			.closelabels
 
-; call a provided func (MonsterCopyToScr, MonsterErase) if a monster is alive
+; call a provided func (monster_copy_to_scr, monster_erase) if a monster is alive
 ; a func will get HL pointing to a monster_update_ptr+1 in the runtime data, and A holding a MONSTER_RUNTIME_DATA_* status
 ; in:
 ; hl - a func addr
 ; use:
 ; de, a
-MonstersCommonFuncCaller:
+monsters_common_func_caller:
 			shld @funcPtr+1
 			lxi h, monster_update_ptr+1
 @loop:
@@ -246,17 +246,17 @@ monsters_draw:
 			jmp monsters_data_func_caller
 
 monsters_copy_to_scr:
-			lxi h, MonsterCopyToScr
-			jmp MonstersCommonFuncCaller
+			lxi h, monster_copy_to_scr
+			jmp monsters_common_func_caller
 
 monsters_erase:
-			lxi h, MonsterErase
-			jmp MonstersCommonFuncCaller
+			lxi h, monster_erase
+			jmp monsters_common_func_caller
 
 ; copy sprites from a backbuffer to a scr
 ; in:
 ; hl - ptr to monster_update_ptr+1 in the runtime data
-MonsterCopyToScr:
+monster_copy_to_scr:
 			; advance to monster_status
 			LXI_D_TO_DIFF(monster_status, monster_update_ptr+1)
 			dad d
@@ -357,10 +357,10 @@ MonsterCopyToScr:
 ; in:
 ; hl - ptr to monster_update_ptr+1 in the runtime data
 ; a - MONSTER_RUNTIME_DATA_* status
-MonsterErase:
+monster_erase:
 			; if a monster is destroyed mark its data as empty
 			cpi MONSTER_RUNTIME_DATA_DESTR
-			jz MonstersSetEmpty
+			jz monsters_set_empty
 
 			; advance to monster_status
 			LXI_D_TO_DIFF(monster_status, monster_update_ptr+1)
