@@ -222,6 +222,14 @@
 								},
 								{
 									"asset_type" : "code",
+									"path": "asm\\render\\draw_sprite_hit_rd.asm"
+								},
+								{
+									"asset_type" : "code",
+									"path": "asm\\render\\draw_sprite_invis_rd.asm"
+								},
+								{
+									"asset_type" : "code",
 									"path" : "asm\\globals\\utils_rd.asm"
 								},
 								{

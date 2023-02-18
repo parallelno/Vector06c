@@ -4,11 +4,13 @@ HERO_RUN_SPEED_D	= $016a ; for diagonal moves
 ; hero statuses.
 ; a status describes what set of animations and behavior is active
 ; for ex. HERO_STATUS_ATTACK plays hero_r_attk or hero_l_attk depending on the direction and it spawns a weapon trail
-HERO_STATUS_IDLE	= 0
-HERO_STATUS_ATTACK	= 1
+HERO_STATUS_IDLE		= 0
+HERO_STATUS_ATTACK		= 1
+HERO_STATUS_INVINCIBLE	= 2
 
 ; duration of statuses (in updateDurations)
 HERO_STATUS_ATTACK_DURATION	= 12
+HERO_STATUS_INVINCIBLE_DURATION = 50
 
 ; animation speed (the less the slower, 0-255, 255 means next frame every update)
 HERO_ANIM_SPEED_MOVE	= 65
@@ -25,7 +27,7 @@ HERO_COLLISION_HEIGHT = 11
 ; this's a struct. do not change the layout
 hero_update_ptr:		.word hero_update
 hero_draw_ptr:			.word hero_draw
-hero_impact_ptr:		.word hero_impact
+hero_impacted_ptr:		.word hero_impacted ; called by a monster's bullet, a monster, etc. to affect a hero
 hero_type:				.byte MONSTER_TYPE_ALLY
 hero_health:			.byte HERO_HEALTH_MAX
 hero_status:			.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
@@ -47,39 +49,39 @@ hero_data_next_pptr:	.word monster_data_next_pptr
 hero_collision_func_table:
 			; bit layout:
 			; (bottom-left), (bottom-right), (top_right), (top-left), 0         
-			JMP_4(hero_check_collision_top_left)
-			JMP_4(hero_check_collision_top_right)
-			JMP_4(hero_move_horizontally)
-			JMP_4(hero_check_collision_bottom_right)
-			JMP_4(hero_dont_move)
-			JMP_4(hero_move_vertically)
-			JMP_4(hero_dont_move)
-			JMP_4(hero_check_collision_bottom_left)
-			JMP_4(hero_move_vertically)
-			JMP_4(hero_dont_move)
-			JMP_4(hero_dont_move)
-			JMP_4(hero_move_horizontally)
-			JMP_4(hero_dont_move)
-			JMP_4(hero_dont_move)
-			JMP_4(hero_dont_move)
+			JMP_4( hero_check_collision_top_left)
+			JMP_4( hero_check_collision_top_right)
+			JMP_4( hero_move_horizontally)
+			JMP_4( hero_check_collision_bottom_right)
+			JMP_4( hero_dont_move)
+			JMP_4( hero_move_vertically)
+			JMP_4( hero_dont_move)
+			JMP_4( hero_check_collision_bottom_left)
+			JMP_4( hero_move_vertically)
+			JMP_4( hero_dont_move)
+			JMP_4( hero_dont_move)
+			JMP_4( hero_move_horizontally)
+			JMP_4( hero_dont_move)
+			JMP_4( hero_dont_move)
+			JMP_4( hero_dont_move)
 
 ; funcs to handle the tile data. more info is in level_data.asm->room_tiles_data
 hero_tile_func_table:
-			JMP_4(0)						; func_id == 1
-			JMP_4(hero_tile_func_teleport)	; func_id == 2
-			JMP_4(0)						; func_id == 3
-			JMP_4(0)						; func_id == 4
-			JMP_4(0)						; func_id == 5
-			JMP_4(0)						; func_id == 6
-			JMP_4(0)						; func_id == 7
-			JMP_4(0)						; func_id == 8
-			JMP_4(0)						; func_id == 9
-			JMP_4(0)						; func_id == 10
-			JMP_4(0)						; func_id == 11
-			JMP_4(0)						; func_id == 12
-			JMP_4(0)						; func_id == 13
-			JMP_4(0)						; func_id == 14
-			JMP_4(hero_tile_func_nothing)	; func_id == 15 (collision) called only when a hero is stuck into collision tiles
+			JMP_4( 0)						; func_id == 1
+			JMP_4( hero_tile_func_teleport)	; func_id == 2
+			JMP_4( 0)						; func_id == 3
+			JMP_4( 0)						; func_id == 4
+			JMP_4( 0)						; func_id == 5
+			JMP_4( 0)						; func_id == 6
+			JMP_4( 0)						; func_id == 7
+			JMP_4( 0)						; func_id == 8
+			JMP_4( 0)						; func_id == 9
+			JMP_4( 0)						; func_id == 10
+			JMP_4( 0)						; func_id == 11
+			JMP_4( 0)						; func_id == 12
+			JMP_4( 0)						; func_id == 13
+			JMP_4( 0)						; func_id == 14
+			JMP_4( hero_tile_func_nothing)	; func_id == 15 (collision) called only when a hero is stuck into collision tiles
 
 hero_init:
 			call hero_idle_start
@@ -129,6 +131,8 @@ hero_update:
 			lda hero_status
 			cpi HERO_STATUS_ATTACK
 			jz hero_attack_update
+			cpi HERO_STATUS_INVINCIBLE
+			cz hero_invincible_update
 
 			; check if an attack key pressed
 			lhld key_code
@@ -592,10 +596,8 @@ hero_attack_update:
 			lxi h, hero_status_timer
 			dcr m
 			rnz
-
 			; if the timer == 0, set the status to Idle
 			jmp hero_idle_start
-			.closelabels
 
 hero_idle_start:
 			; set status
@@ -630,10 +632,31 @@ hero_idle_update:
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_IDLE)
 			ret
 
+hero_invincible_start:
+			; set status
+			mvi a, HERO_STATUS_INVINCIBLE
+			sta hero_status
+			mvi a, HERO_STATUS_INVINCIBLE_DURATION
+			sta hero_status_timer
+			ret
+
+hero_invincible_update:
+			lxi h, hero_status_timer
+			dcr m
+			rnz
+			jmp hero_idle_start
+
+
 ; handle the damage
 ; in:
 ; c - damage (positive number)
-hero_impact:
+hero_impacted:
+			lda hero_status
+			cpi HERO_STATUS_INVINCIBLE
+			rz
+
+			call hero_invincible_start
+
 			lxi h, hero_health
 			mov a, m
 			sub c
@@ -657,15 +680,30 @@ hero_draw:
 
 			lda hero_dir_x
 			ora a
-			mvi a, <(__RAM_DISK_S_HERO_R | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+			mvi l, <(__RAM_DISK_S_HERO_R | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			jnz @spriteR
 @spriteL:
-			mvi a, <(__RAM_DISK_S_HERO_L | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+			mvi l, <(__RAM_DISK_S_HERO_L | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 @spriteR:			
 
+			lda hero_status
+			cpi HERO_STATUS_INVINCIBLE
+			jnz @draw
+@invisState:
+			mvi a, %00001111
+			rrc
+			sta @invisState+1
+			jc @draw
+@invis:
+			mov a, l
+			CALL_RAM_DISK_FUNC_BANK(__draw_sprite_invis_vm)
+			jmp @saveParams
+@draw:
+			mov a, l
 			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
 			CALL_RAM_DISK_FUNC_BANK(__draw_sprite_vm)
 
+@saveParams:
 			; store an old scr addr, width, and height
 			lxi h, hero_erase_scr_addr
 			mov m, c

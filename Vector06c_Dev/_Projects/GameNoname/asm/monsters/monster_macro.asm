@@ -81,7 +81,7 @@
 			; hero collides
 			; send him a damage
 			mvi c, MONSTER_DAMAGE
-			jmp hero_impact
+			jmp hero_impacted
 .endmacro
 
 ; monster initialization
@@ -104,7 +104,7 @@
 			mvi m, <MONSTER_DRAW
 			inx h
 			mvi m, >MONSTER_DRAW
-			; advance hl to monster_impact_ptr
+			; advance hl to monster_impacted_ptr
 			inx h
 			mvi m, <MONSTER_IMPACT
 			inx h

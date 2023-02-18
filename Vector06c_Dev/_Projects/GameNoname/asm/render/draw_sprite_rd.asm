@@ -15,7 +15,8 @@ drawSpriteWidthHeight_ramDisk__:
 			lxi d, TEMP_WORD
 			ret
 			.closelabels
-			
+
+/*	
 ; =============================================
 ; Draw a sprite without a mask in three consiquence screen buffs with offset_x and offset_y
 ; width is 1-3 bytes
@@ -226,7 +227,7 @@ __DrawSpriteV:
 			jnz @w8evenScr1
 			jmp DrawSpriteRet_ramDisk__
 			.closelabels
-
+*/
 
 ; =============================================
 ; Draw a sprite with a mask in three consiquence screen buffs with offset_x and offset_y

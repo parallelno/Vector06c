@@ -92,6 +92,6 @@
 			push h
 			; send him a damage
 			mvi c, BULLET_DAMAGE
-			call hero_impact
+			call hero_impacted
 			pop h
 .endmacro

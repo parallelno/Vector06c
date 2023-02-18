@@ -12,6 +12,12 @@ __sprite_rd_rd_data_end:
 __draw_sprite_rd_rd_data_start:
 .include "asm\\render\\draw_sprite_rd.asm"
 __draw_sprite_rd_rd_data_end:
+__draw_sprite_hit_rd_rd_data_start:
+.include "asm\\render\\draw_sprite_hit_rd.asm"
+__draw_sprite_hit_rd_rd_data_end:
+__draw_sprite_invis_rd_rd_data_start:
+.include "asm\\render\\draw_sprite_invis_rd.asm"
+__draw_sprite_invis_rd_rd_data_end:
 __utils_rd_rd_data_start:
 .include "asm\\globals\\utils_rd.asm"
 __utils_rd_rd_data_end:

@@ -62,13 +62,13 @@
 
 
 ; statuses.
-BURNER_STATUS_DETECT_HERO_INIT	= 0
-BURNER_STATUS_DETECT_HERO		= 1
-BURNER_STATUS_DASH_PREP			= 2
-BURNER_STATUS_DASH				= 3
-BURNER_STATUS_RELAX				= 4
-BURNER_STATUS_MOVE_INIT			= 5
-BURNER_STATUS_MOVE				= 6
+BURNER_STATUS_DETECT_HERO_INIT	= 0 * JMP_4_LEN
+BURNER_STATUS_DETECT_HERO		= 1 * JMP_4_LEN
+BURNER_STATUS_DASH_PREP			= 2 * JMP_4_LEN
+BURNER_STATUS_DASH				= 3 * JMP_4_LEN
+BURNER_STATUS_RELAX				= 4 * JMP_4_LEN
+BURNER_STATUS_MOVE_INIT			= 5 * JMP_4_LEN
+BURNER_STATUS_MOVE				= 6 * JMP_4_LEN
 
 ; status duration in updates.
 BURNER_STATUS_DETECT_HERO_TIME	= 50
@@ -116,7 +116,6 @@ burner_update:
 			LXI_H_TO_DIFF(monster_status, monster_update_ptr)
 			dad d
 			mov a, m
-			; TODO: optimization. think of using a call table
 			cpi BURNER_STATUS_MOVE
 			jz burner_update_move
 			cpi BURNER_STATUS_DETECT_HERO
@@ -452,8 +451,8 @@ burner_update_anim_check_collision_hero:
 			MONSTER_CHECK_COLLISION_HERO(BURNER_COLLISION_WIDTH, BURNER_COLLISION_HEIGHT, BURNER_DAMAGE)
 
 burner_impact:
-			; de - ptr to monster_impact_ptr+1
-			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impact_ptr+1)
+			; de - ptr to monster_impacted_ptr+1
+			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)
 			dad d
 			jmp monsters_destroy
 

@@ -1,17 +1,17 @@
 ; a newly inited room uses this list to call a monster Init func
 ; it's ordered by monster_id (see tile data format in levelsData.asm)
 monsters_inits:
-monsters_init0:JMP_4(skeleton_init)
-monsters_init1:JMP_4(vampire_init)
-monsters_init2:JMP_4(burner_init)
-monsters_init3:JMP_4(knight_init)
-monsters_init4:JMP_4(knight_init)
+monsters_init0:	JMP_4( skeleton_init)
+monsters_init1:	JMP_4( vampire_init)
+monsters_init2:	JMP_4( burner_init)
+monsters_init3:	JMP_4( knight_init)
+monsters_init4:	JMP_4( knight_init)
 
-SKELETON_ID = (monsters_init0-monsters_inits) / JMP_4_LEN
-VAMPIRE_ID = (monsters_init1-monsters_inits) / JMP_4_LEN
-BURNER_ID = (monsters_init2-monsters_inits) / JMP_4_LEN
-KNIGHT_HORIZ_ID = (monsters_init3-monsters_inits) / JMP_4_LEN
-KNIGHT_VERT_ID = (monsters_init4-monsters_inits) / JMP_4_LEN
+SKELETON_ID		= (monsters_init0-monsters_inits) / JMP_4_LEN
+VAMPIRE_ID		= (monsters_init1-monsters_inits) / JMP_4_LEN
+BURNER_ID		= (monsters_init2-monsters_inits) / JMP_4_LEN
+KNIGHT_HORIZ_ID	= (monsters_init3-monsters_inits) / JMP_4_LEN
+KNIGHT_VERT_ID	= (monsters_init4-monsters_inits) / JMP_4_LEN
 
 ; ptr to the first monster data in the sorted list
 monster_runtime_data_sorted:
@@ -22,7 +22,7 @@ monster_runtime_data_sorted:
 monsters_runtime_data:
 monster_update_ptr:			.word TEMP_ADDR
 monster_draw_ptr:			.word TEMP_ADDR
-monster_impact_ptr:			.word TEMP_WORD ; called by hero bullet, another monster, etc. to affect this monster
+monster_impacted_ptr:		.word TEMP_WORD ; called by a hero's bullet, another monster, etc. to affect this monster
 monster_id:					.byte TEMP_BYTE
 monster_type:				.byte TEMP_BYTE
 monster_health:				.byte TEMP_BYTE

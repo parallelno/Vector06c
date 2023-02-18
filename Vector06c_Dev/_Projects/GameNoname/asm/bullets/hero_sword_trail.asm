@@ -218,8 +218,8 @@ hero_sword_trail_update:
 			cmp m
 			rc ; return if no collision
 
-			; advance hl to monster_impact_ptr
-			LXI_B_TO_DIFF(monster_impact_ptr, monster_update_ptr+1)
+			; advance hl to monster_impacted_ptr
+			LXI_B_TO_DIFF(monster_impacted_ptr, monster_update_ptr+1)
 			dad b
 			; call bulletImpactPtr
 			mov e, m

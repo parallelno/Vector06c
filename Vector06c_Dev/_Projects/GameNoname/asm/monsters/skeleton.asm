@@ -396,8 +396,8 @@ skeleton_update_anim_check_collision_hero:
 			MONSTER_CHECK_COLLISION_HERO(SKELETON_COLLISION_WIDTH, SKELETON_COLLISION_HEIGHT, SKELETON_DAMAGE)
 
 skeleton_impact:
-			; de - ptr to monster_impact_ptr+1
-			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impact_ptr+1)
+			; de - ptr to monster_impacted_ptr+1
+			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)
 			dad d
 			jmp monsters_destroy
 

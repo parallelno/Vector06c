@@ -372,8 +372,8 @@ vampire_update_anim_check_collision_hero:
 			MONSTER_CHECK_COLLISION_HERO(VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, VAMPIRE_DAMAGE)
 
 vampire_impact:
-			; de - ptr to monster_impact_ptr+1
-			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impact_ptr+1)
+			; de - ptr to monster_impacted_ptr+1
+			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)
 			dad d
 			jmp monsters_destroy
 

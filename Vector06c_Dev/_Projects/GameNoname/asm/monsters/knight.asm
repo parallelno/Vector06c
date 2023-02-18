@@ -423,8 +423,8 @@ knight_update_anim_check_collision_hero:
 			MONSTER_CHECK_COLLISION_HERO(KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, KNIGHT_DAMAGE)
 
 knight_impact:
-			; de - ptr to monster_impact_ptr+1
-			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impact_ptr+1)
+			; de - ptr to monster_impacted_ptr+1
+			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)
 			dad d
 			jmp monsters_destroy			
 
