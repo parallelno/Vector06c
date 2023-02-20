@@ -89,23 +89,6 @@ monsters_get_first_collided:
 			dad b
 			jmp @loop
 
-; a tile data handler to spawn a monster by its id.
-; input:
-; b - tile data
-; c - tile idx in the room_tiles_data array.
-; a - monster_id
-; out:
-; a - tile_data that will be saved back into room_tiles_data
-monsters_spawn:
-			; get a monster init func addr ptr
-			lxi h, monsters_inits
-			add_a(2) ; to make a JMP_4 ptr
-			mov e, a
-			mvi d, 0
-			dad d
-			; call a monster init func
-			pchl
-
 ; look up the empty spot in the monster runtime data
 ; in: 
 ; none
@@ -398,3 +381,23 @@ monster_erase:
 			jnz sprite_copy_to_back_buff_v ; restore a background
 			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 			ret
+
+
+monster_impacted:
+			; increase room_death_rate
+			lda room_idx
+			mov c, a
+			mvi b, 0
+			lxi h, rooms_runtime_data
+			dad b
+			mvi a, MONSTER_DEATH_RATE_DELTA
+			add m
+			mov m, a
+			jnc @next
+			; set max death_rate
+			mvi m, MONSTER_DEATH_RATE_MAX
+@next:
+			; de - ptr to monster_impacted_ptr+1
+			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)
+			dad d
+			jmp monsters_destroy

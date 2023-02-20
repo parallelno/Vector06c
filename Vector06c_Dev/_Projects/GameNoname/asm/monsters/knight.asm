@@ -88,7 +88,7 @@ KNIGHT_DETECT_HERO_DISTANCE = 60
 ; out:
 ; a = 0
 knight_init:
-			MONSTER_INIT(knight_update, knight_draw, knight_impact, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
+			MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 			ret
 
 ; anim and a gameplay logic update
@@ -422,11 +422,6 @@ knight_update_anim_check_collision_hero:
 			call actor_anim_update
 			MONSTER_CHECK_COLLISION_HERO(KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, KNIGHT_DAMAGE)
 
-knight_impact:
-			; de - ptr to monster_impacted_ptr+1
-			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)
-			dad d
-			jmp monsters_destroy			
 
 ; draw a sprite into a backbuffer
 ; in:

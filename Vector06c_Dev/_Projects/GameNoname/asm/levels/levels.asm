@@ -7,7 +7,7 @@ levels_init:
 			ret
 
 ;================================================================
-;	initialization level data every game start
+;	initialization level data every level start
 ;
 level_init:
 			lxi d, __level01_palette_sprites_tiles_lv01
@@ -15,6 +15,12 @@ level_init:
 			call set_palette_from_ram_disk
 			mvi a, 1
 			sta border_color_idx
+
+			; erase rooms runtime data
+			lxi b, rooms_runtime_data_end_addr
+			lxi d, ROOM_RUNTIME_DATA_LEN * ROOMS_MAX / 32 - 1
+			CLEAR_MEM_SP(true)
+
 			xra a
 			sta room_idx
 

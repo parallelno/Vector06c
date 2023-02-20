@@ -20,7 +20,7 @@ def mask_data(mask_bytes, w, h ):
 	# the width is devided by 8 because there is 8 pixels per a byte
 	width = w // 8
 	#mask = 0
-	data = []
+	data = [] 
 	for y in range(h):
 		even_line = y % 2 == 0
 		if even_line:

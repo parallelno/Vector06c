@@ -117,7 +117,7 @@ backs_spawn:
 			inx h
 			mov d, m
 			call random
-			ani %11
+			ani %11 ; advance to a frame N = rnd(256) % 4
 			; advance to the next frame A reg times
 			xchg
 @nextFrame:

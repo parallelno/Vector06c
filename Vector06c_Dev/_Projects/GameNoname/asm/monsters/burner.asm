@@ -104,7 +104,7 @@ BURNER_DETECT_HERO_DISTANCE = 60
 ; out:
 ; a = 0
 burner_init:
-			MONSTER_INIT(burner_update, burner_draw, burner_impact, BURNER_HEALTH, BURNER_STATUS_DETECT_HERO_INIT, burner_idle)
+			MONSTER_INIT(burner_update, burner_draw, monster_impacted, BURNER_HEALTH, BURNER_STATUS_DETECT_HERO_INIT, burner_idle)
 			ret
 			.closelabels
 
@@ -449,12 +449,6 @@ burner_update_dash:
 burner_update_anim_check_collision_hero:
 			call actor_anim_update
 			MONSTER_CHECK_COLLISION_HERO(BURNER_COLLISION_WIDTH, BURNER_COLLISION_HEIGHT, BURNER_DAMAGE)
-
-burner_impact:
-			; de - ptr to monster_impacted_ptr+1
-			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)
-			dad d
-			jmp monsters_destroy
 
 ; draw a sprite into a backbuffer
 ; in:

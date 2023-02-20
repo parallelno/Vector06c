@@ -129,7 +129,7 @@ def remap_index(rooms_j):
 def get_list_of_rooms(room_paths, label_prefix):
 	size = 0
 	asm = "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
-	asm += label_prefix + "_roomsAddr:\n			.word "
+	asm += label_prefix + "_rooms_addr:\n			.word "
 	for i, room_path_p in enumerate(room_paths):
 		room_path = room_path_p['path']
 		room_path_wo_ext = os.path.splitext(room_path)[0]

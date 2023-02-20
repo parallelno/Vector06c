@@ -13,8 +13,8 @@
 			; a border color, scrolling set up
 			mvi a, PORT0_OUT_OUT
 			out 0
-			;lda border_color_idx
-			;out 2
+			lda border_color_idx
+			out 2
 			lda scr_offset_y
 			out 3
 			; used in the main program to keep the update synced with interuption

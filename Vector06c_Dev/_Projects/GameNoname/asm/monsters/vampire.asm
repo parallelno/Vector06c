@@ -95,7 +95,7 @@ VAMPIRE_DETECT_HERO_DISTANCE = 90
 ; out:
 ; a = 0
 vampire_init:
-			MONSTER_INIT(vampire_update, vampire_draw, vampire_impact, VAMPIRE_HEALTH, VAMPIRE_STATUS_DETECT_HERO_INIT, vampire_idle)
+			MONSTER_INIT(vampire_update, vampire_draw, monster_impacted, VAMPIRE_HEALTH, VAMPIRE_STATUS_DETECT_HERO_INIT, vampire_idle)
 			ret
 
 ; anim and a gameplay logic update
@@ -370,12 +370,6 @@ vampire_update_shoot:
 vampire_update_anim_check_collision_hero:
 			call actor_anim_update
 			MONSTER_CHECK_COLLISION_HERO(VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, VAMPIRE_DAMAGE)
-
-vampire_impact:
-			; de - ptr to monster_impacted_ptr+1
-			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)
-			dad d
-			jmp monsters_destroy
 
 ; draw a sprite into a backbuffer
 ; in:

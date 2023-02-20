@@ -94,7 +94,7 @@ SKELETON_DETECT_HERO_DISTANCE = 60
 ; out:
 ; a = 0
 skeleton_init:
-			MONSTER_INIT(skeleton_update, skeleton_draw, skeleton_impact, SKELETON_HEALTH, SKELETON_STATUS_DETECT_HERO_INIT, skeleton_idle)
+			MONSTER_INIT(skeleton_update, skeleton_draw, monster_impacted, SKELETON_HEALTH, SKELETON_STATUS_DETECT_HERO_INIT, skeleton_idle)
 			ret
 
 ; anim and a gameplay logic update
@@ -394,12 +394,6 @@ skeleton_update_shoot:
 skeleton_update_anim_check_collision_hero:
 			call actor_anim_update
 			MONSTER_CHECK_COLLISION_HERO(SKELETON_COLLISION_WIDTH, SKELETON_COLLISION_HEIGHT, SKELETON_DAMAGE)
-
-skeleton_impact:
-			; de - ptr to monster_impacted_ptr+1
-			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)
-			dad d
-			jmp monsters_destroy
 
 ; draw a sprite into a backbuffer
 ; in:

@@ -17,13 +17,13 @@ room_init:
 room_init_tiles_gfx:
 			; copy the tiles idxs from the ram-disk to the room_tiles_data buffer
 			lda room_idx
-			; double the room index to get an address offset in the level01_roomsAddr array
+			; double the room index to get an address offset in the level01_rooms_addr array
 			rlc
 			; double it again because there are two safety bytes in front of every room pointer
 			rlc
 			mov c, a
 			mvi b, 0
-			lxi h, __level01_roomsAddr
+			lxi h, __level01_rooms_addr
 			dad b
 
 			xchg
@@ -92,7 +92,7 @@ room_init_tiles_data:
 			rlc
 			mov c, a
 			mvi b, 0
-			lxi h, __level01_roomsAddr
+			lxi h, __level01_rooms_addr
 			dad b
 
 			xchg
@@ -112,7 +112,7 @@ room_init_tiles_data:
 @loop:
 			mov b, m
 			push b
-			TILE_DATA_HANDLE_FUNC_CALL(room_func_table)
+			TILE_DATA_HANDLE_FUNC_CALL(room_tiledata_funcs)
 			pop b
 			mov m, a ; save tile_data back into room_tiles_data. funcs (ex. burner_init etc.) can replace A with 0 to make it walkable
 			inx h
@@ -124,7 +124,7 @@ room_init_tiles_data:
 			.closelabels
 
 
-; this is a dummy tile data handler.
+; a tile data handler. it just copies the tiledata.
 ; it copies the tile data byte into the room_tiles_data as it is
 ; input:
 ; b - tile data
@@ -133,6 +133,37 @@ room_init_tiles_data:
 room_tile_data_copy:
             ; just return the same tile data
 			mov a, b
+			ret
+
+; a tile data handler to spawn a monster by its id.
+; input:
+; b - tile data
+; c - tile idx in the room_tiles_data array.
+; a - monster_id
+; out:
+; a - tile_data that will be saved back into room_tiles_data
+room_tiledata_monster_spawn:
+			; get a monster init func addr ptr
+			lxi h, monsters_inits
+			add_a(2) ; to make a JMP_4 ptr
+			mov e, a
+			mvi d, 0
+			dad d
+			; call a monster init func
+			pchl
+
+; a tile data handler for collision + spawn an animated back by its id.
+; if id == TILE_DATA_FUNC_ID_COLLISION, it does not spawn an animated back
+; input:
+; b - tile data
+; c - tile idx in the room_tiles_data array.
+; a - back_id
+; out:
+; a - tile_data that will be saved back into room_tiles_data
+room_tiledata_back_spawn:
+			cpi TILE_DATA_FUNC_ID_COLLISION
+			jnz backs_spawn
+			mvi a, TILE_DATA_COLLISION
 			ret
 
 room_draw:

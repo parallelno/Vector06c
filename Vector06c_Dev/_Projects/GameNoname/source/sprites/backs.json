@@ -33,34 +33,34 @@
 		{
 			"name" : "torch_front0",
 			"x" : 0,
-			"y"	: 32,
+			"y"	: 35,
 			"width" : 16,
 			"height" : 7,
-			"offset_y": 9
+			"offset_y": 6
 		},
 		{
 			"name" : "torch_front1",
 			"x" : 0,
-			"y"	: 48,
+			"y"	: 51,
 			"width" : 16,
 			"height" : 7,
-			"offset_y": 9
+			"offset_y": 6
 		},
 		{
 			"name" : "torch_front2",
 			"x" : 0,
-			"y"	: 64,
+			"y"	: 67,
 			"width" : 16,
 			"height" : 7,
-			"offset_y": 9
+			"offset_y": 6
 		},
 		{
 			"name" : "torch_front3",
 			"x" : 0,
-			"y"	: 80,
+			"y"	: 83,
 			"width" : 16,
 			"height" : 7,
-			"offset_y": 9
+			"offset_y": 6
 		},
 		{
 			"name" : "flag_front0",
