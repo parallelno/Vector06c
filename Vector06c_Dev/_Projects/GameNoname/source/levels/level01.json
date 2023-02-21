@@ -27,7 +27,6 @@
 	"rooms" : [
 		{"path" : "level01_room00.tmj"},
 		{"path" : "level01_room01.tmj"},
-		{"path" : "level01_room02.tmj"},
-		{"path" : "level01_room03.tmj"}
+		{"path" : "level01_room02.tmj"}
 	]
 }

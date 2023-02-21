@@ -1,5 +1,5 @@
 ; TODO: do we need it?
-; list of adresses of compressed levels 
+; list of adresses of compressed levels
 levels_addr: .word TEMP_ADDR, 0
 ; TODO: do we need it?
 ; current level index in levels_addr
@@ -22,7 +22,7 @@ rooms_runtime_data_end_addr:
 room_tiles_gfx_ptrs:
 			.storage ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
 
-; tile_data format: 
+; tile_data format:
 ; it's stored in room_tiles_data
 ; %ffffDDDD, ffff - func_id, dddd - a func argument
 ; ffff == 0, walkable
@@ -35,7 +35,7 @@ room_tiles_gfx_ptrs:
 ;		monster_id == 3 - knight horizontal walk (tiledata = 1*16+3=19)
 ;		monster_id == 4 - knight vertical walk (tiledata = 1*16+4=20)
 ;		monster_id == 5 - monster chest (tiledata = 1*16+5=21)
-; ffff == 2, teleport, room_id = d, go to 0-15 room, ex. teleport to the room_id=0 (tiledata = 2*16+0=32), to the room_id=1 (tiledata = 2*16+1=33), 
+; ffff == 2, teleport, room_id = d, go to 0-15 room, ex. teleport to the room_id=0 (tiledata = 2*16+0=32), to the room_id=1 (tiledata = 2*16+1=33),
 ; ffff == 3, teleport, room_id = d+16, go to 16-31 room
 ; ffff == 4, teleport, room_id = d+32, go to 32-47 room
 ; ffff == 5, teleport, room_id = d+48, go to 48-63 room
@@ -43,16 +43,17 @@ room_tiles_gfx_ptrs:
 ; ffff == 10, an item. item_id = d
 ;		item_id == 0 - a small health potion
 ;		item_id == 1 - a big health potion
-;		item_id == 2 - a small chest. small money reward
-;		item_id == 3 - a big chest. big money reward
-;		item_id == 4 - a monster spawner chest. it spawns a chest monster when opened
+;		item_id == 2 - a coin
+;		item_id == 3 - a small chest. small money reward
+;		item_id == 4 - a big chest. big money reward
+;		item_id == 5 - a monster spawner chest. it spawns a chest monster when opened
 
 ; ffff == 12, a damage pool. dddd = damage
 
 ; ffff == 13, a door. door_id = d
 ; ffff == 14, a key. key_id = d
 
-; ffff == 15, 
+; ffff == 15,
 ;		d == %1111 - collision (tiledata = TILE_DATA_COLLISION)
 ;		d <  %1111 - collision + animated background, back_id = d
 ;	 		back_id == 0 - torch front (tiledata = 15*16+0=241)

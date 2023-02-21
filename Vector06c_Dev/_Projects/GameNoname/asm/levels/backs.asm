@@ -9,8 +9,6 @@ BACK_RUNTIME_DATA_EMPTY = $fd ; a back data is available for a new back
 BACK_RUNTIME_DATA_LAST	= $fe ; the end of the last existing back data
 BACK_RUNTIME_DATA_END	= $ff ; the end of the data
 
-back_for_update_ptr:	.word TEMP_ADDR ; pointer to a runtime data of a back which will be drawn
-back_for_draw_ptr:		.word TEMP_ADDR ; pointer to a runtime data of a back which will be drawn
 ; a list of back runtime data structs.
 backs_runtime_data:
 back_anim_ptr:			.word TEMP_ADDR
@@ -25,15 +23,18 @@ BACK_RUNTIME_DATA_LEN = back_runtime_data_end_addr - backs_runtime_data
 .storage BACK_RUNTIME_DATA_LEN * (BACKS_MAX-1), 0
 backs_runtime_data_end_addr:	.word BACK_RUNTIME_DATA_END << 8
 
+back_runtime_data_ptr_update:	.word TEMP_ADDR ; ptr to a back runtime data which will be updated
+back_runtime_data_ptr_draw:		.word TEMP_ADDR ; ptr to a back runtime data which will be drawn
 
 backs_init:
 			; erase backs_runtime_data
 			mvi a, BACK_RUNTIME_DATA_LAST
 			sta back_anim_ptr + 1
 			; set the first back in the runtime data to be updated and drawn
-			lxi h, back_anim_ptr
-			shld back_for_update_ptr
-			shld back_for_draw_ptr
+			lxi h, backs_runtime_data
+			shld back_runtime_data_ptr_update
+			lxi h, 0
+			shld back_runtime_data_ptr_draw
 			ret
 
 ; look up the empty spot in the back runtime data
@@ -165,13 +166,29 @@ backs_spawn:
 			ret
 
 backs_update:
-			lxi h, back_for_update_ptr
+			lxi h, back_runtime_data_ptr_update
 			; load ptr to back_anim_ptr
 			mov e, m
 			inx h
 			mov d, m
+			; de - ptr to the current back that needs to update
+
+			; check if de points to BACK_RUNTIME_DATA_LAST
+			; advance de to back_anim_ptr+1
+			inx d
+			ldax d
+			cpi BACK_RUNTIME_DATA_EMPTY
+			jz @setNextBack
+			cpi BACK_RUNTIME_DATA_LAST
+			jnz @updateAnim
+@setFirstBack:
+			lxi h, backs_runtime_data
+			shld back_runtime_data_ptr_update
+			ret	
+
+@updateAnim:
 			; advance hl to back_anim_timer_speed
-			LXI_H_TO_DIFF(back_anim_timer_speed, back_anim_ptr)
+			LXI_H_TO_DIFF(back_anim_timer_speed, back_anim_ptr+1)
 			dad d
 			mov a, m
 			; advance hl to back_anim_timer
@@ -179,12 +196,12 @@ backs_update:
 			; back_anim_timer += back_anim_timer_speed
 			add m
 			mov m, a
-			jnc @updateBackForUpdatePtr
+			jnc @setNextBack2
 			; back_anim_timer got overloaded, so it needs to be drawn			
-@updateBackForDrawPtr:
+@setDrawPtr:
 			LXI_D_TO_DIFF(back_anim_ptr, back_anim_timer)
 			dad d
-			shld back_for_draw_ptr
+			shld back_runtime_data_ptr_draw
 
 			; go to the next frame
 			; load back_anim_ptr
@@ -198,46 +215,45 @@ backs_update:
 			mov b, m 
 			; advance back_anim_ptr to the next frame
 			dad b
-			; store back_anim_ptr
 			xchg
+			; store a next frame ptr to back_anim_ptr			
 			mov m, d
 			dcx h
 			mov m, e
-			lxi d, BACK_RUNTIME_DATA_LEN + 1
-			jmp @updateBackForUpdatePtr2
-@updateBackForUpdatePtr:
-			LXI_D_TO_DIFF(back_anim_ptr+1 + BACK_RUNTIME_DATA_LEN, back_anim_timer)
-@updateBackForUpdatePtr2:
+@setNextBack3:
+			lxi d, BACK_RUNTIME_DATA_LEN
 			dad d
-			mov a, m
-			cpi BACK_RUNTIME_DATA_EMPTY
-			jc @thisIsNotTheEnd
-@resetBackForUpdatePtr
-			lxi h, back_anim_ptr
-			shld back_for_update_ptr
+			shld back_runtime_data_ptr_update
 			ret
-
-@thisIsNotTheEnd:
-			; store the next runtime data ptr to back_for_update_ptr
-			dcx h
-			shld back_for_update_ptr
+@setNextBack:
+			; de points to back_anim_ptr+1
+			LXI_H_TO_DIFF(back_anim_ptr + BACK_RUNTIME_DATA_LEN, back_anim_ptr+1)
+			dad d
+			shld back_runtime_data_ptr_update
 			ret
+@setNextBack2:
+			; hl points to back_anim_timer
+			LXI_D_TO_DIFF(back_anim_ptr + BACK_RUNTIME_DATA_LEN, back_anim_timer)
+			dad d
+			shld back_runtime_data_ptr_update
+			ret	
 
 
 backs_draw:
-			lxi h, back_for_draw_ptr
-			; check the back_anim_ptr stored in back_for_draw_ptr
+			lxi h, back_runtime_data_ptr_draw
+			; check the back_anim_ptr stored in back_runtime_data_ptr_draw
 			mov e, m
 			inx h
 			mov a, m
 			ora e
+			; if back_anim_ptr == 0, no draw needed
 			rz
 			; if back_anim_ptr != 0, a frame was updated and it needs to draw
 			mov d, m
 			; de is a ptr to back_anim_ptr
-			; erase back_for_draw_ptr to not draw it ugain until it goes to the next frame
+			; erase back_runtime_data_ptr_draw to not draw it ugain until it goes to the next frame
 			lxi h, 0
-			shld back_for_draw_ptr
+			shld back_runtime_data_ptr_draw
 			xchg
 			; load back_anim_ptr
 			mov e, m
