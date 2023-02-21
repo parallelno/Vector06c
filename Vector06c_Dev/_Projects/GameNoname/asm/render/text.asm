@@ -38,7 +38,7 @@ hex_to_askii:
 ; A - fps
 ; uses:
 ; BC, DE, HL
-FPS_SCR_ADDR = $a0ff
+FPS_SCR_ADDR = $a0ee
 draw_fps:
 			lhld DrawText_restoreSP+1
 			shld @tmpRestoreSP

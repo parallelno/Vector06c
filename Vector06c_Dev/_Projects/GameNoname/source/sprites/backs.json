@@ -25,7 +25,7 @@
 			"loop" : true
 		},
 		"flag_front"	: {
-			"frames" : ["flag_front0", "flag_front1", "flag_front2", "flag_front3"],
+			"frames" : ["flag_front0", "flag_front1", "flag_front2", "flag_front3", "flag_front2", "flag_front1"],
 			"loop" : true
 		}		
 	},
@@ -65,34 +65,34 @@
 		{
 			"name" : "flag_front0",
 			"x" : 16,
-			"y"	: 39,
+			"y"	: 34,
 			"width" : 16,
-			"height" : 6,
-			"offset_y": 3
+			"height" : 7,
+			"offset_y": 7
 		},
 		{
 			"name" : "flag_front1",
 			"x" : 16,
-			"y"	: 55,
+			"y"	: 50,
 			"width" : 16,
-			"height" : 6,
-			"offset_y": 3
+			"height" : 7,
+			"offset_y": 7
 		},
 		{
 			"name" : "flag_front2",
 			"x" : 16,
-			"y"	: 71,
+			"y"	: 66,
 			"width" : 16,
-			"height" : 6,
-			"offset_y": 3
+			"height" : 7,
+			"offset_y": 7
 		},
 		{
 			"name" : "flag_front3",
 			"x" : 16,
-			"y"	: 87,
+			"y"	: 82,
 			"width" : 16,
-			"height" : 6,
-			"offset_y": 3
+			"height" : 7,
+			"offset_y": 7
 		}				
 	]
 }

@@ -17,5 +17,9 @@ backs_flag_front:
 			.word __backs_flag_front1, 
 			.byte 3, 0 ; offset to the next frame
 			.word __backs_flag_front2, 
-			.byte 243, $ff ; offset to the first frame
+			.byte 3, 0 ; offset to the next frame
 			.word __backs_flag_front3, 
+			.byte 3, 0 ; offset to the next frame
+			.word __backs_flag_front2, 
+			.byte 235, $ff ; offset to the first frame
+			.word __backs_flag_front1, 
