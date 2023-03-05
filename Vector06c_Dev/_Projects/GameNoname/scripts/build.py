@@ -10,11 +10,13 @@ SEGMENT_8000_0000_SIZE_MAX = 2 ** 15
 
 SCR_BUFF_SIZE = 8192
 
-ASSET_TYPE_BACK		= "back"
-ASSET_TYPE_SPRITE	= "sprite"
-ASSET_TYPE_LEVEL	= "level"
-ASSET_TYPE_MUSIC	= "music"
-ASSET_TYPE_CODE		= "code"
+ASSET_TYPE_BACK			= "back"
+ASSET_TYPE_SPRITE		= "sprite"
+ASSET_TYPE_LEVEL		= "level"
+ASSET_TYPE_LEVEL_DATA	= "level_data"
+ASSET_TYPE_LEVEL_GFX	= "level_gfx"
+ASSET_TYPE_MUSIC		= "music"
+ASSET_TYPE_CODE			= "code"
 ASSET_TYPE_RAM_DISK_DATA = "ram_disk_data"
 
 EXT_ASM		= ".asm"

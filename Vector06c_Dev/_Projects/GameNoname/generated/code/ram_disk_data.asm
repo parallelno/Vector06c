@@ -44,8 +44,8 @@ chunk_bank3_addr8000_0:
 ; ram-disk data layout
 ; bank0 addr0    [ 1054 free] description: 
 ;                             hero_r_sprites [14466], skeleton_sprites [10140], scythe_sprites [1626], hero_attack01_sprites [5226], 
-; bank0 addr8000 [32272 free] description: 
-;                             backs_sprites [496], 
+; bank0 addr8000 [30788 free] description: 
+;                             level01_data [1484], backs_sprites [496],
 ; bank1 addr0    [ 5554 free] description: 
 ;                             knight_sprites [16398], burner_sprites [9600], bomb_slow_sprites [960], 
 ; bank1 addr8000 [    0 free] description: $8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)
@@ -53,8 +53,8 @@ chunk_bank3_addr8000_0:
 ;                             hero_l_sprites [14466], vampire_sprites [7884], 
 ; bank2 addr8000 [19856 free] description: Music player and songs
 ;                             song01 [12542], gigachad_player_rd [370], 
-; bank3 addr0    [22844 free] description: 
-;                             level01 [9668], 
+; bank3 addr0    [24676 free] description: 
+;                             level01_gfx [7836],
 ; bank3 addr8000 [ 5996 free] description: $8000-$9FFF code library. $A000-$FFFF back buffer
 ;                             sprite_rd [173], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1538], 
-; [97738 total free]
+; [98086 total free]

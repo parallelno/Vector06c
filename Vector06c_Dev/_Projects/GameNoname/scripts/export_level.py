@@ -63,7 +63,7 @@ def get_tile_data(bytes0, bytes1, bytes2, bytes3):
 
 	return data, mask
 	
-def tiles_to_asm(room_j, image, path, remap_idxs, label_prefix):
+def gfx_to_asm(room_j, image, path, remap_idxs, label_prefix):
 	size = 0
 	asm = "; " + path + "\n"
 	asm += label_prefix + "_tiles:\n"
@@ -163,13 +163,28 @@ def start_pos_to_asm(source_j, label_prefix):
 	return asm, 4
 
 #=====================================================
-def export_if_updated(source_path, generated_dir, force_export):
+def export_data_if_updated(source_path, generated_dir, force_export):
 	source_path_wo_ext = os.path.splitext(source_path)[0]
 	source_name = os.path.basename(source_path_wo_ext)
-	export_paths = {"ram_disk" : generated_dir + source_name + build.EXT_ASM }
+	export_paths = {"ram_disk" : generated_dir + source_name + "_data" + build.EXT_ASM }
 
 	if force_export or is_source_updated(source_path):
-		export(
+		export_data(
+			source_path, 
+			export_paths["ram_disk"])
+			
+		print(f"level: {source_path} got exported.")		
+		return True, export_paths
+	else:
+		return False, export_paths
+	
+def export_gfx_if_updated(source_path, generated_dir, force_export):
+	source_path_wo_ext = os.path.splitext(source_path)[0]
+	source_name = os.path.basename(source_path_wo_ext)
+	export_paths = {"ram_disk" : generated_dir + source_name + "_gfx" + build.EXT_ASM }
+
+	if force_export or is_source_updated(source_path):
+		export_gfx(
 			source_path, 
 			export_paths["ram_disk"])
 			
@@ -178,9 +193,55 @@ def export_if_updated(source_path, generated_dir, force_export):
 	else:
 		return False, export_paths
 
-def export(source_j_path, export_path):
+def export_gfx(source_j_path, export_gfx_path):
+	with open(source_j_path, "rb") as file:
+		source_j = json.load(file)
 
-	export_dir = str(Path(export_path).parent) + "\\"
+	source_dir = str(Path(source_j_path).parent) + "\\"
+
+	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_LEVEL :
+		print(f'level_export ERROR: asset_type != "{build.ASSET_TYPE_LEVEL}", path: {source_j_path}')
+		print("Stop export")
+		exit(1)
+
+	png_path = source_dir + source_j["png_path"]
+	image = Image.open(png_path) 
+
+	source_path_wo_ext = os.path.splitext(source_j_path)[0]
+	source_name = os.path.basename(source_path_wo_ext)
+
+	asm = f"__RAM_DISK_S_{source_name.upper()}_GFX = RAM_DISK_S\n"
+	asm += f"__RAM_DISK_M_{source_name.upper()}_GFX = RAM_DISK_M\n"
+	
+	palette_asm, colors = common.palette_to_asm(image, source_j, png_path, "__" + source_name)
+	image = common.remap_colors(image, colors)
+	
+	room_paths = source_j["rooms"]
+	rooms_j = []
+	# load and parse tiled map
+	for room_path_p in room_paths:
+		room_path = source_dir + room_path_p['path']
+		with open(room_path, "rb") as file:
+			rooms_j.append(json.load(file))
+
+	# make a tile index remap dictionary, to have the first idx = 0
+	remap_idxs = remap_index(rooms_j)
+
+	png_path_wo_ext = os.path.splitext(png_path)[0]
+	png_name = os.path.basename(png_path_wo_ext)
+
+	# tile gfx data to asm
+	asm_t, size = gfx_to_asm(rooms_j[0], image, png_path, remap_idxs, "__" + png_name)
+	asm += asm_t
+
+	# save asm
+	export_dir = str(Path(export_gfx_path).parent) + "\\"		
+	if not os.path.exists(export_dir):
+		os.mkdir(export_dir)	
+	with open(export_gfx_path, "w") as file:
+		file.write(asm)	
+
+def export_data(source_j_path, export_data_path):
 
 	with open(source_j_path, "rb") as file:
 		source_j = json.load(file)
@@ -198,16 +259,14 @@ def export(source_j_path, export_path):
 	source_path_wo_ext = os.path.splitext(source_j_path)[0]
 	source_name = os.path.basename(source_path_wo_ext)
 
-	asm = f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S\n"
-	asm += f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M\n"
+	asm = f"__RAM_DISK_S_{source_name.upper()}_DATA = RAM_DISK_S\n"
+	asm += f"__RAM_DISK_M_{source_name.upper()}_DATA = RAM_DISK_M\n"
 	
 	palette_asm, colors = common.palette_to_asm(image, source_j, png_path, "__" + source_name)
 	asm += palette_asm
 
-	data_size = len(colors)
 	asm_start_pos, size = start_pos_to_asm(source_j, source_name)
 	asm += asm_start_pos
-	data_size += size
 	image = common.remap_colors(image, colors)
 
 	room_paths = source_j["rooms"]
@@ -227,32 +286,21 @@ def export(source_j_path, export_path):
 	# list of rooms
 	asm_l, size = get_list_of_rooms(room_paths, "__" + source_name)
 	asm += asm_l
-	data_size += size
-	# list of tiles addreses
-	asm_lt, size = get_list_of_tiles(remap_idxs, "__" + source_name, png_name)
-	asm += asm_lt
-	data_size += size
 	# every room data
 	for i, room_j in enumerate(rooms_j):
 		asm_rt, size = room_tiles_to_asm(room_j["layers"][0], room_paths[i]['path'], remap_idxs, source_dir)
 		asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 		asm += asm_rt
-		data_size += size
 		asm_rtd, size = room_tiles_data_to_asm(room_j["layers"][1], room_paths[i]['path'], source_dir)
 		asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 		asm += asm_rtd
-		data_size += size
-
-	# tile art data to asm
-	asm_t, size = tiles_to_asm(rooms_j[0], image, png_path, remap_idxs, "__" + png_name)
-	asm += asm_t
-	data_size += size
 
 	# save asm
+	export_dir = str(Path(export_data_path).parent) + "\\"
 	if not os.path.exists(export_dir):
 		os.mkdir(export_dir)
-
-	with open(export_path, "w") as file:
+		
+	with open(export_data_path, "w") as file:
 		file.write(asm)
 
 def is_source_updated(source_j_path):

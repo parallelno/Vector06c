@@ -44,14 +44,14 @@ def split_segment(segment_path, segmentLabelsPath):
 	chunk_count = len(chunk_start_addrs)
 	with open(segment_path, "rb") as file:
 		for i in range(chunk_count):
-			
+
 			chunk_size = chunk_end_addrs[i] - chunk_start_addrs[i]
 			data = file.read(chunk_size)
 			chunk_dir = os.path.dirname(segment_path) + "\\"
 			segment_basename = common.path_to_basename(segment_path)
 			segment_idx = segment_basename.find("_")
 			chunk_name = "chunk" + segment_basename[segment_idx:]
-			
+
 			chunk_path = chunk_dir + chunk_name + "_" + str(i) + build.EXT_BIN
 			chunks_paths.append(chunk_path)
 			with open(chunk_path, "wb") as fw:
@@ -78,20 +78,20 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 			print(f'export_segment ERROR: compilation error, path: {source_path}')
 			print("Stop export")
 			exit(1)
-			
+
 		check_segment_size(segment_bin_path, segment_addr)
 
 		build.export_labels(labels_path, externals_only)
 
 		chunk_paths = split_segment(segment_bin_path, labels_path)
-		
+
 		for chunk_path in chunk_paths:
 			zx0_chunk_path = chunk_path + build.EXT_ZX0
 
 			common.delete_file(zx0_chunk_path)
 			common.run_command(f"tools\\zx0salvador.exe -v -classic {chunk_path} {zx0_chunk_path}")
-		
-		print(f"segment: {source_name} got exported.")	
+
+		print(f"segment: {source_name} got exported.")
 
 		return True, export_paths
 	else:
@@ -116,7 +116,7 @@ def export(bank_id, segment_j,
 
 	# export segment data
 	for chunk_n, chunk_j in enumerate(segment_j["chunks"]):
-		
+
 		asm += build.get_chunk_start_label_name(bank_id, addr_s_wo_hex_sym, chunk_n) + ":\n\n"
 
 		for asset in chunk_j["assets"]:
@@ -135,8 +135,13 @@ def export(bank_id, segment_j,
 				ram_include_paths.append(export_paths["ram"])
 				segment_include_path = export_paths["ram_disk"]
 
-			elif asset["asset_type"] == build.ASSET_TYPE_LEVEL:
-				exported, export_paths = export_level.export_if_updated(asset["path"], asset["export_dir"], level_force_export | force_export)
+			elif asset["asset_type"] == build.ASSET_TYPE_LEVEL_DATA:
+				exported, export_paths = export_level.export_data_if_updated(asset["path"], asset["export_dir"], level_force_export | force_export)
+				segment_force_export |= exported
+				segment_include_path = export_paths["ram_disk"]
+
+			elif asset["asset_type"] == build.ASSET_TYPE_LEVEL_GFX:
+				exported, export_paths = export_level.export_gfx_if_updated(asset["path"], asset["export_dir"], level_force_export | force_export)
 				segment_force_export |= exported
 				segment_include_path = export_paths["ram_disk"]
 
@@ -165,10 +170,10 @@ def export(bank_id, segment_j,
 	if (segment_force_export):
 		if not os.path.exists(generated_code_dir):
 			os.mkdir(generated_code_dir)
-			
+
 		with open(path, "w") as file:
 			file.write(asm)
-	
+
 	segment_addr = build.get_segment_addr(addr_s_wo_hex_sym)
 	exported, export_paths = compile_and_compress(path, generated_bin_dir, segment_addr, segment_force_export, True)
 

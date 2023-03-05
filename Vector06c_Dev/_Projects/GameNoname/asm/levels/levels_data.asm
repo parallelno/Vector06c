@@ -40,15 +40,38 @@ room_tiles_gfx_ptrs:
 ; ffff == 4, teleport, room_id = d+32, go to 32-47 room
 ; ffff == 5, teleport, room_id = d+48, go to 48-63 room
 
-; ffff == 10, an item. item_id = d
-;		item_id == 0 - a small health potion
-;		item_id == 1 - a big health potion
-;		item_id == 2 - a coin
-;		item_id == 3 - a small chest. small money reward
-;		item_id == 4 - a big chest. big money reward
-;		item_id == 5 - a monster spawner chest. it spawns a chest monster when opened
+; ffff == 9, a damage pool. dddd = damage
 
-; ffff == 12, a damage pool. dddd = damage
+; ffff == 10, an item. item_id = d ; a hero interacts with an them only when he collids with it.
+;		item_id == 0 - a small red potion
+;		item_id == 1 - a big red potion
+;		item_id == 2 - a small blue potion
+;		item_id == 3 - a big blue potion
+;		item_id == 6 - a coin
+;		item_id == 7 - a small chest. small money reward
+;		item_id == 8 - a big chest. big money reward
+;		item_id == 9 - a monster spawner chest. it spawns a chest monster when opened
+;		item_id == 10 - a barrel
+;		item_id == 11 - a crate
+
+; ffff == 11, keys/doors. keydoor_id = d ; a hero interacts with a key only when he collids with it. a door is a collider only. no collision when it's opened.
+;		item_id == 0 - a red key
+;		item_id == 1 - a blue key
+;		item_id == 2 - a ??? key
+;		item_id == 3 - a XXX key
+;		item_id == 4 - a red door horizontal L
+;		item_id == 5 - a red door horizontal R
+;		item_id == 6 - a blue door vertical U
+;		item_id == 7 - a blue door vertical D
+;		item_id == 8 - a ??? door vertical L
+;		item_id == 9 - a ??? door vertical R
+;		item_id == 10 - a XXX door vertical L
+;		item_id == 11 - a XXX door vertical R
+
+; ffff == 12, decals. decal_id = d ; it draws on top of the tiles to make background diverse.
+;		item_id == 0 - a bones
+;		item_id == 1 - a skull
+;		item_id == 2 - a spider net
 
 ; ffff == 13, a door. door_id = d
 ; ffff == 14, a key. key_id = d
