@@ -87,6 +87,7 @@ room_tiles_gfx_ptrs:
 ;	 		back_id == 0 - torch front (tiledata = 15*16+0=241)
 ;   	    back_id == 1 - flag front (tiledata = 161)
 
+; tiledata buffer has to follow room_tiles_gfx_ptrs because they are unpacked together
 room_tiles_data:
 			.storage ROOM_WIDTH * ROOM_HEIGHT
 

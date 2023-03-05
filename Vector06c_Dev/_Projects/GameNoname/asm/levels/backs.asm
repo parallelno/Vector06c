@@ -1,5 +1,6 @@
 ; animated background tiles. they are drawn directly on the screen.
 ; they have low anim speed and limited frame numbers.
+; they do not have an alpha channel
 
 ; max backs in the room
 BACKS_MAX = 10

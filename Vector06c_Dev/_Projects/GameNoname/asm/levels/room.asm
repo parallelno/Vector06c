@@ -12,8 +12,8 @@ room_init:
 			CALL_RAM_DISK_FUNC(__clear_mem_sp, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_CLEAR_MEM | RAM_DISK_M_89)
 			ret
 
-; it copies the tile idxs of the current room into room_tiles_data as a temporally,
-; then it converts idxs into tile gfx ptrs
+; temporally copy the tile idxs of the current room into room_tiles_data,
+; then it converts idxs into tile gfx ptrs and store it into room_tiles_gfx_ptrs
 room_init_tiles_gfx:
 			; copy the tiles idxs from the ram-disk to the room_tiles_data buffer
 			lda room_idx
