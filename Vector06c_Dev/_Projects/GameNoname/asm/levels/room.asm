@@ -27,13 +27,13 @@ room_init_tiles_gfx:
 			dad b
 
 			xchg
-			mvi a, <__RAM_DISK_S_LEVEL01
+			mvi a, <__RAM_DISK_S_LEVEL01_DATA
 			call get_word_from_ram_disk
 			mov d, b
 			mov e, c
 
 			lxi b, room_tiles_data ; the tile data buffer is used as a temp buffer
-			lxi h, <__RAM_DISK_S_LEVEL01<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
+			lxi h, <__RAM_DISK_S_LEVEL01_DATA<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
 			call copy_from_ram_disk
 
 			; convert tile idxs into tile gfx addrs
@@ -62,7 +62,7 @@ room_init_tiles_gfx:
 			; copy the tile graphics addr to the current room tile graphics table
 			push b
 			xchg
-			mvi a, <__RAM_DISK_S_LEVEL01
+			mvi a, <__RAM_DISK_S_LEVEL01_GFX
 			call get_word_from_ram_disk
 			mov a, c
 			mov e, b
@@ -96,14 +96,14 @@ room_init_tiles_data:
 			dad b
 
 			xchg
-			mvi a, <__RAM_DISK_S_LEVEL01
+			mvi a, <__RAM_DISK_S_LEVEL01_DATA
 			call get_word_from_ram_disk
 			lxi h, ROOM_WIDTH * ROOM_HEIGHT + 2 ; tiles data is stored right after the tile addr tbl plus 2 safety bytes
 			dad b
 
 			xchg
 			lxi b, room_tiles_data
-			lxi h, <__RAM_DISK_S_LEVEL01<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
+			lxi h, <__RAM_DISK_S_LEVEL01_DATA<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
 			call copy_from_ram_disk
 
 			; handle the tile data calling tile data funcs
@@ -168,7 +168,7 @@ room_tiledata_back_spawn:
 
 room_draw:
 			; main scr
-			CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01)
+			CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01_GFX)
 
 			; copy $a000-$ffff scr buffs to the ram-disk back buffer
 			; TODO: optimization. think of making copy process while the gameplay started.
@@ -247,8 +247,8 @@ room_tile_data_buff:
 
 ;=========================================================
 ; draw a room tiles. It might be a main screen, or a back buffer
-; call ex. CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01)
-; __RAM_DISK_S_LEVEL01 - ram-disk activation command where tile gfx stored
+; call ex. CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01_GFX)
+; __RAM_DISK_S_LEVEL01_GFX - ram-disk activation command where tile gfx stored
 room_draw_tiles:
 			; set y = 0
 			mvi e, 0

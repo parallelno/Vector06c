@@ -1,12 +1,5 @@
 __RAM_DISK_S_LEVEL01_DATA = RAM_DISK_S
 __RAM_DISK_M_LEVEL01_DATA = RAM_DISK_M
-; source\levels\art\sprites_tiles_lv01.png
-__level01_palette_sprites_tiles_lv01:
-			.byte %01001010, %00000001, %01011100, %00011010, 
-			.byte %11100100, %11111101, %01110111, %01011111, 
-			.byte %01000010, %01001011, %01001100, %11111111, 
-			.byte %01001001, %11101011, %01010010, %01011011, 
-
 
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
 __level01_startPos:

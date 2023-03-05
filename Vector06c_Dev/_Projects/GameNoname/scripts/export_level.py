@@ -12,7 +12,7 @@ def room_tiles_to_asm(room_j, room_path, remap_idxs, source_dir):
 	asm += "__" + label_prefix + ":\n"
 	width = room_j["width"]
 	height = room_j["height"]
-	size = width * height
+	width * height
 
 	for y in reversed(range(height)):
 		asm += "			.byte "
@@ -21,7 +21,7 @@ def room_tiles_to_asm(room_j, room_path, remap_idxs, source_dir):
 			t_idx = room_j["data"][i]
 			asm += str(remap_idxs[t_idx]) + ", "
 		asm += "\n"
-	return asm, size
+	return asm
 
 def room_tiles_data_to_asm(room_j, room_path, source_dir):
 	asm = "; " + source_dir + room_path + "\n"
@@ -30,7 +30,6 @@ def room_tiles_data_to_asm(room_j, room_path, source_dir):
 	asm += "__" + label_prefix + "_tilesData:\n"
 	width = room_j["width"]
 	height = room_j["height"]
-	size = width * height
 
 	for y in reversed(range(height)):
 		asm += "			.byte "
@@ -39,7 +38,7 @@ def room_tiles_data_to_asm(room_j, room_path, source_dir):
 			t_idx = room_j["data"][i]
 			asm += str(t_idx) + ", "
 		asm += "\n"
-	return asm, size
+	return asm
 
 def get_tile_data(bytes0, bytes1, bytes2, bytes3):
 	all_bytes = [bytes0, bytes1, bytes2, bytes3]
@@ -64,7 +63,6 @@ def get_tile_data(bytes0, bytes1, bytes2, bytes3):
 	return data, mask
 	
 def gfx_to_asm(room_j, image, path, remap_idxs, label_prefix):
-	size = 0
 	asm = "; " + path + "\n"
 	asm += label_prefix + "_tiles:\n"
 
@@ -109,9 +107,8 @@ def gfx_to_asm(room_j, image, path, remap_idxs, label_prefix):
 		asm += "			.byte " + str(mask) + " ; mask\n"
 		asm += "			.byte 4 ; counter\n"
 		asm += common.bytes_to_asm(data)
-		size += len(data)
 
-	return asm, size
+	return asm
 
 def remap_index(rooms_j):
 	unique_idxs = [] # old idx : new idx
@@ -127,7 +124,6 @@ def remap_index(rooms_j):
 	return remap_idxs
 
 def get_list_of_rooms(room_paths, label_prefix):
-	size = 0
 	asm = "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 	asm += label_prefix + "_rooms_addr:\n			.word "
 	for i, room_path_p in enumerate(room_paths):
@@ -138,12 +134,10 @@ def get_list_of_rooms(room_paths, label_prefix):
 		if i != len(room_paths)-1:
 			# two safety fytes
 			asm += "0, "
-		size += 2
 	asm += "\n"
-	return asm, size
+	return asm
 
 def get_list_of_tiles(remap_idxs, label_prefix, pngLabelPrefix):
-	size = 0
 	asm = "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
 	asm += label_prefix + "_tilesAddr:\n			.word "
 	for i, t_idx in enumerate(remap_idxs):
@@ -151,16 +145,15 @@ def get_list_of_tiles(remap_idxs, label_prefix, pngLabelPrefix):
 		if i != len(remap_idxs)-1:
 			# two safety fytes
 			asm += "0, "
-		size += 2
-	asm += "\n"
-	return asm, size
+	asm += "\n\n"
+	return asm
 
 def start_pos_to_asm(source_j, label_prefix):
 	asm = ("\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n" + 
 			"__" + label_prefix + "_startPos:\n			.byte " + 
 			str(source_j["startPos"]["y"]) + ", " + 
 			str(source_j["startPos"]["x"]) + "\n")
-	return asm, 4
+	return asm
 
 #=====================================================
 def export_data_if_updated(source_path, generated_dir, force_export):
@@ -214,6 +207,8 @@ def export_gfx(source_j_path, export_gfx_path):
 	asm += f"__RAM_DISK_M_{source_name.upper()}_GFX = RAM_DISK_M\n"
 	
 	palette_asm, colors = common.palette_to_asm(image, source_j, png_path, "__" + source_name)
+	asm += palette_asm
+
 	image = common.remap_colors(image, colors)
 	
 	room_paths = source_j["rooms"]
@@ -230,9 +225,13 @@ def export_gfx(source_j_path, export_gfx_path):
 	png_path_wo_ext = os.path.splitext(png_path)[0]
 	png_name = os.path.basename(png_path_wo_ext)
 
+	# list of tiles addreses
+	png_path_wo_ext = os.path.splitext(png_path)[0]
+	png_name = os.path.basename(png_path_wo_ext)
+	asm += get_list_of_tiles(remap_idxs, "__" + source_name, png_name)
+	
 	# tile gfx data to asm
-	asm_t, size = gfx_to_asm(rooms_j[0], image, png_path, remap_idxs, "__" + png_name)
-	asm += asm_t
+	asm += gfx_to_asm(rooms_j[0], image, png_path, remap_idxs, "__" + png_name)
 
 	# save asm
 	export_dir = str(Path(export_gfx_path).parent) + "\\"		
@@ -254,7 +253,7 @@ def export_data(source_j_path, export_data_path):
 		exit(1)
 
 	png_path = source_dir + source_j["png_path"]
-	image = Image.open(png_path) 
+	#image = Image.open(png_path) 
 
 	source_path_wo_ext = os.path.splitext(source_j_path)[0]
 	source_name = os.path.basename(source_path_wo_ext)
@@ -262,12 +261,10 @@ def export_data(source_j_path, export_data_path):
 	asm = f"__RAM_DISK_S_{source_name.upper()}_DATA = RAM_DISK_S\n"
 	asm += f"__RAM_DISK_M_{source_name.upper()}_DATA = RAM_DISK_M\n"
 	
-	palette_asm, colors = common.palette_to_asm(image, source_j, png_path, "__" + source_name)
-	asm += palette_asm
+	#palette_asm, colors = common.palette_to_asm(image, source_j, png_path, "__" + source_name)
 
-	asm_start_pos, size = start_pos_to_asm(source_j, source_name)
-	asm += asm_start_pos
-	image = common.remap_colors(image, colors)
+	asm += start_pos_to_asm(source_j, source_name)
+	#image = common.remap_colors(image, colors)
 
 	room_paths = source_j["rooms"]
 	rooms_j = []
@@ -280,20 +277,16 @@ def export_data(source_j_path, export_data_path):
 	# make a tile index remap dictionary, to have the first idx = 0
 	remap_idxs = remap_index(rooms_j)
 
-	png_path_wo_ext = os.path.splitext(png_path)[0]
-	png_name = os.path.basename(png_path_wo_ext)
-
 	# list of rooms
-	asm_l, size = get_list_of_rooms(room_paths, "__" + source_name)
-	asm += asm_l
+	asm += get_list_of_rooms(room_paths, "__" + source_name)
+
 	# every room data
 	for i, room_j in enumerate(rooms_j):
-		asm_rt, size = room_tiles_to_asm(room_j["layers"][0], room_paths[i]['path'], remap_idxs, source_dir)
 		asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
-		asm += asm_rt
-		asm_rtd, size = room_tiles_data_to_asm(room_j["layers"][1], room_paths[i]['path'], source_dir)
+		asm += room_tiles_to_asm(room_j["layers"][0], room_paths[i]['path'], remap_idxs, source_dir)
+
 		asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
-		asm += asm_rtd
+		asm += room_tiles_data_to_asm(room_j["layers"][1], room_paths[i]['path'], source_dir)
 
 	# save asm
 	export_dir = str(Path(export_data_path).parent) + "\\"

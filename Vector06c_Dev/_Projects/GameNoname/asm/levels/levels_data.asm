@@ -43,30 +43,35 @@ room_tiles_gfx_ptrs:
 ; ffff == 9, a damage pool. dddd = damage
 
 ; ffff == 10, an item. item_id = d ; a hero interacts with an them only when he collids with it.
-;		item_id == 0 - a small red potion
-;		item_id == 1 - a big red potion
-;		item_id == 2 - a small blue potion
-;		item_id == 3 - a big blue potion
-;		item_id == 6 - a coin
-;		item_id == 7 - a small chest. small money reward
-;		item_id == 8 - a big chest. big money reward
-;		item_id == 9 - a monster spawner chest. it spawns a chest monster when opened
-;		item_id == 10 - a barrel
-;		item_id == 11 - a crate
+;		item_id == 0 - a red potion
+;		item_id == 1 - a blue potion
+;		item_id == 2 - an item X1
+;		item_id == 3 - an item X2
+;		item_id == 4 - an item X3
+;		item_id == 5 - a coin
+;		item_id == 6 - a small chest. small money reward
+;		item_id == 7 - a big chest. big money reward
+;		item_id == 8 - a chest with a weapon 1
+;		item_id == 9 - a chest with a weapon 2
+;		item_id == 10 - a chest with a weapon 3
+;		item_id == 11 - a monster spawner chest. it spawns a chest monster when opened
+;		item_id == 12 - a barrel
+;		item_id == 13 - a crate
+;		item_id == 14 - a crate with a teleport under it to a unique location
 
 ; ffff == 11, keys/doors. keydoor_id = d ; a hero interacts with a key only when he collids with it. a door is a collider only. no collision when it's opened.
 ;		item_id == 0 - a red key
 ;		item_id == 1 - a blue key
-;		item_id == 2 - a ??? key
-;		item_id == 3 - a XXX key
+;		item_id == 2 - a X1 key
+;		item_id == 3 - a X2 key
 ;		item_id == 4 - a red door horizontal L
 ;		item_id == 5 - a red door horizontal R
 ;		item_id == 6 - a blue door vertical U
 ;		item_id == 7 - a blue door vertical D
-;		item_id == 8 - a ??? door vertical L
-;		item_id == 9 - a ??? door vertical R
-;		item_id == 10 - a XXX door vertical L
-;		item_id == 11 - a XXX door vertical R
+;		item_id == 8 - a X1 door vertical L
+;		item_id == 9 - a X1 door vertical R
+;		item_id == 10 - a X2 door vertical L
+;		item_id == 11 - a X2 door vertical R
 
 ; ffff == 12, decals. decal_id = d ; it draws on top of the tiles to make background diverse.
 ;		item_id == 0 - a bones

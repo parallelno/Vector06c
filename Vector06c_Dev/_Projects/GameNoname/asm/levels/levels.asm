@@ -11,7 +11,7 @@ levels_init:
 ;
 level_init:
 			lxi d, __level01_palette_sprites_tiles_lv01
-            mvi a, <__RAM_DISK_S_LEVEL01
+            mvi a, <__RAM_DISK_S_LEVEL01_GFX
 			call set_palette_from_ram_disk
 			mvi a, 1
 			sta border_color_idx
@@ -25,7 +25,7 @@ level_init:
 			sta room_idx
 
 			lxi d, __level01_startPos
-			mvi a, <__RAM_DISK_S_LEVEL01
+			mvi a, <__RAM_DISK_S_LEVEL01_DATA
 			call get_word_from_ram_disk
 			call hero_set_pos
 			call hero_init
