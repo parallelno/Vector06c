@@ -16,7 +16,7 @@
 		{"x": 176,	"y" : 256},
 		{"x": 192,	"y" : 256},
 		{"x": 208,	"y" : 256},
-		{"x": 224,	"y" : 256},
+		{"x": 234,	"y" : 260},
 		{"x": 240,	"y" : 256}
 	],
 	"asset_type" : "level",
@@ -27,6 +27,6 @@
 	"rooms" : [
 		{"path" : "level01_room00.tmj"},
 		{"path" : "level01_room01.tmj"},
-		{"path" : "level01_room02.tmj"}
+		{"path" : "level01_room02_a.tmj"}
 	]
 }

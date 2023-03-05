@@ -1,4 +1,4 @@
-; mob AI:
+; bullet AI:
 ; init:
 ;	status = moveForward
 ;	statusTimer = moveForwardTimer
@@ -9,8 +9,8 @@
 ;		status = moveBackward
 ;		statusTimer = moveBackwardTimer
 ;	else:
-;		try to move a mob
-;		if mob collides with tiles:
+;		try to move a bullet
+;		if bullet collides with tiles:
 ;			if status = moveBackward:
 ;				die
 ;			else:
@@ -18,19 +18,25 @@
 ;		else:
 ;			accept new pos
 ;			updateAnim
-;			check mod-hero collision, impact if collides
+;			check bullet-hero collision
+;			if bullet collides with hero:
+;				impact hero
+;				death
 ; moveBackward:
 ;	decr statusTimer
 ;	if statusTimer = 0
 ;		death
 ;	else:
-;		try to move a mob
-;		if mob collides with tiles:
+;		try to move a bullet
+;		if bullet collides with tiles:
 ;			death
 ;		else:
 ;			accept new pos
 ;			updateAnim
-;			check mod-hero collision, impact if collides
+;			check bullet-hero collision
+;			if bullet collides with hero:
+;				impact hero
+;				death
 
 
 SCYTHE_MOVE_SPEED		= $0400				; low byte is a subpixel speed, high byte is a speed in pixels
@@ -71,7 +77,9 @@ scythe_init:
 			
 			; advance hl to bullet_id
 			inx h
-;@bullet_id:	mvi a, TEMP_BYTE
+			; do not set bullet_id because it is unnecessary for this weapon
+;@bullet_id:
+			;mvi a, TEMP_BYTE
 			;mov m, a
 
 			; advance hl to bullet_status

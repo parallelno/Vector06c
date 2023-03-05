@@ -9,18 +9,9 @@ levels_init:
 ;================================================================
 ;	initialization level data every level start
 ;
-; source\levels\art\sprites_tiles_lv01.png
-level01_palette_sprites_tiles:
-			.byte %01001010, %00000001, %01011100, %00011010, 
-			.byte %11100100, %11111101, %01110111, %01011111, 
-			.byte %01000010, %01001011, %01001100, %11111111, 
-			.byte %11111111, %11101011, %01010010, %01011011, 
-
 level_init:
-			lxi d, level01_palette_sprites_tiles
-			; remove the next line because we do not use ram-disk
-            ;mvi a, <__RAM_DISK_S_LEVEL01
-			xra a
+			lxi d, __level01_palette_sprites_tiles_lv01
+            mvi a, <__RAM_DISK_S_LEVEL01
 			call set_palette_from_ram_disk
 			mvi a, 1
 			sta border_color_idx

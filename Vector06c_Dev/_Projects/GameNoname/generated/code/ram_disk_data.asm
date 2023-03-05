@@ -53,8 +53,8 @@ chunk_bank3_addr8000_0:
 ;                             hero_l_sprites [14466], vampire_sprites [7884], 
 ; bank2 addr8000 [19856 free] description: Music player and songs
 ;                             song01 [12542], gigachad_player_rd [370], 
-; bank3 addr0    [25916 free] description: 
-;                             level01 [6596], 
+; bank3 addr0    [22844 free] description: 
+;                             level01 [9668], 
 ; bank3 addr8000 [ 5996 free] description: $8000-$9FFF code library. $A000-$FFFF back buffer
 ;                             sprite_rd [173], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1538], 
-; [100810 total free]
+; [97738 total free]

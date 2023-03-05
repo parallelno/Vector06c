@@ -21,7 +21,6 @@ ATTK01_COLLISION_OFFSET_X_L = <(-3)
 ATTK01_COLLISION_OFFSET_Y_L = 0
 
 ; in:
-; out:
 hero_sword_trail_init:
 			call bullets_get_empty_data_ptr
 			; hl - ptr to bullet_update_ptr+1
@@ -37,7 +36,9 @@ hero_sword_trail_init:
 
 			; advance hl to bullet_id
 			inx h
-;@bullet_id:	mvi a, TEMP_BYTE
+			; do not set bullet_id because it is unnecessary for this weapon
+;@bullet_id:	
+			;mvi a, TEMP_BYTE
 			;mov m, a
 
 			; advance hl to bullet_status
@@ -60,7 +61,7 @@ hero_sword_trail_init:
 			mov m, a
 			dcx h 
 			mov m, b
-			; advance hl to bullet_pos_x+1	
+			; advance hl to bullet_pos_x+1
 			dcx h			
 			; set posX
 			lda hero_pos_x+1

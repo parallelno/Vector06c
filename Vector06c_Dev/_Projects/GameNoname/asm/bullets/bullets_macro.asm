@@ -1,4 +1,3 @@
-
 ; draw a bullet sprite into a backbuffer
 ; ex. BULLET_DRAW(sprite_get_scr_addr_scythe, __RAM_DISK_S_SCYTHE)
 ; in:

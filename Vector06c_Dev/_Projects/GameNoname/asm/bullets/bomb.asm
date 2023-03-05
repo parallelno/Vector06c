@@ -1,4 +1,4 @@
-; mob AI:
+; bullet AI:
 ; init:
 ;	status = moveForward
 ;	statusTimer = moveForwardTimer
@@ -6,32 +6,18 @@
 ; moveForward:
 ;	decr statusTimer
 ;	if statusTimer = 0
-;		status = moveBackward
-;		statusTimer = moveBackwardTimer
-;	else:
-;		try to move a mob
-;		if mob collides with tiles:
-;			if status = moveBackward:
-;				die
-;			else:
-;				status = moveBackward
-;		else:
-;			accept new pos
-;			updateAnim
-;			check mod-hero collision, impact if collides
-; moveBackward:
-;	decr statusTimer
-;	if statusTimer = 0
 ;		death
 ;	else:
-;		try to move a mob
-;		if mob collides with tiles:
+;		try to move a bullet
+;		if bullet collides with tiles:
 ;			death
 ;		else:
 ;			accept new pos
 ;			updateAnim
-;			check mod-hero collision, impact if collides
-
+;			check bullet-hero collision, 
+;			if bullet collides with hero:
+;				impact hero
+;				death
 
 BOMB_SLOW_MOVE_SPEED		= $0400				; low byte is a subpixel speed, high byte is a speed in pixels
 BOMB_SLOW_MOVE_SPEED_NEG	= $ffff - $0400 + 1	; low byte is a subpixel speed, high byte is a speed in pixels
@@ -52,7 +38,7 @@ BOMB_SLOW_COLLISION_HEIGHT	= 10
 
 ; in:
 ; bc - caster pos
-; a - projectileId
+; a - bullet_id
 bomb_slow_init:
 			sta @bullet_id+1
 			call bullets_get_empty_data_ptr

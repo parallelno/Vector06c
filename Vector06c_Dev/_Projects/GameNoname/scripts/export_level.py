@@ -193,7 +193,7 @@ def export(source_j_path, export_path):
 		exit(1)
 
 	png_path = source_dir + source_j["png_path"]
-	image = Image.open(png_path)
+	image = Image.open(png_path) 
 
 	source_path_wo_ext = os.path.splitext(source_j_path)[0]
 	source_name = os.path.basename(source_path_wo_ext)
