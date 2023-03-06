@@ -21,6 +21,7 @@ rooms_runtime_data_end_addr:
 ; the address table of tile graphics
 room_tiles_gfx_ptrs:
 			.storage ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
+room_tiles_gfx_ptrs_end:
 
 ; tile_data format:
 ; it's stored in room_tiles_data

@@ -107,9 +107,13 @@ def is_bytes_zeros(bytes):
 		if byte != 0 : return False
 	return True
 
-def bytes_to_asm(data):
-	asm = "			.byte "
+def bytes_to_asm(data, numbers_in_line = 16):
+	asm = ""
 	for i, byte in enumerate(data):
+		if i % numbers_in_line == 0:
+			if i != 0:
+				asm += "\n"
+			asm += "			.byte "
 		asm += str(byte) + ","
 	return asm + "\n"
 

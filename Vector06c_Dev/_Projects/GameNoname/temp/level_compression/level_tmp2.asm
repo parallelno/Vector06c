@@ -18,7 +18,6 @@ __level01_room01:
 			.byte 0, 1, 12, 3, 5, 9, 48, 46, 8, 7, 8, 6, 0, 0, 0, 0, 
 			.byte 0, 0, 0, 0, 1, 3, 2, 1, 4, 3, 4, 2, 0, 0, 0, 0, 
 
-			.byte 0,0 ; safety pair of bytes to support a stack renderer
 ; source\levels\level01_room01.tmj
 __level01_room01_tilesData:
 			.byte 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 

@@ -2,6 +2,7 @@ room_init:
 			call monsters_erase_runtime_data
 			call bullets_erase_runtime_data
 			call backs_init
+			call room_data_copy			
 			call room_init_tiles_gfx
 			call room_init_tiles_data
 			; erase a back buffer $a000-$ffff in the ram-disk
@@ -12,10 +13,12 @@ room_init:
 			CALL_RAM_DISK_FUNC(__clear_mem_sp, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_CLEAR_MEM | RAM_DISK_M_89)
 			ret
 
-; temporally copy the tile idxs of the current room into room_tiles_data,
-; then it converts idxs into tile gfx ptrs and store it into room_tiles_gfx_ptrs
-room_init_tiles_gfx:
-			; copy the tiles idxs from the ram-disk to the room_tiles_data buffer
+; copy room gfx tile idx buffer + room tile data buffer into the room_tiles_gfx_ptrs + offset
+; offset = (size of room_tiles_gfx_ptrs buffer) / 2. the result of the copy operation is
+; after copying room tile idxs occupy the second half of the room_tiles_gfx_ptrs, and
+; after copying room tile data occupies the room_tiles_data
+room_data_copy:
+			; convert a room_idx into the room gfx tile idx buffer addr like __level01_room00 or __level01_room01, etc
 			lda room_idx
 			; double the room index to get an address offset in the level01_rooms_addr array
 			rlc
@@ -25,19 +28,23 @@ room_init_tiles_gfx:
 			mvi b, 0
 			lxi h, __level01_rooms_addr
 			dad b
-
+			
+			; load a pointer to a room gfx tile idx buffer
 			xchg
 			mvi a, <__RAM_DISK_S_LEVEL01_DATA
 			call get_word_from_ram_disk
 			mov d, b
 			mov e, c
 
-			lxi b, room_tiles_data ; the tile data buffer is used as a temp buffer
-			lxi h, <__RAM_DISK_S_LEVEL01_DATA<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
-			call copy_from_ram_disk
+			; copy room gfx tile idxs + room tile data into the room_tiles_gfx_ptrs + offset
+			; offset = (room_tiles_gfx_ptrs_end - room_tiles_gfx_ptrs) / 2
+			lxi b, room_tiles_gfx_ptrs + (room_tiles_gfx_ptrs_end - room_tiles_gfx_ptrs) / 2
+			CALL_RAM_DISK_FUNC(dzx0, __RAM_DISK_M_LEVEL01_DATA | RAM_DISK_M_8F)
+			ret
 
-			; convert tile idxs into tile gfx addrs
-			lxi h, room_tiles_data
+; convert room gfx tile idxs into room gfx tile ptrs
+room_init_tiles_gfx:
+			lxi h, room_tiles_gfx_ptrs + (room_tiles_gfx_ptrs_end - room_tiles_gfx_ptrs) / 2
 			lxi b, room_tiles_gfx_ptrs
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
 			; hl - current room tile indexes
@@ -79,33 +86,9 @@ room_init_tiles_gfx:
 			dcr a
 			jnz @loop
 			ret
-			.closelabels
 
-; copies the tiles data of the current room from the ram-disk into room_tiles_data.
 ; calls the tile data handler func to spawn spawn a monster, etc
 room_init_tiles_data:
-			; copy the tiles data from the ram-disk
-			lda room_idx
-			; double a room index to get a room pointer
-			rlc
-			; double it again because there are two safety bytes in front of every pointer
-			rlc
-			mov c, a
-			mvi b, 0
-			lxi h, __level01_rooms_addr
-			dad b
-
-			xchg
-			mvi a, <__RAM_DISK_S_LEVEL01_DATA
-			call get_word_from_ram_disk
-			lxi h, ROOM_WIDTH * ROOM_HEIGHT + 2 ; tiles data is stored right after the tile addr tbl plus 2 safety bytes
-			dad b
-
-			xchg
-			lxi b, room_tiles_data
-			lxi h, <__RAM_DISK_S_LEVEL01_DATA<<8 | ROOM_WIDTH * ROOM_HEIGHT / 2
-			call copy_from_ram_disk
-
 			; handle the tile data calling tile data funcs
 			lxi h, room_tiles_data
 			mvi c, 0
@@ -121,8 +104,6 @@ room_init_tiles_data:
 			cmp c
 			jnz @loop
 			ret
-			.closelabels
-
 
 ; a tile data handler. it just copies the tiledata.
 ; it copies the tile data byte into the room_tiles_data as it is
@@ -192,7 +173,7 @@ room_draw:
 
 
 ;=========================================================
-; convert room_tiles_data into the tiledata buffer in the ram-disk (bank 3 at $8000)
+; convert room_tiles_data into the tiledata buffer in the ram-disk
 ; call ex. CALL_RAM_DISK_FUNC(room_tile_data_buff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
 room_tile_data_buff:
 			; set y = 0

@@ -19,7 +19,7 @@
 ;
 ; Compile with The Telemark Assembler (TASM) 3.2
 ; -----------------------------------------------------------------------------
-/*
+
 dzx0:
 		lxi h, $0FFFF
 		push h
@@ -93,7 +93,7 @@ dzx0:
 		add a
 		ret
 		.closelabels
-*/
+
 ; unpack to the ram-disk $8000-$FFFF
 ; in:
 ; de - compressed data addr
