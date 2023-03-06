@@ -1,8 +1,8 @@
 ;----------------------------------------------------------------
-; draw a background sprite (8xN, 16xN pixels)
+; draw a background sprite without an alpha (8xN, 16xN pixels)
 ; input:
 ; bc - back sprite data addr
-; de - $80 screen addr
+; de - screen addr, d=[$80, $9f]
 ; use: a, hl, sp
 
 ; data format:
@@ -23,8 +23,6 @@
 ; 1st screen buff : 14 <- 13
 ; y++
 ; repeat for the next lines of the art data
-DRAW_BACK_SPRITE_8 = 0
-DRAW_BACK_SPRITE_16 = 1
 
 draw_back_v:
 			; store sp
@@ -66,6 +64,7 @@ draw_back_v:
 			adi $20
 
 @nextLine:
+@scr8:
 			pop b					
 			mov m, c				
 			inr h					

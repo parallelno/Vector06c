@@ -19,52 +19,52 @@
 ;				impact hero
 ;				death
 
-BOMB_SLOW_MOVE_SPEED		= $0400				; low byte is a subpixel speed, high byte is a speed in pixels
-BOMB_SLOW_MOVE_SPEED_NEG	= $ffff - $0400 + 1	; low byte is a subpixel speed, high byte is a speed in pixels
+BOMB_MOVE_SPEED		= $0400				; low byte is a subpixel speed, high byte is a speed in pixels
+BOMB_MOVE_SPEED_NEG	= $ffff - $0400 + 1	; low byte is a subpixel speed, high byte is a speed in pixels
 
 ; statuses.
-BOMB_SLOW_STATUS_MOVE_THROW = 0
+BOMB_STATUS_MOVE_THROW = 0
 
 ; status duration in updates.
-BOMB_SLOW_STATUS_MOVE_TIME	= 32
+BOMB_STATUS_MOVE_TIME	= 32
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
-BOMB_SLOW_ANIM_SPEED_MOVE	= 130
+BOMB_ANIM_SPEED_MOVE	= 130
 
 ; gameplay
-BOMB_SLOW_DAMAGE = 1
-BOMB_SLOW_COLLISION_WIDTH	= 10
-BOMB_SLOW_COLLISION_HEIGHT	= 10
+BOMB_DAMAGE = 1
+BOMB_COLLISION_WIDTH	= 10
+BOMB_COLLISION_HEIGHT	= 10
 
 ; in:
 ; bc - caster pos
 ; a - bullet_id
-bomb_slow_init:
-			sta @bullet_id+1
+bomb_init:
+			sta @bulletId+1
 			call bullets_get_empty_data_ptr
 			; hl - ptr to bullet_update_ptr+1
 			; advance hl to bullet_update_ptr
 			dcx h
-			mvi m, <bomb_slow_update
+			mvi m, <bomb_update
 			inx h 
-			mvi m, >bomb_slow_update
+			mvi m, >bomb_update
 			; advance hl to bullet_draw_ptr
 			inx h 
-			mvi m, <bomb_slow_draw
+			mvi m, <bomb_draw
 			inx h 
-			mvi m, >bomb_slow_draw
+			mvi m, >bomb_draw
 
 			; advance hl to bullet_id
 			inx h
-@bullet_id:	mvi a, TEMP_BYTE
+@bulletId:	mvi a, TEMP_BYTE
 			mov m, a
 
 			; advance hl to bullet_status
 			inx h
-			mvi m, BOMB_SLOW_STATUS_MOVE_THROW
+			mvi m, BOMB_STATUS_MOVE_THROW
 			; advance and set bullet_status_timer
 			inx h
-			mvi m, BOMB_SLOW_STATUS_MOVE_TIME
+			mvi m, BOMB_STATUS_MOVE_TIME
 			; advance hl to bullet_anim_ptr
 			inx_h(2)
 			
@@ -72,14 +72,14 @@ bomb_slow_init:
 			cpi BOMB_SLOW_ID
 			jz @bombSlow
 @bombDmg:
-			mvi m, <bomb_slow_dmg
+			mvi m, <bomb_dmg
 			inx h
-			mvi m, >bomb_slow_dmg
+			mvi m, >bomb_dmg
 			jmp @eraseScrAddr
 @bombSlow:
-			mvi m, <bomb_slow_run
+			mvi m, <bomb_run
 			inx h
-			mvi m, >bomb_slow_run			
+			mvi m, >bomb_run			
 @eraseScrAddr:
 			mov a, b
 			; a - posX
@@ -138,12 +138,12 @@ bomb_slow_init:
 			sbb a
 			mov d, a
 			xchg
-			; posDiffX / BOMB_SLOW_STATUS_MOVE_TIME (it uses the fact that HL>>5 the same as HL<<3)
+			; posDiffX / BOMB_STATUS_MOVE_TIME (it uses the fact that HL>>5 the same as HL<<3)
 			dad h
 			dad h 
 			dad h
 			; to fill up L with %1111 if pos_diff < 0
-			ani %111 ; <(%0000000011111111 / BOMB_SLOW_STATUS_DASH_TIME)
+			ani %111 ; <(%0000000011111111 / BOMB_STATUS_DASH_TIME)
 			ora l 
 			mov l, a
 			push h
@@ -157,12 +157,12 @@ bomb_slow_init:
 			sbb a
 			mov d, a 
 			xchg
-			; posDiffY / BOMB_SLOW_STATUS_MOVE_TIME 
+			; posDiffY / BOMB_STATUS_MOVE_TIME 
 			dad h 
 			dad h 
 			dad h 
 			; to fill up L with %1111 if pos_diff < 0
-			ani %111 ; <(%0000000011111111 / BOMB_SLOW_STATUS_DASH_TIME)
+			ani %111 ; <(%0000000011111111 / BOMB_STATUS_DASH_TIME)
 			ora l 
 			mov l, a
 			xchg
@@ -182,7 +182,7 @@ bomb_slow_init:
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to bullet_update_ptr in the runtime data
-bomb_slow_update:
+bomb_update:
 			; advance to bullet_status_timer
 			LXI_H_TO_DIFF(bullet_status_timer, bullet_update_ptr)
 			dad d
@@ -236,8 +236,8 @@ bomb_slow_update:
 			; advance hl to bullet_anim_timer
 			LXI_B_TO_DIFF(bullet_anim_timer, bullet_pos_x+1)
 			dad b
-			mvi a, BOMB_SLOW_ANIM_SPEED_MOVE
-			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_SLOW_COLLISION_WIDTH, BOMB_SLOW_COLLISION_HEIGHT, BOMB_SLOW_DAMAGE)	
+			mvi a, BOMB_ANIM_SPEED_MOVE
+			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_COLLISION_WIDTH, BOMB_COLLISION_HEIGHT, BOMB_DAMAGE)	
 @dieAfterDamage:
 			; advance hl to bullet_update_ptr+1
 			LXI_B_TO_DIFF(bullet_update_ptr+1, bullet_pos_y+1)
@@ -253,5 +253,5 @@ bomb_slow_update:
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
-bomb_slow_draw:
-			BULLET_DRAW(sprite_get_scr_addr_bomb_slow, __RAM_DISK_S_BOMB_SLOW)
+bomb_draw:
+			BULLET_DRAW(sprite_get_scr_addr_bomb, __RAM_DISK_S_BOMB)

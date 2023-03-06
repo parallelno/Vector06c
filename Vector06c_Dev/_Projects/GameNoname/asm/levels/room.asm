@@ -13,10 +13,11 @@ room_init:
 			CALL_RAM_DISK_FUNC(__clear_mem_sp, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_CLEAR_MEM | RAM_DISK_M_89)
 			ret
 
-; copy room gfx tile idx buffer + room tile data buffer into the room_tiles_gfx_ptrs + offset
+; uncompress room gfx tile idx buffer + room tile data buffer into the room_tiles_gfx_ptrs + offset
 ; offset = (size of room_tiles_gfx_ptrs buffer) / 2. the result of the copy operation is
 ; after copying room tile idxs occupy the second half of the room_tiles_gfx_ptrs, and
 ; after copying room tile data occupies the room_tiles_data
+; packed room data has to be stored into $8000-$FFFF segment to be properly unzipped
 room_data_copy:
 			; convert a room_idx into the room gfx tile idx buffer addr like __level01_room00 or __level01_room01, etc
 			lda room_idx

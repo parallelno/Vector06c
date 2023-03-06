@@ -4,6 +4,7 @@ import common
 import build
 import export_sprite
 import export_back
+import export_decal
 import export_level
 import export_music
 
@@ -71,7 +72,7 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 	}
 
 	if force_export:
-		common.run_command(f"..\\..\\retroassembler\\retroassembler.exe -x -C=8080 -c {source_path} "
+		common.run_command(f"{build.assembler_path} {build.assembler_labels_cmd} {source_path} "
 				f" {segment_bin_path} >{labels_path}")
 
 		if not os.path.exists(segment_bin_path):
@@ -89,7 +90,7 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 			zx0_chunk_path = chunk_path + build.EXT_ZX0
 
 			common.delete_file(zx0_chunk_path)
-			common.run_command(f"tools\\zx0salvador.exe -v -classic {chunk_path} {zx0_chunk_path}")
+			common.run_command(f"{build.zx0_path} {chunk_path} {zx0_chunk_path}")
 
 		print(f"segment: {source_name} got exported.")
 
@@ -99,7 +100,7 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 
 #=========================================================================================
 def export(bank_id, segment_j,
-			force_export, sprite_force_export, back_force_export, level_force_export, music_force_export,
+			force_export, sprite_force_export, back_force_export, decal_force_export, level_force_export, music_force_export,
 			generated_code_dir, generated_bin_dir):
 
 	addr_s = segment_j["addr"]
@@ -133,6 +134,11 @@ def export(bank_id, segment_j,
 				exported, export_paths = export_back.export_if_updated(asset["path"], asset["export_dir"], back_force_export | force_export)
 				segment_force_export |= exported
 				ram_include_paths.append(export_paths["ram"])
+				segment_include_path = export_paths["ram_disk"]
+
+			elif asset["asset_type"] == build.ASSET_TYPE_DECAL:
+				exported, export_paths = export_decal.export_if_updated(asset["path"], asset["export_dir"], decal_force_export | force_export)
+				segment_force_export |= exported
 				segment_include_path = export_paths["ram_disk"]
 
 			elif asset["asset_type"] == build.ASSET_TYPE_LEVEL_DATA:

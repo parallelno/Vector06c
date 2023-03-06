@@ -26,6 +26,7 @@ def export(source_j_path):
 
 	sprite_force_export = build.is_file_updated(dependency_paths_j["sprite"])
 	back_force_export = build.is_file_updated(dependency_paths_j["back"])
+	decal_force_export = build.is_file_updated(dependency_paths_j["decal"])
 	level_force_export = build.is_file_updated(dependency_paths_j["level"])
 	music_force_export = build.is_file_updated(dependency_paths_j["music"])
 
@@ -48,7 +49,7 @@ def export(source_j_path):
 
 			exported, segment_name, segment_paths = export_segment.export(
 				bank_id, segment_j,
-				global_force_export, sprite_force_export, back_force_export, level_force_export, music_force_export,
+				global_force_export, sprite_force_export, back_force_export, decal_force_export, level_force_export, music_force_export,
 				generated_code_dir, generated_bin_dir)
 
 			ram_disk_data_asm_force_export |= exported

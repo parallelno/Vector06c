@@ -304,13 +304,14 @@ def export_data(source_j_path, export_data_path):
 		asm_room_data_path_asm = export_dir + "room_data" + build.EXT_ASM
 		asm_room_data_path_bin = export_dir + "room_data" + build.EXT_BIN
 		asm_room_data_path_zx0 = export_dir + "room_data" + build.EXT_BIN_ZX0
+
 		with open(asm_room_data_path_asm, "w") as file:
 			file.write(asm_room_data)
 		# asm to temp bin
-		common.run_command(f"..\\..\\retroassembler\\retroassembler.exe -x -C=8080 -c {asm_room_data_path_asm} "
+		common.run_command(f"{build.assembler_path} {asm_room_data_path_asm} "
 			f" {asm_room_data_path_bin}")
 		# pack a room data
-		common.run_command(f"tools\\zx0salvador.exe -v -classic {asm_room_data_path_bin} {asm_room_data_path_zx0}")
+		common.run_command(f"{build.zx0_path} {asm_room_data_path_bin} {asm_room_data_path_zx0}")
 		# load bin
 		with open(asm_room_data_path_zx0, "rb") as file:
 			asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
@@ -318,9 +319,9 @@ def export_data(source_j_path, export_data_path):
 			asm += common.bytes_to_asm(file.read())
 
 		# del tmp files
-		#common.delete_file(asm_room_data_path_asm)
-		#common.delete_file(asm_room_data_path_bin)
-		#common.delete_file(asm_room_data_path_zx0)
+		common.delete_file(asm_room_data_path_asm)
+		common.delete_file(asm_room_data_path_bin) 
+		common.delete_file(asm_room_data_path_zx0)
 		
 	with open(export_data_path, "w") as file:
 		file.write(asm)

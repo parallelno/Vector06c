@@ -123,7 +123,7 @@ def export(source_path, export_path, cleanTmp = True):
 				f.write(c)
 			
 			common.delete_file(zx0File)
-			common.run_command(f"tools\\zx0salvador.exe -v -classic -w 256 {binFile} {zx0File}")
+			common.run_command(f"{build.zx0_path} -w 256 {binFile} {zx0File}")
 
 			with open(zx0File, "rb") as f:
 				dbname = f"ayRegData{i:02d}"

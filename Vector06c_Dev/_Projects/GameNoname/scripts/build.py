@@ -15,6 +15,7 @@ ASSET_TYPE_SPRITE		= "sprite"
 ASSET_TYPE_LEVEL		= "level"
 ASSET_TYPE_LEVEL_DATA	= "level_data"
 ASSET_TYPE_LEVEL_GFX	= "level_gfx"
+ASSET_TYPE_DECAL		= "decal"
 ASSET_TYPE_MUSIC		= "music"
 ASSET_TYPE_CODE			= "code"
 ASSET_TYPE_RAM_DISK_DATA = "ram_disk_data"
@@ -26,15 +27,38 @@ EXT_BIN_ZX0	= ".bin.zx0"
 EXT_ROM		= ".rom"
 EXT_YM		= ".ym"
 
+# global vars
 build_db_path = "generated\\build.db"
+assembler_path = "..\\..\\retroassembler\\retroassembler.exe -C=8080 -c"
+assembler_labels_cmd = " -x"
+zx0_path = "tools\\zx0salvador.exe -v -classic"
+emulator_path = "..\\..\\Emu80\\Emu80qt.exe"
+# end global vars
 
 BIN_DIR = "bin\\"
+
+def set_assembler_path(path):
+	global assembler_path
+	assembler_path = path
+
+def set_assembler_labels_cmd(cmd):
+	global assembler_labels_cmd
+	assembler_labels_cmd = cmd
+
+def set_zx0_path(path):
+	global zx0_path
+	zx0_path = path
+
+def set_emulator_path(path):
+	global emulator_path
+	emulator_path = path
 
 def build_db_init(path):
 	global build_db_path
 	dir = os.path.dirname(path)
 	if not os.path.exists(dir):
 		os.mkdir(dir)
+	build_db_path = path
 
 def is_asm_updated(asmPath):
 	with open(asmPath, "rb") as file:

@@ -4,6 +4,7 @@
 	{
 		"sprite" : "scripts\\export_sprite.py",
 		"back" : "scripts\\export_back.py",
+		"decal" : "scripts\\export_decal.py",
 		"level" : "scripts\\export_level.py",
 		"music" : "scripts\\export_music.py",
 		"global" : [
@@ -85,6 +86,11 @@
 									"asset_type" : "back",
 									"path" : "source\\sprites\\backs.json",
 									"export_dir" : "generated\\sprites\\"
+								},
+								{
+									"asset_type" : "decal",
+									"path" : "source\\sprites\\decals.json",
+									"export_dir" : "generated\\sprites\\"
 								}
 							]
 						}
@@ -121,7 +127,7 @@
 								},
 								{
 									"asset_type" : "sprite",
-									"path" : "source\\sprites\\bomb_slow.json",
+									"path" : "source\\sprites\\bomb.json", 
 									"export_dir" : "generated\\sprites\\"
 								}
 							]

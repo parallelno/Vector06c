@@ -31,11 +31,11 @@ room_tiles_gfx_ptrs_end:
 ;		d == 1 - no collision + a tile is restored when a hero, a monster, or a bullet are on it
 ; ffff == 1, spawn a monster, monster_id = d
 ;		monster_id == 0 - skeleton (tiledata = 1*16+0=16)
-;		monster_id == 1 - vampire (tiledata = 1*16+1=17)
-;		monster_id == 2 - burner (tiledata = 1*16+2=18)
-;		monster_id == 3 - knight horizontal walk (tiledata = 1*16+3=19)
-;		monster_id == 4 - knight vertical walk (tiledata = 1*16+4=20)
-;		monster_id == 5 - monster chest (tiledata = 1*16+5=21)
+;		monster_id == 1 - vampire (tiledata = 17)
+;		monster_id == 2 - burner (tiledata = 18)
+;		monster_id == 3 - knight horizontal walk (tiledata =19)
+;		monster_id == 4 - knight vertical walk (tiledata = 20)
+;		monster_id == 5 - monster chest (tiledata = 21)
 ; ffff == 2, teleport, room_id = d, go to 0-15 room, ex. teleport to the room_id=0 (tiledata = 2*16+0=32), to the room_id=1 (tiledata = 2*16+1=33),
 ; ffff == 3, teleport, room_id = d+16, go to 16-31 room
 ; ffff == 4, teleport, room_id = d+32, go to 32-47 room

@@ -107,7 +107,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 0, addr $8000, chunk_id 0
 	;===============================================
-			; ['level01', 'backs']
+			; ['level01', 'backs', 'decals']
 			; unpack the chunk into the ram-disk
 			lxi d, chunk_bank0_addr8000_0
 			lxi b, __chunk_start_bank0_addr8000_0
@@ -141,7 +141,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 1, addr 0, chunk_id 1
 	;===============================================
-			; ['burner', 'bomb_slow']
+			; ['burner', 'bomb']
 			; unpack the chunk into the ram-disk back buffer
 			lxi d, chunk_bank1_addr0_1
 			lxi b, BACK_BUFF_ADDR
@@ -155,9 +155,9 @@ ram_disk_init:
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
 
-			; preshift bomb_slow sprites
+			; preshift bomb sprites
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
-			lxi d, bomb_slow_preshifted_sprites
+			lxi d, bomb_preshifted_sprites
 			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank1_addr0_1)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
