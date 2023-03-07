@@ -222,4 +222,4 @@ __draw_sprite_hit_vm:
 			dcr e
 			jnz @w8evenScr1
 			jmp DrawSpriteRet_ramDisk__
-			.closelabels
+			

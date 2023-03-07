@@ -7,7 +7,7 @@ restore_sp:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
 			ret
-			.closelabels
+			
 
 ; clear a memory buffer
 ; input:
@@ -25,7 +25,7 @@ clear_mem:
 			ora b
 			jnz @loop
 			ret
-			.closelabels
+			
 
 ; clear a memory buffer using stack operations
 ; can be used to clear ram-disk memory as well
@@ -67,7 +67,7 @@ clear_mem_sp:
 			lxi sp, TEMP_WORD
 			RAM_DISK_OFF()
 			ret
-			.closelabels
+			
 
 clear_ram_disk:
 			lxi b, $0000
@@ -96,7 +96,7 @@ clear_ram_disk:
 			mvi a, RAM_DISK_S3
 			CLEAR_MEM_SP(false)
 			ret
-			.closelabels			
+						
 
 INIT_COLOR_IDX = 15
 ; Set palette
@@ -122,7 +122,7 @@ set_palette:
 
 			jp	@loop
 			ret
-			.closelabels
+			
 
 ; Set palette copied from the ram-disk w/o blocking interruptions
 ; input:
@@ -174,7 +174,7 @@ set_palette_from_ram_disk:
 			cpi PALETTE_COLORS
 			jnz	@loop
 			jmp restore_sp
-			.closelabels
+			
 
 ; Read a word from the ram-disk w/o blocking interruptions
 ; input:
@@ -197,7 +197,7 @@ get_word_from_ram_disk:
 			sphl
 			pop b ; bc has to be used when interruptions is on
 			jmp restore_sp
-			.closelabels
+			
 
 ;========================================
 ; copy a buffer into the ram-disk.

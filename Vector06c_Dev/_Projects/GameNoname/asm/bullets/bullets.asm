@@ -8,7 +8,7 @@ bullets_erase_runtime_data:
 			mvi a, BULLET_RUNTIME_DATA_LAST
 			sta bullet_update_ptr + 1
 			ret
-			.closelabels
+			
 
 ; look up the empty spot in the bullet runtime data
 ; in: 
@@ -61,7 +61,7 @@ bullets_get_empty_data_ptr:
 bullets_destroy:
 			mvi m, BULLET_RUNTIME_DATA_DESTR
 			ret
-			.closelabels
+			
 
 ; mark a bullet data as empty
 ; in:
@@ -70,7 +70,7 @@ bullets_destroy:
 bullets_set_empty:
 			mvi m, BULLET_RUNTIME_DATA_EMPTY
 			ret
-			.closelabels
+			
 
 ; call all active bullets' Update/Draw func
 ; a func will get DE pointing to a func ptr (ex.:bullet_update_ptr or bullet_draw_ptr) in the runtime data
@@ -112,7 +112,7 @@ bullets_data_func_caller:
 			dad d
 			jmp @loop
 			ret			
-			.closelabels
+			
 
 ; call a provided func (bullet_copy_to_scr, bullet_erase) if a bullet is alive
 ; a func will get HL pointing to a bullet_update_ptr+1 in the runtime data, and A holding a BULLET_RUNTIME_DATA_* status
@@ -140,7 +140,7 @@ bullets_common_func_caller:
 			dad d
 			jmp @loop
 			ret
-			.closelabels
+			
 			
 bullets_update:
 			lxi h, 0

@@ -158,13 +158,13 @@ room_tiledata_back_spawn:
 ; input:
 ; b - tile data
 ; c - tile idx in the room_tiles_data array.
-; a - decal_id
+; a - decal_walkable_id
 ; out:
 ; a - tile_data that will be saved back into room_tiles_data
 room_tiledata_decal_walkable_spawn:
 			; if decal_id < 2, then just copy
 			cpi TILE_DATA_RESTORE_TILE + 1
-			jc @exit
+			jc room_tile_data_copy
 
 			add_a(2) ; to make a JMP_4 ptr
 			sta @restoreA+1
@@ -183,8 +183,7 @@ room_tiledata_decal_walkable_spawn:
 			push d
 
 			lxi h, __decals_walkable_sprite_ptrs - JMP_4_LEN * 2 ; make decal_id == 2 corelates to 0 addr offset
-@restoreA:
-			mvi e, TEMP_BYTE
+@restoreA:	mvi e, TEMP_BYTE
 			mvi d, 0
 			dad d
 			xchg
@@ -196,13 +195,13 @@ room_tiledata_decal_walkable_spawn:
 			; de - scr addr
 			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
 			mvi a, TILE_DATA_RESTORE_TILE
-@exit:		ret
+			ret
 
 ; a tile data handler for a collision + draw a decal.
 ; input:
 ; b - tile data
 ; c - tile idx in the room_tiles_data array.
-; a - decal_id
+; a - decal_collision_id
 ; out:
 ; a - tile_data that will be saved back into room_tiles_data
 room_tiledata_decal_collision_spawn:
@@ -223,8 +222,46 @@ room_tiledata_decal_collision_spawn:
 			push d
 
 			lxi h, __decals_collision_sprite_ptrs
-@restoreA:
-			mvi e, TEMP_BYTE
+@restoreA:	mvi e, TEMP_BYTE
+			mvi d, 0
+			dad d
+			xchg
+			; de pptr to a sprite
+			mvi a, <__RAM_DISK_S_DECALS
+			call get_word_from_ram_disk
+			pop d
+			; bc - sprite addr
+			; de - scr addr
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+			mvi a, TILE_DATA_COLLISION
+			ret
+
+; a tile data handler for breakable items.
+; input:
+; b - tile data
+; c - tile idx in the room_tiles_data array.
+; a - decal_collision_id
+; out:
+; a - tile_data that will be saved back into room_tiles_data
+room_tiledata_breakable_spawn:
+			add_a(2) ; to make a JMP_4 ptr
+			sta @restoreA+1
+			; scr_y = tile idx % ROOM_WIDTH
+			mvi a, %11110000
+			ana c
+			mov e, a
+			; c - tile_idx
+			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
+			mvi a, %00001111
+			ana c
+			rlc
+			adi >SCR_ADDR
+			mov d, a
+			; de - scr addr
+			push d
+
+			lxi h, __decals_collision_sprite_ptrs
+@restoreA:	mvi e, TEMP_BYTE
 			mvi d, 0
 			dad d
 			xchg

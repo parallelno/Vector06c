@@ -17,9 +17,9 @@ level_init:
 			sta border_color_idx
 
 			; erase rooms runtime data
-			lxi b, rooms_runtime_data_end_addr
-			lxi d, ROOM_RUNTIME_DATA_LEN * ROOMS_MAX / 32 - 1
-			CLEAR_MEM_SP(true)
+			lxi h, rooms_runtime_data
+			lxi b, rooms_runtime_data_end_addr - rooms_runtime_data
+			call clear_mem
 
 			xra a
 			sta room_idx
@@ -30,7 +30,7 @@ level_init:
 			call hero_set_pos
 			call hero_init
 			ret
-			.closelabels
+			
 
 level_update:
 			lda level_command

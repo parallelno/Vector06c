@@ -106,7 +106,7 @@ BURNER_DETECT_HERO_DISTANCE = 60
 burner_init:
 			MONSTER_INIT(burner_update, burner_draw, monster_impacted, BURNER_HEALTH, BURNER_STATUS_DETECT_HERO_INIT, burner_idle)
 			ret
-			.closelabels
+			
 
 ; anim and a gameplay logic update
 ; in:

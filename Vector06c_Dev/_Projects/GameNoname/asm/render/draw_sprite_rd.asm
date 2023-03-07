@@ -14,7 +14,7 @@ drawSpriteWidthHeight_ramDisk__:
 ; e - height
 			lxi d, TEMP_WORD
 			ret
-			.closelabels
+			
 
 /*	
 ; =============================================
@@ -226,7 +226,7 @@ __DrawSpriteV:
 			dcr e
 			jnz @w8evenScr1
 			jmp DrawSpriteRet_ramDisk__
-			.closelabels
+			
 */
 
 ; =============================================
@@ -446,4 +446,4 @@ __draw_sprite_vm:
 			dcr e
 			jnz @w8evenScr1
 			jmp DrawSpriteRet_ramDisk__
-			.closelabels
+			

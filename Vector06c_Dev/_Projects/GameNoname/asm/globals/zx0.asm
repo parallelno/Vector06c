@@ -92,7 +92,7 @@ dzx0:
 		pop psw
 		add a
 		ret
-		.closelabels
+		
 
 ; unpack to the ram-disk $8000-$FFFF
 ; in:
@@ -211,4 +211,4 @@ dzx0_rd:
 		add a
 		jnc @eliasLoop
 		jmp @elias
-		.closelabels
+		

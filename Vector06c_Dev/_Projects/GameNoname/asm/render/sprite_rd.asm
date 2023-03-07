@@ -5,7 +5,7 @@ Ret_ramDisk__:
 restoreSP_ramDisk__:
 			lxi sp, TEMP_ADDR
 			ret
-			.closelabels
+			
 
 ; clear a N*16 pxs square on the screen,
 ; it clears 3 screen buffers from de addr and further
@@ -61,7 +61,7 @@ __erase_sprite:
 @width8:
 			ERASE_SPRITE_SP_COL(false)
 			jmp Ret_ramDisk__
-			.closelabels
+			
 
 .macro ERASE_SPRITE_SP_COL(nextColumn = true)
 	col .var 0
@@ -80,4 +80,4 @@ __erase_sprite:
 			mov h, a
 		.endif
 .endmacro
-			.closelabels
+			

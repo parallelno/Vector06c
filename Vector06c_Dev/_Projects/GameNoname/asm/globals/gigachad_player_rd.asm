@@ -36,7 +36,7 @@ __gcplayer_start_repeat:
 			xra a
 			sta __gcplayer_update
 			ret
-			.closelabels
+			
 
 ; this function has to be called from an unterruption routine
 ; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(__gcplayer_update, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
@@ -58,14 +58,14 @@ __gcplayer_update:
 			inr m
 			call gcplayer_ay_update
 			ret
-			.closelabels
+			
 
 ; bufferN[bufferIdx] data will be send to AY for each register accordingly
 gcplayer_buffer_idx:
 			.byte TEMP_BYTE
 gcplayer_task_id:
 			.byte TEMP_BYTE
-			.closelabels
+			
 
 ;==========================================
 ; create a GCPlayerUnpack tasks
@@ -119,14 +119,14 @@ gcplayer_tasks_init:
 @restoreSP: lxi sp, TEMP_ADDR
 			ei 
 			ret
-			.closelabels
+			
 
 ; Set the current task stack pointer to the first task stack pointer
 gcplayer_scheduler_init:
 			lxi h, GCPlayerTaskSPs
 			shld GCPlayerCurrentTaskSPp
 			ret
-			.closelabels
+			
 
 ; it clears the last 14 bytes of every buffer
 ; to prevent player to play gugbage data 
@@ -145,7 +145,7 @@ gcplayer_clear_buffers:
 			cmp h
 			jnz @nextBuff
 			ret
-			.closelabels
+			
 
 ; this func restores the context of the current task
 ; then calls GCPlayerUnpack to let it continue unpacking regData
@@ -197,7 +197,7 @@ gcplayer_scheduler_store_task_context:
 GCPlayerSchedulerRestoreSp:
 			lxi sp, TEMP_ADDR
 			ret
-			.closelabels
+			
 
 ; unpacks 16 bytes of regData for the current task
 ; this function is called during an interruption
@@ -315,7 +315,7 @@ GCPlayerUnpack:
 			sta __gcplayer_update
 			; return to the func that called __gcplayer_update		
 			ret
-			.closelabels
+			
 		
 ; send buffers data to AY regs
 ; this code is performed during an interruption
@@ -343,7 +343,7 @@ gcplayer_ay_update:
 			dcr e
 			jp @sendData
 			ret
-			.closelabels
+			
 
 gcplayer_mute:
 			mvi e, GC_PLAYER_TASKS - 1
@@ -355,4 +355,4 @@ gcplayer_mute:
 			dcr e
 			jp @sendData
 			ret
-			.closelabels
+			

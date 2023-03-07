@@ -10,7 +10,7 @@ monsters_erase_runtime_data:
 			mvi a, MONSTER_RUNTIME_DATA_LAST
 			sta monster_update_ptr+1
 			ret
-			.closelabels
+			
 
 ; in:
 ; hl - 	posX, posY
@@ -140,7 +140,7 @@ monsters_get_empty_data_ptr:
 monsters_destroy:
 			mvi m, MONSTER_RUNTIME_DATA_DESTR
 			ret
-			.closelabels
+			
 
 ; mark a monster data as empty
 ; in:
@@ -149,7 +149,7 @@ monsters_destroy:
 monsters_set_empty:
 			mvi m, MONSTER_RUNTIME_DATA_EMPTY
 			ret
-			.closelabels
+			
 
 ; call all active monsters' Update/Draw func
 ; a func will get DE pointing to a func ptr (ex.:monster_update_ptr or monster_draw_ptr) in the runtime data
@@ -191,7 +191,7 @@ monsters_data_func_caller:
 			dad d
 			jmp @loop
 			ret			
-			.closelabels
+			
 
 ; call a provided func (monster_copy_to_scr, monster_erase) if a monster is alive
 ; a func will get HL pointing to a monster_update_ptr+1 in the runtime data, and A holding a MONSTER_RUNTIME_DATA_* status

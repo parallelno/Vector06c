@@ -108,7 +108,7 @@ DrawText_restoreSP:
 
 			pop h
 			jmp draw_text
-			.closelabels
+			
 			
 
 .macro DRAW_CHAR()

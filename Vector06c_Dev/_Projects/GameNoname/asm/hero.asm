@@ -108,7 +108,6 @@ hero_set_pos:
 			mov a, c
 			sta hero_pos_y+1
 			ret
-			.closelabels
 
 .macro HERO_UPDATE_ANIM(anim_speed)
 			; anim idle update

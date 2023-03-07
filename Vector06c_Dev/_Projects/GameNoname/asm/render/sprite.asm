@@ -11,7 +11,7 @@ sprite_get_addr:
 			inx h
 			mov b, m
 			ret
-			.closelabels
+			
 
 ; in:
 ; hl - ptr to posX+1 (high byte in 16-bit pos)
@@ -37,7 +37,7 @@ sprite_get_scr_addr8:
 			mov e, m
 			mov	d, a
 			ret
-			.closelabels
+			
 sprite_get_scr_addr4:
 			; calc screen addr X
 			mov	a, m
@@ -54,7 +54,7 @@ sprite_get_scr_addr4:
 			mov e, m
 			mov	d, a
 			ret
-			.closelabels
+			
 
 ; copy a sprite from the back buff to the screen
 ; in:

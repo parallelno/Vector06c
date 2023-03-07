@@ -93,7 +93,7 @@ hero_sword_trail_init:
 			; c = posY
 			mov m, c
 			ret
-			.closelabels
+			
 
 ; anim and a gameplay logic update
 ; in:

@@ -58,7 +58,7 @@ draw_tile_16x16:
 @restoreSP:		
 			lxi sp, TEMP_ADDR
 			ret
-			.closelabels
+			
 			
 .macro DRAWTILE16x16_DRAW_BUF()
 		.loop 7
