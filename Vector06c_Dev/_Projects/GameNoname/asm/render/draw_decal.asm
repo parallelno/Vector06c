@@ -19,32 +19,40 @@
 ; 4rd screen buff : 8 <- 7
 ; y++
 ; evenLine:
-; 4rd screen buff : 7 -> 8
-; 3nd screen buff : 10 <- 9
-; 2st screen buff : 12 <- 11
-; 1st screen buff : 14 <- 13
+; 4rd screen buff : 9 -> 10
+; 3nd screen buff : 12 <- 11
+; 2st screen buff : 14 <- 13
+; 1st screen buff : 16 <- 15
 ; y++
 ; repeat for the next lines of the art data
 
-.macro DRAW_DECAL_V_M(backward = false)
+.macro DRAW_DECAL_V_M()
 			pop b
 			mov a, m
 			ana e
-			ora c
+			ora c	
 			mov m, a
-		.if backward = false			
 			inr h
-		.endif
-		.if backward
-			dcr h
-		.endif
 			mov a, m
-			ana d
+			ana d	
 			ora b
 			mov m, a
 .endmacro
 
-draw_back_v:
+.macro DRAW_DECAL_V_M_BACK()
+			pop b
+			mov a, m
+			ana d
+			ora c	
+			mov m, a
+			dcr h
+			mov a, m
+			ana e
+			ora b
+			mov m, a
+.endmacro
+
+draw_decal_v:
 			; store sp
 			lxi h, $0000
 			dad sp
@@ -72,7 +80,7 @@ draw_back_v:
 
 @width16 = 2
 @drawWidth16:
-			; store a max Y to end the loop
+			; store a max Y to check the end end the loop
 			add l
 			sta @maxY1+1
 			sta @maxY2+1
@@ -84,8 +92,10 @@ draw_back_v:
 			sta @scrA + 1
 			sta @scrA2 + 1
 			adi $20
-			mov e, a
+			sta @scrC + 1
+			sta @scrC2 + 1
 			adi $20
+			sta @scrE + 1
 
 @oddLine:
 			pop b ; an alpha
@@ -95,13 +105,13 @@ draw_back_v:
 			DRAW_DECAL_V_M()
 @scrA:		mvi h, TEMP_BYTE
 
-			DRAW_DECAL_V_M(true)
-@scrC:		mov h, e
+			DRAW_DECAL_V_M_BACK()
+@scrC:		mvi h, TEMP_ADDR
 
-			DRAW_DECAL_V_M(true)
-@scrE:		mov h, a
+			DRAW_DECAL_V_M_BACK()
+@scrE:		mvi h, TEMP_BYTE
 
-			DRAW_DECAL_V_M(true)
+			DRAW_DECAL_V_M_BACK()
 
 			inr l
 @maxY1:		mvi a, TEMP_BYTE
@@ -114,15 +124,15 @@ draw_back_v:
 			mov d, b
 @scrE2:
 			DRAW_DECAL_V_M()
-@scrC2:		mov h, e
+@scrC2:		mvi h, TEMP_ADDR
 
-			DRAW_DECAL_V_M(true)
+			DRAW_DECAL_V_M_BACK()
 @scrA2:		mvi h, TEMP_BYTE
 
-			DRAW_DECAL_V_M(true)
+			DRAW_DECAL_V_M_BACK()
 @scr82:		mvi h, TEMP_BYTE
 
-			DRAW_DECAL_V_M(true)
+			DRAW_DECAL_V_M_BACK()
 
 			inr l
 @maxY2:		mvi a, TEMP_BYTE

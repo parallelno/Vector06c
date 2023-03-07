@@ -19,16 +19,42 @@
 	],
 	"asset_type" : "decal",	
 	"png_path" : "art\\sprites_decals.png",
+	"decals_collision" : ["web1"],
+	"decals_walkable" : ["bones", "skull"],
 	"sprites" : [
 		{
-			"name" : "coin",
-			"x" : 0,
-			"y"	: 36,
+			"name" : "bones",
+			"x" : 32,
+			"y"	: 82,
 			"width" : 16,
-			"height" : 11,
+			"height" : 12,
+			"offset_y" : 0,
+			"mask_x" : 48,
+			"mask_y" : 82, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "skull",
+			"x" : 64,
+			"y"	: 81,
+			"width" : 16,
+			"height" : 14,
+			"offset_y" : 0,
+			"mask_x" : 80,
+			"mask_y" : 81, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "web1",
+			"x" : 0,
+			"y"	: 80,
+			"width" : 16,
+			"height" : 14,
 			"offset_y" : 0,
 			"mask_x" : 16,
-			"mask_y" : 36, 
+			"mask_y" : 80, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		}	

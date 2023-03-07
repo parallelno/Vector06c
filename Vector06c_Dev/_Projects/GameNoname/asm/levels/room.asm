@@ -4,6 +4,7 @@ room_init:
 			call backs_init
 			call room_data_copy			
 			call room_init_tiles_gfx
+			call room_draw_on_scr
 			call room_init_tiles_data
 			; erase a back buffer $a000-$ffff in the ram-disk
 			; TODO: perhaps we do not need to erase a back buffer.
@@ -11,6 +12,12 @@ room_init:
 			lxi b, $0000
 			lxi d, $6000 / 128 - 1
 			CALL_RAM_DISK_FUNC(__clear_mem_sp, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_CLEAR_MEM | RAM_DISK_M_89)
+
+			call room_draw_on_backbuffs
+
+			; convert room_tiles_data into BACKBUFF2 buffer
+			;call room_tile_data_buff
+			CALL_RAM_DISK_FUNC(room_tile_data_buff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)			
 			ret
 
 ; uncompress room gfx tile idx buffer + room tile data buffer into the room_tiles_gfx_ptrs + offset
@@ -83,7 +90,6 @@ room_init_tiles_gfx:
 			inx b
 			pop h
 			pop psw
-			; repeat if it's not done
 			dcr a
 			jnz @loop
 			ret
@@ -134,7 +140,7 @@ room_tiledata_monster_spawn:
 			; call a monster init func
 			pchl
 
-; a tile data handler for collision + spawn an animated back by its id.
+; a tile data handler for a collision + spawn an animated back by its id.
 ; if id == TILE_DATA_FUNC_ID_COLLISION, it does not spawn an animated back
 ; input:
 ; b - tile data
@@ -148,10 +154,95 @@ room_tiledata_back_spawn:
 			mvi a, TILE_DATA_COLLISION
 			ret
 
-room_draw:
+; a tile data handler for non-collision + draw a decal.
+; input:
+; b - tile data
+; c - tile idx in the room_tiles_data array.
+; a - decal_id
+; out:
+; a - tile_data that will be saved back into room_tiles_data
+room_tiledata_decal_walkable_spawn:
+			; if decal_id < 2, then just copy
+			cpi TILE_DATA_RESTORE_TILE + 1
+			jc @exit
+
+			add_a(2) ; to make a JMP_4 ptr
+			sta @restoreA+1
+			; scr_y = tile idx % ROOM_WIDTH
+			mvi a, %11110000
+			ana c
+			mov e, a
+			; c - tile_idx
+			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
+			mvi a, %00001111
+			ana c
+			rlc
+			adi >SCR_ADDR
+			mov d, a
+			; de - scr addr
+			push d
+
+			lxi h, __decals_walkable_sprite_ptrs - JMP_4_LEN * 2 ; make decal_id == 2 corelates to 0 addr offset
+@restoreA:
+			mvi e, TEMP_BYTE
+			mvi d, 0
+			dad d
+			xchg
+			; de pptr to a sprite
+			mvi a, <__RAM_DISK_S_DECALS
+			call get_word_from_ram_disk
+			pop d
+			; bc - sprite addr
+			; de - scr addr
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+			mvi a, TILE_DATA_RESTORE_TILE
+@exit:		ret
+
+; a tile data handler for a collision + draw a decal.
+; input:
+; b - tile data
+; c - tile idx in the room_tiles_data array.
+; a - decal_id
+; out:
+; a - tile_data that will be saved back into room_tiles_data
+room_tiledata_decal_collision_spawn:
+			add_a(2) ; to make a JMP_4 ptr
+			sta @restoreA+1
+			; scr_y = tile idx % ROOM_WIDTH
+			mvi a, %11110000
+			ana c
+			mov e, a
+			; c - tile_idx
+			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
+			mvi a, %00001111
+			ana c
+			rlc
+			adi >SCR_ADDR
+			mov d, a
+			; de - scr addr
+			push d
+
+			lxi h, __decals_collision_sprite_ptrs
+@restoreA:
+			mvi e, TEMP_BYTE
+			mvi d, 0
+			dad d
+			xchg
+			; de pptr to a sprite
+			mvi a, <__RAM_DISK_S_DECALS
+			call get_word_from_ram_disk
+			pop d
+			; bc - sprite addr
+			; de - scr addr
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+			mvi a, TILE_DATA_COLLISION
+			ret
+
+room_draw_on_scr:
 			; main scr
 			CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01_GFX)
-
+			ret
+room_draw_on_backbuffs:
 			; copy $a000-$ffff scr buffs to the ram-disk back buffer
 			; TODO: optimization. think of making copy process while the gameplay started.
 			lxi d, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
@@ -166,12 +257,7 @@ room_draw:
 			lxi b, SCR_BUFF_LEN * 3 / 32
 			mvi a, __RAM_DISK_S_BACKBUFF2
 			call copy_to_ram_disk32
-
-			; convert room_tiles_data into $8000 tiledata buffer in the ram-disk
-			;call room_tile_data_buff
-			CALL_RAM_DISK_FUNC(room_tile_data_buff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
 			ret
-
 
 ;=========================================================
 ; convert room_tiles_data into the tiledata buffer in the ram-disk

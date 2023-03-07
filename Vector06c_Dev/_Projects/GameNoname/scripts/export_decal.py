@@ -203,6 +203,30 @@ def make_empty_sprite_data(has_mask, width, height):
 
 	return [data]
 
+def sprites_ptrs_to_asm(label_prefix, source_j):
+	decals_walkable_j = source_j["decals_walkable"]
+	decals_collision_j = source_j["decals_collision"]
+
+	asm = f"			.byte 0,0  ; safety pair of bytes to support a stack renderer\n"
+	asm += f"{label_prefix}_walkable_sprite_ptrs: .word "
+
+	for i, sprite_name in enumerate(decals_walkable_j):
+		asm += f"{label_prefix}_{sprite_name}, "
+		if i < len(decals_walkable_j) -1:
+			asm += "0, "
+	
+	asm += "\n\n"
+
+	asm += f"			.byte 0,0  ; safety pair of bytes to support a stack renderer\n"
+	asm += f"{label_prefix}_collision_sprite_ptrs: .word "
+
+	for i, sprite_name in enumerate(decals_collision_j):
+		asm += f"{label_prefix}_{sprite_name}, "
+		if i < len(decals_walkable_j) -1:
+			asm += "0, "
+	asm += "\n\n"
+	return asm
+
 def sprites_to_asm(label_prefix, source_j, image):
 	sprites_j = source_j["sprites"]
 	asm = label_prefix + "_sprites:"
@@ -312,16 +336,17 @@ def export(source_j_path, asmSpritePath):
 	image = common.remap_colors(image, colors)
 
 	asm = "; " + source_j_path + "\n"
-	asm_sprites = asm + f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S" + "\n"
-	asm_sprites += asm + f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M" + "\n"
-	asm_sprites += sprites_to_asm("__" + source_name, source_j, image)
+	asm += f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S" + "\n"
+	asm += f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M" + "\n\n"
+	asm += sprites_ptrs_to_asm("__" + source_name, source_j)
+	asm += sprites_to_asm("__" + source_name, source_j, image)
 
 	# save asm
 	if not os.path.exists(asm_sprite_dir):
 		os.mkdir(asm_sprite_dir)
 
 	with open(asmSpritePath, "w") as file:
-		file.write(asm_sprites)
+		file.write(asm)
 
 def is_source_updated(source_j_path):
 	with open(source_j_path, "rb") as file:

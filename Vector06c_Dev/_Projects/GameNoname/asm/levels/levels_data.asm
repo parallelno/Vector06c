@@ -28,7 +28,11 @@ room_tiles_gfx_ptrs_end:
 ; %ffffDDDD, ffff - func_id, dddd - a func argument
 ; ffff == 0, walkable
 ;		d == 0 - no collision
-;		d == 1 - no collision + a tile is restored when a hero, a monster, or a bullet are on it
+;		d == 1 - no collision + restore back
+;		d >= 2 - no collision + restore back + a decal drawn on top of the tile to make a background diverse. decal_id = d
+;			decal_id == 2 - a bones (tiledata = 0*16+1 = 1)
+;			decal_id == 3 - a skull (tiledata = 2)
+
 ; ffff == 1, spawn a monster, monster_id = d
 ;		monster_id == 0 - skeleton (tiledata = 1*16+0=16)
 ;		monster_id == 1 - vampire (tiledata = 17)
@@ -41,15 +45,13 @@ room_tiles_gfx_ptrs_end:
 ; ffff == 4, teleport, room_id = d+32, go to 32-47 room
 ; ffff == 5, teleport, room_id = d+48, go to 48-63 room
 
-; ffff == 9, a damage pool. dddd = damage
-
 ; ffff == 10, an item. item_id = d ; a hero interacts with an them only when he collids with it.
 ;		item_id == 0 - a red potion
 ;		item_id == 1 - a blue potion
 ;		item_id == 2 - an item X1
 ;		item_id == 3 - an item X2
 ;		item_id == 4 - an item X3
-;		item_id == 5 - a coin
+;		item_id == 5 - a coin (tiledata = 10*16+5 = 165)
 ;		item_id == 6 - a small chest. small money reward
 ;		item_id == 7 - a big chest. big money reward
 ;		item_id == 8 - a chest with a weapon 1
@@ -61,26 +63,25 @@ room_tiles_gfx_ptrs_end:
 ;		item_id == 14 - a crate with a teleport under it to a unique location
 
 ; ffff == 11, keys/doors. keydoor_id = d ; a hero interacts with a key only when he collids with it. a door is a collider only. no collision when it's opened.
-;		item_id == 0 - a red key
-;		item_id == 1 - a blue key
-;		item_id == 2 - a X1 key
-;		item_id == 3 - a X2 key
-;		item_id == 4 - a red door horizontal L
-;		item_id == 5 - a red door horizontal R
-;		item_id == 6 - a blue door vertical U
-;		item_id == 7 - a blue door vertical D
-;		item_id == 8 - a X1 door vertical L
-;		item_id == 9 - a X1 door vertical R
-;		item_id == 10 - a X2 door vertical L
-;		item_id == 11 - a X2 door vertical R
+;		keydoor_id == 0 - a red key
+;		keydoor_id == 1 - a blue key
+;		keydoor_id == 2 - a X1 key
+;		keydoor_id == 3 - a X2 key
+;		keydoor_id == 4 - a red door horizontal L
+;		keydoor_id == 5 - a red door horizontal R
+;		keydoor_id == 6 - a blue door vertical U
+;		keydoor_id == 7 - a blue door vertical D
+;		keydoor_id == 8 - a X1 door vertical L
+;		keydoor_id == 9 - a X1 door vertical R
+;		keydoor_id == 10 - a X2 door vertical L
+;		keydoor_id == 11 - a X2 door vertical R
 
-; ffff == 12, decals. decal_id = d ; it draws on top of the tiles to make background diverse.
-;		item_id == 0 - a bones
-;		item_id == 1 - a skull
-;		item_id == 2 - a spider net
+; ffff == 12, ????
 
-; ffff == 13, a door. door_id = d
-; ffff == 14, a key. key_id = d
+; ffff == 13, a damage pool. dddd = damage
+
+; ffff == 14, collision with a decal drawn on top of the tile to make a background diverse. decal_id = d
+;		decal_id == 0 - a spider net
 
 ; ffff == 15,
 ;		d == %1111 - collision (tiledata = TILE_DATA_COLLISION)
@@ -88,13 +89,15 @@ room_tiles_gfx_ptrs_end:
 ;	 		back_id == 0 - torch front (tiledata = 15*16+0=241)
 ;   	    back_id == 1 - flag front (tiledata = 161)
 
+; if tiledata > 0 then a tile is restored when a hero, a monster, or a bullet are on it
+
 ; tiledata buffer has to follow room_tiles_gfx_ptrs because they are unpacked together
 room_tiles_data:
 			.storage ROOM_WIDTH * ROOM_HEIGHT
 
 ; to init each tile data in a room during a room initialization. check room.asm room_init_tiles_data func
 room_tiledata_funcs:
-			JMP_4(room_tile_data_copy)	; func_id = 0
+			JMP_4(room_tiledata_decal_walkable_spawn)	; func_id = 0
 			JMP_4(room_tiledata_monster_spawn)
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
@@ -108,7 +111,7 @@ room_tiledata_funcs:
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy)
+			JMP_4(room_tiledata_decal_collision_spawn)
 			JMP_4(room_tiledata_back_spawn)	; func_id = 15
 
 ; command that are handled by the level update func

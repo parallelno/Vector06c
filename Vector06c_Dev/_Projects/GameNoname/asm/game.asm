@@ -5,6 +5,7 @@
 .include "asm\\bullets\\bullets_consts.asm"
 .include "asm\\render\\draw_tile.asm"
 .include "asm\\render\\draw_back.asm"
+.include "asm\\render\\draw_decal.asm"
 .include "asm\\render\\sprite.asm"
 .include "asm\\render\\actor_macro.asm"
 .include "asm\\render\\actor.asm"
@@ -19,10 +20,9 @@
 
 game_init:
 			call levels_init
-			call level_init			
+			call level_init
 			call room_init
-			call room_draw
-			call game_ui_init			
+			call game_ui_init
 
 			xra a
 			sta update_request_counter

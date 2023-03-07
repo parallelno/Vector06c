@@ -12,15 +12,17 @@
 ; 		0 - one byte width, 
 ;		1 - two bytes width, 
 ; pixel format:
+; oddLine:
 ; 1st screen buff : 1 -> 2
 ; 2nd screen buff : 4 <- 3
 ; 3rd screen buff : 6 <- 5
 ; 4rd screen buff : 8 <- 7
 ; y++
-; 4rd screen buff : 7 -> 8
-; 3nd screen buff : 10 <- 9
-; 2st screen buff : 12 <- 11
-; 1st screen buff : 14 <- 13
+; evenLine:
+; 4rd screen buff : 9 -> 10
+; 3nd screen buff : 12 <- 11
+; 2st screen buff : 14 <- 13
+; 1st screen buff : 16 <- 15
 ; y++
 ; repeat for the next lines of the art data
 
@@ -63,7 +65,7 @@ draw_back_v:
 			mov e, a
 			adi $20
 
-@nextLine:
+@oddLine:
 @scr8:
 			pop b					
 			mov m, c				
@@ -91,6 +93,8 @@ draw_back_v:
 			inr l
 			dcr d
 			jz @restoreSP
+
+@evenLine:
 @scrE2:
 			pop b					
 			mov m, c				
@@ -117,7 +121,7 @@ draw_back_v:
 			
 			inr l
 			dcr d
-			jnz @nextLine			
+			jnz @oddLine			
 
 @restoreSP:		
 			lxi sp, TEMP_ADDR

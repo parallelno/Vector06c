@@ -40,7 +40,6 @@ level_update:
 			jnz @nextCommandCheck			
 			; load a new room
 			call room_init
-			call room_draw
 			call hero_init
 			xra a
 			lda	update_request_counter
