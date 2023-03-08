@@ -14,7 +14,7 @@ rooms_death_rate: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a monster
 rooms_break_rate: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a breakable item. 255 means no spawn
 rooms_runtime_data_end_addr:
 
-; the address table of tile graphics
+; tile gfx ptrs table
 room_tiles_gfx_ptrs:
 			.storage ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
 room_tiles_gfx_ptrs_end:
@@ -42,8 +42,8 @@ room_tiles_gfx_ptrs_end:
 ; ffff == 5, teleport to 48-63 room_id, room_id = d+48
 
 ; ffff == 10, an item. a hero interacts with it only when he collids with it. status of every item in the room is stored. item_id = d
-;		item_id == 0 - a red potion
-;		item_id == 1 - a blue potion
+;		item_id == 0 - a potion red 
+;		item_id == 1 - a potion blue
 ;		item_id == 2 - an item X1
 ;		item_id == 3 - an item X2
 ;		item_id == 4 - an item X3
@@ -57,18 +57,18 @@ room_tiles_gfx_ptrs_end:
 ;		item_id == 12 - a crate with a teleport under it to a unique location
 
 ; ffff == 11, keys/doors. a hero interacts with it only when he collids with it. a door is a collider only. no collision when it's opened. keydoor_id = d 
-;		keydoor_id == 0 - a red key
-;		keydoor_id == 1 - a blue key
+;		keydoor_id == 0 - a key red 
+;		keydoor_id == 1 - a key blue
 ;		keydoor_id == 2 - a X1 key
 ;		keydoor_id == 3 - a X2 key
-;		keydoor_id == 4 - a red door horizontal L
-;		keydoor_id == 5 - a red door horizontal R
-;		keydoor_id == 6 - a blue door vertical U
-;		keydoor_id == 7 - a blue door vertical D
-;		keydoor_id == 8 - a X1 door vertical L
-;		keydoor_id == 9 - a X1 door vertical R
-;		keydoor_id == 10 - a X2 door vertical L
-;		keydoor_id == 11 - a X2 door vertical R
+;		keydoor_id == 4 - a door 1 L
+;		keydoor_id == 5 - a door 1 R
+;		keydoor_id == 6 - a door 2 U
+;		keydoor_id == 7 - a door 2 D
+;		keydoor_id == 8 - a door 3 L
+;		keydoor_id == 9 - a door 3 R
+;		keydoor_id == 10 - a door 4 L
+;		keydoor_id == 11 - a door 4 R
 
 ; ffff == 12, a damage pool. dddd = damage
 

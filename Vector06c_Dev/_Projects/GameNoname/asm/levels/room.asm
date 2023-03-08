@@ -162,7 +162,7 @@ room_tiledata_back_spawn:
 ; out:
 ; a - tile_data that will be saved back into room_tiles_data
 room_tiledata_decal_walkable_spawn:
-			; if decal_id < 2, then just copy
+			; if decal_id < 2, then just copy tiledata
 			cpi TILE_DATA_RESTORE_TILE + 1
 			jc room_tile_data_copy
 
@@ -240,12 +240,10 @@ room_tiledata_decal_collision_spawn:
 ; input:
 ; b - tile data
 ; c - tile idx in the room_tiles_data array.
-; a - decal_collision_id
+; a - breakable_id
 ; out:
 ; a - tile_data that will be saved back into room_tiles_data
 room_tiledata_breakable_spawn:
-			add_a(2) ; to make a JMP_4 ptr
-			sta @restoreA+1
 			; scr_y = tile idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
