@@ -3,16 +3,19 @@ __RAM_DISK_S_DECALS = RAM_DISK_S
 __RAM_DISK_M_DECALS = RAM_DISK_M
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
-__decals_collision_sprite_ptrs: .word __decals_web1, 
+__decals_walkable_gfx_ptrs: .word __decals_bones, 0, __decals_skull, 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
-__decals_walkable_sprite_ptrs: .word __decals_bones, 0, __decals_skull, 
+__decals_collidable_gfx_ptrs: .word __decals_web1, 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
-__decals_breakable_sprite_ptrs: .word __decals_crate, 0, __decals_barrel, 
+__items_walkable_gfx_ptrs: .word __decals_coin, 0, __decals_key_blue, 0, __decals_potion_red, 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
-__decals_items_sprite_ptrs: .word __decals_coin, 0, __decals_key_blue, 0, __decals_potion_red, 
+__items_collidable_gfx_ptrs: .word __decals_coin, 
+
+			.byte 0,0  ; safety pair of bytes to support a stack renderer
+__breakable_gfx_ptrs: .word __decals_crate, 0, __decals_barrel, 
 
 __decals_sprites:
 			.byte 0,0  ; safety pair of bytes to support a stack renderer

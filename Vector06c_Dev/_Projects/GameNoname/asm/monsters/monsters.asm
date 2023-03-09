@@ -16,10 +16,10 @@ monsters_erase_runtime_data:
 ; hl - 	posX, posY
 ; a  - 	collider width
 ; c  - 	collider height
-; de -	monster data ptr + 1
 ; out:
-; collision 	- (hl) < MONSTER_RUNTIME_DATA_LAST
-; no collision 	- (hl) >= MONSTER_RUNTIME_DATA_LAST
+; no collision 	- (hl) >= MONSTER_RUNTIME_DATA_DESTR
+; collision 	- hl points to a collided monster_update_ptr+1, (hl) < MONSTER_RUNTIME_DATA_DESTR
+; uses b
 
 monsters_get_first_collided:
 			sta @colliderWidth+1
@@ -29,7 +29,7 @@ monsters_get_first_collided:
 			sta @colliderPosX+1
 			mov a, l
 			sta @colliderPosY+1
-			xchg
+			lxi h, monster_update_ptr+1
 
 @loop:
 			mov a, m

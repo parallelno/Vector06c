@@ -27,17 +27,17 @@ hero_sword_trail_init:
 
 			dcx h
 			mvi m, <hero_sword_trail_update
-			inx h 
+			inx h
 			mvi m, >hero_sword_trail_update
-			inx h 
+			inx h
 			mvi m, <hero_sword_trail_draw
-			inx h 
+			inx h
 			mvi m, >hero_sword_trail_draw
 
 			; advance hl to bullet_id
 			inx h
 			; do not set bullet_id because it is unnecessary for this weapon
-;@bullet_id:	
+;@bullet_id:
 			;mvi a, TEMP_BYTE
 			;mov m, a
 
@@ -59,10 +59,10 @@ hero_sword_trail_init:
 			mov c, a
 			; set posY
 			mov m, a
-			dcx h 
+			dcx h
 			mov m, b
 			; advance hl to bullet_pos_x+1
-			dcx h			
+			dcx h
 			; set posX
 			lda hero_pos_x+1
 
@@ -93,7 +93,7 @@ hero_sword_trail_init:
 			; c = posY
 			mov m, c
 			ret
-			
+
 
 ; anim and a gameplay logic update
 ; in:
@@ -112,7 +112,7 @@ hero_sword_trail_update:
 			inx h
 			; check if it's time to die
 			dcr m
-			jz @destroy			
+			jz @destroy
 
 @attkAnimUpdate:
 			; advance to bullet_anim_timer
@@ -124,7 +124,7 @@ hero_sword_trail_update:
 			jnc @skipAnimUpdate
 
 			; advance to bullet_anim_ptr
-			inx h			
+			inx h
 			; read the ptr to a current frame
 			mov e, m
 			inx h
@@ -157,14 +157,14 @@ hero_sword_trail_update:
 			inx h
 			dcr m
 			rnz
-			
-			; hl = bulletStatusDuration
+
+			; hl - ptr to bulletStatusDuration
 			; set the attack
 			mvi m, ATTK01_STATUS_ATTACK_DURATION
 			; advance and set bullet_status
 			dcx h
 			mvi m, ATTK01_STATUS_ATTACK
-			
+
 			; advance and reset bullet_anim_timer
 			inx_h(2)
 			mvi m, 0
@@ -179,8 +179,8 @@ hero_sword_trail_update:
 			mvi m, > hero_attack01_attk_r
 
 			; check enemies-attk01 sprite collision
-			; hl - bullet_anim_ptr+1
-			; advance hl to bullet_pos_x+1			
+			; hl - ptr to bullet_anim_ptr+1
+			; advance hl to bullet_pos_x+1
 			LXI_B_TO_DIFF(bullet_pos_x+1, bullet_anim_ptr+1)
 			dad b
 			; add a collision offset
@@ -188,17 +188,16 @@ hero_sword_trail_update:
 			inx_h(2)
 			mov e, m
 			lxi h, ATTK01_COLLISION_OFFSET_X_R<<8 | ATTK01_COLLISION_OFFSET_Y_R
-			dad d			
-
+			dad d
 			jmp @setCollisionSize
-@attkL:			
+@attkL:
 			mvi m, < hero_attack01_attk_l
 			inx h
 			mvi m, > hero_attack01_attk_l
 
 			; check enemies-attk01 sprite collision
-			; hl - bullet_anim_ptr+1
-			; advance hl to bullet_pos_x+1			
+			; hl - ptr to bullet_anim_ptr+1
+			; advance hl to bullet_pos_x+1
 			LXI_B_TO_DIFF(bullet_pos_x+1, bullet_anim_ptr+1)
 			dad b
 			; add a collision offset
@@ -209,15 +208,20 @@ hero_sword_trail_update:
 			dad d
 
 @setCollisionSize:
+			; store posXY
+			push h
+			; check if a bullet collides with a monster
 			mvi a, ATTK01_COLLISION_WIDTH-1
 			mvi c, ATTK01_COLLISION_HEIGHT-1
-			lxi d, monster_update_ptr+1
 			call monsters_get_first_collided
-			
-			; check if bullet collides with monster
-			mvi a, BULLET_RUNTIME_DATA_EMPTY
-			cmp m
-			rc ; return if no collision
+
+			; hl - ptr to a collided monster_update_ptr+1
+			mov a, m
+			cpi MONSTER_RUNTIME_DATA_DESTR
+			pop d
+			; de - posXY
+			; if not, check the tile it is on.
+			jnc @checkTiledata
 
 			; advance hl to monster_impacted_ptr
 			LXI_B_TO_DIFF(monster_impacted_ptr, monster_update_ptr+1)
@@ -228,7 +232,16 @@ hero_sword_trail_update:
 			mov d, m
 			xchg
 			pchl
-
+@checkTiledata:
+			; de - posXY 
+			lxi h, (ATTK01_COLLISION_WIDTH)<<8 | ATTK01_COLLISION_HEIGHT-1
+			dad d
+			CALL_RAM_DISK_FUNC(room_get_tiledata_by_coord, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89)
+			mov a, c
+			cpi 208
+@loop:
+			jnc @loop
+			ret
 
 ; draw a sprite into a backbuffer
 ; in:

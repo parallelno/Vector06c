@@ -182,9 +182,8 @@ room_tiledata_decal_walkable_spawn:
 			; de - scr addr
 			push d
 
-			lxi h, __decals_walkable_sprite_ptrs - JMP_4_LEN * 2 ; make decal_id == 2 corelates to 0 addr offset
-@restoreA:	mvi e, TEMP_BYTE
-			mvi d, 0
+			lxi h, __decals_walkable_gfx_ptrs - JMP_4_LEN * 2 ; make decal_id == 2 corelates to 0 addr offset
+@restoreA:	lxi d, TEMP_BYTE
 			dad d
 			xchg
 			; de pptr to a sprite
@@ -201,10 +200,10 @@ room_tiledata_decal_walkable_spawn:
 ; input:
 ; b - tile data
 ; c - tile idx in the room_tiles_data array.
-; a - decal_collision_id
+; a - decal_collidable_id
 ; out:
 ; a - tile_data that will be saved back into room_tiles_data
-room_tiledata_decal_collision_spawn:
+room_tiledata_decal_collidable_spawn:
 			add_a(2) ; to make a JMP_4 ptr
 			sta @restoreA+1
 			; scr_y = tile idx % ROOM_WIDTH
@@ -221,9 +220,8 @@ room_tiledata_decal_collision_spawn:
 			; de - scr addr
 			push d
 
-			lxi h, __decals_collision_sprite_ptrs
-@restoreA:	mvi e, TEMP_BYTE
-			mvi d, 0
+			lxi h, __decals_collidable_gfx_ptrs
+@restoreA:	lxi d, TEMP_BYTE
 			dad d
 			xchg
 			; de pptr to a sprite
@@ -244,6 +242,8 @@ room_tiledata_decal_collision_spawn:
 ; out:
 ; a - tile_data that will be saved back into room_tiles_data
 room_tiledata_breakable_spawn:
+			add_a(2) ; to make a JMP_4 ptr
+			sta @restoreA+1
 			; scr_y = tile idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
@@ -258,9 +258,8 @@ room_tiledata_breakable_spawn:
 			; de - scr addr
 			push d
 
-			lxi h, __decals_collision_sprite_ptrs
-@restoreA:	mvi e, TEMP_BYTE
-			mvi d, 0
+			lxi h, __breakable_gfx_ptrs
+@restoreA:	lxi d, TEMP_BYTE
 			dad d
 			xchg
 			; de pptr to a sprite
@@ -270,7 +269,7 @@ room_tiledata_breakable_spawn:
 			; bc - sprite addr
 			; de - scr addr
 			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
-			mvi a, TILE_DATA_COLLISION
+			mvi a, TILE_DATA_BREAKABLE
 			ret
 
 room_draw_on_scr:
@@ -472,27 +471,30 @@ room_check_walkable_tiles:
 			ani TILE_DATA_FUNC_MASK
 			ret
 
-; collects tiledata of tiles which intersect with a sprite
-; this func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
+; collects tiledata of tiles that intersect with a sprite
+; this func uses the tiledata buffer in the ram-disk
 ; ex. CALL_RAM_DISK_FUNC(room_get_tile_data_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; d - posX
 ; e - posY
 ; b - width-1
 ; c - height-1
-; out:
+; out: room_tile_collision_data
+; hl - (room_tile_collision_data+2)
+; de - (room_tile_collision_data)
 room_tile_collision_data:
 			; tile_data layout:
-			; (bottom-left), (top-left), (top_right), (bottom-right)
+			; (bottom-left), (top-left), (top-right), (bottom-right)
 			.byte 0, 0, 0, 0,		
 ; Z flag = 1 if all tiles have tile_data func==0
+; 364 cc
 room_get_tile_data_around_sprite:
 			; calc the top-right corner addr
 			mov a, d
 			add b
 			ani %11110000
 			rrc_(3)
-			adi >BACK_BUFF2_ADDR ; $80
+			adi >BACK_BUFF2_ADDR
 			mov h, a
 			mov a, e
 			add c
@@ -503,7 +505,7 @@ room_get_tile_data_around_sprite:
 			mvi a, %11110000
 			ana h
 			rrc_(3)
-			adi >BACK_BUFF2_ADDR ; $80
+			adi >BACK_BUFF2_ADDR
 			mov h, a
 
 			; check the bottom-left corner
@@ -537,36 +539,25 @@ room_get_tile_data_around_sprite:
 			ora e
 			ani TILE_DATA_FUNC_MASK
 			ret
-/*
-; check a collision of sprite pixel against a tiledata
-; this func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
-; call ex. CALL_RAM_DISK_FUNC(room_check_tile_data_collision_pxl, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-; in:
-; d - posX
-; e - posY
-; b - offset_x
-; c - offset_y
-; out:
-; Z flag = 1 if no collision
-room_check_tile_data_collision_pxl:
-			; calc the top-right corner addr
-			mov a, d
-			add b
-			ani %11110000
-			rrc_(3)
-			adi $80
-			mov h, a
-			mov a, e
-			add c
-			mov l, a
 
-			; check the collision
-			mov a, m
-			adi 1
+; get a tiledata by coordXY
+; this func uses the tiledata buffer in the ram-disk
+; call ex. CALL_RAM_DISK_FUNC(room_get_tiledata_by_coord, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89)
+; in:
+; hl - posXY
+; out:
+; c - a tiledata
+room_get_tiledata_by_coord:
+			mvi a, %11110000
+			ana h
+			rrc_(3)
+			adi >BACK_BUFF2_ADDR
+			mov h, a
+			mov c, m
 			ret
-*/
+/*
 ; collects a tiledata around a sprite if it's a collision data (equals $ff)
-; this func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
+; this func uses the tiledata buffer in the ram-disk
 ; ex. CALL_RAM_DISK_FUNC(room_check_tile_data_collision, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; d - posX
@@ -576,9 +567,10 @@ room_check_tile_data_collision_pxl:
 ; out:
 ; c - collision data x 4 to make a ptr to a jmp table with 4 byte alignment
 		; a bits layout in C register:
-		; 0,0,0,0, (bottom-left), (bottom-right), (top_right), (top-left), 0
+		; 0,0, (bottom-left), (bottom-right), (top_right), (top-left), 0, 0
 		; if it's collision, bit is ON.
 ; Z flag = 1 if no collision
+; 400 cc
 
 room_check_tile_data_collision:
 			; calc the top-right corner addr
@@ -586,7 +578,7 @@ room_check_tile_data_collision:
 			add b
 			ani %11110000
 			rrc_(3)
-			adi $80
+			adi >BACK_BUFF2_ADDR
 			mov h, a
 			mov a, e
 			add c
@@ -597,12 +589,12 @@ room_check_tile_data_collision:
 			mvi a, %11110000
 			ana h
 			rrc_(3)
-			adi $80
+			adi >BACK_BUFF2_ADDR
 			mov h, a
 
 			; check the bottom-left corner
 			mov a, m
-			adi 1
+			adi 256-TILE_DATA_BREAKABLE
 			mvi a, 0
 			ral
 			mov c, a
@@ -611,14 +603,14 @@ room_check_tile_data_collision:
 			mov b, h ; tmp
 			mov h, d
 
-			mvi d, 1
+			mvi d, 256-TILE_DATA_BREAKABLE
 			mov a, m
 			add d
 			mov a, c
 			ral
 			mov c, a
 
-			; check the top-right scr addr
+			; check the top-right corner
 			mov l, e
 			mov a, m
 			add d
@@ -636,3 +628,4 @@ room_check_tile_data_collision:
 			add a
 			mov c, a			
 			ret
+*/

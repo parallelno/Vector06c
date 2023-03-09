@@ -41,43 +41,45 @@ room_tiles_gfx_ptrs_end:
 ; ffff == 4, teleport to 32-47 room_id, room_id = d+32
 ; ffff == 5, teleport to 48-63 room_id, room_id = d+48
 
-; ffff == 10, an item. a hero interacts with it only when he collids with it. status of every item in the room is stored. item_id = d
-;		item_id == 0 - a potion red 
-;		item_id == 1 - a potion blue
-;		item_id == 2 - an item X1
-;		item_id == 3 - an item X2
-;		item_id == 4 - an item X3
-;		item_id == 5 - a coin (tiledata = 10*16+5 = 165)
-;		item_id == 6 - a small chest. small money reward
-;		item_id == 7 - a big chest. big money reward
-;		item_id == 8 - a chest with a weapon 1
-;		item_id == 9 - a chest with a weapon 2
-;		item_id == 10 - a chest with a weapon 3
-;		item_id == 11 - a monster spawner chest. it spawns a chest monster when opened
-;		item_id == 12 - a crate with a teleport under it to a unique location
+; ffff == 10, a walkable item. a hero interacts with it only when he hits it with a weapon. status of every item in the room is stored. item_walkable_id = d
+;		item_walkable_id == 0 - a key red
+;		item_walkable_id == 1 - a key blue
+;		item_walkable_id == 2 - a key 1
+;		item_walkable_id == 3 - a key 2
+;		item_walkable_id == 4 - a potion red 
+;		item_walkable_id == 5 - a potion blue
+;		item_walkable_id == 6 - an item 1
+;		item_walkable_id == 7 - an item 2
+;		item_walkable_id == 8 - an item 3
+;		item_walkable_id == 9 - a coin (tiledata = 10*16+5 = 165) 
+;		item_walkable_id == 10 - a damage pool.
+;		item_walkable_id == 11 - a slow pool.
 
-; ffff == 11, keys/doors. a hero interacts with it only when he collids with it. a door is a collider only. no collision when it's opened. keydoor_id = d 
-;		keydoor_id == 0 - a key red 
-;		keydoor_id == 1 - a key blue
-;		keydoor_id == 2 - a X1 key
-;		keydoor_id == 3 - a X2 key
-;		keydoor_id == 4 - a door 1 L
-;		keydoor_id == 5 - a door 1 R
-;		keydoor_id == 6 - a door 2 U
-;		keydoor_id == 7 - a door 2 D
-;		keydoor_id == 8 - a door 3 L
-;		keydoor_id == 9 - a door 3 R
-;		keydoor_id == 10 - a door 4 L
-;		keydoor_id == 11 - a door 4 R
+; ffff == 11, ???
+; 		every tiledata >= TILE_DATA_BREAKABLE is considered to be colladable
+; ffff == 12, a collidable item. a hero interacts with it only when he collids with it or hits it with a weapon. collidable_id = d
+;		collidable_id == 0 - a small chest. small money reward
+;		collidable_id == 1 - a big chest. big money reward
+;		collidable_id == 2 - a chest with a weapon 1
+;		collidable_id == 3 - a chest with a weapon 2
+;		collidable_id == 4 - a chest with a weapon 3
+;		collidable_id == 5 - a door 1a, there "a" and "b" mean left and right or top and bottom
+;		collidable_id == 6 - a door 1b
+;		collidable_id == 7 - a door 2a
+;		collidable_id == 8 - a door 2b
+;		collidable_id == 9 - a door 3a
+;		collidable_id == 10 - a door 3b
+;		collidable_id == 11 - a door 4a
+;		collidable_id == 12 - a door 4b
+;		collidable_id == 13 - a monster spawner chest. it spawns a chest monster when opened
+;		collidable_id == 14 - a crate with a teleport under it to a unique location
 
-; ffff == 12, a damage pool. dddd = damage
-
-; ffff == 13, a breakable item, a hero can only break it and get a random reward. a room tracks how many it was broken to manage a reward and a spawn rate. breakable_id = d
+; ffff == 13, a breakable item, a hero can only break it with a hit and get a random reward. a room tracks how many it was broken to manage a reward and a spawn rate. breakable_id = d
 ;		breakable_id == 0 - a barrel (tiledata = 13*16+0 = 208)
 ;		breakable_id == 1 - a crate
 
-; ffff == 14, collision with a decal drawn on top of the tile to make a background diverse. decal_collision_id = d
-;		decal_collision_id == 0 - a spider web
+; ffff == 14, a collidable decal drawn on top of the tile to make a background diverse. decal_collidable_id = d
+;		decal_collidable_id == 0 - a spider web
 
 ; ffff == 15,
 ;		d == %1111 - collision (tiledata = TILE_DATA_COLLISION)
@@ -85,7 +87,7 @@ room_tiles_gfx_ptrs_end:
 ;	 		back_id == 0 - torch front (tiledata = 15*16+0=241)
 ;   	    back_id == 1 - flag front (tiledata = 161)
 
-; if tiledata > 0 then a tile is restored when a hero, a monster, or a bullet are on it
+; if tiledata > 0 then a tile is restored on the screen when a hero, a monster, or a bullet on it
 
 ; tiledata buffer has to follow room_tiles_gfx_ptrs because they are unpacked together
 room_tiles_data:
@@ -107,7 +109,7 @@ room_tiledata_funcs:
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tile_data_copy)
 			JMP_4(room_tiledata_breakable_spawn)
-			JMP_4(room_tiledata_decal_collision_spawn)
+			JMP_4(room_tiledata_decal_collidable_spawn)
 			JMP_4(room_tiledata_back_spawn)	; func_id = 15
 
 ; command that are handled by the level update func

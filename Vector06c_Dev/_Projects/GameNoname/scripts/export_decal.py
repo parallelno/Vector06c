@@ -210,7 +210,7 @@ def lists_of_sprites_ptrs_to_asm(label_prefix, source_j):
 		list_j = source_j["lists"][list_name]
 
 		asm += f"			.byte 0,0  ; safety pair of bytes to support a stack renderer\n"
-		asm += f"{label_prefix}_{list_name}_sprite_ptrs: .word "
+		asm += f"__{list_name}_gfx_ptrs: .word "
 
 		for i, sprite_name in enumerate(list_j):
 			asm += f"{label_prefix}_{sprite_name}, "
