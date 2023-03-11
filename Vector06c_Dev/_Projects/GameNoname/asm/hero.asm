@@ -49,40 +49,40 @@ hero_data_next_pptr:	.word monster_data_next_pptr
 hero_collision_func_table:
 			; bit layout:
 			; 0, 0, (bottom-left), (bottom-right), (top_right), (top-left), 0, 0
-			JMP_4( hero_no_collision)
-			JMP_4( hero_check_collision_top_left)
-			JMP_4( hero_check_collision_top_right)
-			JMP_4( hero_move_horizontally)
-			JMP_4( hero_check_collision_bottom_right)
-			JMP_4( hero_check_tiledata)
-			JMP_4( hero_move_vertically)
-			JMP_4( hero_check_tiledata)
-			JMP_4( hero_check_collision_bottom_left)
-			JMP_4( hero_move_vertically)
-			JMP_4( hero_check_tiledata)
-			JMP_4( hero_check_tiledata)
-			JMP_4( hero_move_horizontally)
-			JMP_4( hero_check_tiledata)
-			JMP_4( hero_check_tiledata)
-			JMP_4( hero_check_tiledata)
+			jmp_4( hero_no_collision)
+			jmp_4( hero_check_collision_top_left)
+			jmp_4( hero_check_collision_top_right)
+			jmp_4( hero_move_horizontally)
+			jmp_4( hero_check_collision_bottom_right)
+			jmp_4( hero_check_tiledata)
+			jmp_4( hero_move_vertically)
+			jmp_4( hero_check_tiledata)
+			jmp_4( hero_check_collision_bottom_left)
+			jmp_4( hero_move_vertically)
+			jmp_4( hero_check_tiledata)
+			jmp_4( hero_check_tiledata)
+			jmp_4( hero_move_horizontally)
+			jmp_4( hero_check_tiledata)
+			jmp_4( hero_check_tiledata)
+			jmp_4( hero_check_tiledata)
 
-; funcs to handle the tile data. more info is in level_data.asm->room_tiles_data
+; funcs to handle the tiledata. more info is in level_data.asm->room_tiledata
 hero_tile_func_table:
-			JMP_4( 0)						; func_id == 1
-			JMP_4( hero_tile_func_teleport)	; func_id == 2
-			JMP_4( 0)						; func_id == 3
-			JMP_4( 0)						; func_id == 4
-			JMP_4( 0)						; func_id == 5
-			JMP_4( 0)						; func_id == 6
-			JMP_4( 0)						; func_id == 7
-			JMP_4( 0)						; func_id == 8
-			JMP_4( 0)						; func_id == 9
-			JMP_4( 0)						; func_id == 10
-			JMP_4( 0)						; func_id == 11
-			JMP_4( 0)						; func_id == 12
-			JMP_4( 0)						; func_id == 13
-			JMP_4( 0)						; func_id == 14
-			JMP_4( hero_tile_func_nothing)	; func_id == 15 (collision) called only when a hero is stuck into collision tiles
+			jmp_4( 0)						; func_id == 1
+			jmp_4( hero_tile_func_teleport)	; func_id == 2
+			jmp_4( 0)						; func_id == 3
+			jmp_4( 0)						; func_id == 4
+			jmp_4( 0)						; func_id == 5
+			jmp_4( 0)						; func_id == 6
+			jmp_4( 0)						; func_id == 7
+			jmp_4( 0)						; func_id == 8
+			jmp_4( 0)						; func_id == 9
+			jmp_4( 0)						; func_id == 10
+			jmp_4( 0)						; func_id == 11
+			jmp_4( 0)						; func_id == 12
+			jmp_4( 0)						; func_id == 13
+			jmp_4( 0)						; func_id == 14
+			ret_4()							; func_id == 15 (collision) called only when a hero is stuck into collision tiles
 
 hero_init:
 			call hero_idle_start
@@ -304,8 +304,8 @@ hero_update_temp_pos:
 			mov d, b ; posX
 			mov e, h ; posY
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(room_get_tile_data_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			jz hero_no_collision_no_tiledata; if there is no tiledata to check, then move a hero and return
+			CALL_RAM_DISK_FUNC(room_get_tiledata_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			jz hero_no_collision_no_tiledata;  ; if there is no tiledata to analize, move a hero and return
 @collides:
 			; check if there is any collidable tiledata
 			; de - (bottom-left), (top-left), 
@@ -314,7 +314,7 @@ hero_update_temp_pos:
 			; (bottom-left), (bottom-right), (top_right), (top-left), 0, 0
 			
 			; check the bottom-left corner
-			mvi b, 256-TILE_DATA_BREAKABLE
+			mvi b, 256-TILEDATA_COLLIDABLE
 			mov a, e
 			add b
 			mvi a, 0
@@ -350,19 +350,19 @@ hero_update_temp_pos:
 			dad b
 			pchl
 
-; handle tile_data around a hero.
+; handle tiledata around a hero.
 hero_check_tiledata:
 			lxi h, hero_pos_x+1
 			mov d, m
 			inx_h(2)
 			mov e, m
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(room_get_tile_data_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			rz
+			CALL_RAM_DISK_FUNC(room_get_tiledata_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			rz ; return if there is no tiledata to analize
 hero_do_not_get_tiledata_around:	
-			lxi h, room_tile_collision_data
+			lxi h, room_collision_tiledata
 			mvi c, 4
-@loop:		TILE_DATA_HANDLE_FUNC_CALL(hero_tile_func_table-JMP_4_LEN, true)
+@loop:		TILEDATA_HANDLE_FUNC_CALL(hero_tile_func_table-JMP_4_LEN, true)
 			inx h
 			dcr c
 			jnz @loop
@@ -552,12 +552,6 @@ hero_move_vertically:
 			shld hero_pos_y
 			jmp hero_check_tiledata
 
-hero_tile_func_nothing:
-			; bypass "ret"s to return from the hero_update func
-			pop psw
-			pop psw
-			ret
-
 ; load a new room with room_id, move the hero to an
 ; appropriate position based on his current posXY
 ; input:
@@ -630,12 +624,11 @@ hero_attack_start:
 
 			lxi h, hero_r_attk
 			shld hero_anim_addr
-			jmp  hero_sword_trail_init
+			jmp  hero_sword_init
 @setAnimAttkL:
 			lxi h, hero_l_attk
 			shld hero_anim_addr
-			jmp hero_sword_trail_init
-			.closelabels
+			jmp hero_sword_init
 
 hero_attack_update:
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_ATTACK)
@@ -826,7 +819,7 @@ hero_erase:
 			mvi a, -$20 ; advance DE to SCR_ADDR_0 to check the collision, to decide if we need to restore a beckground
 			add d
 			mov d, a
-			CALL_RAM_DISK_FUNC(room_check_non_zero_tiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(room_check_non_zero_tiledata_under_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			pop d
 			pop h
 			jnz sprite_copy_to_back_buff_v ; restore a background

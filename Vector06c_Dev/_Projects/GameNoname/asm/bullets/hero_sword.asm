@@ -1,38 +1,55 @@
 ; statuses.
 ; a status describes what set of animations and behavior is active
 ; for ex. HERO_STATUS_ATTACK plays hero_attk_r or hero_attk_l depending on the direction and it spawns a weapon trail
-ATTK01_STATUS_ATTACK = 0
+HERO_SWORD_STATUS_ATTACK = 0
 
 ; duration of statuses (in updateDurations)
-ATTK01_STATUS_INVIS_DURATION	= 6
-ATTK01_STATUS_ATTACK_DURATION	= 8
+HERO_SWORD_STATUS_INVIS_DURATION	= 6
+HERO_SWORD_STATUS_ATTACK_DURATION	= 8
 
 ; animation speed (the less the slower, 0-255, 255 means next frame every update)
-ATTK01_ANIM_SPEED_ATTACK	= 50
+HERO_SWORD_ANIM_SPEED_ATTACK	= 50
 
 ; gameplay
-ATTK01_DAMAGE = 1
-ATTK01_COLLISION_WIDTH	= 11
-ATTK01_COLLISION_HEIGHT	= 16
-ATTK01_COLLISION_OFFSET_X_R = 8
-ATTK01_COLLISION_OFFSET_Y_R = 0
+HERO_SWORD_DAMAGE = 1
+HERO_SWORD_COLLISION_WIDTH	= 11
+HERO_SWORD_COLLISION_HEIGHT	= 16
+HERO_SWORD_COLLISION_OFFSET_X_R = 8
+HERO_SWORD_COLLISION_OFFSET_Y_R = 0
 
-ATTK01_COLLISION_OFFSET_X_L = <(-3)
-ATTK01_COLLISION_OFFSET_Y_L = 0
+HERO_SWORD_COLLISION_OFFSET_X_L = <(-3)
+HERO_SWORD_COLLISION_OFFSET_Y_L = 0
 
-; in:
-hero_sword_trail_init:
+; funcs to handle the tiledata. tiledata format is in level_data.asm->room_tiledata
+hero_sword_tile_func_table:
+			ret_4()								; func_id == 1 ; spawn a monster
+			ret_4()								; func_id == 2 ; teleport
+			ret_4()								; func_id == 3 ; teleport
+			ret_4()								; func_id == 4 ; teleport
+			ret_4()								; func_id == 5 ; teleport
+			ret_4()								; func_id == 6
+			ret_4()								; func_id == 7
+			ret_4()								; func_id == 8
+			ret_4()								; func_id == 9
+			ret_4()								; func_id == 10
+			ret_4()								; func_id == 11
+			ret_4()								; func_id == 12
+			jmp_4( hero_sword_func_breakable)	; func_id == 13 ; breakable
+			ret_4()								; func_id == 14
+			ret_4()								; func_id == 15 ; collision
+
+hero_sword_init:
 			call bullets_get_empty_data_ptr
 			; hl - ptr to bullet_update_ptr+1
 
 			dcx h
-			mvi m, <hero_sword_trail_update
+			mvi m, <hero_sword_update
 			inx h
-			mvi m, >hero_sword_trail_update
+			mvi m, >hero_sword_update
 			inx h
-			mvi m, <hero_sword_trail_draw
+			mvi m, <hero_sword_draw
 			inx h
-			mvi m, >hero_sword_trail_draw
+			mvi m, >hero_sword_draw
 
 			; advance hl to bullet_id
 			inx h
@@ -46,7 +63,7 @@ hero_sword_trail_init:
 			mvi m, BULLET_STATUS_INVIS
 			; advance and set bullet_status_timer
 			inx h
-			mvi m, ATTK01_STATUS_INVIS_DURATION
+			mvi m, HERO_SWORD_STATUS_INVIS_DURATION
 
 			; tmp b = 0
 			mvi b, 0
@@ -98,7 +115,7 @@ hero_sword_trail_init:
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to bullet_update_ptr in the runtime data
-hero_sword_trail_update:
+hero_sword_update:
 			; advance to bullet_status
 			LXI_H_TO_DIFF(bullet_status, bullet_update_ptr)
 			dad d
@@ -119,7 +136,7 @@ hero_sword_trail_update:
 			inx h
 			; update it
 			mov a, m
-			adi ATTK01_ANIM_SPEED_ATTACK
+			adi HERO_SWORD_ANIM_SPEED_ATTACK
 			mov m, a
 			jnc @skipAnimUpdate
 
@@ -160,10 +177,10 @@ hero_sword_trail_update:
 
 			; hl - ptr to bulletStatusDuration
 			; set the attack
-			mvi m, ATTK01_STATUS_ATTACK_DURATION
+			mvi m, HERO_SWORD_STATUS_ATTACK_DURATION
 			; advance and set bullet_status
 			dcx h
-			mvi m, ATTK01_STATUS_ATTACK
+			mvi m, HERO_SWORD_STATUS_ATTACK
 
 			; advance and reset bullet_anim_timer
 			inx_h(2)
@@ -174,9 +191,9 @@ hero_sword_trail_update:
 			ora a
 			jz @attkL
 @attkR:
-			mvi m, < hero_attack01_attk_r
+			mvi m, < hero_sword_attk_r
 			inx h
-			mvi m, > hero_attack01_attk_r
+			mvi m, > hero_sword_attk_r
 
 			; check enemies-attk01 sprite collision
 			; hl - ptr to bullet_anim_ptr+1
@@ -187,13 +204,13 @@ hero_sword_trail_update:
 			mov d, m
 			inx_h(2)
 			mov e, m
-			lxi h, ATTK01_COLLISION_OFFSET_X_R<<8 | ATTK01_COLLISION_OFFSET_Y_R
+			lxi h, HERO_SWORD_COLLISION_OFFSET_X_R<<8 | HERO_SWORD_COLLISION_OFFSET_Y_R
 			dad d
 			jmp @setCollisionSize
 @attkL:
-			mvi m, < hero_attack01_attk_l
+			mvi m, < hero_sword_attk_l
 			inx h
-			mvi m, > hero_attack01_attk_l
+			mvi m, > hero_sword_attk_l
 
 			; check enemies-attk01 sprite collision
 			; hl - ptr to bullet_anim_ptr+1
@@ -204,15 +221,15 @@ hero_sword_trail_update:
 			mov d, m
 			inx_h(2)
 			mov e, m
-			lxi h, ATTK01_COLLISION_OFFSET_X_L<<8 | ATTK01_COLLISION_OFFSET_Y_L
+			lxi h, HERO_SWORD_COLLISION_OFFSET_X_L<<8 | HERO_SWORD_COLLISION_OFFSET_Y_L
 			dad d
 
 @setCollisionSize:
 			; store posXY
 			push h
 			; check if a bullet collides with a monster
-			mvi a, ATTK01_COLLISION_WIDTH-1
-			mvi c, ATTK01_COLLISION_HEIGHT-1
+			mvi a, HERO_SWORD_COLLISION_WIDTH-1
+			mvi c, HERO_SWORD_COLLISION_HEIGHT-1
 			call monsters_get_first_collided
 
 			; hl - ptr to a collided monster_update_ptr+1
@@ -234,17 +251,24 @@ hero_sword_trail_update:
 			pchl
 @checkTiledata:
 			; de - posXY 
-			lxi h, (ATTK01_COLLISION_WIDTH)<<8 | ATTK01_COLLISION_HEIGHT-1
-			dad d
-			CALL_RAM_DISK_FUNC(room_get_tiledata_by_coord, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89)
-			mov a, c
-			cpi 208
-@loop:
-			jnc @loop
+			lxi b, (HERO_SWORD_COLLISION_WIDTH-1)<<8 | HERO_SWORD_COLLISION_HEIGHT-1
+			CALL_RAM_DISK_FUNC(room_get_tiledata_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			rz ; return if the is no tiledata to analize
+
+			lxi h, room_collision_tiledata
+			mvi c, 4
+@loop:		TILEDATA_HANDLE_FUNC_CALL(hero_sword_tile_func_table-JMP_4_LEN, true)
+			inx h
+			dcr c
+			jnz @loop
+			ret
+
+hero_sword_func_breakable:
+			call room_handle_tiledata_under_sprite
 			ret
 
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
-hero_sword_trail_draw:
-			BULLET_DRAW(sprite_get_scr_addr_hero_attack01, __RAM_DISK_S_HERO_ATTACK01)
+hero_sword_draw:
+			BULLET_DRAW(sprite_get_scr_addr_hero_sword, __RAM_DISK_S_HERO_SWORD)

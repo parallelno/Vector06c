@@ -244,7 +244,13 @@
 		.endif
 .endmacro
 		
-.macro	JMP_4(DST_ADDR) ; for a jmp table with 4 byte allignment
+; for a jmp table with 4 byte allignment
+.macro	jmp_4(DST_ADDR)
 			jmp DST_ADDR
 			nop
+.endmacro
+; for a jmp table with 4 byte allignment
+.macro ret_4() ; 
+			ret
+			nop_(3)
 .endmacro

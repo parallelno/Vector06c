@@ -5,7 +5,7 @@ room_init:
 			call room_data_copy			
 			call room_init_tiles_gfx
 			call room_draw_on_scr
-			call room_init_tiles_data
+			call room_handle_room_tiledata
 			; erase a back buffer $a000-$ffff in the ram-disk
 			; TODO: perhaps we do not need to erase a back buffer.
 			; because we will restore a background tiles
@@ -15,15 +15,15 @@ room_init:
 
 			call room_draw_on_backbuffs
 
-			; convert room_tiles_data into BACKBUFF2 buffer
-			;call room_tile_data_buff
-			CALL_RAM_DISK_FUNC(room_tile_data_buff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)			
+			; convert room_tiledata into BACKBUFF2 buffer
+			;call room_init_tiledata_buff
+			CALL_RAM_DISK_FUNC(room_init_tiledata_buff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)			
 			ret
 
-; uncompress room gfx tile idx buffer + room tile data buffer into the room_tiles_gfx_ptrs + offset
+; uncompress room gfx tile idx buffer + room tiledata buffer into the room_tiles_gfx_ptrs + offset
 ; offset = (size of room_tiles_gfx_ptrs buffer) / 2. the result of the copy operation is
 ; after copying room tile idxs occupy the second half of the room_tiles_gfx_ptrs, and
-; after copying room tile data occupies the room_tiles_data
+; after copying room tiledata occupies the room_tiledata
 ; packed room data has to be stored into $8000-$FFFF segment to be properly unzipped
 room_data_copy:
 			; convert a room_idx into the room gfx tile idx buffer addr like __level01_room00 or __level01_room01, etc
@@ -44,7 +44,7 @@ room_data_copy:
 			mov d, b
 			mov e, c
 
-			; copy room gfx tile idxs + room tile data into the room_tiles_gfx_ptrs + offset
+			; copy room gfx tile idxs + room tiledata into the room_tiles_gfx_ptrs + offset
 			; offset = (room_tiles_gfx_ptrs_end - room_tiles_gfx_ptrs) / 2
 			lxi b, room_tiles_gfx_ptrs + (room_tiles_gfx_ptrs_end - room_tiles_gfx_ptrs) / 2
 			CALL_RAM_DISK_FUNC(dzx0, __RAM_DISK_M_LEVEL01_DATA | RAM_DISK_M_8F)
@@ -94,17 +94,17 @@ room_init_tiles_gfx:
 			jnz @loop
 			ret
 
-; calls the tile data handler func to spawn spawn a monster, etc
-room_init_tiles_data:
-			; handle the tile data calling tile data funcs
-			lxi h, room_tiles_data
+; calls the tiledata handler func to spawn spawn a monster, etc
+room_handle_room_tiledata:
+			; handle the tiledata calling tiledata funcs
+			lxi h, room_tiledata
 			mvi c, 0
 @loop:
 			mov b, m
 			push b
-			TILE_DATA_HANDLE_FUNC_CALL(room_tiledata_funcs)
+			TILEDATA_HANDLE_FUNC_CALL(room_tiledata_funcs)
 			pop b
-			mov m, a ; save tile_data back into room_tiles_data. funcs (ex. burner_init etc.) can replace A with 0 to make it walkable
+			mov m, a ; save tiledata back into room_tiledata. funcs (ex. burner_init etc.) can replace A with 0 to make it walkable
 			inx h
 			inr c
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
@@ -112,61 +112,61 @@ room_init_tiles_data:
 			jnz @loop
 			ret
 
-; a tile data handler. it just copies the tiledata.
-; it copies the tile data byte into the room_tiles_data as it is
+; a tiledata handler. it just copies the tiledata.
+; it copies the tiledata byte into the room_tiledata as it is
 ; input:
-; b - tile data
+; b - tiledata
 ; out:
-; a - tile_data that will be saved back into room_tiles_data
-room_tile_data_copy:
-            ; just return the same tile data
+; a - tiledata that will be saved back into room_tiledata
+room_tiledata_copy:
+            ; just return the same tiledata
 			mov a, b
 			ret
 
-; a tile data handler to spawn a monster by its id.
+; a tiledata handler to spawn a monster by its id.
 ; input:
-; b - tile data
-; c - tile idx in the room_tiles_data array.
+; b - tiledata
+; c - tile idx in the room_tiledata array.
 ; a - monster_id
 ; out:
-; a - tile_data that will be saved back into room_tiles_data
+; a - tiledata that will be saved back into room_tiledata
 room_tiledata_monster_spawn:
 			; get a monster init func addr ptr
 			lxi h, monsters_inits
-			add_a(2) ; to make a JMP_4 ptr
+			add_a(2) ; to make a jmp_4 ptr
 			mov e, a
 			mvi d, 0
 			dad d
 			; call a monster init func
 			pchl
 
-; a tile data handler for a collision + spawn an animated back by its id.
-; if id == TILE_DATA_FUNC_ID_COLLISION, it does not spawn an animated back
+; a tiledata handler for a collision + spawn an animated back by its id.
+; if id == TILEDATA_FUNC_ID_COLLISION, it does not spawn an animated back
 ; input:
-; b - tile data
-; c - tile idx in the room_tiles_data array.
+; b - tiledata
+; c - tile idx in the room_tiledata array.
 ; a - back_id
 ; out:
-; a - tile_data that will be saved back into room_tiles_data
+; a - tiledata that will be saved back into room_tiledata
 room_tiledata_back_spawn:
-			cpi TILE_DATA_FUNC_ID_COLLISION
+			cpi TILEDATA_FUNC_ID_COLLISION
 			jnz backs_spawn
-			mvi a, TILE_DATA_COLLISION
+			mvi a, TILEDATA_COLLISION
 			ret
 
-; a tile data handler for non-collision + draw a decal.
+; a tiledata handler for non-collision + draw a decal.
 ; input:
-; b - tile data
-; c - tile idx in the room_tiles_data array.
+; b - tiledata
+; c - tile idx in the room_tiledata array.
 ; a - decal_walkable_id
 ; out:
-; a - tile_data that will be saved back into room_tiles_data
+; a - tiledata that will be saved back into room_tiledata
 room_tiledata_decal_walkable_spawn:
 			; if decal_id < 2, then just copy tiledata
-			cpi TILE_DATA_RESTORE_TILE + 1
-			jc room_tile_data_copy
+			cpi TILEDATA_RESTORE_TILE + 1
+			jc room_tiledata_copy
 
-			add_a(2) ; to make a JMP_4 ptr
+			add_a(2) ; to make a jmp_4 ptr
 			sta @restoreA+1
 			; scr_y = tile idx % ROOM_WIDTH
 			mvi a, %11110000
@@ -193,18 +193,18 @@ room_tiledata_decal_walkable_spawn:
 			; bc - sprite addr
 			; de - scr addr
 			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
-			mvi a, TILE_DATA_RESTORE_TILE
+			mvi a, TILEDATA_RESTORE_TILE
 			ret
 
-; a tile data handler for a collision + draw a decal.
+; a tiledata handler for a collision + draw a decal.
 ; input:
-; b - tile data
-; c - tile idx in the room_tiles_data array.
+; b - tiledata
+; c - tile idx in the room_tiledata array.
 ; a - decal_collidable_id
 ; out:
-; a - tile_data that will be saved back into room_tiles_data
+; a - tiledata that will be saved back into room_tiledata
 room_tiledata_decal_collidable_spawn:
-			add_a(2) ; to make a JMP_4 ptr
+			add_a(2) ; to make a jmp_4 ptr
 			sta @restoreA+1
 			; scr_y = tile idx % ROOM_WIDTH
 			mvi a, %11110000
@@ -231,18 +231,18 @@ room_tiledata_decal_collidable_spawn:
 			; bc - sprite addr
 			; de - scr addr
 			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
-			mvi a, TILE_DATA_COLLISION
+			mvi a, TILEDATA_COLLISION
 			ret
 
-; a tile data handler for breakable items.
+; a tiledata handler for breakable items.
 ; input:
-; b - tile data
-; c - tile idx in the room_tiles_data array.
+; b - tiledata
+; c - tile idx in the room_tiledata array.
 ; a - breakable_id
 ; out:
-; a - tile_data that will be saved back into room_tiles_data
+; a - tiledata that will be saved back into room_tiledata
 room_tiledata_breakable_spawn:
-			add_a(2) ; to make a JMP_4 ptr
+			add_a(2) ; to make a jmp_4 ptr
 			sta @restoreA+1
 			; scr_y = tile idx % ROOM_WIDTH
 			mvi a, %11110000
@@ -269,7 +269,7 @@ room_tiledata_breakable_spawn:
 			; bc - sprite addr
 			; de - scr addr
 			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
-			mvi a, TILE_DATA_BREAKABLE
+			mvi a, TILEDATA_BREAKABLE
 			ret
 
 room_draw_on_scr:
@@ -294,12 +294,12 @@ room_draw_on_backbuffs:
 			ret
 
 ;=========================================================
-; convert room_tiles_data into the tiledata buffer in the ram-disk
-; call ex. CALL_RAM_DISK_FUNC(room_tile_data_buff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
-room_tile_data_buff:
+; convert room_tiledata into the tiledata buffer in the ram-disk
+; call ex. CALL_RAM_DISK_FUNC(room_init_tiledata_buff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
+room_init_tiledata_buff:
 			; set y = 0
 			mvi e, 0
-			lxi h, room_tiles_data
+			lxi h, room_tiledata
 @newLine
 			; reset the x. it's a high byte of the first screen buffer addr
 			mvi d, $80
@@ -308,7 +308,7 @@ room_tile_data_buff:
 			; HL - tile graphics addr
 			mov a, m
 			inx h
-			ROOM_DRAW_TILE_DATA()	
+			ROOM_DRAW_TILEDATA()	
 
 			; x = x + 1
 			inr d
@@ -326,13 +326,13 @@ room_tile_data_buff:
 			ret
 
 ;----------------------------------------------------------------
-; draw a tile filled up with a tile data (16x16 pixels)
+; draw a tile filled up with a tiledata (16x16 pixels)
 ; input:
-; c - tile data
+; c - tiledata
 ; de - screen addr (x,y)
 ; out:
 ; d = d + 1
-.macro ROOM_DRAW_TILE_DATA()
+.macro ROOM_DRAW_TILEDATA()
 		.loop 15
 			stax d
 			inr e
@@ -387,8 +387,8 @@ room_draw_tiles:
 			jc @newLine
 			ret
 
-; check tiles if they need to be restored. It uses the tiledata buffer in the ram-disk (bank 3 at $8000)
-; ex. CALL_RAM_DISK_FUNC(room_check_non_zero_tiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+; check tiles if they need to be restored. It uses the tiledata buffer in the ram-disk
+; ex. CALL_RAM_DISK_FUNC(room_check_non_zero_tiledata_under_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; de - back buffer2 scr addr
 ; h - width
@@ -401,7 +401,8 @@ room_draw_tiles:
 ; Z flag is OFF if an area needs to be restored
 ; change:
 ; a, hl, de, b
-room_check_non_zero_tiles:
+; 100 - 212 cc
+room_check_non_zero_tiledata_under_sprite:
 			xchg
 			xra a
 			; check the bottom-left corner
@@ -426,8 +427,62 @@ room_check_non_zero_tiles:
 			; returns Z=1. this area do not need to be restored
 			ret
 
+; check tiles if they need to be restored. 
+; in:
+; de - back buffer2 scr addr
+; h - width
+;		00 - 8pxs,
+;		01 - 16pxs,
+;		10 - 24pxs,
+;		11 - 32pxs
+; l - height
+; out:
+; Z flag is OFF if an area needs to be restored
+; 124 - 
+room_check_non_zero_tiledata_under_sprite2:
+			; convert scr addr to room_tiles_gfx_ptrs offset
+			mvi a, %00011110
+			ana d
+			rrc
+			mov b, a
+			mvi a, %11110000
+			ana e
+			ora b
+			mov c, a
+			mvi b, 0
+			xchg
+			lxi b, room_tiles_gfx_ptrs
+			dad b
+			
+			xra a
+			; check the bottom-left corner
+			cmp m
+			rnz
+
+			; de - width, height
+			; check the top-right corner
+			mvi a, %11110000
+
+
+			dad d
+			dcr l ; to be inside the AABB
+			cmp m
+			rnz
+			; check the top-left corner
+			mov b, h
+			mov h, d
+			cmp m
+			rnz
+			; check the bottom-right corner
+			xchg
+			mov h, b
+			cmp m
+			rnz
+			; returns Z=1. this area do not need to be restored
+			ret
+
 ; check if tiles are walkable.
-; func uses the tiledata buffer in the ram-disk (bank 3 at $8000)
+; func uses the tiledata buffer in the ram-disk
 ; call ex. CALL_RAM_DISK_FUNC(room_check_walkable_tiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; d - posX
@@ -435,14 +490,15 @@ room_check_non_zero_tiles:
 ; b - width-1
 ; c - height-1
 ; out:
-; Z flag is on when all tile data are walkable (tiledata fff == 0)
+; Z flag is on when all tiledata are walkable (tiledata fff == 0)
+; 292 cc
 room_check_walkable_tiles:
 			; calc the top-right corner addr
 			mov a, d
 			add b
 			ani %11110000
 			rrc_(3)
-			adi >BACK_BUFF2_ADDR ; $80
+			adi >BACK_BUFF2_ADDR
 			mov h, a
 			mov a, e
 			add c
@@ -453,7 +509,7 @@ room_check_walkable_tiles:
 			mvi a, %11110000
 			ana h
 			rrc_(3)
-			adi >BACK_BUFF2_ADDR ; $80
+			adi >BACK_BUFF2_ADDR
 			mov h, a
 
 			; check the bottom-left corner
@@ -468,27 +524,27 @@ room_check_walkable_tiles:
 			; check the top-left corner
 			mov h, b
 			ora m
-			ani TILE_DATA_FUNC_MASK
+			ani TILEDATA_FUNC_MASK
 			ret
 
 ; collects tiledata of tiles that intersect with a sprite
 ; this func uses the tiledata buffer in the ram-disk
-; ex. CALL_RAM_DISK_FUNC(room_get_tile_data_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+; ex. CALL_RAM_DISK_FUNC(room_get_tiledata_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; d - posX
 ; e - posY
 ; b - width-1
 ; c - height-1
-; out: room_tile_collision_data
-; hl - (room_tile_collision_data+2)
-; de - (room_tile_collision_data)
-room_tile_collision_data:
-			; tile_data layout:
+; out: room_collision_tiledata
+; hl - (room_collision_tiledata+2)
+; de - (room_collision_tiledata)
+room_collision_tiledata:
+			; tiledata layout:
 			; (bottom-left), (top-left), (top-right), (bottom-right)
 			.byte 0, 0, 0, 0,		
-; Z flag = 1 if all tiles have tile_data func==0
+; Z flag = 1 if all tiles have tiledata func==0
 ; 364 cc
-room_get_tile_data_around_sprite:
+room_get_tiledata_around_sprite:
 			; calc the top-right corner addr
 			mov a, d
 			add b
@@ -522,43 +578,96 @@ room_get_tile_data_around_sprite:
 			mov h, m
 			mov l, c
 			
-			; tile_data layout in registers:
+			; tiledata layout in registers:
 			; h (top-left), 	e (top_right)
 			; l (bottom-left), 	d (bottom-right)
 
-			; tile_data layout in room_tile_collision_data:
+			; tiledata layout in room_collision_tiledata:
 			; (bottom-left), (top-left), (top_right), (bottom-right)
 
-			shld room_tile_collision_data
+			shld room_collision_tiledata
 			xchg
-			shld room_tile_collision_data+2
+			shld room_collision_tiledata+2
 
 			mov a, h
 			ora l
 			ora d
 			ora e
-			ani TILE_DATA_FUNC_MASK
+			ani TILEDATA_FUNC_MASK
 			ret
 
-; get a tiledata by coordXY
-; this func uses the tiledata buffer in the ram-disk
-; call ex. CALL_RAM_DISK_FUNC(room_get_tiledata_by_coord, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89)
+; collects tiledata of tiles that intersect with a sprite
 ; in:
-; hl - posXY
-; out:
-; c - a tiledata
-room_get_tiledata_by_coord:
+; d - posX
+; e - posY
+; b - width-1
+; c - height-1
+; out: room_collision_tiledata
+; hl - (room_collision_tiledata+2)
+; de - (room_collision_tiledata)
+room_tiledata_under_sprite:
+			; tiledata layout:
+			; (bottom-left), (bottom-right), (top-right), (top-left)
+			.byte 0, 0, 0, 0,	
+; Z flag = 1 if all tiles have tiledata func==0
+; ???-364 cc
+room_handle_tiledata_under_sprite:
+			; calc the bottom-left corner
 			mvi a, %11110000
-			ana h
-			rrc_(3)
-			adi >BACK_BUFF2_ADDR
+			ana e
+			mov l, a
+
+			mov a, e
+			add c
+			ani %11110000
+			cmp l
+			jz @tileSizeH1
+
+			mvi a, %11110000
+			ana d
 			mov h, a
-			mov c, m
+			mov a, d
+			add b
+			ani %11110000
+			cmp h 
+			jz @tileSizeW1H2
+
+			mov a, h
+			rrc_(4)
+			ora l
+
+			mov l, a
+			mvi h, 0
+			lxi d, room_tiledata
+			dad d
+
+			xra a
+			mov e, m
+			ora e
+			inx h
+			mov d, m 
+			ora d
+			lxi b, ROOM_WIDTH
+			dad b
+			xchg
+			shld room_tiledata_under_sprite
+			xchg
+			mov b, m 
+			ora b
+			dcx h
+			mov h, m
+			ora h 
+			mov l, b
+			shld room_tiledata_under_sprite+2
 			ret
+@tileSizeH1:
+@tileSizeW1H2:
+			ret
+
 /*
 ; collects a tiledata around a sprite if it's a collision data (equals $ff)
 ; this func uses the tiledata buffer in the ram-disk
-; ex. CALL_RAM_DISK_FUNC(room_check_tile_data_collision, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+; ex. CALL_RAM_DISK_FUNC(room_check_tiledata_collision, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
 ; d - posX
 ; e - posY
@@ -572,7 +681,7 @@ room_get_tiledata_by_coord:
 ; Z flag = 1 if no collision
 ; 400 cc
 
-room_check_tile_data_collision:
+room_check_tiledata_collision:
 			; calc the top-right corner addr
 			mov a, d
 			add b
@@ -594,7 +703,7 @@ room_check_tile_data_collision:
 
 			; check the bottom-left corner
 			mov a, m
-			adi 256-TILE_DATA_BREAKABLE
+			adi 256-TILEDATA_COLLIDABLE
 			mvi a, 0
 			ral
 			mov c, a
@@ -603,7 +712,7 @@ room_check_tile_data_collision:
 			mov b, h ; tmp
 			mov h, d
 
-			mvi d, 256-TILE_DATA_BREAKABLE
+			mvi d, 256-TILEDATA_COLLIDABLE
 			mov a, m
 			add d
 			mov a, c

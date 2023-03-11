@@ -1,7 +1,7 @@
 ;----------------------------------------------------------------
 ; draw a tile (16x16 pixels)
 ; input:
-; bc - tile data addr
+; bc - tiledata addr
 ; de - screen addr (x,y)
 ; use: a, hl, sp
 

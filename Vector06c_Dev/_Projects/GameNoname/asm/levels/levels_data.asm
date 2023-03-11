@@ -14,13 +14,20 @@ rooms_death_rate: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a monster
 rooms_break_rate: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a breakable item. 255 means no spawn
 rooms_runtime_data_end_addr:
 
-; tile gfx ptrs table
-room_tiles_gfx_ptrs:
-			.storage ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
-room_tiles_gfx_ptrs_end:
+; tile graphics pointer table
+; the actual place defined in buffers.asm
+;room_tiles_gfx_ptrs:
+;			.storage ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
+;room_tiles_gfx_ptrs_end:
 
-; tile_data format:
-; it's stored in room_tiles_data
+; tiledata buffer has to follow room_tiles_gfx_ptrs because they are unpacked together
+;room_tiledata:
+;			.storage ROOM_WIDTH * ROOM_HEIGHT
+; the actual place defined in buffers.asm
+
+
+; tiledata format:
+; it's stored in room_tiledata
 ; %ffffDDDD, ffff - func_id, dddd - a func argument
 ; ffff == 0, walkable
 ;		d == 0 - no collision
@@ -56,7 +63,9 @@ room_tiles_gfx_ptrs_end:
 ;		item_walkable_id == 11 - a slow pool.
 
 ; ffff == 11, ???
-; 		every tiledata >= TILE_DATA_BREAKABLE is considered to be colladable
+
+; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable
+
 ; ffff == 12, a collidable item. a hero interacts with it only when he collids with it or hits it with a weapon. collidable_id = d
 ;		collidable_id == 0 - a small chest. small money reward
 ;		collidable_id == 1 - a big chest. big money reward
@@ -82,35 +91,31 @@ room_tiles_gfx_ptrs_end:
 ;		decal_collidable_id == 0 - a spider web
 
 ; ffff == 15,
-;		d == %1111 - collision (tiledata = TILE_DATA_COLLISION)
+;		d == %1111 - collision (tiledata = TILEDATA_COLLISION)
 ;		d <  %1111 - collision + animated background, back_id = d
 ;	 		back_id == 0 - torch front (tiledata = 15*16+0=241)
 ;   	    back_id == 1 - flag front (tiledata = 161)
 
 ; if tiledata > 0 then a tile is restored on the screen when a hero, a monster, or a bullet on it
 
-; tiledata buffer has to follow room_tiles_gfx_ptrs because they are unpacked together
-room_tiles_data:
-			.storage ROOM_WIDTH * ROOM_HEIGHT
-
-; to init each tile data in a room during a room initialization. check room.asm room_init_tiles_data func
+; to init each tiledata in a room during a room initialization. check room.asm room_handle_room_tiledata func
 room_tiledata_funcs:
-			JMP_4(room_tiledata_decal_walkable_spawn)	; func_id = 0
-			JMP_4(room_tiledata_monster_spawn)
-			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy)
-			JMP_4(room_tile_data_copy)
-			JMP_4(room_tiledata_breakable_spawn)
-			JMP_4(room_tiledata_decal_collidable_spawn)
-			JMP_4(room_tiledata_back_spawn)	; func_id = 15
+			jmp_4(room_tiledata_decal_walkable_spawn)	; func_id = 0
+			jmp_4(room_tiledata_monster_spawn)
+			jmp_4(room_tiledata_copy)
+			jmp_4(room_tiledata_copy)
+			jmp_4(room_tiledata_copy)
+			jmp_4(room_tiledata_copy)
+			jmp_4(room_tiledata_copy)
+			jmp_4(room_tiledata_copy)
+			jmp_4(room_tiledata_copy)
+			jmp_4(room_tiledata_copy)
+			jmp_4(room_tiledata_copy)
+			jmp_4(room_tiledata_copy)
+			jmp_4(room_tiledata_copy)
+			jmp_4(room_tiledata_breakable_spawn)
+			jmp_4(room_tiledata_decal_collidable_spawn)
+			jmp_4(room_tiledata_back_spawn)	; func_id = 15
 
 ; command that are handled by the level update func
 LEVEL_COMMAND_NONE = 0

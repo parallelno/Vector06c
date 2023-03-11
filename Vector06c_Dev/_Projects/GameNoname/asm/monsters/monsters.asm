@@ -375,7 +375,7 @@ monster_erase:
 			mvi a, -$20 ; advance DE to BACK_BUFF2_ADDR to check the collision, to decide if we need to restore a beckground
 			add d
 			mov d, a
-			CALL_RAM_DISK_FUNC(room_check_non_zero_tiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(room_check_non_zero_tiledata_under_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			pop d
 			pop h
 			jnz sprite_copy_to_back_buff_v ; restore a background

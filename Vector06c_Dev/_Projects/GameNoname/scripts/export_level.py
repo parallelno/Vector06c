@@ -48,7 +48,7 @@ def room_tiles_data_to_asm(room_j, room_path, source_dir):
 		asm += "\n"
 	return asm
 
-def get_tile_data(bytes0, bytes1, bytes2, bytes3):
+def get_tiledata(bytes0, bytes1, bytes2, bytes3):
 	all_bytes = [bytes0, bytes1, bytes2, bytes3]
 	# data structure description is in drawTile.asm
 	mask = 0
@@ -106,7 +106,7 @@ def gfx_to_asm(room_j, image, path, remap_idxs, label_prefix):
 		bytes3 = common.combine_bits_to_bytes(bits3) # E000-FFFF
 
 		# to support a tile render function
-		data, mask = get_tile_data(bytes0, bytes1, bytes2, bytes3)
+		data, mask = get_tiledata(bytes0, bytes1, bytes2, bytes3)
 
 
 		# two empty bytes prior every data to support a stack renderer

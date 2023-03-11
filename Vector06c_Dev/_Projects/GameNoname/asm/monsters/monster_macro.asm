@@ -86,7 +86,7 @@
 
 ; monster initialization
 ; in:
-; c - tile idx in the room_tiles_data array.
+; c - tile idx in the room_tiledata array.
 ; a - monster id * 4
 ;ex. MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 .macro MONSTER_INIT(MONSTER_UPDATE, MONSTER_DRAW, MONSTER_IMPACT, MONSTER_HEALTH, MONSTER_STATUS_DETECT_HERO_INIT, MONSTER_ANIM)
@@ -195,7 +195,7 @@
 			inx h
 			mov m, a
 @ret:
-			; return zero to erase the tile data
-			; there this monster was in the room_tiles_data
+			; return zero to erase the tiledata
+			; there this monster was in the room_tiledata
 			xra a
 .endmacro

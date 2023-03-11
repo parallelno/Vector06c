@@ -21,9 +21,9 @@ __skeleton_sprites_rd_data_end:
 __scythe_sprites_rd_data_start:
 .include "generated\\sprites\\scythe_sprites.asm"
 __scythe_sprites_rd_data_end:
-__hero_attack01_sprites_rd_data_start:
-.include "generated\\sprites\\hero_attack01_sprites.asm"
-__hero_attack01_sprites_rd_data_end:
+__hero_sword_sprites_rd_data_start:
+.include "generated\\sprites\\hero_sword_sprites.asm"
+__hero_sword_sprites_rd_data_end:
 
 .align 2
 __chunk_end_bank0_addr0_1:

@@ -90,7 +90,7 @@ VAMPIRE_DETECT_HERO_DISTANCE = 90
 ;========================================================
 ; called to spawn this monster
 ; in:
-; c - tile idx in the room_tiles_data array.
+; c - tile idx in the room_tiledata array.
 ; a - monster id * 4
 ; out:
 ; a = 0

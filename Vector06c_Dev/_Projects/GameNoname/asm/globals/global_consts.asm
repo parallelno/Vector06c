@@ -1,3 +1,4 @@
+			; nonsense to make VS Code remember the text formatting.
 ; prefixes
 ; ADDR - address
 ; BUF - buffer
@@ -104,7 +105,7 @@ RAM_DISK_M_8F = RAM_DISK_M_89 | RAM_DISK_M_AD | RAM_DISK_M_EF
 SEGMENT_0000_7F00_ADDR = 0x0000
 SEGMENT_8000_0000_ADDR = 0x8000
 
-SEGMENT_0000_7F00_SIZE_MAX = 2 ^ 31 - 256 ; because an interruption can corrupt the ram-disk memory from STACK_MIN_ADDR = $7f00 to STACK_TEMP_ADDR = $8000
+SEGMENT_0000_7F00_SIZE_MAX = 2 ^ 31 - 256 ; because an interruption can corrupt the ram-disk memory from STACK_MIN_ADDR to STACK_TEMP_ADDR
 SEGMENT_8000_0000_SIZE_MAX = 2 ^ 31
 
 ; to sort a list ob object to draw

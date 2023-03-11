@@ -93,13 +93,13 @@ back_to_next_frame:
 			xchg
 			ret
 
-; a tile data handler to spawn an animated background tile by its id.
+; a tiledata handler to spawn an animated background tile by its id.
 ; input:
-; b - tile data
-; c - tile idx in the room_tiles_data array.
+; b - tiledata
+; c - tile idx in the room_tiledata array.
 ; a - back_id
 ; out:
-; a - tile_data that will be saved back into room_tiles_data
+; a - tiledata that will be saved back into room_tiledata
 backs_spawn:
 			call backs_get_empty_data_ptr
 			; hl - ptr to back_update_ptr+1
@@ -109,7 +109,7 @@ backs_spawn:
 			; back_id to back_anim_ptr
 			lxi h, backs_anims
 			mov a, b
-			ani TILE_DATA_ARG_MASK
+			ani TILEDATA_ARG_MASK
 			add a ; make a ptr to an anim which depends on back_id
 			mov e, a
 			mvi d, 0
@@ -163,7 +163,7 @@ backs_spawn:
 			; advance hl to back_anim_timer_speed
 			inx h
 			mvi m, 50
-			mvi a, TILE_DATA_COLLISION	
+			mvi a, TILEDATA_COLLISION	
 			ret
 
 backs_update:

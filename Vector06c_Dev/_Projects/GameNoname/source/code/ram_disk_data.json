@@ -62,7 +62,7 @@
 								},
 								{
 									"asset_type" : "sprite",
-									"path" : "source\\sprites\\hero_attack01.json",
+									"path" : "source\\sprites\\hero_sword.json",
 									"export_dir" : "generated\\sprites\\"
 								}
 							]
