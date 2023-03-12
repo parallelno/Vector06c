@@ -54,7 +54,7 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths,
 	sorted_chunks = sorted(chunks, key=get_unpack_priority)
 	
 	# print in the order which they will be unpacked and moved into the ram-disk
-	asm += "ram_disk_data: ; the addr of this label has to be < $8000\n"
+	asm += "ram_disk_data: ; the addr of this label has to be < BUFFERS_START_ADDR\n"
 	for chunk_j in sorted_chunks:
 		bank_id = chunk_j["bank_id"]
 		addr_s = chunk_j["segment_addr_s"]
@@ -122,7 +122,10 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths,
 			if len(assets_s) > 0:
 				asm += ";                             " + assets_s + "\n"
 
-	asm += f"; [{total_free_space} total free]\n"
+	asm += f"; [{total_free_space} total free]\n\n"
+	asm += '.if BUFFERS_START_ADDR < ram_disk_data\n' \
+			'			.error "the programm is too big. It overlaps with a tables at the end of RAM"\n' \
+			'.endif\n'
 
 	# save ram_disk_data.asm
 	path = f"{generated_code_dir}ram_disk_data{build.EXT_ASM}"

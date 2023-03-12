@@ -88,6 +88,7 @@ OPCODE_STC $0037
 OPCODE_INX_D $0013
 ROOM_TILES_GFX_PTRS_SIZE $01e0
 ROOM_TILEDATA_SIZE_ALIGNED $0100
+BUFFERS_START_ADDR $7c20
 room_tiles_gfx_ptrs $7c20
 room_tiles_gfx_ptrs_end $7e00
 room_tiledata $7e00
@@ -1095,11 +1096,11 @@ room_init_tiledata_buff $2e6e
 room_draw_tiles $2ec7
 @newLine_2 $2ecc
 @loop_21 $2ece
-room_check_non_zero_tiledata_under_sprite $2eeb
+room_check_tiledata_restorable $2eeb
 room_check_non_zero_tiledata_under_sprite2 $2efd
-room_check_walkable_tiles $2f20
-room_collision_tiledata $2f42
-room_get_tiledata_around_sprite $2f46
+room_check_tiledata_walkable $2f20
+room_get_tiledata_buff $2f42
+room_get_tiledata $2f46
 room_tiledata_under_sprite $2f74
 room_handle_tiledata_under_sprite $2f78
 @tileSizeH1 $2fb6

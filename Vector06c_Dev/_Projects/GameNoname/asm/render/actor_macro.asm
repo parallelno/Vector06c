@@ -92,7 +92,7 @@
 			mov d, a
 			mov e, h
 			lxi b, (ACTOR_COLLISION_WIDTH-1)<<8 | ACTOR_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(room_check_walkable_tiles, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(room_check_tiledata_walkable, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			jnz CollisionHandler
 
 @applyNewPos:

@@ -19,7 +19,7 @@
 .include "generated\\sprites\\hero_l_anim.asm"
 .include "generated\\sprites\\vampire_anim.asm"
 
-ram_disk_data: ; the addr of this label has to be < $8000
+ram_disk_data: ; the addr of this label has to be < BUFFERS_START_ADDR
 chunk_bank0_addr0_0:
 .incbin "generated\\bin\\chunk_bank0_addr0_0.bin.zx0"
 chunk_bank0_addr0_1:
@@ -59,3 +59,6 @@ chunk_bank3_addr8000_0:
 ;                             sprite_rd [173], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1538], 
 ; [98374 total free]
 
+.if BUFFERS_START_ADDR < ram_disk_data
+			.error "the programm is too big. It overlaps with a tables at the end of RAM"
+.endif

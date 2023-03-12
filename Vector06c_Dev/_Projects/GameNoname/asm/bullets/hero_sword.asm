@@ -252,10 +252,10 @@ hero_sword_update:
 @checkTiledata:
 			; de - posXY 
 			lxi b, (HERO_SWORD_COLLISION_WIDTH-1)<<8 | HERO_SWORD_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(room_get_tiledata_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			rz ; return if the is no tiledata to analize
 
-			lxi h, room_collision_tiledata
+			lxi h, room_get_tiledata_buff
 			mvi c, 4
 @loop:		TILEDATA_HANDLE_FUNC_CALL(hero_sword_tile_func_table-JMP_4_LEN, true)
 			inx h
@@ -264,7 +264,7 @@ hero_sword_update:
 			ret
 
 hero_sword_func_breakable:
-			call room_handle_tiledata_under_sprite
+			;call room_handle_tiledata_under_sprite
 			ret
 
 ; draw a sprite into a backbuffer

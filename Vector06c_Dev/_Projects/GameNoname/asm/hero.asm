@@ -304,7 +304,7 @@ hero_update_temp_pos:
 			mov d, b ; posX
 			mov e, h ; posY
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(room_get_tiledata_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			jz hero_no_collision_no_tiledata;  ; if there is no tiledata to analize, move a hero and return
 @collides:
 			; check if there is any collidable tiledata
@@ -357,10 +357,10 @@ hero_check_tiledata:
 			inx_h(2)
 			mov e, m
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(room_get_tiledata_around_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			rz ; return if there is no tiledata to analize
 hero_do_not_get_tiledata_around:	
-			lxi h, room_collision_tiledata
+			lxi h, room_get_tiledata_buff
 			mvi c, 4
 @loop:		TILEDATA_HANDLE_FUNC_CALL(hero_tile_func_table-JMP_4_LEN, true)
 			inx h
@@ -819,7 +819,7 @@ hero_erase:
 			mvi a, -$20 ; advance DE to SCR_ADDR_0 to check the collision, to decide if we need to restore a beckground
 			add d
 			mov d, a
-			CALL_RAM_DISK_FUNC(room_check_non_zero_tiledata_under_sprite, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			CALL_RAM_DISK_FUNC(room_check_tiledata_restorable, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			pop d
 			pop h
 			jnz sprite_copy_to_back_buff_v ; restore a background
