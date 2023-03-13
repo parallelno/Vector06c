@@ -30,6 +30,23 @@
 			lxi h, ints_per_sec_counter
 			dcr m
 			jnz @skipSavingFps
+; TODO: test
+			lxi h, game_draws_counter
+			mov c, m
+			mvi b, 0
+@test_fps_counter:
+			lxi h, 0
+			dad b
+			shld @test_fps_counter+1
+
+@test_counter_in_sec:			
+			mvi a, 200
+			dcr a
+			sta @test_counter_in_sec+1
+@loop:
+			jz @loop
+; test end
+
 			lxi h, game_draws_counter
 			mov a, m
 			mvi m, 0			

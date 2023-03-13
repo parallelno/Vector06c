@@ -814,14 +814,20 @@ hero_erase:
 			lhld hero_erase_wh
 
 			; check if it needs to restore the background
-			push h
-			push d
-			mvi a, -$20 ; advance DE to SCR_ADDR_0 to check the collision, to decide if we need to restore a beckground
-			add d
-			mov d, a
-			CALL_RAM_DISK_FUNC(room_check_tiledata_restorable, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			pop d
-			pop h
+			;push h
+			;push d
+			;mvi a, -$20 ; advance DE to SCR_ADDR_0 to check the collision, to decide if we need to restore a beckground
+			;add d
+			;mov d, a
+			;CALL_RAM_DISK_FUNC(room_check_tiledata_restorable, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			call room_check_tiledata_restorable_v2
+			;pop d
+			;pop h
+			lhld hero_erase_scr_addr
+			xchg
+			lhld hero_erase_wh
+
+
 			jnz sprite_copy_to_back_buff_v ; restore a background
 			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 			ret

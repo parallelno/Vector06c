@@ -438,10 +438,8 @@ room_check_tiledata_restorable:
 ; l - height
 ; out:
 ; Z flag == 0 if this area needs to be restored
-; v1. 188 - 320
-; v2. 232 - 316
-; v3. 124 - 280
-room_check_tiledata_restorable2:
+; v2. 124 - 280
+room_check_tiledata_restorable_v2:
 			; convert scr addr to room_tiles_gfx_ptrs offset
 			mvi a, %00011110
 			ana d
@@ -462,7 +460,7 @@ room_check_tiledata_restorable2:
 			mov e, a
 			ldax d
 			ora a
-			rz			; 124 cc if returns
+			rnz			; 124 cc if returns
 
 			; get x+dx in tiles
 			mvi a, %00011110
@@ -476,12 +474,12 @@ room_check_tiledata_restorable2:
 			mov e, a
 			ldax d
 			ora a
-			rz		; 180 cc if returns
+			rnz		; 180 cc if returns
 
 			; get y+dy in tiles
+			dcr l ; to be inside the AABB						
 			mvi a, %11110000
 			ana l
-			dcr a ; to be inside the AABB			
 			mov l, a
 			; l, a = y+dy in tiles
 
@@ -490,7 +488,7 @@ room_check_tiledata_restorable2:
 			mov e, a
 			ldax d
 			ora a
-			rz		; 240 cc if returns
+			rnz		; 240 cc if returns
 
 			; check top-left corner
 			mov a, b
@@ -546,7 +544,7 @@ room_check_tiledata_walkable:
 			ora m
 			ani TILEDATA_FUNC_MASK
 			ret
-/*
+
 ; check if tiles are walkable.
 ; in:
 ; d - posX
@@ -556,7 +554,7 @@ room_check_tiledata_walkable:
 ; out:
 ; Z flag is on when all tiledata are walkable (tiledata ffff == 0)
 ; mov+call+body 28+24+176=228 - 28+24+240=292 cc
-room_check_tiledata_walkable2:
+room_check_tiledata_walkable_v2:
 			; calc y in tiles
 			mvi a, %11110000
 			ana e
@@ -654,7 +652,7 @@ room_check_tiledata_walkable2:
 			ora m
 			ani TILEDATA_FUNC_MASK
 			ret
-*/
+
 ; check if tiles are walkable.
 ; in:
 ; a - posX
@@ -663,20 +661,10 @@ room_check_tiledata_walkable2:
 ; c - height-1
 ; out:
 ; Z flag is on when all tiledata are walkable (tiledata ffff == 0)
-; v0.mov RP + call + body = 320 cc
-; v2. 20+24+292=336 cc
-; v3. 20+24+244=288 - 20+24+372=416
-; v31 28+24+176=228 - 28+24+240=292 cc
-; v4. 20+24+124=168 - 20+24+292=336
-
-; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-;
-; 		remove "mov d", a in the code that calls this func!
-;		---------------------------------------------------
-;
-; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-room_check_tiledata_walkable3:
+; v1. mov RP + call + body = 320 cc
+; v2. 28+24+176=228 - 28+24+240=292 cc
+; v3. 20+24+124=168 - 20+24+292=336
+room_check_tiledata_walkable_v3:
 			mov d, a
 			ani %11110000
 			rrc_(4)
