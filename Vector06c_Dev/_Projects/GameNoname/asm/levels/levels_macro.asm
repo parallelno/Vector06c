@@ -1,6 +1,6 @@
 ; a tiledata handler. 
 ; tiledata should be in the format: ffffDDDD
-;		ffff is a func_id oh a func handler in the func_table
+;		ffff is a func_id of a func handler in the func_table
 ;		DDDD is a func argument
 ; call a handler func with DDDD stored in a, bc passed in the func depends on the context
 ; input:

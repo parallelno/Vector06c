@@ -17,7 +17,7 @@ room_init:
 
 			; convert room_tiledata into BACKBUFF2 buffer
 			;call room_init_tiledata_buff
-			CALL_RAM_DISK_FUNC(room_init_tiledata_buff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
+			;CALL_RAM_DISK_FUNC(room_init_tiledata_buff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
 			ret
 
 ; uncompress room gfx tile idx buffer + room tiledata buffer into the room_tiles_gfx_ptrs + offset
@@ -292,7 +292,7 @@ room_draw_on_backbuffs:
 			mvi a, __RAM_DISK_S_BACKBUFF2
 			call copy_to_ram_disk32
 			ret
-
+/*
 ;=========================================================
 ; convert room_tiledata into the tiledata buffer in the ram-disk
 ; call ex. CALL_RAM_DISK_FUNC(room_init_tiledata_buff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
@@ -346,7 +346,7 @@ room_init_tiledata_buff:
 		.endloop
 			stax d
 .endmacro
-
+*/
 ;=========================================================
 ; draw a room tiles. It might be a main screen, or a back buffer
 ; call ex. CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01_GFX)
@@ -386,7 +386,7 @@ room_draw_tiles:
 			cpi ROOM_HEIGHT * TILE_HEIGHT
 			jc @newLine
 			ret
-
+/*
 ; check tiles if they need to be restored. It uses the tiledata buffer in the ram-disk
 ; ex. CALL_RAM_DISK_FUNC(room_check_tiledata_restorable, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 ; in:
@@ -426,8 +426,9 @@ room_check_tiledata_restorable:
 			cmp m
 			; returns Z=1. this area do not need to be restored
 			ret		; 244 cc
-
+*/
 ; check tiles if they need to be restored.
+; all gfx of tiledata that are > 0, need to be restored if there is a sprite on it
 ; in:
 ; de - scr addr
 ; h - width
@@ -497,7 +498,7 @@ room_check_tiledata_restorable_v2:
 			ldax d
 			ora a
 			ret		; 280 cc
-
+/*
 ; check if tiles are walkable.
 ; func uses the tiledata buffer in the ram-disk
 ; call ex. CALL_RAM_DISK_FUNC(room_check_tiledata_walkable, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
@@ -544,7 +545,7 @@ room_check_tiledata_walkable:
 			ora m
 			ani TILEDATA_FUNC_MASK
 			ret
-
+*/
 ; check if tiles are walkable.
 ; in:
 ; d - posX
@@ -552,7 +553,7 @@ room_check_tiledata_walkable:
 ; b - width-1
 ; c - height-1
 ; out:
-; Z flag is on when all tiledata are walkable (tiledata ffff == 0)
+; Z flag is on when all tiledata are walkable (tiledata func == 0)
 ; mov+call+body 28+24+176=228 - 28+24+240=292 cc
 room_check_tiledata_walkable_v2:
 			; calc y in tiles
@@ -652,7 +653,7 @@ room_check_tiledata_walkable_v2:
 			ora m
 			ani TILEDATA_FUNC_MASK
 			ret
-
+/*
 ; check if tiles are walkable.
 ; in:
 ; a - posX
@@ -722,8 +723,8 @@ room_check_tiledata_walkable_v3:
 			ldax b
 			ana e
 			ret		; 336
-
-
+*/
+/*
 ; collects tiledata of tiles that intersect with a sprite
 ; this func uses the tiledata buffer in the ram-disk
 ; ex. CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
@@ -792,7 +793,7 @@ room_get_tiledata:
 			ora e
 			ani TILEDATA_FUNC_MASK
 			ret
-
+*/
 ; collects tiledata of tiles that intersect with a sprite
 ; in:
 ; d - posX
@@ -859,6 +860,7 @@ room_get_tiledata2:
 			ora l
 			mov h, b
 			shld room_get_tiledata_buff2+2
+			ani TILEDATA_FUNC_MASK
 			ret
 
 @tileSizeH1:
@@ -892,6 +894,7 @@ room_get_tiledata2:
 			xchg
 			shld room_get_tiledata_buff2
 			shld room_get_tiledata_buff2+2
+			ani TILEDATA_FUNC_MASK
 			ret
 
 @tileSizeW1H1:
@@ -907,6 +910,7 @@ room_get_tiledata2:
 			mov h, a
 			shld room_get_tiledata_buff2
 			shld room_get_tiledata_buff2+2
+			ani TILEDATA_FUNC_MASK
 			ret
 
 @tileSizeW1H2:
@@ -929,4 +933,5 @@ room_get_tiledata2:
 			ora l
 			mov h, d
 			shld room_get_tiledata_buff2+2
+			ani TILEDATA_FUNC_MASK
 			ret

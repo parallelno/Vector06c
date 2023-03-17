@@ -93,34 +93,12 @@
 			mov d, a
 			mov e, h
 /*			
-			push d
-
 			lxi b, (ACTOR_COLLISION_WIDTH-1)<<8 | ACTOR_COLLISION_HEIGHT-1
 			CALL_RAM_DISK_FUNC(room_check_tiledata_walkable, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 
-@test0:		mvi a, TEMP_BYTE			
-			mvi a, 0
-			jz @test2
-			mvi a, 1
-@test2:		sta @test0+1
-
-			pop d
 			*/
 			lxi b, (ACTOR_COLLISION_WIDTH-1)<<8 | ACTOR_COLLISION_HEIGHT-1
 			call room_check_tiledata_walkable_v2
-/*
-			push psw
-
-			mvi b, 0
-			jz @t2
-			mvi b, 1
-@t2:					
-			lda @test0+1
-			cmp b
-@loop:		jnz @loop
-
-			pop psw
-			*/
 			jnz CollisionHandler
 
 @applyNewPos:

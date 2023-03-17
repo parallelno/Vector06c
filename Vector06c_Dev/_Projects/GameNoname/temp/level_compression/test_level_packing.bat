@@ -10,12 +10,10 @@
 ..\\..\\tools\\zx0salvador.exe -v -classic level_tmp2.bin level_tmp2.bin.zx0s
 ..\\..\\tools\\zx0salvador.exe -v -classic level_tmp3.bin level_tmp3.bin.zx0s
 
-..\\..\\tools\\zx0.exe -c level_tmp1.bin level_tmp1.bin.zx0
-..\\..\\tools\\zx0.exe -c level_tmp2.bin level_tmp2.bin.zx0
-..\\..\\tools\\zx0.exe -c level_tmp3.bin level_tmp3.bin.zx0
+..\\..\\tools\\zx0salvador.exe -v -classic -D level_tmp3.bin.zx0s level_tmp1.bin level_tmp1_dict.bin.zx0s
+..\\..\\tools\\zx0salvador.exe -v -classic -D level_tmp1.bin.zx0s level_tmp2.bin level_tmp2_dict.bin.zx0s
+..\\..\\tools\\zx0salvador.exe -v -classic -D level_tmp2.bin.zx0s level_tmp3.bin level_tmp3_dict.bin.zx0s
 
-copy /b level_tmp1.bin+level_tmp2.bin prefix_level_tmp2.bin
-copy /b level_tmp1.bin+level_tmp3.bin prefix_level_tmp3.bin
+copy /b level_tmp1_dict.bin.zx0s+level_tmp2_dict.bin.zx0s+level_tmp3_dict.bin.zx0s level_all_dict.bin.zx0s
 
-..\\..\\tools\\zx0.exe -c +484 prefix_level_tmp2.bin prefix_level_tmp2.bin.zx0
-..\\..\\tools\\zx0.exe -c +484 prefix_level_tmp3.bin prefix_level_tmp3.bin.zx0
+..\\..\\tools\\zx0salvador.exe -v -classic level_all_dict.bin.zx0s level_all_dict.bin.zx0s.zx0s

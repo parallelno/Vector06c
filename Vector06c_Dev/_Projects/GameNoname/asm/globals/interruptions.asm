@@ -30,6 +30,7 @@
 			lxi h, ints_per_sec_counter
 			dcr m
 			jnz @skipSavingFps
+/*
 ; TODO: test
 			lxi h, game_draws_counter
 			mov c, m
@@ -46,6 +47,7 @@
 @loop:
 			jz @loop
 ; test end
+*/
 
 			lxi h, game_draws_counter
 			mov a, m

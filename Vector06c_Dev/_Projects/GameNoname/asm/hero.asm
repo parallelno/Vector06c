@@ -304,9 +304,12 @@ hero_update_temp_pos:
 			mov d, b ; posX
 			mov e, h ; posY
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			;CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			call room_get_tiledata2
+
 			jz hero_no_collision_no_tiledata;  ; if there is no tiledata to analize, move a hero and return
 @collides:
+/*
 			; check if there is any collidable tiledata
 			; de - (bottom-left), (top-left), 
 			; hl - (top-right), (bottom-right)			
@@ -340,6 +343,41 @@ hero_update_temp_pos:
 			add b
 			mov a, c
 			ral
+*/
+			; check if there is any collidable tiledata
+			; de - (bottom-left), (bottom-right), 
+			; hl - (top-left), (top-right)
+			; hero collision ptr bit layout:
+			; (bottom-left), (bottom-right), (top_right), (top-left), 0, 0
+
+			; check the bottom-left corner
+			mvi b, 256-TILEDATA_COLLIDABLE
+			mov a, e
+			add b
+			mvi a, 0
+			ral
+			mov c, a
+
+			; check the bottom-right corner
+			mov a, d
+			add b
+			mov a, c
+			ral
+			mov c, a
+
+			; check the top-right corner
+			mov a, h
+			add b
+			mov a, c
+			ral
+			mov c, a
+
+			; check the top-left corner
+			mov a, l
+			add b
+			mov a, c
+			ral
+
 			add_a(2)
 			mov c, a
 
@@ -357,10 +395,11 @@ hero_check_tiledata:
 			inx_h(2)
 			mov e, m
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			;CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			call room_get_tiledata2
 			rz ; return if there is no tiledata to analize
 hero_do_not_get_tiledata_around:	
-			lxi h, room_get_tiledata_buff
+			lxi h, room_get_tiledata_buff2
 			mvi c, 4
 @loop:		TILEDATA_HANDLE_FUNC_CALL(hero_tile_func_table-JMP_4_LEN, true)
 			inx h

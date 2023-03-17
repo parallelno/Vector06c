@@ -252,10 +252,11 @@ hero_sword_update:
 @checkTiledata:
 			; de - posXY 
 			lxi b, (HERO_SWORD_COLLISION_WIDTH-1)<<8 | HERO_SWORD_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			;CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			call room_get_tiledata2
 			rz ; return if the is no tiledata to analize
 
-			lxi h, room_get_tiledata_buff
+			lxi h, room_get_tiledata_buff2
 			mvi c, 4
 @loop:		TILEDATA_HANDLE_FUNC_CALL(hero_sword_tile_func_table-JMP_4_LEN, true)
 			inx h
