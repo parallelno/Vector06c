@@ -79,3 +79,31 @@
 			dcx h
 			jmp @loop
 .endmacro
+
+.macro ROOM_DEATH_RATE_CHECK(rate, doNotSpawn)
+			; check rooms_break_rate if it needs to spawn
+			lda room_idx
+			mov e, a
+			mvi d, 0
+			lxi h, rate
+			dad d
+			mov e, m
+			call random
+			cmp e
+			jc doNotSpawn
+.endmacro			
+
+.macro ROOM_DEATH_RATE_UPDATE(rate, next, RATE_DELTA, RATE_MAX)
+			; increase room_death_rate
+			lda room_idx
+			mov c, a
+			mvi b, 0
+			lxi h, rate
+			dad b
+			mvi a, RATE_DELTA
+			add m
+			mov m, a
+			jnc next
+			; set max death_rate
+			mvi m, RATE_MAX
+.endmacro

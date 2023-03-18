@@ -3,7 +3,7 @@
 .include "asm\\globals\\macro.asm"
 .include "asm\\globals\\global_consts.asm"
 .include "asm\\globals\\buffers.asm"
-; init.asm must be the first code inclusion
+; main_init must be the first code inclusion
 .include "asm\\globals\\main_init.asm"
 .include "asm\\globals\\global_vars.asm"
 

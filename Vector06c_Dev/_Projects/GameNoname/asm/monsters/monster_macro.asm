@@ -93,18 +93,8 @@
 			rrc_(2) ; to get monsterID
 			sta @monster_id+1
 
-			; TODO: move the code into the spawner init
-			; use room_death_rate for spawning
-			lda room_idx
-			mov e, a
-			mvi d, 0
-			lxi h, rooms_runtime_data
-			dad d
-			mov e, m
-			call random
-			cmp e
-			jc @ret
-			; TODO: end the moving code
+			; TODO: move the code into a spawner init routine
+			ROOM_DEATH_RATE_CHECK(rooms_death_rate_monsters, @ret)
 
 			call monsters_get_empty_data_ptr
 			; hl - ptr to monster_update_ptr+1

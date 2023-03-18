@@ -388,18 +388,7 @@ monster_erase:
 
 
 monster_impacted:
-			; increase room_death_rate
-			lda room_idx
-			mov c, a
-			mvi b, 0
-			lxi h, rooms_runtime_data
-			dad b
-			mvi a, MONSTER_DEATH_RATE_DELTA
-			add m
-			mov m, a
-			jnc @next
-			; set max death_rate
-			mvi m, MONSTER_DEATH_RATE_MAX
+			ROOM_DEATH_RATE_UPDATE(rooms_death_rate_monsters, @next, MONSTER_DEATH_RATE_DELTA, MONSTER_DEATH_RATE_MAX)
 @next:
 			; de - ptr to monster_impacted_ptr+1
 			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)

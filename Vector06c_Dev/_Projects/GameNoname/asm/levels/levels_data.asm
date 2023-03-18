@@ -9,9 +9,10 @@ level_idx:
 room_idx:   .byte 0 ; 0 - ROOMS_MAX-1
 
 ; rooms runtime data
+; TODO: move it to buffers.asm aligned by 256+Const
 rooms_runtime_data:
-rooms_death_rate: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a monster. 255 means no spawn
-rooms_break_rate: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a breakable item. 255 means no spawn
+rooms_death_rate_monsters: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a monster. 255 means no spawn
+rooms_death_rate_breakables: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a breakable item. 255 means no spawn
 rooms_runtime_data_end_addr:
 
 ; tile graphics pointer table

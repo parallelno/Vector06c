@@ -1,4 +1,4 @@
-			; nonsense to make VS Code remember the text formatting.
+			; this line is to make VS Code remember the text formatting.
 ;==================================================================================================
 ROOM_TILES_GFX_PTRS_SIZE	= ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
 ROOM_TILEDATA_SIZE_ALIGNED	= $100

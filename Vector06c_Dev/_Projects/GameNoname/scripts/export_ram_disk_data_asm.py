@@ -124,7 +124,7 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths,
 
 	asm += f"; [{total_free_space} total free]\n\n"
 	asm += '.if BUFFERS_START_ADDR < ram_disk_data\n' \
-			'			.error "the programm is too big. It overlaps with a tables at the end of RAM"\n' \
+			'			.error "the programm is too big. It overlaps with tables at the end of RAM"\n' \
 			'.endif\n'
 
 	# save ram_disk_data.asm

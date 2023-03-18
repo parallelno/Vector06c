@@ -4,7 +4,7 @@ room_init:
 			call backs_init
 			call room_unpack
 			call room_init_tiles_gfx
-			call room_draw_on_scr
+			CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01_GFX)
 			call room_handle_room_tiledata	
 			call room_copy_scr_to_backbuffs
 			ret
@@ -235,6 +235,9 @@ room_tiledata_breakable_spawn:
 			sta @restoreA+1
 			mov a, b
 			sta @restoreTiledata+1
+			
+			ROOM_DEATH_RATE_CHECK(rooms_death_rate_breakables, @restoreTiledata)
+
 			; scr_y = tile idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
@@ -260,14 +263,11 @@ room_tiledata_breakable_spawn:
 			; bc - sprite addr
 			; de - scr addr
 			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+
 @restoreTiledata:
 			mvi a, TEMP_BYTE
 			ret
 
-room_draw_on_scr:
-			; main scr
-			CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01_GFX)
-			ret
 room_copy_scr_to_backbuffs:
 			; copy $a000-$ffff scr buffs to the ram-disk back buffer
 			; TODO: optimization. think of making copy process while the gameplay started.
@@ -296,7 +296,7 @@ room_draw_tiles:
 			lxi h, room_tiles_gfx_ptrs
 @newLine
 			; reset the x. it's a high byte of the first screen buffer addr
-			mvi d, >SCR_BUFF0_ADDR ; $80
+			mvi d, >SCR_BUFF0_ADDR
 @loop:
 			; DE - screen addr
 			; HL - tile graphics addr
@@ -313,7 +313,7 @@ room_draw_tiles:
 			; x = x + 2
 			inr_d(2)
 			; repeat if x reaches the high byte of the second screen buffer addr
-			mvi a, $a0
+			mvi a, >SCR_BUFF1_ADDR
 			cmp d
 			jnz @loop
 

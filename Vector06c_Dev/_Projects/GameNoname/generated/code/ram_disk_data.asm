@@ -60,5 +60,5 @@ chunk_bank3_addr8000_0:
 ; [98375 total free]
 
 .if BUFFERS_START_ADDR < ram_disk_data
-			.error "the programm is too big. It overlaps with a tables at the end of RAM"
+			.error "the programm is too big. It overlaps with tables at the end of RAM"
 .endif
