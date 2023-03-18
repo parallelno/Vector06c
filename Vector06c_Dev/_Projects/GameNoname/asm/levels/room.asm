@@ -236,8 +236,12 @@ room_tiledata_breakable_spawn:
 			mov a, b
 			sta @restoreTiledata+1
 			
-			ROOM_DEATH_RATE_CHECK(rooms_death_rate_breakables, @restoreTiledata)
-
+			ROOM_DEATH_RATE_CHECK(rooms_death_rate_breakables, @noSpawn)
+			jmp @spawn
+@noSpawn:
+			mvi a, TILEDATA_RESTORE_TILE
+			ret
+@spawn:
 			; scr_y = tile idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
