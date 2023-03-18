@@ -24,7 +24,7 @@
 		"decals_collidable" : ["web1"],
 		"items_walkable" : ["coin", "key_blue", "potion_red"],
 		"items_collidable" : ["coin"],
-		"breakable" : ["crate", "barrel"]
+		"breakable" : ["barrel", "crate"]
 	},
 	"sprites" : [
 		{

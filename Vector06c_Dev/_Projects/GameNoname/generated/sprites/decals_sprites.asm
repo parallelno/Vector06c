@@ -15,7 +15,7 @@ __items_walkable_gfx_ptrs: .word __decals_coin, 0, __decals_key_blue, 0, __decal
 __items_collidable_gfx_ptrs: .word __decals_coin, 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
-__breakable_gfx_ptrs: .word __decals_crate, 0, __decals_barrel, 
+__breakable_gfx_ptrs: .word __decals_barrel, 0, __decals_crate, 
 
 __decals_sprites:
 			.byte 0,0  ; safety pair of bytes to support a stack renderer

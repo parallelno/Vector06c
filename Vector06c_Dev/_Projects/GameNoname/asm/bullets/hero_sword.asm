@@ -250,22 +250,26 @@ hero_sword_update:
 			xchg
 			pchl
 @checkTiledata:
-			; de - posXY 
-			lxi b, (HERO_SWORD_COLLISION_WIDTH-1)<<8 | HERO_SWORD_COLLISION_HEIGHT-1
-			;CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			call room_get_tiledata2
-			rz ; return if the is no tiledata to analize
-
-			lxi h, room_get_tiledata_buff2
-			mvi c, 4
-@loop:		TILEDATA_HANDLE_FUNC_CALL(hero_sword_tile_func_table-JMP_4_LEN, true)
-			inx h
-			dcr c
-			jnz @loop
+			TILEDATA_HANDLING2(HERO_SWORD_COLLISION_WIDTH, HERO_SWORD_COLLISION_HEIGHT, hero_sword_tile_func_table)
 			ret
 
+; in:
+; a - item_id
+; c - tile idx
 hero_sword_func_breakable:
-			;call room_handle_tiledata_under_sprite
+			mvi b, >room_tiledata
+			mvi a, 0
+			stax b
+			; calc scr addr to draw a empty tile
+
+			lxi d, $a180
+			lxi h, 210
+			; de - scr addr
+			; hl - width, height
+			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
+			lxi d, $a180
+			lxi h, 210			
+			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF2 | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 			ret
 
 ; draw a sprite into a backbuffer

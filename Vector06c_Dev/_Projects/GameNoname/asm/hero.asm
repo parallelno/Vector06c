@@ -68,20 +68,20 @@ hero_collision_func_table:
 
 ; funcs to handle the tiledata. more info is in level_data.asm->room_tiledata
 hero_tile_func_table:
-			jmp_4( 0)						; func_id == 1
+			ret_4()							; func_id == 1
 			jmp_4( hero_tile_func_teleport)	; func_id == 2
-			jmp_4( 0)						; func_id == 3
-			jmp_4( 0)						; func_id == 4
-			jmp_4( 0)						; func_id == 5
-			jmp_4( 0)						; func_id == 6
-			jmp_4( 0)						; func_id == 7
-			jmp_4( 0)						; func_id == 8
-			jmp_4( 0)						; func_id == 9
-			jmp_4( 0)						; func_id == 10
-			jmp_4( 0)						; func_id == 11
-			jmp_4( 0)						; func_id == 12
-			jmp_4( 0)						; func_id == 13
-			jmp_4( 0)						; func_id == 14
+			ret_4()							; func_id == 3
+			ret_4()							; func_id == 4
+			ret_4()							; func_id == 5
+			ret_4()							; func_id == 6
+			ret_4()							; func_id == 7
+			ret_4()							; func_id == 8
+			ret_4()							; func_id == 9
+			ret_4()							; func_id == 10
+			ret_4()							; func_id == 11
+			ret_4()							; func_id == 12
+			ret_4()							; func_id == 13
+			ret_4()							; func_id == 14
 			ret_4()							; func_id == 15 (collision) called only when a hero is stuck into collision tiles
 
 hero_init:
@@ -284,7 +284,6 @@ hero_update:
 @setAnimRunDfaceL:
 			lxi h, hero_l_run
 			shld hero_anim_addr
-			;jmp hero_update_temp_pos
 
 hero_update_temp_pos:
 			; apply the hero speed
@@ -304,49 +303,16 @@ hero_update_temp_pos:
 			mov d, b ; posX
 			mov e, h ; posY
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
-			;CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			call room_get_tiledata2
+			call room_get_collision_tiledata
+			ani TILEDATA_FUNC_MASK
+			jz hero_no_collision_no_tiledata ; if there is no tiledata to analize, move a hero and return
+			;cpi TILEDATA_COLLIDABLE
+			;jc hero_check_tiledata
 
-			jz hero_no_collision_no_tiledata;  ; if there is no tiledata to analize, move a hero and return
 @collides:
-/*
 			; check if there is any collidable tiledata
-			; de - (bottom-left), (top-left), 
-			; hl - (top-right), (bottom-right)			
-			; hero collision ptr bit layout:
-			; (bottom-left), (bottom-right), (top_right), (top-left), 0, 0
-			
-			; check the bottom-left corner
-			mvi b, 256-TILEDATA_COLLIDABLE
-			mov a, e
-			add b
-			mvi a, 0
-			ral
-			mov c, a
-
-			; check the bottom-right corner
-			mov a, h
-			add b
-			mov a, c
-			ral
-			mov c, a
-
-			; check the top-right corner
-			mov a, l
-			add b
-			mov a, c
-			ral
-			mov c, a
-
-			; check the top-left corner
-			mov a, d
-			add b
-			mov a, c
-			ral
-*/
-			; check if there is any collidable tiledata
-			; de - (bottom-left), (bottom-right), 
-			; hl - (top-left), (top-right)
+			; hl - (top-left), (top-right)			
+			; de - (bottom-left), (bottom-right)
 			; hero collision ptr bit layout:
 			; (bottom-left), (bottom-right), (top_right), (top-left), 0, 0
 
@@ -377,14 +343,13 @@ hero_update_temp_pos:
 			add b
 			mov a, c
 			ral
-
-			add_a(2)
-			mov c, a
 
 			; handle a collision data around a hero
 			; if a hero is inside the collision, move him out
-			lxi h, hero_collision_func_table
+			add_a(2) ; to make a jmp table ptr with a 4 byte allignment
+			mov c, a
 			mvi b, 0
+			lxi h, hero_collision_func_table
 			dad b
 			pchl
 
@@ -394,20 +359,10 @@ hero_check_tiledata:
 			mov d, m
 			inx_h(2)
 			mov e, m
-			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
-			;CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			call room_get_tiledata2
-			rz ; return if there is no tiledata to analize
-hero_do_not_get_tiledata_around:	
-			lxi h, room_get_tiledata_buff2
-			mvi c, 4
-@loop:		TILEDATA_HANDLE_FUNC_CALL(hero_tile_func_table-JMP_4_LEN, true)
-			inx h
-			dcr c
-			jnz @loop
+			TILEDATA_HANDLING2(HERO_COLLISION_WIDTH, HERO_COLLISION_HEIGHT, hero_tile_func_table)
 			ret
 
-; we are here when a hero does not collide with colladable tiles, and there is no tiledata round
+; we are here when a hero does not collide with colladable tiles, and there is no tiledata_func_id>0 round
 hero_no_collision_no_tiledata:
 			lhld char_temp_x
 			shld hero_pos_x
@@ -421,7 +376,7 @@ hero_no_collision:
 			shld hero_pos_x
 			lhld char_temp_y
 			shld hero_pos_y
-			jmp hero_do_not_get_tiledata_around
+			jmp hero_check_tiledata
 
 hero_check_collision_top_left:
 			lda char_temp_x+1
@@ -596,6 +551,10 @@ hero_move_vertically:
 ; input:
 ; a - room_id
 hero_tile_func_teleport:
+			; we don't need to handle the rest of the collided tiles because the hero is teleporting.
+			; so, we remove hl from a stack stored there in the hero_check_tiledata routine
+			; as well as the return addr
+			pop h
 			pop h
 
 			; update a room id to teleport there
@@ -603,10 +562,6 @@ hero_tile_func_teleport:
 			; requesting room loading
 			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
 			sta level_command
-			; bypassing the hero_check_tiledata:@loop because the hero is teleporting
-			; so we don't need to handle the rest of the colllided tiles.
-			; return to the func that called hero_update
-			pop b
 
 			; check if the teleport on the left or right side
 			lda hero_pos_x+1
@@ -853,15 +808,7 @@ hero_erase:
 			lhld hero_erase_wh
 
 			; check if it needs to restore the background
-			;push h
-			;push d
-			;mvi a, -$20 ; advance DE to SCR_ADDR_0 to check the collision, to decide if we need to restore a beckground
-			;add d
-			;mov d, a
-			;CALL_RAM_DISK_FUNC(room_check_tiledata_restorable, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
 			call room_check_tiledata_restorable_v2
-			;pop d
-			;pop h
 			lhld hero_erase_scr_addr
 			xchg
 			lhld hero_erase_wh

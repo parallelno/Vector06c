@@ -48,7 +48,7 @@
 ; hl points to actorStatusTimer
 ; out:
 ; hl points to actorPosY+1
-.macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actorStatusTimer, actorPosX, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, CollisionHandler) 
+.macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actorStatusTimer, actorPosX, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, collisionHandler) 
 			LXI_B_TO_DIFF(actorPosX, actorStatusTimer)
 			dad b
 			push h ; (stack) <- posX ptr, to restore it in @applyNewPos
@@ -92,14 +92,10 @@
 			
 			mov d, a
 			mov e, h
-/*			
 			lxi b, (ACTOR_COLLISION_WIDTH-1)<<8 | ACTOR_COLLISION_HEIGHT-1
-			CALL_RAM_DISK_FUNC(room_check_tiledata_walkable, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-
-			*/
-			lxi b, (ACTOR_COLLISION_WIDTH-1)<<8 | ACTOR_COLLISION_HEIGHT-1
-			call room_check_tiledata_walkable_v2
-			jnz CollisionHandler
+			call room_get_collision_tiledata
+			ani TILEDATA_FUNC_MASK
+			jnz collisionHandler
 
 @applyNewPos:
 			pop h

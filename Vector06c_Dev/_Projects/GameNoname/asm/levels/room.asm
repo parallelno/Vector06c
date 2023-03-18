@@ -2,22 +2,11 @@ room_init:
 			call monsters_erase_runtime_data
 			call bullets_erase_runtime_data
 			call backs_init
-			call room_data_copy
+			call room_unpack
 			call room_init_tiles_gfx
 			call room_draw_on_scr
-			call room_handle_room_tiledata
-			; erase a back buffer $a000-$ffff in the ram-disk
-			; TODO: perhaps we do not need to erase a back buffer.
-			; because we will restore a background tiles
-			lxi b, $0000
-			lxi d, $6000 / 128 - 1
-			CALL_RAM_DISK_FUNC(__clear_mem_sp, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_CLEAR_MEM | RAM_DISK_M_89)
-
-			call room_draw_on_backbuffs
-
-			; convert room_tiledata into BACKBUFF2 buffer
-			;call room_init_tiledata_buff
-			;CALL_RAM_DISK_FUNC(room_init_tiledata_buff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
+			call room_handle_room_tiledata	
+			call room_copy_scr_to_backbuffs
 			ret
 
 ; uncompress room gfx tile idx buffer + room tiledata buffer into the room_tiles_gfx_ptrs + offset
@@ -25,7 +14,7 @@ room_init:
 ; after copying room tile idxs occupy the second half of the room_tiles_gfx_ptrs, and
 ; after copying room tiledata occupies the room_tiledata
 ; packed room data has to be stored into $8000-$FFFF segment to be properly unzipped
-room_data_copy:
+room_unpack:
 			; convert a room_idx into the room gfx tile idx buffer addr like __level01_room00 or __level01_room01, etc
 			lda room_idx
 			; double the room index to get an address offset in the level01_rooms_addr array
@@ -102,7 +91,7 @@ room_handle_room_tiledata:
 @loop:
 			mov b, m
 			push b
-			TILEDATA_HANDLE_FUNC_CALL(room_tiledata_funcs)
+			TILEDATA_HANDLING(room_tiledata_funcs)
 			pop b
 			mov m, a ; save tiledata back into room_tiledata. funcs (ex. burner_init etc.) can replace A with 0 to make it walkable
 			inx h
@@ -244,6 +233,8 @@ room_tiledata_decal_collidable_spawn:
 room_tiledata_breakable_spawn:
 			add_a(2) ; to make a jmp_4 ptr
 			sta @restoreA+1
+			mov a, b
+			sta @restoreTiledata+1
 			; scr_y = tile idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
@@ -269,14 +260,15 @@ room_tiledata_breakable_spawn:
 			; bc - sprite addr
 			; de - scr addr
 			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
-			mvi a, TILEDATA_BREAKABLE
+@restoreTiledata:
+			mvi a, TEMP_BYTE
 			ret
 
 room_draw_on_scr:
 			; main scr
 			CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01_GFX)
 			ret
-room_draw_on_backbuffs:
+room_copy_scr_to_backbuffs:
 			; copy $a000-$ffff scr buffs to the ram-disk back buffer
 			; TODO: optimization. think of making copy process while the gameplay started.
 			lxi d, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
@@ -292,61 +284,7 @@ room_draw_on_backbuffs:
 			mvi a, __RAM_DISK_S_BACKBUFF2
 			call copy_to_ram_disk32
 			ret
-/*
-;=========================================================
-; convert room_tiledata into the tiledata buffer in the ram-disk
-; call ex. CALL_RAM_DISK_FUNC(room_init_tiledata_buff, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
-room_init_tiledata_buff:
-			; set y = 0
-			mvi e, 0
-			lxi h, room_tiledata
-@newLine
-			; reset the x. it's a high byte of the first screen buffer addr
-			mvi d, $80
-@loop:
-			; DE - screen addr
-			; HL - tile graphics addr
-			mov a, m
-			inx h
-			ROOM_DRAW_TILEDATA()
 
-			; x = x + 1
-			inr d
-			; repeat if x reaches the high byte of the second screen buffer addr
-			mvi a, $a0
-			cmp d
-			jnz @loop
-
-			; move posY up to the next tile line
-			mvi a, TILE_HEIGHT
-			add e
-			mov e, a
-			cpi ROOM_HEIGHT * TILE_HEIGHT
-			jc @newLine
-			ret
-
-;----------------------------------------------------------------
-; draw a tile filled up with a tiledata (16x16 pixels)
-; input:
-; c - tiledata
-; de - screen addr (x,y)
-; out:
-; d = d + 1
-.macro ROOM_DRAW_TILEDATA()
-		.loop 15
-			stax d
-			inr e
-		.endloop
-			stax d
-
-			inr d
-		.loop 15
-			stax d
-			dcr e
-		.endloop
-			stax d
-.endmacro
-*/
 ;=========================================================
 ; draw a room tiles. It might be a main screen, or a back buffer
 ; call ex. CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01_GFX)
@@ -386,47 +324,7 @@ room_draw_tiles:
 			cpi ROOM_HEIGHT * TILE_HEIGHT
 			jc @newLine
 			ret
-/*
-; check tiles if they need to be restored. It uses the tiledata buffer in the ram-disk
-; ex. CALL_RAM_DISK_FUNC(room_check_tiledata_restorable, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-; in:
-; de - back buffer2 scr addr
-; h - width
-;		00 - 8pxs,
-;		01 - 16pxs,
-;		10 - 24pxs,
-;		11 - 32pxs
-; l - height
-; out:
-; Z flag is OFF if an area needs to be restored
-; change:
-; a, hl, de, b
-; old wrong 120 - 236 cc
-; 144 - 244 cc
-room_check_tiledata_restorable:
-			xchg
-			xra a
-			; check the bottom-left corner
-			cmp m
-			rnz
-			; check the top-right corner
-			xchg
-			dad d
-			dcr l ; to be inside the AABB
-			cmp m
-			rnz		; 184 cc if returns
-			; check the top-left corner
-			mov b, h
-			mov h, d
-			cmp m
-			rnz		; 216 cc if reterns
-			; check the bottom-right corner
-			xchg
-			mov h, b
-			cmp m
-			; returns Z=1. this area do not need to be restored
-			ret		; 244 cc
-*/
+
 ; check tiles if they need to be restored.
 ; all gfx of tiledata that are > 0, need to be restored if there is a sprite on it
 ; in:
@@ -498,64 +396,20 @@ room_check_tiledata_restorable_v2:
 			ldax d
 			ora a
 			ret		; 280 cc
-/*
-; check if tiles are walkable.
-; func uses the tiledata buffer in the ram-disk
-; call ex. CALL_RAM_DISK_FUNC(room_check_tiledata_walkable, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
+			
+; collects tiledata of tiles that intersect with a sprite
+; if several tile corners stays on the same tile, 
+; they all read same tiledata to let collision logic works properly
 ; in:
 ; d - posX
 ; e - posY
 ; b - width-1
 ; c - height-1
 ; out:
-; Z flag is on when all tiledata are walkable (tiledata ffff == 0)
-; 292 cc
-; mov RP + call + body = 320 cc
-room_check_tiledata_walkable:
-			; calc the top-right corner addr
-			mov a, d
-			add b
-			ani %11110000
-			rrc_(3)
-			adi >BACK_BUFF2_ADDR
-			mov h, a
-			mov a, e
-			add c
-			mov l, a
-
-			; calc the bottom-left scr addr
-			xchg
-			mvi a, %11110000
-			ana h
-			rrc_(3)
-			adi >BACK_BUFF2_ADDR
-			mov h, a
-
-			; check the bottom-left corner
-			mov a, m
-			; check the bottom-right corner
-			mov b, h ; tmp
-			mov h, d
-			ora m
-			; check the top-right scr addr
-			mov l, e
-			ora m
-			; check the top-left corner
-			mov h, b
-			ora m
-			ani TILEDATA_FUNC_MASK
-			ret
-*/
-; check if tiles are walkable.
-; in:
-; d - posX
-; e - posY
-; b - width-1
-; c - height-1
-; out:
-; Z flag is on when all tiledata are walkable (tiledata func == 0)
-; mov+call+body 28+24+176=228 - 28+24+240=292 cc
-room_check_tiledata_walkable_v2:
+; hl - (top-left), (top-right)			
+; de - (bottom-left), (bottom-right)
+; a - "OR" operation on tiledata of all tiles that intersect with a sprite
+room_get_collision_tiledata:
 			; calc y in tiles
 			mvi a, %11110000
 			ana e
@@ -582,26 +436,26 @@ room_check_tiledata_walkable_v2:
 			cmp h
 			jz @tileSizeW1H2
 
-@tileSizeW2H2:
 			rrc_(4)
 			ora l
 			mov l, a
 			mvi h, >room_tiledata
 
-			; check bottom-left corner
-			mov a, m
-			; check bottom-right corner
-			inx h ; check the next tile instead of (x+dx) because there is no sprites wider 32 pxls
-			ora m
-			; check top-right corner
+			mov e, m
+			inx h
+			mov d, m
 			lxi b, ROOM_WIDTH
 			dad b
-			ora m
-			; check top-left corner
+			mov a, m
 			dcx h
-			ora m
-			ani TILEDATA_FUNC_MASK
+			mov l, m
+			mov h, a
+
+			ora l
+			ora d
+			ora e
 			ret
+
 @tileSizeH1:
 			; calc x+dx in tiles
 			mov a, d
@@ -621,195 +475,64 @@ room_check_tiledata_walkable_v2:
 			mov l, a
 			mvi h, >room_tiledata
 
-			; check bottom-left corner
-			mov a, m
-			; check bottom-right corner
-			inx h ; check the next tile instead of (x+dx) because there is no sprites wider 32 pxls
-			ora m
-			ani TILEDATA_FUNC_MASK
+			mov e, m
+			inx h
+			mov d, m
+			mov h, d
+			mov l, e
+
+			mov a, d
+			ora e
 			ret
+
 @tileSizeW1H1:
 			rrc_(4)
 			ora l
 			mov l, a
 			mvi h, >room_tiledata
 
-			; check bottom-left corner
-			mov a, m
-			ani TILEDATA_FUNC_MASK
-			ret
-
-@tileSizeW1H2:
-			rrc_(4)
-			ora l
-			mov l, a
-			mvi h, >room_tiledata
-
-			; check bottom-left corner
-			mov a, m
-			; check top-left corner
-			lxi b, ROOM_WIDTH
-			dad b
-			ora m
-			ani TILEDATA_FUNC_MASK
-			ret
-/*
-; check if tiles are walkable.
-; in:
-; a - posX
-; e - posY
-; b - width-1
-; c - height-1
-; out:
-; Z flag is on when all tiledata are walkable (tiledata ffff == 0)
-; v1. mov RP + call + body = 320 cc
-; v2. 28+24+176=228 - 28+24+240=292 cc
-; v3. 20+24+124=168 - 20+24+292=336
-room_check_tiledata_walkable_v3:
-			mov d, a
-			ani %11110000
-			rrc_(4)
-			mov h, a
-			mvi a, %11110000
-			ana e
-			mov l, a
-
-			xchg
-			dad b
-			; hl - top-right corner posXY
-			; d = x in tiles
-			; e, a = y in tiles * 32
-			mvi b, >room_tiledata
-
-			; check bottom-left corner
-			ora d
-			mov c, a
-			ldax b
-			ani TILEDATA_FUNC_MASK
-			rnz			; 168
-
-			; get x+dx in tiles
-			mvi a, %11110000
-			ana h
-			rrc_(4)
-			mov h, a
-			; h, a = x+dx in tiles
-
-			; check bottom-right corner
-			ora e
-			mov c, a
-			ldax b
-			mvi e, TILEDATA_FUNC_MASK
-			ana e
-			rnz			; 244
-
-			; get y+dy in tiles
-			mvi a, %11110000
-			ana l
-			mov l, a
-			; l, a = y+dy in tiles
-
-			; check top-right corner
-			ora h
-			mov c, a
-			ldax b
-			ana e
-			rnz			; 296
-
-			; check top-left corner
-			mov a, d
-			ora l
-			mov c, a
-			ldax b
-			ana e
-			ret		; 336
-*/
-/*
-; collects tiledata of tiles that intersect with a sprite
-; this func uses the tiledata buffer in the ram-disk
-; ex. CALL_RAM_DISK_FUNC(room_get_tiledata, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-; in:
-; d - posX
-; e - posY
-; b - width-1
-; c - height-1
-; out: room_get_tiledata_buff
-; hl - (room_get_tiledata_buff+2)
-; de - (room_get_tiledata_buff)
-room_get_tiledata_buff:
-			; tiledata layout:
-			; (bottom-left), (top-left), (top-right), (bottom-right)
-			.byte 0, 0, 0, 0,
-; Z flag = 1 if all tiles have tiledata func==0
-; 364 cc
-room_get_tiledata:
-			; calc the top-right corner addr
-			mov a, d
-			add b
-			ani %11110000
-			rrc_(3)
-			adi >BACK_BUFF2_ADDR
-			mov h, a
-			mov a, e
-			add c
-			mov l, a
-
-			; calc the bottom-left scr addr
-			xchg
-			mvi a, %11110000
-			ana h
-			rrc_(3)
-			adi >BACK_BUFF2_ADDR
-			mov h, a
-
-			; check the bottom-left corner
-			mov c, m
-			; check the bottom-right corner
-			mov b, h ; tmp
-			mov h, d
-			mov d, m
-			; check the top-right scr addr
-			mov l, e
-			mov e, m
-			; check the top-left corner
-			mov h, b
+			; all four corners in the same tile
 			mov h, m
-			mov l, c
-
-			; tiledata layout in registers:
-			; h (top-left), 	e (top_right)
-			; l (bottom-left), 	d (bottom-right)
-
-			; tiledata layout in room_get_tiledata_buff:
-			; (bottom-left), (top-left), (top_right), (bottom-right)
-
-			shld room_get_tiledata_buff
-			xchg
-			shld room_get_tiledata_buff+2
+			mov l, h
+			mov d, h
+			mov e, h
 
 			mov a, h
-			ora l
-			ora d
-			ora e
-			ani TILEDATA_FUNC_MASK
 			ret
-*/
-; collects tiledata of tiles that intersect with a sprite
+
+@tileSizeW1H2:
+			rrc_(4)
+			ora l
+			mov l, a
+			mvi h, >room_tiledata
+
+			mov e, m
+			lxi b, ROOM_WIDTH
+			dad b
+			mov l, m
+			mvi h, 0
+			mov d, h
+
+			mov a, e
+			ora l
+			ret
+
+; collects idxs of tiles that intersect with a sprite
+; if 2+ corners are in the same tile, only one idx is stored
 ; in:
 ; d - posX
 ; e - posY
 ; b - width-1
 ; c - height-1
 ; out: room_get_tiledata_buff
-; hl - (room_get_tiledata_buff+2)
-; de - (room_get_tiledata_buff)
-room_get_tiledata_buff2:
-			; tiledata layout:
-			; (bottom-left), (bottom-right), (top-left), (top-right)
-			.byte 0, 0, 0, 0,
+; hl - ptr to the last tile idx in the array room_get_tiledata_idxs
+			.byte TILE_IDX_INVALID
+; tile idxs that intersect with a sprite. max = 4, can be less when 2+ corners are in the same tile
+room_get_tiledata_idxs: 
+			.byte 0,0,0,0
 ; Z flag = 1 if all tiles have tiledata func==0
 ; 24+224=248 - 24+316 =340 cc
-room_get_tiledata2:
+room_get_tiledata:
 			; calc y in tiles
 			mvi a, %11110000
 			ana e
@@ -838,29 +561,19 @@ room_get_tiledata2:
 
 			rrc_(4)
 			ora l
-
-			mov l, a
-			mvi h, >room_tiledata
-
-			xra a
-			mov e, m
-			ora e
+			
+			; store tile idxs
+			lxi h, room_get_tiledata_idxs
+			mov m, a
 			inx h
-			mov d, m
-			ora d
-			lxi b, ROOM_WIDTH
-			dad b
-			xchg
-			shld room_get_tiledata_buff2
-			xchg
-			mov b, m
-			ora b
-			dcx h
-			mov l, m
-			ora l
-			mov h, b
-			shld room_get_tiledata_buff2+2
-			ani TILEDATA_FUNC_MASK
+			inr a
+			mov m, a
+			inx h
+			adi ROOM_WIDTH-1
+			mov m, a
+			inx h
+			inr a
+			mov m, a
 			ret
 
 @tileSizeH1:
@@ -879,59 +592,32 @@ room_get_tiledata2:
 @tileSizeW2H1:
 			rrc_(4)
 			ora l
-
-			mov l, a
-			mvi h, >room_tiledata
-
-			xra a
-			mov e, m
-			ora e
+			
+			; store tile idxs
+			lxi h, room_get_tiledata_idxs
+			mov m, a
 			inx h
-			mov d, m
-			ora d
-
-			; bottom two corners points to the same tiledata as the top two corners
-			xchg
-			shld room_get_tiledata_buff2
-			shld room_get_tiledata_buff2+2
-			ani TILEDATA_FUNC_MASK
+			inr a
+			mov m, a
 			ret
 
 @tileSizeW1H1:
 			rrc_(4)
 			ora l
-
-			mov l, a
-			mvi h, >room_tiledata
-
-			; all four corners points tothe same tiledata
-			mov a, m
-			mov l, a
-			mov h, a
-			shld room_get_tiledata_buff2
-			shld room_get_tiledata_buff2+2
-			ani TILEDATA_FUNC_MASK
+			
+			; store tile idxs
+			lxi h, room_get_tiledata_idxs
+			mov m, a
 			ret
 
 @tileSizeW1H2:
 			rrc_(4)
 			ora l
-
-			mov l, a
-			mvi h, >room_tiledata
-
-			xra a
-			mov e, m
-			mvi d, 0
-			ora e
-			lxi b, ROOM_WIDTH
-			dad b
-			xchg
-			shld room_get_tiledata_buff2
-			xchg
-			mov l, m
-			ora l
-			mov h, d
-			shld room_get_tiledata_buff2+2
-			ani TILEDATA_FUNC_MASK
+			
+			; store tile idxs
+			lxi h, room_get_tiledata_idxs
+			mov m, a
+			inx h
+			adi ROOM_WIDTH
+			mov m, a
 			ret
