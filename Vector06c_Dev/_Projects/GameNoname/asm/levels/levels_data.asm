@@ -11,8 +11,9 @@ room_idx:   .byte 0 ; 0 - ROOMS_MAX-1
 ; rooms runtime data
 ; TODO: move it to buffers.asm aligned by 256+Const
 rooms_runtime_data:
-rooms_death_rate_monsters: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a monster. 255 means no spawn
-rooms_death_rate_breakables: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a breakable item. 255 means no spawn
+rooms_spawn_rate_monsters: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a monster. 255 means no spawn
+rooms_spawn_rate_breakables: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a breakable item. 255 means no spawn
+rooms_status_walkable: .storage ROOMS_MAX * WALKABLES_MAX, 0
 rooms_runtime_data_end_addr:
 
 ; tile graphics pointer table
@@ -49,23 +50,26 @@ rooms_runtime_data_end_addr:
 ; ffff == 4, teleport to 32-47 room_id, room_id = d+32
 ; ffff == 5, teleport to 48-63 room_id, room_id = d+48
 
-; ffff == 10, a walkable item. a hero interacts with it only when he hits it with a weapon. status of every item in the room is stored. item_walkable_id = d
-;		item_walkable_id == 0 - a key red
+; ffff == 7, a walkable item. a hero interacts with it only when he hits it with a weapon. status of every item in the room is stored. item_walkable_id = d
+;		item_walkable_id == 0 - a coin (tiledata = 10*16+0 = 160)
 ;		item_walkable_id == 1 - a key blue
-;		item_walkable_id == 2 - a key 1
-;		item_walkable_id == 3 - a key 2
-;		item_walkable_id == 4 - a potion red 
+;		item_walkable_id == 2 - a key red
+;		item_walkable_id == 3 - a key green
+;		item_walkable_id == 4 - a key magma
 ;		item_walkable_id == 5 - a potion blue
-;		item_walkable_id == 6 - an item 1
-;		item_walkable_id == 7 - an item 2
-;		item_walkable_id == 8 - an item 3
-;		item_walkable_id == 9 - a coin (tiledata = 10*16+5 = 165) 
-;		item_walkable_id == 10 - a damage pool.
-;		item_walkable_id == 11 - a slow pool.
-
-; ffff == 11, ???
+;		item_walkable_id == 6 - a potion red
+;		item_walkable_id == 7 - an item 1
+;		item_walkable_id == 8 - an item 2
+;		item_walkable_id == 9 - an item 3
+;		item_walkable_id == 10 - a damage pool
+;		item_walkable_id == 11 - a slow pool
 
 ; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable
+
+; ffff == 8, ???
+; ffff == 9, ???
+; ffff == 10, ???
+; ffff == 11, ???
 
 ; ffff == 12, a collidable item. a hero interacts with it only when he collids with it or hits it with a weapon. collidable_id = d
 ;		collidable_id == 0 - a small chest. small money reward
@@ -102,21 +106,21 @@ rooms_runtime_data_end_addr:
 ; to init each tiledata in a room during a room initialization. check room.asm room_handle_room_tiledata func
 room_tiledata_funcs:
 			jmp_4(room_tiledata_decal_walkable_spawn)	; func_id = 0
-			jmp_4(room_tiledata_monster_spawn)
-			jmp_4(room_tiledata_copy)
-			jmp_4(room_tiledata_copy)
-			jmp_4(room_tiledata_copy)
-			jmp_4(room_tiledata_copy)
-			jmp_4(room_tiledata_copy)
-			jmp_4(room_tiledata_copy)
-			jmp_4(room_tiledata_copy)
-			jmp_4(room_tiledata_copy)
-			jmp_4(room_tiledata_copy)
-			jmp_4(room_tiledata_copy)
-			jmp_4(room_tiledata_copy)
-			jmp_4(room_tiledata_breakable_spawn)
-			jmp_4(room_tiledata_decal_collidable_spawn)
-			jmp_4(room_tiledata_back_spawn)	; func_id = 15
+			jmp_4(room_tiledata_monster_spawn)			; func_id = 1
+			jmp_4(room_tiledata_copy)					; func_id = 2
+			jmp_4(room_tiledata_copy)					; func_id = 3
+			jmp_4(room_tiledata_copy)					; func_id = 4
+			jmp_4(room_tiledata_copy)					; func_id = 5
+			jmp_4(room_tiledata_copy)					; func_id = 6
+			jmp_4(room_tiledata_walkable_spawn)			; func_id = 7
+			jmp_4(room_tiledata_copy)					; func_id = 8
+			jmp_4(room_tiledata_copy)					; func_id = 9
+			jmp_4(room_tiledata_copy)					; func_id = 10
+			jmp_4(room_tiledata_copy)					; func_id = 11
+			jmp_4(room_tiledata_copy)					; func_id = 12
+			jmp_4(room_tiledata_breakable_spawn)		; func_id = 13
+			jmp_4(room_tiledata_decal_collidable_spawn)	; func_id = 14
+			jmp_4(room_tiledata_back_spawn)				; func_id = 15
 
 ; command that are handled by the level update func
 LEVEL_COMMAND_NONE = 0

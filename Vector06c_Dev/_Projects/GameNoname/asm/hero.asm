@@ -306,8 +306,8 @@ hero_update_temp_pos:
 			call room_get_collision_tiledata
 			ani TILEDATA_FUNC_MASK
 			jz hero_no_collision_no_tiledata ; if there is no tiledata to analize, move a hero and return
-			;cpi TILEDATA_COLLIDABLE
-			;jc hero_check_tiledata
+			ani TILEDATA_COLLIDABLE
+			jz hero_no_collision
 
 @collides:
 			; check if there is any collidable tiledata

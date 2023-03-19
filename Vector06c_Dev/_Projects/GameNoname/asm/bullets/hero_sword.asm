@@ -303,8 +303,7 @@ hero_sword_func_breakable:
 			; draw a tile in the back buffer2
 			CALL_RAM_DISK_FUNC(draw_tile_16x16_back_buff, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
 
-			ROOM_DEATH_RATE_UPDATE(rooms_death_rate_breakables, @next, BREAKABLE_DEATH_RATE_DELTA, BREAKABLE_DEATH_RATE_MAX)
-@next:			
+			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_breakables, BREAKABLE_SPAWN_RATE_DELTA, BREAKABLE_SPAWN_RATE_MAX)
 			ret
 
 ; draw a sprite into a backbuffer

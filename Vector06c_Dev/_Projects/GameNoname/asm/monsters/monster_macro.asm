@@ -94,7 +94,7 @@
 			sta @monster_id+1
 
 			; TODO: move the code into a spawner init routine
-			ROOM_DEATH_RATE_CHECK(rooms_death_rate_monsters, @ret)
+			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_monsters, @ret)
 
 			call monsters_get_empty_data_ptr
 			; hl - ptr to monster_update_ptr+1

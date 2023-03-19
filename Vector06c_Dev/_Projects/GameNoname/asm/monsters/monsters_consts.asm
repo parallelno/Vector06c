@@ -4,9 +4,6 @@ MONSTERS_MAX = 15
 MONSTER_TYPE_ENEMY = 0
 MONSTER_TYPE_ALLY = 1
 
-MONSTER_DEATH_RATE_MAX		= 240 
-MONSTER_DEATH_RATE_DELTA	= 16
-
 MONSTER_RUNTIME_DATA_DESTR  = $fc ; a monster is ready to be destroyed
 MONSTER_RUNTIME_DATA_EMPTY  = $fd ; a monster data is available for a new monster
 MONSTER_RUNTIME_DATA_LAST   = $fe ; the end of the last existing monster data

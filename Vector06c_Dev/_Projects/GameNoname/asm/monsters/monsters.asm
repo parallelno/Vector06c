@@ -388,8 +388,7 @@ monster_erase:
 
 
 monster_impacted:
-			ROOM_DEATH_RATE_UPDATE(rooms_death_rate_monsters, @next, MONSTER_DEATH_RATE_DELTA, MONSTER_DEATH_RATE_MAX)
-@next:
+			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_monsters, MONSTER_SPAWN_RATE_DELTA, MONSTER_SPAWN_RATE_MAX)
 			; de - ptr to monster_impacted_ptr+1
 			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)
 			dad d

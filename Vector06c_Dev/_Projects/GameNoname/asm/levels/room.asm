@@ -236,7 +236,7 @@ room_tiledata_breakable_spawn:
 			mov a, b
 			sta @restoreTiledata+1
 			
-			ROOM_DEATH_RATE_CHECK(rooms_death_rate_breakables, @noSpawn)
+			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_breakables, @noSpawn)
 			jmp @spawn
 @noSpawn:
 			mvi a, TILEDATA_RESTORE_TILE
@@ -267,7 +267,56 @@ room_tiledata_breakable_spawn:
 			; bc - sprite addr
 			; de - scr addr
 			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+@restoreTiledata:
+			mvi a, TEMP_BYTE
+			ret
 
+; a tiledata handler for walkable items.
+; input:
+; b - tiledata
+; c - tile idx in the room_tiledata array.
+; a - walkable_id
+; out:
+; a - tiledata that will be saved back into room_tiledata
+room_tiledata_walkable_spawn:
+			add_a(2) ; to make a jmp_4 ptr
+			sta @restoreA+1
+			mov a, b
+			sta @restoreTiledata+1
+			/*
+			; check global
+			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_breakables, @noSpawn)
+			jmp @spawn
+@noSpawn:
+			mvi a, TILEDATA_RESTORE_TILE
+			ret
+@spawn:
+*/
+			; scr_y = tile idx % ROOM_WIDTH
+			mvi a, %11110000
+			ana c
+			mov e, a
+			; c - tile_idx
+			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
+			mvi a, %00001111
+			ana c
+			rlc
+			adi >SCR_ADDR
+			mov d, a
+			; de - scr addr
+			push d
+
+			lxi h, __items_walkable_gfx_ptrs
+@restoreA:	lxi d, TEMP_BYTE
+			dad d
+			xchg
+			; de pptr to a sprite
+			mvi a, <__RAM_DISK_S_DECALS
+			call get_word_from_ram_disk
+			pop d
+			; bc - sprite addr
+			; de - scr addr
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
 @restoreTiledata:
 			mvi a, TEMP_BYTE
 			ret

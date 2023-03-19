@@ -22,7 +22,7 @@
 	"lists" : {
 		"decals_walkable" : ["bones", "skull"],		
 		"decals_collidable" : ["web1"],
-		"items_walkable" : ["coin", "key_blue", "potion_red"],
+		"items_walkable" : ["coin", "key_blue", "key_red", "key_green", "key_magma", "potion_blue", "potion_red"],
 		"items_collidable" : ["coin"],
 		"breakable" : ["barrel", "crate"]
 	},
@@ -90,38 +90,86 @@
 		{
 			"name" : "coin",
 			"x" : 0,
-			"y"	: 36,
+			"y"	: 100,
 			"width" : 16,
 			"height" : 11,
-			"offset_y" : 0,
-			"mask_x" : 16,
-			"mask_y" : 36, 
+			"offset_y" : 1,
+			"mask_x" : 0,
+			"mask_y" : 116,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
 			"name" : "key_blue",
-			"x" : 32,
-			"y"	: 37,
+			"x" : 16,
+			"y"	: 101,
 			"width" : 16,
 			"height" : 10,
-			"offset_y" : 0,
-			"mask_x" : 48,
-			"mask_y" : 37, 
+			"offset_y" : 1,
+			"mask_x" : 16,
+			"mask_y" : 117, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
-			"name" : "potion_red",
+			"name" : "key_red",
 			"x" : 32,
-			"y"	: 35,
+			"y"	: 101,
 			"width" : 16,
-			"height" : 12,
-			"offset_y" : 0,
-			"mask_x" : 48,
-			"mask_y" : 35, 
+			"height" : 10,
+			"offset_y" : 1,
+			"mask_x" : 32,
+			"mask_y" : 117, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		}						
+		},
+		{
+			"name" : "key_green",
+			"x" : 48,
+			"y"	: 101,
+			"width" : 16,
+			"height" : 10,
+			"offset_y" : 1,
+			"mask_x" : 48,
+			"mask_y" : 117, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},	
+		{
+			"name" : "key_magma",
+			"x" : 64,
+			"y"	: 101,
+			"width" : 16,
+			"height" : 10,
+			"offset_y" : 1,
+			"mask_x" : 64,
+			"mask_y" : 117, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},	
+		{
+			"name" : "potion_blue",
+			"x" : 80,
+			"y"	: 99,
+			"width" : 16,
+			"height" : 12,
+			"offset_y" : 1,
+			"mask_x" : 80,
+			"mask_y" : 115, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},	
+		{
+			"name" : "potion_red",
+			"x" : 96,
+			"y"	: 99,
+			"width" : 16,
+			"height" : 12,
+			"offset_y" : 1,
+			"mask_x" : 96,
+			"mask_y" : 115, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		}		
 	]
 }

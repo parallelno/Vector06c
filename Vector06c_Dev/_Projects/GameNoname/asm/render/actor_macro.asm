@@ -92,9 +92,23 @@
 			
 			mov d, a
 			mov e, h
+			; check if X<TILE_WIDTH or > ROOM_WIDTH * TILE_WIDTH - TILE_WIDTH
+			cpi TILE_WIDTH
+			jc collisionHandler
+			cpi ROOM_WIDTH * TILE_WIDTH - TILE_WIDTH
+			jnc collisionHandler
+			; check if Y<TILE_HEIGHT or > ROOM_HEIGHT * TILE_HEIGHT - TILE_HEIGHT
+			mov a, e
+			cpi TILE_HEIGHT
+			jc collisionHandler
+			cpi ROOM_HEIGHT * TILE_HEIGHT - TILE_HEIGHT
+			jnc collisionHandler
+
 			lxi b, (ACTOR_COLLISION_WIDTH-1)<<8 | ACTOR_COLLISION_HEIGHT-1
+			; de - posXY
+			; bc - width, height
 			call room_get_collision_tiledata
-			ani TILEDATA_FUNC_MASK
+			ani TILEDATA_COLLIDABLE
 			jnz collisionHandler
 
 @applyNewPos:
