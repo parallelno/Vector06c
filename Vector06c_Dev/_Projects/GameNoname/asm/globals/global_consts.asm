@@ -1,4 +1,4 @@
-			; nonsense to make VS Code remember the text formatting.
+	; this line for VSCode proper formating
 ; prefixes
 ; ADDR - address
 ; BUF - buffer

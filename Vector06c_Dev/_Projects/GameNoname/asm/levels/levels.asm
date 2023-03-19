@@ -4,6 +4,11 @@
 levels_init:
 			xra a
 			sta level_idx
+
+			; erase global item statuses
+			lxi h, global_items
+			lxi b, global_items_end - global_items
+			call clear_mem	
 			ret
 
 ;================================================================
@@ -18,7 +23,7 @@ level_init:
 
 			; erase rooms runtime data
 			lxi h, rooms_runtime_data
-			lxi b, rooms_runtime_data_end_addr - rooms_runtime_data
+			lxi b, rooms_runtime_data_end - rooms_runtime_data
 			call clear_mem
 
 			xra a

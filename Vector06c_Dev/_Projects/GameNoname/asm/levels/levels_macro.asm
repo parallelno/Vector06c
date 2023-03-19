@@ -15,7 +15,7 @@
 			; extract a function
 			ani TILEDATA_FUNC_MASK
 		.if skip_func_zero
-			; if func_id == 0, that means it is an walkable (non-interactable) tile, we skip it.
+			; if func_id == 0, that means it is a walkable (non-interactable) tile, we skip it.
 			jz @funcReturnAddr
 		.endif
 			rrc_(2) ; to make a jmp table ptr with a 4 byte allignment
@@ -83,10 +83,10 @@
 .macro ROOM_SPAWN_RATE_CHECK(rate, doNotSpawn)
 			; check rooms_break_rate if it needs to spawn
 			lda room_idx
-			mov e, a
-			mvi d, 0
-			lxi h, rate
-			dad d
+			adi <rate
+			mov l, a
+			mvi h, >rate
+
 			mov e, m
 			call random
 			cmp e
@@ -94,14 +94,14 @@
 .endmacro			
 
 .macro ROOM_SPAWN_RATE_UPDATE(rate, SPAWN_RATE_DELTA, SPAWN_RATE_MIN)
-			; increase room_death_rate
+			; increase death_rate
 			lda room_idx
-			mov c, a
-			mvi b, 0
-			lxi h, rate
-			dad b
-			mvi a, SPAWN_RATE_DELTA
-			add m
+			adi <rate
+			mov l, a
+			mvi h, >rate
+
+			mov a, m
+			adi SPAWN_RATE_DELTA
 			mov m, a
 			jnc @next
 			mvi m, SPAWN_RATE_MIN

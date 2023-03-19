@@ -34,14 +34,14 @@ room_unpack:
 			mov e, c
 
 			; copy room gfx tile idxs + room tiledata into the room_tiles_gfx_ptrs + offset
-			; offset = (room_tiles_gfx_ptrs_end - room_tiles_gfx_ptrs) / 2
-			lxi b, room_tiles_gfx_ptrs + (room_tiles_gfx_ptrs_end - room_tiles_gfx_ptrs) / 2
+			; offset = room_tiles_gfx_ptrs_size / 2
+			lxi b, room_tiles_gfx_ptrs + room_tiles_gfx_ptrs_size / 2
 			CALL_RAM_DISK_FUNC(dzx0, __RAM_DISK_M_LEVEL01_DATA | RAM_DISK_M_8F)
 			ret
 
 ; convert room gfx tile idxs into room gfx tile ptrs
 room_init_tiles_gfx:
-			lxi h, room_tiles_gfx_ptrs + (room_tiles_gfx_ptrs_end - room_tiles_gfx_ptrs) / 2
+			lxi h, room_tiles_gfx_ptrs + room_tiles_gfx_ptrs_size / 2
 			lxi b, room_tiles_gfx_ptrs
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
 			; hl - current room tile indexes
@@ -271,27 +271,29 @@ room_tiledata_breakable_spawn:
 			mvi a, TEMP_BYTE
 			ret
 
-; a tiledata handler for walkable items.
+; a tiledata handler for item items.
 ; input:
 ; b - tiledata
 ; c - tile idx in the room_tiledata array.
-; a - walkable_id
+; a - item_id
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
-room_tiledata_walkable_spawn:
+room_tiledata_item_spawn:
+			lxi h, @restoreTiledata+1
+			mov m, b
+
 			add_a(2) ; to make a jmp_4 ptr
 			sta @restoreA+1
-			mov a, b
-			sta @restoreTiledata+1
-			/*
-			; check global
-			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_breakables, @noSpawn)
-			jmp @spawn
-@noSpawn:
-			mvi a, TILEDATA_RESTORE_TILE
-			ret
-@spawn:
-*/
+
+			; check global item status
+			mvi h, >global_items
+			rrc
+			adi <global_items
+			mov l, a
+			mov a, m
+			ora a
+			jnz @restoreTiledata ; if status != 0, means this item was picked up
+
 			; scr_y = tile idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
@@ -306,7 +308,7 @@ room_tiledata_walkable_spawn:
 			; de - scr addr
 			push d
 
-			lxi h, __items_walkable_gfx_ptrs
+			lxi h, __items_gfx_ptrs
 @restoreA:	lxi d, TEMP_BYTE
 			dad d
 			xchg

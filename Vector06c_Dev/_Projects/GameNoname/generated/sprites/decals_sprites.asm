@@ -9,10 +9,10 @@ __decals_walkable_gfx_ptrs: .word __decals_bones, 0, __decals_skull,
 __decals_collidable_gfx_ptrs: .word __decals_web1, 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
-__items_walkable_gfx_ptrs: .word __decals_coin, 0, __decals_key_blue, 0, __decals_key_red, 0, __decals_key_green, 0, __decals_key_magma, 0, __decals_potion_blue, 0, __decals_potion_red, 
+__items_gfx_ptrs: .word __decals_key_blue, 0, __decals_key_red, 0, __decals_key_green, 0, __decals_key_magma, 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
-__items_collidable_gfx_ptrs: .word __decals_coin, 
+__resource_gfx_ptrs: .word __decals_coin, 0, __decals_potion_blue, 0, __decals_potion_red, 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
 __breakable_gfx_ptrs: .word __decals_barrel, 0, __decals_crate, 
@@ -54,13 +54,6 @@ __decals_barrel:
 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
-__decals_coin:
-			.byte 1, 0; offset_y, offset_x
-			.byte 11, 1; height, width
-			.byte 255,7,1,240,0,0,0,0,240,1,254,3,3,248,0,0,0,0,56,0,252,3,0,24,192,3,192,3,248,7,248,1,8,60,224,7,224,7,12,0,240,1,4,4,240,11,240,15,140,21,240,3,18,72,240,15,240,15,0,0,240,3,5,0,240,10,240,15,72,23,240,3,23,232,240,15,144,9,96,6,248,7,3,128,96,4,224,7,144,11,252,15,4,32,192,3,192,3,0,0,254,31,0,0,0,0,0,0,192,3,
-
-
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
 __decals_key_blue:
 			.byte 1, 0; offset_y, offset_x
 			.byte 10, 1; height, width
@@ -89,15 +82,22 @@ __decals_key_magma:
 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
+__decals_coin:
+			.byte 1, 0; offset_y, offset_x
+			.byte 11, 1; height, width
+			.byte 255,7,1,240,0,0,0,0,240,1,254,3,3,248,0,0,0,0,56,0,252,3,0,24,192,3,192,3,248,7,248,1,8,60,224,7,224,7,12,0,240,1,4,4,240,11,240,15,140,21,240,3,18,72,240,15,240,15,0,0,240,3,5,0,240,10,240,15,72,23,240,3,23,232,240,15,144,9,96,6,248,7,3,128,96,4,224,7,144,11,252,15,4,32,192,3,192,3,0,0,254,31,0,0,0,0,0,0,192,3,
+
+
+			.byte 0,0  ; safety pair of bytes to support a stack renderer
 __decals_potion_blue:
 			.byte 1, 0; offset_y, offset_x
 			.byte 12, 1; height, width
-			.byte 252,15,3,240,0,0,0,0,0,0,248,7,7,224,0,0,0,0,24,0,240,7,4,8,224,7,0,0,240,11,224,3,19,248,0,0,240,15,196,15,224,3,15,228,240,15,0,0,248,23,224,7,23,168,0,0,240,15,240,15,240,15,4,160,160,4,0,0,16,8,248,31,4,32,0,0,64,2,64,2,248,31,0,0,128,1,0,0,224,7,248,31,4,224,0,0,192,3,0,3,252,63,0,0,128,1,0,0,64,2,254,127,1,128,0,0,0,0,0,0,
+			.byte 240,7,3,240,0,0,0,0,0,0,252,127,7,224,0,0,0,0,24,0,247,207,4,8,224,3,0,4,240,15,229,135,31,248,0,12,240,3,196,15,225,3,15,228,240,7,0,8,248,31,224,1,31,248,80,8,160,7,240,15,224,1,4,160,0,0,160,4,176,12,224,3,6,96,64,2,0,0,64,2,255,135,0,0,128,1,0,0,224,7,255,207,7,224,0,3,192,0,0,3,255,255,0,0,128,1,0,0,64,2,255,255,1,128,0,0,0,0,0,0,
 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
 __decals_potion_red:
 			.byte 1, 0; offset_y, offset_x
 			.byte 12, 1; height, width
-			.byte 252,15,3,240,0,0,0,0,0,0,248,7,7,224,0,0,0,0,24,0,240,7,4,8,224,3,0,4,240,15,224,3,31,248,192,15,240,3,4,12,224,3,8,4,240,7,224,15,248,31,224,7,31,248,240,15,160,7,80,8,240,15,7,224,0,0,224,7,176,12,248,31,6,96,192,3,0,0,192,3,248,31,0,0,128,1,0,0,224,7,248,31,7,224,0,3,192,0,0,3,252,63,0,0,128,1,128,1,192,3,254,127,1,128,0,0,0,0,0,0,
+			.byte 240,7,3,240,0,0,0,0,0,0,252,127,7,224,0,0,0,0,24,0,247,207,4,8,224,3,0,4,240,15,229,135,31,248,192,15,240,3,4,12,225,3,8,4,240,7,224,15,248,31,224,1,31,248,240,15,160,7,80,8,224,1,7,224,0,0,224,7,176,12,224,3,6,96,192,3,0,0,192,3,255,135,0,0,128,1,0,0,224,7,255,207,7,224,0,3,192,0,0,3,255,255,0,0,128,1,128,1,192,3,255,255,1,128,0,0,0,0,0,0,
 

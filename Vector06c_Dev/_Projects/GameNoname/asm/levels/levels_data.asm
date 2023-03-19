@@ -8,34 +8,14 @@ level_idx:
 ; current room index in rooms_addr of the current level
 room_idx:   .byte 0 ; 0 - ROOMS_MAX-1
 
-; rooms runtime data
-; TODO: move it to buffers.asm aligned by 256+Const
-rooms_runtime_data:
-rooms_spawn_rate_monsters: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a monster. 255 means no spawn
-rooms_spawn_rate_breakables: .storage ROOMS_MAX, 0 ; 0 means 100% chance to spawn a breakable item. 255 means no spawn
-rooms_status_walkable: .storage ROOMS_MAX * WALKABLES_MAX, 0
-rooms_runtime_data_end_addr:
-
-; tile graphics pointer table
-; the actual place defined in buffers.asm
-;room_tiles_gfx_ptrs:
-;			.storage ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
-;room_tiles_gfx_ptrs_end:
-
-; tiledata buffer has to follow room_tiles_gfx_ptrs because they are unpacked together
-;room_tiledata:
-;			.storage ROOM_WIDTH * ROOM_HEIGHT
-; the actual place defined in buffers.asm
-
-
 ; tiledata format:
 ; it's stored in room_tiledata
 ; %ffffDDDD, ffff - func_id, dddd - a func argument
-; ffff == 0, walkable
-;		d == 0 - no collision
-;		d == 1 - no collision + restore back
-;		d >= 2 - no collision + restore back + a decal drawn on top of the tile to make a background diverse. decal_walkable_id = d
-;			decal_walkable_id == 2 - a bones (tiledata = 0*16+1 = 1)
+; ffff == 0, walkable tile
+;		d == 0 - walkable tile, no back restoration, no decal
+;		d == 1 - walkable tile, restore back, no decal
+;		d >= 2 - walkable tile, restore back + a decal drawn on top of the tile to make a background diverse. decal_walkable_id = d
+;			decal_walkable_id == 2 - a bones (tiledata = 1)
 ;			decal_walkable_id == 3 - a skull (tiledata = 2)
 
 ; ffff == 1, spawn a monster, monster_id = d
@@ -45,26 +25,23 @@ rooms_runtime_data_end_addr:
 ;		monster_id == 3 - knight horizontal walk (tiledata = 19)
 ;		monster_id == 4 - knight vertical walk (tiledata = 20)
 ;		monster_id == 5 - monster chest (tiledata = 21)
+
 ; ffff == 2, teleport to 0-15 room_id, room_id = d
 ; ffff == 3, teleport to 16-31 room_id, room_id = d+16
 ; ffff == 4, teleport to 32-47 room_id, room_id = d+32
 ; ffff == 5, teleport to 48-63 room_id, room_id = d+48
 
-; ffff == 7, a walkable item. a hero interacts with it only when he hits it with a weapon. status of every item in the room is stored. item_walkable_id = d
-;		item_walkable_id == 0 - a coin (tiledata = 10*16+0 = 160)
-;		item_walkable_id == 1 - a key blue
-;		item_walkable_id == 2 - a key red
-;		item_walkable_id == 3 - a key green
-;		item_walkable_id == 4 - a key magma
-;		item_walkable_id == 5 - a potion blue
-;		item_walkable_id == 6 - a potion red
-;		item_walkable_id == 7 - an item 1
-;		item_walkable_id == 8 - an item 2
-;		item_walkable_id == 9 - an item 3
-;		item_walkable_id == 10 - a damage pool
-;		item_walkable_id == 11 - a slow pool
+; ffff == 6, a global item. a hero interacts with it when he steps on it. status of every item is stored globally. item_id = d. see buffers.asm->global_items for details
 
-; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable
+; ffff == 7, a resource. a hero interacts with it when he steps on it. status of every item in the room is stored. resource_id = d
+;		resource_id == 0 - a coin (tiledata = 10*16+0 = 160)
+;		resource_id == 1 - a potion blue
+;		resource_id == 2 - a potion red
+;	??? is it working to the items below ???
+;		resource_id == 10 - a damage pool
+;		resource_id == 11 - a slow pool
+
+; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable (a hero and monster can't step on)
 
 ; ffff == 8, ???
 ; ffff == 9, ???
@@ -92,7 +69,7 @@ rooms_runtime_data_end_addr:
 ;		breakable_id == 0 - a barrel (tiledata = 13*16+0 = 208)
 ;		breakable_id == 1 - a crate
 
-; ffff == 14, a collidable decal drawn on top of the tile to make a background diverse. decal_collidable_id = d
+; ffff == 14, a decal collidable. it's drawn on top of the tile to make a background diverse. decal_collidable_id = d
 ;		decal_collidable_id == 0 - a spider web
 
 ; ffff == 15,
@@ -111,8 +88,8 @@ room_tiledata_funcs:
 			jmp_4(room_tiledata_copy)					; func_id = 3
 			jmp_4(room_tiledata_copy)					; func_id = 4
 			jmp_4(room_tiledata_copy)					; func_id = 5
-			jmp_4(room_tiledata_copy)					; func_id = 6
-			jmp_4(room_tiledata_walkable_spawn)			; func_id = 7
+			jmp_4(room_tiledata_item_spawn)				; func_id = 6
+			jmp_4(room_tiledata_copy)					; func_id = 7
 			jmp_4(room_tiledata_copy)					; func_id = 8
 			jmp_4(room_tiledata_copy)					; func_id = 9
 			jmp_4(room_tiledata_copy)					; func_id = 10

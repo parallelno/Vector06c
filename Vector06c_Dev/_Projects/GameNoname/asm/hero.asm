@@ -73,7 +73,7 @@ hero_tile_func_table:
 			ret_4()							; func_id == 3
 			ret_4()							; func_id == 4
 			ret_4()							; func_id == 5
-			ret_4()							; func_id == 6
+			jmp_4( hero_tile_func_item)		; func_id == 6
 			ret_4()							; func_id == 7
 			ret_4()							; func_id == 8
 			ret_4()							; func_id == 9
@@ -546,6 +546,66 @@ hero_move_vertically:
 			shld hero_pos_y
 			jmp hero_check_tiledata
 
+; handler func for items
+; in:
+; a - item_id
+; c - tile_idx
+hero_tile_func_item:
+			; update global item status
+			mvi h, >global_items
+			adi <global_items
+			mov l, a
+			mvi m, 1
+
+			; erase item_id from tiledata
+			mvi b, >room_tiledata
+			mvi a, TILEDATA_RESTORE_TILE
+			stax b
+			; calc tile gfx ptr
+			mov l, c
+			mvi h, 0
+			lxi d, room_tiles_gfx_ptrs
+			dad h
+			dad d
+			mov d, c
+			; d - tile_idx
+			; read a tile gfx ptr
+			mov c, m
+			inx h
+			mov b, m
+
+			; calc tile scr addr
+			; d - tile_idx
+			mvi a, %11110000
+			ana d
+			mov e, a
+			; e - scr Y
+			mvi a, %00001111
+			ana d
+			rlc
+			adi >SCR_BUFF0_ADDR
+			mov d, a
+
+			; bc - a tile gfx ptr
+			; de - screen addr
+			push b
+			push d
+			; draw a tile on the screen
+			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX)			
+			pop d
+			pop b
+			push b
+			push d
+			; draw a tile in the back buffer
+			CALL_RAM_DISK_FUNC(draw_tile_16x16_back_buff, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
+			pop d
+			pop b
+			; draw a tile in the back buffer2
+			CALL_RAM_DISK_FUNC(draw_tile_16x16_back_buff, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
+
+			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_breakables, BREAKABLE_SPAWN_RATE_DELTA, BREAKABLE_SPAWN_RATE_MAX)
+			ret
+
 ; load a new room with room_id, move the hero to an
 ; appropriate position based on his current posXY
 ; input:
@@ -557,7 +617,7 @@ hero_tile_func_teleport:
 			pop h
 			pop h
 
-			; update a room id to teleport there
+			; update a room_id to teleport there
 			sta room_idx
 			; requesting room loading
 			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM

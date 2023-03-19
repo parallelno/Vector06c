@@ -22,8 +22,8 @@
 	"lists" : {
 		"decals_walkable" : ["bones", "skull"],		
 		"decals_collidable" : ["web1"],
-		"items_walkable" : ["coin", "key_blue", "key_red", "key_green", "key_magma", "potion_blue", "potion_red"],
-		"items_collidable" : ["coin"],
+		"items" : ["key_blue", "key_red", "key_green", "key_magma"],
+		"resource" : ["coin", "potion_blue", "potion_red"],
 		"breakable" : ["barrel", "crate"]
 	},
 	"sprites" : [
@@ -88,19 +88,19 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "coin",
+			"name" : "key_blue",
 			"x" : 0,
-			"y"	: 100,
+			"y"	: 101,
 			"width" : 16,
-			"height" : 11,
+			"height" : 10,
 			"offset_y" : 1,
 			"mask_x" : 0,
-			"mask_y" : 116,
+			"mask_y" : 117, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
 		{
-			"name" : "key_blue",
+			"name" : "key_red",
 			"x" : 16,
 			"y"	: 101,
 			"width" : 16,
@@ -112,7 +112,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "key_red",
+			"name" : "key_green",
 			"x" : 32,
 			"y"	: 101,
 			"width" : 16,
@@ -122,9 +122,9 @@
 			"mask_y" : 117, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		},
+		},	
 		{
-			"name" : "key_green",
+			"name" : "key_magma",
 			"x" : 48,
 			"y"	: 101,
 			"width" : 16,
@@ -134,39 +134,39 @@
 			"mask_y" : 117, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		},	
+		},
 		{
-			"name" : "key_magma",
-			"x" : 64,
-			"y"	: 101,
+			"name" : "coin",
+			"x" : 0,
+			"y"	: 132,
 			"width" : 16,
-			"height" : 10,
+			"height" : 11,
 			"offset_y" : 1,
-			"mask_x" : 64,
-			"mask_y" : 117, 
+			"mask_x" : 0,
+			"mask_y" : 148,
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		},	
+		},
 		{
 			"name" : "potion_blue",
-			"x" : 80,
-			"y"	: 99,
+			"x" : 16,
+			"y"	: 131,
 			"width" : 16,
 			"height" : 12,
 			"offset_y" : 1,
-			"mask_x" : 80,
+			"mask_x" : 16,
 			"mask_y" : 115, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},	
 		{
 			"name" : "potion_red",
-			"x" : 96,
-			"y"	: 99,
+			"x" : 32,
+			"y"	: 131,
 			"width" : 16,
 			"height" : 12,
 			"offset_y" : 1,
-			"mask_x" : 96,
+			"mask_x" : 32,
 			"mask_y" : 115, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
