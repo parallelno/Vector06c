@@ -14,7 +14,7 @@ room_idx:   .byte 0 ; 0 - ROOMS_MAX-1
 ; ffff == 0, walkable tile
 ;		d == 0 - walkable tile, no back restoration, no decal
 ;		d == 1 - walkable tile, restore back, no decal
-;		d >= 2 - walkable tile, restore back + a decal drawn on top of the tile to make a background diverse. decal_walkable_id = d
+;		d >= 2 - walkable tile, restore back + a decal. it's drawn on top of tiles to increase background variety. decal_walkable_id = d
 ;			decal_walkable_id == 2 - a bones (tiledata = 1)
 ;			decal_walkable_id == 3 - a skull (tiledata = 2)
 
@@ -46,30 +46,30 @@ room_idx:   .byte 0 ; 0 - ROOMS_MAX-1
 ; ffff == 8, ???
 ; ffff == 9, ???
 ; ffff == 10, ???
-; ffff == 11, ???
-
-; ffff == 12, a collidable item. a hero interacts with it only when he collids with it or hits it with a weapon. collidable_id = d
+; ffff == 11, a collidable item. a hero interacts with it only when he collids with it or hits it with a weapon. collidable_id = d
 ;		collidable_id == 0 - a small chest. small money reward
 ;		collidable_id == 1 - a big chest. big money reward
 ;		collidable_id == 2 - a chest with a weapon 1
 ;		collidable_id == 3 - a chest with a weapon 2
 ;		collidable_id == 4 - a chest with a weapon 3
-;		collidable_id == 5 - a door 1a, there "a" and "b" mean left and right or top and bottom
-;		collidable_id == 6 - a door 1b
-;		collidable_id == 7 - a door 2a
-;		collidable_id == 8 - a door 2b
-;		collidable_id == 9 - a door 3a
-;		collidable_id == 10 - a door 3b
-;		collidable_id == 11 - a door 4a
-;		collidable_id == 12 - a door 4b
 ;		collidable_id == 13 - a monster spawner chest. it spawns a chest monster when opened
 ;		collidable_id == 14 - a crate with a teleport under it to a unique location
+
+; ffff == 12, doors. a hero interacts with it only when he collids with it or hits it with a weapon. collidable_id = d
+;		door_id == 0 - a door 1a
+;		door_id == 1 - a door 1b
+;		door_id == 2 - a door 2a
+;		door_id == 3 - a door 2b
+;		door_id == 4 - a door 3a
+;		door_id == 5 - a door 3b
+;		door_id == 6 - a door 4a
+;		door_id == 7 - a door 4b
 
 ; ffff == 13, a breakable item, a hero can only break it with a hit and get a random reward. a room tracks how many it was broken to manage a reward and a spawn rate. breakable_id = d
 ;		breakable_id == 0 - a barrel (tiledata = 13*16+0 = 208)
 ;		breakable_id == 1 - a crate
 
-; ffff == 14, a decal collidable. it's drawn on top of the tile to make a background diverse. decal_collidable_id = d
+; ffff == 14, a decal collidable. it's drawn on top of tiles to increase background variety. decal_collidable_id = d
 ;		decal_collidable_id == 0 - a spider web
 
 ; ffff == 15,
@@ -94,7 +94,7 @@ room_tiledata_funcs:
 			jmp_4(room_tiledata_copy)					; func_id = 9
 			jmp_4(room_tiledata_copy)					; func_id = 10
 			jmp_4(room_tiledata_copy)					; func_id = 11
-			jmp_4(room_tiledata_copy)					; func_id = 12
+			jmp_4(room_tiledata_door_spawn)				; func_id = 12
 			jmp_4(room_tiledata_breakable_spawn)		; func_id = 13
 			jmp_4(room_tiledata_decal_collidable_spawn)	; func_id = 14
 			jmp_4(room_tiledata_back_spawn)				; func_id = 15

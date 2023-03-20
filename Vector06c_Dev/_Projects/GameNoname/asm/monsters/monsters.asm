@@ -19,8 +19,8 @@ monsters_erase_runtime_data:
 ; out:
 ; no collision 	- (hl) >= MONSTER_RUNTIME_DATA_DESTR
 ; collision 	- hl points to a collided monster_update_ptr+1, (hl) < MONSTER_RUNTIME_DATA_DESTR
-; uses b
-
+; use:
+; b
 monsters_get_first_collided:
 			sta @colliderWidth+1
 			mov a, c
