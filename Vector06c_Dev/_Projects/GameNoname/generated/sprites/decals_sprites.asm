@@ -18,10 +18,10 @@ __resource_gfx_ptrs: .word __decals_coin, 0, __decals_potion_blue, 0, __decals_p
 __breakable_gfx_ptrs: .word __decals_barrel, 0, __decals_crate, 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
-__doors_gfx_ptrs: .word __decals_door_red_l, 0, __decals_door_red_r, 0, __decals_door_red_l, 0, __decals_door_red_r, 
+__doors_gfx_ptrs: .word __decals_door_blue_l, 0, __decals_door_blue_r, 0, __decals_door_red_l, 0, __decals_door_red_r, 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
-__doors_opened_gfx_ptrs: .word __decals_door_red_open_l, 0, __decals_door_red_open_r, 0, __decals_door_red_open_l, 0, __decals_door_red_open_r, 
+__doors_opened_gfx_ptrs: .word __decals_door_blue_open_l, 0, __decals_door_blue_open_r, 0, __decals_door_red_open_l, 0, __decals_door_red_open_r, 
 
 __decals_sprites:
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
@@ -109,6 +109,20 @@ __decals_potion_red:
 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer
+__decals_door_blue_l:
+			.byte 0, 0; offset_y, offset_x
+			.byte 15, 1; height, width
+			.byte 253,247,2,8,0,0,0,0,8,2,120,227,135,28,0,0,0,0,20,133,56,227,64,0,8,2,0,0,20,197,24,227,229,28,0,0,0,2,0,0,8,193,0,0,8,2,20,64,34,181,24,227,229,28,0,0,0,2,0,0,120,227,0,0,8,2,0,0,20,133,24,227,231,20,0,0,8,0,0,0,0,99,0,0,8,66,0,5,148,184,24,227,231,20,0,0,8,0,0,0,120,227,0,0,8,2,0,0,20,133,248,227,7,28,0,0,0,0,8,2,240,65,0,0,28,7,0,0,162,8,248,227,7,28,0,0,8,2,0,0,253,247,0,0,0,0,0,0,8,2,
+
+
+			.byte 0,0  ; safety pair of bytes to support a stack renderer
+__decals_door_blue_r:
+			.byte 0, 0; offset_y, offset_x
+			.byte 15, 1; height, width
+			.byte 239,191,16,64,0,0,0,0,64,16,199,30,56,225,0,0,0,0,161,40,199,28,0,2,64,16,0,0,163,40,199,24,56,167,0,0,64,0,0,0,131,16,0,0,64,16,2,40,173,68,199,24,56,167,0,0,64,0,0,0,199,30,0,0,64,16,0,0,161,40,199,24,40,231,0,0,0,16,0,0,198,0,0,0,66,16,160,0,29,41,199,24,40,231,0,0,0,16,0,0,199,30,0,0,64,16,0,0,161,40,199,31,56,224,0,0,0,0,64,16,130,15,0,0,224,56,0,0,16,69,199,31,56,224,0,0,64,16,0,0,239,191,0,0,0,0,0,0,64,16,
+
+
+			.byte 0,0  ; safety pair of bytes to support a stack renderer
 __decals_door_red_l:
 			.byte 0, 0; offset_y, offset_x
 			.byte 16, 1; height, width
@@ -120,6 +134,20 @@ __decals_door_red_r:
 			.byte 0, 0; offset_y, offset_x
 			.byte 16, 1; height, width
 			.byte 0,0,0,0,0,0,0,0,255,255,0,0,255,253,2,0,0,192,254,31,0,0,48,224,0,142,160,0,95,241,0,0,198,237,0,40,30,145,64,44,0,0,0,64,14,145,32,44,215,195,0,0,215,73,182,32,0,142,72,0,0,0,0,64,0,196,160,1,95,126,0,0,30,109,128,1,30,252,64,0,0,0,2,64,14,128,160,1,87,254,0,0,210,79,176,45,0,128,72,18,0,0,18,64,6,128,166,45,95,210,0,0,211,247,30,44,22,0,0,18,0,1,0,0,176,129,248,1,182,255,0,7,237,184,224,63,160,173,0,0,0,31,0,0,0,44,0,62,224,237,129,255,126,0,0,0,0,0,0,0,
+
+
+			.byte 0,0  ; safety pair of bytes to support a stack renderer
+__decals_door_blue_open_l:
+			.byte 0, 0; offset_y, offset_x
+			.byte 11, 1; height, width
+			.byte 253,247,2,8,0,0,0,0,8,2,120,227,135,28,0,0,0,0,20,133,48,65,72,162,0,0,0,0,190,207,56,227,199,28,0,0,0,0,20,5,31,255,0,0,0,64,0,0,0,160,63,255,192,0,0,0,0,0,0,0,127,255,0,0,0,0,0,0,0,128,63,255,192,0,0,0,0,0,0,0,31,255,0,0,0,64,0,0,0,160,63,255,192,0,0,0,0,0,0,0,127,255,0,0,0,0,0,0,0,128,
+
+
+			.byte 0,0  ; safety pair of bytes to support a stack renderer
+__decals_door_blue_open_r:
+			.byte 0, 0; offset_y, offset_x
+			.byte 11, 1; height, width
+			.byte 239,191,16,64,0,0,0,0,64,16,199,30,56,225,0,0,0,0,161,40,130,12,69,18,0,0,0,0,243,125,199,28,56,227,0,0,0,0,160,40,255,248,0,0,2,0,0,0,5,0,255,252,0,3,0,0,0,0,0,0,255,254,0,0,0,0,0,0,1,0,255,252,0,3,0,0,0,0,0,0,255,248,0,0,2,0,0,0,5,0,255,252,0,3,0,0,0,0,0,0,255,254,0,0,0,0,0,0,1,0,
 
 
 			.byte 0,0  ; safety pair of bytes to support a stack renderer

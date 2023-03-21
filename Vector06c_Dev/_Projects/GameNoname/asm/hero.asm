@@ -597,11 +597,11 @@ hero_tile_func_item:
 			push b
 			push d
 			; draw a tile in the back buffer
-			CALL_RAM_DISK_FUNC(draw_tile_16x16_back_buff, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF)
 			pop d
 			pop b
 			; draw a tile in the back buffer2
-			CALL_RAM_DISK_FUNC(draw_tile_16x16_back_buff, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
 
 			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_breakables, BREAKABLE_SPAWN_RATE_DELTA, BREAKABLE_SPAWN_RATE_MAX)
 			ret

@@ -376,7 +376,18 @@ room_tiledata_door_spawn_restoreA:
 			pop d
 			; bc - sprite addr
 			; de - scr addr
+			push b
+			push d
 			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+			pop d
+			pop b
+			push b
+			push d
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF)
+			pop d
+			pop b
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
+
 room_tiledata_door_restoreTiledata:
 			mvi a, TEMP_BYTE
 			ret

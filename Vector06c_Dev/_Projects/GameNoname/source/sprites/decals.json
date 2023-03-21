@@ -25,8 +25,8 @@
 		"items" : ["key_blue", "key_red", "key_green", "key_magma"],
 		"resource" : ["coin", "potion_blue", "potion_red"],
 		"breakable" : ["barrel", "crate"],
-		"doors" : ["door_red_l", "door_red_r", "door_red_l", "door_red_r"],
-		"doors_opened" : ["door_red_open_l", "door_red_open_r", "door_red_open_l", "door_red_open_r"]
+		"doors" : ["door_blue_l", "door_blue_r", "door_red_l", "door_red_r"],
+		"doors_opened" : ["door_blue_open_l", "door_blue_open_r", "door_red_open_l", "door_red_open_r"]
 	},
 	"sprites" : [
 		{
@@ -172,7 +172,31 @@
 			"mask_y" : 115, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
+		},
+		{
+			"name" : "door_blue_l",
+			"x" : 0,
+			"y"	: 161,
+			"width" : 16,
+			"height" : 15,
+			"offset_y" : 0,
+			"mask_x" : 0,
+			"mask_y" : 177, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
 		},	
+		{
+			"name" : "door_blue_r",
+			"x" : 16,
+			"y"	: 161,
+			"width" : 16,
+			"height" : 15,
+			"offset_y" : 0,
+			"mask_x" : 16,
+			"mask_y" : 177, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},			
 		{
 			"name" : "door_red_l",
 			"x" : 32,
@@ -194,6 +218,30 @@
 			"offset_y" : 0,
 			"mask_x" : 48,
 			"mask_y" : 176, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},	
+		{
+			"name" : "door_blue_open_l",
+			"x" : 48,
+			"y"	: 229,
+			"width" : 16,
+			"height" : 11,
+			"offset_y" : 0,
+			"mask_x" : 48,
+			"mask_y" : 245, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},	
+		{
+			"name" : "door_blue_open_r",
+			"x" : 64,
+			"y"	: 229,
+			"width" : 16,
+			"height" : 11,
+			"offset_y" : 0,
+			"mask_x" : 64,
+			"mask_y" : 245, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},	
@@ -222,6 +270,6 @@
 			"mask_y" : 240, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		}			
+		}	
 	]
 }

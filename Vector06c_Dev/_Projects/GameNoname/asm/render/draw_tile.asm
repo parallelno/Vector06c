@@ -102,7 +102,7 @@ draw_tile_16x16:
 			mov m, a 
 			dcr h		
 .endmacro
-
+/*
 ;----------------------------------------------------------------
 ; draw a tile (16x16 pixels) skipping SCR_BUFF0_ADDR
 ; input:
@@ -181,3 +181,4 @@ draw_tile_16x16_back_buff:
 			pop b
 		.endloop
 .endmacro
+*/
