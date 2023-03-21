@@ -257,7 +257,25 @@ hero_sword_update:
 ; a - door_id
 ; c - tile_idx
 hero_sword_func_door:
+			mov b, a
 			; check global item status
+			mvi h, >global_items
+			ani %00001110
+			rrc
+
+			adi <global_items
+			mov l, a
+			mov a, m
+			cpi ITEM_STATUS_NOT_ACQUIRED
+			rz	; if status == ITEM_STATUS_NOT_ACQUIRED, means a hero does't have a proper key to open the door
+
+			mov a, b
+			add_a(2) ; to make a jmp_4 ptr
+			sta room_tiledata_door_spawn_restoreA+1 ; store door_id in case we need to draw an opened version of it
+
+			push b
+			; update the key status
+			mvi m, ITEM_STATUS_USED
 			
 			; erase breakable_id from tiledata
 			mvi b, >room_tiledata
@@ -305,7 +323,9 @@ hero_sword_func_door:
 			; draw a tile in the back buffer2
 			CALL_RAM_DISK_FUNC(draw_tile_16x16_back_buff, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
 
-			
+			pop b
+			; c - tile idx in the room_tiledata array.
+			call room_tiledata_door_spawn_open
 			ret
 
 ; in:

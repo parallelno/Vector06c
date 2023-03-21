@@ -332,11 +332,11 @@ room_tiledata_item_spawn:
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
 room_tiledata_door_spawn:
-			lxi h, @restoreTiledata+1
+			lxi h, room_tiledata_door_restoreTiledata + 1
 			mov m, b
 
 			add_a(2) ; to make a jmp_4 ptr
-			sta @restoreA+1
+			sta room_tiledata_door_spawn_restoreA+1
 
 			; check global item status
 			mvi h, >global_items
@@ -347,9 +347,9 @@ room_tiledata_door_spawn:
 			adi <global_items
 			mov l, a
 			mov a, m
-			ora a
-			jnz @drawOpenedDoor; if status != 0, means a door is opened
-@drawDoor:
+			cpi ITEM_STATUS_USED
+			jz room_tiledata_door_spawn_open	; if status != ITEM_STATUS_NOT_ACQUIRED, means a door is opened
+room_tiledata_door_spawn_draw_door:
 			; scr_y = tile idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
@@ -364,8 +364,10 @@ room_tiledata_door_spawn:
 			; de - scr addr
 			push d
 
-@gfx:		lxi h, __doors_gfx_ptrs
-@restoreA:	lxi d, TEMP_BYTE
+room_tiledata_door_spawn_gfx:		
+			lxi h, __doors_gfx_ptrs
+room_tiledata_door_spawn_restoreA:	
+			lxi d, TEMP_BYTE
 			dad d
 			xchg
 			; de pptr to a sprite
@@ -375,17 +377,17 @@ room_tiledata_door_spawn:
 			; bc - sprite addr
 			; de - scr addr
 			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
-@restoreTiledata:
+room_tiledata_door_restoreTiledata:
 			mvi a, TEMP_BYTE
 			ret
-@drawOpenedDoor:
+room_tiledata_door_spawn_open:
 			; restore gfx ptr
 			lxi h, __doors_opened_gfx_ptrs
-			shld @gfx+1
-			call @drawDoor
+			shld room_tiledata_door_spawn_gfx + 1
+			call room_tiledata_door_spawn_draw_door
 			; restore gfx ptr
 			lxi h, __doors_gfx_ptrs
-			shld @gfx+1
+			shld room_tiledata_door_spawn_gfx + 1
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
 
