@@ -1,3 +1,5 @@
+.include "asm\\globals\\sfx.asm"
+
 .macro INTERRUPTION_MAIN_LOGIC()
 			; keyboard check
 			mvi a, PORT0_OUT_IN
@@ -100,6 +102,8 @@ interruption:
 			CALL_RAM_DISK_FUNC_NO_RESTORE(__gcplayer_update, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 			INTERRUPTION_MAIN_LOGIC()
 
+			call sfx_play
+			
 			pop d
 			pop b
 			pop psw

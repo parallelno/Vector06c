@@ -55,7 +55,7 @@ room_idx:   .byte 0 ; 0 - ROOMS_MAX-1
 ;		collidable_id == 13 - a monster spawner chest. it spawns a chest monster when opened
 ;		collidable_id == 14 - a crate with a teleport under it to a unique location
 
-; ffff == 12, doors. a hero interacts with it only when he collids with it or hits it with a weapon. collidable_id = d
+; ffff == 12, doors. a hero interacts with it only when he hits it with a weapon. door_id = d
 ;		door_id == 0 - a door 1a
 ;		door_id == 1 - a door 1b
 ;		door_id == 2 - a door 2a
