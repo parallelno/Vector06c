@@ -1,0 +1,186 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "Retro Assembler (8080)",
+    "patterns": [
+        {
+            "include": "#strings"
+        },
+        {
+            "include": "#characters"
+        },
+        {
+            "include": "#locallabels"
+        },
+        {
+            "include": "#globallabels"
+        },
+        {
+            "include": "#constantlabels"
+        },        
+        {
+            "include": "#directives"
+        },
+        {
+            "include": "#keywords"
+        },
+        {
+            "include": "#instructions"
+        },
+        {
+            "include": "#registers"
+        },
+        {
+            "include": "#comments"
+        },
+        {
+            "include": "#constants"
+        },
+        {
+            "include": "#operators"
+        }
+    ],
+    "repository": {
+        "strings": {
+            "name": "string.quoted.double.retroasm_8080",
+            "begin": "\"",
+            "end": "\"",
+            "patterns": [
+                {
+                    "name": "constant.character.escape.retroasm_8080",
+                    "match": "\\\\."
+                }
+            ]
+        },
+        "characters": {
+            "patterns": [
+                {
+                    "name": "string.quoted.single.retroasm_8080",
+                    "match": "(?i)\\'.\\'"
+                }
+            ]
+        },
+        "constantlabels": {
+            "patterns": [
+                {
+                    "name": "keyword.constantslabel.retroasm_8080",
+                    "match": "\\b([A-Z][A-Z0-9_]+)\\b"
+                }
+            ]
+        },        
+        "globallabels": {
+            "patterns": [
+                {
+                    "name": "keyword.globallabel.retroasm_8080",
+                    "match": "(?i:(^\\s*?[a-z_][a-z0-9_]*\\s*?:))"
+                }
+            ]
+        },
+        "locallabels": {
+            "patterns": [
+                {
+                    "name": "keyword.locallabel.retroasm_8080",
+                    "match": "(?i)\\@+[a-z0-9_]+\\b"
+                }
+            ]
+        },
+        "directives": {
+            "patterns": [
+                {
+                    "name": "keyword.directive.retroasm_8080",
+                    "match": "(?i)(?:^|\\s)(\\.(org|pc|equ|var|random|rnd|storage|ds|fill|align|target|format|cpu|closelabels|breakpoint|print|debug|error|end|region|endregion|function|endfunction|endf|segment|code|lib|data|bss|bank|namespace|include|incbin|macro|endmacro|endm|if|endif|loop|endloop|endl|while|endwhile|endw|break|byte|b|word|w|dword|dw|lobyte|hibyte|loword|hiword|encoding|text|t|textz|stext|ascii|asciiz|generate|memory|memorydump|setting))\\b"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [
+                {
+                    "name": "keyword.keyword.retroasm_8080",
+                    "match": "(?i)\\b(auto|true|false)\\b"
+                }
+            ]
+        },
+        "instructions": {
+            "patterns": [
+                {
+                    "name": "keyword.instruction.retroasm_8080",
+                    "match": "(?i)[\\s]*\\b(aci|adc|add|adi|ana|ani|call|cc|cm|cma|cmc|cmp|cnc|cnz|cp|cpe|cpi|cpo|cz|daa|dad|dcr|dcx|di|ei|hlt|in|inr|inx|jc|jm|jmp|jnc|jnz|jp|jpe|jpo|jz|lda|ldax|lhld|lxi|mov|mvi|nop|ora|ori|out|pchl|pop|push|ral|rar|rc|ret|rlc|rm|rnc|rnz|rp|rpe|rpo|rrc|rst|rz|sbb|sbi|shld|sphl|sta|stax|stc|sub|sui|xchg|xra|xri|xthl)\\b"
+                }
+            ]
+        },
+        "registers": {
+            "patterns": [
+                {
+                    "name": "keyword.register.retroasm_8080",
+                    "match": "(?i)\\b(a|b|c|d|e|h|l|m|psw|sp)\\b"
+                }
+            ]
+        },
+        "comments": {
+            "patterns": [
+                {
+                    "name": "comment.block.retroasm_8080",
+                    "begin": "/\\*",
+                    "end": "\\*/",
+                    "comment": "Block comment"
+                },
+                {
+                    "name": "comment.line.retroasm_8080",
+                    "begin": "//",
+                    "end": "$",
+                    "comment": "Single line comment with //"
+                },
+                {
+                    "name": "comment.line.retroasm_8080",
+                    "begin": ";",
+                    "end": "$",
+                    "comment": "Single line comment with ';'"
+                }
+            ]
+        },
+        "constants": {
+            "patterns": [
+                {
+                    "include": "#constants-numeric"
+                }
+            ]
+        },
+        "constants-numeric": {
+            "patterns": [
+                {
+                    "name": "constant.numeric.binary.retroasm_8080",
+                    "match": "(?i)(\\%|0b)[0-1_]+\\b",
+                    "comment": "Integer literal (binary)"
+                },
+                {
+                    "name": "constant.numeric.hexadecimal.retroasm_8080",
+                    "match": "(?i)(\\$|0x)[0-9a-f_]+\\b",
+                    "comment": "Integer literal (hexadecimal)"
+                },
+                {
+                    "name": "constant.numeric.octal.retroasm_8080",
+                    "match": "(?i)(0o)[0-7]+\\b",
+                    "comment": "Integer literal (octal)"
+                },
+                {
+                    "name": "constant.numeric.decimal.retroasm_8080",
+                    "match": "(?i)\\b[0-9]+\\b",
+                    "comment": "Integer literal (decimal)"
+                },
+                {
+                    "name": "constant.numeric.hash.retroasm_8080",
+                    "match": "\\#",
+                    "comment": "Hash"
+                }
+            ]
+        },
+        "operators": {
+            "patterns": [
+                {
+                    "name": "keyword.operator.retroasm_8080",
+                    "match": "(?i)(\\+|\\-|\\=|\\*|\\/|\\!|\\<|\\>|\\&|\\||\\^|\\(|\\)|\\[|\\]\\,)"
+                }
+            ]
+        }
+    },
+    "scopeName": "source.retroasm_8080"
+}

@@ -1,0 +1,38 @@
+{
+    "workbench.colorTheme": "Retro Assembler Dark",
+    "explorer.confirmDragAndDrop": false,
+    "python.languageServer": "Pylance",
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
+    },
+    "explorer.confirmDelete": false,
+    "git.confirmSync": false,
+    "git.enableSmartCommit": true,
+    "[python]": {
+        "editor.formatOnType": true
+    },
+    "retroassembler.path": "C:\\Work\\Programming\\_Dev\\Vector06c_Dev\\retroassembler\\retroassembler.exe",
+    "files.associations": {
+        "*.asm": "retroasm_8080",
+        "*.dasm": "retroasm_8080"
+    },
+    "[retroasm_8080]": {
+    },    
+    "window.zoomLevel": 1,
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": "keyword.globallabel",
+                "settings": {
+                    "foreground": "#d0c443" // This is the color green. You can change it to any color you prefer using a HEX color code.
+                }
+            },
+            {
+                "scope": "keyword.constantslabel",
+                "settings": {
+                    "foreground": "#8be0e9" // This is the color green. You can change it to any color you prefer using a HEX color code.
+                }
+            }
+        ]
+    }
+}

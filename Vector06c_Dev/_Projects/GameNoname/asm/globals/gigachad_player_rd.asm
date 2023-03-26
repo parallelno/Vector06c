@@ -1,3 +1,7 @@
+.include "asm\\globals\\sound_const.asm"
+; TODO: move it to ram_disk a well as sfx player
+.include "asm\\globals\\sound_vars.asm"
+
 ; gigachad16 player
 ; info/credits:
 ; music has to be compressed into 14 buffers each for every register
@@ -317,14 +321,24 @@ GCPlayerUnpack:
 			ret
 			
 		
+
+.macro CG_PLAYER_AY_UPDATE_REG(mixer = false)
+			mov a, e
+			out AY_PORT_REG
+			ldax b
+		.if mixer
+			sta ay_reg_mixer_data
+		.endif
+			out AY_PORT_DATA
+			dcr b
+			dcr e
+.endmacro
+
 ; send buffers data to AY regs
-; this code is performed during an interruption
 ; input:
 ; hl = bufferIdx
-; reg13 (envelope shape) data = $ff means don't send data to reg13
+; if envelope shape reg13 data = $ff, then don't send data to reg13
 ; AY-3-8910 ports
-AY_PORT_REG		= $15
-AY_PORT_DATA	= $14
 
 gcplayer_ay_update:
 			mvi e, GC_PLAYER_TASKS - 1
@@ -332,15 +346,19 @@ gcplayer_ay_update:
 			mvi b, (>gcplayer_buffer00) + GC_PLAYER_TASKS - 1
 			ldax b
 			cpi $ff
-			jz @doNotSendData
+			jz @doNotSendEnvData
+
+			CG_PLAYER_AY_UPDATE_REG() ; set reg 13 (envelope)
+@doNotSendEnvData:
+			CG_PLAYER_AY_UPDATE_REG() ; set reg 12
+			CG_PLAYER_AY_UPDATE_REG() ; set reg 11			
+			CG_PLAYER_AY_UPDATE_REG() ; set reg 10
+			CG_PLAYER_AY_UPDATE_REG() ; set reg 9
+			CG_PLAYER_AY_UPDATE_REG() ; set reg 8							
+			CG_PLAYER_AY_UPDATE_REG(true); set reg 7 (mixer)
 @sendData:
-			mov a, e
-			out AY_PORT_REG
-			ldax b
-			out AY_PORT_DATA
-@doNotSendData:
-			dcr b
-			dcr e
+			CG_PLAYER_AY_UPDATE_REG() ; set reg 6 and others
+@doNotSendData:						
 			jp @sendData
 			ret
 			
@@ -350,7 +368,7 @@ gcplayer_mute:
 @sendData:
 			mov a, e
 			out AY_PORT_REG
-			mvi a, 0
+			xra a
 			out AY_PORT_DATA
 			dcr e
 			jp @sendData

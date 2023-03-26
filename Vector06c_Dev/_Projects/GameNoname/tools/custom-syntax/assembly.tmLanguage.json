@@ -1,0 +1,16 @@
+{
+    "name": "Custom Assembly",
+    "scopeName": "source.assembly.custom",
+    "fileTypes": ["asm"],
+    "patterns": [
+        {
+            "match": "^(\\s*)([A-Za-z_][A-Za-z0-9_]*:)",
+            "name": "entity.name.label.assembly.custom",
+            "captures": {
+                "2": { "name": "entity.name.label.assembly.custom" }
+            }
+        }
+    ],
+    "repository": {},
+    "uuid": "99b07d02-ca8b-11ed-afa1-0242ac120002"
+}
