@@ -6,13 +6,13 @@ sfx_delay:
 SFX_TEST_DELAY	= 50 ; 1 sec
 
 sfx_ay_song:
-.incbin "C:\\Work\\Programming\\_Dev\\Vector06c_Dev\\_Projects\\GameNoname\\temp\\sfx\\noname006.afx"
+.incbin "C:\\Work\\Programming\\_Dev\\Vector06c_Dev\\_Projects\\GameNoname\\temp\\sfx\\test9.afx"
 
 AY_REG_VOL_CHSFX			= AY_REG_VOL_CHA
 AY_REG_TONE_FDIV_CHSFX_L	= AY_REG_TONE_FDIV_CHA_L
 AY_REG_TONE_FDIV_CHSFX_H	= AY_REG_TONE_FDIV_CHA_H
-AY_REG_MIXER_T_CHSFX		= AY_REG_MIXER_T_CHA
-AY_REG_MIXER_N_CHSFX		= AY_REG_MIXER_N_CHA
+AY_REG_MIXER_T_MUTE_CHSFX	= AY_REG_MIXER_T_MUTE_CHA
+AY_REG_MIXER_N_MUTE_CHSFX	= AY_REG_MIXER_N_MUTE_CHA
 
 ; sfx data format:
 ; .byte - a control byte NntTVVVV:
@@ -33,12 +33,17 @@ AY_REG_MIXER_N_CHSFX		= AY_REG_MIXER_N_CHA
 SFX_DATA_EOF = $20
 
 SFX_DATA_CTRL_VOL_MASK		= %00001111 ; master volume
-SFX_DATA_CTRL_TD_MASK		= %00010000	; tone muted
+SFX_DATA_CTRL_T_MUTE_MASK	= %00010000	; tone muted
 SFX_DATA_CTRL_TC_MASK		= %00100000 ; tone change
 SFX_DATA_CTRL_NC_MASK		= %01000000 ; noise change
-SFX_DATA_CTRL_ND_MASK		= %10000000 ; noise muted
+SFX_DATA_CTRL_N_MUTE_MASK	= %10000000 ; noise muted
 
 ;===========================================
+sfx_ay_init:
+			; set sfx vol max
+			xra a
+			sta master_sfx_mute
+
 sfx_ay_update_test:
 			; check delay
 			lxi h, sfx_delay
@@ -109,36 +114,22 @@ sfx_ay_update:
 			inx h
 			out AY_PORT_DATA
 
-@checkMixer:
-			; check if a tone muted
-			mvi b, AY_REG_MIXER_T_CHSFX ; mixer reg data
-			mvi a, SFX_DATA_CTRL_TD_MASK
-			ana c
-			jnz @muteTone
-			; enable a tone
-			mov b, a
-@muteTone:
-			; check if a noise muted
-			mvi a, SFX_DATA_CTRL_ND_MASK
-			ana c
-			jz @skipMuteNoise
-			; mute a noise
-			mvi a, AY_REG_MIXER_N_CHSFX
-			ora b
-			mov b, a
-@skipMuteNoise:
-			; b - SFX mixer data
-			; TODO: combine SFX mixer data with a gigachad player mixer data
 @setMixer:
 			; set a mixer
 			mvi a, AY_REG_MIXER
 			out AY_PORT_REG
-			; TODO: test below
-			; temporaly mute all other channels 
-			; mixer data should be synced with gigachad
-			;mvi a, ~(AY_REG_MIXER_T_CHSFX | AY_REG_MIXER_N_CHSFX)
-			;ora b
-			mvi a, 0
+
+			mvi a, SFX_DATA_CTRL_T_MUTE_MASK | SFX_DATA_CTRL_N_MUTE_MASK
+			ana c
+		.if AY_REG_MIXER_T_MUTE_CHSFX == AY_REG_MIXER_T_MUTE_CHA
+			rrc_(4)
+		.endif
+		.if AY_REG_MIXER_T_MUTE_CHSFX == AY_REG_MIXER_T_MUTE_CHB
+			rrc_(3)
+		.endif
+		.if AY_REG_MIXER_T_MUTE_CHSFX == AY_REG_MIXER_T_MUTE_CHC
+			rrc_(2)
+		.endif
 			out AY_PORT_DATA
 			; store sfx pointer
 			shld sfx_ay_update + 1

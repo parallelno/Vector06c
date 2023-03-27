@@ -1,6 +1,6 @@
 .include "asm\\globals\\sound_const.asm"
-; TODO: move it to ram_disk a well as sfx player
-.include "asm\\globals\\sound_vars.asm"
+.include "asm\\levels\\levels_const.asm"
+.include "asm\\globals\\buffers.asm"
 
 ; gigachad16 player
 ; info/credits:
@@ -320,18 +320,31 @@ GCPlayerUnpack:
 			; return to the func that called __gcplayer_update		
 			ret
 			
-		
-
-.macro CG_PLAYER_AY_UPDATE_REG(mixer = false)
+.macro CG_PLAYER_AY_UPDATE_REG(do_dcr = true, mode = 255)
 			mov a, e
 			out AY_PORT_REG
+
 			ldax b
-		.if mixer
-			sta ay_reg_mixer_data
+		.if mode == 1
+			; store envelope marker
+			;ani AY_REG_VOL_ENV_MASK
+			;mov d, a
+			;ldax b
+			;rrc
+			;ani %111	
+			;mvi a, 0
+			;ora d
 		.endif
+		
+		.if mode == 0
+			xra a
+		.endif
+
 			out AY_PORT_DATA
+		.if do_dcr
 			dcr b
 			dcr e
+		.endif
 .endmacro
 
 ; send buffers data to AY regs
@@ -347,19 +360,27 @@ gcplayer_ay_update:
 			ldax b
 			cpi $ff
 			jz @doNotSendEnvData
-
-			CG_PLAYER_AY_UPDATE_REG() ; set reg 13 (envelope)
+			CG_PLAYER_AY_UPDATE_REG(false) ; reg 13 (Envelope)
 @doNotSendEnvData:
-			CG_PLAYER_AY_UPDATE_REG() ; set reg 12
-			CG_PLAYER_AY_UPDATE_REG() ; set reg 11			
-			CG_PLAYER_AY_UPDATE_REG() ; set reg 10
-			CG_PLAYER_AY_UPDATE_REG() ; set reg 9
-			CG_PLAYER_AY_UPDATE_REG() ; set reg 8							
-			CG_PLAYER_AY_UPDATE_REG(true); set reg 7 (mixer)
+			dcr b
+			dcr e
+			CG_PLAYER_AY_UPDATE_REG() ; reg 12 (envelope FDIV H)
+			CG_PLAYER_AY_UPDATE_REG() ; reg 11 (envelope FDIV L)
+			CG_PLAYER_AY_UPDATE_REG() ; reg 10 (Vol C)
+			CG_PLAYER_AY_UPDATE_REG() ; reg 9  (Vol B)
+			CG_PLAYER_AY_UPDATE_REG() ; reg 8  (Vol A)
+			CG_PLAYER_AY_UPDATE_REG() ; reg 7 (Mixer)
+			CG_PLAYER_AY_UPDATE_REG() ; reg 6 (Noise FDIV)
+			CG_PLAYER_AY_UPDATE_REG() ; reg 5 (Tone FDIV CHC H)
+			CG_PLAYER_AY_UPDATE_REG() ; reg 4 (Tone FDIV CHC L)
+			CG_PLAYER_AY_UPDATE_REG() ; reg 3 (Tone FDIV CHB H)
+			CG_PLAYER_AY_UPDATE_REG() ; reg 2 (Tone FDIV CHB L)
+			CG_PLAYER_AY_UPDATE_REG() ; reg 1 (Tone FDIV CHA H)
+			CG_PLAYER_AY_UPDATE_REG() ; reg 0 (Tone FDIV CHA L)
 @sendData:
-			CG_PLAYER_AY_UPDATE_REG() ; set reg 6 and others
+			;CG_PLAYER_AY_UPDATE_REG() ; all other regs
 @doNotSendData:						
-			jp @sendData
+			;jp @sendData
 			ret
 			
 

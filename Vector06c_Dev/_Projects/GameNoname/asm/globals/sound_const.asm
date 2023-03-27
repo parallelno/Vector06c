@@ -1,3 +1,4 @@
+	; this line for VSCode proper formating
 ; AY-3-8910 sound chip consts
 ; ports
 AY_PORT_REG		= $15
@@ -26,10 +27,13 @@ AY_REG_ENV				= 13; ----EEEH, envelope type = EEE, H = 1 means hold
 ;							envelope type = 6: /\/\/\/\/\/\/\, repeated attack-decay
 ;							envelope type = 7: \/\/\/\/\/\/\/, repeated decay-attack 
 ; mixer masks
-AY_REG_MIXER_T_CHA = %00000001 ; to mute tone channel A
-AY_REG_MIXER_T_CHB = %00000010 ; to mute tone channel B
-AY_REG_MIXER_T_CHC = %00000100 ; to mute tone channel C
-AY_REG_MIXER_N_CHA = %00001000 ; to mute noise channel A
-AY_REG_MIXER_N_CHB = %00010000 ; to mute noise channel B
-AY_REG_MIXER_N_CHC = %00100000 ; to mute noise channel C
+AY_REG_MIXER_T_MUTE_CHA = %00000001 ; to mute tone channel A
+AY_REG_MIXER_T_MUTE_CHB = %00000010 ; to mute tone channel B
+AY_REG_MIXER_T_MUTE_CHC = %00000100 ; to mute tone channel C
+AY_REG_MIXER_N_MUTE_CHA = %00001000 ; to mute noise channel A
+AY_REG_MIXER_N_MUTE_CHB = %00010000 ; to mute noise channel B
+AY_REG_MIXER_N_MUTE_CHC = %00100000 ; to mute noise channel C
+; master volume masks
+AY_REG_VOL_MASK			= %00001111
+AY_REG_VOL_ENV_MASK		= %00010000
 			

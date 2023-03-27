@@ -40,13 +40,12 @@ sfx_song_01_ch0:
 sfx_song_01_ch1:			
 			.word 1700, 2700, 2750, 1100, 6500, 3700, 7100, 1750, 5000, 0
 */
-/*
+
 			; vampire attack
-sfx_song_01_ch0: 
-			.word 710, 700, 1750, 1000, 1100, 1700, 2100, 4750, 5500, 0
-sfx_song_01_ch1:			
-			.word 700, 700, 1750, 1100, 1100, 1700, 2100, 4750, 5500, 0
-*/
+sfx_song_vampire_attack: 
+			.word 710, 700, 1750, 1000, 1100, 1700, 2100, 4750, 5500, 0	
+			.word 700, 700, 1750, 1100, 1100, 1700, 2100, 4750, 5500
+
 
 /*
 			; bomb attack
@@ -55,11 +54,12 @@ sfx_song_01_ch0:
 sfx_song_01_ch1:			
 			.word 57000, 44700, 33750, 33100, 11000, 1100, 6500, 700, 7100, 42700, 2750, 1100, 6500
 */
-
+/*
 sfx_delay:
 			.byte 0
 
-SFX_TEST_DELAY	= 50 ; 1 sec
+SFX_TEST_DELAY			= 50 ; 1 sec
+*/
 SFX_PORT_INIT			= $08
 SFX_PORT_INIT_VALUE_CH0	= $36
 SFX_PORT_INIT_VALUE_CH1	= $76
@@ -68,12 +68,18 @@ SFX_PORT_CH0			= $0b
 SFX_PORT_CH1			= $0a
 SFX_PORT_CH2			= $09
 
+SFX_CMD_MUTE			= OPCODE_RET
+SFX_CMD_PLAY			= OPCODE_NOP
+
 sfx_stop:
 		; stop sound
 		mvi a, SFX_PORT_INIT_VALUE_CH0
 		out SFX_PORT_INIT
 		mvi a, SFX_PORT_INIT_VALUE_CH1
 		out SFX_PORT_INIT
+		mvi a, OPCODE_RET
+		sta sfx_update
+		/*
 		; reset song
 		lxi h, sfx_song_01_ch0
 		shld sfx_songPtr+1
@@ -81,9 +87,14 @@ sfx_stop:
 		; set a delay
 		mvi a, SFX_TEST_DELAY
 		sta sfx_delay
+		*/
 		ret
 
+		
+
 sfx_update:
+		ret
+		/*
 		; check delay
 		lxi h, sfx_delay
 		mov a, m
@@ -93,18 +104,20 @@ sfx_update:
 		dcr m
 		ret
 		; send data to a sound chip
+		*/
 sfx_songPtr:
 		lxi h, sfx_song_01_ch0
 		; check the end of the song
+		mov c, m
+		inx h
 		mov a, m
-		ora a
+		ora c
 		jz sfx_stop
 @play:
 		; set freq_div to ch0
 		mvi a, SFX_PORT_INIT_VALUE_CH0
 		out SFX_PORT_INIT
-		mov a, m
-		inx h
+		mov a, c
 		out SFX_PORT_CH0
 		mov a, m
 		inx h

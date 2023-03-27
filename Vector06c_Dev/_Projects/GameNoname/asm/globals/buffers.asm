@@ -12,8 +12,11 @@ rooms_spawn_rate_breakables = rooms_spawn_rate_monsters + ROOMS_MAX ; 0 means 10
 rooms_runtime_data_end		= rooms_spawn_rate_breakables + ROOMS_MAX ; $7b80
 
 ;
-;	free space = $7b80 - $7c10
+;master_music_mute				= $7b80 ; value = 0 means no mute (max volume), value >= 15 means mute
+;master_sfx_mute					= $7b81 ; value = 0 means no mute (max volume), value >= 15 means mute
+;	free space = $7b82 - $7c10
 ;
+
 global_items				= $7c10
 	global_item0 = global_items	; key blue
 	global_item1 = global_items+1	; key red
