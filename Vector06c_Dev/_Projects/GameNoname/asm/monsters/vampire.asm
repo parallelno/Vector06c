@@ -346,7 +346,9 @@ vampire_update_shoot_prep:
 			; advance hl to monster_status
 			dcx h
 			mvi m, VAMPIRE_STATUS_SHOOT
-			SFX_PLAY(sfx_vampire_attack)
+			
+			lxi h, __sfx_vampire_attack
+			CALL_RAM_DISK_FUNC_NO_RESTORE(__sfx_play, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
 			ret
 
 vampire_update_shoot:

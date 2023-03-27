@@ -239,9 +239,6 @@ bomb_update:
 			mvi a, BOMB_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_COLLISION_WIDTH, BOMB_COLLISION_HEIGHT, BOMB_DAMAGE)	
 @dieAfterDamage:
-			xchg
-			SFX_PLAY(sfx_bomb_attack)
-			xchg
 			; advance hl to bullet_update_ptr+1
 			LXI_B_TO_DIFF(bullet_update_ptr+1, bullet_pos_y+1)
 			dad b

@@ -97,11 +97,8 @@ interruption:
 			push b
 			push d
 
-			CALL_RAM_DISK_FUNC_NO_RESTORE(__gcplayer_update, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC_NO_RESTORE(__sound_update, __RAM_DISK_S_SOUND | __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
 			INTERRUPTION_MAIN_LOGIC()
-
-			call sfx_update
-			;call sfx_ay_update_test
 
 			pop d
 			pop b

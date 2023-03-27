@@ -1,5 +1,4 @@
 .include "asm\\game_const.asm"
-.include "asm\\globals\\sfx.asm"
 .include "asm\\levels\\levels_const.asm"
 .include "asm\\levels\\levels_macro.asm"
 .include "asm\\levels\\levels_data.asm"

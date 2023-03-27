@@ -1,6 +1,6 @@
 .include "asm\\globals\\ay_const.asm"
-.include "asm\\levels\\levels_const.asm"
-.include "asm\\globals\\buffers.asm"
+;.include "asm\\levels\\levels_const.asm"
+;.include "asm\\globals\\buffers.asm"
 
 ; gigachad16 player
 ; info/credits:
@@ -42,7 +42,7 @@ __gcplayer_start_repeat:
 			ret
 			
 
-; this function has to be called from an unterruption routine
+; called by the unterruption routine
 ; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(__gcplayer_update, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 __gcplayer_update:
 			; ret will be replaced with NOP when the player inited

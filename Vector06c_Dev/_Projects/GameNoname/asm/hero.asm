@@ -748,7 +748,8 @@ hero_impacted:
 			cpi HERO_STATUS_INVINCIBLE
 			rz
 
-			SFX_PLAY(sfx_hero_hit)
+			lxi h, __sfx_bomb_attack
+			CALL_RAM_DISK_FUNC_NO_RESTORE(__sfx_play, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
 
 			call hero_invincible_start
 

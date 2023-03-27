@@ -8,9 +8,6 @@ TIMER_PORT_CH0	= $0b
 TIMER_PORT_CH1	= $0a
 TIMER_PORT_CH2	= $09
 
-SFX_CMD_MUTE			= OPCODE_RET
-SFX_CMD_PLAY			= OPCODE_LXI_H
-
 SFX_DATA_EOF = 0
 
 ; sfx data format:
@@ -48,7 +45,7 @@ sfx_song_false:
 			.word 1700, 2700, 2750, 1100, 6500, 3700, 7100, 1750, 5000, 0
 */
 
-sfx_vampire_attack:
+__sfx_vampire_attack:
 			.dword 0710<<16 | 0700, 
 			.dword 0700<<16 | 0700, 
 			.dword 1750<<16 | 1750,
@@ -60,7 +57,7 @@ sfx_vampire_attack:
 			.dword 5750<<16 | 5750,
 			.word SFX_DATA_EOF
 
-sfx_bomb_attack: 
+__sfx_bomb_attack: 
 			.dword 50010<<16 | 57000,
 			.dword 44700<<16 | 44700,
 			.dword 33750<<16 | 33750,
@@ -76,7 +73,7 @@ sfx_bomb_attack:
 			.dword 11075<<16 | 6500,
 			.word SFX_DATA_EOF
 
-sfx_hero_hit:
+__sfx_hero_hit:
 			.dword 50010<<16 | 57000,
 			.dword 44700<<16 | 44700,
 			.dword 33750<<16 | 33750,
@@ -87,7 +84,7 @@ sfx_hero_hit:
 			.dword 11075<<16 | 6500,
 			.word SFX_DATA_EOF
 
-sfx_song_hi_pitch: 
+__sfx_song_hi_pitch: 
 			.dword 242<<16 | 226,
 			.dword 132<<16 | 153,
 			.dword 17<<16 | 152,
@@ -99,15 +96,6 @@ sfx_song_hi_pitch:
 			.dword 175<<16 | 1,
 			.word SFX_DATA_EOF
 
-; in:
-; hl - sfx pointer
-.macro SFX_PLAY(sfx_song_addr)
-			lxi h, sfx_song_addr
-			shld sfx_songPtr+1
-			lxi h, sfx_update
-			mvi m, SFX_CMD_PLAY
-.endmacro
-
 sfx_stop:
 			; stop sound
 			mvi a, TIMER_INIT_CH0
@@ -115,15 +103,25 @@ sfx_stop:
 			mvi a, TIMER_INIT_CH1
 			out TIMER_PORT
 			mvi a, OPCODE_RET
-			sta sfx_update
+			sta __sfx_update
+			ret
+
+; start the next sfx to play
+; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(__sfx_play, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
+; in:
+; hl - sfx pointer
+__sfx_play:
+			shld __sfx_update+1
+			lxi h, __sfx_update
+			mvi m, OPCODE_LXI_H
 			ret
 
 ; called by the interuption routine
+; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(__sfx_update, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
 ; uses:
 ; hl, a, c
-sfx_update:
-sfx_songPtr:
-		lxi h, sfx_vampire_attack
+__sfx_update:
+		lxi h, __sfx_vampire_attack
 		; check the end of the song
 		mov c, m
 		inx h
@@ -150,6 +148,6 @@ sfx_songPtr:
 		inx h
 		out TIMER_PORT_CH1
 		; store the current song ptr ch0		
-		shld sfx_songPtr+1		
+		shld __sfx_update+1		
 		ret
 sfx_end:

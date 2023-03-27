@@ -18,7 +18,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 2, addr $8000, chunk_id 0
 	;===============================================
-			; ['song01', 'gigachad_player_rd']
+			; ['song01', 'sound_rd']
 			; unpack the chunk into the ram-disk
 			lxi d, chunk_bank2_addr8000_0
 			lxi b, __chunk_start_bank2_addr8000_0

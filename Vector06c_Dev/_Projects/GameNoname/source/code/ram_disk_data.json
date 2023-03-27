@@ -186,7 +186,7 @@
 								},
 								{
 									"asset_type" : "code",
-									"path": "asm\\globals\\gigachad_player_rd.asm"
+									"path": "asm\\globals\\sound_rd.asm"
 								}
 							]
 						}
