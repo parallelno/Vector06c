@@ -1,4 +1,5 @@
 	; this line for VSCode proper formating
+	; TODO: remane buffers.asm to vars.asm
 ;=============================================================================
 ; buffers
 ;

@@ -1,10 +1,13 @@
-.include "asm\\globals\\sound_const.asm"
+; SFX player for AY-3-8910 sound chip
+.include "asm\\globals\\ay_const.asm"
 
+; TODO: test delay
 sfx_delay:
 			.byte 0
 
 SFX_TEST_DELAY	= 50 ; 1 sec
 
+; TODO: test link
 sfx_ay_song:
 .incbin "C:\\Work\\Programming\\_Dev\\Vector06c_Dev\\_Projects\\GameNoname\\temp\\sfx\\test9.afx"
 
@@ -30,13 +33,13 @@ AY_REG_MIXER_N_MUTE_CHSFX	= AY_REG_MIXER_N_MUTE_CHA
 ; ...
 ; .byte $D0, $20 ; EOF
 
-SFX_DATA_EOF = $20
+SFX_AY_DATA_EOF = $20
 
-SFX_DATA_CTRL_VOL_MASK		= %00001111 ; master volume
-SFX_DATA_CTRL_T_MUTE_MASK	= %00010000	; tone muted
-SFX_DATA_CTRL_TC_MASK		= %00100000 ; tone change
-SFX_DATA_CTRL_NC_MASK		= %01000000 ; noise change
-SFX_DATA_CTRL_N_MUTE_MASK	= %10000000 ; noise muted
+SFX_AY_DATA_CTRL_VOL_MASK		= %00001111 ; master volume
+SFX_AY_DATA_CTRL_T_MUTE_MASK	= %00010000	; tone muted
+SFX_AY_DATA_CTRL_TC_MASK		= %00100000 ; tone change
+SFX_AY_DATA_CTRL_NC_MASK		= %01000000 ; noise change
+SFX_AY_DATA_CTRL_N_MUTE_MASK	= %10000000 ; noise muted
 
 ;===========================================
 sfx_ay_init:
@@ -75,13 +78,13 @@ sfx_ay_update:
 			; set a master volume
 			mvi a, AY_REG_VOL_CHSFX
 			out AY_PORT_REG
-			mvi a, SFX_DATA_CTRL_VOL_MASK
+			mvi a, SFX_AY_DATA_CTRL_VOL_MASK
 			ana c
 			out AY_PORT_DATA
 
 @checkTone:
 			; check if a tone changes
-			mvi a, SFX_DATA_CTRL_TC_MASK
+			mvi a, SFX_AY_DATA_CTRL_TC_MASK
 			ana c
 			jz @checkNoise
 @setTone:
@@ -99,12 +102,12 @@ sfx_ay_update:
 
 @checkNoise:
 			; check if a noise changes
-			mvi a, SFX_DATA_CTRL_NC_MASK
+			mvi a, SFX_AY_DATA_CTRL_NC_MASK
 			ana c
 			jz @setMixer
 			; check if it is EOF
 			mov a, m
-			cpi SFX_DATA_EOF
+			cpi SFX_AY_DATA_EOF
 			jz sfx_ay_stop_test
 @setNoise:
 			; set a noise
@@ -119,7 +122,7 @@ sfx_ay_update:
 			mvi a, AY_REG_MIXER
 			out AY_PORT_REG
 
-			mvi a, SFX_DATA_CTRL_T_MUTE_MASK | SFX_DATA_CTRL_N_MUTE_MASK
+			mvi a, SFX_AY_DATA_CTRL_T_MUTE_MASK | SFX_AY_DATA_CTRL_N_MUTE_MASK
 			ana c
 		.if AY_REG_MIXER_T_MUTE_CHSFX == AY_REG_MIXER_T_MUTE_CHA
 			rrc_(4)
@@ -134,5 +137,3 @@ sfx_ay_update:
 			; store sfx pointer
 			shld sfx_ay_update + 1
 			ret
-
-sfx_ay_song_ptr = sfx_ay_update + 1

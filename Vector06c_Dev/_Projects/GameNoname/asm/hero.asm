@@ -748,6 +748,8 @@ hero_impacted:
 			cpi HERO_STATUS_INVINCIBLE
 			rz
 
+			SFX_PLAY(sfx_hero_hit)
+
 			call hero_invincible_start
 
 			lxi h, hero_health

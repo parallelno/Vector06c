@@ -1,5 +1,6 @@
 	; this line for VSCode proper formating
 ; AY-3-8910 sound chip consts
+
 ; ports
 AY_PORT_REG		= $15
 AY_PORT_DATA	= $14

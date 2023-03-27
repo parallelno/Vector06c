@@ -346,11 +346,7 @@ vampire_update_shoot_prep:
 			; advance hl to monster_status
 			dcx h
 			mvi m, VAMPIRE_STATUS_SHOOT
-			; play sfx
-			lxi h, sfx_song_vampire_attack
-			shld sfx_songPtr+1
-			mvi a, SFX_CMD_PLAY
-			sta sfx_update
+			SFX_PLAY(sfx_vampire_attack)
 			ret
 
 vampire_update_shoot:

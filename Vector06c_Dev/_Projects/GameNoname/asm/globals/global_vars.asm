@@ -1,4 +1,5 @@
 
+; TODO: move it to buffers.asm
 ; low byte	- Down, Right, Up, Left, ЗБ (DEL), ВК (Enter), ПС (Alt), TAB (Tab)
 ; hi byte 	- SPC, ^, ], \, [, Z, Y, X
 key_code:
