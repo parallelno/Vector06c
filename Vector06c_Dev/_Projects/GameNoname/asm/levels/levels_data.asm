@@ -2,11 +2,11 @@
 ; list of adresses of compressed levels
 levels_addr: .word TEMP_ADDR, 0
 ; TODO: do we need it?
-; current level index in levels_addr
+; the current level idx in levels_addr
 level_idx:
 			.byte 0
-; current room index in rooms_addr of the current level
-room_idx:   .byte 0 ; 0 - ROOMS_MAX-1
+; the current room idx of the current level
+room_idx:   .byte 0 ; in the range [0, ROOMS_MAX-1]
 
 ; tiledata format:
 ; it's stored in room_tiledata
@@ -33,15 +33,16 @@ room_idx:   .byte 0 ; 0 - ROOMS_MAX-1
 
 ; ffff == 6, a global item. a hero interacts with it when he steps on it. status of every item is stored globally. item_id = d. see buffers.asm->global_items for details
 
-; ffff == 7, a resource. a hero interacts with it when he steps on it. status of every item in the room is stored. resource_id = d
+; ffff == 7, a resource. a hero interacts with it when he steps on it. status of every item in the room stored in room_resources. there can be RESOURCES_INSTANCES_MAX in the room. resource_id = d
 ;		resource_id == 0 - a coin (tiledata = 10*16+0 = 160)
 ;		resource_id == 1 - a potion blue
 ;		resource_id == 2 - a potion red
-;	??? is it working to the items below ???
+
+;	??? is it working for the items below ???
 ;		resource_id == 10 - a damage pool
 ;		resource_id == 11 - a slow pool
 
-; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable (a hero and monster can't step on)
+; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable (a hero and monsters can't step on that tile)
 
 ; ffff == 8, ???
 ; ffff == 9, ???
@@ -89,7 +90,7 @@ room_tiledata_funcs:
 			jmp_4(room_tiledata_copy)					; func_id = 4
 			jmp_4(room_tiledata_copy)					; func_id = 5
 			jmp_4(room_tiledata_item_spawn)				; func_id = 6
-			jmp_4(room_tiledata_copy)					; func_id = 7
+			jmp_4(room_tiledata_resource_spawn)			; func_id = 7
 			jmp_4(room_tiledata_copy)					; func_id = 8
 			jmp_4(room_tiledata_copy)					; func_id = 9
 			jmp_4(room_tiledata_copy)					; func_id = 10

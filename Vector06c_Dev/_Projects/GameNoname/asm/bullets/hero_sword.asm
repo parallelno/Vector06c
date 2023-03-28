@@ -324,7 +324,7 @@ hero_sword_func_door:
 			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
 
 			pop b
-			; c - tile idx in the room_tiledata array.
+			; c - tile_idx in the room_tiledata array.
 			call room_tiledata_door_spawn_open
 			ret
 

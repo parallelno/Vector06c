@@ -23,7 +23,12 @@ level_init:
 
 			; erase rooms runtime data
 			lxi h, rooms_runtime_data
-			lxi b, rooms_runtime_data_end - rooms_runtime_data
+			lxi b, ROOMS_RUNTIME_DATA_LEN
+			call clear_mem
+
+			; erase room resources
+			lxi h, rooms_resources
+			lxi b, ROOMS_RESOURCES_LEN
 			call clear_mem
 
 			xra a

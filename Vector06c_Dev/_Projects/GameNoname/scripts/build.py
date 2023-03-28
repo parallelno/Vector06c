@@ -63,13 +63,13 @@ def build_db_init(path):
 def is_asm_updated(asmPath):
 	with open(asmPath, "rb") as file:
 		lines = file.readlines()
-		
+
 	includes = []
 	for line in lines:
 		line_str = line.decode('ascii')
 		inc_str = ".include "
 		inc_idx = line_str.find(inc_str)
-		
+
 		if inc_idx != -1 and line_str[0] != ";":
 			path = line_str[inc_idx + len(inc_str)+1:]
 			path = common.remove_double_slashes(path)
@@ -94,12 +94,12 @@ def is_file_updated(path):
 	cur = con.cursor()
 	cur.execute('''CREATE TABLE if not exists files
 			   (path text, modtime integer)''')
-	
+
 	if not os.path.exists(path):
 		return True
 	modificationTime = int(os.path.getmtime(path))
-	
-	
+
+
 	res = cur.execute("SELECT * FROM files WHERE path = '%s'" % path)
 	modified = False
 	ents = res.fetchall()
@@ -125,7 +125,7 @@ def is_file_updated(path):
 def export_labels(path, externals_only = False):
 	with open(path, "rb") as file:
 		lines = file.readlines()
-		
+
 	get_all_next_lines = False
 	labels = ""
 	for line in lines:
@@ -139,7 +139,7 @@ def export_labels(path, externals_only = False):
 			get_all_next_lines = True
 
 	with open(path, "w") as file:
-		file.write(labels) 
+		file.write(labels)
 
 def get_segment_addr(_addr_s):
 	addr_s_wo_prefix = common.get_addr_wo_prefix(_addr_s)
@@ -149,7 +149,7 @@ def get_segment_addr(_addr_s):
 		return SEGMENT_0000_7F00_ADDR
 	if addr == SEGMENT_8000_0000_ADDR:
 		return SEGMENT_8000_0000_ADDR
-	
+
 	print(f"get_segment_addr ERROR: addr: {_addr_s} is not supported.")
 	exit(1)
 

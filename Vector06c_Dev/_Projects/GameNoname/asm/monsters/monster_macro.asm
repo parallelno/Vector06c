@@ -86,8 +86,8 @@
 
 ; monster initialization
 ; in:
-; c - tile idx in the room_tiledata array.
-; a - monster id * 4
+; c - tile_idx in the room_tiledata array.
+; a - monster_id * 4
 ;ex. MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 .macro MONSTER_INIT(MONSTER_UPDATE, MONSTER_DRAW, MONSTER_IMPACT, MONSTER_HEALTH, MONSTER_STATUS_DETECT_HERO_INIT, MONSTER_ANIM)
 			rrc_(2) ; to get monsterID
@@ -135,7 +135,7 @@
 			mvi m, >MONSTER_ANIM
 
 			; c - tile_idx
-			; posX = tile idx % ROOM_WIDTH * TILE_WIDTH
+			; posX = tile_idx % ROOM_WIDTH * TILE_WIDTH
 			mvi a, %00001111
 			ana c
 			rlc_(4)
@@ -144,7 +144,7 @@
 			rrc_(3)
 			adi SPRITE_X_SCR_ADDR
 			mov d, a
-			; posY = (tile idx % ROOM_WIDTH) * TILE_WIDTH
+			; posY = (tile_idx % ROOM_WIDTH) * TILE_WIDTH
 			mvi a, %11110000
 			ana c
 			mvi e, 0

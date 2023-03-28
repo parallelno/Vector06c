@@ -89,8 +89,8 @@ SKELETON_DETECT_HERO_DISTANCE = 60
 ;========================================================
 ; called to spawn this monster
 ; in:
-; c - tile idx in the room_tiledata array.
-; a - monster id * 4
+; c - tile_idx in the room_tiledata array.
+; a - monster_id * 4
 ; out:
 ; a = 0
 skeleton_init:

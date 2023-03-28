@@ -3,7 +3,11 @@
 ;=============================================================================
 ; buffers
 ;
-
+ROOMS_RESOURCES_UNIQUE_MAX		= 16
+ROOMS_RESOURCES_INSTANCES_MAX	= 5
+ROOMS_RESOURCES_LEN				= ROOMS_RESOURCES_UNIQUE_MAX * ROOMS_RESOURCES_INSTANCES_MAX
+rooms_resources				= $7ab0; 16 unique resources * 5 instances of each resource
+rooms_resources_end			= rooms_resources + ROOMS_RESOURCES_LEN
 
 ; rooms runtime data
 ; TODO: replace dad with adi <ADDR in the pointer calc routines
@@ -11,11 +15,10 @@ rooms_runtime_data			= $7b00
 rooms_spawn_rate_monsters	= rooms_runtime_data 					; 0 means 100% chance to spawn a monster. 255 means no spawn
 rooms_spawn_rate_breakables = rooms_spawn_rate_monsters + ROOMS_MAX ; 0 means 100% chance to spawn a breakable item. 255 means no spawn
 rooms_runtime_data_end		= rooms_spawn_rate_breakables + ROOMS_MAX ; $7b80
+ROOMS_RUNTIME_DATA_LEN = rooms_runtime_data_end - rooms_runtime_data
 
 ;
-;master_music_mute				= $7b80 ; value = 0 means no mute (max volume), value >= 15 means mute
-;master_sfx_mute					= $7b81 ; value = 0 means no mute (max volume), value >= 15 means mute
-;	free space = $7b82 - $7c10
+;	free space = $7b80 - $7c10
 ;
 
 global_items				= $7c10

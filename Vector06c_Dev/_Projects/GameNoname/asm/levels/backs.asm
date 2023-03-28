@@ -96,7 +96,7 @@ back_to_next_frame:
 ; a tiledata handler to spawn an animated background tile by its id.
 ; input:
 ; b - tiledata
-; c - tile idx in the room_tiledata array.
+; c - tile_idx in the room_tiledata array.
 ; a - back_id
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
@@ -141,7 +141,7 @@ backs_spawn:
 
 			; advance hl to back_scr_addr
 			inx h
-			; scr_y = tile idx % ROOM_WIDTH
+			; scr_y = tile_idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
 			mov m, a

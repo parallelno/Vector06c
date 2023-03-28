@@ -9,13 +9,13 @@ room_init:
 			call room_copy_scr_to_backbuffs
 			ret
 
-; uncompress room gfx tile idx buffer + room tiledata buffer into the room_tiles_gfx_ptrs + offset
+; uncompress room gfx tile_idx buffer + room tiledata buffer into the room_tiles_gfx_ptrs + offset
 ; offset = (size of room_tiles_gfx_ptrs buffer) / 2. the result of the copy operation is
-; after copying room tile idxs occupy the second half of the room_tiles_gfx_ptrs, and
+; after copying room tile_idxs occupy the second half of the room_tiles_gfx_ptrs, and
 ; after copying room tiledata occupies the room_tiledata
 ; packed room data has to be stored into $8000-$FFFF segment to be properly unzipped
 room_unpack:
-			; convert a room_idx into the room gfx tile idx buffer addr like __level01_room00 or __level01_room01, etc
+			; convert a room_idx into the room gfx tile_idx buffer addr like __level01_room00 or __level01_room01, etc
 			lda room_idx
 			; double the room index to get an address offset in the level01_rooms_addr array
 			rlc
@@ -26,20 +26,20 @@ room_unpack:
 			lxi h, __level01_rooms_addr
 			dad b
 
-			; load a pointer to a room gfx tile idx buffer
+			; load a pointer to a room gfx tile_idx buffer
 			xchg
 			mvi a, <__RAM_DISK_S_LEVEL01_DATA
 			call get_word_from_ram_disk
 			mov d, b
 			mov e, c
 
-			; copy room gfx tile idxs + room tiledata into the room_tiles_gfx_ptrs + offset
+			; copy room gfx tile_idxs + room tiledata into the room_tiles_gfx_ptrs + offset
 			; offset = room_tiles_gfx_ptrs_size / 2
 			lxi b, room_tiles_gfx_ptrs + room_tiles_gfx_ptrs_size / 2
 			CALL_RAM_DISK_FUNC(dzx0, __RAM_DISK_M_LEVEL01_DATA | RAM_DISK_M_8F)
 			ret
 
-; convert room gfx tile idxs into room gfx tile ptrs
+; convert room gfx tile_idxs into room gfx tile ptrs
 room_init_tiles_gfx:
 			lxi h, room_tiles_gfx_ptrs + room_tiles_gfx_ptrs_size / 2
 			lxi b, room_tiles_gfx_ptrs
@@ -112,10 +112,10 @@ room_tiledata_copy:
 			mov a, b
 			ret
 
-; a tiledata handler to spawn a monster by its id.
+; a tiledata handler. spawn a monster.
 ; input:
 ; b - tiledata
-; c - tile idx in the room_tiledata array.
+; c - tile_idx in the room_tiledata array.
 ; a - monster_id
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
@@ -129,11 +129,11 @@ room_tiledata_monster_spawn:
 			; call a monster init func
 			pchl
 
-; a tiledata handler for a collision + spawn an animated back by its id.
+; a tiledata handler. spawn an animated back + collision.
 ; if id == TILEDATA_FUNC_ID_COLLISION, it does not spawn an animated back
 ; input:
 ; b - tiledata
-; c - tile idx in the room_tiledata array.
+; c - tile_idx in the room_tiledata array.
 ; a - back_id
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
@@ -143,10 +143,10 @@ room_tiledata_back_spawn:
 			mvi a, TILEDATA_COLLISION
 			ret
 
-; a tiledata handler for non-collision + draw a decal.
+; a tiledata handler. spawn a walkable decal.
 ; input:
 ; b - tiledata
-; c - tile idx in the room_tiledata array.
+; c - tile_idx in the room_tiledata array.
 ; a - decal_walkable_id
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
@@ -157,7 +157,7 @@ room_tiledata_decal_walkable_spawn:
 
 			add_a(2) ; to make a jmp_4 ptr
 			sta @restoreA+1
-			; scr_y = tile idx % ROOM_WIDTH
+			; scr_y = tile_idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
 			mov e, a
@@ -185,17 +185,17 @@ room_tiledata_decal_walkable_spawn:
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
 
-; a tiledata handler for a collision + draw a decal.
+; a tiledata handler. spawn a collidable decals.
 ; input:
 ; b - tiledata
-; c - tile idx in the room_tiledata array.
+; c - tile_idx in the room_tiledata array.
 ; a - decal_collidable_id
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
 room_tiledata_decal_collidable_spawn:
 			add_a(2) ; to make a jmp_4 ptr
 			sta @restoreA+1
-			; scr_y = tile idx % ROOM_WIDTH
+			; scr_y = tile_idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
 			mov e, a
@@ -223,10 +223,10 @@ room_tiledata_decal_collidable_spawn:
 			mvi a, TILEDATA_COLLISION
 			ret
 
-; a tiledata handler for breakable items.
+; a tiledata handler. spawn breakables.
 ; input:
 ; b - tiledata
-; c - tile idx in the room_tiledata array.
+; c - tile_idx in the room_tiledata array.
 ; a - breakable_id
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
@@ -242,7 +242,7 @@ room_tiledata_breakable_spawn:
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
 @spawn:
-			; scr_y = tile idx % ROOM_WIDTH
+			; scr_y = tile_idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
 			mov e, a
@@ -271,10 +271,10 @@ room_tiledata_breakable_spawn:
 			mvi a, TEMP_BYTE
 			ret
 
-; a tiledata handler for item items.
+; a tiledata handler. spawn items.
 ; input:
 ; b - tiledata
-; c - tile idx in the room_tiledata array.
+; c - tile_idx in the room_tiledata array.
 ; a - item_id
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
@@ -295,7 +295,7 @@ room_tiledata_item_spawn:
 			mvi a, TILEDATA_RESTORE_TILE
 			rnz ; if status != 0, means this item was picked up
 
-			; scr_y = tile idx % ROOM_WIDTH
+			; scr_y = tile_idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
 			mov e, a
@@ -324,10 +324,63 @@ room_tiledata_item_spawn:
 			mvi a, TEMP_BYTE
 			ret
 
-; a tiledata handler for item items.
+; a tiledata handler. spawn resources.
 ; input:
 ; b - tiledata
-; c - tile idx in the room_tiledata array.
+; c - tile_idx in the room_tiledata array.
+; a - resource_id
+; out:
+; a - tiledata that will be saved back into room_tiledata
+room_tiledata_resource_spawn:
+			lxi h, @restoreTiledata+1
+			mov m, b
+
+			add_a(2) ; to make a jmp_4 ptr
+			sta @restoreA+1
+
+			; check global item status
+			mvi h, >global_items
+			rrc_(2)
+			adi <global_items
+			mov l, a
+			mov a, m
+			ora a
+			mvi a, TILEDATA_RESTORE_TILE
+			rnz ; if status != 0, means this item was picked up
+
+			; scr_y = tile_idx % ROOM_WIDTH
+			mvi a, %11110000
+			ana c
+			mov e, a
+			; c - tile_idx
+			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
+			mvi a, %00001111
+			ana c
+			rlc
+			adi >SCR_ADDR
+			mov d, a
+			; de - scr addr
+			push d
+
+			lxi h, __resource_gfx_ptrs
+@restoreA:	lxi d, TEMP_BYTE
+			dad d
+			xchg
+			; de pptr to a sprite
+			mvi a, <__RAM_DISK_S_DECALS
+			call get_word_from_ram_disk
+			pop d
+			; bc - sprite addr
+			; de - scr addr
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+@restoreTiledata:
+			mvi a, TEMP_BYTE
+			ret
+
+; a tiledata handler. spawn doors.
+; input:
+; b - tiledata
+; c - tile_idx in the room_tiledata array.
 ; a - door_id
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
@@ -350,7 +403,7 @@ room_tiledata_door_spawn:
 			cpi ITEM_STATUS_USED
 			jz room_tiledata_door_spawn_open	; if status != ITEM_STATUS_NOT_ACQUIRED, means a door is opened
 room_tiledata_door_spawn_draw_door:
-			; scr_y = tile idx % ROOM_WIDTH
+			; scr_y = tile_idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
 			mov e, a
@@ -405,6 +458,7 @@ room_tiledata_door_spawn_open:
 room_copy_scr_to_backbuffs:
 			; copy $a000-$ffff scr buffs to the ram-disk back buffer
 			; TODO: optimization. think of making copy process while the gameplay started.
+			; or do not copy tile gfx which never be restred
 			lxi d, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi h, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi b, SCR_BUFF_LEN * 3 / 32
@@ -659,9 +713,9 @@ room_get_collision_tiledata:
 ; b - width-1
 ; c - height-1
 ; out: room_get_tiledata_buff
-; hl - ptr to the last tile idx in the array room_get_tiledata_idxs
+; hl - ptr to the last tile_idx in the array room_get_tiledata_idxs
 			.byte TILE_IDX_INVALID
-; tile idxs that intersect with a sprite. max = 4, can be less when 2+ corners are in the same tile
+; tile_idxs that intersect with a sprite. max = 4, can be less when 2+ corners are in the same tile
 room_get_tiledata_idxs: 
 			.byte 0,0,0,0
 ; Z flag = 1 if all tiles have tiledata func==0
@@ -696,7 +750,7 @@ room_get_tiledata:
 			rrc_(4)
 			ora l
 			
-			; store tile idxs
+			; store tile_idxs
 			lxi h, room_get_tiledata_idxs
 			mov m, a
 			inx h
@@ -727,7 +781,7 @@ room_get_tiledata:
 			rrc_(4)
 			ora l
 			
-			; store tile idxs
+			; store tile_idxs
 			lxi h, room_get_tiledata_idxs
 			mov m, a
 			inx h
@@ -739,7 +793,7 @@ room_get_tiledata:
 			rrc_(4)
 			ora l
 			
-			; store tile idxs
+			; store tile_idxs
 			lxi h, room_get_tiledata_idxs
 			mov m, a
 			ret
@@ -748,7 +802,7 @@ room_get_tiledata:
 			rrc_(4)
 			ora l
 			
-			; store tile idxs
+			; store tile_idxs
 			lxi h, room_get_tiledata_idxs
 			mov m, a
 			inx h
