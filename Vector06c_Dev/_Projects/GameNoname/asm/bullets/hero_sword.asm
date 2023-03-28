@@ -266,7 +266,7 @@ hero_sword_func_door:
 			adi <global_items
 			mov l, a
 			mov a, m
-			cpi ITEM_STATUS_NOT_ACQUIRED
+			cpi <ITEM_STATUS_NOT_ACQUIRED
 			rz	; if status == ITEM_STATUS_NOT_ACQUIRED, means a hero does't have a proper key to open the door
 
 			mov a, b
@@ -275,7 +275,7 @@ hero_sword_func_door:
 
 			push b
 			; update the key status
-			mvi m, ITEM_STATUS_USED
+			mvi m, <ITEM_STATUS_USED
 			
 			; erase breakable_id from tiledata
 			mvi b, >room_tiledata

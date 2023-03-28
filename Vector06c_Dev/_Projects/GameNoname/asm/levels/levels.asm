@@ -7,8 +7,8 @@ levels_init:
 
 			; erase global item statuses
 			lxi h, global_items
-			lxi b, global_items_end - global_items
-			call clear_mem	
+			mvi a, <global_items_end
+			call clear_mem_short
 			ret
 
 ;================================================================
@@ -23,13 +23,14 @@ level_init:
 
 			; erase rooms runtime data
 			lxi h, rooms_runtime_data
-			lxi b, ROOMS_RUNTIME_DATA_LEN
-			call clear_mem
+			mvi a, <rooms_runtime_data_end
+			call clear_mem_short
 
 			; erase room resources
 			lxi h, rooms_resources
-			lxi b, ROOMS_RESOURCES_LEN
-			call clear_mem
+			mvi a, <rooms_resources_end
+			mvi c, <ITEM_STATUS_NOT_ACQUIRED
+			call fill_mem_short
 
 			xra a
 			sta room_idx

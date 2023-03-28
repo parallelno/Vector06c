@@ -1,50 +1,63 @@
 	; this line for VSCode proper formating
-	; TODO: remane buffers.asm to vars.asm
-;=============================================================================
-; buffers
-;
-ROOMS_RESOURCES_UNIQUE_MAX		= 16
-ROOMS_RESOURCES_INSTANCES_MAX	= 5
-ROOMS_RESOURCES_LEN				= ROOMS_RESOURCES_UNIQUE_MAX * ROOMS_RESOURCES_INSTANCES_MAX
-rooms_resources				= $7ab0; 16 unique resources * 5 instances of each resource
-rooms_resources_end			= rooms_resources + ROOMS_RESOURCES_LEN
+; TODO: move all global vars here
+; TODO: rename buffers.asm to vars.asm
 
-; rooms runtime data
-; TODO: replace dad with adi <ADDR in the pointer calc routines
+;=============================================================================
+; this buffer contains of two bytes (room_id, tile_idx) for every instance of resources in rooms.
+ROOMS_RESOURCES_UNIQUE_MAX		= 16
+ROOMS_RESOURCES_INSTANCES_MAX	= 8
+RESOURCE_STATUS_NOT_ACQUIRED	= $ff
+
+; data format:
+; .loop ROOMS_RESOURCES_UNIQUE_MAX
+;	.loop ROOMS_RESOURCES_INSTANCES_MAX
+;		.byte room_id ; if room_id = RESOURCE_STATUS_NOT_ACQUIRED, then this resource has not picked up yet
+;		.byte tile_idx
+;	.endloop
+; .endloop
+
+rooms_resources				= $7a00
+rooms_resources_end			= rooms_resources + ROOMS_RESOURCES_UNIQUE_MAX * ROOMS_RESOURCES_INSTANCES_MAX * WORD_LEN
+
+;=============================================================================
+; rooms runtime data. each byte represents a spawn rate in a particular room.
+; data format:
+; .loop ROOMS_MAX
+;	.byte - a spawn rate
+; .endloop
+
 rooms_runtime_data			= $7b00
 rooms_spawn_rate_monsters	= rooms_runtime_data 					; 0 means 100% chance to spawn a monster. 255 means no spawn
 rooms_spawn_rate_breakables = rooms_spawn_rate_monsters + ROOMS_MAX ; 0 means 100% chance to spawn a breakable item. 255 means no spawn
 rooms_runtime_data_end		= rooms_spawn_rate_breakables + ROOMS_MAX ; $7b80
-ROOMS_RUNTIME_DATA_LEN = rooms_runtime_data_end - rooms_runtime_data
 
+;=============================================================================
 ;
 ;	free space = $7b80 - $7c10
 ;
 
-global_items				= $7c10
-	global_item0 = global_items	; key blue
-	global_item1 = global_items+1	; key red
-	global_item2 = global_items+2	; key green
-	global_item3 = global_items+3	; key magma
-	global_item4 = global_items+4	; 
-	global_item5 = global_items+5	; 
-	global_item6 = global_items+6	; 
-	global_item7 = global_items+7	; 
-	global_item8 = global_items+8	; 
-	global_item9 = global_items+9	; 
-	global_itemA = global_items+10	; 
-	global_itemB = global_items+11	; 
-	global_itemC = global_items+12	; 
-	global_itemD = global_items+13	; 
-	global_itemE = global_items+14	; 
-	global_itemF = global_items+15	;
-global_items_end = global_items+16
+;=============================================================================
+; contains a status for every global item.
+ITEM_STATUS_NOT_ACQUIRED	= 0
+ITEM_STATUS_ACQUIRED		= 1
+ITEM_STATUS_USED			= 2
+ITEMS_MAX					= 16
 
+; data format:
+; .loop ITEMS_MAX
+;	.byte status for item_id = 0
+; .endloop
+
+global_items				= $7c10
+global_items_end = global_items + ITEMS_MAX
+
+;=============================================================================
 ; tile graphics pointer table.
 room_tiles_gfx_ptrs			= $7c20
 room_tiles_gfx_ptrs_size	= ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
 room_tiles_gfx_ptrs_end		= room_tiles_gfx_ptrs + room_tiles_gfx_ptrs_size
 
+;=============================================================================
 ; tiledata buffer has to follow room_tiles_gfx_ptrs because they are unpacked altogether. see level_data.asm for tiledata format
 room_tiledata		= $7e00
 room_tiledata_size	= ROOM_WIDTH * ROOM_HEIGHT

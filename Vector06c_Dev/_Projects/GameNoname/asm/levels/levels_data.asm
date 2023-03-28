@@ -32,6 +32,10 @@ room_idx:   .byte 0 ; in the range [0, ROOMS_MAX-1]
 ; ffff == 5, teleport to 48-63 room_id, room_id = d+48
 
 ; ffff == 6, a global item. a hero interacts with it when he steps on it. status of every item is stored globally. item_id = d. see buffers.asm->global_items for details
+;		global_id = 0 - key blue
+;		global_id = 1 - key red
+;		global_id = 2 - key green
+;		global_id = 3 - key magma
 
 ; ffff == 7, a resource. a hero interacts with it when he steps on it. status of every item in the room stored in room_resources. there can be RESOURCES_INSTANCES_MAX in the room. resource_id = d
 ;		resource_id == 0 - a coin (tiledata = 10*16+0 = 160)

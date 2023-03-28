@@ -8,7 +8,7 @@ restore_sp:
 			RAM_DISK_OFF()
 			ret
 			
-
+/*
 ; clear a memory buffer
 ; input:
 ; hl - addr to clear
@@ -25,7 +25,24 @@ clear_mem:
 			ora b
 			jnz @loop
 			ret
-			
+*/
+; fill up an aligned memory buffer with a byte
+; a buffer has to be stored in one $100 block of memory
+; buffer len <=256
+; input:
+; hl - addr to clear
+; a - the next addr after a buffer
+; c - filler, if fill_mem_short is called
+; use:
+; a
+clear_mem_short:
+			mvi c, 0
+fill_mem_short:
+@loop:		mov m, c
+			inr l
+			cmp l
+			jnz @loop
+			ret
 
 ; clear a memory buffer using stack operations
 ; can be used to clear ram-disk memory as well

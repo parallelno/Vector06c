@@ -338,7 +338,7 @@ room_tiledata_resource_spawn:
 			add_a(2) ; to make a jmp_4 ptr
 			sta @restoreA+1
 
-			; check global item status
+			; check resource status
 			mvi h, >global_items
 			rrc_(2)
 			adi <global_items
@@ -400,7 +400,7 @@ room_tiledata_door_spawn:
 			adi <global_items
 			mov l, a
 			mov a, m
-			cpi ITEM_STATUS_USED
+			cpi <ITEM_STATUS_USED
 			jz room_tiledata_door_spawn_open	; if status != ITEM_STATUS_NOT_ACQUIRED, means a door is opened
 room_tiledata_door_spawn_draw_door:
 			; scr_y = tile_idx % ROOM_WIDTH

@@ -555,7 +555,7 @@ hero_tile_func_item:
 			mvi h, >global_items
 			adi <global_items
 			mov l, a
-			mvi m, ITEM_STATUS_ACQUIRED
+			mvi m, <ITEM_STATUS_ACQUIRED
 
 			; erase item_id from tiledata
 			mvi b, >room_tiledata
