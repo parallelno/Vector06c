@@ -34,14 +34,14 @@ room_unpack:
 			mov e, c
 
 			; copy room gfx tile_idxs + room tiledata into the room_tiles_gfx_ptrs + offset
-			; offset = room_tiles_gfx_ptrs_size / 2
-			lxi b, room_tiles_gfx_ptrs + room_tiles_gfx_ptrs_size / 2
+			; offset = ROOM_TILES_GFX_PTRS_LEN / 2
+			lxi b, room_tiles_gfx_ptrs + ROOM_TILES_GFX_PTRS_LEN / 2
 			CALL_RAM_DISK_FUNC(dzx0, __RAM_DISK_M_LEVEL01_DATA | RAM_DISK_M_8F)
 			ret
 
 ; convert room gfx tile_idxs into room gfx tile ptrs
 room_init_tiles_gfx:
-			lxi h, room_tiles_gfx_ptrs + room_tiles_gfx_ptrs_size / 2
+			lxi h, room_tiles_gfx_ptrs + ROOM_TILES_GFX_PTRS_LEN / 2
 			lxi b, room_tiles_gfx_ptrs
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
 			; hl - current room tile indexes
@@ -293,7 +293,7 @@ room_tiledata_item_spawn:
 			mov a, m
 			ora a
 			mvi a, TILEDATA_RESTORE_TILE
-			rnz ; if status != 0, means this item was picked up
+			rnz ; status != 0 means this item was picked up
 
 			; scr_y = tile_idx % ROOM_WIDTH
 			mvi a, %11110000
@@ -335,19 +335,36 @@ room_tiledata_resource_spawn:
 			lxi h, @restoreTiledata+1
 			mov m, b
 
-			add_a(2) ; to make a jmp_4 ptr
+			add_a(2) ; resource_id to jmp_4 ptr
 			sta @restoreA+1
 
 			; check resource status
-			mvi h, >global_items
-			rrc_(2)
-			adi <global_items
+			mvi h, >rooms_resources
+			add a ; a = resource_id * 8 because 8 instances per resource.
+			adi <rooms_resources
 			mov l, a
-			mov a, m
+			; check next ROOMS_RESOURCES_INSTANCES_MAX bytes to find a slot
+			mvi b, ROOMS_RESOURCES_INSTANCES_MAX
+@check_loop:			
+			mov a, m ; check resource's room_id
+			inx h
 			ora a
-			mvi a, TILEDATA_RESTORE_TILE
-			rnz ; if status != 0, means this item was picked up
+			jp @continue ; room_id >= 0 means a slot occupied.
+			mov e, m ; check resource's tile_idx
+			cmp e ; a = RESOURCE_STATUS_NOT_ACQUIRED
+			jp @continue ; tile_idx >= 0 means a slot occupied.
 
+			@emptySlot ; room_id < 0 means a slot is empty.
+@continue:			
+			inx h
+			dcr b
+			jnz @check_loop
+			jmp @ignoreResource ; no empty slots. ignore this resource item
+
+@emptySlot:
+			; hl - ptr to an empty slot in the rooms_resources buffer
+			; use this slot to store resource's room_id and tile_idx
+			
 			; scr_y = tile_idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
@@ -376,6 +393,9 @@ room_tiledata_resource_spawn:
 @restoreTiledata:
 			mvi a, TEMP_BYTE
 			ret
+@ignoreResource:
+			mvi a, TILEDATA_RESTORE_TILE
+			ret	
 
 ; a tiledata handler. spawn doors.
 ; input:
@@ -401,7 +421,7 @@ room_tiledata_door_spawn:
 			mov l, a
 			mov a, m
 			cpi <ITEM_STATUS_USED
-			jz room_tiledata_door_spawn_open	; if status != ITEM_STATUS_NOT_ACQUIRED, means a door is opened
+			jz room_tiledata_door_spawn_open	; status != ITEM_STATUS_NOT_ACQUIRED means a door is opened
 room_tiledata_door_spawn_draw_door:
 			; scr_y = tile_idx % ROOM_WIDTH
 			mvi a, %11110000

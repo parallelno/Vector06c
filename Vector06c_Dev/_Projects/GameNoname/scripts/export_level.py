@@ -268,8 +268,7 @@ def export_data(source_j_path, export_data_path):
 	#png_path = source_dir + source_j["png_path"]
 	#image = Image.open(png_path) 
 
-	source_path_wo_ext = os.path.splitext(source_j_path)[0]
-	source_name = os.path.basename(source_path_wo_ext)
+	source_name = common.path_to_basename(source_j_path)
 
 	asm = f"__RAM_DISK_S_{source_name.upper()}_DATA = RAM_DISK_S\n"
 	asm += f"__RAM_DISK_M_{source_name.upper()}_DATA = RAM_DISK_M\n"
@@ -293,9 +292,11 @@ def export_data(source_j_path, export_data_path):
 	# list of rooms
 	asm += get_list_of_rooms(room_paths, "__" + source_name)
 
-	# every room data
-	for i, room_j in enumerate(rooms_j):
-		room_path = room_paths[i]['path']
+	# data for rooms_resources_tbl and rooms_resources
+	resources = {}
+	# per room data
+	for room_id, room_j in enumerate(rooms_j):
+		room_path = room_paths[room_id]['path']
 
 		asm_room_data = ".org 0 \n"
 		asm_room_data += room_tiles_to_asm(room_j["layers"][0], room_path, remap_idxs, source_dir)
@@ -322,7 +323,48 @@ def export_data(source_j_path, export_data_path):
 		common.delete_file(asm_room_data_path_asm)
 		common.delete_file(asm_room_data_path_bin) 
 		common.delete_file(asm_room_data_path_zx0)
+
+		# collect resource data
+		TILEDATA_RESOURCE	= 112 
+		RESOURCES_UNIQUE_MAX = 16
+		WORD_LEN			= 2
+
+		for tile_idx, tiledata in enumerate(room_j["layers"][1]["data"]):
+			if TILEDATA_RESOURCE <= tiledata < TILEDATA_RESOURCE + RESOURCES_UNIQUE_MAX:
+				if tiledata not in resources:
+					resources[tiledata] = []
+				resources[tiledata].append((room_id, tile_idx))
+				
+	# make resource_instances_offsets data 
+	resources_sorted = dict(sorted(resources.items())) 
+	
+	asm += f"\n__{source_name}_resources_inst_data_ptrs:\n"
+	asm += "			.byte "
+
+	resource_data_len = 0
+	ptr = 0
+	resources_inst_data_ptrs_len = len(resources_sorted) + 1
+	
+	for i, tiledata in enumerate(resources_sorted):
+		asm += str(ptr + resources_inst_data_ptrs_len) + ", "
+		inst_len = len(resources_sorted[tiledata]) * WORD_LEN
+		ptr += inst_len
+		resource_data_len += 1
+	asm += str(ptr + resources_inst_data_ptrs_len) + ", "
+	resource_data_len += 1
+
+	asm += f"\n__{source_name}_resources_inst_data:\n"
+	for i, tiledata in enumerate(resources_sorted):
+		asm += "			.byte "
+		for room_id, tile_idx in resources_sorted[tiledata]:
+			asm += f"{room_id}, {tile_idx}, "
+		asm += "\n"
 		
+	if 	resource_data_len > 256:
+		print(f"ERROR: {source_j_path} has resource instance data > 256 bytes")
+		print("Stop export")
+		exit(1)
+
 	with open(export_data_path, "w") as file:
 		file.write(asm)
 

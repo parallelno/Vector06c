@@ -18,7 +18,7 @@ print(f"ram-disk data export: {ram_disk_data_path}")
 export_ram_disk_data.export(ram_disk_data_path)
 
 print("")
-######################################################################################
+###################################################################################### 
 print("build a rom file:")
 
 rom_name = os.path.basename(os.getcwd())

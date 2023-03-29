@@ -22,8 +22,8 @@ level_init:
 			sta border_color_idx
 
 			; erase rooms runtime data
-			lxi h, rooms_runtime_data
-			mvi a, <rooms_runtime_data_end
+			lxi h, rooms_spawn_rates
+			mvi a, <rooms_spawn_rates_end
 			call clear_mem_short
 
 			; erase room resources

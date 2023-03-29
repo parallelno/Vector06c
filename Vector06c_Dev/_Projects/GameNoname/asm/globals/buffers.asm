@@ -3,33 +3,47 @@
 ; TODO: rename buffers.asm to vars.asm
 
 ;=============================================================================
-; this buffer contains of two bytes (room_id, tile_idx) for every instance of resources in rooms.
-ROOMS_RESOURCES_UNIQUE_MAX		= 16
-ROOMS_RESOURCES_INSTANCES_MAX	= 8
-RESOURCE_STATUS_NOT_ACQUIRED	= $ff
+; statuses of resource instances. each instance represented by a pair of bytes (room_id, tile_idx)
+; this data is aligned to $100, the length is <= $100
+RESOURCES_UNIQUE_MAX		= 16
+RESOURCES_LEN				= $100
 
 ; data format:
-; .loop ROOMS_RESOURCES_UNIQUE_MAX
-;	.loop ROOMS_RESOURCES_INSTANCES_MAX
-;		.byte room_id ; if room_id = RESOURCE_STATUS_NOT_ACQUIRED, then this resource has not picked up yet
-;		.byte tile_idx
-;	.endloop
+; resources_inst_data_ptrs:
+; .loop RESOURCES_UNIQUE_MAX
+;	.byte resource_NN_inst_data_ptr
+; .endloop
+; .byte - one byte ptr to the next addr after the last resource_NN_inst_data_ptr
+;
+; .loop RESOURCES_UNIQUE_MAX
+;	resources_status:
+;		.byte - status S_MMMMMM
+;			SS - status
+;				SS = 0 - resource has not picked up yet
+;				SS = 1 - resource is picked up
+;			MMMMMM - room_id where this resource is placed
+;		.byte - tile_idx where this resource is placed
 ; .endloop
 
-rooms_resources				= $7a00
-rooms_resources_end			= rooms_resources + ROOMS_RESOURCES_UNIQUE_MAX * ROOMS_RESOURCES_INSTANCES_MAX * WORD_LEN
+resources_inst_data_ptrs	= $7a00
+resources_inst_data			= rooms_resources_tbl + RESOURCES_UNIQUE_MAX
+resources_inst_data_end		= rooms_resources_tbl + RESOURCES_LEN
 
 ;=============================================================================
-; rooms runtime data. each byte represents a spawn rate in a particular room.
+; rooms spawn rates. each byte represents a spawn rate in a particular room.
 ; data format:
 ; .loop ROOMS_MAX
-;	.byte - a spawn rate
+;	.byte - a monster spawn rate in the room_id = N
 ; .endloop
+; .loop ROOMS_MAX
+;	.byte - a breakables spawn rate in the room_id = N
+; .endloop
+; ...
 
-rooms_runtime_data			= $7b00
-rooms_spawn_rate_monsters	= rooms_runtime_data 					; 0 means 100% chance to spawn a monster. 255 means no spawn
+rooms_spawn_rates			= $7b00
+rooms_spawn_rate_monsters	= rooms_spawn_rates 					; 0 means 100% chance to spawn a monster. 255 means no spawn
 rooms_spawn_rate_breakables = rooms_spawn_rate_monsters + ROOMS_MAX ; 0 means 100% chance to spawn a breakable item. 255 means no spawn
-rooms_runtime_data_end		= rooms_spawn_rate_breakables + ROOMS_MAX ; $7b80
+rooms_spawn_rates_end		= rooms_spawn_rate_breakables + ROOMS_MAX ; $7b80
 
 ;=============================================================================
 ;
@@ -37,7 +51,7 @@ rooms_runtime_data_end		= rooms_spawn_rate_breakables + ROOMS_MAX ; $7b80
 ;
 
 ;=============================================================================
-; contains a status for every global item.
+; contains global item statuses.
 ITEM_STATUS_NOT_ACQUIRED	= 0
 ITEM_STATUS_ACQUIRED		= 1
 ITEM_STATUS_USED			= 2
@@ -45,7 +59,7 @@ ITEMS_MAX					= 16
 
 ; data format:
 ; .loop ITEMS_MAX
-;	.byte status for item_id = 0
+;	.byte - status of item_id = N
 ; .endloop
 
 global_items				= $7c10
@@ -53,17 +67,33 @@ global_items_end = global_items + ITEMS_MAX
 
 ;=============================================================================
 ; tile graphics pointer table.
+ROOM_TILES_GFX_PTRS_LEN	= ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
+
+; data format:
+; .loop ROOM_HEIGHT
+;	.loop ROOM_WIDTH
+;		.word - tile_gfx_addr
+;	.endloop
+; .endloop
+
 room_tiles_gfx_ptrs			= $7c20
-room_tiles_gfx_ptrs_size	= ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
-room_tiles_gfx_ptrs_end		= room_tiles_gfx_ptrs + room_tiles_gfx_ptrs_size
+room_tiles_gfx_ptrs_end		= room_tiles_gfx_ptrs + ROOM_TILES_GFX_PTRS_LEN
 
 ;=============================================================================
 ; tiledata buffer has to follow room_tiles_gfx_ptrs because they are unpacked altogether. see level_data.asm for tiledata format
-room_tiledata		= $7e00
-room_tiledata_size	= ROOM_WIDTH * ROOM_HEIGHT
-room_tiledata_end	= room_tiledata + room_tiledata_size
+ROOM_TILEDATA_LEN	= ROOM_WIDTH * ROOM_HEIGHT
 
-BUFFERS_START_ADDR	= rooms_runtime_data
+; data format:
+; .loop ROOM_HEIGHT
+;	.loop ROOM_WIDTH
+;		.byte - tiledata
+;	.endloop
+; .endloop
+
+room_tiledata		= $7e00
+room_tiledata_end	= room_tiledata + ROOM_TILEDATA_LEN
+
+BUFFERS_START_ADDR	= rooms_resources
 BUFFERS_END_ADDR	= room_tiledata_end
 
 ;=============================================================================
@@ -71,8 +101,8 @@ BUFFERS_END_ADDR	= room_tiledata_end
 ;
 
 ; TODO: update checkers after finalizing buffers layout
-.if rooms_runtime_data_end > room_tiles_gfx_ptrs
-	.error "rooms_runtime_data_end and room_tiles_gfx_ptrs overlap"
+.if rooms_spawn_rates_end > room_tiles_gfx_ptrs
+	.error "rooms_spawn_rates_end and room_tiles_gfx_ptrs overlap"
 .endif
 
 .if room_tiles_gfx_ptrs_end > room_tiledata

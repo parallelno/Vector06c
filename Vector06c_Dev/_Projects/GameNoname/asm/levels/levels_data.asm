@@ -38,7 +38,7 @@ room_idx:   .byte 0 ; in the range [0, ROOMS_MAX-1]
 ;		global_id = 3 - key magma
 
 ; ffff == 7, a resource. a hero interacts with it when he steps on it. status of every item in the room stored in room_resources. there can be RESOURCES_INSTANCES_MAX in the room. resource_id = d
-;		resource_id == 0 - a coin (tiledata = 10*16+0 = 160)
+;		resource_id == 0 - a coin (tiledata = 7*16+0 = 160)
 ;		resource_id == 1 - a potion blue
 ;		resource_id == 2 - a potion red
 
