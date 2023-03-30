@@ -329,19 +329,22 @@ def export_data(source_j_path, export_data_path):
 		RESOURCES_UNIQUE_MAX = 16
 		WORD_LEN			= 2
 
-		for tile_idx, tiledata in enumerate(room_j["layers"][1]["data"]):
+		for i, tiledata in enumerate(room_j["layers"][1]["data"]):
+			width = room_j["width"]
+			height = room_j["height"]
+			dy, dx = divmod(i, width)
+			tile_idx = (height - 1 - dy) * width + dx
 			if TILEDATA_RESOURCE <= tiledata < TILEDATA_RESOURCE + RESOURCES_UNIQUE_MAX:
 				if tiledata not in resources:
 					resources[tiledata] = []
 				resources[tiledata].append((room_id, tile_idx))
 				
-	# make resource_instances_offsets data 
+	# make resources_inst_data_ptrs data 
 	resources_sorted = dict(sorted(resources.items())) 
 	
 	asm += f"\n__{source_name}_resources_inst_data_ptrs:\n"
 	asm += "			.byte "
 
-	resource_data_len = 0
 	ptr = 0
 	resources_inst_data_ptrs_len = len(resources_sorted) + 1
 	
@@ -349,18 +352,17 @@ def export_data(source_j_path, export_data_path):
 		asm += str(ptr + resources_inst_data_ptrs_len) + ", "
 		inst_len = len(resources_sorted[tiledata]) * WORD_LEN
 		ptr += inst_len
-		resource_data_len += 1
 	asm += str(ptr + resources_inst_data_ptrs_len) + ", "
-	resource_data_len += 1
 
+	# make resources_inst_data data 
 	asm += f"\n__{source_name}_resources_inst_data:\n"
 	for i, tiledata in enumerate(resources_sorted):
 		asm += "			.byte "
 		for room_id, tile_idx in resources_sorted[tiledata]:
-			asm += f"{room_id}, {tile_idx}, "
+			asm += f"{tile_idx}, {room_id}, "
 		asm += "\n"
 		
-	if 	resource_data_len > 256:
+	if 	ptr + resources_inst_data_ptrs_len > 256:
 		print(f"ERROR: {source_j_path} has resource instance data > 256 bytes")
 		print("Stop export")
 		exit(1)

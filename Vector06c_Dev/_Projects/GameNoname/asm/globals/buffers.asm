@@ -7,27 +7,24 @@
 ; this data is aligned to $100, the length is <= $100
 RESOURCES_UNIQUE_MAX		= 16
 RESOURCES_LEN				= $100
+RESOURCES_STATUS_ACQUIRED	= $ff
 
 ; data format:
 ; resources_inst_data_ptrs:
 ; .loop RESOURCES_UNIQUE_MAX
-;	.byte resource_NN_inst_data_ptr
+;	.byte - a low byte ptr to resource_inst_data for particular resource
 ; .endloop
-; .byte - one byte ptr to the next addr after the last resource_NN_inst_data_ptr
-;
+; .byte - a low byte ptr to the next addr after the last resource_NN_inst_data_ptr
+; resources_inst_data:
 ; .loop RESOURCES_UNIQUE_MAX
-;	resources_status:
-;		.byte - status S_MMMMMM
-;			SS - status
-;				SS = 0 - resource has not picked up yet
-;				SS = 1 - resource is picked up
-;			MMMMMM - room_id where this resource is placed
+;	resource_inst_data:
 ;		.byte - tile_idx where this resource is placed
+;		.byte - room_id where this resource is placed.
 ; .endloop
 
 resources_inst_data_ptrs	= $7a00
-resources_inst_data			= rooms_resources_tbl + RESOURCES_UNIQUE_MAX
-resources_inst_data_end		= rooms_resources_tbl + RESOURCES_LEN
+;resources_inst_data		= resources_inst_data_ptrs + used unique resources + 1
+resources_inst_data_end		= resources_inst_data_ptrs + RESOURCES_LEN
 
 ;=============================================================================
 ; rooms spawn rates. each byte represents a spawn rate in a particular room.
@@ -93,7 +90,7 @@ ROOM_TILEDATA_LEN	= ROOM_WIDTH * ROOM_HEIGHT
 room_tiledata		= $7e00
 room_tiledata_end	= room_tiledata + ROOM_TILEDATA_LEN
 
-BUFFERS_START_ADDR	= rooms_resources
+BUFFERS_START_ADDR	= resources_inst_data_ptrs
 BUFFERS_END_ADDR	= room_tiledata_end
 
 ;=============================================================================

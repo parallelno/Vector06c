@@ -3,6 +3,7 @@
 
 ; sharetable chunk of code to restore SP
 ; and dismount the ram-disk
+; TODO: remove RAM_DISK_OFF() to make it be called via CALL_RAM_DISK_FUNC
 restore_sp:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
@@ -313,7 +314,6 @@ copy_from_ram_disk:
 			mov a, d
 			RAM_DISK_ON_BANK()
 			sphl
-			;mov a, e
 			mov l, c
 			mov h, b
 @loop:
@@ -322,6 +322,6 @@ copy_from_ram_disk:
 			inx h
 			mov m, b
 			inx h
-			dcr e;a
+			dcr e
 			jnz @loop
 			jmp restore_sp

@@ -618,7 +618,7 @@ hero_tile_func_teleport:
 			pop h
 
 			; update a room_id to teleport there
-			sta room_idx
+			sta room_id
 			; requesting room loading
 			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
 			sta level_command

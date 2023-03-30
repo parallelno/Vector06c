@@ -6,7 +6,7 @@ levels_addr: .word TEMP_ADDR, 0
 level_idx:
 			.byte 0
 ; the current room idx of the current level
-room_idx:   .byte 0 ; in the range [0, ROOMS_MAX-1]
+room_id:   .byte 0 ; in the range [0, ROOMS_MAX-1]
 
 ; tiledata format:
 ; it's stored in room_tiledata

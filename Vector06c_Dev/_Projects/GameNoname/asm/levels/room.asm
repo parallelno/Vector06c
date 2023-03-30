@@ -5,7 +5,7 @@ room_init:
 			call room_unpack
 			call room_init_tiles_gfx
 			CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01_GFX)
-			call room_handle_room_tiledata	
+			call room_handle_room_tiledata
 			call room_copy_scr_to_backbuffs
 			ret
 
@@ -15,8 +15,8 @@ room_init:
 ; after copying room tiledata occupies the room_tiledata
 ; packed room data has to be stored into $8000-$FFFF segment to be properly unzipped
 room_unpack:
-			; convert a room_idx into the room gfx tile_idx buffer addr like __level01_room00 or __level01_room01, etc
-			lda room_idx
+			; convert a room_id into the room gfx tile_idx buffer addr like __level01_room00 or __level01_room01, etc
+			lda room_id
 			; double the room index to get an address offset in the level01_rooms_addr array
 			rlc
 			; double it again because there are two safety bytes in front of every room pointer
@@ -235,7 +235,7 @@ room_tiledata_breakable_spawn:
 			sta @restoreA+1
 			mov a, b
 			sta @restoreTiledata+1
-			
+
 			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_breakables, @noSpawn)
 			jmp @spawn
 @noSpawn:
@@ -335,36 +335,49 @@ room_tiledata_resource_spawn:
 			lxi h, @restoreTiledata+1
 			mov m, b
 
+			lxi h, room_id
+			mov d, m
+
+			mov l, a
 			add_a(2) ; resource_id to jmp_4 ptr
 			sta @restoreA+1
 
 			; check resource status
-			mvi h, >rooms_resources
-			add a ; a = resource_id * 8 because 8 instances per resource.
-			adi <rooms_resources
-			mov l, a
-			; check next ROOMS_RESOURCES_INSTANCES_MAX bytes to find a slot
-			mvi b, ROOMS_RESOURCES_INSTANCES_MAX
-@check_loop:			
-			mov a, m ; check resource's room_id
+			mvi h, >resources_inst_data_ptrs
+			; hl - ptr to resources_inst_data_ptrs
+			mov a, m
 			inx h
-			ora a
-			jp @continue ; room_id >= 0 means a slot occupied.
-			mov e, m ; check resource's tile_idx
-			cmp e ; a = RESOURCE_STATUS_NOT_ACQUIRED
-			jp @continue ; tile_idx >= 0 means a slot occupied.
+			mov l, m
+			; hl - ptr to the next resource_inst_data
+			; (h<<8 + a) - ptr to resource_inst_data.
+			; make instance counter
+			sub l
+			cma
+			cmc ; make C flag = 0
+			rar ; div by 2 because every instance data contains of a pair of bytes
+			mov e, a
+			; e = inst_counter - 1
+			; d = room_id
+			; find a resource in resource_inst_data	
+			mov a, d
+@search_loop:
+			dcx h
+			cmp m
+			dcx h
+			jz @room_match
+@check_counter:
+			dcr e
+			jp @search_loop
+			jmp @picked_up ; resource is not found, means it is picked up
+@room_match:
+			; check tile_idx
+			mov a, m
+			cmp c
+			mov a, d
+			jnz @check_counter
+			; resource is found, means it is not picked up
+			; c = tile_idx
 
-			@emptySlot ; room_id < 0 means a slot is empty.
-@continue:			
-			inx h
-			dcr b
-			jnz @check_loop
-			jmp @ignoreResource ; no empty slots. ignore this resource item
-
-@emptySlot:
-			; hl - ptr to an empty slot in the rooms_resources buffer
-			; use this slot to store resource's room_id and tile_idx
-			
 			; scr_y = tile_idx % ROOM_WIDTH
 			mvi a, %11110000
 			ana c
@@ -393,9 +406,9 @@ room_tiledata_resource_spawn:
 @restoreTiledata:
 			mvi a, TEMP_BYTE
 			ret
-@ignoreResource:
+@picked_up:
 			mvi a, TILEDATA_RESTORE_TILE
-			ret	
+			ret
 
 ; a tiledata handler. spawn doors.
 ; input:
@@ -437,9 +450,9 @@ room_tiledata_door_spawn_draw_door:
 			; de - scr addr
 			push d
 
-room_tiledata_door_spawn_gfx:		
+room_tiledata_door_spawn_gfx:
 			lxi h, __doors_gfx_ptrs
-room_tiledata_door_spawn_restoreA:	
+room_tiledata_door_spawn_restoreA:
 			lxi d, TEMP_BYTE
 			dad d
 			xchg
@@ -558,7 +571,7 @@ room_check_tiledata_restorable_v2:
 			; b = x in tiles
 			; c, a = y in tiles * 32
 
-			dad d			
+			dad d
 			; hl - top-right corner scr addr
 			mvi d, >room_tiledata
 
@@ -584,7 +597,7 @@ room_check_tiledata_restorable_v2:
 			rnz		; 180 cc if returns
 
 			; get y+dy in tiles
-			dcr l ; to be inside the AABB						
+			dcr l ; to be inside the AABB
 			mvi a, %11110000
 			ana l
 			mov l, a
@@ -604,9 +617,9 @@ room_check_tiledata_restorable_v2:
 			ldax d
 			ora a
 			ret		; 280 cc
-			
+
 ; collects tiledata of tiles that intersect with a sprite
-; if several tile corners stays on the same tile, 
+; if several tile corners stays on the same tile,
 ; they all read same tiledata to let collision logic works properly
 ; in:
 ; d - posX
@@ -614,7 +627,7 @@ room_check_tiledata_restorable_v2:
 ; b - width-1
 ; c - height-1
 ; out:
-; hl - (top-left), (top-right)			
+; hl - (top-left), (top-right)
 ; de - (bottom-left), (bottom-right)
 ; a - "OR" operation on tiledata of all tiles that intersect with a sprite
 room_get_collision_tiledata:
@@ -736,7 +749,7 @@ room_get_collision_tiledata:
 ; hl - ptr to the last tile_idx in the array room_get_tiledata_idxs
 			.byte TILE_IDX_INVALID
 ; tile_idxs that intersect with a sprite. max = 4, can be less when 2+ corners are in the same tile
-room_get_tiledata_idxs: 
+room_get_tiledata_idxs:
 			.byte 0,0,0,0
 ; Z flag = 1 if all tiles have tiledata func==0
 ; 24+224=248 - 24+316 =340 cc
@@ -769,7 +782,7 @@ room_get_tiledata:
 
 			rrc_(4)
 			ora l
-			
+
 			; store tile_idxs
 			lxi h, room_get_tiledata_idxs
 			mov m, a
@@ -800,7 +813,7 @@ room_get_tiledata:
 @tileSizeW2H1:
 			rrc_(4)
 			ora l
-			
+
 			; store tile_idxs
 			lxi h, room_get_tiledata_idxs
 			mov m, a
@@ -812,7 +825,7 @@ room_get_tiledata:
 @tileSizeW1H1:
 			rrc_(4)
 			ora l
-			
+
 			; store tile_idxs
 			lxi h, room_get_tiledata_idxs
 			mov m, a
@@ -821,7 +834,7 @@ room_get_tiledata:
 @tileSizeW1H2:
 			rrc_(4)
 			ora l
-			
+
 			; store tile_idxs
 			lxi h, room_get_tiledata_idxs
 			mov m, a

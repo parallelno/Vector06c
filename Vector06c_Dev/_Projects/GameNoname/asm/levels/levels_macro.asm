@@ -80,12 +80,12 @@
 			jmp @loop
 .endmacro
 
-.macro ROOM_SPAWN_RATE_CHECK(rate, doNotSpawn)
+.macro ROOM_SPAWN_RATE_CHECK(rate_ptr, doNotSpawn)
 			; check rooms_break_rate if it needs to spawn
-			lda room_idx
-			adi <rate
+			lda room_id
+			adi <rate_ptr
 			mov l, a
-			mvi h, >rate
+			mvi h, >rate_ptr
 
 			mov e, m
 			call random
@@ -95,7 +95,7 @@
 
 .macro ROOM_SPAWN_RATE_UPDATE(rate, SPAWN_RATE_DELTA, SPAWN_RATE_MIN)
 			; increase death_rate
-			lda room_idx
+			lda room_id
 			adi <rate
 			mov l, a
 			mvi h, >rate

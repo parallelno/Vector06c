@@ -71,6 +71,6 @@ __level01_room02_a:
 __level01_resources_inst_data_ptrs:
 			.byte 4, 10, 12, 14, 
 __level01_resources_inst_data:
-			.byte 0, 86, 0, 179, 0, 180, 
-			.byte 0, 106, 
-			.byte 0, 116, 
+			.byte 150, 0, 51, 0, 52, 0, 
+			.byte 138, 0, 
+			.byte 116, 0, 
