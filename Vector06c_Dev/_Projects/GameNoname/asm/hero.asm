@@ -25,26 +25,26 @@ HERO_COLLISION_HEIGHT = 11
 
 ; hero runtime data
 ; this's a struct. do not change the layout
-hero_update_ptr:		.word hero_update
-hero_draw_ptr:			.word hero_draw
-hero_impacted_ptr:		.word hero_impacted ; called by a monster's bullet, a monster, etc. to affect a hero
-hero_type:				.byte MONSTER_TYPE_ALLY
-hero_health:			.byte HERO_HEALTH_MAX
-hero_status:			.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
-hero_status_timer:		.byte 0	; a duration of the status. ticks every update
-hero_anim_timer:		.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
-hero_anim_addr:			.word TEMP_ADDR ; holds the current frame ptr
-hero_dir_x:				.byte 1 		; 1-right, 0-left
-hero_erase_scr_addr:	.word TEMP_ADDR
-hero_erase_scr_addr_old .word TEMP_ADDR
-hero_erase_wh:			.word TEMP_WORD
-hero_erase_wh_old:		.word TEMP_WORD
-hero_pos_x:				.word TEMP_WORD
-hero_pos_y:				.word TEMP_WORD
-hero_speed_x:			.word TEMP_WORD
-hero_speed_y:			.word TEMP_WORD
-hero_data_prev_pptr:	.word DRAW_LIST_FIRST_DATA_MARKER
-hero_data_next_pptr:	.word monster_data_next_pptr
+hero_update_ptr:			.word hero_update
+hero_draw_ptr:				.word hero_draw
+hero_impacted_ptr:			.word hero_impacted ; called by a monster's bullet, a monster, etc. to affect a hero
+hero_type:					.byte MONSTER_TYPE_ALLY
+hero_health:				.byte HERO_HEALTH_MAX
+hero_status:				.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
+hero_status_timer:			.byte 0	; a duration of the status. ticks every update
+hero_anim_timer:			.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
+hero_anim_addr:				.word TEMP_ADDR ; holds the current frame ptr
+hero_dir_x:					.byte 1 		; 1-right, 0-left
+hero_erase_scr_addr:		.word TEMP_ADDR
+hero_erase_scr_addr_old:	.word TEMP_ADDR
+hero_erase_wh:				.word TEMP_WORD
+hero_erase_wh_old:			.word TEMP_WORD
+hero_pos_x:					.word TEMP_WORD
+hero_pos_y:					.word TEMP_WORD
+hero_speed_x:				.word TEMP_WORD
+hero_speed_y:				.word TEMP_WORD
+hero_data_prev_pptr:		.word DRAW_LIST_FIRST_DATA_MARKER
+hero_data_next_pptr:		.word monster_data_next_pptr
 ;
 hero_collision_func_table:
 			; bit layout:
@@ -74,7 +74,7 @@ hero_tile_func_table:
 			ret_4()							; func_id == 4
 			ret_4()							; func_id == 5
 			jmp_4( hero_tile_func_item)		; func_id == 6
-			ret_4()							; func_id == 7
+			jmp_4( hero_tile_func_resource)	; func_id == 7
 			ret_4()							; func_id == 8
 			ret_4()							; func_id == 9
 			ret_4()							; func_id == 10
@@ -83,6 +83,25 @@ hero_tile_func_table:
 			ret_4()							; func_id == 13
 			ret_4()							; func_id == 14
 			ret_4()							; func_id == 15 (collision) called only when a hero is stuck into collision tiles
+
+; funcs to handle the resource pick up process. more info is in level_data.asm->room_tiledata
+hero_res_func_table:
+			jmp_4( hero_res_func_coin)			; resource_id == 1
+			jmp_4( hero_res_func_potion_blue)	; resource_id == 2
+			jmp_4( hero_res_func_potion_red)	; resource_id == 3
+			ret_4()								; resource_id == 4
+			ret_4()								; resource_id == 5
+			ret_4()								; resource_id == 6
+			ret_4()								; resource_id == 7
+			ret_4()								; resource_id == 8
+			ret_4()								; resource_id == 9
+			ret_4()								; resource_id == 10
+			ret_4()								; resource_id == 11
+			ret_4()								; resource_id == 12
+			ret_4()								; resource_id == 13
+			ret_4()								; resource_id == 14
+			ret_4()								; resource_id == 15 (collision) called only when a hero is stuck into collision tiles
+
 
 hero_init:
 			call hero_idle_start
@@ -606,6 +625,80 @@ hero_tile_func_item:
 			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_breakables, BREAKABLE_SPAWN_RATE_DELTA, BREAKABLE_SPAWN_RATE_MAX)
 			ret
 
+; handler func for resources
+; in:
+; a - resource_id
+; c - tile_idx
+hero_tile_func_resource:
+			sta @restore_resource_id+1
+			; find a resource
+			lxi h, room_id
+			mov d, m
+			mov l, a
+			FIND_RESOURCE(@no_resource_found)
+			; c = tile_idx
+			; hl ptr to tile_idx
+			; remove this resource from resources_inst_data
+			inx h
+			mvi m, <RESOURCES_STATUS_ACQUIRED
+
+@no_resource_found:
+			; erase item_id from tiledata
+			mvi b, >room_tiledata
+			mvi a, TILEDATA_RESTORE_TILE
+			stax b
+			; calc tile gfx ptr
+			mov l, c
+			mvi h, 0
+			lxi d, room_tiles_gfx_ptrs
+			dad h
+			dad d
+			mov d, c
+			; d - tile_idx
+			; read a tile gfx ptr
+			mov c, m
+			inx h
+			mov b, m
+
+			; calc tile scr addr
+			; d - tile_idx
+			mvi a, %11110000
+			ana d
+			mov e, a
+			; e - scr Y
+			mvi a, %00001111
+			ana d
+			rlc
+			adi >SCR_BUFF0_ADDR
+			mov d, a
+
+			; bc - a tile gfx ptr
+			; de - screen addr
+			push b
+			push d
+			; draw a tile on the screen
+			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX)			
+			pop d
+			pop b
+			push b
+			push d
+			; draw a tile in the back buffer
+			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF)
+			pop d
+			pop b
+			; draw a tile in the back buffer2
+			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
+
+			; update a hero resource
+			lxi h, hero_res_func_table
+@restore_resource_id:			
+			mvi a, TEMP_BYTE
+			add_a(2) ; resource_id to jmp_4 ptr
+			mov c, a
+			mvi b, 0
+			dad b
+			pchl ; run a resource handler
+
 ; load a new room with room_id, move the hero to an
 ; appropriate position based on his current posXY
 ; input:
@@ -881,3 +974,28 @@ hero_erase:
 			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 			ret
 			.closelabels
+
+hero_res_func_coin:
+			lhld hero_res_score_l
+			lxi d, RESOURCE_COIN_VAL
+			dad d
+			clamp_hl()
+			shld hero_res_score_l
+			ret
+
+hero_res_func_potion_blue:
+			lxi h, hero_res_mana
+			mov a, m
+			adi RESOURCE_POTION_BLUE_VAL
+			clamp_a()
+			mov m, a
+			ret
+
+hero_res_func_potion_red:
+			lxi h, hero_health
+			mov a, m
+			adi RESOURCE_POTION_RED_VAL
+			clamp_a()	
+			mov m, a
+			call game_ui_health_draw
+			ret

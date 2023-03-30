@@ -19,11 +19,12 @@ RESOURCES_STATUS_ACQUIRED	= $ff
 ; .loop RESOURCES_UNIQUE_MAX
 ;	resource_inst_data:
 ;		.byte - tile_idx where this resource is placed
-;		.byte - room_id where this resource is placed.
+;		.byte - room_id where this resource is placed. 
+;				if room_id == RESOURCES_STATUS_ACQUIRED, a resource is acquired
 ; .endloop
 
 resources_inst_data_ptrs	= $7a00
-;resources_inst_data		= resources_inst_data_ptrs + used unique resources + 1
+;resources_inst_data		= resources_inst_data_ptrs + used_unique_resources (can vary) + 1
 resources_inst_data_end		= resources_inst_data_ptrs + RESOURCES_LEN
 
 ;=============================================================================
@@ -43,8 +44,20 @@ rooms_spawn_rate_breakables = rooms_spawn_rate_monsters + ROOMS_MAX ; 0 means 10
 rooms_spawn_rates_end		= rooms_spawn_rate_breakables + ROOMS_MAX ; $7b80
 
 ;=============================================================================
+; hero resources
+; TODO: update RESOURCES_LEN when resources are finilized
+HERO_RESOURCES_LEN	= 5
+
+hero_resources		= $7b80
+hero_res_score_l	= hero_resources + 0
+hero_res_score_h	= hero_resources + 1
+hero_res_ammo		= hero_resources + 2
+hero_res_mana		= hero_resources + 3
+hero_resources_end	= hero_resources + HERO_RESOURCES_LEN
+
+;=============================================================================
 ;
-;	free space = $7b80 - $7c10
+;	free space = $7b82 - $7c10
 ;
 
 ;=============================================================================

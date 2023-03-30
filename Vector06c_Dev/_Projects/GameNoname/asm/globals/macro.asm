@@ -254,3 +254,15 @@
 			ret
 			nop_(3)
 .endmacro
+
+.macro clamp_a()
+			jnc @save
+			mvi a, $ff
+@save:			
+.endmacro
+
+.macro clamp_hl()
+			jnc @save
+			lxi h, $ffff
+@save:
+.endmacro

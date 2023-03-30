@@ -342,39 +342,9 @@ room_tiledata_resource_spawn:
 			add_a(2) ; resource_id to jmp_4 ptr
 			sta @restoreA+1
 
-			; check resource status
-			mvi h, >resources_inst_data_ptrs
-			; hl - ptr to resources_inst_data_ptrs
-			mov a, m
-			inx h
-			mov l, m
-			; hl - ptr to the next resource_inst_data
-			; (h<<8 + a) - ptr to resource_inst_data.
-			; make instance counter
-			sub l
-			cma
-			cmc ; make C flag = 0
-			rar ; div by 2 because every instance data contains of a pair of bytes
-			mov e, a
-			; e = inst_counter - 1
-			; d = room_id
-			; find a resource in resource_inst_data	
-			mov a, d
-@search_loop:
-			dcx h
-			cmp m
-			dcx h
-			jz @room_match
-@check_counter:
-			dcr e
-			jp @search_loop
-			jmp @picked_up ; resource is not found, means it is picked up
-@room_match:
-			; check tile_idx
-			mov a, m
-			cmp c
-			mov a, d
-			jnz @check_counter
+			; find a resource
+			FIND_RESOURCE(@picked_up)
+
 			; resource is found, means it is not picked up
 			; c = tile_idx
 
@@ -407,6 +377,7 @@ room_tiledata_resource_spawn:
 			mvi a, TEMP_BYTE
 			ret
 @picked_up:
+			; no need to draw a resource
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
 

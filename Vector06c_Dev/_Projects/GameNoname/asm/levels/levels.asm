@@ -28,6 +28,11 @@ level_init:
 			mvi a, <rooms_spawn_rates_end
 			call clear_mem_short
 
+			; erase resources
+			lxi h, hero_resources
+			mvi a, <hero_resources_end
+			call clear_mem_short
+
 			; setup room resources
 			lxi h, __RAM_DISK_S_LEVEL01_DATA<<8 | (RESOURCES_LEN / 2)
 			lxi d, __level01_resources_inst_data_ptrs
