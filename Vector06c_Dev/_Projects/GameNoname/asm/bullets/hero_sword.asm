@@ -21,7 +21,7 @@ HERO_SWORD_COLLISION_OFFSET_X_L = <(-3)
 HERO_SWORD_COLLISION_OFFSET_Y_L = <(-3)
 
 ; funcs to handle the tiledata. tiledata format is in level_data.asm->room_tiledata
-hero_sword_tile_func_table:
+hero_sword_tile_func_tbl:
 			ret_4()								; func_id == 1 ; spawn a monster
 			ret_4()								; func_id == 2 ; teleport
 			ret_4()								; func_id == 3 ; teleport
@@ -32,7 +32,7 @@ hero_sword_tile_func_table:
 			ret_4()								; func_id == 8
 			ret_4()								; func_id == 9
 			ret_4()								; func_id == 10
-			ret_4()								; func_id == 11
+			jmp_4( hero_sword_func_container)	; func_id == 11
 			jmp_4( hero_sword_func_door)		; func_id == 12
 			jmp_4( hero_sword_func_breakable)	; func_id == 13 ; breakable
 			ret_4()								; func_id == 14
@@ -250,8 +250,81 @@ hero_sword_update:
 			xchg
 			pchl
 @checkTiledata:
-			TILEDATA_HANDLING2(HERO_SWORD_COLLISION_WIDTH, HERO_SWORD_COLLISION_HEIGHT, hero_sword_tile_func_table)
+			TILEDATA_HANDLING2(HERO_SWORD_COLLISION_WIDTH, HERO_SWORD_COLLISION_HEIGHT, hero_sword_tile_func_tbl)
 			ret
+
+; in:
+; a - door_id
+; c - tile_idx
+hero_sword_func_container:
+			sta @restore_container_id+1
+			; find a container
+			lxi h, room_id
+			mov d, m
+			mov l, a
+			FIND_INSTANCE(@no_container_found, containers_inst_data_ptrs)
+			; c = tile_idx
+			; hl ptr to tile_idx
+			; remove this container from containers_inst_data
+			inx h
+			mvi m, <RESOURCES_STATUS_ACQUIRED
+
+@no_container_found:
+			; erase item_id from tiledata
+			mvi b, >room_tiledata
+			mvi a, TILEDATA_RESTORE_TILE
+			stax b
+			; calc tile gfx ptr
+			mov l, c
+			mvi h, 0
+			lxi d, room_tiles_gfx_ptrs
+			dad h
+			dad d
+			mov d, c
+			; d - tile_idx
+			; read a tile gfx ptr
+			mov c, m
+			inx h
+			mov b, m
+
+			; calc tile scr addr
+			; d - tile_idx
+			mvi a, %11110000
+			ana d
+			mov e, a
+			; e - scr Y
+			mvi a, %00001111
+			ana d
+			rlc
+			adi >SCR_BUFF0_ADDR
+			mov d, a
+
+			; bc - a tile gfx ptr
+			; de - screen addr
+			push b
+			push d
+			; draw a tile on the screen
+			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX)			
+			pop d
+			pop b
+			push b
+			push d
+			; draw a tile in the back buffer
+			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF)
+			pop d
+			pop b
+			; draw a tile in the back buffer2
+			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
+
+			; update a hero container
+			lxi h, hero_cont_func_tbl
+@restore_container_id:			
+			mvi a, TEMP_BYTE
+			add_a(2) ; container_id to jmp_4 ptr
+			mov c, a
+			mvi b, 0
+			dad b
+			pchl ; run a container handler
 
 ; in:
 ; a - door_id

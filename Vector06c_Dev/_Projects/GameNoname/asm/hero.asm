@@ -67,7 +67,7 @@ hero_collision_func_table:
 			jmp_4( hero_check_tiledata)
 
 ; funcs to handle the tiledata. more info is in level_data.asm->room_tiledata
-hero_tile_func_table:
+hero_tile_func_tbl:
 			ret_4()							; func_id == 1
 			jmp_4( hero_tile_func_teleport)	; func_id == 2
 			ret_4()							; func_id == 3
@@ -85,7 +85,7 @@ hero_tile_func_table:
 			ret_4()							; func_id == 15 (collision) called only when a hero is stuck into collision tiles
 
 ; funcs to handle the resource pick up process. more info is in level_data.asm->room_tiledata
-hero_res_func_table:
+hero_res_func_tbl:
 			jmp_4( hero_res_func_coin)			; resource_id == 1
 			jmp_4( hero_res_func_potion_blue)	; resource_id == 2
 			jmp_4( hero_res_func_potion_red)	; resource_id == 3
@@ -102,6 +102,23 @@ hero_res_func_table:
 			ret_4()								; resource_id == 14
 			ret_4()								; resource_id == 15 (collision) called only when a hero is stuck into collision tiles
 
+; funcs to handle the container pick up process. more info is in level_data.asm->room_tiledata
+hero_cont_func_tbl:
+			jmp_4( hero_cont_func_chest_small)	; resource_id == 1
+			jmp_4( hero_cont_func_chest_big)	; resource_id == 2
+			jmp_4( hero_cont_func_chest_weapon0); resource_id == 3
+			ret_4()								; resource_id == 4
+			ret_4()								; resource_id == 5
+			ret_4()								; resource_id == 6
+			ret_4()								; resource_id == 7
+			ret_4()								; resource_id == 8
+			ret_4()								; resource_id == 9
+			ret_4()								; resource_id == 10
+			ret_4()								; resource_id == 11
+			ret_4()								; resource_id == 12
+			ret_4()								; resource_id == 13
+			ret_4()								; resource_id == 14
+			ret_4()								; resource_id == 15 (collision) called only when a hero is stuck into collision tiles
 
 hero_init:
 			call hero_idle_start
@@ -378,7 +395,7 @@ hero_check_tiledata:
 			mov d, m
 			inx_h(2)
 			mov e, m
-			TILEDATA_HANDLING2(HERO_COLLISION_WIDTH, HERO_COLLISION_HEIGHT, hero_tile_func_table)
+			TILEDATA_HANDLING2(HERO_COLLISION_WIDTH, HERO_COLLISION_HEIGHT, hero_tile_func_tbl)
 			ret
 
 ; we are here when a hero does not collide with colladable tiles, and there is no tiledata_func_id>0 round
@@ -690,7 +707,7 @@ hero_tile_func_resource:
 			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
 
 			; update a hero resource
-			lxi h, hero_res_func_table
+			lxi h, hero_res_func_tbl
 @restore_resource_id:			
 			mvi a, TEMP_BYTE
 			add_a(2) ; resource_id to jmp_4 ptr
@@ -998,4 +1015,9 @@ hero_res_func_potion_red:
 			clamp_a()	
 			mov m, a
 			call game_ui_health_draw
+			ret
+
+hero_cont_func_chest_small:
+hero_cont_func_chest_big:
+hero_cont_func_chest_weapon0:
 			ret
