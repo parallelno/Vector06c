@@ -343,7 +343,7 @@ room_tiledata_resource_spawn:
 			sta @restoreA+1
 
 			; find a resource
-			FIND_RESOURCE(@picked_up)
+			FIND_INSTANCE(@picked_up, resources_inst_data_ptrs)
 
 			; resource is found, means it is not picked up
 			; c = tile_idx
@@ -362,7 +362,7 @@ room_tiledata_resource_spawn:
 			; de - scr addr
 			push d
 
-			lxi h, __resource_gfx_ptrs
+			lxi h, __resources_gfx_ptrs
 @restoreA:	lxi d, TEMP_BYTE
 			dad d
 			xchg
@@ -378,6 +378,64 @@ room_tiledata_resource_spawn:
 			ret
 @picked_up:
 			; no need to draw a resource
+			; DOTO: draw an opened container
+			mvi a, TILEDATA_RESTORE_TILE
+			ret
+
+; a tiledata handler. spawn container.
+; input:
+; b - tiledata
+; c - tile_idx in the room_tiledata array.
+; a - container_id
+; out:
+; a - tiledata that will be saved back into room_tiledata
+room_tiledata_container_spawn:
+			lxi h, @restoreTiledata+1
+			mov m, b
+
+			lxi h, room_id
+			mov d, m
+
+			mov l, a
+			add_a(2) ; container_id to jmp_4 ptr
+			sta @restoreA+1
+
+			; find a container
+			FIND_INSTANCE(@picked_up, containers_inst_data_ptrs)
+
+			; container is found, means it is not picked up
+			; c = tile_idx
+
+			; scr_y = tile_idx % ROOM_WIDTH
+			mvi a, %11110000
+			ana c
+			mov e, a
+			; c - tile_idx
+			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
+			mvi a, %00001111
+			ana c
+			rlc
+			adi >SCR_ADDR
+			mov d, a
+			; de - scr addr
+			push d
+
+			lxi h, __containers_gfx_ptrs
+@restoreA:	lxi d, TEMP_BYTE
+			dad d
+			xchg
+			; de pptr to a sprite
+			mvi a, <__RAM_DISK_S_DECALS
+			call get_word_from_ram_disk
+			pop d
+			; bc - sprite addr
+			; de - scr addr
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+@restoreTiledata:
+			mvi a, TEMP_BYTE
+			ret
+@picked_up:
+			; no need to draw a container
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
 

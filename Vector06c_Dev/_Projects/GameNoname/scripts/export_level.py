@@ -294,6 +294,8 @@ def export_data(source_j_path, export_data_path):
 
 	# data for rooms_resources_tbl and rooms_resources
 	resources = {}
+	# data for rooms_containers_tbl and rooms_containers
+	containers = {}	
 	# per room data
 	for room_id, room_j in enumerate(rooms_j):
 		room_path = room_paths[room_id]['path']
@@ -325,8 +327,12 @@ def export_data(source_j_path, export_data_path):
 		common.delete_file(asm_room_data_path_zx0)
 
 		# collect resource data
-		TILEDATA_RESOURCE	= 112 
+		TILEDATA_RESOURCE	= 7*16
 		RESOURCES_UNIQUE_MAX = 16
+		# collect container data
+		TILEDATA_CONTAINER	= 11*16 
+		CONTAINERS_UNIQUE_MAX = 16
+
 		WORD_LEN			= 2
 
 		for i, tiledata in enumerate(room_j["layers"][1]["data"]):
@@ -338,6 +344,11 @@ def export_data(source_j_path, export_data_path):
 				if tiledata not in resources:
 					resources[tiledata] = []
 				resources[tiledata].append((room_id, tile_idx))
+
+			if TILEDATA_CONTAINER <= tiledata < TILEDATA_CONTAINER + CONTAINERS_UNIQUE_MAX:
+				if tiledata not in containers:
+					containers[tiledata] = []
+				containers[tiledata].append((room_id, tile_idx))				
 				
 	# make resources_inst_data_ptrs data 
 	resources_sorted = dict(sorted(resources.items())) 
@@ -366,6 +377,34 @@ def export_data(source_j_path, export_data_path):
 		print(f"ERROR: {source_j_path} has resource instance data > 256 bytes")
 		print("Stop export")
 		exit(1)
+
+	# make containers_inst_data_ptrs data 
+	containers_sorted = dict(sorted(containers.items())) 
+	
+	asm += f"\n__{source_name}_containers_inst_data_ptrs:\n"
+	asm += "			.byte "
+
+	ptr = 0
+	containers_inst_data_ptrs_len = len(containers_sorted) + 1
+	
+	for i, tiledata in enumerate(containers_sorted):
+		asm += str(ptr + containers_inst_data_ptrs_len) + ", "
+		inst_len = len(containers_sorted[tiledata]) * WORD_LEN
+		ptr += inst_len
+	asm += str(ptr + containers_inst_data_ptrs_len) + ", "
+
+	# make containers_inst_data data 
+	asm += f"\n__{source_name}_containers_inst_data:\n"
+	for i, tiledata in enumerate(containers_sorted):
+		asm += "			.byte "
+		for room_id, tile_idx in containers_sorted[tiledata]:
+			asm += f"{tile_idx}, {room_id}, "
+		asm += "\n"
+		
+	if 	ptr + containers_inst_data_ptrs_len > 256:
+		print(f"ERROR: {source_j_path} has container instance data > 256 bytes")
+		print("Stop export")
+		exit(1)		
 
 	with open(export_data_path, "w") as file:
 		file.write(asm)

@@ -31,34 +31,31 @@ room_id:   .byte 0 ; in the range [0, ROOMS_MAX-1]
 ; ffff == 4, teleport to 32-47 room_id, room_id = d+32
 ; ffff == 5, teleport to 48-63 room_id, room_id = d+48
 
-; ffff == 6, a global item. a hero interacts with it when he steps on it. status of every item is stored globally. item_id = d. see buffers.asm->global_items for details
-;		global_id = 0 - key blue
-;		global_id = 1 - key red
-;		global_id = 2 - key green
-;		global_id = 3 - key magma
+; ffff == 6, a global item. a hero interacts with it when he steps on it. item_id = d. see buffers.asm->global_items for details
+;		item_id = 0 - key blue
+;		item_id = 1 - key red
+;		item_id = 2 - key green
+;		item_id = 3 - key magma
 
-; ffff == 7, a resource. a hero interacts with it when he steps on it. status of every item in the room stored in room_resources. there can be RESOURCES_INSTANCES_MAX in the room. resource_id = d
+; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. resource_id = d. see buffers.asm->resources_inst_data for details
 ;		resource_id == 0 - a coin (tiledata = 7*16+0 = 160)
 ;		resource_id == 1 - a potion blue
 ;		resource_id == 2 - a potion red
-
-;	??? is it working for the items below ???
-;		resource_id == 10 - a damage pool
-;		resource_id == 11 - a slow pool
 
 ; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable (a hero and monsters can't step on that tile)
 
 ; ffff == 8, ???
 ; ffff == 9, ???
 ; ffff == 10, ???
-; ffff == 11, a collidable item. a hero interacts with it only when he collids with it or hits it with a weapon. collidable_id = d
-;		collidable_id == 0 - a small chest. small money reward
-;		collidable_id == 1 - a big chest. big money reward
-;		collidable_id == 2 - a chest with a weapon 1
-;		collidable_id == 3 - a chest with a weapon 2
-;		collidable_id == 4 - a chest with a weapon 3
-;		collidable_id == 13 - a monster spawner chest. it spawns a chest monster when opened
-;		collidable_id == 14 - a crate with a teleport under it to a unique location
+
+; ffff == 11, a collidable container that leaves rewards on the floor when a hero hits it. container_id = d
+;		container_id == 0 - a small chest. small money reward
+;		container_id == 1 - a big chest. big money reward
+;		container_id == 2 - a chest with a weapon 1
+;		container_id == 3 - a chest with a weapon 2
+;		container_id == 4 - a chest with a weapon 3
+;		container_id == 13 - a monster spawner chest. it spawns a chest monster when opened
+;		container_id == 14 - a crate with a teleport under it to a unique location
 
 ; ffff == 12, doors. a hero interacts with it only when he hits it with a weapon. door_id = d
 ;		door_id == 0 - a door 1a
@@ -98,7 +95,7 @@ room_tiledata_funcs:
 			jmp_4(room_tiledata_copy)					; func_id = 8
 			jmp_4(room_tiledata_copy)					; func_id = 9
 			jmp_4(room_tiledata_copy)					; func_id = 10
-			jmp_4(room_tiledata_copy)					; func_id = 11
+			jmp_4(room_tiledata_container_spawn)		; func_id = 11
 			jmp_4(room_tiledata_door_spawn)				; func_id = 12
 			jmp_4(room_tiledata_breakable_spawn)		; func_id = 13
 			jmp_4(room_tiledata_decal_collidable_spawn)	; func_id = 14

@@ -3,7 +3,32 @@
 ; TODO: rename buffers.asm to vars.asm
 
 ;=============================================================================
-; statuses of resource instances. each instance represented by a pair of bytes (room_id, tile_idx)
+; statuses of container instances. each instance is represented by a pair of bytes (room_id, tile_idx)
+; this data is aligned to $100, the length is <= $100
+CONTAINERS_UNIQUE_MAX		= 16
+CONTAINERS_LEN				= $100
+CONTAINERS_STATUS_ACQUIRED	= $ff
+
+; data format:
+; containers_inst_data_ptrs:
+; .loop CONTAINERS_UNIQUE_MAX
+;	.byte - a low byte ptr to container_inst_data for particular container
+; .endloop
+; .byte - a low byte ptr to the next addr after the last container_NN_inst_data_ptr
+; container_inst_data:
+; .loop CONTAINERS_UNIQUE_MAX
+;	container_inst_data:
+;		.byte - tile_idx where this container is placed
+;		.byte - room_id where this container is placed. 
+;				if room_id == CONTAINERS_STATUS_ACQUIRED, a container is acquired
+; .endloop
+
+containers_inst_data_ptrs	= $7900
+;containers_inst_data		= containers_inst_data_ptrs + used_unique_containers (can vary) + 1
+containers_inst_data_end		= containers_inst_data_ptrs + CONTAINERS_LEN
+
+;=============================================================================
+; statuses of resource instances. each instance is represented by a pair of bytes (room_id, tile_idx)
 ; this data is aligned to $100, the length is <= $100
 RESOURCES_UNIQUE_MAX		= 16
 RESOURCES_LEN				= $100
@@ -12,7 +37,7 @@ RESOURCES_STATUS_ACQUIRED	= $ff
 ; data format:
 ; resources_inst_data_ptrs:
 ; .loop RESOURCES_UNIQUE_MAX
-;	.byte - a low byte ptr to resource_inst_data for particular resource
+;	.byte - a low byte ptr to resources_inst_data for particular resource
 ; .endloop
 ; .byte - a low byte ptr to the next addr after the last resource_NN_inst_data_ptr
 ; resources_inst_data:

@@ -116,10 +116,10 @@
 ; c - tile_idx
 ; uses:
 ; hl, de, a
-.macro FIND_RESOURCE(picked_up)
+.macro FIND_INSTANCE(picked_up, instances_ptrs)
 			; find a resource
-			mvi h, >resources_inst_data_ptrs
-			; hl - ptr to resources_inst_data_ptrs
+			mvi h, >instances_ptrs
+			; hl - ptr to instances_ptrs, ex. resources_inst_data_ptrs
 			mov a, m
 			inx h
 			mov l, m

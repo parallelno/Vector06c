@@ -39,6 +39,12 @@ level_init:
 			lxi b, resources_inst_data_ptrs
 			call copy_from_ram_disk
 
+			; setup room containers
+			lxi h, __RAM_DISK_S_LEVEL01_DATA<<8 | (CONTAINERS_LEN / 2)
+			lxi d, __level01_containers_inst_data_ptrs
+			lxi b, containers_inst_data_ptrs
+			call copy_from_ram_disk			
+
 			; reset room_id
 			xra a
 			sta room_id

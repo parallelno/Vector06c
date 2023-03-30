@@ -635,7 +635,7 @@ hero_tile_func_resource:
 			lxi h, room_id
 			mov d, m
 			mov l, a
-			FIND_RESOURCE(@no_resource_found)
+			FIND_INSTANCE(@no_resource_found, resources_inst_data_ptrs)
 			; c = tile_idx
 			; hl ptr to tile_idx
 			; remove this resource from resources_inst_data

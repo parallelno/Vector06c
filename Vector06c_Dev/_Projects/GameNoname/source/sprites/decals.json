@@ -23,10 +23,11 @@
 		"decals_walkable" : ["bones", "skull"],
 		"decals_collidable" : ["web1"],
 		"items" : ["key_blue", "key_red", "key_green", "key_magma"],
-		"resource" : ["coin", "potion_blue", "potion_red"],
+		"resources" : ["coin", "potion_blue", "potion_red"],
 		"breakable" : ["barrel", "crate"],
 		"doors" : ["door_blue_l", "door_blue_r", "door_red_l", "door_red_r"],
-		"doors_opened" : ["door_blue_open_l", "door_blue_open_r", "door_red_open_l", "door_red_open_r"]
+		"doors_opened" : ["door_blue_open_l", "door_blue_open_r", "door_red_open_l", "door_red_open_r"],
+		"containers" : ["chest_small", "chest_big", "chest_weapon0"]
 	},
 	"sprites" : [
 		{
@@ -268,6 +269,45 @@
 			"offset_y" : 0,
 			"mask_x" : 32,
 			"mask_y" : 240, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "chest_small",
+			"x" : 0,
+			"y"	: 68,
+			"width" : 16,
+			"height" : 11,
+			"offset_x" : 0,
+			"offset_y" : 1,
+			"mask_x" : 0,
+			"mask_y" : 84, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "chest_big",
+			"x" : 16,
+			"y"	: 66,
+			"width" : 16,
+			"height" : 13,
+			"offset_x" : 0,
+			"offset_y" : 1,
+			"mask_x" : 16,
+			"mask_y" : 82, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "chest_weapon0",
+			"x" : 32,
+			"y"	: 66,
+			"width" : 16,
+			"height" : 13,
+			"offset_x" : 0,
+			"offset_y" : 1,
+			"mask_x" : 32,
+			"mask_y" : 82, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		}	
