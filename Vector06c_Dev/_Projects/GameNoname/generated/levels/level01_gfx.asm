@@ -423,14 +423,6 @@ __sprites_tiles_lv01_tile47:
 			.byte 1,1,1,1,183,0,0,0,0,0,0,0,0,0,0,0,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
 __sprites_tiles_lv01_tile48:
-			.byte 9 ; mask
-			.byte 4 ; counter
-			.byte 184,64,143,16,96,64,0,138,84,84,84,80,86,64,64,136,
-			.byte 0,2,2,200,152,152,24,136,72,2,2,5,13,241,0,6,
-			.byte 7,63,112,224,159,176,239,117,43,43,43,43,41,63,63,112,
-			.byte 14,252,244,44,108,108,228,116,180,236,28,250,2,14,254,248,
-			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile49:
 			.byte 15 ; mask
 			.byte 4 ; counter
 			.byte 0,0,0,31,10,10,10,10,10,2,0,16,2,0,0,0,
@@ -442,13 +434,13 @@ __sprites_tiles_lv01_tile49:
 			.byte 127,192,191,191,234,170,234,234,234,238,239,247,182,183,192,127,
 			.byte 254,3,237,109,239,247,119,87,87,87,85,87,253,253,3,254,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile50:
+__sprites_tiles_lv01_tile49:
 			.byte 8 ; mask
 			.byte 4 ; counter
 			.byte 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
 			.byte 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile51:
+__sprites_tiles_lv01_tile50:
 			.byte 13 ; mask
 			.byte 4 ; counter
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -458,7 +450,7 @@ __sprites_tiles_lv01_tile51:
 			.byte 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
 			.byte 255,255,255,255,255,255,240,224,128,140,255,255,223,223,163,192,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile52:
+__sprites_tiles_lv01_tile51:
 			.byte 13 ; mask
 			.byte 4 ; counter
 			.byte 2,244,0,0,0,242,17,1,6,8,248,0,0,0,0,0,
@@ -468,13 +460,13 @@ __sprites_tiles_lv01_tile52:
 			.byte 3,245,251,251,255,255,49,1,7,15,255,255,255,255,255,255,
 			.byte 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile53:
+__sprites_tiles_lv01_tile52:
 			.byte 8 ; mask
 			.byte 4 ; counter
 			.byte 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
 			.byte 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile54:
+__sprites_tiles_lv01_tile53:
 			.byte 13 ; mask
 			.byte 4 ; counter
 			.byte 32,63,8,4,7,0,8,8,8,8,12,15,0,0,0,0,
@@ -484,7 +476,7 @@ __sprites_tiles_lv01_tile54:
 			.byte 160,191,137,228,231,239,248,248,248,248,252,255,255,255,255,255,
 			.byte 255,255,255,255,123,139,10,12,140,4,103,254,7,255,135,5,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile55:
+__sprites_tiles_lv01_tile54:
 			.byte 13 ; mask
 			.byte 4 ; counter
 			.byte 0,0,224,32,0,0,200,36,18,16,16,16,48,6,1,0,
@@ -494,7 +486,7 @@ __sprites_tiles_lv01_tile55:
 			.byte 252,28,238,255,255,183,251,37,30,20,24,208,248,254,255,255,
 			.byte 223,176,89,16,88,15,72,255,255,208,192,207,79,207,222,207,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile56:
+__sprites_tiles_lv01_tile55:
 			.byte 13 ; mask
 			.byte 4 ; counter
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,
@@ -504,7 +496,7 @@ __sprites_tiles_lv01_tile56:
 			.byte 235,9,249,249,249,17,1,255,255,6,112,10,8,234,29,251,
 			.byte 255,255,127,31,11,24,40,120,164,223,237,255,255,119,56,63,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile57:
+__sprites_tiles_lv01_tile56:
 			.byte 13 ; mask
 			.byte 4 ; counter
 			.byte 32,32,33,32,63,128,32,48,48,16,17,30,0,0,0,0,
@@ -514,7 +506,7 @@ __sprites_tiles_lv01_tile57:
 			.byte 161,224,225,224,127,241,33,48,48,80,209,222,255,255,255,255,
 			.byte 255,255,255,255,255,63,31,31,31,31,63,231,55,241,29,5,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile58:
+__sprites_tiles_lv01_tile57:
 			.byte 13 ; mask
 			.byte 4 ; counter
 			.byte 7,0,0,0,0,7,24,0,0,0,1,63,31,32,44,35,
@@ -524,7 +516,7 @@ __sprites_tiles_lv01_tile58:
 			.byte 199,207,255,248,224,135,159,159,255,248,193,255,255,163,172,163,
 			.byte 101,157,197,207,31,231,31,255,251,251,195,31,60,241,243,199,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile59:
+__sprites_tiles_lv01_tile58:
 			.byte 9 ; mask
 			.byte 4 ; counter
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -532,7 +524,7 @@ __sprites_tiles_lv01_tile59:
 			.byte 129,64,224,232,246,119,59,77,15,33,0,128,192,224,224,240,
 			.byte 207,207,223,203,219,203,203,107,235,203,206,231,103,103,231,230,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile60:
+__sprites_tiles_lv01_tile59:
 			.byte 9 ; mask
 			.byte 4 ; counter
 			.byte 0,0,0,0,0,0,0,16,0,16,16,16,0,16,16,16,
@@ -540,7 +532,7 @@ __sprites_tiles_lv01_tile60:
 			.byte 39,255,250,251,251,15,239,251,235,251,251,255,239,255,251,249,
 			.byte 15,7,7,3,1,0,132,240,178,220,238,109,23,7,2,129,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile61:
+__sprites_tiles_lv01_tile60:
 			.byte 13 ; mask
 			.byte 4 ; counter
 			.byte 3,12,0,0,0,3,28,0,0,0,0,63,31,32,56,38,
@@ -550,7 +542,7 @@ __sprites_tiles_lv01_tile61:
 			.byte 227,207,143,188,248,195,223,159,255,248,224,255,255,167,185,167,
 			.byte 197,53,197,255,143,227,31,255,249,249,225,7,31,255,243,227,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile62:
+__sprites_tiles_lv01_tile61:
 			.byte 13 ; mask
 			.byte 4 ; counter
 			.byte 0,3,0,0,0,0,6,8,0,0,0,3,0,0,0,1,
@@ -560,7 +552,7 @@ __sprites_tiles_lv01_tile62:
 			.byte 252,247,111,60,184,96,230,79,255,240,224,227,227,252,224,193,
 			.byte 4,24,121,163,201,13,29,250,250,55,135,143,63,235,207,63,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile63:
+__sprites_tiles_lv01_tile62:
 			.byte 15 ; mask
 			.byte 4 ; counter
 			.byte 0,0,0,8,24,0,0,0,0,0,0,0,0,0,0,0,
@@ -572,7 +564,7 @@ __sprites_tiles_lv01_tile63:
 			.byte 228,228,252,244,236,252,254,254,127,63,223,111,55,187,140,131,
 			.byte 127,255,250,255,252,248,104,104,104,76,76,76,77,93,125,253,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile64:
+__sprites_tiles_lv01_tile63:
 			.byte 15 ; mask
 			.byte 4 ; counter
 			.byte 217,153,152,144,144,0,0,0,0,0,0,8,10,144,0,0,
@@ -584,7 +576,7 @@ __sprites_tiles_lv01_tile64:
 			.byte 187,187,186,178,178,34,34,34,34,34,34,34,225,47,255,254,
 			.byte 65,177,221,236,118,57,92,118,59,59,59,59,59,59,59,187,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile65:
+__sprites_tiles_lv01_tile64:
 			.byte 13 ; mask
 			.byte 4 ; counter
 			.byte 32,0,0,0,1,1,12,16,0,0,0,3,4,0,0,0,
@@ -594,7 +586,7 @@ __sprites_tiles_lv01_tile65:
 			.byte 252,240,211,200,193,225,108,95,95,184,176,147,197,158,24,32,
 			.byte 131,7,63,199,199,7,15,255,250,119,6,29,60,254,47,63,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile66:
+__sprites_tiles_lv01_tile65:
 			.byte 13 ; mask
 			.byte 4 ; counter
 			.byte 0,0,0,3,0,0,0,0,3,12,24,32,0,0,0,0,
@@ -604,7 +596,7 @@ __sprites_tiles_lv01_tile66:
 			.byte 248,248,240,243,239,244,248,255,255,236,219,255,240,224,128,207,
 			.byte 231,3,7,31,251,239,63,11,251,159,127,255,223,159,159,31,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile67:
+__sprites_tiles_lv01_tile66:
 			.byte 15 ; mask
 			.byte 4 ; counter
 			.byte 0,0,0,0,0,32,0,0,1,1,33,1,1,1,1,1,
@@ -616,7 +608,7 @@ __sprites_tiles_lv01_tile67:
 			.byte 236,228,228,228,228,196,196,196,197,229,197,229,229,229,229,229,
 			.byte 255,253,253,253,245,253,253,244,117,119,100,116,244,85,93,93,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile68:
+__sprites_tiles_lv01_tile67:
 			.byte 15 ; mask
 			.byte 4 ; counter
 			.byte 0,16,16,152,24,48,184,149,17,89,25,217,153,217,217,153,
@@ -628,7 +620,7 @@ __sprites_tiles_lv01_tile68:
 			.byte 206,222,218,82,210,122,122,211,83,59,123,187,187,187,187,187,
 			.byte 171,185,169,185,187,179,179,51,51,35,35,99,99,115,243,243,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
-__sprites_tiles_lv01_tile69:
+__sprites_tiles_lv01_tile68:
 			.byte 13 ; mask
 			.byte 4 ; counter
 			.byte 0,1,1,3,0,0,1,0,7,8,48,32,0,0,0,0,
@@ -637,6 +629,14 @@ __sprites_tiles_lv01_tile69:
 			.byte 0,0,0,0,0,16,224,0,0,0,0,0,0,0,0,0,
 			.byte 248,249,249,251,255,254,249,223,223,232,247,239,248,224,224,231,
 			.byte 243,1,7,11,247,203,23,255,255,31,47,247,207,15,31,31,
+			.byte 0,0 ; safety pair of bytes to support a stack renderer
+__sprites_tiles_lv01_tile69:
+			.byte 9 ; mask
+			.byte 4 ; counter
+			.byte 184,64,143,16,96,64,0,138,84,84,84,80,86,64,64,136,
+			.byte 0,2,2,200,152,152,24,136,72,2,2,5,13,241,0,6,
+			.byte 7,63,112,224,159,176,239,117,43,43,43,43,41,63,63,112,
+			.byte 14,252,244,44,108,108,228,116,180,236,28,250,2,14,254,248,
 			.byte 0,0 ; safety pair of bytes to support a stack renderer
 __sprites_tiles_lv01_tile70:
 			.byte 13 ; mask
