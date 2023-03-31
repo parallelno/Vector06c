@@ -24,6 +24,9 @@ __scythe_sprites_rd_data_end:
 __hero_sword_sprites_rd_data_start:
 .include "generated\\sprites\\hero_sword_sprites.asm"
 __hero_sword_sprites_rd_data_end:
+__bomb_sprites_rd_data_start:
+.include "generated\\sprites\\bomb_sprites.asm"
+__bomb_sprites_rd_data_end:
 
 .align 2
 __chunk_end_bank0_addr0_1:

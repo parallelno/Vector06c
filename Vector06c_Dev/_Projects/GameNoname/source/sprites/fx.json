@@ -1,0 +1,80 @@
+{
+	"palette" :	[
+		{"x": 0,	"y" : 0},
+		{"x": 16,	"y" : 0},
+		{"x": 32,	"y" : 0},
+		{"x": 48,	"y" : 0},
+		{"x": 64,	"y" : 0},
+		{"x": 80,	"y" : 0},
+		{"x": 96,	"y" : 0},
+		{"x": 112,	"y" : 0},
+		{"x": 128,	"y" : 0},
+		{"x": 144,	"y" : 0},
+		{"x": 160,	"y" : 0},
+		{"x": 176,	"y" : 0},
+		{"x": 192,	"y" : 0},
+		{"x": 208,	"y" : 0},
+		{"x": 224,	"y" : 0},
+		{"x": 240,	"y" : 0}
+	],
+	"asset_type" : "sprite",
+	"png_path" : "art\\sprites_fx.png",
+	"preshifted_sprites" : 4,
+	"mask" : true,
+	"anims" : {
+		"puff"	: {
+			"frames" : ["puff0", "puff1", "puff2", "puff3"],
+			"loop" : false
+		}		
+	},
+	"sprites" : [ 
+		{
+			"name" : "puff0",
+			"x" : 0,
+			"y"	: 35,
+			"width" : 16,
+			"height" : 11,
+			"mask_x" : 0,
+			"mask_y" : 51, 			
+			"offset_y": 2,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "puff1",
+			"x" : 16,
+			"y"	: 33,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 0,
+			"mask_y" : 49, 						
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1			
+		},
+		{
+			"name" : "puff2",
+			"x" : 32,
+			"y"	: 33,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 0,
+			"mask_y" : 49, 			
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "puff3",
+			"x" : 48,
+			"y"	: 33,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 0,
+			"mask_y" : 49, 			
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1			
+		}		
+	]
+}
