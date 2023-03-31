@@ -83,6 +83,67 @@ room_init_tiles_gfx:
 			jnz @loop
 			ret
 
+.macro ROOM_DECAL_DRAW(gfx_ptrs, backbuffers = false)
+			lxi h, gfx_ptrs
+		.if backbuffers
+			xra a
+			sta room_decal_draw_backbuffers
+		.endif
+		.if backbuffers == false
+			mvi a, OPCODE_RET
+			sta room_decal_draw_backbuffers
+		.endif
+			call room_decal_draw
+.endmacro
+
+; draw a decal onto the screen, into the backbuffer, and backbuffer2
+; ex. 
+; in:
+; hl - ptr to the graphics, ex. __doors_gfx_ptrs
+; c - tile_idx in the room_tiledata array.
+; save item_id*4 into room_decal_draw_ptr_offset+1 addr
+room_decal_draw:
+			; scr_y = tile_idx % ROOM_WIDTH
+			mvi a, %11110000
+			ana c
+			mov e, a
+			; c - tile_idx
+			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
+			mvi a, %00001111
+			ana c
+			rlc
+			adi >SCR_ADDR
+			mov d, a
+			; de - scr addr
+			push d
+			
+room_decal_draw_ptr_offset:
+			lxi d, TEMP_WORD
+			dad d
+			xchg
+			; de pptr to a sprite
+			mvi a, <__RAM_DISK_S_DECALS
+			call get_word_from_ram_disk
+			pop d
+			; bc - sprite addr
+			; de - scr addr
+			push b
+			push d
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+			pop d
+			pop b
+room_decal_draw_backbuffers:
+			ret
+
+			push b
+			push d
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF)
+			pop d
+			pop b
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
+			ret	
+
+
 ; calls the tiledata handler func to spawn spawn a monster, etc
 room_handle_room_tiledata:
 			; handle the tiledata calling tiledata funcs
@@ -100,7 +161,7 @@ room_handle_room_tiledata:
 			cmp c
 			jnz @loop
 			ret
-
+			
 ; a tiledata handler. it just copies the tiledata.
 ; it copies the tiledata byte into the room_tiledata as it is
 ; input:
@@ -156,32 +217,8 @@ room_tiledata_decal_walkable_spawn:
 			jc room_tiledata_copy
 
 			add_a(2) ; to make a jmp_4 ptr
-			sta @restoreA+1
-			; scr_y = tile_idx % ROOM_WIDTH
-			mvi a, %11110000
-			ana c
-			mov e, a
-			; c - tile_idx
-			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
-			mvi a, %00001111
-			ana c
-			rlc
-			adi >SCR_ADDR
-			mov d, a
-			; de - scr addr
-			push d
-
-			lxi h, __decals_walkable_gfx_ptrs - JMP_4_LEN * 2 ; make decal_id == 2 corelates to 0 addr offset
-@restoreA:	lxi d, TEMP_BYTE
-			dad d
-			xchg
-			; de pptr to a sprite
-			mvi a, <__RAM_DISK_S_DECALS
-			call get_word_from_ram_disk
-			pop d
-			; bc - sprite addr
-			; de - scr addr
-			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+			sta room_decal_draw_ptr_offset+1
+			ROOM_DECAL_DRAW(__decals_walkable_gfx_ptrs - JMP_4_LEN * 2)
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
 
@@ -194,32 +231,8 @@ room_tiledata_decal_walkable_spawn:
 ; a - tiledata that will be saved back into room_tiledata
 room_tiledata_decal_collidable_spawn:
 			add_a(2) ; to make a jmp_4 ptr
-			sta @restoreA+1
-			; scr_y = tile_idx % ROOM_WIDTH
-			mvi a, %11110000
-			ana c
-			mov e, a
-			; c - tile_idx
-			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
-			mvi a, %00001111
-			ana c
-			rlc
-			adi >SCR_ADDR
-			mov d, a
-			; de - scr addr
-			push d
-
-			lxi h, __decals_collidable_gfx_ptrs
-@restoreA:	lxi d, TEMP_BYTE
-			dad d
-			xchg
-			; de pptr to a sprite
-			mvi a, <__RAM_DISK_S_DECALS
-			call get_word_from_ram_disk
-			pop d
-			; bc - sprite addr
-			; de - scr addr
-			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+			sta room_decal_draw_ptr_offset+1
+			ROOM_DECAL_DRAW(__decals_collidable_gfx_ptrs)
 			mvi a, TILEDATA_COLLISION
 			ret
 
@@ -231,45 +244,20 @@ room_tiledata_decal_collidable_spawn:
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
 room_tiledata_breakable_spawn:
+			lxi h, @restore_tiledata+1
+			mov m, b
+
 			add_a(2) ; to make a jmp_4 ptr
-			sta @restoreA+1
-			mov a, b
-			sta @restoreTiledata+1
+			sta room_decal_draw_ptr_offset+1
 
 			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_breakables, @noSpawn)
-			jmp @spawn
-@noSpawn:
-			mvi a, TILEDATA_RESTORE_TILE
-			ret
-@spawn:
-			; scr_y = tile_idx % ROOM_WIDTH
-			mvi a, %11110000
-			ana c
-			mov e, a
-			; c - tile_idx
-			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
-			mvi a, %00001111
-			ana c
-			rlc
-			adi >SCR_ADDR
-			mov d, a
-			; de - scr addr
-			push d
-
-			lxi h, __breakable_gfx_ptrs
-@restoreA:	lxi d, TEMP_BYTE
-			dad d
-			xchg
-			; de pptr to a sprite
-			mvi a, <__RAM_DISK_S_DECALS
-			call get_word_from_ram_disk
-			pop d
-			; bc - sprite addr
-			; de - scr addr
-			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
-@restoreTiledata:
+			ROOM_DECAL_DRAW(__breakable_gfx_ptrs)
+@restore_tiledata:
 			mvi a, TEMP_BYTE
 			ret
+@noSpawn:
+			mvi a, TILEDATA_RESTORE_TILE
+			ret			
 
 ; a tiledata handler. spawn items.
 ; input:
@@ -279,11 +267,11 @@ room_tiledata_breakable_spawn:
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
 room_tiledata_item_spawn:
-			lxi h, @restoreTiledata+1
+			lxi h, @restore_tiledata+1
 			mov m, b
 
 			add_a(2) ; to make a jmp_4 ptr
-			sta @restoreA+1
+			sta room_decal_draw_ptr_offset+1
 
 			; check global item status
 			mvi h, >global_items
@@ -295,32 +283,8 @@ room_tiledata_item_spawn:
 			mvi a, TILEDATA_RESTORE_TILE
 			rnz ; status != 0 means this item was picked up
 
-			; scr_y = tile_idx % ROOM_WIDTH
-			mvi a, %11110000
-			ana c
-			mov e, a
-			; c - tile_idx
-			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
-			mvi a, %00001111
-			ana c
-			rlc
-			adi >SCR_ADDR
-			mov d, a
-			; de - scr addr
-			push d
-
-			lxi h, __items_gfx_ptrs
-@restoreA:	lxi d, TEMP_BYTE
-			dad d
-			xchg
-			; de pptr to a sprite
-			mvi a, <__RAM_DISK_S_DECALS
-			call get_word_from_ram_disk
-			pop d
-			; bc - sprite addr
-			; de - scr addr
-			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
-@restoreTiledata:
+			ROOM_DECAL_DRAW(__items_gfx_ptrs)
+@restore_tiledata:
 			mvi a, TEMP_BYTE
 			ret
 
@@ -340,45 +304,18 @@ room_tiledata_resource_spawn:
 
 			mov l, a
 			add_a(2) ; resource_id to jmp_4 ptr
-			sta @restoreA+1
+			sta room_decal_draw_ptr_offset+1
 
 			; find a resource
 			FIND_INSTANCE(@picked_up, resources_inst_data_ptrs)
-
 			; resource is found, means it is not picked up
 			; c = tile_idx
-
-			; scr_y = tile_idx % ROOM_WIDTH
-			mvi a, %11110000
-			ana c
-			mov e, a
-			; c - tile_idx
-			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
-			mvi a, %00001111
-			ana c
-			rlc
-			adi >SCR_ADDR
-			mov d, a
-			; de - scr addr
-			push d
-
-			lxi h, __resources_gfx_ptrs
-@restoreA:	lxi d, TEMP_BYTE
-			dad d
-			xchg
-			; de pptr to a sprite
-			mvi a, <__RAM_DISK_S_DECALS
-			call get_word_from_ram_disk
-			pop d
-			; bc - sprite addr
-			; de - scr addr
-			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+			ROOM_DECAL_DRAW(__resources_gfx_ptrs)
 @restoreTiledata:
 			mvi a, TEMP_BYTE
 			ret
 @picked_up:
 			; no need to draw a resource
-			; DOTO: draw an opened container
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
 
@@ -390,7 +327,7 @@ room_tiledata_resource_spawn:
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
 room_tiledata_container_spawn:
-			lxi h, @restoreTiledata+1
+			lxi h, @tiledata+1
 			mov m, b
 
 			lxi h, room_id
@@ -398,44 +335,17 @@ room_tiledata_container_spawn:
 
 			mov l, a
 			add_a(2) ; container_id to jmp_4 ptr
-			sta @restoreA+1
+			sta room_decal_draw_ptr_offset+1
 
 			; find a container
-			FIND_INSTANCE(@picked_up, containers_inst_data_ptrs)
+			FIND_INSTANCE(@opened, containers_inst_data_ptrs)
 
-			; container is found, means it is not picked up
-			; c = tile_idx
-
-			; scr_y = tile_idx % ROOM_WIDTH
-			mvi a, %11110000
-			ana c
-			mov e, a
-			; c - tile_idx
-			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
-			mvi a, %00001111
-			ana c
-			rlc
-			adi >SCR_ADDR
-			mov d, a
-			; de - scr addr
-			push d
-
-			lxi h, __containers_gfx_ptrs
-@restoreA:	lxi d, TEMP_BYTE
-			dad d
-			xchg
-			; de pptr to a sprite
-			mvi a, <__RAM_DISK_S_DECALS
-			call get_word_from_ram_disk
-			pop d
-			; bc - sprite addr
-			; de - scr addr
-			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
-@restoreTiledata:
-			mvi a, TEMP_BYTE
+			ROOM_DECAL_DRAW(__containers_gfx_ptrs, true)
+@tiledata:	mvi a, TEMP_BYTE
 			ret
-@picked_up:
-			; no need to draw a container
+@opened:
+			; draw an opened container
+			ROOM_DECAL_DRAW(__containers_opened_gfx_ptrs, true)
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
 
@@ -447,11 +357,11 @@ room_tiledata_container_spawn:
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
 room_tiledata_door_spawn:
-			lxi h, room_tiledata_door_restoreTiledata + 1
+			lxi h, @tiledata + 1
 			mov m, b
 
 			add_a(2) ; to make a jmp_4 ptr
-			sta room_tiledata_door_spawn_restoreA+1
+			sta room_decal_draw_ptr_offset+1
 
 			; check global item status
 			mvi h, >global_items
@@ -463,57 +373,15 @@ room_tiledata_door_spawn:
 			mov l, a
 			mov a, m
 			cpi <ITEM_STATUS_USED
-			jz room_tiledata_door_spawn_open	; status != ITEM_STATUS_NOT_ACQUIRED means a door is opened
-room_tiledata_door_spawn_draw_door:
-			; scr_y = tile_idx % ROOM_WIDTH
-			mvi a, %11110000
-			ana c
-			mov e, a
-			; c - tile_idx
-			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
-			mvi a, %00001111
-			ana c
-			rlc
-			adi >SCR_ADDR
-			mov d, a
-			; de - scr addr
-			push d
+			jz @opened	; status != ITEM_STATUS_NOT_ACQUIRED means a door is opened
 
-room_tiledata_door_spawn_gfx:
-			lxi h, __doors_gfx_ptrs
-room_tiledata_door_spawn_restoreA:
-			lxi d, TEMP_BYTE
-			dad d
-			xchg
-			; de pptr to a sprite
-			mvi a, <__RAM_DISK_S_DECALS
-			call get_word_from_ram_disk
-			pop d
-			; bc - sprite addr
-			; de - scr addr
-			push b
-			push d
-			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
-			pop d
-			pop b
-			push b
-			push d
-			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF)
-			pop d
-			pop b
-			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
-
-room_tiledata_door_restoreTiledata:
+			ROOM_DECAL_DRAW(__doors_gfx_ptrs, true)
+@tiledata:
 			mvi a, TEMP_BYTE
 			ret
-room_tiledata_door_spawn_open:
-			; restore gfx ptr
-			lxi h, __doors_opened_gfx_ptrs
-			shld room_tiledata_door_spawn_gfx + 1
-			call room_tiledata_door_spawn_draw_door
-			; restore gfx ptr
-			lxi h, __doors_gfx_ptrs
-			shld room_tiledata_door_spawn_gfx + 1
+@opened:
+			; draw an opened door
+			ROOM_DECAL_DRAW(__doors_opened_gfx_ptrs, true)
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
 

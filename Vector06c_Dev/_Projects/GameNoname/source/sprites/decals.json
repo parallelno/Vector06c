@@ -27,7 +27,8 @@
 		"breakable" : ["barrel", "crate"],
 		"doors" : ["door_blue_l", "door_blue_r", "door_red_l", "door_red_r"],
 		"doors_opened" : ["door_blue_open_l", "door_blue_open_r", "door_red_open_l", "door_red_open_r"],
-		"containers" : ["chest_small", "chest_big", "chest_weapon0"]
+		"containers" : ["chest_small", "chest_big", "chest_weapon0"],
+		"containers_opened" : ["chest_small_opened", "chest_big_opened", "chest_weapon0_opened"]
 	},
 	"sprites" : [
 		{
@@ -308,6 +309,45 @@
 			"offset_y" : 1,
 			"mask_x" : 32,
 			"mask_y" : 82, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "chest_small_opened",
+			"x" : 48,
+			"y"	: 69,
+			"width" : 16,
+			"height" : 10,
+			"offset_x" : 0,
+			"offset_y" : 1,
+			"mask_x" : 48,
+			"mask_y" : 85, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "chest_big_opened",
+			"x" : 64,
+			"y"	: 66,
+			"width" : 16,
+			"height" : 13,
+			"offset_x" : 0,
+			"offset_y" : 1,
+			"mask_x" : 64,
+			"mask_y" : 82, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "chest_weapon0_opened",
+			"x" : 80,
+			"y"	: 64,
+			"width" : 16,
+			"height" : 15,
+			"offset_x" : 0,
+			"offset_y" : 1,
+			"mask_x" : 80,
+			"mask_y" : 80, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		}	
