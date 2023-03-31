@@ -981,7 +981,7 @@ hero_erase:
 			lhld hero_erase_wh
 
 			; check if it needs to restore the background
-			call room_check_tiledata_restorable_v2
+			call room_check_tiledata_restorable
 			lhld hero_erase_scr_addr
 			xchg
 			lhld hero_erase_wh

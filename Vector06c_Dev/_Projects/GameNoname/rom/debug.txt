@@ -1137,7 +1137,7 @@ room_copy_scr_to_backbuffs $31b4
 room_draw_tiles $31d1
 @newLine $31d6
 @loop_18 $31d8
-room_check_tiledata_restorable_v2 $31f5
+room_check_tiledata_restorable $31f5
 room_get_collision_tiledata $3220
 @tileSizeH1 $324f
 @tileSizeW2H1 $325b

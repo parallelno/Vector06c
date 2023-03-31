@@ -83,67 +83,6 @@ room_init_tiles_gfx:
 			jnz @loop
 			ret
 
-.macro ROOM_DECAL_DRAW(gfx_ptrs, backbuffers = false)
-			lxi h, gfx_ptrs
-		.if backbuffers
-			xra a
-			sta room_decal_draw_backbuffers
-		.endif
-		.if backbuffers == false
-			mvi a, OPCODE_RET
-			sta room_decal_draw_backbuffers
-		.endif
-			call room_decal_draw
-.endmacro
-
-; draw a decal onto the screen, into the backbuffer, and backbuffer2
-; ex. 
-; in:
-; hl - ptr to the graphics, ex. __doors_gfx_ptrs
-; c - tile_idx in the room_tiledata array.
-; save item_id*4 into room_decal_draw_ptr_offset+1 addr
-room_decal_draw:
-			; scr_y = tile_idx % ROOM_WIDTH
-			mvi a, %11110000
-			ana c
-			mov e, a
-			; c - tile_idx
-			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
-			mvi a, %00001111
-			ana c
-			rlc
-			adi >SCR_ADDR
-			mov d, a
-			; de - scr addr
-			push d
-			
-room_decal_draw_ptr_offset:
-			lxi d, TEMP_WORD
-			dad d
-			xchg
-			; de pptr to a sprite
-			mvi a, <__RAM_DISK_S_DECALS
-			call get_word_from_ram_disk
-			pop d
-			; bc - sprite addr
-			; de - scr addr
-			push b
-			push d
-			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
-			pop d
-			pop b
-room_decal_draw_backbuffers:
-			ret
-
-			push b
-			push d
-			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF)
-			pop d
-			pop b
-			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
-			ret	
-
-
 ; calls the tiledata handler func to spawn spawn a monster, etc
 room_handle_room_tiledata:
 			; handle the tiledata calling tiledata funcs
@@ -161,7 +100,7 @@ room_handle_room_tiledata:
 			cmp c
 			jnz @loop
 			ret
-			
+
 ; a tiledata handler. it just copies the tiledata.
 ; it copies the tiledata byte into the room_tiledata as it is
 ; input:
@@ -388,7 +327,7 @@ room_tiledata_door_spawn:
 room_copy_scr_to_backbuffs:
 			; copy $a000-$ffff scr buffs to the ram-disk back buffer
 			; TODO: optimization. think of making copy process while the gameplay started.
-			; or do not copy tile gfx which never be restred
+			; or do not copy tile gfx for non-restorable tiles
 			lxi d, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi h, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi b, SCR_BUFF_LEN * 3 / 32
@@ -402,6 +341,73 @@ room_copy_scr_to_backbuffs:
 			mvi a, __RAM_DISK_S_BACKBUFF2
 			call copy_to_ram_disk32
 			ret
+
+;=========================================================
+; draw a decal onto the screen, and backbuffers
+; in:
+; hl - ptr to the graphics, ex. __doors_gfx_ptrs
+; c - tile_idx in the room_tiledata array.
+; save item_id*4 into room_decal_draw_ptr_offset+1 addr
+; backbuffers = true means draw onto backbuffers as well
+.macro ROOM_DECAL_DRAW(gfx_ptrs, backbuffers = false)
+			lxi h, gfx_ptrs
+		.if backbuffers
+			xra a
+			sta room_decal_draw_backbuffers
+		.endif
+		.if backbuffers == false
+			mvi a, OPCODE_RET
+			sta room_decal_draw_backbuffers
+		.endif
+			call room_decal_draw
+.endmacro
+
+; draw a decal onto the screen, and backbuffers
+; ex. ROOM_DECAL_DRAW(__containers_gfx_ptrs, true)
+; in:
+; hl - ptr to the graphics, ex. __doors_gfx_ptrs
+; c - tile_idx in the room_tiledata array.
+; save item_id*4 into room_decal_draw_ptr_offset+1 addr
+room_decal_draw:
+			; scr_y = tile_idx % ROOM_WIDTH
+			mvi a, %11110000
+			ana c
+			mov e, a
+			; c - tile_idx
+			; scr_x = tile_idx % ROOM_WIDTH * TILE_WIDTH_B + SCR_ADDR
+			mvi a, %00001111
+			ana c
+			rlc
+			adi >SCR_ADDR
+			mov d, a
+			; de - scr addr
+			push d
+			
+room_decal_draw_ptr_offset:
+			lxi d, TEMP_WORD
+			dad d
+			xchg
+			; de pptr to a sprite
+			mvi a, <__RAM_DISK_S_DECALS
+			call get_word_from_ram_disk
+			pop d
+			; bc - sprite addr
+			; de - scr addr
+			push b
+			push d
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS)
+			pop d
+			pop b
+room_decal_draw_backbuffers:
+			ret
+
+			push b
+			push d
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF)
+			pop d
+			pop b
+			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
+			ret	
 
 ;=========================================================
 ; draw a room tiles. It might be a main screen, or a back buffer
@@ -456,7 +462,7 @@ room_draw_tiles:
 ; out:
 ; Z flag == 0 if this area needs to be restored
 ; v2. 124 - 280
-room_check_tiledata_restorable_v2:
+room_check_tiledata_restorable:
 			; convert scr addr to room_tiles_gfx_ptrs offset
 			mvi a, %00011110
 			ana d

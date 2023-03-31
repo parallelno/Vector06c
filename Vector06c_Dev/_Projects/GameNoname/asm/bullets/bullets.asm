@@ -294,13 +294,7 @@ bullet_erase:
 			; check if it needs to restore the background
 			push h
 			push d
-			/*
-			mvi a, -$20 ; advance DE to SCR_ADDR_0 to check the collision, to decide if we need to restore a beckground
-			add d
-			mov d, a
-			CALL_RAM_DISK_FUNC(room_check_tiledata_restorable, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_89, false, false)
-			*/
-			call room_check_tiledata_restorable_v2
+			call room_check_tiledata_restorable
 			pop d
 			pop h
 
