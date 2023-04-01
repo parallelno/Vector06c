@@ -1,4 +1,5 @@
 import os
+import json
 
 def palette_to_asm(image, char_j, path = "", label_prefix = ""):
 	# usially there are color tiles in top row in the image.
@@ -143,6 +144,11 @@ def run_command(command, comment = "", checkPath = ""):
 def delete_file(path):
 	if os.path.isfile(f"{path}"):
 		os.remove(f"{path}")
+
+def load_json(source_j_path):
+	with open(source_j_path, "rb") as file:
+		source_j = json.load(file)
+	return source_j
 
 def remove_double_slashes(path):
 	res = ""

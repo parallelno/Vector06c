@@ -26,5 +26,5 @@ hero_r_run:
 hero_r_attk:
 			.byte 17, 0 ; offset to the next frame
 			.word __hero_r_attk0_0, __hero_r_attk0_1, __hero_r_attk0_2, __hero_r_attk0_3, __hero_r_attk0_4, __hero_r_attk0_5, __hero_r_attk0_6, __hero_r_attk0_7, 
-			.byte -1, $ff ; offset to the first frame
+			.byte -1, $ff ; offset to the same last frame
 			.word __hero_r_attk1_0, __hero_r_attk1_1, __hero_r_attk1_2, __hero_r_attk1_3, __hero_r_attk1_4, __hero_r_attk1_5, __hero_r_attk1_6, __hero_r_attk1_7, 

@@ -1,4 +1,4 @@
-
+PRESHIFT_MIN = 4 ; means 4 preshifted sprites, one preshifted sprite for every two pixels.
 
 SPRITE_FORWARD_ORDER = true
 SPRITE_BACKWARD_ORDER = false
@@ -10,7 +10,7 @@ MASK_BYTE_COLOR_BYTE_LEN = 2
 
 ; Calculate preshifted sprites
 ; in:
-; de - preshifted_sprites addr
+; de - ptr to preshifted_sprites addr
 ; hl - sprite data offset in the ram-disk
 ; used:
 ; de, bc, a
@@ -20,6 +20,8 @@ __sprite_dup_preshift:
 
 			xchg
 			mov a, m
+			cpi PRESHIFT_MIN
+			rc ; return if preshifted_sprites is below 4
 			sta @preshiftedSprites+1
 			sta @preshiftedSprites2+1
 			inx h

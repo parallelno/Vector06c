@@ -19,7 +19,6 @@
 	],
 	"asset_type" : "sprite",
 	"png_path" : "art\\sprites_fx.png",
-	"preshifted_sprites" : 4,
 	"mask" : true,
 	"anims" : {
 		"puff"	: {

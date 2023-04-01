@@ -117,14 +117,23 @@ def sprite_data(bytes1, bytes2, bytes3, w, h, mask_bytes = None):
 
 	return [data]
 
-def anims_to_asm(label_prefix, source_j):
+def anims_to_asm(label_prefix, source_j, source_j_path):
 	asm = ""
+	preshifted_sprites = 1
 	# preshifted sprites
-	preshifted_sprites = source_j["preshifted_sprites"]
-	asm += f"sprite_get_scr_addr_{label_prefix} = sprite_get_scr_addr{preshifted_sprites}\n\n"
-	asm += label_prefix + "_preshifted_sprites:\n"
-	asm += f"			.byte " + str(preshifted_sprites) + "\n"
+	if "preshifted_sprites" in source_j:
+		preshifted_sprites = source_j["preshifted_sprites"]
+	
+	if (preshifted_sprites != 1 and
+		preshifted_sprites != 4 and preshifted_sprites != 8):
+		print(f'export_sprite ERROR: preshifted_sprites can be only equal 1, 4, 8", path: {source_j_path}')
+		print("Stop export")
+		exit(1)
 
+	if preshifted_sprites == 4 or preshifted_sprites == 8:
+		asm += f"sprite_get_scr_addr_{label_prefix} = sprite_get_scr_addr{preshifted_sprites}\n\n"
+		asm += label_prefix + "_preshifted_sprites:\n"
+		asm += f"			.byte " + str(preshifted_sprites) + "\n"
 
 	# make a list of animNames
 	asm += label_prefix + "_anims:\n"
@@ -151,12 +160,14 @@ def anims_to_asm(label_prefix, source_j):
 				next_frame_offset_hi_str = "$ff"
 				if loop == False:
 					next_frame_offset_low = -1
+					comment = "offset to the same last frame"
 				else:
 					offset_addr = 1
 					next_frame_offset_low = 255 - (frame_count - 1) * (preshifted_sprites + offset_addr) * 2 + 1
 					next_frame_offset_low -= 1 # decrease the offset to save one instruction in the game code
+					comment = "offset to the first frame"
 					
-				asm += "			.byte " + str(next_frame_offset_low) + ", " + next_frame_offset_hi_str + " ; offset to the first frame\n"
+				asm += f"			.byte {next_frame_offset_low}, {next_frame_offset_hi_str} ; {comment}\n"
 
 			asm += "			.word "
 			for i in range(preshifted_sprites):
@@ -203,12 +214,20 @@ def make_empty_sprite_data(has_mask, width, height):
 
 	return [data]
 
-def sprites_to_asm(label_prefix, source_j, image, has_mask):
+def sprites_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 	sprites_j = source_j["sprites"]
 	asm = label_prefix + "_sprites:"
 
+	preshifted_sprites = 1
 	# preshifted sprites
-	preshifted_sprites = source_j["preshifted_sprites"]
+	if "preshifted_sprites" in source_j:
+		preshifted_sprites = source_j["preshifted_sprites"]
+	
+	if (preshifted_sprites != 1 and
+		preshifted_sprites != 4 and preshifted_sprites != 8):
+		print(f'export_sprite ERROR: preshifted_sprites can be only equal 1, 4, 8", path: {source_j_path}')
+		print("Stop export")
+		exit(1)
 
 	for sprite in sprites_j:
 		sprite_name = sprite["name"]
@@ -356,10 +375,10 @@ def export(source_j_path, asmAnimPath, asmSpritePath):
 	image = common.remap_colors(image, colors)
 
 	asm = "; " + source_j_path + "\n"
-	asm_anims = asm + anims_to_asm(source_name, source_j)
+	asm_anims = asm + anims_to_asm(source_name, source_j, source_j_path)
 	asm_sprites = asm + f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S" + "\n"
 	asm_sprites += asm + f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M" + "\n"
-	asm_sprites += sprites_to_asm("__" + source_name, source_j, image, has_mask)
+	asm_sprites += sprites_to_asm("__" + source_name, source_j, image, has_mask, source_j_path)
 
 	# save asm
 	if not os.path.exists(asm_anim_dir):

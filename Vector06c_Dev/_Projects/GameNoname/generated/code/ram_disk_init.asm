@@ -162,13 +162,6 @@ ram_disk_init:
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
 
-			; preshift fx sprites
-			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
-			lxi d, fx_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank1_addr0_1)
-			call __sprite_dup_preshift
-			RAM_DISK_OFF()
-
 			; copy the chunk into the ram-disk
 			lxi d, BACK_BUFF_ADDR + (__chunk_end_bank1_addr0_1 - __chunk_start_bank1_addr0_1)
 			lxi h, __chunk_end_bank1_addr0_1

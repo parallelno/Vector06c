@@ -79,14 +79,18 @@ def export(source_j, generated_code_dir,
 			for asset in chunk_j["assets"]:
 				path = asset["path"]
 				asset_name = common.path_to_basename(path)
+				asset_j = common.load_json(path)
+				
+				if ("preshifted_sprites" in asset_j and
+					(asset_j["preshifted_sprites"] == 4 or asset_j["preshifted_sprites"] == 8)):
 
-				asm +=f"			; preshift {asset_name} sprites\n"
-				asm +=f"			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)\n"
-				asm +=f"			lxi d, {asset_name}_preshifted_sprites\n"
-				asm +=f"			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - {chunk_start_addr_s})\n"
-				asm +=f"			call __sprite_dup_preshift\n"
-				asm +=f"			RAM_DISK_OFF()\n"
-				asm +="\n"
+					asm +=f"			; preshift {asset_name} sprites\n"
+					asm +=f"			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)\n"
+					asm +=f"			lxi d, {asset_name}_preshifted_sprites\n"
+					asm +=f"			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - {chunk_start_addr_s})\n"
+					asm +=f"			call __sprite_dup_preshift\n"
+					asm +=f"			RAM_DISK_OFF()\n"
+					asm +="\n"
 
 			asm +=f"			; copy the chunk into the ram-disk\n"
 			asm +=f"			lxi d, BACK_BUFF_ADDR + ({chunk_len_s})\n"
