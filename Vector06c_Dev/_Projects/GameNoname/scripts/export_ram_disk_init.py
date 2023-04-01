@@ -9,18 +9,32 @@ def get_unpack_priority(dictionary):
 	return 0
 
 # make ram_disk_init.asm
-def export(source_j, generated_code_dir, 
-		bank_id_backbuffer, bank_id_backbuffer2):
+def export(source_j, generated_code_dir, source_j_path):
 	
+	bank_id_backbuffer = -1
+	bank_id_backbuffer2 = -1
+
 	# collect all chunks
 	chunks = []
 	for bank_j in source_j["banks"]:
 		bank_id = int(bank_j["bank_id"])
 		for segment_j in bank_j["segments"]:
-			if "reserved" in segment_j and segment_j["reserved"]:
-				continue
 
 			for chunk_id, chunk_j in enumerate(segment_j["chunks"]):
+				if "reserved" in chunk_j and chunk_j["reserved"]:
+					if chunk_j["name"] == "backbuffer":
+						if bank_id_backbuffer >= 0:
+							print(f"export_ram_disk_init ERROR: more than one chunk is reserved for bank_id_backbuffer. path: {source_j_path}\n")
+							exit(1)
+						bank_id_backbuffer = bank_id
+
+					elif chunk_j["name"] == "backbuffer2":
+						if bank_id_backbuffer2 >= 0:
+							print(f"export_ram_disk_init ERROR: more than one chunk is reserved for bank_id_backbuffer2. path: {source_j_path}\n")
+							exit(1)						
+						bank_id_backbuffer2 = bank_id
+					continue				
+
 				chunk_j["bank_id"] = bank_id
 				chunk_j["segment_addr_s"] = segment_j["addr"]
 				chunk_j["chunk_id"] = chunk_id
@@ -34,6 +48,13 @@ def export(source_j, generated_code_dir,
 					name = common.path_to_basename(path)
 					chunk_j["assets_names"].append(name)
 				chunks.append(chunk_j)
+
+	if bank_id_backbuffer < 0 < 0:
+		print(f"export_ram_disk_init ERROR: no chunk is reserved for bank_id_backbuffer. path: {source_j_path}\n")
+		exit(1)
+	if bank_id_backbuffer2 < 0:
+		print(f"export_ram_disk_init ERROR: no chunk is reserved for bank_id_backbuffer2. path: {source_j_path}\n")
+		exit(1)	
 
 	# sort chunks by the unpack priority
 	sorted_chunks = sorted(chunks, key=get_unpack_priority, reverse=True)

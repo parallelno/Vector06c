@@ -18,9 +18,6 @@ __chunk_start_bank1_addr0_1:
 __burner_sprites_rd_data_start:
 .include "generated\\sprites\\burner_sprites.asm"
 __burner_sprites_rd_data_end:
-__fx_sprites_rd_data_start:
-.include "generated\\sprites\\fx_sprites.asm"
-__fx_sprites_rd_data_end:
 
 .align 2
 __chunk_end_bank1_addr0_1:

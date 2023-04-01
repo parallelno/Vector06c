@@ -18,7 +18,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 2, addr $8000, chunk_id 0
 	;===============================================
-			; ['song01', 'sound_rd']
+			; ['sound_rd', 'song01']
 			; unpack the chunk into the ram-disk
 			lxi d, chunk_bank2_addr8000_0
 			lxi b, __chunk_start_bank2_addr8000_0
@@ -148,7 +148,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 1, addr 0, chunk_id 1
 	;===============================================
-			; ['burner', 'fx']
+			; ['burner']
 			; unpack the chunk into the ram-disk back buffer
 			lxi d, chunk_bank1_addr0_1
 			lxi b, BACK_BUFF_ADDR
@@ -166,6 +166,23 @@ ram_disk_init:
 			lxi d, BACK_BUFF_ADDR + (__chunk_end_bank1_addr0_1 - __chunk_start_bank1_addr0_1)
 			lxi h, __chunk_end_bank1_addr0_1
 			lxi b, (__chunk_end_bank1_addr0_1 - __chunk_start_bank1_addr0_1) / 2
+			mvi a, RAM_DISK_S1 | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F
+			call copy_to_ram_disk
+
+	;===============================================
+	;		bank_id 1, addr $8000, chunk_id 0
+	;===============================================
+			; ['fx']
+			; unpack the chunk into the ram-disk back buffer
+			lxi d, chunk_bank1_addr8000_0
+			lxi b, BACK_BUFF_ADDR
+			mvi a, __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F
+			call dzx0_rd
+
+			; copy the chunk into the ram-disk
+			lxi d, BACK_BUFF_ADDR + (__chunk_end_bank1_addr8000_0 - __chunk_start_bank1_addr8000_0)
+			lxi h, __chunk_end_bank1_addr8000_0
+			lxi b, (__chunk_end_bank1_addr8000_0 - __chunk_start_bank1_addr8000_0) / 2
 			mvi a, RAM_DISK_S1 | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F
 			call copy_to_ram_disk
 

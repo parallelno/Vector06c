@@ -118,6 +118,14 @@ def export(bank_id, segment_j,
 	# export segment data
 	for chunk_n, chunk_j in enumerate(segment_j["chunks"]):
 
+		if "reserved" in chunk_j and chunk_j["reserved"]:
+			asm += f"; {build.get_chunk_start_label_name(bank_id, addr_s_wo_hex_sym, chunk_n)}:\n"
+			description = ""
+			if "description" in chunk_j:
+				description = chunk_j["description"]
+			asm += f"; reserved. {description}\n\n"
+			continue
+		
 		asm += build.get_chunk_start_label_name(bank_id, addr_s_wo_hex_sym, chunk_n) + ":\n\n"
 
 		for asset in chunk_j["assets"]:

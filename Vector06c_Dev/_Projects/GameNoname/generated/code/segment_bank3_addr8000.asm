@@ -28,3 +28,6 @@ __sprite_preshift_rd_rd_data_end:
 .align 2
 __chunk_end_bank3_addr8000_0:
 
+; __chunk_start_bank3_addr8000_1:
+; reserved. $A000-$FFFF backbuffer (to avoid sprite flickering)
+

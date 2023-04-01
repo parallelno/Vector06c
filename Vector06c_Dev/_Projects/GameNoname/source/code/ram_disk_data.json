@@ -24,9 +24,6 @@
 		"generated_bin" : "generated\\bin\\"
 	},
 	"build_db_path" : "generated\\build.db",
-	"bank_id_backbuffer" : 3,
-	"bank_id_backbuffer2" : 1,
-	"back_buffer_size" : 24578,
 	"chunk_size_limit_rule" : "if a chunk contains sprites, its size has to be < $6000",
 	"banks" :
 	[
@@ -75,7 +72,6 @@
 					]
 				},
 				{
-					"reserved" : false,
 					"addr" : "$8000",
 					"chunks" : 
 					[
@@ -108,7 +104,6 @@
 			"segments" :
 			[
 				{
-					"reserved" : false,
 					"addr" : "0",
 					"chunks" :
 					[
@@ -129,20 +124,33 @@
 									"asset_type" : "sprite",
 									"path" : "source\\sprites\\burner.json",
 									"export_dir" : "generated\\sprites\\"
-								},
-								{
-									"asset_type" : "sprite",
-									"path" : "source\\sprites\\fx.json", 
-									"export_dir" : "generated\\sprites\\"
 								}
 							]
 						}
 					]
 				},
 				{
-					"reserved" : true,
 					"addr" : "$8000",
-					"description" : "$8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)"
+					"chunks" : 
+					[
+						{
+							"unpack_priority" : 0,
+							"assets" : [
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\fx.json", 
+									"export_dir" : "generated\\sprites\\"
+								}
+							]
+						},
+						{
+							"description" : "$A000-$FFFF backbuffer2 (to restore a background in the backbuffer)",
+							"reserved" : true,
+							"name" : "backbuffer2",
+							"addr" : "$A000",
+							"len" : "$6000"
+						}										
+					]
 				}
 			]
 		},
@@ -151,7 +159,6 @@
 			"segments" :
 			[
 				{
-					"reserved" : false,
 					"addr" : "0",
 					"chunks" :
 					[
@@ -176,24 +183,30 @@
 					]
 				},
 				{
-					"reserved" : false,
 					"addr" : "$8000",
-					"description" : "Music player and songs",
 					"chunks" :
 					[
 						{
+							"description" : "sound and music must be at >= $8000 addr.",
 							"unpack_priority" : 100,
 							"assets" : [
+								{
+									"asset_type" : "code",
+									"path": "asm\\globals\\sound_rd.asm"
+								},
 								{
 									"asset_type" : "music",
 									"path" : "source\\music\\song01.ym"
 									,"export_dir" : "generated\\music\\"
-								},
-								{
-									"asset_type" : "code",
-									"path": "asm\\globals\\sound_rd.asm"
-								}
+								}								
 							]
+						},
+						{
+							"description" : "F102-$FFFF backbuffer (to avoid sprite flickering)",
+							"reserved" : true,
+							"name" : "gigachad_buffers",
+							"addr" : "$f102",
+							"len" : "$efd"
 						}
 					]
 				}
@@ -203,7 +216,6 @@
 			"segments" :
 			[
 				{
-					"reserved" : false,
 					"addr" : "0",
 					"chunks" :
 					[
@@ -220,12 +232,11 @@
 					]
 				},
 				{
-					"reserved" : false,
 					"addr" : "$8000",
-					"description" : "$8000-$9FFF code library. $A000-$FFFF back buffer",
 					"chunks" :
 					[
 						{
+							"description" : "$8000-$9FFF code library.",
 							"unpack_priority" : 100500,
 							"assets" : [
 								{
@@ -253,6 +264,13 @@
 									"path" : "asm\\render\\sprite_preshift_rd.asm"
 								}
 							]
+						},
+						{
+							"description" : "$A000-$FFFF backbuffer (to avoid sprite flickering)",
+							"reserved" : true,
+							"name" : "backbuffer",
+							"addr" : "$A000",
+							"len" : "$6000"
 						}
 					]
 				}

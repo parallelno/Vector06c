@@ -9,8 +9,7 @@ def get_unpack_priority(dictionary):
 	return 0
  
 # generate and save ram_disk_data.asm
-def export(source_j, generated_code_dir, generated_bin_dir, segments_paths, 
-		bank_id_backbuffer, back_buffer_size):
+def export(source_j, generated_code_dir, generated_bin_dir, segments_paths):
 
 	asm = "; ram-disk data labels\n"
 
@@ -32,15 +31,16 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths,
 	for bank_j in source_j["banks"]:
 		bank_id = int(bank_j["bank_id"])
 		for segment_j in bank_j["segments"]:
-			if "reserved" in segment_j and segment_j["reserved"]:
-				continue
-
 			for chunk_id, chunk_j in enumerate(segment_j["chunks"]):
+				if "reserved" in chunk_j and chunk_j["reserved"]:
+					continue
+
 				chunk_j["bank_id"] = bank_id
 				chunk_j["segment_addr_s"] = segment_j["addr"]
 				chunk_j["chunk_id"] = chunk_id
 				chunk_j["preshift"] = False
 				chunk_j["assets_names"] = []
+				# mark a chunk as it needs a special unpacking + preshifting
 				for asset in chunk_j["assets"]:
 					if asset["asset_type"] == build.ASSET_TYPE_SPRITE:
 						chunk_j["preshift"] = True
@@ -53,7 +53,7 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths,
 	# sort chunks by the unpack priority
 	sorted_chunks = sorted(chunks, key=get_unpack_priority)
 	
-	# print in the order which they will be unpacked and moved into the ram-disk
+	# print it in the unpacking order
 	asm += "ram_disk_data: ; the addr of this label has to be < BUFFERS_START_ADDR\n"
 	for chunk_j in sorted_chunks:
 		bank_id = chunk_j["bank_id"]
@@ -80,47 +80,59 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths,
 			if "description" in segment_j:
 				description = segment_j["description"]
 
-			if "reserved" in segment_j and segment_j["reserved"]:
-				free_space = 0
-				assets_s = ""
+			segment_name = build.get_segment_name(bank_id, addr_s_wo_hex_sym)
+
+			if len(segment_j["chunks"]) > 0:
+				segment_path = segments_paths[segment_name]["segment_bin_path"]
+				segment_size = os.path.getsize(segment_path)
 			else:
-				if bank_id == bank_id_backbuffer and segment_addr == build.SEGMENT_8000_0000_ADDR :
-					segment_size_max = build.SCR_BUFF_SIZE * 4 - back_buffer_size
-				else:
-					segment_size_max = build.get_segment_size_max(segment_addr)
+				segment_size = 0
 
-				segment_name = build.get_segment_name(bank_id, addr_s_wo_hex_sym)
+			labels_path = segments_paths[segment_name]["labels_path"]
 
-				if len(segment_j["chunks"]) > 0:
-					segment_path = segments_paths[segment_name]["segment_bin_path"]
-					segment_size = os.path.getsize(segment_path)
-				else:
-					segment_size = 0
+			if len(segments_paths[segment_name]["segment_include_paths"]) > 0:
+				assets_s = ""
+				for path in segments_paths[segment_name]["segment_include_paths"]:
+					ext = os.path.splitext(path)[1]
+					asset_name = common.path_to_basename(path)
 
-				labels_path = segments_paths[segment_name]["labels_path"]
+					label_start = common.get_label_addr(labels_path, "__" + asset_name + "_rd_data_start")
+					label_end = common.get_label_addr(labels_path, "__" + asset_name + "_rd_data_end")
+					asset_size = label_end - label_start
+						
+					assets_s += f"{asset_name} [{asset_size}], "
+			else:
+				assets_s = ["empty"]
+			
+			# calc total_free_space
+			segment_size_max = build.get_segment_size_max(segment_addr)
+			# reserved size
+			reserved_size = 0
+			for chunk_j in segment_j["chunks"]:
+				if "reserved" in chunk_j and chunk_j["reserved"]:
+					reserved_size += common.hex_str_to_int(chunk_j["len"])
 
-				if len(segments_paths[segment_name]["segment_include_paths"]) > 0:
-					assets_s = ""
-					for path in segments_paths[segment_name]["segment_include_paths"]:
-						ext = os.path.splitext(path)[1]
-						asset_name = common.path_to_basename(path)
+			free_space = segment_size_max - segment_size - reserved_size
+			if free_space < 0:
+				print(f'export_ram_disk_data_asm ERROR: free_space < 0, segment_name: "{segment_name}", paths: {segments_paths[segment_name]}')
+				print("stop export")
+				exit(1)
 
-						label_start = common.get_label_addr(labels_path, "__" + asset_name + "_rd_data_start")
-						label_end = common.get_label_addr(labels_path, "__" + asset_name + "_rd_data_end")
-						asset_size = label_end - label_start
-							
-						assets_s += f"{asset_name} [{asset_size}], "
-				else:
-					assets_s = ["empty"]
-					
-				free_space = segment_size_max - segment_size
-				total_free_space += free_space
-				
+			total_free_space += free_space
+			
+			# aggregate all the segment descriptions
+			for chunk_j in segment_j["chunks"]:
+				if "description" in chunk_j:
+					description += chunk_j["description"] + " "
+
 			segment_free_space_s_aligned = common.align_string(f"{free_space}", 5, True)
 			addr_s_aligned = common.align_string(addr_s_wo_hex_sym, 4)
 			asm += f"; bank{bank_id} addr{addr_s_aligned} [{segment_free_space_s_aligned} free] description: {description}\n"
 			if len(assets_s) > 0:
 				asm += ";                             " + assets_s + "\n"
+
+			if bank_id == 2:
+				a = 1
 
 	asm += f"; [{total_free_space} total free]\n\n"
 	asm += '.if BUFFERS_START_ADDR < ram_disk_data\n' \

@@ -2,6 +2,7 @@
 .include "generated\\code\\segment_bank0_addr0_labels.asm"
 .include "generated\\code\\segment_bank0_addr8000_labels.asm"
 .include "generated\\code\\segment_bank1_addr0_labels.asm"
+.include "generated\\code\\segment_bank1_addr8000_labels.asm"
 .include "generated\\code\\segment_bank2_addr0_labels.asm"
 .include "generated\\code\\segment_bank2_addr8000_labels.asm"
 .include "generated\\code\\segment_bank3_addr0_labels.asm"
@@ -31,6 +32,8 @@ chunk_bank1_addr0_0:
 .incbin "generated\\bin\\chunk_bank1_addr0_0.bin.zx0"
 chunk_bank1_addr0_1:
 .incbin "generated\\bin\\chunk_bank1_addr0_1.bin.zx0"
+chunk_bank1_addr8000_0:
+.incbin "generated\\bin\\chunk_bank1_addr8000_0.bin.zx0"
 chunk_bank2_addr0_0:
 .incbin "generated\\bin\\chunk_bank2_addr0_0.bin.zx0"
 chunk_bank2_addr0_1:
@@ -47,18 +50,19 @@ chunk_bank3_addr8000_0:
 ;                             hero_r_sprites [14466], skeleton_sprites [10140], scythe_sprites [1626], hero_sword_sprites [5226], bomb_sprites [960], 
 ; bank0 addr8000 [27837 free] description: 
 ;                             level01_data [795], backs_sprites [496], decals_sprites [3640], 
-; bank1 addr0    [ 5818 free] description: 
-;                             knight_sprites [16398], burner_sprites [9600], fx_sprites [696],
-; bank1 addr8000 [    0 free] description: $8000-$9FFF tiledata buffer (collision, copyToScr, etc), $A000-$FFFF back buffer2 (to restore a background in the back buffer)
+; bank1 addr0    [ 6514 free] description: 
+;                             knight_sprites [16398], burner_sprites [9600], 
+; bank1 addr8000 [ 7496 free] description: $A000-$FFFF backbuffer2 (to restore a background in the backbuffer) 
+;                             fx_sprites [696], 
 ; bank2 addr0    [10162 free] description: 
 ;                             hero_l_sprites [14466], vampire_sprites [7884], 
-; bank2 addr8000 [19521 free] description: Music player and songs
-;                             song01 [12542], sound_rd [705], 
+; bank2 addr8000 [19651 free] description: sound and music must be at >= $8000 addr. F102-$FFFF backbuffer (to avoid sprite flickering) 
+;                             sound_rd [705], song01 [8575], 
 ; bank3 addr0    [25880 free] description: 
 ;                             level01_gfx [6632], 
-; bank3 addr8000 [ 5993 free] description: $8000-$9FFF code library. $A000-$FFFF back buffer
+; bank3 addr8000 [ 5995 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering) 
 ;                             sprite_rd [173], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], 
-; [95305 total free]
+; [103629 total free]
 
 .if BUFFERS_START_ADDR < ram_disk_data
 			.error "the programm is too big. It overlaps with tables at the end of RAM"

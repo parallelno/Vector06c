@@ -1,6 +1,4 @@
 .include "asm\\globals\\ay_const.asm"
-;.include "asm\\levels\\levels_const.asm"
-;.include "asm\\globals\\buffers.asm"
 
 ; gigachad16 player
 ; info/credits:

@@ -16,7 +16,7 @@ def chunker(seq, size):
 
 def drop_comment(f):
 	comment = ''
-	print("musicExport: song name/credits: ")
+	print("export_music: song name/credits: ")
 	while True:
 		b = f.read(1)
 		if b[0] == 0:
@@ -35,10 +35,10 @@ def readym(filename):
 		f = open(filename, "rb")
 
 	hdr = f.read(12) # YM6!LeOnArD!               # 12
-	print('musicExport: hdr=', hdr)
+	print('export_music: hdr=', hdr)
 	nframes = struct.unpack(">I", f.read(4))[0]      # 16
 
-	print("musicExport: YM6 file has ", nframes, " frames")
+	print("export_music: YM6 file has ", nframes, " frames")
 
 	attrib = struct.unpack(">I", f.read(4))       # 20
 	digidrums = struct.unpack(">h", f.read(2))    # 22
@@ -46,8 +46,8 @@ def readym(filename):
 	framehz = struct.unpack(">h", f.read(2))      # 28
 	loopfrm = struct.unpack(">I", f.read(4))      # 32
 	f.read(2) # additional data                   # 34
-	print("musicExport: Masterclock: ", masterclock, "Hz")
-	print("musicExport: Frame: ", framehz, "Hz")
+	print("export_music: Masterclock: ", masterclock, "Hz")
+	print("export_music: Frame: ", framehz, "Hz")
 
 	# skip digidrums but we don't do that here..
 
@@ -63,8 +63,8 @@ def readym(filename):
 		#decimated = complete[::2]
 		#decimated = [x if x != 255 else y for x, y in chu]
 		decimated = complete
-		#print(f'musicExport: complete[{i}]=', complete)
-		#print(f'musicExport: decimated[{i}]=', decimated)
+		#print(f'export_music: complete[{i}]=', complete)
+		#print(f'export_music: decimated[{i}]=', decimated)
 		decbytes = bytes(decimated)
 		regs.append(decbytes)  ## brutal decimator
 
@@ -98,16 +98,11 @@ def export(source_path, export_path, cleanTmp = True):
 	try:
 		[regData, comment1, comment2, comment3] = readym(source_path)
 	except:
-		sys.stderr.write(f'musicExport: error reading f{source_path}\n')
+		sys.stderr.write(f'export_music: error reading f{source_path}\n')
 		exit(1)
 
 	with open(export_path, "w") as fileInc:
 		# task stacks
-		fileInc.write(f'GCP_WORD_LEN = 2\n')
-		fileInc.write(f'GCP_TEMP_ADDR = 0\n')
-		fileInc.write(f'GC_PLAYER_TASKS = 14\n')
-		fileInc.write(f'GC_PLAYER_STACK_SIZE = 16\n')
-
 		# song's credits
 		fileInc.write(f'; {comment1}\n; {comment2}\n; {comment3}\n')
 		# redData ptrs. 
@@ -130,46 +125,6 @@ def export(source_path, export_path, cleanTmp = True):
 				data = f.read()
 				fileInc.write(f'{dbname}: .byte ' + ",".join("$%02x" % x for x in data) + "\n")
 			if cleanTmp:
-				print("musicExport: clean up tmp resources")
+				print("export_music: clean up tmp resources")
 				common.delete_file(binFile)
 				common.delete_file(zx0File)
-
-		fileInc.write(f'; buffers for unpacking the streams, must be aligned to 256 byte boundary\n')
-		fileInc.write(f'.align $100\n')
-		fileInc.write(f'gcplayer_buffer00 : .storage $100\n')
-		fileInc.write(f'gcplayer_buffer01 : .storage $100\n')  
-		fileInc.write(f'gcplayer_buffer02 : .storage $100\n')
-		fileInc.write(f'gcplayer_buffer03 : .storage $100\n')
-		fileInc.write(f'gcplayer_buffer04 : .storage $100\n')
-		fileInc.write(f'gcplayer_buffer05 : .storage $100\n')
-		fileInc.write(f'gcplayer_buffer06 : .storage $100\n')
-		fileInc.write(f'gcplayer_buffer07 : .storage $100\n')
-		fileInc.write(f'gcplayer_buffer08 : .storage $100\n')
-		fileInc.write(f'gcplayer_buffer09 : .storage $100\n')
-		fileInc.write(f'gcplayer_buffer10 : .storage $100\n')
-		fileInc.write(f'gcplayer_buffer11 : .storage $100\n') 
-		fileInc.write(f'gcplayer_buffer12 : .storage $100\n')
-		fileInc.write(f'gcplayer_buffer13 : .storage $100\n')
-
-
-		fileInc.write(f'; array of task stack pointers. GCPlayerTaskSPs[i] = taskSP\n')
-		fileInc.write(f'GCPlayerTaskSPs: .storage GCP_WORD_LEN * GC_PLAYER_TASKS\n')
-		fileInc.write(f'GCPlayerTaskSPsEnd     = *\n')
-		fileInc.write(f'; task stacks\n')
-		fileInc.write(f'GCPlayerTaskStack00: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack01: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack02: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack03: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack04: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack05: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack06: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack07: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack08: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack09: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack10: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack11: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack12: .storage GC_PLAYER_STACK_SIZE\n')
-		fileInc.write(f'GCPlayerTaskStack13: .storage GC_PLAYER_STACK_SIZE\n')
-
-		fileInc.write(f'; a pointer to a current task sp. *GCPlayerCurrentTaskSPp = GCPlayerTaskSPs[currentTask]\n')
-		fileInc.write(f'GCPlayerCurrentTaskSPp: .word GCP_TEMP_ADDR;\n')

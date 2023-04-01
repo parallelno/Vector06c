@@ -1,7 +1,3 @@
-GCP_WORD_LEN = 2
-GCP_TEMP_ADDR = 0
-GC_PLAYER_TASKS = 14
-GC_PLAYER_STACK_SIZE = 16
 ; DoUbTfuL FutUre... hi f4nZzz..;)
 ; MmcM^Sa9e 050720120452 ABC YM
 ; Created by Sergey Bulba's AY-3-8910/12 Emulator v2.9
@@ -20,39 +16,3 @@ ayRegData10: .byte $85,$00,$6a,$0a,$9a,$09,$08,$a6,$07,$a9,$06,$05,$aa,$04,$03,$
 ayRegData11: .byte $85,$00,$5a,$2f,$1a,$5d,$17,$d1,$dc,$e0,$a0,$55,$b8,$34,$fe,$a1,$68,$7d,$dc,$1e,$a0,$05,$5b,$23,$8a,$fe,$46,$17,$d1,$dc,$e0,$a0,$55,$b8,$1f,$fe,$a1,$3e,$7d,$dc,$1e,$a0,$05,$5b,$2f,$8a,$fe,$5d,$17,$d1,$dc,$e0,$a0,$55,$b8,$34,$fe,$a1,$68,$7d,$dc,$1e,$a0,$05,$5b,$23,$8a,$fe,$46,$17,$d1,$dc,$e0,$a0,$55,$b8,$1f,$fe,$a1,$3e,$7d,$dc,$1e,$a0,$05,$5b,$2f,$8a,$fe,$5d,$17,$d1,$dc,$e0,$a0,$55,$b8,$34,$fe,$a1,$68,$7d,$dc,$1e,$a0,$05,$5b,$23,$8a,$fe,$46,$17,$d1,$dc,$e0,$a0,$55,$b8,$1f,$fe,$a1,$3e,$7d,$dc,$1e,$a0,$05,$5b,$2f,$8a,$fe,$5d,$17,$d1,$dc,$e0,$a0,$55,$b8,$34,$fe,$a1,$68,$7d,$dc,$1e,$a0,$05,$5b,$23,$8a,$fe,$46,$17,$d1,$dc,$e0,$a0,$55,$b8,$1f,$fe,$a1,$3e,$7d,$dc,$1e,$a0,$05,$5b,$2f,$8a,$fe,$5d,$17,$d1,$dc,$e0,$a0,$55,$b8,$34,$fe,$a1,$68,$7d,$dc,$1e,$a0,$05,$5b,$23,$8a,$fe,$46,$17,$d1,$dc,$e0,$a0,$55,$b8,$1f,$fe,$a1,$3e,$7d,$dc,$1e,$a0,$05,$5b,$2f,$8a,$fe,$5d,$17,$d1,$dc,$e0,$a0,$55,$b8,$34,$fe,$a1,$68,$7d,$dc,$1e,$a0,$05,$5b,$23,$8a,$fe,$46,$17,$d1,$dc,$e0,$a0,$55,$b8,$1f,$fe,$a1,$3e,$7d,$dc,$1e,$a0,$01,$5f,$fe,$68,$2f,$68,$5d,$5f,$dc,$47,$81,$a0,$56,$e2,$34,$fe,$85,$68,$f4,$dc,$78,$a0,$15,$6e,$23,$fe,$28,$46,$5f,$dc,$47,$81,$a0,$56,$e2,$1f,$fe,$85,$3e,$f4,$dc,$7d,$a0,$14,$e4,$ff,$08,$22,$25,$28,$2b,$2e,$31,$34,$37,$3a,$3d,$40,$43,$46,$49,$4c,$4f,$52,$55,$58,$5b,$5e,$61,$64,$2f,$68,$5d,$5f,$dc,$47,$81,$a0,$56,$e2,$34,$fe,$85,$68,$f4,$dc,$78,$a0,$15,$6e,$23,$fe,$28,$46,$5f,$dc,$47,$81,$a0,$56,$e2,$1f,$fe,$85,$3e,$f4,$dc,$78,$a0,$15,$6e,$2f,$fe,$28,$5d,$5f,$dc,$47,$81,$a0,$56,$e2,$34,$fe,$85,$68,$f4,$dc,$78,$a0,$15,$6e,$23,$fe,$28,$46,$5f,$dc,$47,$81,$a0,$56,$e2,$1f,$fe,$85,$3e,$f4,$dc,$78,$a0,$15,$6e,$2f,$fe,$28,$5d,$5f,$dc,$47,$81,$a0,$56,$e2,$34,$fe,$85,$68,$f4,$dc,$78,$a0,$15,$6e,$23,$fe,$28,$46,$5f,$dc,$47,$81,$a0,$56,$e2,$1f,$fe,$85,$3e,$f4,$dc,$78,$a0,$15,$6e,$2f,$fe,$28,$5d,$5f,$dc,$47,$81,$a0,$56,$e2,$34,$fe,$85,$68,$f4,$dc,$78,$a0,$15,$6e,$23,$fe,$28,$46,$5f,$dc,$47,$81,$a0,$56,$e2,$1f,$fe,$85,$3e,$f4,$dc,$78,$a0,$15,$6e,$2f,$fe,$58,$50,$5c,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$3a,$3b,$3c,$3d,$3e,$3f,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$4a,$4b,$4c,$4d,$4e,$4f,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$5a,$5b,$5c,$5d,$5e,$5f,$60,$61,$62,$63,$64,$65,$66,$67,$68,$69,$6a,$6b,$6c,$6d,$6e,$6f,$70,$71,$72,$73,$74,$75,$76,$77,$78,$79,$7a,$7b,$7c,$7d,$7e,$7f,$80,$81,$82,$83,$84,$85,$86,$87,$88,$89,$8a,$8b,$8c,$8d,$8e,$8f,$90,$91,$92,$93,$94,$95,$96,$97,$98,$99,$9a,$9b,$9c,$9d,$9e,$9f,$a0,$a1,$a2,$a3,$a4,$a5,$a6,$a7,$a8,$a9,$aa,$ab,$ac,$ad,$ae,$af,$b0,$b1,$b2,$b3,$b4,$b5,$b6,$b7,$b8,$b9,$ba,$bb,$bc,$bd,$be,$bf,$c0,$c1,$c2,$c3,$c4,$c5,$c6,$c7,$c8,$c9,$ca,$cb,$cc,$cd,$ce,$cf,$d0,$d1,$d2,$d3,$d4,$d5,$d6,$d7,$d8,$d9,$da,$db,$dc,$dd,$de,$df,$e0,$e1,$e2,$00,$02
 ayRegData12: .byte $80,$00,$15,$45,$5c,$00,$02
 ayRegData13: .byte $85,$ff,$5b,$0c,$81,$f4,$55,$40,$a1,$ff,$a1,$0c,$50,$56,$85,$ff,$68,$0c,$55,$55,$5a,$0e,$e5,$fe,$51,$c0,$00,$20
-; buffers for unpacking the streams, must be aligned to 256 byte boundary
-.align $100
-gcplayer_buffer00 : .storage $100
-gcplayer_buffer01 : .storage $100
-gcplayer_buffer02 : .storage $100
-gcplayer_buffer03 : .storage $100
-gcplayer_buffer04 : .storage $100
-gcplayer_buffer05 : .storage $100
-gcplayer_buffer06 : .storage $100
-gcplayer_buffer07 : .storage $100
-gcplayer_buffer08 : .storage $100
-gcplayer_buffer09 : .storage $100
-gcplayer_buffer10 : .storage $100
-gcplayer_buffer11 : .storage $100
-gcplayer_buffer12 : .storage $100
-gcplayer_buffer13 : .storage $100
-; array of task stack pointers. GCPlayerTaskSPs[i] = taskSP
-GCPlayerTaskSPs: .storage GCP_WORD_LEN * GC_PLAYER_TASKS
-GCPlayerTaskSPsEnd     = *
-; task stacks
-GCPlayerTaskStack00: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack01: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack02: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack03: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack04: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack05: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack06: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack07: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack08: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack09: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack10: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack11: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack12: .storage GC_PLAYER_STACK_SIZE
-GCPlayerTaskStack13: .storage GC_PLAYER_STACK_SIZE
-; a pointer to a current task sp. *GCPlayerCurrentTaskSPp = GCPlayerTaskSPs[currentTask]
-GCPlayerCurrentTaskSPp: .word GCP_TEMP_ADDR;

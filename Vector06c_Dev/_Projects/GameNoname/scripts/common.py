@@ -173,16 +173,18 @@ def double_slashes(path):
 			res += char
 	return res
 
-def get_addr_wo_prefix(addr_s):
-	if addr_s[0] == "$":
-		addr_s = addr_s[1:]
-	elif len(addr_s) > 1 and addr_s[1] == "x":
-		addr_s = addr_s[2:]
+def get_addr_wo_prefix(hex_string):
+	hex_string_without_prefix = hex_string.replace("$", "")
+	hex_string_without_prefix = hex_string_without_prefix.replace("0x", "")
 
-	if int(addr_s, 16) == 0:
-		addr_s = "0"
+	if int(hex_string_without_prefix, 16) == 0:
+		hex_string_without_prefix = "0"
 
-	return addr_s
+	return hex_string_without_prefix
+
+def hex_str_to_int(hex_string):
+	hex_string_without_prefix = hex_string.replace("$", "")
+	return int(hex_string_without_prefix, 16)
 
 def align_string(str, allign, to_left = False):
 	addition = "                   "
