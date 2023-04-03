@@ -1,15 +1,21 @@
 .include "asm\\bullets\\bullets_macro.asm"
-.include "asm\\bullets\\bullets_data.asm"
 .include "asm\\bullets\\hero_sword.asm"
 .include "asm\\bullets\\scythe.asm"
 .include "asm\\bullets\\bomb.asm"
+
+bullets_init:
+			mvi a, BULLET_RUNTIME_DATA_END
+			sta bullets_runtime_data_end_addr + 1
+			mvi a, <bullets_runtime_data
+			sta bullet_runtime_data_sorted
+			jmp bullets_erase_runtime_data
 
 bullets_erase_runtime_data:
 			mvi a, BULLET_RUNTIME_DATA_LAST
 			sta bullet_update_ptr + 1
 			ret
 			
-
+;=========================================================================
 ; look up the empty spot in the bullet runtime data
 ; in: 
 ; none
@@ -49,8 +55,9 @@ bullets_get_empty_data_ptr:
 			pop psw
 			ret
 @nextData:
-			lxi d, BULLET_RUNTIME_DATA_LEN
-			dad d
+			mvi a, <BULLET_RUNTIME_DATA_LEN
+			add l
+			mov l, a
 			jmp @loop
 
 
@@ -97,6 +104,7 @@ bullets_data_func_caller:
 @funcPtrOffset:
 			lxi d, TEMP_ADDR
 			; advance to a func ptr
+			; TODO: replace dad PR with add R, because the data is $100 byte aligned in buffers.asm
 			dad d
 			; read the func addr
 			mov d, m 
@@ -208,7 +216,7 @@ bullet_copy_to_scr:
 			push d
 			; bc - bullet_erase_scr_addr
 			; calc top-right corner addr (hero_erase_scr_addr + bullet_erase_wh)
-			inx_h(2)
+			INX_H(2)
 			mov d, b
 			mov e, c
 			; bc - bullet_erase_wh

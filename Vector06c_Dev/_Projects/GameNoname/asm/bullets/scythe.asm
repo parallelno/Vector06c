@@ -89,7 +89,7 @@ scythe_init:
 			inx h
 			mvi m, SCYTHE_STATUS_MOVE_TIME
 			; advance hl to bullet_anim_ptr
-			inx_h(2)
+			INX_H(2)
 			mvi m, <scythe_run
 			inx h
 			mvi m, >scythe_run
@@ -97,7 +97,7 @@ scythe_init:
 			mov a, b
 			; a - posX
 			; scrX = posX/8 + $a0
-			rrc_(3)
+			RRC_(3)
 			ani %00011111
 			adi SPRITE_X_SCR_ADDR
 			mvi e, 0
@@ -243,7 +243,7 @@ scythe_update:
 			ret
 @setMoveVert:		
 			; advance hl to bullet_speed_y+1
-			inx_h(2)
+			INX_H(2)
 			mov a, m
 			ora a
 			jp @setMoveDown

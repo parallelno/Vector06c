@@ -66,7 +66,7 @@
 			rc
 			; vertical check
 			; advance hl to monster_pos_y+1
-			inx_h(2)
+			INX_H(2)
 			mov c, m ; posY
 			lda hero_pos_y+1
 			mov b, a
@@ -90,7 +90,7 @@
 ; a - monster_id * 4
 ;ex. MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 .macro MONSTER_INIT(MONSTER_UPDATE, MONSTER_DRAW, MONSTER_IMPACT, MONSTER_HEALTH, MONSTER_STATUS_DETECT_HERO_INIT, MONSTER_ANIM)
-			rrc_(2) ; to get monsterID
+			RRC_(2) ; to get monsterID
 			sta @monster_id+1
 
 			; TODO: move the code into a spawner init routine
@@ -138,10 +138,10 @@
 			; posX = tile_idx % ROOM_WIDTH * TILE_WIDTH
 			mvi a, %00001111
 			ana c
-			rlc_(4)
+			RLC_(4)
 			mov b, a
 			; scrX = posX/8 + $a0
-			rrc_(3)
+			RRC_(3)
 			adi SPRITE_X_SCR_ADDR
 			mov d, a
 			; posY = (tile_idx % ROOM_WIDTH) * TILE_WIDTH

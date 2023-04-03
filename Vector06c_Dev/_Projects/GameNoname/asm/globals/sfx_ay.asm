@@ -125,13 +125,13 @@ sfx_ay_update:
 			mvi a, SFX_AY_DATA_CTRL_T_MUTE_MASK | SFX_AY_DATA_CTRL_N_MUTE_MASK
 			ana c
 		.if AY_REG_MIXER_T_MUTE_CHSFX == AY_REG_MIXER_T_MUTE_CHA
-			rrc_(4)
+			RRC_(4)
 		.endif
 		.if AY_REG_MIXER_T_MUTE_CHSFX == AY_REG_MIXER_T_MUTE_CHB
-			rrc_(3)
+			RRC_(3)
 		.endif
 		.if AY_REG_MIXER_T_MUTE_CHSFX == AY_REG_MIXER_T_MUTE_CHC
-			rrc_(2)
+			RRC_(2)
 		.endif
 			out AY_PORT_DATA
 			; store sfx pointer

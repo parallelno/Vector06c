@@ -74,7 +74,7 @@
 			rc
 			; vertical check
 			; advance hl to bullet_pos_y+1
-			inx_h(2)
+			INX_H(2)
 			mov c, m ; posY
 			lda hero_pos_y+1
 			mov b, a

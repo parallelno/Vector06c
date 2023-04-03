@@ -12,12 +12,12 @@
 .include "generated\\sprites\\hero_r_anim.asm"
 .include "generated\\sprites\\skeleton_anim.asm"
 .include "generated\\sprites\\scythe_anim.asm"
-.include "generated\\sprites\\hero_sword_anim.asm"
 .include "generated\\sprites\\bomb_anim.asm"
 .include "generated\\sprites\\backs_anim.asm"
 .include "generated\\sprites\\knight_anim.asm"
 .include "generated\\sprites\\burner_anim.asm"
-.include "generated\\sprites\\fx_anim.asm"
+.include "generated\\sprites\\vfx_anim.asm"
+.include "generated\\sprites\\hero_sword_anim.asm"
 .include "generated\\sprites\\hero_l_anim.asm"
 .include "generated\\sprites\\vampire_anim.asm"
 
@@ -46,14 +46,14 @@ chunk_bank3_addr8000_0:
 .incbin "generated\\bin\\chunk_bank3_addr8000_0.bin.zx0"
 
 ; ram-disk data layout
-; bank0 addr0    [   94 free] description: 
-;                             hero_r_sprites [14466], skeleton_sprites [10140], scythe_sprites [1626], hero_sword_sprites [5226], bomb_sprites [960], 
+; bank0 addr0    [ 5320 free] description: 
+;                             hero_r_sprites [14466], skeleton_sprites [10140], scythe_sprites [1626], bomb_sprites [960], 
 ; bank0 addr8000 [27837 free] description: 
 ;                             level01_data [795], backs_sprites [496], decals_sprites [3640], 
 ; bank1 addr0    [ 6514 free] description: 
 ;                             knight_sprites [16398], burner_sprites [9600], 
-; bank1 addr8000 [ 7496 free] description: $A000-$FFFF backbuffer2 (to restore a background in the backbuffer) 
-;                             fx_sprites [696], 
+; bank1 addr8000 [ 2270 free] description: $A000-$FFFF backbuffer2 (to restore a background in the backbuffer) 
+;                             vfx_sprites [696], hero_sword_sprites [5226], 
 ; bank2 addr0    [10162 free] description: 
 ;                             hero_l_sprites [14466], vampire_sprites [7884], 
 ; bank2 addr8000 [19651 free] description: sound and music must be at >= $8000 addr. F102-$FFFF backbuffer (to avoid sprite flickering) 

@@ -59,11 +59,6 @@
 								},
 								{
 									"asset_type" : "sprite",
-									"path" : "source\\sprites\\hero_sword.json",
-									"export_dir" : "generated\\sprites\\"
-								},
-								{
-									"asset_type" : "sprite",
 									"path" : "source\\sprites\\bomb.json", 
 									"export_dir" : "generated\\sprites\\"
 								}
@@ -138,7 +133,12 @@
 							"assets" : [
 								{
 									"asset_type" : "sprite",
-									"path" : "source\\sprites\\fx.json", 
+									"path" : "source\\sprites\\vfx.json", 
+									"export_dir" : "generated\\sprites\\"
+								},
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\hero_sword.json",
 									"export_dir" : "generated\\sprites\\"
 								}
 							]

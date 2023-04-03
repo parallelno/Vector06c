@@ -20,7 +20,7 @@ hex_to_askii:
 			dcx h
 
 			mov a, e
-			rrc_(4)
+			RRC_(4)
 			ana b
 			cpi $0a ; to adjust chars codes
 			jc @below10a

@@ -157,7 +157,7 @@ skeleton_update_detect_hero:
 			jmp @updateAnimHeroDetectX
 @checkPosYDiff:
 			; advance hl to monster_pos_y+1
-			inx_h(2)
+			INX_H(2)
 			; check hero-monster posY diff
 			lda hero_pos_y+1
 			sub m
@@ -372,7 +372,7 @@ skeleton_update_shoot:
 			jmp @setBulletPos
 @shootVert:
 			; advance hl to monster_speed_y+1
-			inx_h(2)
+			INX_H(2)
 			mov a, m
 			ora a
 			mvi a, BULLET_DIR_U
@@ -384,7 +384,7 @@ skeleton_update_shoot:
 @setBulletPos:
 			dad b
 			mov b, m
-			inx_h(2)
+			INX_H(2)
 			mov c, m
 			jmp scythe_init
 

@@ -22,7 +22,7 @@ __clear_mem_sp:
 			lxi b, $0000
 			mvi a, $ff
 @loop:
-			push_b(64)
+			PUSH_B(64)
 			dcx d
 			cmp d
 			jnz @loop

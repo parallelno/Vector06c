@@ -18,7 +18,7 @@
 			; if func_id == 0, that means it is a walkable (non-interactable) tile, we skip it.
 			jz @funcReturnAddr
 		.endif
-			rrc_(2) ; to make a jmp table ptr with a 4 byte allignment
+			RRC_(2) ; to make a jmp table ptr with a 4 byte allignment
 			mov e, a
 			mvi d, 0
 			; extract a func argument
@@ -64,7 +64,7 @@
 			lxi h, @funcReturnAddr
 			push h
 			; to make a jmp table ptr with a 4 byte allignment
-			rrc_(2)
+			RRC_(2)
 			mov l, a
 			mvi h, 0
 			lxi d, actor_tile_func_table - JMP_4_LEN ; because we skip tiledata_func_id = 0

@@ -138,7 +138,7 @@ SpriteToBuff:
 			; 0 = no mask
 			; 1 = a mask
 			mov b, m
-			inx_h(4)
+			INX_H(4)
 			; get a height
 			mov c, m
 			; advance to a width
@@ -233,14 +233,14 @@ SpriteToBuff:
 ; hl - a target sprite data addr
 SpriteFromBuff:
 			; get copyFromBuffOffset
-			dcx_h(2)
+			DCX_H(2)
 			mov e, m
 			inx h
 			; get a maskFlag
 			; 0 = no mask
 			; 1 = a mask
 			mov b, m
-			inx_h(3)
+			INX_H(3)
 			; get a height
 			mov c, m
 			; advance to a width
@@ -383,16 +383,16 @@ SpriteFromBuff:
 ;	4 - shift by 2 pxls
 SpriteBuffPreshift:
 			; get a preshift
-			dcx_h(2)
+			DCX_H(2)
 			mov b, m
 			; get a maskFlag
 			inx h
 			mov a, m
 			; get a height
-			inx_h(3)
+			INX_H(3)
 			mov c, m
 			; advance to gfx data
-			inx_h(2)
+			INX_H(2)
 			; check a maskFlag
 			ora a
 			lxi h, spriteTmpBuff
@@ -509,16 +509,16 @@ SpriteBuffPreshift:
 			; load a line of mask bytes
 		.if order == SPRITE_FORWARD_ORDER
 			mov a, m
-			inx_h(2)
+			INX_H(2)
 			mov d, m
-			inx_h(2)
+			INX_H(2)
 			mov e, m
 		.endif
 		.if order == SPRITE_BACKWARD_ORDER
 			mov e, m
-			inx_h(2)
+			INX_H(2)
 			mov d, m
-			inx_h(2)
+			INX_H(2)
 			mov a, m
 		.endif
 
@@ -536,16 +536,16 @@ SpriteBuffPreshift:
 			; save bytes
 		.if order == SPRITE_FORWARD_ORDER
 			mov m, e
-			dcx_h(2)
+			DCX_H(2)
 			mov m, d
-			dcx_h(2)
+			DCX_H(2)
 			mov m, a
 		.endif
 		.if order == SPRITE_BACKWARD_ORDER
 			mov m, a
-			dcx_h(2)
+			DCX_H(2)
 			mov m, d
-			dcx_h(2)
+			DCX_H(2)
 			mov m, e
 		.endif
 

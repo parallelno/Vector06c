@@ -149,7 +149,7 @@ knight_update_detect_hero:
 			jmp @updateAnimHeroDetectX
 @checkPosYDiff:
 			; advance hl to monster_pos_y+1
-			inx_h(2)
+			INX_H(2)
 			; check hero-monster posY diff
 			lda hero_pos_y+1
 			sub m

@@ -24,6 +24,7 @@ game_init:
 			call level_init
 			call room_init
 			call game_ui_init
+			call bullets_init
 
 			xra a
 			sta update_request_counter

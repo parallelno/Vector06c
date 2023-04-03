@@ -66,7 +66,7 @@ bomb_init:
 			inx h
 			mvi m, BOMB_STATUS_MOVE_TIME
 			; advance hl to bullet_anim_ptr
-			inx_h(2)
+			INX_H(2)
 			
 			; a - bullet_id
 			cpi BOMB_SLOW_ID
@@ -84,7 +84,7 @@ bomb_init:
 			mov a, b
 			; a - posX
 			; scrX = posX/8 + $a0
-			rrc_(3)
+			RRC_(3)
 			ani %00011111
 			adi SPRITE_X_SCR_ADDR
 			mvi e, 0
@@ -217,7 +217,7 @@ bomb_update:
 			mov m, e
 			inx h 
 			mov m, d
-			dcx_h(2)
+			DCX_H(2)
 			; hl points to speedX+1
 			; de <- posX
 			mov d, m

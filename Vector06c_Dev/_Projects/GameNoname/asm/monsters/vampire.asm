@@ -158,7 +158,7 @@ vampire_update_detect_hero:
 			jmp @updateAnimHeroDetectX
 @checkPosYDiff:
 			; advance hl to monster_pos_y+1
-			inx_h(2)
+			INX_H(2)
 			; check hero-monster posY diff
 			lda hero_pos_y+1
 			sub m
@@ -362,7 +362,7 @@ vampire_update_shoot:
 			LXI_B_TO_DIFF(monster_pos_x+1, monster_status_timer)
 			dad b
 			mov b, m
-			inx_h(2)
+			INX_H(2)
 			mov c, m
 			mvi a, BOMB_DMG_ID
 			jmp bomb_init

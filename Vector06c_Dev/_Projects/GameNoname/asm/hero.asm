@@ -49,76 +49,76 @@ hero_data_next_pptr:		.word monster_data_next_pptr
 hero_collision_func_table:
 			; bit layout:
 			; 0, 0, (bottom-left), (bottom-right), (top_right), (top-left), 0, 0
-			jmp_4( hero_no_collision)
-			jmp_4( hero_check_collision_top_left)
-			jmp_4( hero_check_collision_top_right)
-			jmp_4( hero_move_horizontally)
-			jmp_4( hero_check_collision_bottom_right)
-			jmp_4( hero_check_tiledata)
-			jmp_4( hero_move_vertically)
-			jmp_4( hero_check_tiledata)
-			jmp_4( hero_check_collision_bottom_left)
-			jmp_4( hero_move_vertically)
-			jmp_4( hero_check_tiledata)
-			jmp_4( hero_check_tiledata)
-			jmp_4( hero_move_horizontally)
-			jmp_4( hero_check_tiledata)
-			jmp_4( hero_check_tiledata)
-			jmp_4( hero_check_tiledata)
+			JMP_4( hero_no_collision)
+			JMP_4( hero_check_collision_top_left)
+			JMP_4( hero_check_collision_top_right)
+			JMP_4( hero_move_horizontally)
+			JMP_4( hero_check_collision_bottom_right)
+			JMP_4( hero_check_tiledata)
+			JMP_4( hero_move_vertically)
+			JMP_4( hero_check_tiledata)
+			JMP_4( hero_check_collision_bottom_left)
+			JMP_4( hero_move_vertically)
+			JMP_4( hero_check_tiledata)
+			JMP_4( hero_check_tiledata)
+			JMP_4( hero_move_horizontally)
+			JMP_4( hero_check_tiledata)
+			JMP_4( hero_check_tiledata)
+			JMP_4( hero_check_tiledata)
 
 ; funcs to handle the tiledata. more info is in level_data.asm->room_tiledata
 hero_tile_func_tbl:
-			ret_4()							; func_id == 1
-			jmp_4( hero_tile_func_teleport)	; func_id == 2
-			ret_4()							; func_id == 3
-			ret_4()							; func_id == 4
-			ret_4()							; func_id == 5
-			jmp_4( hero_tile_func_item)		; func_id == 6
-			jmp_4( hero_tile_func_resource)	; func_id == 7
-			ret_4()							; func_id == 8
-			ret_4()							; func_id == 9
-			ret_4()							; func_id == 10
-			ret_4()							; func_id == 11
-			ret_4()							; func_id == 12
-			ret_4()							; func_id == 13
-			ret_4()							; func_id == 14
-			ret_4()							; func_id == 15 (collision) called only when a hero is stuck into collision tiles
+			RET_4()							; func_id == 1
+			JMP_4( hero_tile_func_teleport)	; func_id == 2
+			RET_4()							; func_id == 3
+			RET_4()							; func_id == 4
+			RET_4()							; func_id == 5
+			JMP_4( hero_tile_func_item)		; func_id == 6
+			JMP_4( hero_tile_func_resource)	; func_id == 7
+			RET_4()							; func_id == 8
+			RET_4()							; func_id == 9
+			RET_4()							; func_id == 10
+			RET_4()							; func_id == 11
+			RET_4()							; func_id == 12
+			RET_4()							; func_id == 13
+			RET_4()							; func_id == 14
+			RET_4()							; func_id == 15 (collision) called only when a hero is stuck into collision tiles
 
 ; funcs to handle the resource pick up process. more info is in level_data.asm->room_tiledata
 hero_res_func_tbl:
-			jmp_4( hero_res_func_coin)			; resource_id == 1
-			jmp_4( hero_res_func_potion_blue)	; resource_id == 2
-			jmp_4( hero_res_func_potion_red)	; resource_id == 3
-			ret_4()								; resource_id == 4
-			ret_4()								; resource_id == 5
-			ret_4()								; resource_id == 6
-			ret_4()								; resource_id == 7
-			ret_4()								; resource_id == 8
-			ret_4()								; resource_id == 9
-			ret_4()								; resource_id == 10
-			ret_4()								; resource_id == 11
-			ret_4()								; resource_id == 12
-			ret_4()								; resource_id == 13
-			ret_4()								; resource_id == 14
-			ret_4()								; resource_id == 15 (collision) called only when a hero is stuck into collision tiles
+			JMP_4( hero_res_func_coin)			; resource_id == 1
+			JMP_4( hero_res_func_potion_blue)	; resource_id == 2
+			JMP_4( hero_res_func_potion_red)	; resource_id == 3
+			RET_4()								; resource_id == 4
+			RET_4()								; resource_id == 5
+			RET_4()								; resource_id == 6
+			RET_4()								; resource_id == 7
+			RET_4()								; resource_id == 8
+			RET_4()								; resource_id == 9
+			RET_4()								; resource_id == 10
+			RET_4()								; resource_id == 11
+			RET_4()								; resource_id == 12
+			RET_4()								; resource_id == 13
+			RET_4()								; resource_id == 14
+			RET_4()								; resource_id == 15 (collision) called only when a hero is stuck into collision tiles
 
 ; funcs to handle the container pick up process. more info is in level_data.asm->room_tiledata
 hero_cont_func_tbl:
-			jmp_4( hero_cont_func_chest_small)	; resource_id == 1
-			jmp_4( hero_cont_func_chest_big)	; resource_id == 2
-			jmp_4( hero_cont_func_chest_weapon0); resource_id == 3
-			ret_4()								; resource_id == 4
-			ret_4()								; resource_id == 5
-			ret_4()								; resource_id == 6
-			ret_4()								; resource_id == 7
-			ret_4()								; resource_id == 8
-			ret_4()								; resource_id == 9
-			ret_4()								; resource_id == 10
-			ret_4()								; resource_id == 11
-			ret_4()								; resource_id == 12
-			ret_4()								; resource_id == 13
-			ret_4()								; resource_id == 14
-			ret_4()								; resource_id == 15 (collision) called only when a hero is stuck into collision tiles
+			JMP_4( hero_cont_func_chest_small)	; resource_id == 1
+			JMP_4( hero_cont_func_chest_big)	; resource_id == 2
+			JMP_4( hero_cont_func_chest_weapon0); resource_id == 3
+			RET_4()								; resource_id == 4
+			RET_4()								; resource_id == 5
+			RET_4()								; resource_id == 6
+			RET_4()								; resource_id == 7
+			RET_4()								; resource_id == 8
+			RET_4()								; resource_id == 9
+			RET_4()								; resource_id == 10
+			RET_4()								; resource_id == 11
+			RET_4()								; resource_id == 12
+			RET_4()								; resource_id == 13
+			RET_4()								; resource_id == 14
+			RET_4()								; resource_id == 15 (collision) called only when a hero is stuck into collision tiles
 
 hero_init:
 			call hero_idle_start
@@ -382,7 +382,7 @@ hero_update_temp_pos:
 
 			; handle a collision data around a hero
 			; if a hero is inside the collision, move him out
-			add_a(2) ; to make a jmp table ptr with a 4 byte allignment
+			ADD_A(2) ; to make a jmp table ptr with a 4 byte allignment
 			mov c, a
 			mvi b, 0
 			lxi h, hero_collision_func_table
@@ -393,7 +393,7 @@ hero_update_temp_pos:
 hero_check_tiledata:
 			lxi h, hero_pos_x+1
 			mov d, m
-			inx_h(2)
+			INX_H(2)
 			mov e, m
 			TILEDATA_HANDLING2(HERO_COLLISION_WIDTH, HERO_COLLISION_HEIGHT, hero_tile_func_tbl)
 			ret
@@ -501,7 +501,7 @@ hero_move_tile_br:
 			stc		; to move outside the current tile
 			adc m
 			sta hero_pos_x+1
-			inx_h(2)
+			INX_H(2)
 			mov a, m
 			stc		; to move outside the current tile
 			sbb c
@@ -524,7 +524,7 @@ hero_move_tile_bl:
 			sub m
 			cma
 			sta hero_pos_x+1
-			inx_h(2)
+			INX_H(2)
 			mov a, m
 			stc		; to move outside the current tile
 			sbb c
@@ -548,7 +548,7 @@ hero_move_tile_tr:
 			stc		; to move outside the current tile
 			adc m
 			sta hero_pos_x+1
-			inx_h(2)
+			INX_H(2)
 			mov a, m
 			stc		; to move outside the current tile
 			adc c
@@ -561,7 +561,7 @@ hero_move_tile_tl:
 			sub m
 			cma
 			sta hero_pos_x+1
-			inx_h(2)
+			INX_H(2)
 			mov a, m
 			stc		; to move outside the current tile
 			adc c
@@ -710,7 +710,7 @@ hero_tile_func_resource:
 			lxi h, hero_res_func_tbl
 @restore_resource_id:			
 			mvi a, TEMP_BYTE
-			add_a(2) ; resource_id to jmp_4 ptr
+			ADD_A(2) ; resource_id to JMP_4 ptr
 			mov c, a
 			mvi b, 0
 			dad b
@@ -996,7 +996,7 @@ hero_res_func_coin:
 			lhld hero_res_score_l
 			lxi d, RESOURCE_COIN_VAL
 			dad d
-			clamp_hl()
+			CLAMP_HL()
 			shld hero_res_score_l
 			ret
 
@@ -1004,7 +1004,7 @@ hero_res_func_potion_blue:
 			lxi h, hero_res_mana
 			mov a, m
 			adi RESOURCE_POTION_BLUE_VAL
-			clamp_a()
+			CLAMP_A()
 			mov m, a
 			ret
 
@@ -1012,7 +1012,7 @@ hero_res_func_potion_red:
 			lxi h, hero_health
 			mov a, m
 			adi RESOURCE_POTION_RED_VAL
-			clamp_a()	
+			CLAMP_A()	
 			mov m, a
 			call game_ui_health_draw
 			ret

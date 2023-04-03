@@ -10,32 +10,23 @@ BACK_RUNTIME_DATA_EMPTY = $fd ; a back data is available for a new back
 BACK_RUNTIME_DATA_LAST	= $fe ; the end of the last existing back data
 BACK_RUNTIME_DATA_END	= $ff ; the end of the data
 
-; a list of back runtime data structs.
-backs_runtime_data:
-back_anim_ptr:			.word TEMP_ADDR
-back_scr_addr:			.word TEMP_WORD
-back_anim_timer:		.byte TEMP_BYTE
-back_anim_timer_speed:	.byte TEMP_BYTE
-back_runtime_data_end_addr:
+BACK_NO_DRAW			= 0 ; it is stored in back_runtime_data_ptr_draw+1 to prevent back drawing every next update
 
-BACK_RUNTIME_DATA_LEN = back_runtime_data_end_addr - backs_runtime_data
+BACKS_AMIN_TIMER_SPEED	= 50
 
-; the same structs for the rest of the backs
-.storage BACK_RUNTIME_DATA_LEN * (BACKS_MAX-1), 0
-backs_runtime_data_end_addr:	.word BACK_RUNTIME_DATA_END << 8
-
-back_runtime_data_ptr_update:	.word TEMP_ADDR ; ptr to a back runtime data which will be updated
-back_runtime_data_ptr_draw:		.word TEMP_ADDR ; ptr to a back runtime data which will be drawn
 
 backs_init:
 			; erase backs_runtime_data
 			mvi a, BACK_RUNTIME_DATA_LAST
 			sta back_anim_ptr + 1
+			; set the last marker byte of backs_runtime_data
+			mvi a, BACK_RUNTIME_DATA_END
+			sta backs_runtime_data_end_marker + 1
 			; set the first back in the runtime data to be updated and drawn
 			lxi h, backs_runtime_data
 			shld back_runtime_data_ptr_update
-			lxi h, 0
-			shld back_runtime_data_ptr_draw
+			mvi a, BACK_NO_DRAW
+			sta back_runtime_data_ptr_draw
 			ret
 
 ; look up the empty spot in the back runtime data
@@ -54,9 +45,9 @@ backs_get_empty_data_ptr:
 			cpi BACK_RUNTIME_DATA_EMPTY
 			; return if it is an empty data
 			rz
-			jc @nextData
+			jc @next_data
 			cpi BACK_RUNTIME_DATA_LAST
-			jnz @backsTooMany
+			jnz @backs_too_many
 			; it is the end of the last back data
 			xchg
 			lxi h, BACK_RUNTIME_DATA_LEN
@@ -72,13 +63,14 @@ backs_get_empty_data_ptr:
 			xchg
 			; TODO: optimize. store hl into last_removed_back_runtime_data_ptr
 			ret
-@backsTooMany:
+@backs_too_many:
 			; return bypassing a func that called this func
 			pop psw
 			ret
-@nextData:
-			lxi d, BACK_RUNTIME_DATA_LEN
-			dad d
+@next_data:
+			mvi a, <BACK_RUNTIME_DATA_LEN
+			add l
+			mov l, a
 			jmp @loop
 
 back_to_next_frame:
@@ -122,7 +114,7 @@ backs_spawn:
 			ani %11 ; advance to a frame N = rnd(256) % 4
 			; advance to the next frame A reg times
 			xchg
-@nextFrame:
+@next_frame:
 			; load an offset to the next frame
 			mov e, m 
 			inx h
@@ -130,7 +122,7 @@ backs_spawn:
 			; advance back_anim_ptr to the next frame
 			dad d
 			dcr a
-			jnz @nextFrame
+			jnz @next_frame
 
 			xchg
 			pop h
@@ -156,52 +148,53 @@ backs_spawn:
 			mov m, a
 			; advance hl to back_anim_timer and reset it
 			inx h
-			xchg
+			xchg	; save hl
 			call random
-			xchg
+			xchg	; restore hl
 			mov m, a
 			; advance hl to back_anim_timer_speed
 			inx h
-			mvi m, 50
+			; TODO: use different speeds or do not store unique back_anim_timer_speed for every back
+			; if you do not store unique back_anim_timer_speed for every back
+			; then you save one dcx h per frame and one byte per back. small improvements. that's why it is here.
+			mvi m, BACKS_AMIN_TIMER_SPEED
 			mvi a, TILEDATA_COLLISION	
 			ret
 
 backs_update:
-			lxi h, back_runtime_data_ptr_update
-			; load ptr to back_anim_ptr
-			mov e, m
-			inx h
-			mov d, m
-			; de - ptr to the current back that needs to update
-
-			; check if de points to BACK_RUNTIME_DATA_LAST
-			; advance de to back_anim_ptr+1
-			inx d
-			ldax d
-			cpi BACK_RUNTIME_DATA_EMPTY
-			jz @setNextBack
-			cpi BACK_RUNTIME_DATA_LAST
-			jnz @updateAnim
-@setFirstBack:
+back_runtime_data_ptr_update: = backs_update+1
 			lxi h, backs_runtime_data
-			shld back_runtime_data_ptr_update
+			; check if hl points to BACK_RUNTIME_DATA_LAST
+			; advance hl to back_anim_ptr+1
+			inx h
+			mov a, m
+			cpi BACK_RUNTIME_DATA_EMPTY
+			jz @set_next_back
+			cpi BACK_RUNTIME_DATA_LAST
+			jnz @update_anim
+@set_first_back:
+			mvi a, <backs_runtime_data
+			sta back_runtime_data_ptr_update
 			ret	
 
-@updateAnim:
+@update_anim:
 			; advance hl to back_anim_timer_speed
-			LXI_H_TO_DIFF(back_anim_timer_speed, back_anim_ptr+1)
-			dad d
+			MVI_A_TO_DIFF(back_anim_timer_speed, back_anim_ptr+1)
+			add l
+			mov l, a
+
 			mov a, m
 			; advance hl to back_anim_timer
 			dcx h
 			; back_anim_timer += back_anim_timer_speed
 			add m
 			mov m, a
-			jnc @setNextBack2
+			jnc @set_next_back2
 			; back_anim_timer got overloaded, so it needs to be drawn			
-@setDrawPtr:
-			LXI_D_TO_DIFF(back_anim_ptr, back_anim_timer)
-			dad d
+@set_draw_ptr:
+			MVI_A_TO_DIFF(back_anim_ptr, back_anim_timer)
+			add l
+			mov l, a
 			shld back_runtime_data_ptr_draw
 
 			; go to the next frame
@@ -217,45 +210,40 @@ backs_update:
 			; advance back_anim_ptr to the next frame
 			dad b
 			xchg
-			; store a next frame ptr to back_anim_ptr			
+			; store the next frame ptr to back_anim_ptr
 			mov m, d
 			dcx h
 			mov m, e
-@setNextBack3:
-			lxi d, BACK_RUNTIME_DATA_LEN
-			dad d
-			shld back_runtime_data_ptr_update
+@set_next_back3:
+			MVI_A_TO_DIFF(back_anim_ptr + BACK_RUNTIME_DATA_LEN, back_anim_ptr)
+			add l
+			sta back_runtime_data_ptr_update
 			ret
-@setNextBack:
-			; de points to back_anim_ptr+1
-			LXI_H_TO_DIFF(back_anim_ptr + BACK_RUNTIME_DATA_LEN, back_anim_ptr+1)
-			dad d
-			shld back_runtime_data_ptr_update
+@set_next_back:
+			MVI_A_TO_DIFF(back_anim_ptr + BACK_RUNTIME_DATA_LEN, back_anim_ptr+1)
+			add l
+			mov l, a			
+			sta back_runtime_data_ptr_update
 			ret
-@setNextBack2:
-			; hl points to back_anim_timer
-			LXI_D_TO_DIFF(back_anim_ptr + BACK_RUNTIME_DATA_LEN, back_anim_timer)
-			dad d
-			shld back_runtime_data_ptr_update
+@set_next_back2:
+			MVI_A_TO_DIFF(back_anim_ptr + BACK_RUNTIME_DATA_LEN, back_anim_timer)
+			add l
+			mov l, a			
+			sta back_runtime_data_ptr_update			
 			ret	
 
-
 backs_draw:
-			lxi h, back_runtime_data_ptr_draw
-			; check the back_anim_ptr stored in back_runtime_data_ptr_draw
-			mov e, m
-			inx h
-			mov a, m
-			ora e
+back_runtime_data_ptr_draw: = backs_draw + 1
+			lxi h, TEMP_ADDR
+			xra a
+			ora h
 			; if back_anim_ptr == 0, no draw needed
 			rz
-			; if back_anim_ptr != 0, a frame was updated and it needs to draw
-			mov d, m
-			; de is a ptr to back_anim_ptr
-			; erase back_runtime_data_ptr_draw to not draw it ugain until it goes to the next frame
-			lxi h, 0
-			shld back_runtime_data_ptr_draw
-			xchg
+			; frame was updated and it needs to draw
+			; hl - ptr to back_anim_ptr
+			; erase back_runtime_data_ptr_draw to not draw it again until it goes to the next frame
+			mvi a, BACK_NO_DRAW
+			sta back_runtime_data_ptr_draw + 1
 			; load back_anim_ptr
 			mov e, m
 			inx h
@@ -263,7 +251,7 @@ backs_draw:
 			xchg
 			; hl points to an offset to the next frame
 			; so advance hl to a frame ptr
-			inx_h(2)
+			INX_H(2)
 			; load a frame addr
 			mov c, m
 			inx h

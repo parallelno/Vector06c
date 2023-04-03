@@ -1,5 +1,5 @@
 ; max bullets in the room
-BULLETS_MAX = 15
+BULLETS_MAX = 9
 
 BULLET_RUNTIME_DATA_DESTR   = $fc ; a bullet is ready to be destroyed
 BULLET_RUNTIME_DATA_EMPTY   = $fd ; a bullet data is available for a new bullet

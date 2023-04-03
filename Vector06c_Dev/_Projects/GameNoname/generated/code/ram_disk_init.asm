@@ -69,7 +69,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 0, addr 0, chunk_id 1
 	;===============================================
-			; ['skeleton', 'scythe', 'hero_sword', 'bomb']
+			; ['skeleton', 'scythe', 'bomb']
 			; unpack the chunk into the ram-disk back buffer
 			lxi d, chunk_bank0_addr0_1
 			lxi b, BACK_BUFF_ADDR
@@ -86,13 +86,6 @@ ram_disk_init:
 			; preshift scythe sprites
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, scythe_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank0_addr0_1)
-			call __sprite_dup_preshift
-			RAM_DISK_OFF()
-
-			; preshift hero_sword sprites
-			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
-			lxi d, hero_sword_preshifted_sprites
 			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank0_addr0_1)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
@@ -172,12 +165,19 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 1, addr $8000, chunk_id 0
 	;===============================================
-			; ['fx']
+			; ['vfx', 'hero_sword']
 			; unpack the chunk into the ram-disk back buffer
 			lxi d, chunk_bank1_addr8000_0
 			lxi b, BACK_BUFF_ADDR
 			mvi a, __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F
 			call dzx0_rd
+
+			; preshift hero_sword sprites
+			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
+			lxi d, hero_sword_preshifted_sprites
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank1_addr8000_0)
+			call __sprite_dup_preshift
+			RAM_DISK_OFF()
 
 			; copy the chunk into the ram-disk
 			lxi d, BACK_BUFF_ADDR + (__chunk_end_bank1_addr8000_0 - __chunk_start_bank1_addr8000_0)

@@ -327,11 +327,15 @@ def export_data(source_j_path, export_data_path):
 		common.delete_file(asm_room_data_path_zx0)
 
 		# collect resource data
+		# TODO: get this from asm file
 		TILEDATA_RESOURCE	= 7*16
 		RESOURCES_UNIQUE_MAX = 16
+		RESOURCES_LEN	= 0x100		
 		# collect container data
 		TILEDATA_CONTAINER	= 11*16 
 		CONTAINERS_UNIQUE_MAX = 16
+		# TODO: get this from asm file
+		CONTAINERS_LEN	= 0x100
 
 		WORD_LEN			= 2
 
@@ -374,7 +378,7 @@ def export_data(source_j_path, export_data_path):
 		asm += "\n"
 		
 	if 	ptr + resources_inst_data_ptrs_len > 256:
-		print(f"ERROR: {source_j_path} has resource instance data > 256 bytes")
+		print(f"ERROR: {source_j_path} has resource instance data > {RESOURCES_LEN} bytes")
 		print("Stop export")
 		exit(1)
 
@@ -402,7 +406,7 @@ def export_data(source_j_path, export_data_path):
 		asm += "\n"
 		
 	if 	ptr + containers_inst_data_ptrs_len > 256:
-		print(f"ERROR: {source_j_path} has container instance data > 256 bytes")
+		print(f"ERROR: {source_j_path} has container instance data > {CONTAINERS_LEN} bytes")
 		print("Stop export")
 		exit(1)		
 

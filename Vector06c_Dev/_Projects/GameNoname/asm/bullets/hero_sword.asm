@@ -22,21 +22,21 @@ HERO_SWORD_COLLISION_OFFSET_Y_L = <(-3)
 
 ; funcs to handle the tiledata. tiledata format is in level_data.asm->room_tiledata
 hero_sword_tile_func_tbl:
-			ret_4()								; func_id == 1 ; spawn a monster
-			ret_4()								; func_id == 2 ; teleport
-			ret_4()								; func_id == 3 ; teleport
-			ret_4()								; func_id == 4 ; teleport
-			ret_4()								; func_id == 5 ; teleport
-			ret_4()								; func_id == 6
-			ret_4()								; func_id == 7
-			ret_4()								; func_id == 8
-			ret_4()								; func_id == 9
-			ret_4()								; func_id == 10
-			jmp_4( hero_sword_func_container)	; func_id == 11
-			jmp_4( hero_sword_func_door)		; func_id == 12
-			jmp_4( hero_sword_func_breakable)	; func_id == 13 ; breakable
-			ret_4()								; func_id == 14
-			ret_4()								; func_id == 15 ; collision
+			RET_4()								; func_id == 1 ; spawn a monster
+			RET_4()								; func_id == 2 ; teleport
+			RET_4()								; func_id == 3 ; teleport
+			RET_4()								; func_id == 4 ; teleport
+			RET_4()								; func_id == 5 ; teleport
+			RET_4()								; func_id == 6
+			RET_4()								; func_id == 7
+			RET_4()								; func_id == 8
+			RET_4()								; func_id == 9
+			RET_4()								; func_id == 10
+			JMP_4( hero_sword_func_container)	; func_id == 11
+			JMP_4( hero_sword_func_door)		; func_id == 12
+			JMP_4( hero_sword_func_breakable)	; func_id == 13 ; breakable
+			RET_4()								; func_id == 14
+			RET_4()								; func_id == 15 ; collision
 
 hero_sword_init:
 			call bullets_get_empty_data_ptr
@@ -101,7 +101,7 @@ hero_sword_init:
 			dad d
 			; a - posX
 			; scrX = posX/8 + $a0
-			rrc_(3)
+			RRC_(3)
 			ani %00011111
 			adi SPRITE_X_SCR_ADDR
 			mov m, a
@@ -183,7 +183,7 @@ hero_sword_update:
 			mvi m, HERO_SWORD_STATUS_ATTACK
 
 			; advance and reset bullet_anim_timer
-			inx_h(2)
+			INX_H(2)
 			mvi m, 0
 			; advance and set bullet_anim_ptr
 			inx h
@@ -202,7 +202,7 @@ hero_sword_update:
 			dad b
 			; add a collision offset
 			mov d, m
-			inx_h(2)
+			INX_H(2)
 			mov e, m
 			lxi h, HERO_SWORD_COLLISION_OFFSET_X_R<<8 | HERO_SWORD_COLLISION_OFFSET_Y_R
 			dad d
@@ -219,7 +219,7 @@ hero_sword_update:
 			dad b
 			; add a collision offset
 			mov d, m
-			inx_h(2)
+			INX_H(2)
 			mov e, m
 			lxi h, HERO_SWORD_COLLISION_OFFSET_X_L<<8 | HERO_SWORD_COLLISION_OFFSET_Y_L
 			dad d
@@ -319,15 +319,21 @@ hero_sword_func_container:
 			pop b
 			; c - tile_idx in the room_tiledata array
 			lda @restore_container_id+1
-			add_a(2) ; container_id to jmp_4 ptr
+			ADD_A(2) ; container_id to JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 			ROOM_DECAL_DRAW(__containers_opened_gfx_ptrs, true)
+
+			; draw vfx puff
+
+
+
+
 
 			; update a hero container
 			lxi h, hero_cont_func_tbl
 @restore_container_id:			
 			mvi a, TEMP_BYTE
-			add_a(2) ; container_id to jmp_4 ptr
+			ADD_A(2) ; container_id to JMP_4 ptr
 			mov c, a
 			mvi b, 0
 			dad b
@@ -350,7 +356,7 @@ hero_sword_func_door:
 			rz	; if status == ITEM_STATUS_NOT_ACQUIRED, means a hero does't have a proper key to open the door
 
 			mov a, b
-			add_a(2) ; to make a jmp_4 ptr
+			ADD_A(2) ; to make a JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1 ; store door_id in case we need to draw an opened version of it
 
 			push b

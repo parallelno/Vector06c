@@ -1,98 +1,108 @@
-.macro hlt_(i)
+.macro HLT_(i)
 		.loop i
 			hlt
 		.endloop
 .endmacro
 
-.macro rrc_(i)
+.macro RRC_(i)
 		.loop i
 			rrc
 		.endloop
 .endmacro
 
-.macro ral_(i)
+.macro RAL_(i)
 		.loop i
 			ral
 		.endloop
 .endmacro
 
-.macro rlc_(i)
+.macro RLC_(i)
 		.loop i
 			rlc
 		.endloop
 .endmacro
 
-.macro push_b(i)
+.macro PUSH_B(i)
 		.loop i
 			push b
 		.endloop
 .endmacro
 
-.macro push_h(i)
+.macro PUSH_H(i)
 		.loop i
 			push h
 		.endloop
 .endmacro
 
-.macro pop_h(i)
+.macro POP_H(i)
 		.loop i
 			pop h
 		.endloop
 .endmacro
 
-.macro inr_d(i)
+.macro INR_D(i)
 		.loop i
 			inr d
 		.endloop
 .endmacro
 
-.macro inx_h(i)
+.macro INX_H(i)
 		.loop i
 			inx h
 		.endloop
 .endmacro
 
-.macro inx_d(i)
+.macro INX_D(i)
 		.loop i
 			inx d
 		.endloop
 .endmacro
 
-.macro dcx_h(i)
+.macro DCX_H(i)
 		.loop i
 			dcx h
 		.endloop
 .endmacro
 
-.macro inr_l(i)
+.macro INR_L(i)
 		.loop i
 			inr l
 		.endloop
 .endmacro
 
-.macro inr_h(i)
+.macro INR_H(i)
 		.loop i
 			inr h
 		.endloop
 .endmacro
 
-.macro inr_a(i)
+.macro INR_A(i)
 		.loop i
 			inr a
 		.endloop
 .endmacro
 
-.macro nop_(i)
+.macro NOP_(i)
 		.loop i
 			nop
 		.endloop
 .endmacro
 
-.macro add_a(i)
+.macro ADD_A(i)
 		.loop i
 			add a
 		.endloop
-.endmacro	
+.endmacro
+
+.macro MVI_A_TO_DIFF(offsetTo, offsetFrom)
+		offsetAddr = offsetTo - offsetFrom
+		.if offsetAddr > 0
+			mvi a, <offsetAddr
+		.endif
+		.if offsetAddr < 0
+			mvi a, <($ffff + offsetAddr + 1)
+		.endif
+.endmacro
 
 .macro LXI_B_TO_DIFF(offsetTo, offsetFrom)
 		offsetAddr = offsetTo - offsetFrom
@@ -245,23 +255,23 @@
 .endmacro
 		
 ; for a jmp table with 4 byte allignment
-.macro	jmp_4(DST_ADDR)
+.macro	JMP_4(DST_ADDR)
 			jmp DST_ADDR
 			nop
 .endmacro
 ; for a jmp table with 4 byte allignment
-.macro ret_4() ; 
+.macro RET_4() ; 
 			ret
-			nop_(3)
+			NOP_(3)
 .endmacro
 
-.macro clamp_a()
+.macro CLAMP_A()
 			jnc @save
 			mvi a, $ff
 @save:			
 .endmacro
 
-.macro clamp_hl()
+.macro CLAMP_HL()
 			jnc @save
 			lxi h, $ffff
 @save:

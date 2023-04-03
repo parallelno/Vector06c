@@ -65,7 +65,7 @@ monsters_get_first_collided:
 			cmp b
 			jc @noCollision
 			; vertical check
-			inx_h(2)
+			INX_H(2)
 			mov c, m ; monster posY
 @colliderPosY:
 			mvi a, TEMP_BYTE
@@ -286,7 +286,7 @@ monster_copy_to_scr:
 			push d
 			; bc - monster_erase_scr_addr
 			; calc top-right corner addr (hero_erase_scr_addr + monster_erase_wh)
-			inx_h(2)
+			INX_H(2)
 			mov d, b
 			mov e, c
 			; bc - monster_erase_wh

@@ -122,7 +122,7 @@ room_tiledata_copy:
 room_tiledata_monster_spawn:
 			; get a monster init func addr ptr
 			lxi h, monsters_inits
-			add_a(2) ; to make a jmp_4 ptr
+			ADD_A(2) ; to make a JMP_4 ptr
 			mov e, a
 			mvi d, 0
 			dad d
@@ -155,7 +155,7 @@ room_tiledata_decal_walkable_spawn:
 			cpi TILEDATA_RESTORE_TILE + 1
 			jc room_tiledata_copy
 
-			add_a(2) ; to make a jmp_4 ptr
+			ADD_A(2) ; to make a JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 			ROOM_DECAL_DRAW(__decals_walkable_gfx_ptrs - JMP_4_LEN * 2)
 			mvi a, TILEDATA_RESTORE_TILE
@@ -169,7 +169,7 @@ room_tiledata_decal_walkable_spawn:
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
 room_tiledata_decal_collidable_spawn:
-			add_a(2) ; to make a jmp_4 ptr
+			ADD_A(2) ; to make a JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 			ROOM_DECAL_DRAW(__decals_collidable_gfx_ptrs)
 			mvi a, TILEDATA_COLLISION
@@ -186,7 +186,7 @@ room_tiledata_breakable_spawn:
 			lxi h, @restore_tiledata+1
 			mov m, b
 
-			add_a(2) ; to make a jmp_4 ptr
+			ADD_A(2) ; to make a JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 
 			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_breakables, @noSpawn)
@@ -209,12 +209,12 @@ room_tiledata_item_spawn:
 			lxi h, @restore_tiledata+1
 			mov m, b
 
-			add_a(2) ; to make a jmp_4 ptr
+			ADD_A(2) ; to make a JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 
 			; check global item status
 			mvi h, >global_items
-			rrc_(2)
+			RRC_(2)
 			adi <global_items
 			mov l, a
 			mov a, m
@@ -242,7 +242,7 @@ room_tiledata_resource_spawn:
 			mov d, m
 
 			mov l, a
-			add_a(2) ; resource_id to jmp_4 ptr
+			ADD_A(2) ; resource_id to JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 
 			; find a resource
@@ -273,7 +273,7 @@ room_tiledata_container_spawn:
 			mov d, m
 
 			mov l, a
-			add_a(2) ; container_id to jmp_4 ptr
+			ADD_A(2) ; container_id to JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 
 			; find a container
@@ -299,7 +299,7 @@ room_tiledata_door_spawn:
 			lxi h, @tiledata + 1
 			mov m, b
 
-			add_a(2) ; to make a jmp_4 ptr
+			ADD_A(2) ; to make a JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 
 			; check global item status
@@ -435,7 +435,7 @@ room_draw_tiles:
 			pop d
 
 			; x = x + 2
-			inr_d(2)
+			INR_D(2)
 			; repeat if x reaches the high byte of the second screen buffer addr
 			mvi a, >SCR_BUFF1_ADDR
 			cmp d
@@ -560,7 +560,7 @@ room_get_collision_tiledata:
 			cmp h
 			jz @tileSizeW1H2
 
-			rrc_(4)
+			RRC_(4)
 			ora l
 			mov l, a
 			mvi h, >room_tiledata
@@ -594,7 +594,7 @@ room_get_collision_tiledata:
 			jz @tileSizeW1H1
 
 @tileSizeW2H1:
-			rrc_(4)
+			RRC_(4)
 			ora l
 			mov l, a
 			mvi h, >room_tiledata
@@ -610,7 +610,7 @@ room_get_collision_tiledata:
 			ret
 
 @tileSizeW1H1:
-			rrc_(4)
+			RRC_(4)
 			ora l
 			mov l, a
 			mvi h, >room_tiledata
@@ -625,7 +625,7 @@ room_get_collision_tiledata:
 			ret
 
 @tileSizeW1H2:
-			rrc_(4)
+			RRC_(4)
 			ora l
 			mov l, a
 			mvi h, >room_tiledata
@@ -683,7 +683,7 @@ room_get_tiledata:
 			cmp h
 			jz @tileSizeW1H2
 
-			rrc_(4)
+			RRC_(4)
 			ora l
 
 			; store tile_idxs
@@ -714,7 +714,7 @@ room_get_tiledata:
 			jz @tileSizeW1H1
 
 @tileSizeW2H1:
-			rrc_(4)
+			RRC_(4)
 			ora l
 
 			; store tile_idxs
@@ -726,7 +726,7 @@ room_get_tiledata:
 			ret
 
 @tileSizeW1H1:
-			rrc_(4)
+			RRC_(4)
 			ora l
 
 			; store tile_idxs
@@ -735,7 +735,7 @@ room_get_tiledata:
 			ret
 
 @tileSizeW1H2:
-			rrc_(4)
+			RRC_(4)
 			ora l
 
 			; store tile_idxs

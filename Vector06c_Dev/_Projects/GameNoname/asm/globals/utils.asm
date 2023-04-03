@@ -77,7 +77,7 @@ clear_mem_sp:
 			sphl
 			mvi a, $ff
 @loop:
-			push_b(16)
+			PUSH_B(16)
 			dcx d
 			cmp d
 			jnz @loop

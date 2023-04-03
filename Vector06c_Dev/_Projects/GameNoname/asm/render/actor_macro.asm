@@ -28,7 +28,7 @@
 			mov m, e
 			inx h 
 			mov m, d
-			dcx_h(2)
+			DCX_H(2)
 			; hl points to speedX+1
 			; de <- posX
 			mov d, m
