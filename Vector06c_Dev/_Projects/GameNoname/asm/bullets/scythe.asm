@@ -62,7 +62,11 @@ SCYTHE_COLLISION_HEIGHT	= 12
 ; a - direction
 scythe_init:
 			sta @dir+1 ; direction (BULLET_DIR_*) ; TODO: move dir calc over this func. use A reg for a bullet_id
-			call bullets_get_empty_data_ptr
+			
+			lxi h, bullet_update_ptr+1
+			mvi a, BULLET_RUNTIME_DATA_LEN
+			call actor_get_empty_data_ptr
+
 			; hl - ptr to bullet_update_ptr+1
 			; advance hl to bullet_update_ptr
 			dcx h
@@ -211,7 +215,7 @@ scythe_update:
 			; advance hl to bullet_update_ptr+1
 			LXI_B_TO_DIFF(bullet_update_ptr+1, bullet_pos_y+1)
 			dad b
-			jmp bullets_destroy
+			jmp actor_destroy
 @setBounceAfterTileCollision:
 			pop h
 			; hl points to posX
@@ -262,7 +266,7 @@ scythe_update:
 			; advance hl to bullet_update_ptr+1
 			LXI_B_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
 			dad b
-			jmp bullets_destroy
+			jmp actor_destroy
 
 ; draw a sprite into a backbuffer
 ; in:

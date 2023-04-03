@@ -1,24 +1,18 @@
-.include "asm\\monsters\\monsters_consts.asm"
+.include "asm\\monsters\\monsters_data.asm"
 .include "asm\\monsters\\monster_macro.asm"
 .include "asm\\monsters\\skeleton.asm"
 .include "asm\\monsters\\vampire.asm"
 .include "asm\\monsters\\burner.asm"
 .include "asm\\monsters\\knight.asm"
-.include "asm\\monsters\\monsters_data.asm"
 
-monsters_erase_runtime_data:
-			mvi a, MONSTER_RUNTIME_DATA_LAST
-			sta monster_update_ptr+1
-			ret
-			
 
 ; in:
 ; hl - 	posX, posY
 ; a  - 	collider width
 ; c  - 	collider height
 ; out:
-; no collision 	- (hl) >= MONSTER_RUNTIME_DATA_DESTR
-; collision 	- hl points to a collided monster_update_ptr+1, (hl) < MONSTER_RUNTIME_DATA_DESTR
+; no collision 	- (hl) >= ACTOR_RUNTIME_DATA_DESTR
+; collision 	- hl points to a collided monster_update_ptr+1, (hl) < ACTOR_RUNTIME_DATA_DESTR
 ; use:
 ; b
 monsters_get_first_collided:
@@ -33,10 +27,10 @@ monsters_get_first_collided:
 
 @loop:
 			mov a, m
-			cpi MONSTER_RUNTIME_DATA_DESTR
+			cpi ACTOR_RUNTIME_DATA_DESTR
 			jc @checkCollision
-			cpi MONSTER_RUNTIME_DATA_LAST
-			jc @nextData
+			cpi ACTOR_RUNTIME_DATA_LAST
+			jc @next_data
 			; no collision against all alive monsters
 			ret
 @checkCollision:
@@ -84,71 +78,10 @@ monsters_get_first_collided:
 			ret
 @noCollision:
 			pop h
-@nextData:
+@next_data:
 			lxi b, MONSTER_RUNTIME_DATA_LEN
 			dad b
 			jmp @loop
-
-; look up the empty spot in the monster runtime data
-; in: 
-; none
-; return:
-; hl - a ptr to monster_update_ptr+1 of an empty monster runtime data
-; uses:
-; de, a
-
-; TODO: optimize. use a lastRemovedMonsterRuntimeDataPtr as a starter to find an empty data
-monsters_get_empty_data_ptr:
-			lxi h, monster_update_ptr+1
-@loop:
-			mov a, m
-			cpi MONSTER_RUNTIME_DATA_EMPTY
-			; return if it is an empty data
-			rz
-			jc @nextData
-			cpi MONSTER_RUNTIME_DATA_LAST
-			jnz @monstersTooMany
-			; it is the end of the last monster data
-			xchg
-			lxi h, MONSTER_RUNTIME_DATA_LEN
-			dad d
-			mvi a, MONSTER_RUNTIME_DATA_END
-			cmp m
-			xchg
-			; if the next after the last data is end, then just return
-			rz
-			; if not the end, then set it as the last
-			xchg
-			mvi m, MONSTER_RUNTIME_DATA_LAST
-			xchg
-			; TODO: optimize. store hl into lastRemovedMonsterRuntimeDataPtr
-			ret
-@monstersTooMany:
-			; return bypassing a func that called this func
-			pop psw
-			ret
-@nextData:
-			lxi d, MONSTER_RUNTIME_DATA_LEN
-			dad d
-			jmp @loop
-
-
-; mark a monster data ptr as it's going to be destroyed
-; in:
-; hl - monsterUpdate+1 ptr
-; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
-monsters_destroy:
-			mvi m, MONSTER_RUNTIME_DATA_DESTR
-			ret
-			
-
-; mark a monster data as empty
-; in:
-; hl - monsterUpdate+1 ptr
-; TODO: optimize. fiil up lastRemovedMonsterRuntimeDataPtr
-monsters_set_empty:
-			mvi m, MONSTER_RUNTIME_DATA_EMPTY
-			ret
 			
 
 ; call all active monsters' Update/Draw func
@@ -163,13 +96,13 @@ monsters_data_func_caller:
 			lxi h, monster_update_ptr+1
 @loop:
 			mov a, m
-			cpi MONSTER_RUNTIME_DATA_DESTR
-			jc @callFunc
-			cpi MONSTER_RUNTIME_DATA_LAST
-			jc @nextData
+			cpi ACTOR_RUNTIME_DATA_DESTR
+			jc @call_func
+			cpi ACTOR_RUNTIME_DATA_LAST
+			jc @next_data
 			; it is the last or the end, so return
 			ret
-@callFunc:
+@call_func:
 			push h
 			lxi d, @return
 			push d
@@ -186,7 +119,7 @@ monsters_data_func_caller:
 			pchl
 @return:
 			pop h
-@nextData:
+@next_data:
 			lxi d, MONSTER_RUNTIME_DATA_LEN
 			dad d
 			jmp @loop
@@ -204,17 +137,17 @@ monsters_common_func_caller:
 			lxi h, monster_update_ptr+1
 @loop:
 			mov a, m
-			cpi MONSTER_RUNTIME_DATA_EMPTY
-			jc @callFunc
-			jz @nextData
+			cpi ACTOR_RUNTIME_DATA_EMPTY
+			jc @call_func
+			jz @next_data
 			; it is the last or the end, so return
 			ret
-@callFunc:			
+@call_func:			
 			push h
 @funcPtr:
 			call TEMP_ADDR
 			pop h
-@nextData:
+@next_data:
 			lxi d, MONSTER_RUNTIME_DATA_LEN
 			dad d
 			jmp @loop
@@ -245,7 +178,7 @@ monster_copy_to_scr:
 			dad d
 			; if it is invisible, return
 			mov a, m
-			cpi MONSTER_STATUS_INVIS
+			cpi ACTOR_STATUS_INVIS
 			rz
 
 			; advance to monster_erase_scr_addr
@@ -342,15 +275,15 @@ monster_copy_to_scr:
 ; a - MONSTER_RUNTIME_DATA_* status
 monster_erase:
 			; if a monster is destroyed mark its data as empty
-			cpi MONSTER_RUNTIME_DATA_DESTR
-			jz monsters_set_empty
+			cpi ACTOR_RUNTIME_DATA_DESTR
+			jz actor_set_empty
 
 			; advance to monster_status
 			LXI_D_TO_DIFF(monster_status, monster_update_ptr+1)
 			dad d
 			; if it is invisible, return
 			mov a, m
-			cpi MONSTER_STATUS_INVIS
+			cpi ACTOR_STATUS_INVIS
 			rz
 
 			; advance to monster_erase_scr_addr
@@ -386,4 +319,4 @@ monster_impacted:
 			; de - ptr to monster_impacted_ptr+1
 			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)
 			dad d
-			jmp monsters_destroy
+			jmp actor_destroy

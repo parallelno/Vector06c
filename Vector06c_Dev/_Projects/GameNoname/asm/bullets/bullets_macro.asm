@@ -8,7 +8,7 @@
 			dad d
 			mov a, m
 			; if it is invisible, return
-			cpi BULLET_STATUS_INVIS
+			cpi ACTOR_STATUS_INVIS
 			rz
 
 			LXI_D_TO_DIFF(bullet_pos_x+1, bullet_status)

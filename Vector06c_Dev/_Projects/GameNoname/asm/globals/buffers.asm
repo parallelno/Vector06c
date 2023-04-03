@@ -29,7 +29,7 @@ bullet_runtime_data_end:	= bullet_speed_y + WORD_LEN
 BULLET_RUNTIME_DATA_LEN = bullet_runtime_data_end - bullets_runtime_data ; $1a; bullet_runtime_data_end_addr-bullets_runtime_data
 
 ; the same structs for the rest of the bullets
-bullets_runtime_data_end_addr: = bullets_runtime_data + BULLET_RUNTIME_DATA_LEN * BULLETS_MAX ; $78ff ; :		.word BULLET_RUNTIME_DATA_END << 8
+bullets_runtime_data_end_addr: = bullets_runtime_data + BULLET_RUNTIME_DATA_LEN * BULLETS_MAX ; $78ff ; :		.word ACTOR_RUNTIME_DATA_END << 8
 
 ;=============================================================================
 ; statuses of container instances. each instance is represented by a pair of bytes (room_id, tile_idx)
@@ -112,7 +112,7 @@ hero_resources_end:	= hero_resources + HERO_RESOURCES_LEN
 ;=============================================================================
 ; a list of back runtime data structs.
 backs_runtime_data:		= $7b85
-back_anim_ptr:			= backs_runtime_data 			;.word TEMP_ADDR ; also (back_anim_ptr+1) stores a marker of end of the data like BACK_RUNTIME_DATA_LAST
+back_anim_ptr:			= backs_runtime_data 			;.word TEMP_ADDR ; also (back_anim_ptr+1) stores a marker of end of the data like ACTOR_RUNTIME_DATA_LAST
 back_scr_addr:			= back_anim_ptr + ADDR_LEN		;.word TEMP_WORD
 back_anim_timer:		= back_scr_addr + WORD_LEN		;.byte TEMP_BYTE
 back_anim_timer_speed:	= back_anim_timer + BYTE_LEN	;.byte TEMP_BYTE
@@ -121,7 +121,7 @@ back_runtime_data_end_addr: = back_anim_timer_speed + BYTE_LEN
 BACK_RUNTIME_DATA_LEN = back_runtime_data_end_addr - backs_runtime_data
 
 ; the same structs for the rest of the backs
-backs_runtime_data_end_marker:	= back_runtime_data_end_addr + BACK_RUNTIME_DATA_LEN * (BACKS_MAX-1) ;.word BACK_RUNTIME_DATA_END << 8
+backs_runtime_data_end_marker:	= back_runtime_data_end_addr + BACK_RUNTIME_DATA_LEN * (BACKS_MAX-1) ;.word ACTOR_RUNTIME_DATA_END << 8
 backs_runtime_data_end:			= backs_runtime_data_end_marker + WORD_LEN
 ;=============================================================================
 ;

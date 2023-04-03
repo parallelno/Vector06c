@@ -96,7 +96,10 @@
 			; TODO: move the code into a spawner init routine
 			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_monsters, @ret)
 
-			call monsters_get_empty_data_ptr
+			lxi h, monster_update_ptr+1
+			mvi a, MONSTER_RUNTIME_DATA_LEN
+			call actor_get_empty_data_ptr
+			
 			; hl - ptr to monster_update_ptr+1
 			; advance hl to monster_update_ptr
 			dcx h

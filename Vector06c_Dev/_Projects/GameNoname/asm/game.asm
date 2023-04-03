@@ -2,8 +2,12 @@
 .include "asm\\levels\\levels_const.asm"
 .include "asm\\levels\\levels_macro.asm"
 .include "asm\\levels\\levels_data.asm"
+.include "asm\\levels\\backs_const.asm"
 
+.include "asm\\monsters\\monsters_consts.asm"
 .include "asm\\bullets\\bullets_consts.asm"
+.include "asm\\globals\\buffers.asm"
+
 .include "asm\\render\\draw_tile.asm"
 .include "asm\\render\\draw_back.asm"
 .include "asm\\render\\draw_decal.asm"

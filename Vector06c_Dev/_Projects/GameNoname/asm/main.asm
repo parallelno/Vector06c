@@ -10,7 +10,6 @@
 .include "asm\\globals\\interruptions.asm"
 .include "generated\\code\\ram_disk_init.asm"
 .include "asm\\game.asm"
-.include "asm\\globals\\buffers.asm"
 
 main_start:
 			CALL_RAM_DISK_FUNC(__gcplayer_init, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)

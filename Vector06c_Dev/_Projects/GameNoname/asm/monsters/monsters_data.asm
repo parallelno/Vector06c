@@ -46,4 +46,4 @@ MONSTER_RUNTIME_DATA_LEN = monster_runtime_data_end_addr - monsters_runtime_data
 
 ; the same structs for the rest of the monsters
 .storage MONSTER_RUNTIME_DATA_LEN * (MONSTERS_MAX-1), 0
-monsters_runtime_data_end_addr:	.word MONSTER_RUNTIME_DATA_END << 8
+monsters_runtime_data_end_addr:	.word ACTOR_RUNTIME_DATA_END << 8

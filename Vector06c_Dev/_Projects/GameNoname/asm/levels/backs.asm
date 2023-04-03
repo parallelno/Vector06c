@@ -2,87 +2,21 @@
 ; they have low anim speed and limited frame numbers.
 ; they do not have an alpha channel
 
-; max backs in the room
-BACKS_MAX = 10
-
-BACK_RUNTIME_DATA_DESTR = $fc ; a back is ready to be destroyed
-BACK_RUNTIME_DATA_EMPTY = $fd ; a back data is available for a new back
-BACK_RUNTIME_DATA_LAST	= $fe ; the end of the last existing back data
-BACK_RUNTIME_DATA_END	= $ff ; the end of the data
-
-BACK_NO_DRAW			= 0 ; it is stored in back_runtime_data_ptr_draw+1 to prevent back drawing every next update
-
-BACKS_AMIN_TIMER_SPEED	= 50
-
-
 backs_init:
 			; erase backs_runtime_data
-			mvi a, BACK_RUNTIME_DATA_LAST
+			mvi a, ACTOR_RUNTIME_DATA_LAST
 			sta back_anim_ptr + 1
 			; set the last marker byte of backs_runtime_data
-			mvi a, BACK_RUNTIME_DATA_END
+			mvi a, ACTOR_RUNTIME_DATA_END
 			sta backs_runtime_data_end_marker + 1
+			
 			; set the first back in the runtime data to be updated and drawn
-			lxi h, backs_runtime_data
+			lxi h, backs_runtime_data + 1
 			shld back_runtime_data_ptr_update
-			mvi a, BACK_NO_DRAW
-			sta back_runtime_data_ptr_draw
-			ret
-
-; look up the empty spot in the back runtime data
-; in:
-; none
-; return:
-; hl - a ptr to back_anim_ptr + 1 of an empty back runtime data
-; uses:
-; de, a
-
-; TODO: optimize. use a last_removed_back_runtime_data_ptr as a starter to find an empty data
-backs_get_empty_data_ptr:
-			lxi h, back_anim_ptr + 1
-@loop:
-			mov a, m
-			cpi BACK_RUNTIME_DATA_EMPTY
-			; return if it is an empty data
-			rz
-			jc @next_data
-			cpi BACK_RUNTIME_DATA_LAST
-			jnz @backs_too_many
-			; it is the end of the last back data
-			xchg
-			lxi h, BACK_RUNTIME_DATA_LEN
-			dad d
-			mvi a, BACK_RUNTIME_DATA_END
-			cmp m
-			xchg
-			; if the next after the last data is end, then just return
-			rz
-			; if not the end, then set it as the last
-			xchg
-			mvi m, BACK_RUNTIME_DATA_LAST
-			xchg
-			; TODO: optimize. store hl into last_removed_back_runtime_data_ptr
-			ret
-@backs_too_many:
-			; return bypassing a func that called this func
-			pop psw
-			ret
-@next_data:
-			mvi a, <BACK_RUNTIME_DATA_LEN
-			add l
-			mov l, a
-			jmp @loop
-
-back_to_next_frame:
-			xchg
-			; load an offset to the next frame
-			mov e, m 
-			inx h
-			mov d, m
-			; advance back_anim_ptr to the next frame
-			dad d
-			; store back_anim_ptr
-			xchg
+			
+			; disable drawing
+			mvi a, BACK_DRAW_DISABLED
+			sta backs_draw
 			ret
 
 ; a tiledata handler to spawn an animated background tile by its id.
@@ -93,7 +27,10 @@ back_to_next_frame:
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
 backs_spawn:
-			call backs_get_empty_data_ptr
+			lxi h, back_anim_ptr + 1
+			mvi a, BACK_RUNTIME_DATA_LEN
+			call actor_get_empty_data_ptr
+
 			; hl - ptr to back_update_ptr+1
 			; advance hl to back_anim_ptr
 			dcx h
@@ -157,25 +94,18 @@ backs_spawn:
 			; TODO: use different speeds or do not store unique back_anim_timer_speed for every back
 			; if you do not store unique back_anim_timer_speed for every back
 			; then you save one dcx h per frame and one byte per back. small improvements. that's why it is here.
-			mvi m, BACKS_AMIN_TIMER_SPEED
+			mvi m, BACK_ANIM_TIMER_SPEED
 			mvi a, TILEDATA_COLLISION	
 			ret
 
 backs_update:
 back_runtime_data_ptr_update: = backs_update+1
-			lxi h, backs_runtime_data
-			; check if hl points to BACK_RUNTIME_DATA_LAST
-			; advance hl to back_anim_ptr+1
-			inx h
+			lxi h, backs_runtime_data + 1
 			mov a, m
-			cpi BACK_RUNTIME_DATA_EMPTY
+			cpi ACTOR_RUNTIME_DATA_EMPTY
 			jz @set_next_back
-			cpi BACK_RUNTIME_DATA_LAST
-			jnz @update_anim
-@set_first_back:
-			mvi a, <backs_runtime_data
-			sta back_runtime_data_ptr_update
-			ret	
+			cpi ACTOR_RUNTIME_DATA_LAST
+			jz @set_first_back
 
 @update_anim:
 			; advance hl to back_anim_timer_speed
@@ -189,61 +119,60 @@ back_runtime_data_ptr_update: = backs_update+1
 			; back_anim_timer += back_anim_timer_speed
 			add m
 			mov m, a
-			jnc @set_next_back2
-			; back_anim_timer got overloaded, so it needs to be drawn			
+			jnc @set_next_back ; if back_anim_timer is not overloaded, set the next back for the next update
+			
 @set_draw_ptr:
-			MVI_A_TO_DIFF(back_anim_ptr, back_anim_timer)
+			; back_anim_timer got overloaded, so it needs to be drawn			
+			MVI_A_TO_DIFF(back_anim_ptr + 1, back_anim_timer)
 			add l
 			mov l, a
-			shld back_runtime_data_ptr_draw
 
 			; go to the next frame
 			; load back_anim_ptr
-			mov e, m
-			inx h 
 			mov d, m
+			; advance hl to back_anim_ptr
+			dcx h 
+			mov e, m
+			
+			; store ptr to back_anim_ptr into back_runtime_data_ptr_draw
+			shld back_runtime_data_ptr_draw
+			; enable drawing
+			mvi a, BACK_DRAW_ENABLED
+			sta backs_draw
+			
 			xchg
 			; load an offset to the next frame
-			mov c, m 
+			mov c, m
 			inx h 
 			mov b, m 
 			; advance back_anim_ptr to the next frame
 			dad b
 			xchg
 			; store the next frame ptr to back_anim_ptr
-			mov m, d
-			dcx h
 			mov m, e
-@set_next_back3:
-			MVI_A_TO_DIFF(back_anim_ptr + BACK_RUNTIME_DATA_LEN, back_anim_ptr)
-			add l
-			sta back_runtime_data_ptr_update
-			ret
+			; advance hl to back_anim_ptr + 1
+			inx h
+			mov m, d
+			MVI_A_TO_DIFF(back_anim_ptr + 1 + BACK_RUNTIME_DATA_LEN, back_anim_ptr+1)
+			jmp @advance_and_save_ptr
+@set_first_back:
+			mvi a, <backs_runtime_data + 1
+			jmp @save_ptr
 @set_next_back:
-			MVI_A_TO_DIFF(back_anim_ptr + BACK_RUNTIME_DATA_LEN, back_anim_ptr+1)
+			; back_anim_timer is not overloaded, set the next back for the next update
+			MVI_A_TO_DIFF(back_anim_ptr + 1 + BACK_RUNTIME_DATA_LEN, back_anim_timer)
+@advance_and_save_ptr:
 			add l
 			mov l, a			
-			sta back_runtime_data_ptr_update
+@save_ptr:	sta back_runtime_data_ptr_update			
 			ret
-@set_next_back2:
-			MVI_A_TO_DIFF(back_anim_ptr + BACK_RUNTIME_DATA_LEN, back_anim_timer)
-			add l
-			mov l, a			
-			sta back_runtime_data_ptr_update			
-			ret	
 
 backs_draw:
 back_runtime_data_ptr_draw: = backs_draw + 1
-			lxi h, TEMP_ADDR
-			xra a
-			ora h
-			; if back_anim_ptr == 0, no draw needed
-			rz
-			; frame was updated and it needs to draw
+			lxi h, backs_runtime_data ; this can be replaced with OPCODE_RET is no draw needed
+			mvi a, BACK_DRAW_ENABLED ; disable to not draw until it needs
+			sta backs_draw
 			; hl - ptr to back_anim_ptr
-			; erase back_runtime_data_ptr_draw to not draw it again until it goes to the next frame
-			mvi a, BACK_NO_DRAW
-			sta back_runtime_data_ptr_draw + 1
 			; load back_anim_ptr
 			mov e, m
 			inx h

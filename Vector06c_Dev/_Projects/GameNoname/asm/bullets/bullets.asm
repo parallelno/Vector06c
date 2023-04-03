@@ -4,80 +4,13 @@
 .include "asm\\bullets\\bomb.asm"
 
 bullets_init:
-			mvi a, BULLET_RUNTIME_DATA_END
+			mvi a, ACTOR_RUNTIME_DATA_END
 			sta bullets_runtime_data_end_addr + 1
 			mvi a, <bullets_runtime_data
 			sta bullet_runtime_data_sorted
-			jmp bullets_erase_runtime_data
-
-bullets_erase_runtime_data:
-			mvi a, BULLET_RUNTIME_DATA_LAST
-			sta bullet_update_ptr + 1
-			ret
-			
-;=========================================================================
-; look up the empty spot in the bullet runtime data
-; in: 
-; none
-; return:
-; hl - a ptr to bullet_update_ptr + 1 of an empty bullet runtime data
-; uses:
-; de, a
-
-; TODO: optimize. use a last_removed_bullet_runtime_data_ptr as a starter to find an empty data
-bullets_get_empty_data_ptr:
 			lxi h, bullet_update_ptr + 1
-@loop:
-			mov a, m
-			cpi BULLET_RUNTIME_DATA_EMPTY
-			; return if it is an empty data
-			rz
-			jc @nextData
-			cpi BULLET_RUNTIME_DATA_LAST
-			jnz @bulletsTooMany
-			; it is the end of the last bullet data
-			xchg
-			lxi h, BULLET_RUNTIME_DATA_LEN
-			dad d
-			mvi a, BULLET_RUNTIME_DATA_END
-			cmp m
-			xchg
-			; if the next after the last data is end, then just return
-			rz
-			; if not the end, then set it as the last
-			xchg
-			mvi m, BULLET_RUNTIME_DATA_LAST
-			xchg
-			; TODO: optimize. store hl into lastRemovedBulletRuntimeDataPtr
-			ret
-@bulletsTooMany:
-			; return bypassing a func that called this func
-			pop psw
-			ret
-@nextData:
-			mvi a, <BULLET_RUNTIME_DATA_LEN
-			add l
-			mov l, a
-			jmp @loop
+			jmp actor_erase_runtime_data
 
-
-; mark a bullet data ptr as it's going to be destroyed
-; in:
-; hl - bullet_update_ptr+1 ptr
-; TODO: optimize. fill up lastRemovedBulletRuntimeDataPtr
-bullets_destroy:
-			mvi m, BULLET_RUNTIME_DATA_DESTR
-			ret
-			
-
-; mark a bullet data as empty
-; in:
-; hl - bullet_update_ptr+1 ptr
-; TODO: optimize. fiil up lastRemovedBulletRuntimeDataPtr
-bullets_set_empty:
-			mvi m, BULLET_RUNTIME_DATA_EMPTY
-			ret
-			
 
 ; call all active bullets' Update/Draw func
 ; a func will get DE pointing to a func ptr (ex.:bullet_update_ptr or bullet_draw_ptr) in the runtime data
@@ -91,13 +24,13 @@ bullets_data_func_caller:
 			lxi h, bullet_update_ptr+1
 @loop:
 			mov a, m
-			cpi BULLET_RUNTIME_DATA_DESTR
-			jc @callFunc
-			cpi BULLET_RUNTIME_DATA_LAST
-			jc @nextData
+			cpi ACTOR_RUNTIME_DATA_DESTR
+			jc @call_func
+			cpi ACTOR_RUNTIME_DATA_LAST
+			jc @next_data
 			; it is the last or the end, so return
 			ret
-@callFunc:
+@call_func:
 			push h
 			lxi d, @return
 			push d
@@ -115,7 +48,7 @@ bullets_data_func_caller:
 			pchl
 @return:
 			pop h
-@nextData:
+@next_data:
 			lxi d, BULLET_RUNTIME_DATA_LEN
 			dad d
 			jmp @loop
@@ -133,17 +66,17 @@ bullets_common_func_caller:
 			lxi h, bullet_update_ptr+1
 @loop:
 			mov a, m
-			cpi BULLET_RUNTIME_DATA_EMPTY
-			jc @callFunc
-			jz @nextData
+			cpi ACTOR_RUNTIME_DATA_EMPTY
+			jc @call_func
+			jz @next_data
 			; it is the last or the end, so return
 			ret
-@callFunc:			
+@call_func:			
 			push h
 @funcPtr:
 			call TEMP_ADDR
 			pop h
-@nextData:
+@next_data:
 			lxi d, BULLET_RUNTIME_DATA_LEN
 			dad d
 			jmp @loop
@@ -175,7 +108,7 @@ bullet_copy_to_scr:
 			dad d
 			; if it is invisible, return
 			mov a, m
-			cpi BULLET_STATUS_INVIS
+			cpi ACTOR_STATUS_INVIS
 			rz
 
 			; advance to bullet_erase_scr_addr
@@ -272,15 +205,15 @@ bullet_copy_to_scr:
 ; a - BULLET_RUNTIME_DATA_* status
 bullet_erase:
 			; if a bullet is destroyed mark its data as empty
-			cpi BULLET_RUNTIME_DATA_DESTR
-			jz bullets_set_empty
+			cpi ACTOR_RUNTIME_DATA_DESTR
+			jz actor_set_empty
 
 			; advance to bullet_status
 			LXI_D_TO_DIFF(bullet_status, bullet_update_ptr+1)
 			dad d
 			; if it is invisible, return
 			mov a, m
-			cpi BULLET_STATUS_INVIS
+			cpi ACTOR_STATUS_INVIS
 			rz
 
 			; advance to bullet_erase_scr_addr

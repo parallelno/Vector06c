@@ -33,4 +33,79 @@ actor_anim_update:
 			mov m, e
 			ret
 
+; look up an empty spot in the actor (monster, bullet, back, fx) runtime data
+; in:
+; hl - ptr to runtime_data+1, ex monster_update_ptr+1
+; a - RUNTIME_DATA_LEN
+; return:
+; hl - a ptr to an empty actor runtime_data+1
+; uses:
+; hl, de, a
 
+; statuses.
+; TODO: optimize. use a lastRemovedMonsterRuntimeDataPtr as a starter to find an empty data
+ACTOR_RUNTIME_DATA_DESTR  = $fc ; an actor's runtime data is ready to be destroyed
+ACTOR_RUNTIME_DATA_EMPTY  = $fd ; an actor's runtime data is available for a new actor
+ACTOR_RUNTIME_DATA_LAST   = $fe ; the end of the last existing actor's runtime data
+ACTOR_RUNTIME_DATA_END    = $ff ; the end of the actor's runtime data
+
+; a status describes what set of animations and behavior is active
+; for ex. HERO_STATUS_ATTACK plays hero_attk_r or hero_attk_l depending on the direction and it spawns a weapon trail
+ACTOR_STATUS_INVIS = $ff
+
+actor_get_empty_data_ptr:
+			sta @len1 + 1
+			sta @next_data + 1
+@loop:
+			mov a, m
+			cpi ACTOR_RUNTIME_DATA_EMPTY
+			; return if it is an empty data
+			rz
+			jc @next_data
+			cpi ACTOR_RUNTIME_DATA_LAST
+			jnz @too_many_objects
+			; it is the end of the last monster data
+			xchg
+@len1:
+			lxi h, TEMP_WORD
+			dad d
+			mvi a, ACTOR_RUNTIME_DATA_END
+			cmp m
+			xchg
+			; if the next after the last data is end, then just return
+			rz
+			; if not the end, then set it as the last
+			xchg
+			mvi m, ACTOR_RUNTIME_DATA_LAST
+			xchg
+			; TODO: optimize. store hl into lastRemovedMonsterRuntimeDataPtr
+			ret
+@too_many_objects:
+			; return bypassing a func that called this func
+			pop psw
+			ret
+@next_data:
+			lxi d, TEMP_WORD
+			dad d
+			jmp @loop
+
+; TODO: convert small funcs below to macros
+actor_erase_runtime_data:
+			mvi m, ACTOR_RUNTIME_DATA_LAST
+			ret
+
+; mark the actor's runtime data as it's going to be destroyed
+; in:
+; hl - update_ptr+1 ptr
+; TODO: optimize. fill up lastRemovedBulletRuntimeDataPtr
+actor_destroy:
+			mvi m, ACTOR_RUNTIME_DATA_DESTR
+			ret
+
+; mark the actor's runtime data as empty
+; in:
+; hl - update_ptr+1 ptr
+; TODO: optimize. fiil up lastRemovedBulletRuntimeDataPtr
+actor_set_empty:
+			mvi m, ACTOR_RUNTIME_DATA_EMPTY
+			ret

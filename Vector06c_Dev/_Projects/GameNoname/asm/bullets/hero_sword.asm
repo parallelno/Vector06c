@@ -39,7 +39,10 @@ hero_sword_tile_func_tbl:
 			RET_4()								; func_id == 15 ; collision
 
 hero_sword_init:
-			call bullets_get_empty_data_ptr
+			lxi h, bullet_update_ptr+1
+			mvi a, BULLET_RUNTIME_DATA_LEN
+			call actor_get_empty_data_ptr
+
 			; hl - ptr to bullet_update_ptr+1
 
 			dcx h
@@ -60,7 +63,7 @@ hero_sword_init:
 
 			; advance hl to bullet_status
 			inx h
-			mvi m, BULLET_STATUS_INVIS
+			mvi m, ACTOR_STATUS_INVIS
 			; advance and set bullet_status_timer
 			inx h
 			mvi m, HERO_SWORD_STATUS_INVIS_DURATION
@@ -120,7 +123,7 @@ hero_sword_update:
 			LXI_H_TO_DIFF(bullet_status, bullet_update_ptr)
 			dad d
 			mov a, m
-			cpi BULLET_STATUS_INVIS
+			cpi ACTOR_STATUS_INVIS
 			jz @delayUpdate
 
 @attkUpdate:
@@ -166,7 +169,7 @@ hero_sword_update:
 @destroy:
 			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
 			dad d
-			jmp bullets_destroy
+			jmp actor_destroy
 
 @delayUpdate:
 			; hl - ptr to bullet_status
@@ -234,7 +237,7 @@ hero_sword_update:
 
 			; hl - ptr to a collided monster_update_ptr+1
 			mov a, m
-			cpi MONSTER_RUNTIME_DATA_DESTR
+			cpi ACTOR_RUNTIME_DATA_DESTR
 			pop d
 			; de - posXY
 			; if not, check the tile it is on.
