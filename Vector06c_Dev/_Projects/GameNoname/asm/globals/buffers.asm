@@ -140,8 +140,8 @@ ITEMS_MAX					= 16
 ;	.byte - status of item_id = N
 ; .endloop
 
-global_items				= $7c10
-global_items_end = global_items + ITEMS_MAX
+global_items:		= $7c10
+global_items_end:	= global_items + ITEMS_MAX
 
 ;=============================================================================
 ; tile graphics pointer table.
@@ -154,8 +154,8 @@ ROOM_TILES_GFX_PTRS_LEN	= ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
 ;	.endloop
 ; .endloop
 
-room_tiles_gfx_ptrs			= $7c20
-room_tiles_gfx_ptrs_end		= room_tiles_gfx_ptrs + ROOM_TILES_GFX_PTRS_LEN
+room_tiles_gfx_ptrs:		= $7c20
+room_tiles_gfx_ptrs_end:	= room_tiles_gfx_ptrs + ROOM_TILES_GFX_PTRS_LEN
 
 ;=============================================================================
 ; tiledata buffer has to follow room_tiles_gfx_ptrs because they are unpacked altogether. see level_data.asm for tiledata format
@@ -168,15 +168,16 @@ ROOM_TILEDATA_LEN	= ROOM_WIDTH * ROOM_HEIGHT
 ;	.endloop
 ; .endloop
 
-room_tiledata		= $7e00
-room_tiledata_end	= room_tiledata + ROOM_TILEDATA_LEN
-
-BUFFERS_START_ADDR	= bullet_runtime_data_sorted
-BUFFERS_END_ADDR	= room_tiledata_end
+room_tiledata:		= $7e00
+room_tiledata_end:	= room_tiledata + ROOM_TILEDATA_LEN
 
 ;=============================================================================
 ; check buffer overlapping
 ;
+
+BUFFERS_START_ADDR	= bullet_runtime_data_sorted
+BUFFERS_END_ADDR	= room_tiledata_end
+
 
 ; TODO: update checkers after finalizing buffers layout
 .if rooms_spawn_rates_end > room_tiles_gfx_ptrs

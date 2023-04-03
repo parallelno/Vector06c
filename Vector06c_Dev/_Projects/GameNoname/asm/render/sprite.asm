@@ -37,7 +37,13 @@ sprite_get_scr_addr8:
 			mov e, m
 			mov	d, a
 			ret
-			
+; in:
+; hl - ptr to posX+1 (high byte in 16-bit pos)
+; out:
+; de - sprite screen addr
+; c - preshifted sprite idx*2 offset based on posX then +2
+; hl - ptr to posY+1
+; use: a		
 sprite_get_scr_addr4:
 			; calc screen addr X
 			mov	a, m

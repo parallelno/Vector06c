@@ -1,7 +1,9 @@
 .include "asm\\bullets\\bullets_macro.asm"
+.include "asm\\bullets\\vfx_const.asm"
 .include "asm\\bullets\\hero_sword.asm"
 .include "asm\\bullets\\scythe.asm"
 .include "asm\\bullets\\bomb.asm"
+.include "asm\\bullets\\vfx.asm"
 
 bullets_init:
 			mvi a, ACTOR_RUNTIME_DATA_END
@@ -20,7 +22,7 @@ bullets_init:
 ; use:
 ; de, a
 bullets_data_func_caller:
-			shld @funcPtrOffset+1
+			shld @func_ptr_offset+1
 			lxi h, bullet_update_ptr+1
 @loop:
 			mov a, m
@@ -34,7 +36,7 @@ bullets_data_func_caller:
 			push h
 			lxi d, @return
 			push d
-@funcPtrOffset:
+@func_ptr_offset:
 			lxi d, TEMP_ADDR
 			; advance to a func ptr
 			; TODO: replace dad PR with add R, because the data is $100 byte aligned in buffers.asm
@@ -125,7 +127,7 @@ bullet_copy_to_scr:
 			mov d, m
 			; store bullet_erase_scr_addr temp
 			xchg
-			shld @oldTopRightConner+1
+			shld @old_top_right_corner+1
 			xchg
 			; store bullet_erase_scr_addr to bullet_erase_scr_addr_old
 			mov m, b
@@ -137,14 +139,14 @@ bullet_copy_to_scr:
 			; get min(b, d), min(c, e)
 			mov a, d
 			cmp b
-			jc @keepOldX
+			jc @keep_old_x
 			mov d, b
-@keepOldX:
+@keep_old_x:
 			mov a, e
 			cmp c
-			jc @keepOldY 
+			jc @keep_old_y 
 			mov e, c
-@keepOldY:
+@keep_old_y:
 			; tmp store a scr addr to copy
 			push d
 			; bc - bullet_erase_scr_addr
@@ -170,7 +172,7 @@ bullet_copy_to_scr:
 			mov m, b
 			mov b, a
 			; calc old top-right corner addr (hero_erase_scr_addr_old + bullet_erase_wh_old)
-@oldTopRightConner:
+@old_top_right_corner:
 			lxi h, TEMP_WORD
 			dad b
 			; hl - hero_erase_scr_addr_old + bullet_erase_wh_old
@@ -178,14 +180,14 @@ bullet_copy_to_scr:
 			; get max(h, d), max(l, e)
 			mov a, h
 			cmp d
-			jnc @keepOldTRX
+			jnc @keep_old_tr_x
 			mov h, d
-@keepOldTRX:
+@keep_old_tr_x:
 			mov a, l
 			cmp e
-			jnc @keepOldTRY 
+			jnc @keep_old_tr_y 
 			mov l, e
-@keepOldTRY:
+@keep_old_tr_y:
 			; hl - top-right corner scr addr to copy
 			; de - a scr addr to copy
 			pop d

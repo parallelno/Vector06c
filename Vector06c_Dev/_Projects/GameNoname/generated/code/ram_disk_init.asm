@@ -69,7 +69,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 0, addr 0, chunk_id 1
 	;===============================================
-			; ['skeleton', 'scythe', 'bomb']
+			; ['skeleton', 'scythe', 'bomb', 'vfx']
 			; unpack the chunk into the ram-disk back buffer
 			lxi d, chunk_bank0_addr0_1
 			lxi b, BACK_BUFF_ADDR
@@ -93,6 +93,13 @@ ram_disk_init:
 			; preshift bomb sprites
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, bomb_preshifted_sprites
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank0_addr0_1)
+			call __sprite_dup_preshift
+			RAM_DISK_OFF()
+
+			; preshift vfx sprites
+			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
+			lxi d, vfx_preshifted_sprites
 			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __chunk_start_bank0_addr0_1)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF()
@@ -165,7 +172,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 1, addr $8000, chunk_id 0
 	;===============================================
-			; ['vfx', 'hero_sword']
+			; ['hero_sword']
 			; unpack the chunk into the ram-disk back buffer
 			lxi d, chunk_bank1_addr8000_0
 			lxi b, BACK_BUFF_ADDR

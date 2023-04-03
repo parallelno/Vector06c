@@ -8,6 +8,7 @@
 			dad d
 			mov a, m
 			; if it is invisible, return
+			; TODO: use ral instead of cpi ACTOR_STATUS_INVIS
 			cpi ACTOR_STATUS_INVIS
 			rz
 

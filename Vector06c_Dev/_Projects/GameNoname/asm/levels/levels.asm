@@ -15,8 +15,8 @@ levels_init:
 ;	initialization level data every level start
 ;
 level_init:
-			; TODO: make it via CALL_RAM_DISK_FUNC
-			; TODO: make automatic a proper palette depending on the level.
+			; TODO: make set_palette_from_ram_disk work via CALL_RAM_DISK_FUNC
+			; TODO: set a proper palette depending on the level.
 			lxi d, __level01_palette_sprites_tiles_lv01
             mvi a, <__RAM_DISK_S_LEVEL01_GFX
 			call set_palette_from_ram_disk
@@ -61,7 +61,9 @@ level_update:
 			ora a
 			rz
 			cpi LEVEL_COMMAND_LOAD_DRAW_ROOM
-			jnz @nextCommandCheck			
+			;jnz @next_command_check			
+			rnz
+			
 			; load a new room
 			call room_init
 			call hero_init
@@ -71,5 +73,5 @@ level_update:
 			xra a
 			sta level_command
 			ret
-@nextCommandCheck:
-            ret
+;@next_command_check:
+;            ret

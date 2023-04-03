@@ -92,7 +92,7 @@ monsters_get_first_collided:
 ; use:
 ; de, a
 monsters_data_func_caller:
-			shld @funcPtrOffset+1
+			shld @func_ptr_offset+1
 			lxi h, monster_update_ptr+1
 @loop:
 			mov a, m
@@ -106,7 +106,7 @@ monsters_data_func_caller:
 			push h
 			lxi d, @return
 			push d
-@funcPtrOffset:
+@func_ptr_offset:
 			lxi d, TEMP_ADDR
 			; advance to a func ptr
 			dad d
@@ -195,7 +195,7 @@ monster_copy_to_scr:
 			mov d, m
 			; store monster_erase_scr_addr temp
 			xchg
-			shld @oldTopRightConner+1
+			shld @old_top_right_corner+1
 			xchg
 			; store monster_erase_scr_addr to monster_erase_scr_addr_old
 			mov m, b
@@ -207,14 +207,14 @@ monster_copy_to_scr:
 			; get min(b, d), min(c, e)
 			mov a, d
 			cmp b
-			jc @keepOldX
+			jc @keep_old_x
 			mov d, b
-@keepOldX:
+@keep_old_x:
 			mov a, e
 			cmp c
-			jc @keepOldY 
+			jc @keep_old_y 
 			mov e, c
-@keepOldY:
+@keep_old_y:
 			; tmp store a scr addr to copy
 			push d
 			; bc - monster_erase_scr_addr
@@ -240,7 +240,7 @@ monster_copy_to_scr:
 			mov m, b
 			mov b, a
 			; calc old top-right corner addr (hero_erase_scr_addr_old + monster_erase_wh_old)
-@oldTopRightConner:
+@old_top_right_corner:
 			lxi h, TEMP_WORD
 			dad b
 			; hl - hero_erase_scr_addr_old + monster_erase_wh_old
@@ -248,14 +248,14 @@ monster_copy_to_scr:
 			; get max(h, d), max(l, e)
 			mov a, h
 			cmp d
-			jnc @keepOldTRX
+			jnc @keep_old_tr_x
 			mov h, d
-@keepOldTRX:
+@keep_old_tr_x:
 			mov a, l
 			cmp e
-			jnc @keepOldTRY 
+			jnc @keep_old_tr_y 
 			mov l, e
-@keepOldTRY:
+@keep_old_tr_y:
 			; hl - top-right corner scr addr to copy
 			; de - a scr addr to copy
 			pop d
