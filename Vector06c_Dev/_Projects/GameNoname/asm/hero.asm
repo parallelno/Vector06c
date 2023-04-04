@@ -624,6 +624,8 @@ hero_tile_func_item:
 
 			; bc - a tile gfx ptr
 			; de - screen addr
+			push d	; for vfx
+			
 			push b
 			push d
 			; draw a tile on the screen
@@ -638,6 +640,11 @@ hero_tile_func_item:
 			pop b
 			; draw a tile in the back buffer2
 			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
+
+			; draw vfx
+			pop b
+			lxi d, vfx_reward
+			call vfx_init
 
 			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_breakables, BREAKABLE_SPAWN_RATE_DELTA, BREAKABLE_SPAWN_RATE_MAX)
 			ret
@@ -691,6 +698,8 @@ hero_tile_func_resource:
 
 			; bc - a tile gfx ptr
 			; de - screen addr
+			push d ; for vfx
+
 			push b
 			push d
 			; draw a tile on the screen
@@ -705,6 +714,11 @@ hero_tile_func_resource:
 			pop b
 			; draw a tile in the back buffer2
 			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
+			
+			; draw vfx
+			pop b
+			lxi d, vfx_reward
+			call vfx_init
 
 			; update a hero resource
 			lxi h, hero_res_func_tbl

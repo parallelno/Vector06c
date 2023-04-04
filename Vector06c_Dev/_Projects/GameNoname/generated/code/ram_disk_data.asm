@@ -62,7 +62,7 @@ chunk_bank3_addr8000_0:
 ;                             level01_gfx [6632], 
 ; bank3 addr8000 [ 5995 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering) 
 ;                             sprite_rd [173], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], 
-; [102969 total free]
+; [105450 total/19303 compressed][102969 total free]
 
 .if BUFFERS_START_ADDR < ram_disk_data
 			.error "the programm is too big. It overlaps with tables at the end of RAM"

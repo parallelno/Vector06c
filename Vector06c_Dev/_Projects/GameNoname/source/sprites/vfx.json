@@ -23,11 +23,11 @@
 	"mask" : true,
 	"anims" : {
 		"puff"	: {
-			"frames" : ["puff0", "puff1", "puff2", "puff3"],
+			"frames" : ["puff0", "puff0", "puff1", "puff2", "puff3"],
 			"loop" : false
 		},
 		"reward"	: {
-			"frames" : ["reward0", "reward1", "reward2", "reward3"],
+			"frames" : ["reward0", "reward1", "reward3", "reward2", "reward3", "reward0", "reward3"],
 			"loop" : false
 		}
 	},
@@ -127,6 +127,6 @@
 			"offset_y": 3,
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		}
+		}	
 	]
 }

@@ -53,6 +53,7 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths):
 	# sort chunks by the unpack priority
 	sorted_chunks = sorted(chunks, key=get_unpack_priority)
 	
+	total_data_compressed = 0
 	# print it in the unpacking order
 	asm += "ram_disk_data: ; the addr of this label has to be < BUFFERS_START_ADDR\n"
 	for chunk_j in sorted_chunks:
@@ -64,10 +65,15 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths):
 		chunk_path = generated_bin_dir + chunk_name + build.EXT_BIN_ZX0
 		asm += f"{chunk_name}:\n"
 		asm += f'.incbin "{common.double_slashes(chunk_path)}"\n'
+
+		segment_compressed_size = os.path.getsize(chunk_path)
+		total_data_compressed += segment_compressed_size
+				
 	asm += "\n"
 
 	asm += "; ram-disk data layout\n"
 	total_free_space = 0
+	total_data_space = 0
 	for bank_j in source_j["banks"]:
 		bank_id = int(bank_j["bank_id"])
 		for segment_j in bank_j["segments"]:
@@ -101,6 +107,7 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths):
 					asset_size = label_end - label_start
 						
 					assets_s += f"{asset_name} [{asset_size}], "
+					total_data_space += asset_size
 			else:
 				assets_s = ["empty"]
 			
@@ -134,7 +141,7 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths):
 			if bank_id == 2:
 				a = 1
 
-	asm += f"; [{total_free_space} total free]\n\n"
+	asm += f"; [{total_data_space} total/{total_data_compressed} compressed][{total_free_space} total free]\n\n"
 	asm += '.if BUFFERS_START_ADDR < ram_disk_data\n' \
 			'			.error "the programm is too big. It overlaps with tables at the end of RAM"\n' \
 			'.endif\n'
