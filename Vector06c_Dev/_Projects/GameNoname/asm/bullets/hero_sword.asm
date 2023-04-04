@@ -260,6 +260,10 @@ hero_sword_update:
 ; a - door_id
 ; c - tile_idx
 hero_sword_func_container:
+			; store tile_idx
+			lxi h, @tile_idx + 1
+			mov m, c
+
 			sta @restore_container_id+1
 			; find a container
 			lxi h, room_id
@@ -272,7 +276,6 @@ hero_sword_func_container:
 			inx h
 			mvi m, <CONTAINERS_STATUS_ACQUIRED
 
-			push b
 @no_container_found:
 			; erase item_id from tiledata
 			mvi b, >room_tiledata
@@ -305,6 +308,8 @@ hero_sword_func_container:
 
 			; bc - a tile gfx ptr
 			; de - screen addr
+			push d ; for vfx
+
 			push b
 			push d
 			; draw a tile on the screen
@@ -319,18 +324,18 @@ hero_sword_func_container:
 			pop b
 			; draw a tile in the back buffer2
 			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
-			pop b
+@tile_idx:
+			mvi c, TEMP_BYTE
 			; c - tile_idx in the room_tiledata array
 			lda @restore_container_id+1
 			ADD_A(2) ; container_id to JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 			ROOM_DECAL_DRAW(__containers_opened_gfx_ptrs, true)
 
-			; draw vfx puff
-
-
-
-
+			; draw vfx
+			pop b
+			lxi d, vfx_reward
+			call vfx_init
 
 			; update a hero container
 			lxi h, hero_cont_func_tbl
@@ -346,7 +351,11 @@ hero_sword_func_container:
 ; a - door_id
 ; c - tile_idx
 hero_sword_func_door:
-			mov b, a ; temp b = a
+			; store tile_idx
+			lxi h, @tile_idx + 1
+			mov m, c
+
+			mov b, a ; temp b = door_id
 			; check global item status
 			mvi h, >global_items
 			ani %00001110
@@ -362,7 +371,6 @@ hero_sword_func_door:
 			ADD_A(2) ; to make a JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1 ; store door_id in case we need to draw an opened version of it
 
-			push b
 			; update the key status
 			mvi m, <ITEM_STATUS_USED
 			
@@ -397,24 +405,34 @@ hero_sword_func_door:
 
 			; bc - a tile gfx ptr
 			; de - screen addr	
+			push d ; for vfx
+
 			push b
 			push d
 			; draw a tile on the screen
 			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX)			
 			pop d
 			pop b
+
 			push b
 			push d
 			; draw a tile in the back buffer
 			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF)
 			pop d
 			pop b
+
 			; draw a tile in the back buffer2
 			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
-			pop b
+
+@tile_idx:
+			mvi c, TEMP_BYTE
 			; c - tile_idx in the room_tiledata array
 			ROOM_DECAL_DRAW(__doors_opened_gfx_ptrs, true)
-			ret
+			
+			; draw vfx
+			pop b
+			lxi d, vfx_puff
+			jmp vfx_init
 
 ; in:
 ; a - breakable_id
@@ -466,11 +484,11 @@ hero_sword_func_breakable:
 			push d
 			; draw a tile in the back buffer2
 			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
+			
+			; draw vfx
 			pop b
-
-			mvi a, VFX_ID_PUFF
+			lxi d, vfx_puff
 			call vfx_init
-
 
 			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_breakables, BREAKABLE_SPAWN_RATE_DELTA, BREAKABLE_SPAWN_RATE_MAX)
 			ret

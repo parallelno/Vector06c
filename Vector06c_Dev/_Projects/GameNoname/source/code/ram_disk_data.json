@@ -61,10 +61,6 @@
 									"asset_type" : "sprite",
 									"path" : "source\\sprites\\bomb.json", 
 									"export_dir" : "generated\\sprites\\"
-								},								{
-									"asset_type" : "sprite",
-									"path" : "source\\sprites\\vfx.json", 
-									"export_dir" : "generated\\sprites\\"
 								}
 							]
 						}  
@@ -175,6 +171,11 @@
 								{
 									"asset_type" : "sprite",
 									"path" : "source\\sprites\\vampire.json",
+									"export_dir" : "generated\\sprites\\"
+								},								
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\vfx.json", 
 									"export_dir" : "generated\\sprites\\"
 								}
 							]

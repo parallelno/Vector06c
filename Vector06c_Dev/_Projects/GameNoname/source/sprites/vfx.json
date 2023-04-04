@@ -19,13 +19,17 @@
 	],
 	"asset_type" : "sprite",
 	"png_path" : "art\\sprites_vfx.png",
-	"preshifted_sprites" : 4,
+	"preshifted_sprites" : 1,
 	"mask" : true,
 	"anims" : {
 		"puff"	: {
 			"frames" : ["puff0", "puff1", "puff2", "puff3"],
 			"loop" : false
-		}		
+		},
+		"reward"	: {
+			"frames" : ["reward0", "reward1", "reward2", "reward3"],
+			"loop" : false
+		}
 	},
 	"sprites" : [ 
 		{
@@ -75,6 +79,54 @@
 			"offset_y": 0,
 			"mask_alpha" : 0,
 			"mask_color" : 1			
-		}		
+		},
+		{
+			"name" : "reward0",
+			"x" : 0,
+			"y"	: 65,
+			"width" : 16,
+			"height" : 15,
+			"mask_x" : 0,
+			"mask_y" : 81, 			
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "reward1",
+			"x" : 16,
+			"y"	: 64,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 16,
+			"mask_y" : 80, 			
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "reward2",
+			"x" : 32,
+			"y"	: 66,
+			"width" : 16,
+			"height" : 13,
+			"mask_x" : 32,
+			"mask_y" : 82, 			
+			"offset_y": 1,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "reward3",
+			"x" : 48,
+			"y"	: 68,
+			"width" : 16,
+			"height" : 9,
+			"mask_x" : 48,
+			"mask_y" : 84, 			
+			"offset_y": 3,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		}
 	]
 }

@@ -1,8 +1,12 @@
 ; in:
 ; bc - vfx scrXY
-; a - vfx_id
+; de - vfx_anim_ptr (ex. vfx_puff)
 vfx_init:
-			sta @vfx_id+1
+			; store anim ptr
+			mov a, e
+			sta @anim_ptr_l + 1
+			mov a, d
+			sta @anim_ptr_h + 1
 
 			lxi h, bullet_update_ptr+1
 			mvi a, BULLET_RUNTIME_DATA_LEN
@@ -24,12 +28,12 @@ vfx_init:
 			MVI_A_TO_DIFF(bullet_anim_ptr, bullet_draw_ptr + 1)
 			add l
 			mov l, a
-
-@vfx_id:	mvi a, TEMP_BYTE
-
-			mvi m, <vfx_puff
+			; store anim ptr
+@anim_ptr_l:
+			mvi m, <TEMP_ADDR
 			inx h
-			mvi m, >vfx_puff
+@anim_ptr_h:			
+			mvi m, >TEMP_ADDR
 
 			; make posX
 			mvi a, %00011111
@@ -136,9 +140,37 @@ vfx_update:
 			dad d
 			jmp actor_destroy
 
+
+; work with only preshift = 0
+; in:
+; hl - ptr to posX+1 (high byte in 16-bit pos)
+; out:
+; de - sprite screen addr
+; c - preshifted sprite idx*2 offset based on posX then +2
+; hl - ptr to posY+1
+; use: a		
+sprite_get_scr_addr_vfx:
+			; calc screen addr X
+			;mov	a, m
+			;ani (SPRITES_PRESHIFTED_4 - 1) * 2
+			;adi 2 ; because there are two bytes of nextFrameOffset in front of sprite ptrs
+			;mov	c, a
+			mvi c, 2
+
+			mov	a, m
+			RRC_(3)
+			ani		%00011111
+			adi		SPRITE_X_SCR_ADDR
+			inx h
+			inx h
+			; de - sprite screen addr
+			mov e, m
+			mov	d, a
+			ret
+
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
-; TODO: make it use preshift 0 or 2
+; TODO: make it use preshift 2
 vfx_draw:
 			BULLET_DRAW(sprite_get_scr_addr_vfx, __RAM_DISK_S_VFX)
