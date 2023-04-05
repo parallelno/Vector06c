@@ -317,6 +317,22 @@ monster_erase:
 monster_impacted:
 			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_monsters, MONSTER_SPAWN_RATE_DELTA, MONSTER_SPAWN_RATE_MAX)
 			; de - ptr to monster_impacted_ptr+1
-			LXI_H_TO_DIFF(monster_update_ptr+1, monster_impacted_ptr+1)
+
+			; play a hit vfx
+			; advance hl to monster_pos_x+1
+			LXI_H_TO_DIFF(monster_pos_x+1, monster_impacted_ptr+1)
+			dad d
+			mov b, m
+			; advance hl to monster_pos_y+1
+			INX_H(2)
+			mov c, m
+			lxi d, vfx4_hit
+			push h
+			call vfx_init4
+			pop h
+
+			; mark this monster dead death
+			; advance hl to monster_update_ptr+1
+			LXI_D_TO_DIFF(monster_update_ptr+1, monster_pos_y+1)
 			dad d
 			jmp actor_destroy

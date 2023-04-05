@@ -1,0 +1,80 @@
+{
+	"palette" :	[
+		{"x": 0,	"y" : 0},
+		{"x": 16,	"y" : 0},
+		{"x": 32,	"y" : 0},
+		{"x": 48,	"y" : 0},
+		{"x": 64,	"y" : 0},
+		{"x": 80,	"y" : 0},
+		{"x": 96,	"y" : 0},
+		{"x": 112,	"y" : 0},
+		{"x": 128,	"y" : 0},
+		{"x": 144,	"y" : 0},
+		{"x": 160,	"y" : 0},
+		{"x": 176,	"y" : 0},
+		{"x": 192,	"y" : 0},
+		{"x": 208,	"y" : 0},
+		{"x": 224,	"y" : 0},
+		{"x": 240,	"y" : 0}
+	],
+	"asset_type" : "sprite",
+	"png_path" : "art\\sprites_vfx.png",
+	"preshifted_sprites" : 4,
+	"mask" : true,
+	"anims" : {
+		"hit"	: {
+			"frames" : ["hit0", "hit0", "hit1", "hit2", "hit3"],
+			"loop" : false
+		}
+	},
+	"sprites" : [ 
+		{
+			"name" : "hit0",
+			"x" : 0,
+			"y"	: 99,
+			"width" : 16,
+			"height" : 11,
+			"mask_x" : 0,
+			"mask_y" : 115, 			
+			"offset_y": 3 ,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "hit1",
+			"x" : 16,
+			"y"	: 98,
+			"width" : 16,
+			"height" : 12,
+			"mask_x" : 0,
+			"mask_y" : 114, 						
+			"offset_y": 2,
+			"mask_alpha" : 0,
+			"mask_color" : 1			
+		},
+		{
+			"name" : "hit2",
+			"x" : 32,
+			"y"	: 97,
+			"width" : 16,
+			"height" : 14,
+			"mask_x" : 0,
+			"mask_y" : 113, 			
+			"offset_y": 1,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "hit3",
+			"x" : 48,
+			"y"	: 96,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 0,
+			"mask_y" : 112, 			
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1			
+		}	
+	]
+}

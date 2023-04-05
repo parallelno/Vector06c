@@ -3,6 +3,7 @@
 ; ex. MONSTER_DRAW(sprite_get_scr_addr_skeleton, __RAM_DISK_S_SKELETON)
 ; in:
 ; de - ptr to monster_draw_ptr in the runtime data
+; TODO: try to convert it into a function
 .macro MONSTER_DRAW(SpriteGetScrAddr_monster, __RAM_DISK_S_MONSTER)
 			LXI_H_TO_DIFF(monster_pos_x+1, monster_draw_ptr)
 			dad d

@@ -61,6 +61,11 @@
 									"asset_type" : "sprite",
 									"path" : "source\\sprites\\bomb.json", 
 									"export_dir" : "generated\\sprites\\"
+								},								
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\vfx4.json", 
+									"export_dir" : "generated\\sprites\\"
 								}
 							]
 						}  

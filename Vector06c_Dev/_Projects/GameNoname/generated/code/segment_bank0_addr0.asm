@@ -24,6 +24,9 @@ __scythe_sprites_rd_data_end:
 __bomb_sprites_rd_data_start:
 .include "generated\\sprites\\bomb_sprites.asm"
 __bomb_sprites_rd_data_end:
+__vfx4_sprites_rd_data_start:
+.include "generated\\sprites\\vfx4_sprites.asm"
+__vfx4_sprites_rd_data_end:
 
 .align 2
 __chunk_end_bank0_addr0_1:

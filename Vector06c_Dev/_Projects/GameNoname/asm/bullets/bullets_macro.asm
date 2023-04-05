@@ -2,7 +2,9 @@
 ; ex. BULLET_DRAW(sprite_get_scr_addr_scythe, __RAM_DISK_S_SCYTHE)
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
-.macro BULLET_DRAW(sprite_get_scr_addr_bullet, __RAM_DISK_S_BULLET)
+; TODO: try to convert it into a function
+.macro BULLET_DRAW(sprite_get_scr_addr_bullet, __RAM_DISK_S_BULLET, check_invis = true)
+        .if check_invis
 			; advance to bullet_status
 			LXI_H_TO_DIFF(bullet_status, bullet_draw_ptr)
 			dad d
@@ -13,6 +15,10 @@
 			rz
 
 			LXI_D_TO_DIFF(bullet_pos_x+1, bullet_status)
+		.endif 
+		.if check_invis == false
+			LXI_H_TO_DIFF(bullet_pos_x+1, bullet_draw_ptr)
+		.endif
 			dad d
 			call sprite_get_scr_addr_bullet
 			; hl - ptr to bullet_pos_y+1
