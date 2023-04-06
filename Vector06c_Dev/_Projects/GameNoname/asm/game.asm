@@ -14,7 +14,7 @@
 .include "asm\\render\\sprite.asm"
 .include "asm\\render\\actor_macro.asm"
 .include "asm\\render\\actor.asm"
-.include "asm\\hero.asm"
+.include "asm\\hero\\hero.asm"
 .include "asm\\monsters\\monsters.asm"
 .include "asm\\bullets\\bullets.asm"
 .include "asm\\levels\\levels.asm"

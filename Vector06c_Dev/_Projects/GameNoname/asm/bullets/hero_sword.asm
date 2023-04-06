@@ -191,8 +191,8 @@ hero_sword_update:
 			; advance and set bullet_anim_ptr
 			inx h
 			lda hero_dir_x
-			ora a
-			jz @attkL
+			rrc
+			jnc @attkL
 @attkR:
 			mvi m, < hero_sword_attk_r
 			inx h
