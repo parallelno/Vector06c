@@ -12,6 +12,7 @@ SCR_BUFF_SIZE = 8192
 
 ASSET_TYPE_BACK			= "back"
 ASSET_TYPE_SPRITE		= "sprite"
+ASSET_TYPE_FONT		= "font"
 ASSET_TYPE_LEVEL		= "level"
 ASSET_TYPE_LEVEL_DATA	= "level_data"
 ASSET_TYPE_LEVEL_GFX	= "level_gfx"

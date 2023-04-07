@@ -19,7 +19,7 @@
 	],
 	"asset_type" : "font",
 	"png_path" : "art\\font.png",
-	"font" : [ 
+	"gfx" : [ 
 		{
 			"name" : "!",
 			"x" : 0,
