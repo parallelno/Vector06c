@@ -146,6 +146,7 @@ def export(bank_id, segment_j,
 			elif asset["asset_type"] == build.ASSET_TYPE_FONT:
 				exported, export_paths = export_font.export_if_updated(asset["path"], asset["export_dir"], font_force_export | force_export)
 				segment_force_export |= exported
+				ram_include_paths.append(export_paths["ram"])
 				segment_include_path = export_paths["ram_disk"]
 
 			elif asset["asset_type"] == build.ASSET_TYPE_DECAL:

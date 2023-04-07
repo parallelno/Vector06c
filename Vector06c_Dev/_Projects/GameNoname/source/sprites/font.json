@@ -19,6 +19,9 @@
 	],
 	"asset_type" : "font",
 	"path_png" : "art\\font.png",
+	"gfx_ptrs" : [
+		"A", "p", "i"
+	],
 	"backgrount_color_pos" : [0, 0],
 	"spacing" : 1,
 	"gfx" : [ 

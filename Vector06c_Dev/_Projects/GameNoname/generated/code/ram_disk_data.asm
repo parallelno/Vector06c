@@ -14,6 +14,7 @@
 .include "generated\\sprites\\scythe_anim.asm"
 .include "generated\\sprites\\bomb_anim.asm"
 .include "generated\\sprites\\vfx4_anim.asm"
+.include "generated\\sprites\\font_gfx_ptrs.asm"
 .include "generated\\sprites\\backs_anim.asm"
 .include "generated\\sprites\\knight_anim.asm"
 .include "generated\\sprites\\burner_anim.asm"

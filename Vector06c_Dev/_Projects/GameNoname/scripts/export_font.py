@@ -5,7 +5,7 @@ import json
 import common
 import build
 
-def sprites_to_asm(label_prefix, source_j, image, source_j_path):
+def gfx_to_asm(label_prefix, source_j, image):
 	gfx_j = source_j["gfx"]
 	asm = label_prefix + "_gfx:"
 
@@ -50,9 +50,23 @@ def sprites_to_asm(label_prefix, source_j, image, source_j_path):
 
 	return asm
 
-def export(source_j_path, asm_gfx_path):
+def gfx_ptrs_to_asm(label_prefix, source_j):
+	gfx_j = source_j["gfx"]
+	asm = f"{label_prefix}_gfx_ptrs:\n"
+	asm += "			.word "
+
+	for char_j in gfx_j:
+		char_name = char_j["name"]
+		asm += f"__{label_prefix}_{char_name}, "
+
+	asm +="\n"
+
+	return asm
+
+def export(source_j_path, asm_gfx_ptrs_path, asm_gfx_path):
 	source_name = common.path_to_basename(source_j_path)
 	source_dir = str(Path(source_j_path).parent) + "\\"
+	asm_gfx_ptrs_dir = str(Path(asm_gfx_ptrs_path).parent) + "\\"
 	asm_gfx_dir = str(Path(asm_gfx_path).parent) + "\\"
 
 	with open(source_j_path, "rb") as file:
@@ -66,12 +80,20 @@ def export(source_j_path, asm_gfx_path):
 	path_png = source_dir + source_j["path_png"]
 	image = Image.open(path_png)
 
+	asm_gfx_ptrs = gfx_ptrs_to_asm(source_name, source_j)
+
 	asm = "; " + source_j_path + "\n"
 	asm_gfx = asm + f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S" + "\n"
 	asm_gfx += asm + f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M" + "\n"
-	asm_gfx += sprites_to_asm("__" + source_name, source_j, image, source_j_path)
+	asm_gfx += gfx_to_asm("__" + source_name, source_j, image)
 
 	# save asm
+	if not os.path.exists(asm_gfx_ptrs_dir):
+		os.mkdir(asm_gfx_ptrs_dir)
+
+	with open(asm_gfx_ptrs_path, "w") as file:
+		file.write(asm_gfx_ptrs)
+
 	if not os.path.exists(asm_gfx_dir):
 		os.mkdir(asm_gfx_dir)
 
@@ -81,14 +103,15 @@ def export(source_j_path, asm_gfx_path):
 def export_if_updated(source_path, generated_dir, force_export):
 	source_name = common.path_to_basename(source_path)
 
+	gfx_ptrs_path = generated_dir + source_name + "_gfx_ptrs" + build.EXT_ASM
 	gfx_path = generated_dir + source_name + "_gfx" + build.EXT_ASM
 
-	export_paths = {"ram_disk" : gfx_path }
+	export_paths = {"ram" : gfx_ptrs_path, "ram_disk" : gfx_path }
 
 	if force_export or is_source_updated(source_path):
 		export(
 			source_path,
-			gfx_path)
+			gfx_ptrs_path, gfx_path)
 
 		print(f"char_j: {source_path} got exported.")
 		return True, export_paths

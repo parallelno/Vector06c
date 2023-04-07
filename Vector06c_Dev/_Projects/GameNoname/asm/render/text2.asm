@@ -1,4 +1,3 @@
-
 ; input:
 ; hl - text addr
 ; bc - screen pos
@@ -17,7 +16,7 @@ draw_text2:
 			; get a char gfx pptr
 			xchg
 			dad h
-			lxi d, test_font2 - ADDR_LEN ; because there is no char_code = 0
+			lxi d, font_gfx_ptrs - ADDR_LEN ; because there is no char_code = 0
 			dad d
 			; hl points to char gfx ptr
 			; get a char gfx ptr
@@ -43,21 +42,67 @@ draw_text2:
 			; calc a pxl shift
 			mvi a, %111
 			ana h
-			; make a JMP_4 ptr to a draw routine from it
-			RLC_(2)
-			adi <@draw_funcs
+			; make a ptr to skip_dad dad h
+			rlc
+			adi <@skip_dad_ptrs
 			mov e, a
-			mvi a, >@draw_funcs
+			mvi a, >@skip_dad_ptrs
 			aci 0
 			mov d, a
+			; read skip_ptr
+			xchg
+			mov a, m
+			inx h
+			mov h, m
+			mov l, a
+			shld @skip_dad + 1
+
+			; de - scr pos
 			; posXY to scr addr
 			mvi a, %11111000
-			ana h
+			ana d
 			RRC_(3)
 			adi >SCR_BUFF1_ADDR
-			mov h, a
-			xchg
-			pchl
+			mov d, a
+
+			; draw a char
+@loop:
+			; de - scr addr
+			; shift a pair of gfx bytes
+			pop b
+			; check if it is the end of the char gfx
+			xra a
+			ora b
+			jnz @advancePos
+			mov l, c
+			mov h, b
+@skip_dad:	jmp TEMP_ADDR
+
+@shift1:	dad h
+@shift2:	dad h
+@shift3:	dad h
+@shift4:	dad h
+@shift5:	dad h
+@shift6:	dad h
+@shift7:	dad h
+
+			ldax d
+			ora h
+			stax d
+			inr d
+			ldax d
+			ora l
+			stax d
+			dcr d
+			inr e
+			jmp @loop
+
+@shift0:
+			ldax d
+			ora c
+			stax d
+			inr e
+			jmp @loop			
 
 @advancePos:
 			; bc - a pos offset
@@ -71,57 +116,5 @@ draw_text2:
 			pop h
 			jmp draw_text2
 
-@draw_funcs:
-			JMP_4(@shift0)
-			JMP_4(@shift1)
-			JMP_4(@shift2)
-			JMP_4(@shift3)
-			JMP_4(@shift4)
-			JMP_4(@shift5)
-			JMP_4(@shift6)
-			JMP_4(@shift7)
-
-@shift0:	DRAW_CHAR2(0)
-@shift1:	DRAW_CHAR2(7)
-@shift2:	DRAW_CHAR2(6)
-@shift3:	DRAW_CHAR2(5)
-@shift4:	DRAW_CHAR2(4)
-@shift5:	DRAW_CHAR2(3)
-@shift6:	DRAW_CHAR2(2)
-@shift7:	DRAW_CHAR2(1)
-
-.macro DRAW_CHAR2(shift)
-@loop:
-			; de - scr addr
-			; shift a pair of gfx bytes
-			pop b
-			; check if it is the end of the char gfx
-			xra a
-			ora b
-			jnz @advancePos
-		.if shift > 0
-			mov l, c
-			mov h, b
-			DAD_H(shift)
-			ldax d
-			ora h
-			stax d
-			inr d
-			ldax d
-			ora l
-			stax d
-			dcr d
-		.endif
-		.if shift == 0
-			ldax d
-			ora c
-			stax d
-		.endif
-			inr e
-			jmp @loop
-
-.endmacro
-
-
-test_font2:
-			.word __font_A, __font_p, __font_i
+@skip_dad_ptrs:
+			.word @shift0, @shift1,	@shift2, @shift3, @shift4, @shift5, @shift6, @shift7

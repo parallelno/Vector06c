@@ -30,7 +30,7 @@ common.delete_file(bin_path)
 common.delete_file(rom_path) 
 
 common.run_command(f"{build.assembler_path} {source_path} {bin_path}", "", source_path)
-
+ 
 if not os.path.exists(bin_path):
 	print(f'ERROR: compilation error, path: {source_path}')
 	print("Stop export")
