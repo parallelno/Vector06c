@@ -209,7 +209,7 @@ def lists_of_sprites_ptrs_to_asm(label_prefix, source_j):
 	for list_name in source_j["lists"]:
 		list_j = source_j["lists"][list_name]
 
-		asm += f"			.byte 0,0  ; safety pair of bytes to support a stack renderer\n"
+		asm += f"			.word 0  ; safety word to support a stack renderer\n"
 		asm += f"__{list_name}_gfx_ptrs: .word "
 
 		for i, sprite_name in enumerate(list_j):
@@ -278,8 +278,7 @@ def sprites_to_asm(label_prefix, source_j, image):
 		data = sprite_data(bytes0, bytes1, bytes2, bytes3, width, height, mask_bytes)
 
 		asm += "\n"
-		# two empty bytes prior every sprite data to support a stack renderer
-		asm += f"			.byte 0,0  ; safety pair of bytes to support a stack renderer\n"
+		asm += f"			.word 0  ; safety word to support a stack renderer\n"
 		asm += f"{label_prefix}_{sprite_name}:\n"
 
 		width_packed = width//8 - 1
@@ -321,8 +320,8 @@ def export(source_j_path, asmSpritePath):
 		print("Stop export")
 		exit(1)
 
-	png_path = source_dir + source_j["png_path"]
-	image = Image.open(png_path)
+	path_png = source_dir + source_j["path_png"]
+	image = Image.open(path_png)
 
 	_, colors = common.palette_to_asm(image, source_j)
 
@@ -346,9 +345,9 @@ def is_source_updated(source_j_path):
 		source_j = json.load(file)
 	
 	source_dir = str(Path(source_j_path).parent) + "\\"
-	png_path = source_dir + source_j["png_path"]
+	path_png = source_dir + source_j["path_png"]
 
-	if build.is_file_updated(source_j_path) | build.is_file_updated(png_path):
+	if build.is_file_updated(source_j_path) | build.is_file_updated(path_png):
 		return True
 	return False
 

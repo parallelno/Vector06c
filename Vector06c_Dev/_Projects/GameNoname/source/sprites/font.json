@@ -18,43 +18,33 @@
 		{"x": 240,	"y" : 0}
 	],
 	"asset_type" : "font",
-	"png_path" : "art\\font.png",
+	"path_png" : "art\\font.png",
+	"backgrount_color_pos" : [0, 0],
+	"spacing" : 1,
 	"gfx" : [ 
 		{
-			"name" : "!",
-			"x" : 0,
-			"y"	: 35,
-			"width" : 2,
-			"height" : 11,
-			"offset_y": 0,
-			"backgrount_color" : 0
-		},
-		{
 			"name" : "A",
-			"x" : 0,
-			"y"	: 67,
-			"width" : 5,
-			"height" : 11,
-			"offset_y": 0,
-			"backgrount_color" : 0
-		},
-		{
-			"name" : "B",
 			"x" : 8,
-			"y"	: 67,
-			"width" : 5,
-			"height" : 11,
-			"offset_y": 0,
-			"backgrount_color" : 0
+			"y"	: 71,
+			"width" : 6,
+			"height" : 9,
+			"offset_y": 0
 		},
 		{
-			"name" : "C",
-			"x" : 16,
-			"y"	: 67,
-			"width" : 5,
-			"height" : 11,
-			"offset_y": 0,
-			"backgrount_color" : 0
+			"name" : "p",
+			"x" : 24,
+			"y"	: 122,
+			"width" : 4,
+			"height" : 10,
+			"offset_y": -4
+		},		
+		{
+			"name" : "i",
+			"x" : 136,
+			"y"	: 104,
+			"width" : 2,
+			"height" : 8,
+			"offset_y": 0
 		}
 	]
 }

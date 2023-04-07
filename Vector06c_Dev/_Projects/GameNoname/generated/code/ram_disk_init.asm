@@ -69,7 +69,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 0, addr 0, chunk_id 1
 	;===============================================
-			; ['skeleton', 'scythe', 'bomb', 'vfx4']
+			; ['skeleton', 'scythe', 'bomb', 'vfx4', 'font']
 			; unpack the chunk into the ram-disk back buffer
 			lxi d, chunk_bank0_addr0_1
 			lxi b, BACK_BUFF_ADDR

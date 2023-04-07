@@ -18,7 +18,7 @@
 		{"x": 240,	"y" : 0}
 	],
 	"asset_type" : "decal",	
-	"png_path" : "art\\sprites_decals.png",
+	"path_png" : "art\\sprites_decals.png",
 	"lists" : {
 		"decals_walkable" : ["bones", "skull"],
 		"decals_collidable" : ["web1"],

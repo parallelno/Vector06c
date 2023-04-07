@@ -82,9 +82,7 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths):
 			addr_s_wo_hex_sym = common.get_addr_wo_prefix(addr_s)
 			segment_addr = build.get_segment_addr(addr_s_wo_hex_sym)
 
-			description = ""
-			if "description" in segment_j:
-				description = segment_j["description"]
+			description = segment_j.get("description", "")
 
 			segment_name = build.get_segment_name(bank_id, addr_s_wo_hex_sym)
 

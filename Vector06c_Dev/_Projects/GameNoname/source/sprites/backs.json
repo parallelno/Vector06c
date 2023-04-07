@@ -18,7 +18,7 @@
 		{"x": 240,	"y" : 0}
 	],
 	"asset_type" : "back",
-	"png_path" : "art\\sprites_background.png",
+	"path_png" : "art\\sprites_background.png",
 	"anims" : {
 		"torch_front"	: {
 			"frames" : ["torch_front0", "torch_front1", "torch_front2", "torch_front3"],

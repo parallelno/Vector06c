@@ -7,6 +7,7 @@
 		"decal" : "scripts\\export_decal.py",
 		"level" : "scripts\\export_level.py",
 		"music" : "scripts\\export_music.py",
+		"font" : "scripts\\export_font.py",
 		"global" : [
 			"source\\code\\ram_disk_data.json",
 			"scripts\\export_ram_disk_data.py",
@@ -65,6 +66,11 @@
 								{
 									"asset_type" : "sprite",
 									"path" : "source\\sprites\\vfx4.json", 
+									"export_dir" : "generated\\sprites\\"
+								},								
+								{
+									"asset_type" : "font",
+									"path" : "source\\sprites\\font.json", 
 									"export_dir" : "generated\\sprites\\"
 								}
 							]

@@ -200,12 +200,8 @@ def sprites_to_asm(label_prefix, source_j, image):
 		y = sprite["y"]
 		width = sprite["width"]
 		height = sprite["height"]
-		offset_x = 0
-		if sprite.get("offset_x") is not None:
-			offset_x = sprite["offset_x"]
-		offset_y = 0
-		if sprite.get("offset_y") is not None:
-			offset_y = sprite["offset_y"]
+		offset_x = sprite.get("offset_x", 0)
+		offset_y = sprite.get("offset_y", 0)
 
 		# get a sprite as a color index 2d array
 		sprite_img = []
@@ -230,8 +226,7 @@ def sprites_to_asm(label_prefix, source_j, image):
 		data = sprite_data(bytes0, bytes1, bytes2, bytes3, width, height)
 
 		asm += "\n"
-		# two empty bytes prior every sprite data to support a stack renderer
-		asm += f"			.byte 0,0  ; safety pair of bytes to support a stack renderer\n"
+		asm += f"			.word 0  ; safety word to support a stack renderer\n"
 		asm += f"{label_prefix}_{sprite_name}:\n"
 
 		width_packed = width//8 - 1
@@ -276,8 +271,8 @@ def export(source_j_path, asm_anim_path, asm_sprite_path):
 		print("Stop export")
 		exit(1)
 
-	png_path = source_dir + source_j["png_path"]
-	image = Image.open(png_path)
+	path_png = source_dir + source_j["path_png"]
+	image = Image.open(path_png)
 
 	_, colors = common.palette_to_asm(image, source_j)
 
@@ -307,9 +302,9 @@ def is_source_updated(source_j_path):
 		source_j = json.load(file)
 	
 	source_dir = str(Path(source_j_path).parent) + "\\"
-	png_path = source_dir + source_j["png_path"]
+	path_png = source_dir + source_j["path_png"]
 
-	if build.is_file_updated(source_j_path) | build.is_file_updated(png_path):
+	if build.is_file_updated(source_j_path) | build.is_file_updated(path_png):
 		return True
 	return False
 

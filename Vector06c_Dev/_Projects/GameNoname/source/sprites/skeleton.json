@@ -18,7 +18,7 @@
 		{"x": 240,	"y" : 0}
 	],
 	"asset_type" : "sprite",	
-	"png_path" : "art\\sprites_skeleton.png",
+	"path_png" : "art\\sprites_skeleton.png",
 	"preshifted_sprites" : 4,
 	"mask" : true,
 	"anims" : {

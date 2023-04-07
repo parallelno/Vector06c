@@ -35,6 +35,6 @@ if not os.path.exists(bin_path):
 	print(f'ERROR: compilation error, path: {source_path}')
 	print("Stop export")
 	exit(1) 
- 
+  
 common.run_command(f"ren {bin_path} {rom_name + build.EXT_ROM}")    
 common.run_command(f"{build.emulator_path} {rom_path}", "", rom_path)

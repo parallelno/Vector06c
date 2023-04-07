@@ -119,10 +119,7 @@ def sprite_data(bytes1, bytes2, bytes3, w, h, mask_bytes = None):
 
 def anims_to_asm(label_prefix, source_j, source_j_path):
 	asm = ""
-	preshifted_sprites = 1
-	# preshifted sprites
-	if "preshifted_sprites" in source_j:
-		preshifted_sprites = source_j["preshifted_sprites"]
+	preshifted_sprites = source_j.get("preshifted_sprites", 1)
 	
 	if (preshifted_sprites != 1 and
 		preshifted_sprites != 4 and preshifted_sprites != 8):
@@ -218,10 +215,7 @@ def sprites_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 	sprites_j = source_j["sprites"]
 	asm = label_prefix + "_sprites:"
 
-	preshifted_sprites = 1
-	# preshifted sprites
-	if "preshifted_sprites" in source_j:
-		preshifted_sprites = source_j["preshifted_sprites"]
+	preshifted_sprites = source_j.get("preshifted_sprites", 1)
 	
 	if (preshifted_sprites != 1 and
 		preshifted_sprites != 4 and preshifted_sprites != 8):
@@ -290,8 +284,7 @@ def sprites_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 			mask_flag = 0
 
 		asm += "\n"
-		# two empty bytes prior every sprite data to support a stack renderer
-		asm += f"			.byte {mask_flag},1  ; safety pair of bytes to support a stack renderer, and also (mask_flag, preshifting is done)\n"
+		asm += f"			.byte {mask_flag},1  ; safety word to support a stack renderer, and also (mask_flag, preshifting is done)\n"
 		asm += label_prefix + "_" + sprite_name + "_0:\n"
 
 		width_packed = width//8 - 1
@@ -319,8 +312,7 @@ def sprites_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 			if width_preshifted == 8: 
 				copy_from_buff_offset -= 1
 
-			# two empty bytes prior every sprite data to support a stack renderer
-			asm += "			.byte " + str(copy_from_buff_offset) + ", "+ str(mask_flag) + " ; safety pair of bytes to support a stack renderer and also (copy_from_buff_offset, mask_flag)\n"
+			asm += "			.byte " + str(copy_from_buff_offset) + ", "+ str(mask_flag) + " ; safety word to support a stack renderer and also (copy_from_buff_offset, mask_flag)\n"
 			asm += label_prefix + "_" + sprite_name + "_" + str(i) + ":\n"
 
 			width_preshifted_packed = width_preshifted//8 - 1
@@ -366,9 +358,9 @@ def export(source_j_path, asmAnimPath, asmSpritePath):
 		print("Stop export")
 		exit(1)
 
-	png_path = source_dir + source_j["png_path"]
+	path_png = source_dir + source_j["path_png"]
 	has_mask = str(source_j["mask"])
-	image = Image.open(png_path)
+	image = Image.open(path_png)
 
 	_, colors = common.palette_to_asm(image, source_j)
 
@@ -398,9 +390,9 @@ def is_source_updated(source_j_path):
 		source_j = json.load(file)
 	
 	source_dir = str(Path(source_j_path).parent) + "\\"
-	png_path = source_dir + source_j["png_path"]
+	path_png = source_dir + source_j["path_png"]
 
-	if build.is_file_updated(source_j_path) | build.is_file_updated(png_path):
+	if build.is_file_updated(source_j_path) | build.is_file_updated(path_png):
 		return True
 	return False
 

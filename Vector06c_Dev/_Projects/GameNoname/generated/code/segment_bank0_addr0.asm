@@ -27,6 +27,9 @@ __bomb_sprites_rd_data_end:
 __vfx4_sprites_rd_data_start:
 .include "generated\\sprites\\vfx4_sprites.asm"
 __vfx4_sprites_rd_data_end:
+__font_gfx_rd_data_start:
+.include "generated\\sprites\\font_gfx.asm"
+__font_gfx_rd_data_end:
 
 .align 2
 __chunk_end_bank0_addr0_1:

@@ -109,8 +109,7 @@ def gfx_to_asm(room_j, image, path, remap_idxs, label_prefix):
 		data, mask = get_tiledata(bytes0, bytes1, bytes2, bytes3)
 
 
-		# two empty bytes prior every data to support a stack renderer
-		asm += "			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
+		asm += "			.word 0 ; safety word to support a stack renderer\n"
 		asm += label_prefix + "_tile" + str(remap_idxs[t_idx]) + ":\n"
 		asm += "			.byte " + str(mask) + " ; mask\n"
 		asm += "			.byte 4 ; counter\n"
@@ -132,7 +131,7 @@ def remap_index(rooms_j):
 	return remap_idxs
 
 def get_list_of_rooms(room_paths, label_prefix):
-	asm = "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
+	asm = "\n			.word 0 ; safety word to support a stack renderer\n"
 	asm += label_prefix + "_rooms_addr:\n			.word "
 
 	for i, room_path_p in enumerate(room_paths):
@@ -146,7 +145,7 @@ def get_list_of_rooms(room_paths, label_prefix):
 	return asm
 
 def get_list_of_tiles(remap_idxs, label_prefix, pngLabelPrefix):
-	asm = "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
+	asm = "\n			.word 0 ; safety word to support a stack renderer\n"
 	asm += label_prefix + "_tilesAddr:\n			.word "
 	for i, t_idx in enumerate(remap_idxs):
 		asm += "__" + pngLabelPrefix + "_tile" + str(remap_idxs[t_idx]) + ", "
@@ -157,7 +156,7 @@ def get_list_of_tiles(remap_idxs, label_prefix, pngLabelPrefix):
 	return asm
 
 def start_pos_to_asm(source_j, label_prefix):
-	asm = ("\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n" + 
+	asm = ("\n			.word 0 ; safety word to support a stack renderer\n" + 
 			"__" + label_prefix + "_startPos:\n			.byte " + 
 			str(source_j["startPos"]["y"]) + ", " + 
 			str(source_j["startPos"]["x"]) + "\n")
@@ -205,8 +204,8 @@ def export_gfx(source_j_path, export_gfx_path):
 		print("Stop export")
 		exit(1)
 
-	png_path = source_dir + source_j["png_path"]
-	image = Image.open(png_path) 
+	path_png = source_dir + source_j["path_png"]
+	image = Image.open(path_png) 
 
 	source_path_wo_ext = os.path.splitext(source_j_path)[0]
 	source_name = os.path.basename(source_path_wo_ext)
@@ -214,7 +213,7 @@ def export_gfx(source_j_path, export_gfx_path):
 	asm = f"__RAM_DISK_S_{source_name.upper()}_GFX = RAM_DISK_S\n"
 	asm += f"__RAM_DISK_M_{source_name.upper()}_GFX = RAM_DISK_M\n"
 	
-	palette_asm, colors = common.palette_to_asm(image, source_j, png_path, "__" + source_name)
+	palette_asm, colors = common.palette_to_asm(image, source_j, path_png, "__" + source_name)
 	asm += palette_asm
 
 	image = common.remap_colors(image, colors)
@@ -230,16 +229,16 @@ def export_gfx(source_j_path, export_gfx_path):
 	# make a tile index remap dictionary, to have the first idx = 0
 	remap_idxs = remap_index(rooms_j)
 
-	png_path_wo_ext = os.path.splitext(png_path)[0]
+	png_path_wo_ext = os.path.splitext(path_png)[0]
 	png_name = os.path.basename(png_path_wo_ext)
 
 	# list of tiles addreses
-	png_path_wo_ext = os.path.splitext(png_path)[0]
+	png_path_wo_ext = os.path.splitext(path_png)[0]
 	png_name = os.path.basename(png_path_wo_ext)
 	asm += get_list_of_tiles(remap_idxs, "__" + source_name, png_name)
 	
 	# tile gfx data to asm
-	asm += gfx_to_asm(rooms_j[0], image, png_path, remap_idxs, "__" + png_name)
+	asm += gfx_to_asm(rooms_j[0], image, path_png, remap_idxs, "__" + png_name)
 
 	# save asm
 	export_dir = str(Path(export_gfx_path).parent) + "\\"		
@@ -265,15 +264,15 @@ def export_data(source_j_path, export_data_path):
 		print("Stop export")
 		exit(1)
 
-	#png_path = source_dir + source_j["png_path"]
-	#image = Image.open(png_path) 
+	#path_png = source_dir + source_j["path_png"]
+	#image = Image.open(path_png) 
 
 	source_name = common.path_to_basename(source_j_path)
 
 	asm = f"__RAM_DISK_S_{source_name.upper()}_DATA = RAM_DISK_S\n"
 	asm += f"__RAM_DISK_M_{source_name.upper()}_DATA = RAM_DISK_M\n"
 	
-	#palette_asm, colors = common.palette_to_asm(image, source_j, png_path, "__" + source_name)
+	#palette_asm, colors = common.palette_to_asm(image, source_j, path_png, "__" + source_name)
 
 	asm += start_pos_to_asm(source_j, source_name)
 	#image = common.remap_colors(image, colors)
@@ -317,7 +316,7 @@ def export_data(source_j_path, export_data_path):
 		common.run_command(f"{build.zx0_path} {asm_room_data_path_bin} {asm_room_data_path_zx0}")
 		# load bin
 		with open(asm_room_data_path_zx0, "rb") as file:
-			asm += "\n			.byte 0,0 ; safety pair of bytes to support a stack renderer\n"
+			asm += "\n			.word 0 ; safety word to support a stack renderer\n"
 			asm += get_room_data_label(room_path, source_dir)
 			asm += common.bytes_to_asm(file.read())
 
@@ -418,7 +417,7 @@ def is_source_updated(source_j_path):
 		source_j = json.load(file)
 	
 	source_dir = str(Path(source_j_path).parent) + "\\"
-	png_path = source_dir + source_j["png_path"]
+	path_png = source_dir + source_j["path_png"]
 
 	room_paths = source_j["rooms"]
 	rooms_updated = False
@@ -426,7 +425,7 @@ def is_source_updated(source_j_path):
 		room_path = source_dir + room_path_p['path']
 		rooms_updated |= build.is_file_updated(room_path)
 
-	if build.is_file_updated(source_j_path) | build.is_file_updated(png_path) | rooms_updated:
+	if build.is_file_updated(source_j_path) | build.is_file_updated(path_png) | rooms_updated:
 		return True
 	return False
 

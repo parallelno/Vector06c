@@ -1,5 +1,5 @@
 {
-	"png_path" : "art\\sprites_tiles_lv01.png",
+	"path_png" : "art\\sprites_tiles_lv01.png",
 	"palette" :
 	[ 
 		{"x": 0,	"y" : 256},

@@ -2,210 +2,210 @@
 __RAM_DISK_S_DECALS = RAM_DISK_S
 __RAM_DISK_M_DECALS = RAM_DISK_M
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_walkable_gfx_ptrs: .word __decals_bones, 0, __decals_skull, 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_collidable_gfx_ptrs: .word __decals_web1, 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __items_gfx_ptrs: .word __decals_key_blue, 0, __decals_key_red, 0, __decals_key_green, 0, __decals_key_magma, 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __resources_gfx_ptrs: .word __decals_coin, 0, __decals_potion_blue, 0, __decals_potion_red, 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __breakable_gfx_ptrs: .word __decals_barrel, 0, __decals_crate, 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __doors_gfx_ptrs: .word __decals_door_blue_l, 0, __decals_door_blue_r, 0, __decals_door_red_l, 0, __decals_door_red_r, 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __doors_opened_gfx_ptrs: .word __decals_door_blue_open_l, 0, __decals_door_blue_open_r, 0, __decals_door_red_open_l, 0, __decals_door_red_open_r, 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __containers_gfx_ptrs: .word __decals_chest_small, 0, __decals_chest_big, 0, __decals_chest_weapon0, 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __containers_opened_gfx_ptrs: .word __decals_chest_small_opened, 0, __decals_chest_big_opened, 0, __decals_chest_weapon0_opened, 
 
 __decals_sprites:
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_bones:
 			.byte 0, 0; offset_y, offset_x
 			.byte 12, 1; height, width
 			.byte 255,239,0,0,0,0,0,0,16,0,255,199,0,40,0,0,16,0,0,0,255,131,0,0,32,0,24,0,68,0,254,7,1,152,32,0,64,0,0,0,252,31,0,0,0,0,192,1,32,2,246,63,9,64,128,0,0,0,0,0,227,127,0,0,0,8,0,0,128,20,193,255,34,0,0,24,0,4,0,0,224,127,0,0,0,2,0,4,128,25,248,63,4,64,128,2,0,1,0,0,252,127,0,0,0,0,0,1,128,2,254,255,1,0,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_skull:
 			.byte 0, 0; offset_y, offset_x
 			.byte 14, 1; height, width
 			.byte 253,255,0,0,0,0,0,0,0,2,248,255,5,0,0,0,0,2,0,0,240,127,0,0,0,6,0,1,128,8,192,255,51,0,0,0,0,12,0,0,131,255,0,0,0,16,0,40,0,68,199,255,40,0,0,16,0,0,0,0,238,159,0,0,0,0,0,0,96,17,252,7,2,152,32,1,64,0,0,0,252,3,0,0,224,3,24,0,4,0,252,3,3,116,8,0,128,0,0,0,253,51,0,0,128,0,8,0,68,2,252,3,0,4,48,2,200,1,0,0,252,7,0,0,0,1,240,0,8,2,254,15,1,240,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_web1:
 			.byte 0, 0; offset_y, offset_x
 			.byte 14, 1; height, width
 			.byte 247,255,0,0,0,0,0,0,0,8,227,255,20,0,0,0,0,8,0,0,199,159,0,0,0,16,0,0,96,40,193,15,46,208,64,8,32,16,64,8,128,31,6,0,128,32,0,6,96,95,136,63,118,64,0,32,128,1,0,32,141,15,50,0,64,0,0,50,176,114,0,7,255,104,96,78,144,0,96,78,16,15,66,0,0,9,0,66,240,230,0,255,251,0,0,80,0,4,0,80,3,255,40,0,0,0,0,40,0,252,7,255,248,0,0,80,0,0,0,80,15,255,96,0,0,0,0,96,0,240,31,255,224,0,0,64,0,0,0,64,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_barrel:
 			.byte 0, 0; offset_y, offset_x
 			.byte 16, 1; height, width
 			.byte 224,15,24,0,0,0,0,0,240,31,192,7,56,56,192,7,0,0,0,32,128,3,64,0,0,0,48,24,12,96,0,1,224,6,200,15,200,15,200,143,0,0,152,48,48,24,112,29,7,192,0,0,224,7,88,21,0,0,0,128,0,0,135,192,192,7,200,7,7,224,0,0,192,7,112,29,48,24,48,152,0,0,128,0,0,0,24,0,7,224,0,1,208,6,224,15,224,15,224,143,0,3,144,16,16,16,216,23,4,224,0,3,231,196,40,8,8,0,8,128,0,7,128,0,0,0,16,16,200,231,128,7,96,8,16,16,0,0,0,64,192,15,32,0,0,0,224,15,16,48,240,31,15,224,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_crate:
 			.byte 0, 0; offset_y, offset_x
 			.byte 16, 1; height, width
 			.byte 0,3,0,0,0,0,0,0,252,255,0,3,128,4,224,31,24,96,0,0,0,1,0,0,8,64,0,0,6,128,0,1,169,70,168,86,0,0,64,41,0,0,41,64,0,0,168,86,71,169,0,0,171,71,168,84,0,0,64,43,0,0,59,96,0,0,136,68,103,187,0,0,192,15,0,0,0,0,8,64,0,0,127,248,0,0,0,0,255,255,0,0,128,7,224,31,24,96,0,0,0,0,63,248,8,64,0,0,255,191,0,3,160,20,232,95,0,0,16,32,0,3,32,16,0,0,232,95,20,160,0,3,191,252,0,0,8,64,248,63,0,3,32,24,24,96,224,31,28,160,0,3,255,252,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_key_blue:
 			.byte 1, 0; offset_y, offset_x
 			.byte 10, 1; height, width
 			.byte 240,7,0,0,0,0,0,0,248,15,252,127,3,128,0,0,0,0,0,0,247,207,0,0,0,0,0,0,48,8,229,135,26,120,0,0,48,8,0,0,225,35,0,0,72,10,0,0,220,30,224,35,31,212,0,0,72,14,0,0,224,35,0,0,200,15,0,0,20,16,224,3,31,180,0,0,72,0,0,0,255,135,0,0,48,0,0,0,104,0,255,207,0,48,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_key_red:
 			.byte 1, 0; offset_y, offset_x
 			.byte 10, 1; height, width
 			.byte 240,7,0,0,0,0,0,0,248,15,252,127,3,128,0,0,0,0,0,0,247,207,0,0,0,0,0,0,48,8,229,135,18,72,48,8,0,0,0,0,225,3,0,0,48,0,120,10,180,20,224,1,17,190,124,14,60,0,0,0,224,1,15,196,56,0,56,0,246,31,224,3,31,236,48,0,48,0,72,0,255,135,0,48,0,0,0,0,120,0,255,207,0,48,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_key_green:
 			.byte 1, 0; offset_y, offset_x
 			.byte 10, 1; height, width
 			.byte 240,7,0,0,0,0,0,0,248,15,252,127,3,128,0,0,0,0,0,0,247,207,0,0,0,0,0,0,48,8,229,135,18,72,0,0,48,8,0,0,225,3,0,0,72,10,48,0,180,20,224,1,17,190,124,0,64,14,64,0,224,1,15,196,204,15,252,15,50,16,224,3,31,164,120,0,88,0,72,0,255,135,0,48,48,0,48,0,72,0,255,207,0,48,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_key_magma:
 			.byte 1, 0; offset_y, offset_x
 			.byte 10, 1; height, width
 			.byte 128,3,0,0,0,0,0,0,252,127,252,127,3,128,0,0,0,0,0,0,135,195,0,0,0,0,0,0,60,120,133,129,82,66,60,40,0,0,60,40,129,1,42,100,24,0,124,42,154,84,128,1,65,218,108,62,72,0,36,62,128,1,0,36,200,63,236,63,218,127,128,1,127,194,124,0,68,0,56,0,255,129,0,0,60,0,60,0,114,0,255,195,0,60,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_coin:
 			.byte 1, 0; offset_y, offset_x
 			.byte 11, 1; height, width
 			.byte 255,7,1,240,0,0,0,0,240,1,254,3,3,248,0,0,0,0,56,0,252,3,0,24,192,3,192,3,248,7,248,1,8,60,224,7,224,7,12,0,240,1,4,4,240,11,240,15,140,21,240,3,18,72,240,15,240,15,0,0,240,3,5,0,240,10,240,15,72,23,240,3,23,232,240,15,144,9,96,6,248,7,3,128,96,4,224,7,144,11,252,15,4,32,192,3,192,3,0,0,254,31,0,0,0,0,0,0,192,3,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_potion_blue:
 			.byte 1, 0; offset_y, offset_x
 			.byte 12, 1; height, width
 			.byte 240,7,3,240,0,0,0,0,0,0,252,127,7,224,0,0,0,0,24,0,247,207,4,8,224,3,0,4,240,15,229,135,31,248,0,12,240,3,196,15,225,3,15,228,240,7,0,8,248,31,224,1,31,248,80,8,160,7,240,15,224,1,4,160,0,0,160,4,176,12,224,3,6,96,64,2,0,0,64,2,255,135,0,0,128,1,0,0,224,7,255,207,7,224,0,3,192,0,0,3,255,255,0,0,128,1,0,0,64,2,255,255,1,128,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_potion_red:
 			.byte 1, 0; offset_y, offset_x
 			.byte 12, 1; height, width
 			.byte 240,7,3,240,0,0,0,0,0,0,252,127,7,224,0,0,0,0,24,0,247,207,4,8,224,3,0,4,240,15,229,135,31,248,192,15,240,3,4,12,225,3,8,4,240,7,224,15,248,31,224,1,31,248,240,15,160,7,80,8,224,1,7,224,0,0,224,7,176,12,224,3,6,96,192,3,0,0,192,3,255,135,0,0,128,1,0,0,224,7,255,207,7,224,0,3,192,0,0,3,255,255,0,0,128,1,128,1,192,3,255,255,1,128,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_door_blue_l:
 			.byte 0, 0; offset_y, offset_x
 			.byte 15, 1; height, width
 			.byte 253,247,2,8,0,0,0,0,8,2,120,227,135,28,0,0,0,0,20,133,56,227,64,0,8,2,0,0,20,197,24,227,229,28,0,0,0,2,0,0,8,193,0,0,8,2,20,64,34,181,24,227,229,28,0,0,0,2,0,0,120,227,0,0,8,2,0,0,20,133,24,227,231,20,0,0,8,0,0,0,0,99,0,0,8,66,0,5,148,184,24,227,231,20,0,0,8,0,0,0,120,227,0,0,8,2,0,0,20,133,248,227,7,28,0,0,0,0,8,2,240,65,0,0,28,7,0,0,162,8,248,227,7,28,0,0,8,2,0,0,253,247,0,0,0,0,0,0,8,2,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_door_blue_r:
 			.byte 0, 0; offset_y, offset_x
 			.byte 15, 1; height, width
 			.byte 239,191,16,64,0,0,0,0,64,16,199,30,56,225,0,0,0,0,161,40,199,28,0,2,64,16,0,0,163,40,199,24,56,167,0,0,64,0,0,0,131,16,0,0,64,16,2,40,173,68,199,24,56,167,0,0,64,0,0,0,199,30,0,0,64,16,0,0,161,40,199,24,40,231,0,0,0,16,0,0,198,0,0,0,66,16,160,0,29,41,199,24,40,231,0,0,0,16,0,0,199,30,0,0,64,16,0,0,161,40,199,31,56,224,0,0,0,0,64,16,130,15,0,0,224,56,0,0,16,69,199,31,56,224,0,0,64,16,0,0,239,191,0,0,0,0,0,0,64,16,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_door_red_l:
 			.byte 0, 0; offset_y, offset_x
 			.byte 16, 1; height, width
 			.byte 0,0,0,0,0,0,0,0,255,255,0,0,247,252,0,8,3,0,248,127,0,0,7,252,1,0,160,4,94,251,0,0,182,74,180,1,1,120,252,3,0,0,2,72,1,112,180,5,74,234,0,0,146,74,180,109,1,0,72,114,0,0,2,72,1,0,180,5,74,250,0,0,182,74,180,1,1,120,72,2,0,0,2,72,1,112,180,5,74,234,0,0,242,74,180,13,1,0,72,18,0,0,2,72,1,96,180,101,74,250,0,0,239,203,52,120,0,104,72,0,128,0,0,0,129,13,128,31,255,109,224,0,29,183,252,7,181,5,0,0,248,0,0,0,52,0,124,0,183,7,255,129,0,126,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_door_red_r:
 			.byte 0, 0; offset_y, offset_x
 			.byte 16, 1; height, width
 			.byte 0,0,0,0,0,0,0,0,255,255,0,0,255,253,2,0,0,192,254,31,0,0,48,224,0,142,160,0,95,241,0,0,198,237,0,40,30,145,64,44,0,0,0,64,14,145,32,44,215,195,0,0,215,73,182,32,0,142,72,0,0,0,0,64,0,196,160,1,95,126,0,0,30,109,128,1,30,252,64,0,0,0,2,64,14,128,160,1,87,254,0,0,210,79,176,45,0,128,72,18,0,0,18,64,6,128,166,45,95,210,0,0,211,247,30,44,22,0,0,18,0,1,0,0,176,129,248,1,182,255,0,7,237,184,224,63,160,173,0,0,0,31,0,0,0,44,0,62,224,237,129,255,126,0,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_door_blue_open_l:
 			.byte 0, 0; offset_y, offset_x
 			.byte 11, 1; height, width
 			.byte 253,247,2,8,0,0,0,0,8,2,120,227,135,28,0,0,0,0,20,133,48,65,72,162,0,0,0,0,190,207,56,227,199,28,0,0,0,0,20,5,31,255,0,0,0,64,0,0,0,160,63,255,192,0,0,0,0,0,0,0,127,255,0,0,0,0,0,0,0,128,63,255,192,0,0,0,0,0,0,0,31,255,0,0,0,64,0,0,0,160,63,255,192,0,0,0,0,0,0,0,127,255,0,0,0,0,0,0,0,128,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_door_blue_open_r:
 			.byte 0, 0; offset_y, offset_x
 			.byte 11, 1; height, width
 			.byte 239,191,16,64,0,0,0,0,64,16,199,30,56,225,0,0,0,0,161,40,130,12,69,18,0,0,0,0,243,125,199,28,56,227,0,0,0,0,160,40,255,248,0,0,2,0,0,0,5,0,255,252,0,3,0,0,0,0,0,0,255,254,0,0,0,0,0,0,1,0,255,252,0,3,0,0,0,0,0,0,255,248,0,0,2,0,0,0,5,0,255,252,0,3,0,0,0,0,0,0,255,254,0,0,0,0,0,0,1,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_door_red_open_l:
 			.byte 0, -2; offset_y, offset_x
 			.byte 16, 1; height, width
 			.byte 0,0,0,0,0,0,0,0,255,255,0,0,63,239,16,0,0,192,254,31,0,0,63,224,0,128,32,5,223,122,0,0,82,109,128,45,30,128,192,63,0,0,18,64,14,128,160,45,87,82,0,0,82,73,182,45,0,128,78,18,0,0,18,64,0,128,160,45,95,82,0,0,82,109,128,45,30,128,64,18,0,0,18,64,14,128,160,45,87,82,0,0,82,79,176,45,0,128,72,18,0,0,18,64,6,128,166,45,95,82,0,0,211,247,30,44,22,0,0,18,0,1,0,0,176,129,248,1,182,255,0,7,237,184,224,63,160,173,0,0,0,31,0,0,0,44,0,62,224,237,129,255,126,0,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_door_red_open_r:
 			.byte 0, 2; offset_y, offset_x
 			.byte 16, 1; height, width
 			.byte 0,0,0,0,0,0,0,0,255,255,0,0,191,255,0,64,3,0,248,127,0,0,7,12,113,0,0,5,143,250,0,0,183,99,20,0,137,120,52,2,0,0,2,0,137,112,52,4,195,235,0,0,146,235,4,109,113,0,0,18,0,0,2,0,35,0,128,5,126,250,0,0,182,120,128,1,63,120,0,2,0,0,2,64,1,112,128,5,127,234,0,0,242,75,180,13,1,0,72,18,0,0,2,72,1,96,180,101,75,250,0,0,239,203,52,120,0,104,72,0,128,0,0,0,129,13,128,31,255,109,224,0,29,183,252,7,181,5,0,0,248,0,0,0,52,0,124,0,183,7,255,129,0,126,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_chest_small:
 			.byte 1, 0; offset_y, offset_x
 			.byte 11, 1; height, width
 			.byte 192,7,63,248,0,0,0,0,248,63,128,3,127,252,0,0,0,0,4,0,128,1,60,122,0,0,120,60,134,67,128,1,103,206,48,24,0,0,136,35,128,1,32,8,0,0,112,28,14,96,128,1,127,254,0,0,0,0,248,63,128,1,0,0,0,0,0,0,254,127,128,1,92,230,248,63,240,63,0,0,128,3,0,0,152,51,248,63,156,99,192,3,48,12,248,31,8,16,0,0,224,7,0,0,0,0,0,0,248,31,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_chest_big:
 			.byte 1, 0; offset_y, offset_x
 			.byte 13, 1; height, width
 			.byte 224,7,31,248,0,0,0,0,248,31,128,3,127,252,0,0,0,0,4,0,128,3,63,244,0,0,240,63,12,64,128,3,95,236,16,32,0,0,240,63,128,1,63,240,0,0,80,43,174,84,128,1,84,174,80,43,0,0,160,20,128,1,31,224,0,0,16,32,238,95,128,3,64,12,240,63,0,0,0,0,128,3,0,0,0,0,0,0,252,127,128,3,93,204,240,63,224,31,0,0,128,7,0,0,80,43,240,63,88,107,128,7,96,24,240,63,16,32,0,0,128,7,0,0,0,0,0,0,248,127,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_chest_weapon0:
 			.byte 1, 0; offset_y, offset_x
 			.byte 13, 1; height, width
 			.byte 224,3,31,252,0,0,0,0,252,31,192,1,63,254,0,0,0,0,2,0,192,1,0,2,248,31,0,0,30,56,192,1,55,238,16,8,8,16,240,15,192,0,7,224,24,24,64,3,167,36,192,0,36,167,64,3,24,24,224,7,192,0,4,160,24,24,64,3,167,36,192,0,55,239,16,8,8,16,224,7,192,1,0,0,192,3,0,0,62,60,192,3,47,244,0,0,248,31,0,0,192,3,0,0,232,23,240,15,236,55,192,3,47,244,0,0,248,31,0,0,192,3,0,0,0,0,0,0,252,63,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_chest_small_opened:
 			.byte 1, 0; offset_y, offset_x
 			.byte 10, 1; height, width
 			.byte 192,7,63,248,0,0,0,0,248,63,128,3,127,252,0,0,0,0,4,0,128,1,60,122,0,0,120,60,134,67,128,1,103,206,48,24,0,0,136,35,128,1,32,8,0,0,112,28,14,96,128,1,127,254,0,0,0,0,248,63,128,1,0,8,0,0,0,0,254,127,128,1,127,254,0,0,0,0,4,32,128,3,63,248,0,0,0,0,252,127,192,3,63,252,0,0,0,0,0,0,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_chest_big_opened:
 			.byte 1, 0; offset_y, offset_x
 			.byte 13, 1; height, width
 			.byte 224,7,31,248,0,0,0,0,248,31,128,3,127,252,0,0,0,0,4,0,128,3,63,244,0,0,240,63,12,64,128,3,95,236,16,32,0,0,240,63,128,1,63,240,0,0,80,43,174,84,128,1,84,174,80,43,0,0,160,20,128,1,31,224,0,0,16,32,238,95,128,1,71,142,112,56,0,0,128,4,128,1,0,0,0,0,0,0,254,127,128,3,127,244,8,0,0,0,8,32,192,3,31,248,0,0,8,0,244,63,192,3,32,4,248,31,0,0,0,0,192,3,0,0,0,0,0,0,252,63,
 
 
-			.byte 0,0  ; safety pair of bytes to support a stack renderer
+			.word 0  ; safety word to support a stack renderer
 __decals_chest_weapon0_opened:
 			.byte 1, 0; offset_y, offset_x
 			.byte 15, 1; height, width
