@@ -1,0 +1,60 @@
+{
+	"palette" :	[
+		{"x": 0,	"y" : 0},
+		{"x": 16,	"y" : 0},
+		{"x": 32,	"y" : 0},
+		{"x": 48,	"y" : 0},
+		{"x": 64,	"y" : 0},
+		{"x": 80,	"y" : 0},
+		{"x": 96,	"y" : 0},
+		{"x": 112,	"y" : 0},
+		{"x": 128,	"y" : 0},
+		{"x": 144,	"y" : 0},
+		{"x": 160,	"y" : 0},
+		{"x": 176,	"y" : 0},
+		{"x": 192,	"y" : 0},
+		{"x": 208,	"y" : 0},
+		{"x": 224,	"y" : 0},
+		{"x": 240,	"y" : 0}
+	],
+	"asset_type" : "font",
+	"png_path" : "art\\font.png",
+	"font" : [ 
+		{
+			"name" : "!",
+			"x" : 0,
+			"y"	: 35,
+			"width" : 2,
+			"height" : 11,
+			"offset_y": 0,
+			"backgrount_color" : 0
+		},
+		{
+			"name" : "A",
+			"x" : 0,
+			"y"	: 67,
+			"width" : 5,
+			"height" : 11,
+			"offset_y": 0,
+			"backgrount_color" : 0
+		},
+		{
+			"name" : "B",
+			"x" : 8,
+			"y"	: 67,
+			"width" : 5,
+			"height" : 11,
+			"offset_y": 0,
+			"backgrount_color" : 0
+		},
+		{
+			"name" : "C",
+			"x" : 16,
+			"y"	: 67,
+			"width" : 5,
+			"height" : 11,
+			"offset_y": 0,
+			"backgrount_color" : 0
+		}
+	]
+}

@@ -12,15 +12,16 @@
 .include "asm\\render\\draw_back.asm"
 .include "asm\\render\\draw_decal.asm"
 .include "asm\\render\\sprite.asm"
-.include "asm\\render\\actor_macro.asm"
-.include "asm\\render\\actor.asm"
+.include "asm\\globals\\actor_macro.asm"
+.include "asm\\globals\\actor.asm"
 .include "asm\\hero\\hero.asm"
 .include "asm\\monsters\\monsters.asm"
 .include "asm\\bullets\\bullets.asm"
 .include "asm\\levels\\levels.asm"
 .include "asm\\levels\\room.asm"
 .include "asm\\levels\\backs.asm"
-.include "asm\\render\\text.asm"
+;.include "asm\\render\\text.asm"
+;.include "asm\\render\\text2.asm"
 .include "asm\\ui.asm"
 
 game_init:
@@ -33,7 +34,13 @@ game_init:
 			xra a
 			sta update_request_counter
 			hlt
+
 @gameLoop:
+			; TODO: test
+			lxi b, 20
+			lxi h, test_text_data
+			call draw_text2
+
 			CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 			call game_update
 			call game_draw

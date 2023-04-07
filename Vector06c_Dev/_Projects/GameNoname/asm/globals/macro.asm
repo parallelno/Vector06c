@@ -94,6 +94,12 @@
 		.endloop
 .endmacro
 
+.macro DAD_H(i)
+		.loop i
+			dad h
+		.endloop
+.endmacro
+
 .macro MVI_A_TO_DIFF(offsetTo, offsetFrom)
 		offsetAddr = offsetTo - offsetFrom
 		.if offsetAddr > 0

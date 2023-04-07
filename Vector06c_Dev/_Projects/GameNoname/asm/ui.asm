@@ -1,4 +1,5 @@
-;.include "text.asm"
+.include "text.asm"
+.include "text2.asm"
 
 game_ui_init:
 			call game_ui_panel_draw
