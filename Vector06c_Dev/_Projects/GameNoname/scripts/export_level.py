@@ -169,11 +169,9 @@ def export_data_if_updated(source_path, generated_dir, force_export):
 	export_paths = {"ram_disk" : generated_dir + source_name + "_data" + build.EXT_ASM }
 
 	if force_export or is_source_updated(source_path):
-		export_data(
-			source_path, 
-			export_paths["ram_disk"])
+		export_data( source_path, export_paths["ram_disk"])
 			
-		print(f"level: {source_path} got exported.")		
+		print(f"export_level: {source_path} got exported.")		
 		return True, export_paths
 	else:
 		return False, export_paths
@@ -184,11 +182,9 @@ def export_gfx_if_updated(source_path, generated_dir, force_export):
 	export_paths = {"ram_disk" : generated_dir + source_name + "_gfx" + build.EXT_ASM }
 
 	if force_export or is_source_updated(source_path):
-		export_gfx(
-			source_path, 
-			export_paths["ram_disk"])
+		export_gfx( source_path, export_paths["ram_disk"])
 			
-		print(f"level: {source_path} got exported.")		
+		print(f"export_level: {source_path} got exported.")		
 		return True, export_paths
 	else:
 		return False, export_paths

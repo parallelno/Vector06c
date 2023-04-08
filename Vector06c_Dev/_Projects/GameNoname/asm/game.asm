@@ -22,11 +22,6 @@
 .include "asm\\levels\\backs.asm"
 .include "asm\\ui.asm"
 
-; TODO: test
-test_text_data:
-			.byte 1, 2, 3, 3, 2, 2, 1, 1, 3, 2, 1, 0,
-; TODO: end test
-
 game_init:
 			call levels_init
 			call level_init
@@ -39,11 +34,6 @@ game_init:
 			hlt
 
 @gameLoop:
-			; TODO: test
-			lxi b, 20
-			lxi h, test_text_data
-			CALL_RAM_DISK_FUNC(draw_text2, __RAM_DISK_S_FONT)
-
 			CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 			call game_update
 			call game_draw

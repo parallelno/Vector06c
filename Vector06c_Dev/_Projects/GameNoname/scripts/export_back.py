@@ -247,12 +247,9 @@ def export_if_updated(source_path, generated_dir, force_export):
 	export_paths = {"ram" : anim_path, "ram_disk" : sprite_path }
 
 	if force_export or is_source_updated(source_path):
-		export(
-			source_path,
-			anim_path, 
-			sprite_path)
+		export(	source_path, anim_path, sprite_path)
 
-		print(f"back: {source_path} got exported.")
+		print(f"export_back: {source_path} got exported.")
 		return True, export_paths
 	else:
 		return False, export_paths

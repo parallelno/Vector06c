@@ -54,7 +54,7 @@ level_init:
 			call get_word_from_ram_disk
 			call hero_set_pos
 			call hero_init
-			ret
+			ret		
 
 level_update:
 			lda level_command

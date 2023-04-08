@@ -79,11 +79,9 @@ def export_if_updated(source_path, generated_dir, force_export):
 	export_paths = {"ram_disk" : generated_dir + source_name + build.EXT_ASM }
 
 	if force_export or build.is_file_updated(source_path):
-		export(
-			source_path, 
-			export_paths["ram_disk"])
+		export( source_path, export_paths["ram_disk"])
 			
-		print(f"music: {source_path} got exported.")		
+		print(f"export_music: {source_path} got exported.")		
 		return True, export_paths
 	else:
 		return False, export_paths

@@ -7,10 +7,33 @@ room_init:
 			call backs_init
 			call room_unpack
 			call room_init_tiles_gfx
-			CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01_GFX)
+			CALL_RAM_DISK_FUNC(room_draw_tiles, __RAM_DISK_S_LEVEL01_GFX)
 			call room_handle_room_tiledata
 			call room_copy_scr_to_backbuffs
+
+			; TODO: test
+			lxi b, 20
+			lxi h, test_text_data2
+			CALL_RAM_DISK_FUNC(draw_text2, __RAM_DISK_S_FONT)
+			;lxi b, 5
+			;lxi h, test_text_data2
+			;CALL_RAM_DISK_FUNC(draw_text2, __RAM_DISK_S_FONT)
 			ret
+
+; TODO: test
+test_text_data:
+			//.byte 1, 4, 1, 2, 3, 4, 2, 2, 4, 1, 3, 2, 1, 0,
+.encoding "screencode", "mixed"
+			;.textz "The quick brown fox jumps over the green grass"
+			.stext "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "nopqrstuvwxy"
+			.byte 0
+test_text_data2:			
+			;.stext "n", /*"o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", */"z",
+			;.stext "nopqrstuvwxyz"
+			.stext "z"
+			.byte 0
+; TODO: end test	
+
 
 ; uncompress room gfx tile_idx buffer + room tiledata buffer into the room_tiles_gfx_ptrs + offset
 ; offset = (size of room_tiles_gfx_ptrs buffer) / 2. the result of the copy operation is

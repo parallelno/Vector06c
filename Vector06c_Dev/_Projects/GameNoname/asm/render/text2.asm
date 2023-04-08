@@ -1,6 +1,7 @@
 ; input:
 ; hl - text addr
 ; bc - screen pos
+
 draw_text2:
 			; get a char code
 			mov e, m

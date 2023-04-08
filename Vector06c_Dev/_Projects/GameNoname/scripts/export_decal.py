@@ -298,11 +298,9 @@ def export_if_updated(source_path, generated_dir, force_export):
 	export_paths = {"ram_disk" : sprite_path }
 
 	if force_export or is_source_updated(source_path):
-		export(
-			source_path,
-			sprite_path)
+		export(	source_path, sprite_path)
 
-		print(f"sprite: {source_path} got exported.")
+		print(f"export_decal: {source_path} got exported.")
 		return True, export_paths
 	else:
 		return False, export_paths

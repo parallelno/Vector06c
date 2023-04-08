@@ -9,14 +9,14 @@ def gfx_to_asm(label_prefix, source_j, image):
 	gfx_j = source_j["gfx"]
 	asm = label_prefix + "_gfx:"
 
-	backgrount_color_pos = source_j.get("backgrount_color_pos", 0)
+	backgrount_color_pos = source_j.get("color_sample_pos", [0,0])
 	backgrount_color_idx = image.getpixel((backgrount_color_pos[0], backgrount_color_pos[1]))
 	spacing = source_j.get("spacing", 1)
 
 	for char_j in gfx_j:
 		char_name = char_j["name"]
 		# every char gfx is 16 pxls width, there first 8 pixels are empty to support shifting
-		WIDTH = 16
+		WIDTH_MAX = 8
 		x = char_j["x"]
 		y = char_j["y"]
 		offset_x = char_j.get("offset_x", 0)
@@ -27,7 +27,7 @@ def gfx_to_asm(label_prefix, source_j, image):
 		# convert color indexes into a list of bits.
 		bits = []
 		for py in reversed(range(y, y + height)) : # Y is reversed because it is from bottomto top in the game
-			for px in range(x, x + WIDTH) :
+			for px in range(x, x + WIDTH_MAX) :
 				color_idx = image.getpixel((px, py))
 				if color_idx == backgrount_color_idx:
 					bit = 0
@@ -36,7 +36,7 @@ def gfx_to_asm(label_prefix, source_j, image):
 				bits.append(bit)
 
 		# combite bits into byte lists
-		bytes = common.combine_bits_to_bytes(bits)
+		data = common.combine_bits_to_bytes(bits)
 
 		asm += "\n"
 		asm += f"			.word 0 ; safety word to support a stack renderer\n"
@@ -45,18 +45,21 @@ def gfx_to_asm(label_prefix, source_j, image):
 		if offset_y < 0:
 			offset_x -= 1
 		asm += f"			.byte {offset_y}, {offset_x} ; offset_y, offset_x\n"
-		asm += common.bytes_to_asm(bytes)
+		
+		asm += common.words_to_asm(data)
 		asm += f"			.byte 0, {width + spacing} ; next_char_offset\n"
 
 	return asm
 
 def gfx_ptrs_to_asm(label_prefix, source_j):
-	gfx_j = source_j["gfx"]
 	asm = f"{label_prefix}_gfx_ptrs:\n"
-	asm += "			.word "
 
-	for char_j in gfx_j:
-		char_name = char_j["name"]
+	numbers_in_line = 16
+	for i, char_name in enumerate(source_j["gfx_ptrs"]):
+		if i % numbers_in_line == 0:
+			if i != 0:
+				asm += "\n"
+			asm += "			.word "
 		asm += f"__{label_prefix}_{char_name}, "
 
 	asm +="\n"
@@ -109,11 +112,9 @@ def export_if_updated(source_path, generated_dir, force_export):
 	export_paths = {"ram" : gfx_ptrs_path, "ram_disk" : gfx_path }
 
 	if force_export or is_source_updated(source_path):
-		export(
-			source_path,
-			gfx_ptrs_path, gfx_path)
+		export(source_path,	gfx_ptrs_path, gfx_path)
 
-		print(f"char_j: {source_path} got exported.")
+		print(f"export_font: {source_path} got exported.")
 		return True, export_paths
 	else:
 		return False, export_paths

@@ -118,6 +118,16 @@ def bytes_to_asm(data, numbers_in_line = 16):
 		asm += str(byte) + ","
 	return asm + "\n"
 
+def words_to_asm(data, numbers_in_line = 16):
+	asm = ""
+	for i, byte in enumerate(data):
+		if i % numbers_in_line == 0:
+			if i != 0:
+				asm += "\n"
+			asm += "			.word "
+		asm += str(byte) + ","
+	return asm + "\n"
+
 def bin_to_asm(path, outPath):
 	with open(path, "rb") as file:
 		txt = ""
