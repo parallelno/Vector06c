@@ -5,6 +5,7 @@
 ;=============================================================================
 ; ptr to the first bullet data in the sorted list
 
+; TODO: think of removing it if it's still unusable
 bullet_runtime_data_sorted:	= $7814 ; .byte <bullet_update_ptr
 
 ; a list of bullet runtime data structs.
@@ -29,7 +30,8 @@ bullet_runtime_data_end:	= bullet_speed_y + WORD_LEN
 BULLET_RUNTIME_DATA_LEN = bullet_runtime_data_end - bullets_runtime_data ; $1a; bullet_runtime_data_end_addr-bullets_runtime_data
 
 ; the same structs for the rest of the bullets
-bullets_runtime_data_end_addr: = bullets_runtime_data + BULLET_RUNTIME_DATA_LEN * BULLETS_MAX ; $78ff ; :		.word ACTOR_RUNTIME_DATA_END << 8
+bullets_runtime_data_end_marker: = bullets_runtime_data + BULLET_RUNTIME_DATA_LEN * BULLETS_MAX ; $78ff ; :		.word ACTOR_RUNTIME_DATA_END << 8
+bullets_runtime_data_end: = bullets_runtime_data_end_marker + WORD_LEN
 
 ;=============================================================================
 ; statuses of container instances. each instance is represented by a pair of bytes (room_id, tile_idx)
@@ -57,7 +59,8 @@ containers_inst_data_ptrs:	= $7900
 containers_inst_data_end:	= containers_inst_data_ptrs + CONTAINERS_LEN
 
 ;=============================================================================
-; statuses of resource instances. each instance is represented by a pair of bytes (room_id, tile_idx)
+; statuses of resource instances placed in rooms. 
+; each instance is represented by a pair of bytes (room_id, tile_idx)
 ; this data is aligned to $100, the length is <= $100
 RESOURCES_UNIQUE_MAX		= 16
 RESOURCES_LEN				= $100
@@ -116,12 +119,12 @@ back_anim_ptr:			= backs_runtime_data 			;.word TEMP_ADDR ; also (back_anim_ptr+
 back_scr_addr:			= back_anim_ptr + ADDR_LEN		;.word TEMP_WORD
 back_anim_timer:		= back_scr_addr + WORD_LEN		;.byte TEMP_BYTE
 back_anim_timer_speed:	= back_anim_timer + BYTE_LEN	;.byte TEMP_BYTE
-back_runtime_data_end_addr: = back_anim_timer_speed + BYTE_LEN
+back_runtime_data_end: = back_anim_timer_speed + BYTE_LEN
 
-BACK_RUNTIME_DATA_LEN = back_runtime_data_end_addr - backs_runtime_data
+BACK_RUNTIME_DATA_LEN = back_runtime_data_end - backs_runtime_data
 
 ; the same structs for the rest of the backs
-backs_runtime_data_end_marker:	= back_runtime_data_end_addr + BACK_RUNTIME_DATA_LEN * (BACKS_MAX-1) ;.word ACTOR_RUNTIME_DATA_END << 8
+backs_runtime_data_end_marker:	= back_runtime_data_end + BACK_RUNTIME_DATA_LEN * (BACKS_MAX-1) ;.word ACTOR_RUNTIME_DATA_END << 8
 backs_runtime_data_end:			= backs_runtime_data_end_marker + WORD_LEN
 ;=============================================================================
 ;

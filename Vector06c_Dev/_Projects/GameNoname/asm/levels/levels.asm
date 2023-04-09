@@ -33,6 +33,16 @@ level_init:
 			mvi a, <hero_resources_end
 			call clear_mem_short
 
+			; erase backs
+			lxi h, backs_runtime_data
+			mvi a, <backs_runtime_data_end
+			call clear_mem_short
+
+			; erase bullets
+			lxi h, bullet_runtime_data_sorted
+			mvi a, <bullets_runtime_data_end
+			call clear_mem_short
+
 			; setup room resources
 			lxi h, __RAM_DISK_S_LEVEL01_DATA<<8 | (RESOURCES_LEN / 2)
 			lxi d, __level01_resources_inst_data_ptrs

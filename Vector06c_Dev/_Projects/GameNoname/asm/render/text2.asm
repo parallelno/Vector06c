@@ -50,6 +50,7 @@ draw_text2:
 			mvi a, >@skip_dad_ptrs
 			aci 0
 			mov d, a
+
 			; read skip_ptr
 			xchg
 			mov a, m

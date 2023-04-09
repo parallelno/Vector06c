@@ -1,4 +1,4 @@
-	; tiledata consts
+	; this line for VSCode proper formating
 TILEDATA_NO_COLLISION = 0
 TILEDATA_COLLISION = %11111111
 TILEDATA_RESTORE_TILE = 1

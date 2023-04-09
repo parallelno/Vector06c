@@ -1,4 +1,4 @@
-	; back consts
+	; this line for VSCode proper formating
 ; max backs in the room
 BACKS_MAX = 10
 

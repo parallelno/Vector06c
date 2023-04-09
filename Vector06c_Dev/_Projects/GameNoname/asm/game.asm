@@ -1,9 +1,10 @@
-.include "asm\\game_const.asm"
-.include "asm\\levels\\levels_const.asm"
+.include "asm\\game_consts.asm"
+.include "asm\\levels\\levels_consts.asm"
 .include "asm\\levels\\levels_macro.asm"
 .include "asm\\levels\\levels_data.asm"
-.include "asm\\levels\\backs_const.asm"
+.include "asm\\levels\\backs_consts.asm"
 
+.include "asm\\globals\\actor_consts.asm"
 .include "asm\\monsters\\monsters_consts.asm"
 .include "asm\\bullets\\bullets_consts.asm"
 .include "asm\\globals\\buffers.asm"

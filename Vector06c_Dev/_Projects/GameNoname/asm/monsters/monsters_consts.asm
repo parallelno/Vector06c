@@ -1,3 +1,4 @@
+	; this line for VSCode proper formating
 ; max monsters in the room
 MONSTERS_MAX = 15
 ; monster types

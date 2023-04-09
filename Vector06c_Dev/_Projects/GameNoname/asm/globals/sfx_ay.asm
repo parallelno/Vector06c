@@ -1,5 +1,5 @@
 ; SFX player for AY-3-8910 sound chip
-.include "asm\\globals\\ay_const.asm"
+.include "asm\\globals\\ay_consts.asms"
 
 ; TODO: test delay
 sfx_delay:

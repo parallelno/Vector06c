@@ -41,25 +41,13 @@ actor_anim_update:
 ; hl - a ptr to an empty actor runtime_data+1
 ; uses:
 ; hl, de, a
-
-; statuses.
-; TODO: optimize. use a lastRemovedMonsterRuntimeDataPtr as a starter to find an empty data
-ACTOR_RUNTIME_DATA_DESTR  = $fc ; an actor's runtime data is ready to be destroyed
-ACTOR_RUNTIME_DATA_EMPTY  = $fd ; an actor's runtime data is available for a new actor
-ACTOR_RUNTIME_DATA_LAST   = $fe ; the end of the last existing actor's runtime data
-ACTOR_RUNTIME_DATA_END    = $ff ; the end of the actor's runtime data
-
-; a status describes what set of animations and behavior is active
-; for ex. HERO_STATUS_ATTACK plays hero_attk_r or hero_attk_l depending on the direction and it spawns a weapon trail
-ACTOR_STATUS_INVIS = $ff
-
 actor_get_empty_data_ptr:
 			sta @len1 + 1
 			sta @next_data + 1
 @loop:
 			mov a, m
 			cpi ACTOR_RUNTIME_DATA_EMPTY
-			; return if it is an empty data
+			; return if it's empty data
 			rz
 			jc @next_data
 			cpi ACTOR_RUNTIME_DATA_LAST

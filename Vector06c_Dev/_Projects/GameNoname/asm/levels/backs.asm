@@ -3,10 +3,10 @@
 ; they do not have an alpha channel
 
 backs_init:
-			; erase backs_runtime_data
+			; erase runtime_data
 			mvi a, ACTOR_RUNTIME_DATA_LAST
 			sta back_anim_ptr + 1
-			; set the last marker byte of backs_runtime_data
+			; set the last marker byte of runtime_data
 			mvi a, ACTOR_RUNTIME_DATA_END
 			sta backs_runtime_data_end_marker + 1
 			
@@ -192,6 +192,6 @@ back_runtime_data_ptr_draw: = backs_draw + 1
 			mov e, m
 			inx h
 			mov d, m
-			CALL_RAM_DISK_FUNC(draw_back_v, <__RAM_DISK_S_BACKS)
+			CALL_RAM_DISK_FUNC(draw_back_v, __RAM_DISK_S_BACKS)
 			ret
 

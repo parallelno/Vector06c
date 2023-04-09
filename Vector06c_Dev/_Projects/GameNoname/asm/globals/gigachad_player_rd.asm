@@ -1,4 +1,4 @@
-.include "asm\\globals\\ay_const.asm"
+.include "asm\\globals\\ay_consts.asm"
 
 ; gigachad16 player
 ; info/credits:
