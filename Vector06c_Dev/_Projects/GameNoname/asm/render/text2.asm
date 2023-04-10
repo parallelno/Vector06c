@@ -1,7 +1,32 @@
+/*
+room_test:
+			; TODO: test
+			lxi b, 20
+			lxi h, test_text_data
+			
+			CALL_RAM_DISK_FUNC(draw_text2, __RAM_DISK_S_FONT)
+			
+			;NOP_(16)
+			lxi b, 5
+			lxi h, test_text_data2
+			CALL_RAM_DISK_FUNC(draw_text2, __RAM_DISK_S_FONT)
+			ret
+
+; TODO: test
+test_text_data:
+.encoding "screencode", "mixed"
+			.text "The quick brown fox jumps over the lazy dog"
+			.byte 0
+test_text_data2:
+.encoding "screencode", "mixed"
+			.text "One Ring to Rule them all"
+			.byte 0,
+; TODO: end test
+*/
+
 ; input:
 ; hl - text addr
 ; bc - screen pos
-
 draw_text2:
 			; get a char code
 			mov e, m

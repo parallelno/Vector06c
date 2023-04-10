@@ -10,30 +10,7 @@ room_init:
 			CALL_RAM_DISK_FUNC(room_draw_tiles, __RAM_DISK_S_LEVEL01_GFX)
 			call room_handle_room_tiledata
 			call room_copy_scr_to_backbuffs
-
-room_test:
-			; TODO: test
-			lxi b, 20
-			lxi h, test_text_data
-			
-			CALL_RAM_DISK_FUNC(draw_text2, __RAM_DISK_S_FONT)
-			
-			;NOP_(16)
-			lxi b, 5
-			lxi h, test_text_data2
-			CALL_RAM_DISK_FUNC(draw_text2, __RAM_DISK_S_FONT)
 			ret
-
-; TODO: test
-test_text_data:
-.encoding "screencode", "mixed"
-			.text "The quick brown fox jumps over the lazy dog"
-			.byte 0
-test_text_data2:
-.encoding "screencode", "mixed"
-			.text "One Ring to Rule them all"
-			.byte 0,
-; TODO: end test
 
 
 ; uncompress room gfx tile_idx buffer + room tiledata buffer into the room_tiles_gfx_ptrs + offset

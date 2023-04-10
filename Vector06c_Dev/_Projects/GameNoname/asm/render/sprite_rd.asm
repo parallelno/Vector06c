@@ -25,8 +25,6 @@ __erase_sprite:
 			; adjust Y
 			mov a, e
 			add l
-			; because push decrements SP before store RP
-			inr a
 			mov e, a
 
 			; store SP
