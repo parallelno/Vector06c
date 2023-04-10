@@ -6,62 +6,62 @@ __font_gfx:
 			.word 0 ; safety word to support a stack renderer
 __font_0:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,0,
+			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_1:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,0,
+			.byte 0, 3 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_2:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,0,
+			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_3:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,0,
+			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_4:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,0,
+			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_5:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,0,
+			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_6:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,0,
+			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_7:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
+			.word 0,0,0,0,0,0,0,0,0,
 			.byte 0, 5 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_8:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,0,
+			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_9:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,0,
+			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_space:
@@ -72,8 +72,8 @@ __font_space:
 			.word 0 ; safety word to support a stack renderer
 __font_exclamation:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,0,0,
+			.byte 0, 2 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_d_quote:
@@ -107,51 +107,51 @@ __font_ampercent:
 
 			.word 0 ; safety word to support a stack renderer
 __font_quote:
-			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.byte 8, 0 ; offset_y, offset_x
+			.word 0,0,
+			.byte 0, 3 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_parent_l:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,
+			.byte 0, 4 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_parent_r:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,
+			.byte 0, 4 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_comma:
-			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.byte -1, -1 ; offset_y, offset_x
+			.word 0,0,
+			.byte 0, 3 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
-__font_hythen:
-			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+__font_dash:
+			.byte 3, 0 ; offset_y, offset_x
+			.word 0,
+			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_period:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,
+			.byte 0, 2 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_colon:
-			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.byte 1, 0 ; offset_y, offset_x
+			.word 0,0,0,0,
+			.byte 0, 2 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
-__font_semicolon:
+__font_multidot:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,
+			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_equal:
@@ -162,8 +162,8 @@ __font_equal:
 			.word 0 ; safety word to support a stack renderer
 __font_question:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 240,
-			.byte 0, 5 ; next_char_offset
+			.word 0,0,0,0,0,0,0,0,0,0,
+			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_A:
@@ -342,8 +342,8 @@ __font_c:
 			.word 0 ; safety word to support a stack renderer
 __font_d:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 112,72,72,72,72,240,
-			.byte 0, 6 ; next_char_offset
+			.word 112,72,72,72,72,240,0,0,
+			.byte 0, 5 ; next_char_offset
 
 			.word 0 ; safety word to support a stack renderer
 __font_e:

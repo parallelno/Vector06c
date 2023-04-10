@@ -22,8 +22,8 @@
 	"gfx_ptrs" : [
 		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 		"space", "space", "space", "space", "space",
-		"space", "exclamation", "d_quote", "hash", "dollar", "percent", "ampercent", "quote", "parent_l", "parent_r", "space", "space", "comma", "hythen", "period", "space",
-		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "colon", "semicolon", "space", "equal", "space", "question",
+		"space", "exclamation", "quote", "space", "space", "space", "space", "quote", "parent_l", "parent_r", "space", "space", "comma", "dash", "period", "space",
+		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "colon", "multidot", "space", "space", "space", "question",
 		"space", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 	],
 	"backgrount_color_pos" : [0, 0],
@@ -31,82 +31,82 @@
 	"gfx" : [
 		{
 			"name" : "0",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"x" : 8,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
 			"offset_y": 0
 		},
 		{
 			"name" : "1",
 			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"y"	: 135,
+			"width" : 2,
+			"height" : 9,
 			"offset_y": 0
 		},
 		{
 			"name" : "2",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"x" : 40,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
 			"offset_y": 0
 		},
 		{
 			"name" : "3",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"x" : 56,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
 			"offset_y": 0
 		},
 		{
 			"name" : "4",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"x" : 72,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
 			"offset_y": 0
 		},
 		{
 			"name" : "5",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"x" : 88,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
 			"offset_y": 0
 		},
 		{
 			"name" : "6",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"x" : 104,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
 			"offset_y": 0
 		},
 		{
 			"name" : "7",
-			"x" : 24,
-			"y"	: 87,
+			"x" : 120,
+			"y"	: 135,
 			"width" : 4,
-			"height" : 1,
+			"height" : 9,
 			"offset_y": 0
 		},
 		{
 			"name" : "8",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"x" : 136,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
 			"offset_y": 0
 		},
 		{
 			"name" : "9",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"x" : 152,
+			"y"	: 135,
+			"width" : 5,
+			"height" : 9,
 			"offset_y": 0
 		},
 		{
@@ -119,10 +119,10 @@
 		},
 		{
 			"name" : "exclamation",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"x" : 120,
+			"y"	: 54,
+			"width" : 1,
+			"height" : 10,
 			"offset_y": 0
 		},
 		{
@@ -167,65 +167,65 @@
 		},
 		{
 			"name" : "quote",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
-			"offset_y": 0
+			"x" : 104,
+			"y"	: 54,
+			"width" : 2,
+			"height" : 2,
+			"offset_y": 8
 		},
 		{
 			"name" : "parent_l",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"x" : 88,
+			"y"	: 56,
+			"width" : 3,
+			"height" : 8,
 			"offset_y": 0
 		},
 		{
 			"name" : "parent_r",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"x" : 72,
+			"y"	: 56,
+			"width" : 3,
+			"height" : 8,
 			"offset_y": 0
 		},
 		{
 			"name" : "comma",
 			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
-			"offset_y": 0
+			"y"	: 63,
+			"width" : 2,
+			"height" : 2,
+			"offset_y": -1
 		},
 		{
-			"name" : "hythen",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
+			"name" : "dash",
+			"x" : 152,
+			"y"	: 60,
+			"width" : 5,
 			"height" : 1,
-			"offset_y": 0
+			"offset_y": 3
 		},
 		{
 			"name" : "period",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
+			"x" : 8,
+			"y"	: 63,
+			"width" : 1,
 			"height" : 1,
 			"offset_y": 0
 		},
 		{
 			"name" : "colon",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
-			"offset_y": 0
+			"x" : 40,
+			"y"	: 59,
+			"width" : 1,
+			"height" : 4,
+			"offset_y": 1
 		},
 		{
-			"name" : "semicolon",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
+			"name" : "multidot",
+			"x" : 56,
+			"y"	: 63,
+			"width" : 5,
 			"height" : 1,
 			"offset_y": 0
 		},
@@ -239,10 +239,10 @@
 		},
 		{
 			"name" : "question",
-			"x" : 24,
-			"y"	: 87,
-			"width" : 4,
-			"height" : 1,
+			"x" : 136,
+			"y"	: 54,
+			"width" : 5,
+			"height" : 10,
 			"offset_y": 0
 		},	
 		{
@@ -507,9 +507,9 @@
 		{
 			"name" : "d",
 			"x" : 56,
-			"y"	: 106,
-			"width" : 5,
-			"height" : 6,
+			"y"	: 104,
+			"width" : 4,
+			"height" : 8,
 			"offset_x": 0,
 			"offset_y": 0
 		},
