@@ -63,7 +63,7 @@
  "tilesets":[
         {
          "firstgid":1,
-         "source":"dungeon01.tsx"
+         "source":"level01.tsx"
         }],
  "tilewidth":16,
  "type":"map",

@@ -7,7 +7,8 @@ room_init:
 			call backs_init
 			call room_unpack
 			call room_init_tiles_gfx
-			CALL_RAM_DISK_FUNC(room_draw_tiles, __RAM_DISK_S_LEVEL01_GFX)
+			lda level_ram_disk_s_gfx
+			CALL_RAM_DISK_FUNC_BANK(room_draw_tiles)
 			call room_handle_room_tiledata
 			call room_copy_scr_to_backbuffs
 			ret
@@ -27,12 +28,13 @@ room_unpack:
 			rlc
 			mov c, a
 			mvi b, 0
-			lxi h, __level01_rooms_addr
+			lhld level_rooms_pptr
 			dad b
 
 			; load a pointer to a room gfx tile_idx buffer
 			xchg
-			mvi a, <__RAM_DISK_S_LEVEL01_DATA
+			lda level_ram_disk_s_data
+			; TODO: why is it called without CALL_RAM_DISK_FUNC???
 			call get_word_from_ram_disk
 			mov d, b
 			mov e, c
@@ -40,11 +42,18 @@ room_unpack:
 			; copy room gfx tile_idxs + room tiledata into the room_tiles_gfx_ptrs + offset
 			; offset = ROOM_TILES_GFX_PTRS_LEN / 2
 			lxi b, room_tiles_gfx_ptrs + ROOM_TILES_GFX_PTRS_LEN / 2
-			CALL_RAM_DISK_FUNC(dzx0, __RAM_DISK_M_LEVEL01_DATA | RAM_DISK_M_8F)
+			lda level_ram_disk_m_data
+			ori RAM_DISK_M_8F
+			CALL_RAM_DISK_FUNC_BANK(dzx0)
 			ret
 
 ; convert room gfx tile_idxs into room gfx tile ptrs
 room_init_tiles_gfx:
+			lhld level_tiles_pptr
+			shld @gfx_tiles_addr + 1
+			lda level_ram_disk_s_gfx
+			sta @ram_disk_s_gfx + 1
+
 			lxi h, room_tiles_gfx_ptrs + ROOM_TILES_GFX_PTRS_LEN / 2
 			lxi b, room_tiles_gfx_ptrs
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
@@ -63,14 +72,16 @@ room_init_tiles_gfx:
 			dad h
 			; double it again because there are two safety bytes in front of every pointer
 			dad h
-			lxi d, __level01_tilesAddr
+@gfx_tiles_addr:
+			lxi d, TEMP_WORD
 			; hl gets the tile graphics ponter
 			dad d
 
 			; copy the tile graphics addr to the current room tile graphics table
 			push b
 			xchg
-			mvi a, <__RAM_DISK_S_LEVEL01_GFX
+@ram_disk_s_gfx:
+			mvi a, TEMP_BYTE
 			call get_word_from_ram_disk
 			mov a, c
 			mov e, b

@@ -39,7 +39,7 @@ def gfx_to_asm(label_prefix, source_j, image):
 		data = common.combine_bits_to_bytes(bits)
 
 		asm += "\n"
-		asm += f"			.word 0 ; safety word to support a stack renderer\n"
+		asm += f"			.word 0 ; safety pair of bytes for reading by POP B\n"
 		asm += f"{label_prefix}_{char_name}:\n"
 
 		if offset_y < 0:

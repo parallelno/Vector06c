@@ -1,13 +1,3 @@
-; TODO: do we need it?
-; list of adresses of compressed levels
-levels_addr: .word TEMP_ADDR, 0
-; TODO: do we need it?
-; the current level idx in levels_addr
-level_idx:
-			.byte 0
-; the current room idx of the current level
-room_id:   .byte 0 ; in the range [0, ROOMS_MAX-1]
-
 ; tiledata format:
 ; it's stored in room_tiledata
 ; %ffffDDDD, ffff - func_id, dddd - a func argument
@@ -101,8 +91,28 @@ room_tiledata_funcs:
 			JMP_4(room_tiledata_decal_collidable_spawn)	; func_id = 14
 			JMP_4(room_tiledata_back_spawn)				; func_id = 15
 
-; command that are handled by the level update func
-LEVEL_COMMAND_NONE = 0
-LEVEL_COMMAND_LOAD_DRAW_ROOM = 1
-level_command:
-			.byte LEVEL_COMMAND_NONE
+
+; level init data ptr and ram-disk access commands
+; level00 init tbl
+levels_init_tbls:
+levels_ram_disk_s_data:				.byte __RAM_DISK_S_LEVEL00_DATA
+levels_ram_disk_m_data: 			.byte __RAM_DISK_M_LEVEL00_DATA
+levels_ram_disk_s_gfx:				.byte __RAM_DISK_S_LEVEL00_GFX
+levels_ram_disk_m_gfx:				.byte __RAM_DISK_M_LEVEL00_GFX
+levels_palette_ptr:					.word __level00_palette
+levels_resources_inst_data_pptr:	.word __level00_resources_inst_data_ptrs
+levels_containers_inst_data_pptr:	.word __level00_containers_inst_data_ptrs
+levels_start_pos_ptr:				.word __level00_start_pos
+levels_rooms_pptr:					.word __level00_rooms_addr
+levels_tiles_pptr:					.word __level00_tiles_addr
+; level01 init tbl
+									.byte __RAM_DISK_S_LEVEL01_DATA
+									.byte __RAM_DISK_M_LEVEL01_DATA
+									.byte __RAM_DISK_S_LEVEL01_GFX
+									.byte __RAM_DISK_M_LEVEL01_GFX
+									.word __level01_palette
+									.word __level01_resources_inst_data_ptrs
+									.word __level01_containers_inst_data_ptrs
+									.word __level01_start_pos
+									.word __level01_rooms_addr
+									.word __level01_tiles_addr

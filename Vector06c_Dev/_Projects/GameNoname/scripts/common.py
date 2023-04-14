@@ -7,7 +7,7 @@ def palette_to_asm(image, char_j, path = "", label_prefix = ""):
 	colors = {}
 	label_postfix = path_to_basename(path)
 	asm = "; " + path + "\n"
-	asm += label_prefix + "_palette_" + label_postfix + ":\n"
+	asm += label_prefix + "_palette" + ":\n"
 	palette = image.getpalette()
 
 	for i, pos in enumerate(palette_coords):
@@ -27,8 +27,10 @@ def palette_to_asm(image, char_j, path = "", label_prefix = ""):
 		if i % 4 == 0 : asm += "			.byte "
 		asm += "%" + format(color, '08b') + ", "
 		if i % 4 == 3 : asm += "\n"
-		
-	return asm + "\n", colors
+	
+	asm = "			.word 0 ; safety pair of bytes for reading by POP B\n" + asm + "\n"
+
+	return asm, colors
 
 def remap_colors(image, colors):
 	palette = image.getpalette()

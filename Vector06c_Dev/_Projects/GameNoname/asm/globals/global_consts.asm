@@ -36,6 +36,7 @@ JMP_4_LEN               = 4
 TEMP_BYTE				= $00
 TEMP_WORD				= $0000
 TEMP_ADDR				= $0000
+NULL_PTR				= $0
 
 ; key codes
 KEY_NO					= %11111111

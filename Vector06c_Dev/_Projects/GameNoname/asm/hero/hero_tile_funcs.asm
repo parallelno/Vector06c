@@ -45,17 +45,22 @@ hero_tile_func_item:
 			push b
 			push d
 			; draw a tile on the screen
-			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX)			
+			lda level_ram_disk_s_gfx
+			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)			
 			pop d
 			pop b
 			push b
 			push d
 			; draw a tile in the back buffer
-			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF)
+			lda level_ram_disk_s_gfx
+			ori __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF
+			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
 			pop d
 			pop b
 			; draw a tile in the back buffer2
-			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
+			lda level_ram_disk_s_gfx
+			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
+			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
 
 			; draw vfx
 			pop b
@@ -119,17 +124,22 @@ hero_tile_func_resource:
 			push b
 			push d
 			; draw a tile on the screen
-			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX)			
+			lda level_ram_disk_s_gfx
+			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
 			pop d
 			pop b
 			push b
 			push d
 			; draw a tile in the back buffer
-			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF)
+			lda level_ram_disk_s_gfx
+			ori __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF
+			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
 			pop d
 			pop b
 			; draw a tile in the back buffer2
-			CALL_RAM_DISK_FUNC(draw_tile_16x16, __RAM_DISK_S_LEVEL01_GFX | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
+			lda level_ram_disk_s_gfx
+			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
+			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
 			
 			; draw vfx
 			pop b

@@ -5,8 +5,10 @@
 .include "asm\\levels\\backs_consts.asm"
 
 .include "asm\\globals\\actor_consts.asm"
+.include "asm\\hero\\hero_consts.asm"
 .include "asm\\monsters\\monsters_consts.asm"
 .include "asm\\bullets\\bullets_consts.asm"
+
 .include "asm\\globals\\buffers.asm"
 
 .include "asm\\render\\draw_tile.asm"

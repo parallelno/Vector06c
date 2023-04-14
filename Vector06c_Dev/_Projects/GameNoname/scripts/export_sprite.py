@@ -284,7 +284,7 @@ def sprites_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 			mask_flag = 0
 
 		asm += "\n"
-		asm += f"			.byte {mask_flag},1  ; safety word to support a stack renderer, and also (mask_flag, preshifting is done)\n"
+		asm += f"			.byte {mask_flag},1  ; safety pair of bytes for reading by POP B, and also (mask_flag, preshifting is done)\n"
 		asm += label_prefix + "_" + sprite_name + "_0:\n"
 
 		width_packed = width//8 - 1
@@ -312,7 +312,7 @@ def sprites_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 			if width_preshifted == 8: 
 				copy_from_buff_offset -= 1
 
-			asm += "			.byte " + str(copy_from_buff_offset) + ", "+ str(mask_flag) + " ; safety word to support a stack renderer and also (copy_from_buff_offset, mask_flag)\n"
+			asm += "			.byte " + str(copy_from_buff_offset) + ", "+ str(mask_flag) + " ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)\n"
 			asm += label_prefix + "_" + sprite_name + "_" + str(i) + ":\n"
 
 			width_preshifted_packed = width_preshifted//8 - 1

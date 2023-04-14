@@ -1,15 +1,16 @@
 __RAM_DISK_S_LEVEL01_DATA = RAM_DISK_S
 __RAM_DISK_M_LEVEL01_DATA = RAM_DISK_M
 
-			.word 0 ; safety word to support a stack renderer
-__level01_startPos:
-			.byte 160, 48
+			.word 0 ; safety pair of bytes for reading by POP B
+__level01_start_pos:										; a hero starting pos
+			.byte 160						; pos_y
+			.byte 48						; pos_x
 
-			.word 0 ; safety word to support a stack renderer
+			.word 0 ; safety pair of bytes for reading by POP B
 __level01_rooms_addr:
 			.word __level01_room00, 0, __level01_room01, 0, __level01_room02_a, 
 
-			.word 0 ; safety word to support a stack renderer
+			.word 0 ; safety pair of bytes for reading by POP B
 ; source\levels\level01_room00.tmj
 __level01_room00:
 			.byte 130,0,40,41,45,133,42,0,131,32,19,44,34,216,232,14,
@@ -30,7 +31,7 @@ __level01_room00:
 			.byte 33,34,238,38,97,8,226,60,230,33,239,208,209,209,107,3,
 			.byte 160,61,240,252,244,232,128,240,95,84,229,254,48,0,8,
 
-			.word 0 ; safety word to support a stack renderer
+			.word 0 ; safety pair of bytes for reading by POP B
 ; source\levels\level01_room01.tmj
 __level01_room01:
 			.byte 128,0,8,167,39,12,4,12,13,134,224,72,35,37,48,20,
@@ -48,7 +49,7 @@ __level01_room01:
 			.byte 231,241,234,174,192,241,74,126,233,207,63,255,224,246,206,32,
 			.byte 70,105,240,225,254,48,0,8,
 
-			.word 0 ; safety word to support a stack renderer
+			.word 0 ; safety pair of bytes for reading by POP B
 ; source\levels\level01_room02_a.tmj
 __level01_room02_a:
 			.byte 130,0,40,41,45,133,42,0,131,32,20,19,34,216,224,104,

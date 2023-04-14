@@ -126,9 +126,33 @@ BACK_RUNTIME_DATA_LEN = back_runtime_data_end - backs_runtime_data
 ; the same structs for the rest of the backs
 backs_runtime_data_end_marker:	= back_runtime_data_end + BACK_RUNTIME_DATA_LEN * (BACKS_MAX-1) ;.word ACTOR_RUNTIME_DATA_END << 8
 backs_runtime_data_end:			= backs_runtime_data_end_marker + WORD_LEN
+
+;=============================================================================
+; a current command that is handled by the level update func
+level_command:			= $7bc3				; .byte
+; the current level idx
+level_idx:				= $7bc4				; .byte
+; the current room idx of the current level
+room_id:   				= $7bc5				; .byte TEMP_BYTE ; in the range [0, ROOMS_MAX-1]
+
+;=============================================================================
+; level init data ptr and ram-disk access commands
+level_init_tbl:						= $7bc6
+level_ram_disk_s_data:				= $7bc6 ; .byte __RAM_DISK_S_LEVEL00_DATA
+level_ram_disk_m_data: 				= $7bc7 ; .byte __RAM_DISK_M_LEVEL00_DATA
+level_ram_disk_s_gfx:				= $7bc8 ; .byte __RAM_DISK_S_LEVEL00_GFX
+level_ram_disk_m_gfx:				= $7bc9 ; .byte __RAM_DISK_M_LEVEL00_GFX
+level_palette_ptr:					= $7bca ; .word __level00_palette
+level_resources_inst_data_pptr:		= $7bcc ; .word __level00_resources_inst_data_ptrs
+level_containers_inst_data_pptr:	= $7bce ; .word __level00_containers_inst_data_ptrs
+level_start_pos_ptr:				= $7bd0 ; .word __level00_start_pos
+level_rooms_pptr:					= $7bd2 ; .word __level00_rooms_addr
+level_tiles_pptr:					= $7bd4 ; .word __level00_tiles_addr
+level_init_tbl_end:					= $7bd6
+LEVEL_INIT_TBL_LEN = level_init_tbl_end - level_init_tbl
 ;=============================================================================
 ;
-;	free space = $7bc3 - $7c10
+;	free space = $7bd6 - $7c10
 ;
 
 ;=============================================================================

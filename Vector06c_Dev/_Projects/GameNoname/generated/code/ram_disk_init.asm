@@ -28,7 +28,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 3, addr 0, chunk_id 0
 	;===============================================
-			; ['level01']
+			; ['level00']
 			; unpack the chunk into the ram-disk backbuffer2
 			lxi d, chunk_bank3_addr0_0
 			lxi b, BACK_BUFF2_ADDR
@@ -39,6 +39,23 @@ ram_disk_init:
 			lxi d, BACK_BUFF2_ADDR + (__chunk_end_bank3_addr0_0 - __chunk_start_bank3_addr0_0)
 			lxi h, __chunk_end_bank3_addr0_0
 			lxi b, (__chunk_end_bank3_addr0_0 - __chunk_start_bank3_addr0_0) / 2
+			mvi a, RAM_DISK_S3 | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F
+			call copy_to_ram_disk
+
+	;===============================================
+	;		bank_id 3, addr 0, chunk_id 1
+	;===============================================
+			; ['level01']
+			; unpack the chunk into the ram-disk backbuffer2
+			lxi d, chunk_bank3_addr0_1
+			lxi b, BACK_BUFF2_ADDR
+			mvi a, __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F
+			call dzx0_rd
+
+			; copy the chunk to the ram-disk
+			lxi d, BACK_BUFF2_ADDR + (__chunk_end_bank3_addr0_1 - __chunk_start_bank3_addr0_1)
+			lxi h, __chunk_end_bank3_addr0_1
+			lxi b, (__chunk_end_bank3_addr0_1 - __chunk_start_bank3_addr0_1) / 2
 			mvi a, RAM_DISK_S3 | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F
 			call copy_to_ram_disk
 
@@ -114,7 +131,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 0, addr $8000, chunk_id 0
 	;===============================================
-			; ['level01', 'backs', 'decals']
+			; ['level00', 'level01', 'backs', 'decals']
 			; unpack the chunk into the ram-disk
 			lxi d, chunk_bank0_addr8000_0
 			lxi b, __chunk_start_bank0_addr8000_0

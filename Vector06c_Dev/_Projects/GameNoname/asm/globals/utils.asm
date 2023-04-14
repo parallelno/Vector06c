@@ -45,6 +45,26 @@ fill_mem_short:
 			jnz @loop
 			ret
 
+; copy a memory buffer
+; input:
+; hl - source
+; de - destination
+; bc - length
+; use:
+; a
+copy_mem:
+@loop:		mov a, m
+			stax d
+			inx h
+			inx d
+			dcx b
+
+			xra a
+			ora c
+			ora b
+			jnz @loop
+			ret
+
 ; clear a memory buffer using stack operations
 ; can be used to clear ram-disk memory as well
 ; input:
@@ -261,7 +281,7 @@ copy_to_ram_disk:
 .endmacro
 
 ;========================================
-; copy a buffer into the ram-disk.
+; fast copy a buffer into the ram-disk.
 ; if interruptions are ON, it corrupts a pair of bytes at target addr-2 !!!
 ; input:
 ; de - source addr + data length
@@ -303,6 +323,10 @@ copy_to_ram_disk32:
 ; TODO: optimize. check if it is more efficient to copy a data stored
 ; in $8000 and higher with a direct access like mov
 copy_from_ram_disk:
+			; check if the length == 0
+			xra a
+			cmp l
+			rz
 			; store sp
 			push h
 			lxi h, $0002

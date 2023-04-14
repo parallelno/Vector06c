@@ -2,7 +2,7 @@
 ;	initialization levels data every game start
 ;
 levels_init:
-			xra a
+			mvi a, 1
 			sta level_idx
 
 			; erase global item statuses
@@ -15,10 +15,26 @@ levels_init:
 ;	initialization level data every level start
 ;
 level_init:
+			; cacl level init data ptr of the current level
+			lxi h, levels_init_tbls			
+			lxi d, LEVEL_INIT_TBL_LEN
+			lda level_idx
+@loop:		ora a
+			jz @break
+			dad d
+			dcr a
+			jmp @loop
+@break:		
+			; copy a level init data
+			lxi d, level_init_tbl
+			lxi b, LEVEL_INIT_TBL_LEN
+			call copy_mem 
+
+			
 			; TODO: make set_palette_from_ram_disk work via CALL_RAM_DISK_FUNC
-			; TODO: set a proper palette depending on the level.
-			lxi d, __level01_palette_sprites_tiles_lv01
-            mvi a, <__RAM_DISK_S_LEVEL01_GFX
+			lhld level_palette_ptr
+			xchg
+            lda level_ram_disk_s_gfx
 			call set_palette_from_ram_disk
 			mvi a, 1
 			sta border_color_idx
@@ -44,36 +60,49 @@ level_init:
 			call clear_mem_short
 
 			; setup room resources
-			lxi h, __RAM_DISK_S_LEVEL01_DATA<<8 | (RESOURCES_LEN / 2)
-			lxi d, __level01_resources_inst_data_ptrs
+			lhld level_resources_inst_data_pptr
+			xchg
+			lxi h, level_ram_disk_s_data
+			mov h, m
+			mvi l, RESOURCES_LEN / 2
 			lxi b, resources_inst_data_ptrs
 			call copy_from_ram_disk
 
 			; setup room containers
-			lxi h, __RAM_DISK_S_LEVEL01_DATA<<8 | (CONTAINERS_LEN / 2)
-			lxi d, __level01_containers_inst_data_ptrs
+			lhld level_containers_inst_data_pptr
+			xchg
+			lxi h, level_ram_disk_s_data
+			mov h, m
+			mvi l, CONTAINERS_LEN / 2
 			lxi b, containers_inst_data_ptrs
-			call copy_from_ram_disk			
+			call copy_from_ram_disk
 
 			; reset room_id
 			xra a
 			sta room_id
 
-			lxi d, __level01_startPos
-			mvi a, <__RAM_DISK_S_LEVEL01_DATA
+			; setup a hero pos
+@start_pos_ptr:			
+			lhld level_start_pos_ptr
+			xchg
+			lda level_ram_disk_s_data
 			call get_word_from_ram_disk
 			call hero_set_pos
 			call hero_init
-			ret		
+
+			; reset level command
+			mvi a, LEVEL_COMMAND_NONE
+			sta level_command
+			ret
 
 level_update:
 			lda level_command
 			ora a
 			rz
 			cpi LEVEL_COMMAND_LOAD_DRAW_ROOM
-			;jnz @next_command_check			
+			;jnz @next_command_check
 			rnz
-			
+
 			; load a new room
 			call room_init
 			call hero_init

@@ -226,7 +226,7 @@ def sprites_to_asm(label_prefix, source_j, image):
 		data = sprite_data(bytes0, bytes1, bytes2, bytes3, width, height)
 
 		asm += "\n"
-		asm += f"			.word 0  ; safety word to support a stack renderer\n"
+		asm += f"			.word 0  ; safety pair of bytes for reading by POP B\n"
 		asm += f"{label_prefix}_{sprite_name}:\n"
 
 		width_packed = width//8 - 1
