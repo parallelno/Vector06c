@@ -90,11 +90,6 @@
 									"export_dir" : "generated\\levels\\"
 								},
 								{
-									"asset_type" : "level_data",
-									"path" : "source\\levels\\level01.json", 
-									"export_dir" : "generated\\levels\\"
-								},								
-								{
 									"asset_type" : "back",
 									"path" : "source\\sprites\\backs.json",
 									"export_dir" : "generated\\sprites\\"
@@ -105,7 +100,17 @@
 									"export_dir" : "generated\\sprites\\" 
 								}
 							]
-						}
+						},
+						{
+							"unpack_priority" : 0,
+							"assets" : [
+								{
+									"asset_type" : "level_data",
+									"path" : "source\\levels\\level01.json", 
+									"export_dir" : "generated\\levels\\"
+								}
+							]
+						}						
 					]
 				}
 			]
