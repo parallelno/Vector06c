@@ -93,8 +93,10 @@ room_tiledata_funcs:
 
 
 ; level init data ptr and ram-disk access commands
+levels_init_tbls_ptrs:
+				.word level00_init_tbls, level01_init_tbls
 ; level00 init tbl
-levels_init_tbls:
+level00_init_tbls:
 levels_ram_disk_s_data:				.byte __RAM_DISK_S_LEVEL00_DATA
 levels_ram_disk_m_data: 			.byte __RAM_DISK_M_LEVEL00_DATA
 levels_ram_disk_s_gfx:				.byte __RAM_DISK_S_LEVEL00_GFX
@@ -106,6 +108,7 @@ levels_start_pos_ptr:				.word __level00_start_pos
 levels_rooms_pptr:					.word __level00_rooms_addr
 levels_tiles_pptr:					.word __level00_tiles_addr
 ; level01 init tbl
+level01_init_tbls:
 									.byte __RAM_DISK_S_LEVEL01_DATA
 									.byte __RAM_DISK_M_LEVEL01_DATA
 									.byte __RAM_DISK_S_LEVEL01_GFX

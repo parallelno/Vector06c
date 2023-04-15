@@ -15,22 +15,24 @@ levels_init:
 ;	initialization level data every level start
 ;
 level_init:
-			; cacl level init data ptr of the current level
-			lxi h, levels_init_tbls			
-			lxi d, LEVEL_INIT_TBL_LEN
+			; get the level init data ptr of the current level
 			lda level_idx
-@loop:		ora a
-			jz @break
+			rlc
+			mov e, a
+			mvi d, 0
+			lxi h, levels_init_tbls_ptrs
 			dad d
-			dcr a
-			jmp @loop
-@break:		
+			mov e, m
+			inx h
+			mov d, m
+			xchg
+
 			; copy a level init data
 			lxi d, level_init_tbl
 			lxi b, LEVEL_INIT_TBL_LEN
 			call copy_mem 
 
-			
+
 			; TODO: make set_palette_from_ram_disk work via CALL_RAM_DISK_FUNC
 			lhld level_palette_ptr
 			xchg
