@@ -223,7 +223,7 @@
 							]
 						},
 						{
-							"description" : "F102-$FFFF backbuffer (to avoid sprite flickering)",
+							"description" : "$F102-$FFFF music player runtime buffers",
 							"reserved" : true,
 							"name" : "gigachad_buffers",
 							"addr" : "$f102",

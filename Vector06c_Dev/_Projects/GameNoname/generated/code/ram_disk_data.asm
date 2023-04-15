@@ -62,7 +62,7 @@ chunk_bank3_addr8000_0:
 ;                             hero_sword_sprites [5226], 
 ; bank2 addr0    [ 8806 free] description: 
 ;                             hero_l_sprites [14466], vampire_sprites [7884], vfx_sprites [1356], 
-; bank2 addr8000 [19651 free] description: sound and music must be at >= $8000 addr. F102-$FFFF backbuffer (to avoid sprite flickering) 
+; bank2 addr8000 [19651 free] description: sound and music must be at >= $8000 addr. $F102-$FFFF backbuffer (to avoid sprite flickering) 
 ;                             sound_rd [705], song01 [8575], 
 ; bank3 addr0    [21044 free] description: 
 ;                             level00_gfx [4834], level01_gfx [6634], 

@@ -3,76 +3,9 @@ from pathlib import Path
 from PIL import Image
 import json
 import common
+import common_gfx
 import build
 
-def bytes_to_asm_tiled(data):
-	asm = ""
-	for tile in data:
-		asm += "			.byte "
-		for b in tile:
-			asm += str(b) + ","
-		asm += "\n"
-	return asm
-
-def mask_data(mask_bytes, w, h ):
-	# sprite data structure description is in drawSprite.asm
-	# sprite uses only 3 out of 4 screen buffers.
-	# the width is devided by 8 because there is 8 pixels per a byte
-	width = w // 8
-	#mask = 0
-	data = []
-	for y in range(h):
-		even_line = y % 2 == 0
-		if even_line:
-			for x in range(width):
-				i = y*width+x
-				data.append(mask_bytes[i])
-		else:
-			for x in range(width):
-				i = y*width+x
-				data.append(mask_bytes[i])
-	return data
-
-# from left-bottom corner by columns all the data for the first scr buff
-# then the same for each other scr buffs
-# sprite data structure description is in drawSprite.asm
-# sprite uses only 3 out of 4 screen buffers.
-# the width is devided by 8 because there is 8 pixels per a byte
-
-def sprite_data_bb(bytes1, bytes2, bytes3, w, h, mask_bytes = None):
-	bytes_all = [bytes1, bytes2, bytes3]
-	width = w // 8
-	data = []
-	for bytes in bytes_all:
-		scr_buff = []
-		for x in range(width):
-			for y in reversed(range(0, h)):
-				i = y*width + x
-				scr_buff.append(bytes[i])
-				if mask_bytes:
-					scr_buff.append(mask_bytes[i])
-		data.append(scr_buff)
-	return data
-
-# tiles 8*8pxs for 3 scr fuffers
-def sprite_data_tiled(bytes1, bytes2, bytes3, w, h, mask_bytes = None):
-	# sprite data structure description is in drawSprite.asm
-	# sprite uses only 3 out of 4 screen buffers.
-	# the width is devided by 8 because there is 8 pixels per a byte
-	bytes_all = [bytes1, bytes2, bytes3]
-	width = w // 8
-	data = []
-	for x in range(width):
-		for y in range(0, h, 8):
-			tile = []
-			for bytes in bytes_all:
-				for dy in range(8):
-					i = y*width + x
-					tile.append(bytes[i])
-					if mask_bytes:
-						tile.append(mask_bytes[i])
-			data.append(tile)
-	return data
 
 def sprite_data(bytes1, bytes2, bytes3, w, h, mask_bytes = None):
 	# sprite data structure description is in draw_sprite.asm
@@ -173,26 +106,7 @@ def anims_to_asm(label_prefix, source_j, source_j_path):
 
 	return asm
 
-# find the most leftest or rightest pixel in a sprite
-# return its dx
-def find_sprite_horiz_border(forwardSearch, sprite_img, mask_alpha, width, height):
-	stop_flag = False
-	for dx in range(width):
-		for dy in range(height):
-			if forwardSearch:
-				dx2 = dx
-			else:
-				dx2 = width - 1 - dx
-			color_idx = sprite_img[dy][dx2]
-			if color_idx != mask_alpha:
-				stop_flag = True
-				break
-		if stop_flag: break
-	return dx2  
-
-def get_sprite_params(label_prefix, sprite_name, dx_l, dx_r, sprite_img, mask_alpha, width, height, shift):
-	#if label_prefix == 'burner' and sprite_name == 'idle_l0':
-	#	test= 10 
+def get_sprite_params(dx_l, dx_r, shift):
 	shifted_dx_l = shift + dx_l
 	shifted_dx_r = shift + dx_r
 
@@ -292,19 +206,19 @@ def sprites_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 		asm += "			.byte " + str( offset_y ) + ", " +  str( offset_x_packed ) + "; offset_y, offset_x\n"
 		asm += "			.byte " + str( height ) + ", " +  str( width_packed ) + "; height, width\n"
 
-		asm += bytes_to_asm_tiled(data)
+		asm += common_gfx.bytes_to_asm_tiled(data)
 
  
 		# find leftest pixel dx
-		dx_l = find_sprite_horiz_border(True, sprite_img, mask_alpha, width, height)
+		dx_l = common_gfx.find_sprite_horiz_border(True, sprite_img, mask_alpha, width, height)
 		# find rightest pixel dx
-		dx_r = find_sprite_horiz_border(False, sprite_img, mask_alpha, width, height) 
+		dx_r = common_gfx.find_sprite_horiz_border(False, sprite_img, mask_alpha, width, height) 
 
 		# calculate preshifted sprite data
 		for i in range(1, preshifted_sprites):
 			shift = 8//preshifted_sprites * i
 
-			offset_x_preshifted_local, width_preshifted = get_sprite_params(label_prefix, sprite_name, dx_l, dx_r, sprite_img, mask_alpha, width, height, shift)
+			offset_x_preshifted_local, width_preshifted = get_sprite_params(dx_l, dx_r, shift)
 			offset_x_preshifted = offset_x + offset_x_preshifted_local
 			asm += "\n"
 
@@ -321,7 +235,7 @@ def sprites_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 			asm += "			.byte " + str( height ) + ", " +  str( width_preshifted_packed ) + "; height, width\n"
 
 			empty_data = make_empty_sprite_data(has_mask, width_preshifted, height)
-			asm += bytes_to_asm_tiled(empty_data)
+			asm += common_gfx.bytes_to_asm_tiled(empty_data)
 
 	return asm
 

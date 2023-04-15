@@ -1,0 +1,13 @@
+{
+	"asset_type" : "picture",
+	"art" : [
+		{
+			"name" : "intro",
+			"path_png" : "art\\pictures.png",
+			"pos" : {
+				"x" : 48,
+				"y" : 160
+			}
+		}
+	]
+}

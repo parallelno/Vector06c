@@ -202,21 +202,6 @@ def export_gfx(source_j_path, export_gfx_path):
 	asm = ""
 	asm = f"__RAM_DISK_S_{source_name.upper()}_GFX = RAM_DISK_S\n"
 	asm += f"__RAM_DISK_M_{source_name.upper()}_GFX = RAM_DISK_M\n"
-
-	#asm += f';=============================================================\n'
-	#asm += "; init commands and ptrs to access the level gfx\n"
-	#asm += "			.word 0 ; safety pair of bytes for reading by POP B\n"
-	#asm += f"__{source_name}_init_tbl_gfx:\n"
-	#asm += f"level_ram_disk_s_gfx: 						; ram-disk cmd to access level gfx via stack\n"
-	#asm += f"			.byte RAM_DISK_S\n"
-	#asm += f"level_ram_disk_m_gfx: 						; ram-disk cmd to access level gfx via commands\n"
-	#asm += f"			.byte RAM_DISK_M\n"	
-	
-	#asm += f"level_palette_ptr:							; ram-disk ptr to a level palette\n"
-	#asm += f'			.word __{source_name}_palette\n'
-	#asm += f"level_tiles_addr:							; level tile gfx ptrs\n"
-	#asm += f'			.word __{source_name}_tiles_addr\n'	
-	#asm += f';=============================================================\n\n'
 	
 	palette_asm, colors = common.palette_to_asm(image, source_j, path_png, "__" + source_name)
 	asm += palette_asm
