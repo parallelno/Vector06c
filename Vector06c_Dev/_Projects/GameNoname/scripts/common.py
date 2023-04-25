@@ -1,93 +1,6 @@
 import os
 import json
-
-def palette_to_asm(image, char_j, path = "", label_prefix = ""):
-	# usially there are color tiles in top row in the image.
-	palette_coords = char_j["palette"]
-	colors = {}
-	label_postfix = path_to_basename(path)
-	asm = "; " + path + "\n"
-	asm += label_prefix + "_palette" + ":\n"
-	palette = image.getpalette()
-
-	for i, pos in enumerate(palette_coords):
-		x = pos["x"]
-		y = pos["y"]
-		idx = image.getpixel((x, y))
-		r = palette[idx * 3]
-		g = palette[idx * 3 + 1]
-		b = palette[idx * 3 + 2]
-		colors[(r, g, b)] = i
-		r = r >> 5
-		g = g >> 5
-		g = g << 3
-		b = b >> 6
-		b = b << 6
-		color = b | g | r
-		if i % 4 == 0 : asm += "			.byte "
-		asm += "%" + format(color, '08b') + ", "
-		if i % 4 == 3 : asm += "\n"
-	
-	asm = "			.word 0 ; safety pair of bytes for reading by POP B\n" + asm + "\n"
-
-	return asm, colors
-
-def remap_colors(image, colors):
-	palette = image.getpalette()
-	color_matching_table = {}
-	
-	for idx in range(len(palette) //3):
-		r = palette[idx*3]
-		g = palette[idx*3 + 1]
-		b = palette[idx*3 + 2]
-		rgb = (r,g,b)
-		if rgb not in colors: 
-			continue
-		cidx = colors[rgb]
-		color_matching_table[idx] = cidx
-	
-	w = image.width
-	h = image.height
-
-	for y in range(h) :
-		for x in range(w) :
-			color_idx = image.getpixel((x, y))
-			new_color_idx = color_matching_table[color_idx]
-			image.putpixel((x,y), new_color_idx)
-	return image
-
-color_index_to_bit = [
-		(0,0,0,0), # color idx = 0
-		(0,0,0,1),
-		(0,0,1,0), # color idx = 2
-		(0,0,1,1),
-		(0,1,0,0), # color idx = 4
-		(0,1,0,1),
-		(0,1,1,0),
-		(0,1,1,1),
-		(1,0,0,0), # color idx = 8
-		(1,0,0,1),
-		(1,0,1,0),
-		(1,0,1,1),
-		(1,1,0,0),
-		(1,1,0,1),
-		(1,1,1,0),
-		(1,1,1,1),
-	]
-
-def indexes_to_bit_lists(tile_img):
-	bits0 = [] # 8000-9FFF # from left to right, from bottom to top
-	bits1 = [] # A000-BFFF
-	bits2 = [] # C000-DFFF
-	bits3 = [] # E000-FFFF
-	for line in tile_img:
-		for color_idx in line:
-			bit0, bit1, bit2, bit3 = color_index_to_bit[color_idx]
-			bits0.append(bit0) 
-			bits1.append(bit1)
-			bits2.append(bit2)
-			bits3.append(bit3)
-	return bits0, bits1, bits2, bits3
+import build
 
 def combine_bits_to_bytes(_bits):
 	bytes = []
@@ -122,12 +35,12 @@ def bytes_to_asm(data, numbers_in_line = 16):
 
 def words_to_asm(data, numbers_in_line = 16):
 	asm = ""
-	for i, byte in enumerate(data):
+	for i, word in enumerate(data):
 		if i % numbers_in_line == 0:
 			if i != 0:
 				asm += "\n"
 			asm += "			.word "
-		asm += str(byte) + ","
+		asm += str(word) + ","
 	return asm + "\n"
 
 def bin_to_asm(path, outPath):
@@ -221,3 +134,29 @@ def get_label_addr(path, _label):
 			return int(addr_s, 16)
 
 	return -1
+
+def asm_compress_to_asm(asm, path_tmp = "temp\\"):
+	asm = ".org 0 \n" + asm
+
+	# save room data to a temp file
+	path_asm = path_tmp + "tmp" + build.EXT_ASM
+	path_bin = path_tmp + "tmp" + build.EXT_BIN
+	path_zx0 = path_tmp + "tmp" + build.EXT_BIN_ZX0
+
+	with open(path_asm, "w") as file:
+		file.write(asm)
+	# asm to temp bin
+	run_command(f"{build.assembler_path} {path_asm} "
+		f" {path_bin}")
+	# pack a room data
+	run_command(f"{build.zx0_path} {path_bin} {path_zx0}")
+	# load bin
+	with open(path_zx0, "rb") as file:
+		asm_packed = bytes_to_asm(file.read())
+
+	# del tmp files
+	delete_file(path_asm)
+	#delete_file(path_bin) 
+	#delete_file(path_zx0)
+
+	return asm_packed

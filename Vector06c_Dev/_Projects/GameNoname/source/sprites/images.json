@@ -1,0 +1,12 @@
+{
+	"asset_type" : "image",
+	"images" : [
+		{
+			"name" : "intro",
+			"path_png" : "art\\image_intro_2_256.png",
+			"tile_size" : 2,
+			"n_clusters" : 256,
+			"random_state" : 1
+		}
+	]
+}

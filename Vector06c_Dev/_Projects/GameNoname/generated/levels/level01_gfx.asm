@@ -1,13 +1,12 @@
 __RAM_DISK_S_LEVEL01_GFX = RAM_DISK_S
 __RAM_DISK_M_LEVEL01_GFX = RAM_DISK_M
-			.word 0 ; safety pair of bytes for reading by POP B
 ; source\levels\art\level01.png
+			.word 0 ; safety pair of bytes for reading by POP B
 __level01_palette:
 			.byte %01001010, %00000001, %01011100, %00011010, 
 			.byte %11100100, %11111101, %01110111, %01011111, 
 			.byte %01000010, %01001011, %01001100, %11111111, 
 			.byte %01001001, %11101011, %01010010, %01011011, 
-
 
 			.word 0 ; safety pair of bytes for reading by POP B
 __level01_tiles_addr:

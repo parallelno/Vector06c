@@ -131,7 +131,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 0, addr $8000, chunk_id 0
 	;===============================================
-			; ['level00', 'backs', 'decals']
+			; ['level00', 'backs', 'decals', 'images']
 			; unpack the chunk into the ram-disk
 			lxi d, chunk_bank0_addr8000_0
 			lxi b, __chunk_start_bank0_addr8000_0

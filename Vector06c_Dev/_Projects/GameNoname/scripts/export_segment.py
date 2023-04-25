@@ -8,6 +8,7 @@ import export_decal
 import export_level
 import export_music
 import export_font
+import export_image
 
 def check_segment_size(path, segment_addr):
 	if segment_addr != build.SEGMENT_0000_7F00_ADDR and segment_addr != build.SEGMENT_8000_0000_ADDR :
@@ -101,7 +102,7 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 
 #=========================================================================================
 def export(bank_id, segment_j,
-			force_export, sprite_force_export, back_force_export, decal_force_export, level_force_export, music_force_export, font_force_export,
+			force_export, sprite_force_export, back_force_export, decal_force_export, level_force_export, music_force_export, font_force_export, image_force_export,
 			generated_code_dir, generated_bin_dir):
 
 	addr_s = segment_j["addr"]
@@ -147,6 +148,11 @@ def export(bank_id, segment_j,
 				exported, export_paths = export_font.export_if_updated(asset["path"], asset["export_dir"], font_force_export | force_export)
 				segment_force_export |= exported
 				ram_include_paths.append(export_paths["ram"])
+				segment_include_path = export_paths["ram_disk"]
+
+			elif asset["asset_type"] == build.ASSET_TYPE_IMAGE:
+				exported, export_paths = export_image.export_if_updated(asset["path"], asset["export_dir"], image_force_export | force_export)
+				segment_force_export |= exported
 				segment_include_path = export_paths["ram_disk"]
 
 			elif asset["asset_type"] == build.ASSET_TYPE_DECAL:

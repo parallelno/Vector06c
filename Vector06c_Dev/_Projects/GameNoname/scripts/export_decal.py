@@ -115,7 +115,7 @@ def lists_of_sprites_ptrs_to_asm(label_prefix, source_j):
 		asm += "\n\n"
 	return asm
 
-def sprites_to_asm(label_prefix, source_j, image):
+def gfx_to_asm(label_prefix, source_j, image):
 	sprites_j = source_j["sprites"]
 	asm = label_prefix + "_sprites:"
 
@@ -143,7 +143,7 @@ def sprites_to_asm(label_prefix, source_j, image):
 			sprite_img.append(line)
 
 		# convert indexes into bit lists.
-		bits0, bits1, bits2, bits3 = common.indexes_to_bit_lists(sprite_img)
+		bits0, bits1, bits2, bits3 = common_gfx.indexes_to_bit_lists(sprite_img)
 
 		# combite bits into byte lists
 		bytes0 = common.combine_bits_to_bytes(bits0) # 8000-9FFF # from left to right, from bottom to top
@@ -216,15 +216,15 @@ def export(source_j_path, asmSpritePath):
 	path_png = source_dir + source_j["path_png"]
 	image = Image.open(path_png)
 
-	_, colors = common.palette_to_asm(image, source_j)
+	_, colors = common_gfx.palette_to_asm(image, source_j)
 
-	image = common.remap_colors(image, colors)
+	image = common_gfx.remap_colors(image, colors)
 
 	asm = "; " + source_j_path + "\n"
 	asm += f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S" + "\n"
 	asm += f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M" + "\n\n"
 	asm += lists_of_sprites_ptrs_to_asm("__" + source_name, source_j)
-	asm += sprites_to_asm("__" + source_name, source_j, image)
+	asm += gfx_to_asm("__" + source_name, source_j, image)
 
 	# save asm
 	if not os.path.exists(asm_sprite_dir):

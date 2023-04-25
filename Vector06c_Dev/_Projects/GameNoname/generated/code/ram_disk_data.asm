@@ -54,21 +54,21 @@ chunk_bank3_addr8000_0:
 ; ram-disk data layout
 ; bank0 addr0    [  394 free] description: 
 ;                             hero_r_sprites [14466], skeleton_sprites [10140], scythe_sprites [1626], bomb_sprites [960], vfx4_sprites [3318], font_gfx [1608], 
-; bank0 addr8000 [27641 free] description: 
-;                             level00_data [196], backs_sprites [496], decals_sprites [3640], level01_data [795], 
+; bank0 addr8000 [22957 free] description: 
+;                             level00_data [196], backs_sprites [496], decals_sprites [3640], images_gfx [4683], level01_data [795], 
 ; bank1 addr0    [ 6514 free] description: 
 ;                             knight_sprites [16398], burner_sprites [9600], 
 ; bank1 addr8000 [ 2966 free] description: $A000-$FFFF backbuffer2 (to restore a background in the backbuffer) 
 ;                             hero_sword_sprites [5226], 
 ; bank2 addr0    [ 8806 free] description: 
 ;                             hero_l_sprites [14466], vampire_sprites [7884], vfx_sprites [1356], 
-; bank2 addr8000 [19651 free] description: sound and music must be at >= $8000 addr. $F102-$FFFF backbuffer (to avoid sprite flickering) 
+; bank2 addr8000 [19651 free] description: sound and music must be at >= $8000 addr. $F102-$FFFF music player runtime buffers 
 ;                             sound_rd [705], song01 [8575], 
 ; bank3 addr0    [21044 free] description: 
 ;                             level00_gfx [4834], level01_gfx [6634], 
 ; bank3 addr8000 [ 5996 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering) 
 ;                             sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], 
-; [115407 total/22454 compressed][93012 total free]
+; [120090 total/27140 compressed][88328 total free]
 
 .if BUFFERS_START_ADDR < ram_disk_data
 			.error "the programm is too big. It overlaps with tables at the end of RAM"

@@ -17,5 +17,5 @@ __song01_rd_data_end:
 __chunk_end_bank2_addr8000_0:
 
 ; __chunk_start_bank2_addr8000_1:
-; reserved. $F102-$FFFF backbuffer (to avoid sprite flickering)
+; reserved. $F102-$FFFF music player runtime buffers
 

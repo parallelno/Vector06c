@@ -3,6 +3,7 @@ from PIL import Image
 from pathlib import Path
 import json
 import common
+import common_gfx
 import build
 
 def get_room_data_label(room_path, source_dir = ""):
@@ -97,7 +98,7 @@ def gfx_to_asm(room_j, image, path, remap_idxs, label_prefix):
 			#y += 1
 		
 		# convert indexes into bit lists.
-		bits0, bits1, bits2, bits3 = common.indexes_to_bit_lists(tile_img)
+		bits0, bits1, bits2, bits3 = common_gfx.indexes_to_bit_lists(tile_img)
 
 		# combite bits into byte lists
 		bytes0 = common.combine_bits_to_bytes(bits0) # 8000-9FFF # from left to right, from bottom to top
@@ -203,10 +204,10 @@ def export_gfx(source_j_path, export_gfx_path):
 	asm = f"__RAM_DISK_S_{source_name.upper()}_GFX = RAM_DISK_S\n"
 	asm += f"__RAM_DISK_M_{source_name.upper()}_GFX = RAM_DISK_M\n"
 	
-	palette_asm, colors = common.palette_to_asm(image, source_j, path_png, "__" + source_name)
+	palette_asm, colors = common_gfx.palette_to_asm(image, source_j, path_png, "__" + source_name)
 	asm += palette_asm
 
-	image = common.remap_colors(image, colors)
+	image = common_gfx.remap_colors(image, colors)
 	
 	room_paths = source_j["rooms"]
 	rooms_j = []
