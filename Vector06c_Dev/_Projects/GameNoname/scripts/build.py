@@ -22,19 +22,20 @@ ASSET_TYPE_MUSIC		= "music"
 ASSET_TYPE_CODE			= "code"
 ASSET_TYPE_RAM_DISK_DATA = "ram_disk_data"
 
-EXT_ASM		= ".asm"
-EXT_BIN		= ".bin"
-EXT_ZX0		= ".zx0"
-EXT_BIN_ZX0	= ".bin.zx0"
-EXT_ROM		= ".rom"
-EXT_YM		= ".ym"
+EXT_ASM			= ".asm"
+EXT_BIN			= ".bin"
+EXT_ZX0			= ".zx0"
+EXT_BIN_ZX0		= ".bin.zx0"
+EXT_BIN_UPKR	= ".bin.upkr"
+EXT_ROM			= ".rom"
+EXT_YM			= ".ym"
 
 # global vars
 build_db_path = "generated\\build.db"
 assembler_path = "..\\..\\retroassembler\\retroassembler.exe -C=8080 -c"
 assembler_labels_cmd = " -x"
 zx0_path = "tools\\zx0salvador.exe -v -classic"
-upkr_path = "tools\\upkr.exe "
+upkr_path = "tools\\upkr.exe --z80"
 emulator_path = "..\\..\\Emu80\\Emu80qt.exe"
 # end global vars
 

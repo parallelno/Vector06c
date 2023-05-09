@@ -3,9 +3,10 @@
 	"images" : [
 		{
 			"name" : "intro",
-			"path_png" : "art\\image_intro_2_256.png",
-			"tile_size" : 2,
-			"n_clusters" : 256,
+			"path_png" : "art\\contrast_dither_240_200.png",
+			"tile_size" : 2, 
+			"n_clusters" : 128,
+			"extention" : ".bin.zx0",
 			"random_state" : 1
 		}
 	]

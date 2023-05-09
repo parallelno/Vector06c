@@ -249,30 +249,61 @@ def tiles_to_image_indexed(tiles_gfx, palette, tile_size):
 
 def color_indices_to_asm(image):
 	# pack 2 color indices into one byte
+	#image.save("temp\\tmp.png")
+	#bytes = list(image.tobytes())
 	data = []
-	for x in range(image.width):
-		for y in range(image.height//2):
+	for y in reversed(range(image.height)):
+		for x in range(0, image.width, 2): 
 			idx1 = image.getpixel((x, y))
-			idx2 = image.getpixel((x, y+1))
-			b = idx1<<4 | idx2
+			idx2 = image.getpixel((x+1, y)) 
+			# two color_idxs are encoded into a byte like 			
+			# (a3, b3, a2, b2, a1, b1, a0, b0) 
+			# where "a" is the first color_idx, "b" is the second one
+			b =	 (idx1 & 8)<<4	| (idx2 & 8)<<3
+			b |= (idx1 & 4)<<3	| (idx2 & 4)<<2
+			b |= (idx1 & 2)<<2	| (idx2 & 2)<<1
+			b |= (idx1 & 1)<<1	| (idx2 & 1)
 			data.append(b)
+	'''
+	data2 = []
+	for x in range(0, image.width, 8): 
+		for y in reversed(range(image.height)):
+			idx0 = image.getpixel((x, y))
+			idx1 = image.getpixel((x+1, y))
+			idx2 = image.getpixel((x+2, y))
+			idx3 = image.getpixel((x+3, y))
+			idx4 = image.getpixel((x+4, y))
+			idx5 = image.getpixel((x+5, y))
+			idx6 = image.getpixel((x+6, y))
+			idx7 = image.getpixel((x+7, y))
 
+			# color_idx into the vector06 screen buff format
+			b0 = (idx0 & 8)<<4	| (idx1 & 8)<<3	| (idx2 & 8)<<2 | (idx3 & 8)<<1 | (idx4 & 8)    | (idx5 & 8)>>1 | (idx6 & 8)>>2 | (idx7 & 8)>>3
+			b1 = (idx0 & 4)<<5	| (idx1 & 4)<<4	| (idx2 & 4)<<3 | (idx3 & 4)<<2 | (idx4 & 4)<<1 | (idx5 & 4)    | (idx6 & 4)>>1 | (idx7 & 4)>>2
+			b2 = (idx0 & 2)<<6	| (idx1 & 2)<<5	| (idx2 & 2)<<4 | (idx3 & 2)<<3 | (idx4 & 2)<<2 | (idx5 & 2)<<1 | (idx6 & 2)    | (idx7 & 2)>>1
+			b3 = (idx0 & 1)<<7	| (idx1 & 1)<<6	| (idx2 & 1)<<5 | (idx3 & 1)<<4 | (idx4 & 1)<<3 | (idx5 & 1)<<2 | (idx6 & 1)<<1 | (idx7 & 1)
+
+			data2.append(b0)
+			data2.append(b1)
+			data2.append(b2)
+			data2.append(b3)
+	with open("temp\\tmp2.bin", "wb") as fw:
+		fw.write(bytearray(data2))
+	'''
 	return common.bytes_to_asm(data)
 
-def image_to_asm(image, label_prefix):
+def image_to_asm(image, label_prefix, extention = build.EXT_BIN_ZX0):
 	asm = common_gfx.image_palette_to_asm(image.getpalette(), label_prefix)
 	asm += "\n"
 	asm += "			.word 0 ; safety pair of bytes for reading by POP B\n"
 	asm += label_prefix + "_gfx:\n"
-	asm += color_indices_to_asm(image)
-
-	asm = common.asm_compress_to_asm(asm)
+	asm += common.asm_compress_to_asm(color_indices_to_asm(image), extention, delete_tmp_bin=False)
 	
 	return asm
 
 #==================================================================================================================================================
 #
-def convert_to_asm(image, label_prefix, source_j_path, tile_size = 2, n_clusters = 512, random_state = 42, n_init = 'auto'):
+def convert_to_asm(image, label_prefix, source_j_path, tile_size = 2, n_clusters = 512, random_state = 42, extention = build.EXT_BIN_ZX0, n_init = 'auto'):
 	
 	width = image.width // tile_size * tile_size
 	height = image.height // tile_size * tile_size
@@ -301,7 +332,7 @@ def convert_to_asm(image, label_prefix, source_j_path, tile_size = 2, n_clusters
 	image_decoded = atlas_to_image(tile_idxs, tiles_gfx, atlas_indexed.getpalette(), width, height, tile_size)
 	image_decoded_matched_colors = match_colors(image_decoded, img_vec06c)
 	
-	return image_to_asm(image_decoded_matched_colors, label_prefix)
+	return image_to_asm(image_decoded_matched_colors, label_prefix, extention)
 
 def export_if_updated(source_path, generated_dir, force_export):
 	source_name = common.path_to_basename(source_path)
@@ -340,9 +371,9 @@ def export(source_j_path, asmSpritePath):
 
 	for img_j in source_j["images"]:
 		image_name = img_j["name"]
-		label_prefix = "__image_" + image_name
 		path_png = source_dir + img_j["path_png"]
-		image = Image.open(path_png)
+		extention = img_j["extention"]
+		label_prefix = "__image_" + image_name
 
 		tile_size = 2
 		n_clusters = 256
@@ -354,7 +385,9 @@ def export(source_j_path, asmSpritePath):
 		if "random_state" in img_j:
 			random_state = img_j["random_state"]
 
-		asm += convert_to_asm(image, label_prefix, source_j_path, tile_size, n_clusters, random_state)
+		image = Image.open(path_png)
+
+		asm += convert_to_asm(image, label_prefix, source_j_path, tile_size, n_clusters, random_state, extention)
 
 	# save asm
 	if not os.path.exists(asm_sprite_dir):

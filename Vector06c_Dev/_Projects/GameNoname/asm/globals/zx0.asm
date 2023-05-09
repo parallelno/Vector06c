@@ -21,194 +21,192 @@
 ; -----------------------------------------------------------------------------
 
 dzx0:
-		lxi h, $0FFFF
-		push h
-		inx h
-		mvi a,$80
+			lxi h, $0FFFF
+			push h
+			inx h
+			mvi a,$80
 @literals:
-		call @elias
-		call @ldir
-		jc @newOffset
-		call @elias
+			call @elias
+			call @ldir
+			jc @newOffset
+			call @elias
 @copy:
-		xchg
-		xthl
-		push h
-		dad b
-		xchg
-		call @ldir
-		xchg
-		pop h
-		xthl
-		xchg
-		jnc @literals
+			xchg
+			xthl
+			push h
+			dad b
+			xchg
+			call @ldir
+			xchg
+			pop h
+			xthl
+			xchg
+			jnc @literals
 @newOffset:
-		call @elias
-		mov h, a
-		pop psw
-		xra a
-		sub l
-		rz
-		push h
-		rar
-        mov h, a
-		ldax d
-		rar
-        mov l, a
-		inx d
-		xthl
-		mov a, h
-		lxi h,1
-		cnc @eliasBacktrack
-		inx h
-		jmp @copy
+			call @elias
+			mov h, a
+			pop psw
+			xra a
+			sub l
+			rz
+			push h
+			rar
+			mov h, a
+			ldax d
+			rar
+			mov l, a
+			inx d
+			xthl
+			mov a, h
+			lxi h,1
+			cnc @eliasBacktrack
+			inx h
+			jmp @copy
 @elias:
-		inr l
+			inr l
 @eliasLoop:
-		add a
-		jnz @eliasSkip
-		ldax d
-		inx d
-		ral
+			add a
+			jnz @eliasSkip
+			ldax d
+			inx d
+			ral
 @eliasSkip:
-		rc
+			rc
 @eliasBacktrack:
-		dad h
-		add a
-		jnc @eliasLoop
-		jmp @elias
+			dad h
+			add a
+			jnc @eliasLoop
+			jmp @elias
 
 @ldir:
-		push psw
+			push psw
 @ldir1:
-		ldax d
-		stax b
-		inx d
-		inx b
-		dcx h
-		mov a, h
-		ora l
-		jnz @ldir1
-		pop psw
-		add a
-		ret
-		
+			ldax d
+			stax b
+			inx d
+			inx b
+			dcx h
+			mov a, h
+			ora l
+			jnz @ldir1
+			pop psw
+			add a
+			ret
+			
 
-; unpack to the ram-disk $8000-$FFFF
-; in:
-; de - compressed data addr
-; bc - uncompressed data addr
-; a - ram-disk activation command
+	; unpack to the ram-disk $8000-$FFFF
+	; in:
+	; de - compressed data addr
+	; bc - uncompressed data addr
+	; a - ram-disk activation command
+	;
+	; based on ZX0 8080 decoder v7 by Ivan Gorodetsky -  OLD FILE FORMAT v1
+	; which based on ZX0 z80 decoder by Einar Saukas
 
 dzx0_rd:
-		sta @ramDiskCmd1+1
-		sta @ramDiskCmd2+1
+			sta @ramDiskCmd1+1
+			sta @ramDiskCmd2+1
 
-		lxi h, $ffff
-		push h
-		inx h
-		mvi a,$80
+			lxi h, $ffff
+			push h
+			inx h
+			mvi a,$80
 @literals:
-		call @elias
+			call @elias
 @ldir:
-		sta @restoreA1+1
+			sta @restoreA1+1
 @ldirLoop:
-		ldax d
-		sta @storeA+1
-		; turn on the ram-disk
+			ldax d
+			sta @storeA+1
+			; turn on the ram-disk
 @ramDiskCmd1:
-		mvi a, TEMP_BYTE
-		out $10
+			mvi a, TEMP_BYTE
+			RAM_DISK_ON_BANK_NO_RESTORE()
 @storeA:
-		mvi a, TEMP_BYTE
-		stax b
-		; turn off the ram-disk
-		xra a
-		out $10
+			mvi a, TEMP_BYTE
+			stax b
+			RAM_DISK_OFF_NO_RESTORE()
 
-		inx d
-		inx b
-		dcx h
-		mov a, h
-		ora l
-		jnz @ldirLoop
+			inx d
+			inx b
+			dcx h
+			mov a, h
+			ora l
+			jnz @ldirLoop
 
 @restoreA1:
-		mvi a, TEMP_BYTE		
-		add a
+			mvi a, TEMP_BYTE		
+			add a
 
-		jc @newOffset
-		call @elias
+			jc @newOffset
+			call @elias
 @copy:
-		xchg
-		xthl
-		push h
-		dad b
-		xchg
+			xchg
+			xthl
+			push h
+			dad b
+			xchg
 
 @ldirUnpacked:
-		sta @restoreA2+1
-		; turn on the ram-disk
+			sta @restoreA2+1
+			; turn on the ram-disk
 @ramDiskCmd2:
-		mvi a, TEMP_BYTE
-		out $10
+			mvi a, TEMP_BYTE
+			RAM_DISK_ON_BANK_NO_RESTORE()
 @ldirUnpackedLoop:
-		ldax d
-		stax b
-		inx d
-		inx b
-		dcx h
-		mov a, h
-		ora l
-		jnz @ldirUnpackedLoop
-
-		; turn off the ram-disk
-		xra a
-		out $10
+			ldax d
+			stax b
+			inx d
+			inx b
+			dcx h
+			mov a, h
+			ora l
+			jnz @ldirUnpackedLoop
+			RAM_DISK_OFF_NO_RESTORE()
 
 @restoreA2:
-		mvi a, TEMP_BYTE		
-		add a
+			mvi a, TEMP_BYTE		
+			add a
 
-		xchg
-		pop h
-		xthl
-		xchg
-		jnc @literals
+			xchg
+			pop h
+			xthl
+			xchg
+			jnc @literals
 @newOffset:
-		call @elias
-		mov h, a
-		pop psw
-		xra a
-		sub l
-		rz
-		push h
-		rar
-        mov h, a
-		ldax d
-		rar
-        mov l, a
-		inx d
-		xthl
-		mov a, h
-		lxi h, 1
-		cnc @eliasBacktrack
-		inx h
-		jmp @copy
+			call @elias
+			mov h, a
+			pop psw
+			xra a
+			sub l
+			rz
+			push h
+			rar
+			mov h, a
+			ldax d
+			rar
+			mov l, a
+			inx d
+			xthl
+			mov a, h
+			lxi h, 1
+			cnc @eliasBacktrack
+			inx h
+			jmp @copy
 
 @elias:
-		inr l
+			inr l
 @eliasLoop:
-		add a
-		jnz @eliasSkip
-		ldax d
-		inx d
-		ral
+			add a
+			jnz @eliasSkip
+			ldax d
+			inx d
+			ral
 @eliasSkip:
-		rc
+			rc
 @eliasBacktrack:
-		dad h
-		add a
-		jnc @eliasLoop
-		jmp @elias
-		
+			dad h
+			add a
+			jnc @eliasLoop
+			jmp @elias
+			

@@ -135,28 +135,43 @@ def get_label_addr(path, _label):
 
 	return -1
 
-def asm_compress_to_asm(asm, path_tmp = "temp\\"):
+def asm_compress_to_asm(asm, extention = build.EXT_BIN_ZX0, path_tmp = "temp\\", delete_tmp_asm = True, delete_tmp_bin = True, delete_tmp_packed = True):
 	asm = ".org 0 \n" + asm
 
 	# save room data to a temp file
 	path_asm = path_tmp + "tmp" + build.EXT_ASM
 	path_bin = path_tmp + "tmp" + build.EXT_BIN
-	path_zx0 = path_tmp + "tmp" + build.EXT_BIN_ZX0
+	if extention == build.EXT_BIN_ZX0:
+		path_packed = path_tmp + "tmp" + build.EXT_BIN_ZX0
+	elif extention == build.EXT_BIN_UPKR:
+		path_packed = path_tmp + "tmp" + build.EXT_BIN_UPKR
+	else:
+		print(f"asm_compress_to_asm ERROR: wrong extention: {extention}")
+		exit()
 
 	with open(path_asm, "w") as file:
 		file.write(asm)
+
 	# asm to temp bin
 	run_command(f"{build.assembler_path} {path_asm} "
 		f" {path_bin}")
+	
 	# pack a room data
-	run_command(f"{build.zx0_path} {path_bin} {path_zx0}")
+	if extention == build.EXT_BIN_ZX0:
+		run_command(f"{build.zx0_path} {path_bin} {path_packed}")
+	else:
+		run_command(f"{build.upkr_path} {path_bin} {path_packed}")
+	
 	# load bin
-	with open(path_zx0, "rb") as file:
+	with open(path_packed, "rb") as file:
 		asm_packed = bytes_to_asm(file.read())
 
 	# del tmp files
-	delete_file(path_asm)
-	#delete_file(path_bin) 
-	#delete_file(path_zx0)
+	if delete_tmp_asm:
+		delete_file(path_asm)
+	if delete_tmp_bin:
+		delete_file(path_bin) 
+	if delete_tmp_packed:
+		delete_file(path_packed)
 
 	return asm_packed

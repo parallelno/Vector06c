@@ -6,7 +6,9 @@ import numpy as np
 import math
 import cv2
 import difflib
-import asyncio
+import time
+import concurrent.futures
+import threading
 
 import sys
 lib_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'scripts'))
@@ -52,8 +54,7 @@ def train_codebook(tiles, n_clusters, random_state = 42, n_init = 'auto'):
 	kmeans.fit(flattened_tiles)
 	return kmeans
 
-def compress_image(image, codebook, tile_size=8):
-	tiles = image_to_tiles(image, tile_size)
+def compress_image(tiles, codebook):
 	flattened_tiles = tiles.reshape(tiles.shape[0], -1)
 	compressed_indices = codebook.predict(flattened_tiles)
 	return compressed_indices
@@ -62,12 +63,24 @@ def vector_quantization_compression(image, n_clusters = 256, tile_size = 8, rand
 
 	# Train the codebook
 	tiles = image_to_tiles(image, tile_size)
+#================================================
+# test to add mirrored tiles
+	tiles = add_mirrored_tiles(tiles)
+#================================================
+
 	codebook = train_codebook(tiles, n_clusters, random_state, n_init)
 
 	# Compress and decompress the image
-	compressed_indices = compress_image(image, codebook, tile_size)
+	compressed_indices = compress_image(tiles, codebook)
 
 	return compressed_indices, codebook
+
+def add_mirrored_tiles(tiles):
+	mirrored_tiles = []
+	for tile in tiles:
+		mirrored_tiles.append(np.flip(tile))
+	tiles.extend(mirrored_tiles)
+	return tiles
 
 def displa_PIL_image(image):
 	np_image = np.array(image)
@@ -277,33 +290,29 @@ def get_asm(tile_idxs_sorted, tiles_gfx, palette, path):
 	asm += color_indices_to_asm(tiles_gfx)
 	return asm
 
-def asm_to_bin_zx0(asm, dir, base_name, delete_encoded):
+def asm_to_bin_zx0(asm, dir, base_name, packer_path, delete_encoded):
 	asm = ".org 0 \n" + asm
 
 	# save room data to a temp file
 	path_asm = dir + "\\" + base_name + ".asm"
 	path_bin = dir + "\\" + base_name + ".bin"
-	path_zx0 = dir + "\\" + base_name + ".zx0"
-	path_upkr = dir + "\\" + base_name + ".upkr"
+	path_packed = dir + "\\" + base_name + ".packed"
 
 	with open(path_asm, "w") as file:
 		file.write(asm)
 	# asm to temp bin
-	common.run_command(f"{build.assembler_path} {path_asm} "
-		f" {path_bin}")
+	common.run_command(f"{build.assembler_path} {path_asm} {path_bin}")
 	# pack a room data
-	#common.run_command(f"{build.zx0_path} {path_bin} {path_zx0}")
-	common.run_command(f"{build.upkr_path} {path_bin} {path_upkr}")
+	common.run_command(f"{packer_path} {path_bin} {path_packed}")
 	
-	size = os.path.getsize(path_upkr)
+	size = os.path.getsize(path_packed)
 
 	# del tmp files
 	common.delete_file(path_asm)
 	common.delete_file(path_bin)
-	#delete_file(path_zx0)
 	
 	if delete_encoded:
-		common.delete_file(path_upkr)
+		common.delete_file(path_packed)
 
 	return size
 
@@ -346,7 +355,7 @@ def match_colors(image, image_ref):
 	return image
 
 
-async def compress(n_clusters, tile_size, img_vec06c_not_cropped, path_source, path_name_prefix, save_atlas = False, decode = False, delete_encoded = True, delete_decoded = True, random_state = 42, n_init = 'auto'):
+def compress(n_clusters, tile_size, img_vec06c_not_cropped, path_source, path_name_prefix, packer_path, save_atlas = False, encode = False, delete_encoded = True, decode = False, delete_decoded = True, random_state = 42, n_init = 'auto'):
 
 	image_not_cropped = Image.open(path_source).convert('RGB')
 	width = image_not_cropped.width // tile_size * tile_size
@@ -371,7 +380,7 @@ async def compress(n_clusters, tile_size, img_vec06c_not_cropped, path_source, p
 	image_decoded_matched_colors.save(path_decoded)
 	
 	# match atlas colors with image_decoded_matched_colors
-	if decode or save_atlas:
+	if encode or save_atlas:
 		atlas_index_sorted = tiles_to_image_indexed(tiles_gfx, image_decoded_matched_colors.getpalette(), tile_size)
 
 	if save_atlas:
@@ -380,22 +389,20 @@ async def compress(n_clusters, tile_size, img_vec06c_not_cropped, path_source, p
 	
 	# pack with upkr VQ decoded tiled image
 	size_encoded_tiled = 0
-	if decode:
+	if encode:
 		path_asm = path_name_prefix + "_encoded.asm"
 		asm = get_asm(tile_idxs, tiles_gfx, atlas_index_sorted.getpalette(), path_asm)
 		dir = os.path.dirname(path_asm)
 		base_name = common.path_to_basename(path_asm)
-		size_encoded_tiled = asm_to_bin_zx0(asm, dir, base_name, delete_encoded)
+		size_encoded_tiled = asm_to_bin_zx0(asm, dir, base_name, packer_path, delete_encoded)
 
 	# pack with upkr decoded image
-	path_decoded_upkr = path_name_prefix + "_decoded"
-	size_decoded_upkr = compress_raw_image(image_decoded_matched_colors, path_decoded_upkr, delete_decoded)
+	size_decoded_upkr = 0
+	if decode:
+		path_decoded_upkr = path_name_prefix + "_decoded"
+		size_decoded_upkr = compress_raw_image(image_decoded_matched_colors, path_decoded_upkr, packer_path, delete_decoded)
 
-	# color_idx into bytes, then pack with upkr
-	#path_decoded_buff_upkr = path_name_prefix + "_decoded_buff"
-	#size_decoded_buff_upkr = image_to_buff_compress(image_decoded_matched_colors, path_decoded_buff_upkr, delete_decoded)
-
-	return size_encoded_tiled, size_decoded_upkr #, size_decoded_buff_upkr
+	return size_encoded_tiled, size_decoded_upkr
 
 def palette_to_vec06(image):
 	# adapted to vector06c palette
@@ -409,7 +416,27 @@ def palette_to_vec06(image):
 	image.putpalette(colors)
 	return image
 
-def compress_raw_image(image, path_name_prefix, delete_decoded = True):
+def color_idxs_to_bytes(image):
+	data = []
+	for y in reversed(range(image.height)):
+		for x in range(0, image.width, 2): 
+			idx1 = image.getpixel((x, y))
+			idx2 = image.getpixel((x+1, y)) 
+			'''
+			# two color_idxs are encoded into a byte like 			
+			# (a3, b3, a2, b2, a1, b1, a0, b0) 
+			# where "a" is the first color_idx, "b" is the second one
+			b =	 (idx1 & 8)<<4	| (idx2 & 8)<<3
+			b |= (idx1 & 4)<<3	| (idx2 & 4)<<2
+			b |= (idx1 & 2)<<2	| (idx2 & 2)<<1
+			b |= (idx1 & 1)<<1	| (idx2 & 1)
+			'''
+			b = idx1<<4 | idx2
+			data.append(b)
+
+	return data	
+
+def compress_raw_image(image, path_name_prefix, packer_path, delete_decoded = True):
 	
 	colors = image.getpalette()[:16*3]
 	data=[]
@@ -420,36 +447,29 @@ def compress_raw_image(image, path_name_prefix, delete_decoded = True):
 		b = colors[color_idx*3 + 2]
 		data.append(pack_color(r, g, b))
 	
-	# pack and collect color_idx
-	for x in range(image.width):
-		for y in range(image.height//2):
-			idx1 = image.getpixel((x, y))
-			idx2 = image.getpixel((x, y+1))
-			b = idx1<<4 | idx2
-			data.append(b)
+	data.extend(color_idxs_to_bytes(image))
 	
 	path_bin = path_name_prefix + ".bin"
-	#path_zx0 = path_name_prefix + "_img.zx0"
-	path_upkr = path_name_prefix + ".upkr"
+	path_packed = path_name_prefix + ".packed"
 
 	with open(path_bin, "wb") as file:
 		file.write(bytearray(data))	
 
-	#common.run_command(f"{build.zx0_path} {path_bin} {path_zx0}")
-	common.run_command(f"{build.upkr_path} {path_bin} {path_upkr}")
+	common.run_command(f"{packer_path} {path_bin} {path_packed}")
 
 	# del tmp files
 	common.delete_file(path_bin)
 
-	size = os.path.getsize(path_upkr)
+	size = os.path.getsize(path_packed)
 	
 	if delete_decoded:
-		common.delete_file(path_upkr)
+		common.delete_file(path_packed)
 
 	return size
 
 #===========================================================================
-async def main():
+def main():
+	
 	paths_source = [
 		"temp\\test\\vector_quantization_image_compression\\contrast_dither_adaptive.png",
 		"temp\\test\\vector_quantization_image_compression\\image_intro.png",
@@ -472,27 +492,43 @@ async def main():
 		"temp\\test\\vector_quantization_image_compression\\img16.png",
 		"temp\\test\\vector_quantization_image_compression\\img17.png",		
 		"temp\\test\\vector_quantization_image_compression\\img18.png",
+		"temp\\test\\vector_quantization_image_compression\\img19.png",
 	]
-
-	tile_sizes = [2]
-	n_clusters_list = [64, 96, 128, 256, 1024]
-	random_state = 1
+	compression_setups = [
+		{
+			"tile_size" : 4,
+			"n_clusters" : 300,
+			"random_state" : 9
+		},
+		{
+			"tile_size" : 4,
+			"n_clusters" : 600,
+			"random_state" : 2
+		},
+		{
+			"tile_size" : 4,
+			"n_clusters" : 750,
+			"random_state" : 7
+		},		
+		{
+			"tile_size" : 8,
+			"n_clusters" : 300,
+			"random_state" : 2
+		},
+		{
+			"tile_size" : 8,
+			"n_clusters" : 400,
+			"random_state" : 4
+		},
+	]
 	n_init = 'auto'
 	
-	sizes_upkr = {}
-	sizes_vq = {}
-	sizes_decoded_upkr = {}
-	#sizes_decoded_buff_upkr = {}
-	tasks = {}
-
-	source_count = len(paths_source)
+	result = {}
+	futures = []
+	executor = concurrent.futures.ThreadPoolExecutor(max_workers=40)
+	packer_path = build.zx0_path
 
 	for path_source in paths_source:
-		
-		print("\n\n\n")
-		print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-		print(f"compressing image: {path_source}")
-		print("\n")
 
 		path_wo_ext = os.path.splitext(path_source)[0]
 		base_name =os.path.basename(path_wo_ext)
@@ -506,95 +542,65 @@ async def main():
 		path_indexed = path_name_prefix + ".png"
 		img_vec06c.save(path_indexed)
 
-		size_upkr = compress_raw_image(img_vec06c, path_name_prefix, delete_decoded = True)
-		sizes_upkr[base_name] = size_upkr
-		tasks[base_name] = {}
+		future1 = executor.submit(compress_raw_image, img_vec06c, path_name_prefix, packer_path, delete_decoded = True)
 
-		for tile_size in tile_sizes:
-			tasks[base_name][tile_size] = {}
+		result[base_name] = {}
+		result[base_name]["size_upkr"] = future1
+		result[base_name]["quantization_features"] = {}
+		result[base_name]["quantization"] = {}
+		futures.append(future1)
 
-			for n_clusters in n_clusters_list:
+		for setup in compression_setups:
+			tile_size = setup["tile_size"]
+			n_clusters = setup["n_clusters"]
+
+			random_state = 0
+			if "random_state" in setup:
+				random_state = setup["random_state"]
 				
-				width, height = img_vec06c.size
-				tiles_count = (width // tile_size) * (height // tile_size)
+			width, height = img_vec06c.size
+			tiles_count = (width // tile_size) * (height // tile_size)
 
-				if tiles_count >= n_clusters:
+			if tiles_count >= n_clusters:
 					
-					path_name_prefix2 = f"{path_name_prefix}_{tile_size}_{n_clusters}_"
+				path_name_prefix2 = f"{path_name_prefix}_{tile_size}_{n_clusters}_{random_state}"
+				res_key = f"{tile_size}_{n_clusters}_{random_state}"
 
-					tasks[base_name][tile_size][n_clusters] = asyncio.create_task(compress(n_clusters, tile_size, img_vec06c, path_source, path_name_prefix2, False, False, True, True, random_state, n_init))
+				future1 = executor.submit(compress, n_clusters, tile_size, img_vec06c, path_source, path_name_prefix2, packer_path, False, True, True, False, True, random_state, n_init)
+				result[base_name]["quantization_features"][res_key] = future1
+				futures.append(future1)
 
-	# retrieve the result of compression
-	for base_name in sizes_upkr:
-		size_upkr = sizes_upkr[base_name]
+	# await for execution to complete
+	concurrent.futures.wait(futures)
+	# retrieve results
+	for base_name in result:
+		future1 = result[base_name]["size_upkr"]
+		size_upkr = future1.result()
+		result[base_name]["size_upkr"] = size_upkr
 
-		for tile_size in tile_sizes:
+		for res_key in result[base_name]["quantization_features"]:
+			future1 = result[base_name]["quantization_features"][res_key]
+			size_vq, size_decoded_upkr = future1.result()
 
-			for n_clusters in n_clusters_list:
-				task = tasks[base_name][tile_size][n_clusters]
-				#size_vq, size_decoded_upkr, size_decoded_buff_upkr = await task
-				size_vq, size_decoded_upkr = await task
-
-				# store stats only if its better than raw image packed by UPKR
-				if size_vq <= size_upkr:
-					if base_name not in sizes_vq:
-						sizes_vq[base_name] = {}
-					if tile_size not in sizes_vq[base_name]:
-						sizes_vq[base_name][tile_size] = {}
-					if n_clusters not in sizes_vq[base_name][tile_size]:
-						sizes_vq[base_name][tile_size][n_clusters] = {}
-					sizes_vq[base_name][tile_size][n_clusters] = size_vq
-
-				if size_decoded_upkr <= size_upkr:
-					if base_name not in sizes_decoded_upkr:
-						sizes_decoded_upkr[base_name] = {}
-					if tile_size not in sizes_decoded_upkr[base_name]:
-						sizes_decoded_upkr[base_name][tile_size] = {}
-					if n_clusters not in sizes_decoded_upkr[base_name][tile_size]:
-						sizes_decoded_upkr[base_name][tile_size][n_clusters] = {}
-					sizes_decoded_upkr[base_name][tile_size][n_clusters] = size_decoded_upkr
-				'''
-				if base_name not in sizes_decoded_buff_upkr:
-					sizes_decoded_buff_upkr[base_name] = {}
-				if tile_size not in sizes_decoded_buff_upkr[base_name]:
-					sizes_decoded_buff_upkr[base_name][tile_size] = {}
-				if n_clusters not in sizes_decoded_buff_upkr[base_name][tile_size]:
-					sizes_decoded_buff_upkr[base_name][tile_size][n_clusters] = {}
-				sizes_decoded_buff_upkr[base_name][tile_size][n_clusters] = size_decoded_buff_upkr
-				'''
+			result[base_name]["quantization"][res_key + "_size_vq"] = size_vq
 
 	# print stats
 	print("\n\n\n")
 	print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-	for base_name in sizes_upkr:
-		print(f"{base_name}")
-		size_upkr = sizes_upkr[base_name]
-		print(f"original image to upkr: {size_upkr}")
+	for base_name in result:
+		size_upkr = result[base_name]["size_upkr"]
 		
-		print(f"vector quantization to upkr:")
-		for tile_size in tile_sizes:
-			for n_clusters in n_clusters_list:
-				
-				'''
-				size_vq = -1
-				if tile_size in sizes_vq[base_name] and n_clusters in sizes_vq[base_name][tile_size]:
-					size_vq = sizes_vq[base_name][tile_size][n_clusters]
-				if size_vq > 0:
-					size_vq_rate = size_vq / size_upkr
-					print(f"tiled   VQ to upkr: {size_vq}, rate: {size_vq_rate:.02f}, tile_size: {tile_size}, n_clusters: {n_clusters}")
-				'''					
-				size_decoded_upkr = -1				
-				if tile_size in sizes_decoded_upkr[base_name] and n_clusters in sizes_decoded_upkr[base_name][tile_size]:
-					size_decoded_upkr = sizes_decoded_upkr[base_name][tile_size][n_clusters]
-				if size_decoded_upkr > 0:
-					size_decoded_upkr_rate = size_decoded_upkr / size_upkr
-					print(f"decoded VQ color_idx to upkr: {size_decoded_upkr}, rate: {size_decoded_upkr_rate:.02f}, tile_size: {tile_size}, n_clusters: {n_clusters}")
-				'''
-				size_decoded_buff_upkr = -1
-				if tile_size in sizes_decoded_buff_upkr[base_name] and n_clusters in sizes_decoded_buff_upkr[base_name][tile_size]:
-					size_decoded_buff_upkr = sizes_decoded_buff_upkr[base_name][tile_size][n_clusters]
-				if size_decoded_buff_upkr > 0:
-					size_decoded_upkr_rate = size_decoded_buff_upkr / size_upkr
-					print(f"decoded VQ color bytes to upkr: {size_decoded_buff_upkr}, rate: {size_decoded_upkr_rate:.02f}, tile_size: {tile_size}, n_clusters: {n_clusters}")					
-				'''
-asyncio.run(main())
+		print(base_name)
+		print(f"original image to upkr: {size_upkr}")
+
+		for setup_name in result[base_name]["quantization"]:
+			size = result[base_name]["quantization"][setup_name]
+			rate = size / size_upkr
+		
+			print(f"{setup_name}: {size}, rate: {rate:.02f}")
+					
+start_time = time.time()
+main()
+end_time = time.time()
+elapsed_time = end_time - start_time
+print(f"Elapsed time: {elapsed_time:.03f} seconds")
