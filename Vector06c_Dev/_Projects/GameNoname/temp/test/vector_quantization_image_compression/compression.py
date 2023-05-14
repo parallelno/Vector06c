@@ -63,24 +63,34 @@ def vector_quantization_compression(image, n_clusters = 256, tile_size = 8, rand
 
 	# Train the codebook
 	tiles = image_to_tiles(image, tile_size)
+	'''
 #================================================
 # test to add mirrored tiles
-	tiles = add_mirrored_tiles(tiles)
-#================================================
+	#mirrored_tiles = mirror_tiles(tiles)
+	#tiles_plus_mirrored = np.concatenate(tiles, mirrored_tiles)
 
+	# codebook = train_codebook(tiles_plus_mirrored, n_clusters, random_state, n_init)
+
+	# Compress and decompress the image
+	# compressed_indices = compress_image(tiles_plus_mirrored, codebook)
+
+	# test to add mirrored tiles	
+	# count how many mirrored tiles were used
+	used_mirrored_tiles_count = count_used_mirrored_tiles(compressed_indices, codebook, mirrored_tiles)
+#================================================
+	'''
 	codebook = train_codebook(tiles, n_clusters, random_state, n_init)
 
 	# Compress and decompress the image
 	compressed_indices = compress_image(tiles, codebook)
-
+	
 	return compressed_indices, codebook
 
-def add_mirrored_tiles(tiles):
+def mirror_tiles(tiles):
 	mirrored_tiles = []
 	for tile in tiles:
 		mirrored_tiles.append(np.flip(tile))
-	tiles.extend(mirrored_tiles)
-	return tiles
+	return mirrored_tiles
 
 def displa_PIL_image(image):
 	np_image = np.array(image)
@@ -472,27 +482,27 @@ def main():
 	
 	paths_source = [
 		"temp\\test\\vector_quantization_image_compression\\contrast_dither_adaptive.png",
-		"temp\\test\\vector_quantization_image_compression\\image_intro.png",
-		"temp\\test\\vector_quantization_image_compression\\image_intro2.png",
-		"temp\\test\\vector_quantization_image_compression\\img01.png",
-		"temp\\test\\vector_quantization_image_compression\\img02.png",
-		"temp\\test\\vector_quantization_image_compression\\img03.png",
-		"temp\\test\\vector_quantization_image_compression\\img04.png",
-		"temp\\test\\vector_quantization_image_compression\\img05.png",
-		"temp\\test\\vector_quantization_image_compression\\img06.png",
-		"temp\\test\\vector_quantization_image_compression\\img07.png",
-		"temp\\test\\vector_quantization_image_compression\\img08.png",
-		"temp\\test\\vector_quantization_image_compression\\img09.png",
-		"temp\\test\\vector_quantization_image_compression\\img10.png",
-		"temp\\test\\vector_quantization_image_compression\\img11.png",
-		"temp\\test\\vector_quantization_image_compression\\img12.png",
-		"temp\\test\\vector_quantization_image_compression\\img13.png",
-		"temp\\test\\vector_quantization_image_compression\\img14.png",
-		"temp\\test\\vector_quantization_image_compression\\img15.png",
-		"temp\\test\\vector_quantization_image_compression\\img16.png",
-		"temp\\test\\vector_quantization_image_compression\\img17.png",		
-		"temp\\test\\vector_quantization_image_compression\\img18.png",
-		"temp\\test\\vector_quantization_image_compression\\img19.png",
+		#"temp\\test\\vector_quantization_image_compression\\image_intro.png",
+		#"temp\\test\\vector_quantization_image_compression\\image_intro2.png",
+		#"temp\\test\\vector_quantization_image_compression\\img01.png",
+		#"temp\\test\\vector_quantization_image_compression\\img02.png",
+		#"temp\\test\\vector_quantization_image_compression\\img03.png",
+		#"temp\\test\\vector_quantization_image_compression\\img04.png",
+		#"temp\\test\\vector_quantization_image_compression\\img05.png",
+		#"temp\\test\\vector_quantization_image_compression\\img06.png",
+		#"temp\\test\\vector_quantization_image_compression\\img07.png",
+		#"temp\\test\\vector_quantization_image_compression\\img08.png",
+		#"temp\\test\\vector_quantization_image_compression\\img09.png",
+		#"temp\\test\\vector_quantization_image_compression\\img10.png",
+		#"temp\\test\\vector_quantization_image_compression\\img11.png",
+		#"temp\\test\\vector_quantization_image_compression\\img12.png",
+		#"temp\\test\\vector_quantization_image_compression\\img13.png",
+		#"temp\\test\\vector_quantization_image_compression\\img14.png",
+		#"temp\\test\\vector_quantization_image_compression\\img15.png",
+		#"temp\\test\\vector_quantization_image_compression\\img16.png",
+		#"temp\\test\\vector_quantization_image_compression\\img17.png",		
+		#"temp\\test\\vector_quantization_image_compression\\img18.png",
+		#"temp\\test\\vector_quantization_image_compression\\contrast_cropped.png",
 	]
 	compression_setups = [
 		{
@@ -521,7 +531,7 @@ def main():
 			"random_state" : 4
 		},
 	]
-	n_init = 'auto'
+	n_init = 'auto' # 20
 	
 	result = {}
 	futures = []
