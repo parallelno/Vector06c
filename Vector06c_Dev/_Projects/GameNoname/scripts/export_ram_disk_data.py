@@ -31,6 +31,7 @@ def export(source_j_path):
 	music_force_export = build.is_file_updated(dependency_paths_j["music"])
 	font_force_export = build.is_file_updated(dependency_paths_j["font"])
 	image_force_export = build.is_file_updated(dependency_paths_j["image"])
+	tiled_img_force_export = build.is_file_updated(dependency_paths_j["tiled_img"])
 
 	generated_code_dir = source_j["dirs"]["generated_code"]
 	generated_bin_dir = source_j["dirs"]["generated_bin"]
@@ -58,7 +59,7 @@ def export(source_j_path):
 
 			exported, segment_name, segment_paths = export_segment.export(
 				bank_id, segment_j,
-				global_force_export, sprite_force_export, back_force_export, decal_force_export, level_force_export, music_force_export, font_force_export, image_force_export,
+				global_force_export, sprite_force_export, back_force_export, decal_force_export, level_force_export, music_force_export, font_force_export, image_force_export, tiled_img_force_export,
 				generated_code_dir, generated_bin_dir)
 
 			ram_disk_data_asm_force_export |= exported

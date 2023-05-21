@@ -9,6 +9,7 @@ import export_level
 import export_music
 import export_font
 import export_image
+import export_tiled_img
 
 def check_segment_size(path, segment_addr):
 	if segment_addr != build.SEGMENT_0000_7F00_ADDR and segment_addr != build.SEGMENT_8000_0000_ADDR :
@@ -102,7 +103,7 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 
 #=========================================================================================
 def export(bank_id, segment_j,
-			force_export, sprite_force_export, back_force_export, decal_force_export, level_force_export, music_force_export, font_force_export, image_force_export,
+			force_export, sprite_force_export, back_force_export, decal_force_export, level_force_export, music_force_export, font_force_export, image_force_export, tiled_img_force_export,
 			generated_code_dir, generated_bin_dir):
 
 	addr_s = segment_j["addr"]
@@ -167,6 +168,16 @@ def export(bank_id, segment_j,
 
 			elif asset["asset_type"] == build.ASSET_TYPE_LEVEL_GFX:
 				exported, export_paths = export_level.export_gfx_if_updated(asset["path"], asset["export_dir"], level_force_export | force_export)
+				segment_force_export |= exported
+				segment_include_path = export_paths["ram_disk"]
+
+			elif asset["asset_type"] == build.ASSET_TYPE_TILED_IMG_GFX:
+				exported, export_paths = export_tiled_img.export_gfx_if_updated(asset["path"], asset["export_dir"], tiled_img_force_export | force_export)
+				segment_force_export |= exported
+				segment_include_path = export_paths["ram_disk"]
+
+			elif asset["asset_type"] == build.ASSET_TYPE_TILED_IMG_DATA:
+				exported, export_paths = export_tiled_img.export_data_if_updated(asset["path"], asset["export_dir"], tiled_img_force_export | force_export)
 				segment_force_export |= exported
 				segment_include_path = export_paths["ram_disk"]
 

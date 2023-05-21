@@ -24,7 +24,7 @@
 .include "asm\\levels\\room.asm"
 .include "asm\\levels\\backs.asm"
 .include "asm\\ui.asm"
-.include "asm\\globals\\draw_image_zx0.asm"
+;.include "asm\\globals\\draw_image_zx0.asm"
 
 game_init:
 			call levels_init
@@ -36,12 +36,6 @@ game_init:
 			xra a
 			sta update_request_counter
 			hlt
-
-			; TODO: test
-			lxi d, __image_intro_gfx
-			mvi a, <(__RAM_DISK_M_IMAGES | RAM_DISK_M_8F)
-			call draw_image_zx0
-			; TODO: test end
 
 @gameLoop:
 			CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)

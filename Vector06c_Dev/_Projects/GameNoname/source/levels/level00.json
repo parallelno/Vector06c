@@ -20,7 +20,7 @@
 		{"x": 240,	"y" : 256}
 	],
 	"asset_type" : "level",
-	"start_pos" : {
+	"hero_start_pos" : {
 		"x" : 48,
 		"y" : 160
 	},

@@ -9,6 +9,7 @@
 		"music" : "scripts\\export_music.py",
 		"font" : "scripts\\export_font.py",
 		"image" : "scripts\\export_image.py",
+		"tiled_img" : "scripts\\export_tiled_img.py",
 		"global" : [
 			"source\\code\\ram_disk_data.json",
 			"scripts\\export_ram_disk_data.py",
@@ -100,12 +101,7 @@
 									"asset_type" : "decal",
 									"path" : "source\\sprites\\decals.json",
 									"export_dir" : "generated\\sprites\\" 
-								},
-								{
-									"asset_type" : "image",
-									"path" : "source\\sprites\\images.json",
-									"export_dir" : "generated\\sprites\\" 
-								}								
+								}							
 							]
 						},
 						{
@@ -115,7 +111,17 @@
 									"asset_type" : "level_data",
 									"path" : "source\\levels\\level01.json", 
 									"export_dir" : "generated\\levels\\"
-								}
+								},
+								{
+									"asset_type" : "tiled_img_gfx",
+									"path" : "source\\sprites\\tiled_images.json", 
+									"export_dir" : "generated\\sprites\\"
+								},
+								{
+									"asset_type" : "tiled_img_data",
+									"path" : "source\\sprites\\tiled_images.json", 
+									"export_dir" : "generated\\sprites\\"
+								}																
 							]
 						}						
 					]

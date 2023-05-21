@@ -13,9 +13,15 @@ SCR_BUFF_SIZE = 8192
 ASSET_TYPE_BACK			= "back"
 ASSET_TYPE_FONT			= "font"
 ASSET_TYPE_SPRITE		= "sprite"
+
 ASSET_TYPE_LEVEL		= "level"
 ASSET_TYPE_LEVEL_DATA	= "level_data"
 ASSET_TYPE_LEVEL_GFX	= "level_gfx"
+
+ASSET_TYPE_TILED_IMG	= "tiled_img"
+ASSET_TYPE_TILED_IMG_DATA	= "tiled_img_data"
+ASSET_TYPE_TILED_IMG_GFX	= "tiled_img_gfx"
+
 ASSET_TYPE_DECAL		= "decal"
 ASSET_TYPE_IMAGE		= "image"
 ASSET_TYPE_MUSIC		= "music"

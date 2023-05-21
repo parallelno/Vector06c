@@ -143,3 +143,14 @@ def plane_indexes_to_bit_lists(tile_img):
 		bits2.append(bit2)
 		bits3.append(bit3)
 	return bits0, bits1, bits2, bits3
+
+def get_list_of_tiles(remap_idxs, label_prefix, pngLabelPrefix):
+	asm = "\n			.word 0 ; safety pair of bytes for reading by POP B\n"
+	asm += label_prefix + "_tiles_addr:\n			.word "
+	for i, t_idx in enumerate(remap_idxs):
+		asm += "__" + pngLabelPrefix + "_tile" + str(remap_idxs[t_idx]) + ", "
+		if i != len(remap_idxs)-1:
+			# two safety fytes
+			asm += "0, "
+	asm += "\n\n"
+	return asm

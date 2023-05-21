@@ -17,6 +17,7 @@ sys.path.append(lib_path)
 from common import *
 from common_gfx import *
 from build import *
+from export_level import *
 
 IMAGE_VECTOR_COLOR_MAX = 16
 PNG_EXT = ".png"
@@ -59,47 +60,154 @@ def compress_image(tiles, codebook):
 	compressed_indices = codebook.predict(flattened_tiles)
 	return compressed_indices
 
-def vector_quantization_compression(image, n_clusters = 256, tile_size = 8, random_state = 42, n_init = 'auto'):
+def vector_quantization_compression(image, n_clusters = 256, tile_size = 8, random_state = 42, n_init = 'auto', add_flipped = False):
 
 	# Train the codebook
 	tiles = image_to_tiles(image, tile_size)
-	'''
-#================================================
-# test to add mirrored tiles
-	#mirrored_tiles = mirror_tiles(tiles)
-	#tiles_plus_mirrored = np.concatenate(tiles, mirrored_tiles)
-
-	# codebook = train_codebook(tiles_plus_mirrored, n_clusters, random_state, n_init)
-
-	# Compress and decompress the image
-	# compressed_indices = compress_image(tiles_plus_mirrored, codebook)
-
-	# test to add mirrored tiles	
-	# count how many mirrored tiles were used
-	used_mirrored_tiles_count = count_used_mirrored_tiles(compressed_indices, codebook, mirrored_tiles)
-#================================================
-	'''
-	codebook = train_codebook(tiles, n_clusters, random_state, n_init)
-
-	# Compress and decompress the image
-	compressed_indices = compress_image(tiles, codebook)
 	
-	return compressed_indices, codebook
+	if add_flipped:
+#================================================
+		codebook = train_codebook(tiles, n_clusters, random_state, n_init)
+#================================================
+	else:
+		codebook = train_codebook(tiles, n_clusters, random_state, n_init)
+		flattened_tiles_gfx = codebook.cluster_centers_.reshape(-1, tile_size * tile_size * 3).astype(np.uint8)	
 
-def mirror_tiles(tiles):
-	mirrored_tiles = []
-	for tile in tiles:
-		mirrored_tiles.append(np.flip(tile))
-	return mirrored_tiles
+	# compress and decompress the image
+	tile_idxs = compress_image(tiles, codebook)
 
-def displa_PIL_image(image):
-	np_image = np.array(image)
-	# Convert the color space from RGB to BGR
-	bgr_image = cv2.cvtColor(np_image, cv2.COLOR_RGB2BGR)
-	# Display the image in a window
-	cv2.imshow('Image', bgr_image)
-	cv2.waitKey(0)
-	cv2.destroyAllWindows()	
+	if add_flipped:
+		# test to add mirrored tiles	
+		# count how many mirrored tiles were used
+		tile_idxs, flattened_tiles_gfx = closest_tiles(tile_idxs, tiles, codebook, tile_size)
+
+	return tile_idxs, flattened_tiles_gfx
+
+def count_used_mirrored_tiles(compressed_indices, codebook, tile_size):
+	# get max idx of a tile used for compression
+	max_tile_idx = np.max(compressed_indices)
+	unique_tiles_idxs = np.arange(max_tile_idx)
+
+	decompressed_tiles = codebook.cluster_centers_[unique_tiles_idxs].reshape(-1, tile_size, tile_size, 3).astype(np.uint8)
+	mirrored_v = np.flip(decompressed_tiles, axis=1)
+	mirrored_h = np.flip(decompressed_tiles, axis=2)
+	mirrored_vh = np.flip(mirrored_v, axis=2)
+
+	match_v = np.sum(np.all(decompressed_tiles == mirrored_v, axis=(1, 2, 3)))
+	match_h = np.sum(np.all(decompressed_tiles == mirrored_h, axis=(1, 2, 3)))
+	match_vh = np.sum(np.all(decompressed_tiles == mirrored_vh, axis=(1, 2, 3)))
+
+	all_matches = match_v + match_h + match_vh
+	return all_matches
+
+def closest_tiles(tile_idxs, tiles, codebook, tile_size):
+
+	non_flipped = 0
+	flipped_v = {}
+	flipped_h = {}
+	flipped_vh = {}
+
+	cluster_centers = codebook.cluster_centers_.reshape(-1, tile_size * tile_size * 3).astype(np.int64)
+	cluster_centers_flip_v = np.flip(codebook.cluster_centers_.reshape(-1, tile_size, tile_size, 3).astype(np.int64), axis=0).reshape(cluster_centers.shape[0], -1)
+	cluster_centers_flip_h = np.flip(codebook.cluster_centers_.reshape(-1, tile_size, tile_size, 3).astype(np.int64), axis=1).reshape(cluster_centers.shape[0], -1)
+	cluster_centers_flip_vh = np.flip(codebook.cluster_centers_.reshape(-1, tile_size, tile_size, 3).astype(np.int64), (0, 1)).reshape(cluster_centers.shape[0], -1)
+
+	flattened_tiles = tiles.reshape(tiles.shape[0], -1).astype(np.int64)
+
+	tiles_gfx = cluster_centers.copy()
+
+	for i in range(flattened_tiles.shape[0]):
+		flattened_tile = flattened_tiles[i]
+		cluster_idx = tile_idxs[i]
+		cluster_center = cluster_centers[cluster_idx]
+
+		dist_to_cluster = get_tiles_distance(flattened_tile, [cluster_center])[0]
+
+		dist_to_clusters_flip_v = get_tiles_distance(flattened_tile, cluster_centers_flip_v)
+		dist_to_clusters_flip_v_idx = np.argmin(dist_to_clusters_flip_v)
+		dist_to_cluster_flip_v = dist_to_clusters_flip_v[dist_to_clusters_flip_v_idx]
+
+		dist_to_clusters_flip_h = get_tiles_distance(flattened_tile, cluster_centers_flip_h)
+		dist_to_clusters_flip_h_idx = np.argmin(dist_to_clusters_flip_h)
+		dist_to_cluster_flip_h = dist_to_clusters_flip_h[dist_to_clusters_flip_h_idx]
+
+		dist_to_clusters_flip_vh = get_tiles_distance(flattened_tile, cluster_centers_flip_vh)
+		dist_to_clusters_flip_vh_idx = np.argmin(dist_to_clusters_flip_vh)
+		dist_to_cluster_flip_vh = dist_to_clusters_flip_vh[dist_to_clusters_flip_vh_idx]
+
+		dists = np.array([dist_to_cluster, dist_to_cluster_flip_v, dist_to_cluster_flip_h, dist_to_cluster_flip_vh])
+		dist_min_idx = np.argmin(dists)
+
+		if dist_min_idx == 0:
+			non_flipped += 1
+		elif dist_min_idx == 1:
+			if dist_to_clusters_flip_v_idx not in flipped_v:
+				flipped_v[dist_to_clusters_flip_v_idx] = []
+			flipped_v[dist_to_clusters_flip_v_idx].append(i)
+
+		elif dist_min_idx == 2:
+			if dist_to_clusters_flip_h_idx not in flipped_h:
+				flipped_h[dist_to_clusters_flip_h_idx] = []
+			flipped_h[dist_to_clusters_flip_h_idx].append(i)
+
+		else:
+			if dist_to_clusters_flip_vh_idx not in flipped_vh:
+				flipped_vh[dist_to_clusters_flip_vh_idx] = []
+			flipped_vh[dist_to_clusters_flip_vh_idx].append(i)
+
+	
+	# update tile_idxs, tiles_gfx to incorparate flipped tiles_gfx
+	new_flipped_tile_idx = np.max(tile_idxs) + 1
+
+	for tile_gfx_idx in flipped_v:
+		# updating tile_idxs to use flipped tiles_gfx
+		flipped_tile_idxs = flipped_v[tile_gfx_idx]
+		for tile_idx in flipped_tile_idxs:
+			tile_idxs[tile_idx] = new_flipped_tile_idx
+		new_flipped_tile_idx += 1
+		# adding a new flipped tile gfx into tiles_gfx
+		flattened_tile_gfx = cluster_centers_flip_v[tile_gfx_idx].reshape(1, tile_size * tile_size * 3)
+		tiles_gfx = np.append(tiles_gfx, flattened_tile_gfx, axis=0)
+
+	for tile_gfx_idx in flipped_h:
+		# updating tile_idxs to use flipped tiles_gfx
+		flipped_tile_idxs = flipped_h[tile_gfx_idx]
+		for tile_idx in flipped_tile_idxs:
+			tile_idxs[tile_idx] = new_flipped_tile_idx
+		new_flipped_tile_idx += 1
+		# adding a new flipped tile gfx into tiles_gfx
+		flattened_tile_gfx = cluster_centers_flip_h[tile_gfx_idx].reshape(1, tile_size * tile_size * 3)
+		tiles_gfx = np.append(tiles_gfx, flattened_tile_gfx, axis=0)
+
+	for tile_gfx_idx in flipped_vh:
+		# updating tile_idxs to use flipped tiles_gfx
+		flipped_tile_idxs = flipped_vh[tile_gfx_idx]
+		for tile_idx in flipped_tile_idxs:
+			tile_idxs[tile_idx] = new_flipped_tile_idx
+		new_flipped_tile_idx += 1
+		# adding a new flipped tile gfx into tiles_gfx
+		flattened_tile_gfx = cluster_centers_flip_vh[tile_gfx_idx].reshape(1, tile_size * tile_size * 3)
+		tiles_gfx = np.append(tiles_gfx, flattened_tile_gfx, axis=0)
+
+		
+	return tile_idxs, tiles_gfx
+
+def get_tiles_distance(flatten_tile, flattened_tiles):
+	# Assuming flattened_tiles is your array of flattened image tiles
+
+	# Subtract the i-th cluster center from each tile
+	differences = flattened_tiles - flatten_tile
+
+	# Square the differences
+	squared_differences = np.square(differences)
+
+	# Sum the squared differences along the last axis to get the squared Euclidean distance
+	squared_distances = np.sum(squared_differences, axis=1)
+
+	# Take the square root to get the Euclidean distance
+	distances_to_i = np.sqrt(squared_distances)
+
+	return distances_to_i
 
 def tiles_to_image_indexed(tiles_gfx, palette, tile_size):	
 	tiles_gfx_len = len(tiles_gfx)
@@ -134,26 +242,9 @@ def tiles_to_image_indexed(tiles_gfx, palette, tile_size):
 			tile_gfx_idx += 1
 	return image
 
-def codebook_to_img(compressed_indices, codebook, tile_size):
+def make_atlas(tile_idxs, flattened_tiles_gfx, tile_size):
 
-	decompressed_tiles = codebook.cluster_centers_[compressed_indices].reshape(-1, tile_size, tile_size, 3).astype(np.uint8)
-
-	# to map old_tile_gfx_idx into a range from 0 to max used unique tiles ( less or equal to n_clusters)
-	gfx_idxs_mapper = {}
-	tiles_gfx = []
-	
-	new_tile_gfx_idx = 0
-	# collect only unique gfx_idxs_mapper
-	for i, tile_gfx_idx in enumerate(compressed_indices):
-		if tile_gfx_idx not in gfx_idxs_mapper:
-			gfx_idxs_mapper[tile_gfx_idx] = new_tile_gfx_idx
-			tiles_gfx.append(decompressed_tiles[i])
-			new_tile_gfx_idx += 1
-
-	# remap compressed_indices into new tile_gfx_idx
-	tile_idxs = []
-	for old_tile_gfx_idx in compressed_indices:
-		tile_idxs.append(gfx_idxs_mapper[old_tile_gfx_idx])
+	tiles_gfx = flattened_tiles_gfx.reshape(-1, tile_size, tile_size, 3).astype(np.uint8)
 
 	# atlas size
 	tiles_len = len(tiles_gfx)
@@ -164,7 +255,7 @@ def codebook_to_img(compressed_indices, codebook, tile_size):
 
 	atlas, tiles_coords = tiles_to_image(tiles_gfx, atlas_tiles_x, atlas_tiles_y, tile_size)
 
-	return tile_idxs, atlas, tiles_coords
+	return atlas, tiles_coords
 
 # adjust the color channels (R: 3 bits, G: 3 bits, B: 2 bits)
 def adjust_color_channels(pixel):
@@ -281,13 +372,58 @@ def color_indices_to_asm(tiles_gfx):
 
 	return common.bytes_to_asm(packed_color_idxs)
 
-def get_asm(tile_idxs_sorted, tiles_gfx, palette, path):
+def get_tiledata(bytes0, bytes1, bytes2, bytes3, tile_size = 8):
+	all_bytes = [bytes0, bytes1, bytes2, bytes3]
+	# data structure description is in drawTile.asm
+	mask = 0
+	data = []
+	for bytes in all_bytes:
+		mask >>=  1
+		if common.is_bytes_zeros(bytes) : 
+			continue
+		mask += 8
+
+		data.extend(bytes)
+
+	return data, mask
+
+def tile_gfx_8_to_buffs_to_asm(tiles_gfx):
+	# works only for 8x8 pixel tiles
+	# convert 64 color indices into 32 bytes. Each 8 bytes for a corresponding screen buffer
+	# add a special code that which each bit describes if there is data for a scr buff
+	# then list 8 bytes for a corresponding screen buffer if there is any,
+	# if there is no data for a buff, skip it
+	
+	asm = ""	
+	for tile_gfx_idx in tiles_gfx:
+		tile_gfx = tiles_gfx[tile_gfx_idx]
+		# convert indexes into bit lists.
+		bits0, bits1, bits2, bits3 = common_gfx.plane_indexes_to_bit_lists(tile_gfx)
+
+		# combite bits into byte lists
+		bytes0 = common.combine_bits_to_bytes(bits0) # 8000-9FFF # from left to right, from bottom to top
+		bytes1 = common.combine_bits_to_bytes(bits1) # A000-BFFF
+		bytes2 = common.combine_bits_to_bytes(bits2) # C000-DFFF
+		bytes3 = common.combine_bits_to_bytes(bits3) # E000-FFFF
+
+		# to support a tile render function
+		data, mask = get_tiledata(bytes0, bytes1, bytes2, bytes3)
+
+		asm += "			.word 0 ; safety pair of bytes for reading by POP B\n"
+		#asm += label_prefix + "_tile" + str(remap_idxs[t_idx]) + ":\n"
+		asm += "			.byte " + str(mask) + " ; mask\n"
+		asm += "			.byte 4 ; counter\n"
+		asm += common.bytes_to_asm(data)
+	
+	return asm
+
+def get_asm(tile_idxs_sorted, tiles_gfx, palette, path, tile_size, color_idx_to_scr_buffs):
 	label_prefix = "__image_"
 	asm = "; " + path + "\n"
 	asm += palette_to_asm(palette, label_prefix)
 	
 	# store tile indices
-	asm += "indices:\n"	
+	asm += "indices:\n"
 	
 	max_value = max(tile_idxs_sorted)
 	if max_value < 256:
@@ -296,8 +432,11 @@ def get_asm(tile_idxs_sorted, tiles_gfx, palette, path):
 		asm += common.words_to_asm(tile_idxs_sorted)
 	
 	# store tile gfx
-	asm += "gfx:\n"
-	asm += color_indices_to_asm(tiles_gfx)
+	asm += "gfx_postfix:\n"
+	if color_idx_to_scr_buffs and tile_size == 8:
+		asm += tile_gfx_8_to_buffs_to_asm(tiles_gfx)
+	else:
+		asm += color_indices_to_asm(tiles_gfx)
 	return asm
 
 def asm_to_bin_zx0(asm, dir, base_name, packer_path, delete_encoded):
@@ -365,7 +504,7 @@ def match_colors(image, image_ref):
 	return image
 
 
-def compress(n_clusters, tile_size, img_vec06c_not_cropped, path_source, path_name_prefix, packer_path, save_atlas = False, encode = False, delete_encoded = True, decode = False, delete_decoded = True, random_state = 42, n_init = 'auto'):
+def compress(n_clusters, tile_size, img_vec06c_not_cropped, path_source, path_name_prefix, packer_path, save_atlas = False, encode = False, delete_encoded = True, decode = False, delete_decoded = True, random_state = 42, n_init = 'auto', add_flipped = False, color_idx_to_scr_buffs = False):
 
 	image_not_cropped = Image.open(path_source).convert('RGB')
 	width = image_not_cropped.width // tile_size * tile_size
@@ -374,9 +513,9 @@ def compress(n_clusters, tile_size, img_vec06c_not_cropped, path_source, path_na
 
 	img_vec06c = img_vec06c_not_cropped.crop((0, 0, width, height))
 
-	compressed_indices, codebook = vector_quantization_compression(image = image, n_clusters = n_clusters, tile_size = tile_size, random_state = random_state, n_init = n_init)
+	tile_idxs, flattened_tiles_gfx = vector_quantization_compression(image = image, n_clusters = n_clusters, tile_size = tile_size, random_state = random_state, n_init = n_init, add_flipped = add_flipped)
 
-	tile_idxs, atlas, tiles_coords = codebook_to_img(compressed_indices, codebook, tile_size)
+	atlas, tiles_coords = make_atlas(tile_idxs, flattened_tiles_gfx, tile_size)
 
 	atlas_indexed = image_to_indexed(atlas)
 
@@ -397,16 +536,16 @@ def compress(n_clusters, tile_size, img_vec06c_not_cropped, path_source, path_na
 		path_atlas_indexed = path_name_prefix + "_atlas" + PNG_EXT
 		atlas_index_sorted.save(path_atlas_indexed)
 	
-	# pack with upkr VQ decoded tiled image
+	# pack VQ decoded tiled image
 	size_encoded_tiled = 0
 	if encode:
 		path_asm = path_name_prefix + "_encoded.asm"
-		asm = get_asm(tile_idxs, tiles_gfx, atlas_index_sorted.getpalette(), path_asm)
+		asm = get_asm(tile_idxs, tiles_gfx, atlas_index_sorted.getpalette(), path_asm, tile_size, color_idx_to_scr_buffs)
 		dir = os.path.dirname(path_asm)
 		base_name = common.path_to_basename(path_asm)
 		size_encoded_tiled = asm_to_bin_zx0(asm, dir, base_name, packer_path, delete_encoded)
 
-	# pack with upkr decoded image
+	# pack decoded image
 	size_decoded_upkr = 0
 	if decode:
 		path_decoded_upkr = path_name_prefix + "_decoded"
@@ -482,61 +621,49 @@ def main():
 	
 	paths_source = [
 		"temp\\test\\vector_quantization_image_compression\\contrast_dither_adaptive.png",
-		#"temp\\test\\vector_quantization_image_compression\\image_intro.png",
-		#"temp\\test\\vector_quantization_image_compression\\image_intro2.png",
-		#"temp\\test\\vector_quantization_image_compression\\img01.png",
-		#"temp\\test\\vector_quantization_image_compression\\img02.png",
-		#"temp\\test\\vector_quantization_image_compression\\img03.png",
-		#"temp\\test\\vector_quantization_image_compression\\img04.png",
-		#"temp\\test\\vector_quantization_image_compression\\img05.png",
-		#"temp\\test\\vector_quantization_image_compression\\img06.png",
-		#"temp\\test\\vector_quantization_image_compression\\img07.png",
-		#"temp\\test\\vector_quantization_image_compression\\img08.png",
-		#"temp\\test\\vector_quantization_image_compression\\img09.png",
-		#"temp\\test\\vector_quantization_image_compression\\img10.png",
-		#"temp\\test\\vector_quantization_image_compression\\img11.png",
-		#"temp\\test\\vector_quantization_image_compression\\img12.png",
-		#"temp\\test\\vector_quantization_image_compression\\img13.png",
-		#"temp\\test\\vector_quantization_image_compression\\img14.png",
-		#"temp\\test\\vector_quantization_image_compression\\img15.png",
-		#"temp\\test\\vector_quantization_image_compression\\img16.png",
-		#"temp\\test\\vector_quantization_image_compression\\img17.png",		
-		#"temp\\test\\vector_quantization_image_compression\\img18.png",
-		#"temp\\test\\vector_quantization_image_compression\\contrast_cropped.png",
+		"temp\\test\\vector_quantization_image_compression\\image_intro.png",
+		"temp\\test\\vector_quantization_image_compression\\image_intro2.png",
+		"temp\\test\\vector_quantization_image_compression\\img01.png",
+		"temp\\test\\vector_quantization_image_compression\\img02.png",
+		"temp\\test\\vector_quantization_image_compression\\img03.png",
+		"temp\\test\\vector_quantization_image_compression\\img04.png",
+		"temp\\test\\vector_quantization_image_compression\\img05.png",
+		"temp\\test\\vector_quantization_image_compression\\img06.png",
+		"temp\\test\\vector_quantization_image_compression\\img07.png",
+		"temp\\test\\vector_quantization_image_compression\\img08.png",
+		"temp\\test\\vector_quantization_image_compression\\img09.png",
+		"temp\\test\\vector_quantization_image_compression\\img10.png",
+		"temp\\test\\vector_quantization_image_compression\\img11.png",
+		"temp\\test\\vector_quantization_image_compression\\img12.png",
+		"temp\\test\\vector_quantization_image_compression\\img13.png",
+		"temp\\test\\vector_quantization_image_compression\\img14.png",
+		"temp\\test\\vector_quantization_image_compression\\img15.png",
+		"temp\\test\\vector_quantization_image_compression\\img16.png",
+		"temp\\test\\vector_quantization_image_compression\\img17.png",		
+		"temp\\test\\vector_quantization_image_compression\\img18.png",
+		"temp\\test\\vector_quantization_image_compression\\contrast_cropped.png",
 	]
 	compression_setups = [
 		{
 			"tile_size" : 4,
-			"n_clusters" : 300,
-			"random_state" : 9
-		},
-		{
-			"tile_size" : 4,
-			"n_clusters" : 600,
-			"random_state" : 2
-		},
-		{
-			"tile_size" : 4,
-			"n_clusters" : 750,
-			"random_state" : 7
-		},		
-		{
-			"tile_size" : 8,
-			"n_clusters" : 300,
-			"random_state" : 2
+			"n_clusters" : 700,
+			"random_state" : 12,
 		},
 		{
 			"tile_size" : 8,
 			"n_clusters" : 400,
-			"random_state" : 4
-		},
+			"random_state" : 12,
+		}
 	]
-	n_init = 'auto' # 20
-	
+	n_init = 20 #"auto" # 20
+	add_flipped = False
+	color_idx_to_scr_buffs = False
+	packer_path = build.zx0_path # build.upkr_path
+		
 	result = {}
 	futures = []
 	executor = concurrent.futures.ThreadPoolExecutor(max_workers=40)
-	packer_path = build.zx0_path
+
 
 	for path_source in paths_source:
 
@@ -567,16 +694,18 @@ def main():
 			random_state = 0
 			if "random_state" in setup:
 				random_state = setup["random_state"]
+
+			postfix = "_flipped" if add_flipped else ""
 				
 			width, height = img_vec06c.size
 			tiles_count = (width // tile_size) * (height // tile_size)
 
 			if tiles_count >= n_clusters:
 					
-				path_name_prefix2 = f"{path_name_prefix}_{tile_size}_{n_clusters}_{random_state}"
-				res_key = f"{tile_size}_{n_clusters}_{random_state}"
+				path_name_prefix2 = f"{path_name_prefix}_{tile_size}_{n_clusters}_{random_state}_{postfix}"
+				res_key = f"{tile_size}_{n_clusters}_{random_state}_{postfix}"
 
-				future1 = executor.submit(compress, n_clusters, tile_size, img_vec06c, path_source, path_name_prefix2, packer_path, False, True, True, False, True, random_state, n_init)
+				future1 = executor.submit(compress, n_clusters, tile_size, img_vec06c, path_source, path_name_prefix2, packer_path, False, True, True, False, True, random_state, n_init, add_flipped, color_idx_to_scr_buffs)
 				result[base_name]["quantization_features"][res_key] = future1
 				futures.append(future1)
 

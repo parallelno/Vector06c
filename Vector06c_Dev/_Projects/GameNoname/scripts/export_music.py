@@ -74,8 +74,8 @@ def readym(filename):
 
 #=====================================================
 def export_if_updated(source_path, generated_dir, force_export):
-	source_path_wo_ext = os.path.splitext(source_path)[0]
-	source_name = os.path.basename(source_path_wo_ext)
+	source_name = common.path_to_basename(source_path)
+
 	export_paths = {"ram_disk" : generated_dir + source_name + build.EXT_ASM }
 
 	if force_export or build.is_file_updated(source_path):
