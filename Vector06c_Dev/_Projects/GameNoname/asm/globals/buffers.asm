@@ -1,6 +1,10 @@
 	; this line for VSCode proper formating
 ; TODO: move all global vars here
 ; TODO: rename buffers.asm to vars.asm
+;=============================================================================
+; tiled image indices buffer
+tiled_img_idxs:	= $7714
+TILED_IMG_IDXS_LEN = $100
 
 ;=============================================================================
 ; ptr to the first bullet data in the sorted list

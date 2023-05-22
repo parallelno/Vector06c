@@ -30,7 +30,7 @@ draw_tile_16x16:
 			mov d, b
 
 ; HL - screen buff addr
-; sp - sprite data
+; SP - sprite data
 ; E - contains a bit mask xxxxECA8
 ;   "8" bit - draw in $8000 buffer
 ;   "A" bit - draw in $A000 buffer etc.
@@ -135,7 +135,7 @@ draw_tile_16x16_back_buff:
 			mov d, b
 
 ; HL - screen buff addr
-; sp - sprite data
+; SP - sprite data
 ; E - contains a bit mask xxxxECA8
 ;   "8" bit - draw in $8000 buffer
 ;   "A" bit - draw in $A000 buffer etc.

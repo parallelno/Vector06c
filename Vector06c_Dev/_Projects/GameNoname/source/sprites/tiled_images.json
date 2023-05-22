@@ -20,19 +20,5 @@
 		{"x": 240,	"y" : 256}
 	],
 	"asset_type" : "tiled_img",
-	"images" :
-	[
-		{
-			"path" : "tiled_images.tmj",
-			"layer_name" : "frame_ingame_top"
-		},
-		{
-			"path" : "tiled_images.tmj",
-			"layer_name" : "frame_main_menu"
-		},
-		{
-			"path" : "tiled_images.tmj",
-			"layer_name" : "frame_ingame_dialog"
-		}									
-	]
+	"path" : "tiled_images.tmj"
 }

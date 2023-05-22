@@ -14,6 +14,7 @@
 .include "asm\\render\\draw_tile.asm"
 .include "asm\\render\\draw_back.asm"
 .include "asm\\render\\draw_decal.asm"
+.include "asm\\render\\draw_tiled_img.asm"
 .include "asm\\render\\sprite.asm"
 .include "asm\\globals\\actor_macro.asm"
 .include "asm\\globals\\actor.asm"
@@ -36,6 +37,10 @@ game_init:
 			xra a
 			sta update_request_counter
 			hlt
+
+			; TODO: test
+			call draw_tiled_img
+			; TODO: test end
 
 @gameLoop:
 			CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
