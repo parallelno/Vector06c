@@ -140,12 +140,31 @@
 		.endif
 .endmacro
 
-.macro LXI_B_NEG(val)
-		lxi b, $ffff - val + 1
+.macro LXI_B(val)
+	.if val < 0
+		lxi b, $ffff + val + 1
+	.endif
+	.if val >= 0
+		lxi b, val
+	.endif
 .endmacro
 
-.macro LXI_D_NEG(val)
-		lxi d, $ffff - val + 1
+.macro LXI_D(val)
+	.if val < 0
+		lxi d, $ffff + val + 1
+	.endif
+	.if val >= 0
+		lxi d, val
+	.endif
+.endmacro
+
+.macro LXI_H(val)
+	.if val < 0
+		lxi h, $ffff + val + 1
+	.endif
+	.if val >= 0
+		lxi h, val
+	.endif
 .endmacro
 
 .macro LXI_H_NEG(val)

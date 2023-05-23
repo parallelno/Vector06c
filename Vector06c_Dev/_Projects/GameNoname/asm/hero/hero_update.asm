@@ -425,12 +425,14 @@ hero_impacted:
 			lxi h, hero_health
 			mov a, m
 			sub c
-			mov m, a
+			jc @dead
+			call game_ui_draw_health
+			ret
+@dead:
+			mvi m, 0
 			; check if he dies
-			push psw
-			call game_ui_health_draw
-			pop psw
-			rnc
+			call game_ui_draw_health
+
 			; hero's dead
 			; TODO: teleport the hero to the main scene if he died in the level
 			; TODO: teleport the hero to the catacombs entrance if a boss killed him

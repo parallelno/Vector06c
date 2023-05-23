@@ -156,7 +156,11 @@ level_init_tbl_end:					= $7bd6
 LEVEL_INIT_TBL_LEN = level_init_tbl_end - level_init_tbl
 ;=============================================================================
 ;
-;	free space = $7bd6 - $7c10
+hero_score = $7bd6 ; word
+
+;=============================================================================
+;
+;	free space = $7bd8 - $7c10
 ;
 
 ;=============================================================================
@@ -206,7 +210,7 @@ room_tiledata_end:	= room_tiledata + ROOM_TILEDATA_LEN
 ; check buffer overlapping
 ;
 
-BUFFERS_START_ADDR	= bullet_runtime_data_sorted
+BUFFERS_START_ADDR	= tiled_img_idxs
 BUFFERS_END_ADDR	= room_tiledata_end
 
 

@@ -19,7 +19,6 @@ __level00_tile0:
 			.byte 0 ; mask
 			.byte 4 ; counter
 
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile1:
 			.byte 15 ; mask
@@ -32,7 +31,6 @@ __level00_tile1:
 			.byte 224,0,128,128,128,0,0,0,0,0,0,0,0,56,60,220,
 			.byte 0,0,0,0,0,0,96,110,206,192,224,97,1,15,14,0,
 			.byte 224,0,128,128,128,0,0,0,0,0,0,0,0,56,60,28,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile2:
 			.byte 15 ; mask
@@ -45,7 +43,6 @@ __level00_tile2:
 			.byte 6,14,15,1,7,6,6,0,0,0,0,0,0,0,0,0,
 			.byte 0,0,0,0,0,0,0,48,48,176,128,128,0,0,0,0,
 			.byte 6,14,12,0,6,6,6,0,0,0,0,0,0,0,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile3:
 			.byte 15 ; mask
@@ -58,7 +55,6 @@ __level00_tile3:
 			.byte 228,128,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
 			.byte 132,128,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile4:
 			.byte 15 ; mask
@@ -71,14 +67,12 @@ __level00_tile4:
 			.byte 0,0,0,0,0,64,192,128,128,2,161,177,32,0,0,0,
 			.byte 255,255,255,255,254,253,252,248,241,227,192,192,208,136,128,195,
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,155,255,255,255,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile5:
 			.byte 8 ; mask
 			.byte 4 ; counter
 			.byte 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
 			.byte 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile6:
 			.byte 15 ; mask
@@ -91,7 +85,6 @@ __level00_tile6:
 			.byte 128,192,112,240,160,128,0,0,0,0,3,7,7,6,0,8,
 			.byte 226,224,128,128,0,0,0,0,0,0,1,1,1,3,3,3,
 			.byte 128,128,48,176,160,128,0,0,0,0,0,6,6,6,4,7,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile7:
 			.byte 15 ; mask
@@ -104,7 +97,6 @@ __level00_tile7:
 			.byte 0,0,0,0,0,0,0,16,48,4,6,1,0,0,0,0,
 			.byte 255,255,31,33,62,83,0,0,0,0,0,0,0,0,0,0,
 			.byte 0,0,0,0,0,0,0,16,48,0,8,6,228,248,255,255,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile8:
 			.byte 15 ; mask
@@ -117,7 +109,6 @@ __level00_tile8:
 			.byte 124,92,124,100,90,103,101,89,88,102,38,55,60,0,0,0,
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 			.byte 56,56,24,24,24,60,37,25,25,0,0,0,0,60,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile9:
 			.byte 15 ; mask
@@ -130,7 +121,6 @@ __level00_tile9:
 			.byte 0,0,120,132,204,79,51,207,206,192,216,240,0,0,0,0,
 			.byte 0,0,0,0,0,0,0,240,240,255,31,0,0,0,0,0,
 			.byte 0,0,0,48,120,72,59,15,15,0,0,15,96,0,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile10:
 			.byte 15 ; mask
@@ -143,7 +133,6 @@ __level00_tile10:
 			.byte 0,0,120,132,204,79,51,207,206,192,216,240,0,0,0,0,
 			.byte 0,0,0,0,0,0,0,240,240,255,31,0,0,0,0,0,
 			.byte 0,0,0,48,120,72,59,15,15,0,0,15,96,0,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile11:
 			.byte 15 ; mask
@@ -156,7 +145,6 @@ __level00_tile11:
 			.byte 0,0,120,132,204,79,51,207,206,192,216,240,0,0,0,0,
 			.byte 0,0,0,0,0,0,0,240,240,255,31,0,0,0,0,0,
 			.byte 0,0,0,48,120,72,59,15,15,0,0,15,96,0,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile12:
 			.byte 15 ; mask
@@ -169,7 +157,6 @@ __level00_tile12:
 			.byte 120,120,120,248,232,152,152,104,136,208,240,240,240,248,184,120,
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 			.byte 48,48,48,0,96,144,144,96,0,72,96,96,96,112,48,48,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile13:
 			.byte 14 ; mask
@@ -180,7 +167,6 @@ __level00_tile13:
 			.byte 0,0,0,0,0,0,0,0,128,128,192,128,0,0,0,0,
 			.byte 255,255,255,243,248,249,249,255,255,255,255,63,31,31,31,15,
 			.byte 255,255,255,255,255,255,255,255,255,255,63,31,255,255,255,255,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile14:
 			.byte 15 ; mask
@@ -193,7 +179,6 @@ __level00_tile14:
 			.byte 0,163,30,158,142,10,128,192,192,0,0,0,0,0,0,0,
 			.byte 0,0,0,0,0,12,12,0,1,1,6,7,1,1,64,8,
 			.byte 3,4,30,158,134,2,128,192,192,0,0,0,0,0,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile15:
 			.byte 15 ; mask
@@ -206,7 +191,6 @@ __level00_tile15:
 			.byte 0,2,9,28,20,0,1,29,124,112,28,30,110,240,192,0,
 			.byte 192,192,128,0,0,128,0,0,0,0,0,0,0,130,17,247,
 			.byte 206,77,40,12,4,0,1,29,124,96,28,30,14,192,192,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile16:
 			.byte 15 ; mask
@@ -219,7 +203,6 @@ __level00_tile16:
 			.byte 0,0,0,0,64,64,0,0,24,0,8,16,32,12,8,240,
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,235,191,255,
 			.byte 255,255,255,255,127,95,79,23,7,7,8,16,34,0,0,4,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile17:
 			.byte 15 ; mask
@@ -232,7 +215,6 @@ __level00_tile17:
 			.byte 0,0,0,0,0,0,0,0,32,8,12,2,19,25,60,24,
 			.byte 7,143,191,195,112,162,0,0,0,0,0,0,0,0,0,0,
 			.byte 0,0,0,0,0,0,0,0,32,0,16,192,192,192,192,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile18:
 			.byte 15 ; mask
@@ -245,7 +227,6 @@ __level00_tile18:
 			.byte 0,0,0,0,0,0,0,0,32,8,4,67,0,0,0,0,
 			.byte 7,135,99,51,0,19,0,0,0,0,0,0,0,0,0,0,
 			.byte 0,0,0,0,0,0,0,0,32,0,40,132,224,240,255,255,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile19:
 			.byte 15 ; mask
@@ -258,7 +239,6 @@ __level00_tile19:
 			.byte 16,0,0,4,0,0,128,4,0,128,0,0,0,0,0,159,
 			.byte 224,96,49,64,100,232,224,224,0,0,0,0,0,0,0,0,
 			.byte 3,1,1,1,1,7,71,75,135,95,63,127,255,255,96,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile20:
 			.byte 7 ; mask
@@ -269,7 +249,6 @@ __level00_tile20:
 			.byte 1,0,0,0,0,0,0,64,224,229,247,255,192,0,0,0,
 			.byte 0,0,255,255,255,255,251,240,64,0,0,0,0,0,0,192,
 			.byte 1,0,0,0,0,0,0,64,224,229,247,255,255,255,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile21:
 			.byte 7 ; mask
@@ -280,7 +259,6 @@ __level00_tile21:
 			.byte 0,0,0,0,0,0,0,32,112,244,255,255,192,0,0,0,
 			.byte 0,0,255,255,255,255,255,240,96,0,0,0,0,0,0,224,
 			.byte 0,0,0,0,0,0,0,32,112,244,255,255,255,255,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile22:
 			.byte 15 ; mask
@@ -293,7 +271,6 @@ __level00_tile22:
 			.byte 248,188,7,7,7,15,3,15,71,192,7,7,15,7,15,31,
 			.byte 0,128,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 			.byte 0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile23:
 			.byte 15 ; mask
@@ -306,7 +283,6 @@ __level00_tile23:
 			.byte 0,64,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 			.byte 255,255,255,255,255,255,255,255,255,255,255,255,254,254,252,120,
 			.byte 127,127,7,67,143,255,255,255,255,255,255,255,255,255,255,255,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile24:
 			.byte 15 ; mask
@@ -319,7 +295,6 @@ __level00_tile24:
 			.byte 0,0,0,0,0,0,0,0,0,143,4,0,4,255,0,0,
 			.byte 255,255,0,0,0,0,0,0,0,0,159,191,255,255,255,191,
 			.byte 255,255,255,255,255,255,0,0,0,0,0,0,0,0,255,255,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile25:
 			.byte 15 ; mask
@@ -332,7 +307,6 @@ __level00_tile25:
 			.byte 0,0,0,0,0,0,0,2,1,0,0,0,0,0,0,0,
 			.byte 31,0,7,15,15,15,15,15,7,0,159,191,191,191,191,191,
 			.byte 255,255,255,255,255,254,0,248,252,252,252,252,252,248,0,255,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile26:
 			.byte 15 ; mask
@@ -345,7 +319,6 @@ __level00_tile26:
 			.byte 0,0,0,0,0,0,0,0,0,143,4,4,4,255,0,0,
 			.byte 183,255,128,0,0,0,0,0,0,0,31,63,127,127,127,63,
 			.byte 255,255,255,255,255,255,0,0,0,0,0,0,0,0,255,222,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile27:
 			.byte 15 ; mask
@@ -358,7 +331,6 @@ __level00_tile27:
 			.byte 0,0,0,0,0,0,0,2,1,0,0,0,0,0,0,0,
 			.byte 31,0,7,15,15,15,15,15,7,0,159,191,191,191,191,191,
 			.byte 255,255,255,255,255,254,0,248,252,252,252,252,252,248,0,254,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile28:
 			.byte 15 ; mask
@@ -371,7 +343,6 @@ __level00_tile28:
 			.byte 248,188,7,15,7,15,3,15,199,193,7,7,15,7,15,31,
 			.byte 128,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile29:
 			.byte 15 ; mask
@@ -384,7 +355,6 @@ __level00_tile29:
 			.byte 16,0,32,96,240,240,1,7,3,1,7,15,7,15,15,1,
 			.byte 0,192,192,192,192,128,128,128,128,128,128,128,128,128,128,128,
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile30:
 			.byte 15 ; mask
@@ -397,7 +367,6 @@ __level00_tile30:
 			.byte 0,0,0,0,0,0,32,112,242,251,255,255,255,0,0,0,
 			.byte 127,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile31:
 			.byte 7 ; mask
@@ -408,7 +377,6 @@ __level00_tile31:
 			.byte 113,0,0,0,0,0,0,32,112,242,255,191,2,0,15,0,
 			.byte 0,0,255,255,255,255,255,248,32,0,0,0,0,0,0,240,
 			.byte 113,0,0,0,0,0,0,32,112,242,255,255,255,255,12,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile32:
 			.byte 15 ; mask
@@ -421,7 +389,6 @@ __level00_tile32:
 			.byte 190,1,3,1,0,1,15,135,151,191,255,255,254,254,0,0,
 			.byte 127,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 			.byte 1,0,0,0,0,0,0,0,0,0,0,0,1,1,255,255,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile33:
 			.byte 15 ; mask
@@ -434,7 +401,6 @@ __level00_tile33:
 			.byte 192,0,0,0,131,3,1,226,251,255,255,255,255,255,0,0,
 			.byte 255,255,240,224,192,192,192,192,192,128,128,128,128,192,192,192,
 			.byte 32,0,0,0,0,0,0,0,0,0,0,0,0,0,255,255,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile34:
 			.byte 15 ; mask
@@ -447,7 +413,6 @@ __level00_tile34:
 			.byte 0,3,67,97,1,1,3,231,255,255,255,255,255,254,0,0,
 			.byte 255,255,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,1,255,255,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile35:
 			.byte 15 ; mask
@@ -460,7 +425,6 @@ __level00_tile35:
 			.byte 0,0,0,0,0,0,0,2,1,0,0,0,0,0,255,0,
 			.byte 63,0,15,15,15,15,15,15,7,0,31,63,127,127,63,63,
 			.byte 255,255,255,255,255,254,0,248,252,252,252,252,252,252,0,158,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile36:
 			.byte 15 ; mask
@@ -473,7 +437,6 @@ __level00_tile36:
 			.byte 0,0,0,24,0,0,3,192,192,199,7,15,15,7,15,31,
 			.byte 128,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tile37:
 			.byte 15 ; mask
@@ -486,4 +449,3 @@ __level00_tile37:
 			.byte 0,0,0,0,0,0,0,0,96,224,128,248,56,24,192,224,
 			.byte 1,1,0,0,0,3,3,96,224,128,0,0,0,128,0,128,
 			.byte 0,0,0,0,0,0,0,0,96,224,128,56,56,24,192,224,
-

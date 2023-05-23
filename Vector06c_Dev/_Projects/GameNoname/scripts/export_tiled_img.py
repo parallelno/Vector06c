@@ -13,9 +13,18 @@ IMG_TILE_H = 8
 SCR_TILES_W = 32
 SCR_TILES_H = 32
 
+TILED_IMG_IDXS_LEN_MAX = 256
+
+META_DATA_LEN = 4 # scr addr, scr addr end
+
 def get_tiledata(bytes0, bytes1, bytes2, bytes3, use_mask):
+	if not use_mask:
+		# reverse every second list of bytes to support tiled_img format
+		bytes1 = bytes1[::-1]
+		bytes3 = bytes3[::-1]
+	
 	all_bytes = [bytes0, bytes1, bytes2, bytes3]
-	# data structure description is in drawTile.asm
+	# data structure description is in draw_tiled_img.asm
 	mask = 0
 	data = []
 	for bytes in all_bytes:
@@ -29,9 +38,10 @@ def get_tiledata(bytes0, bytes1, bytes2, bytes3, use_mask):
 
 	return data, mask
 
-def gfx_to_asm(image, path, remap_idxs, label_prefix):
-	asm = "; " + path + "\n"
-	asm += label_prefix + "_tiles:\n"
+def gfx_to_asm(image, remap_idxs, label_prefix):
+	#asm = "; " + path + "\n"
+	#asm += label_prefix + "_tiles:\n"
+	asm = "\n"
 	
 	# extract tile images and convert them into asm
 	for t_idx in remap_idxs:
@@ -102,11 +112,16 @@ def get_img_ptrs(images_j, label_prefix):
 
 def tile_idxs_to_asm(idxs, pos_x, pos_y, tiles_w, tiles_h, label_name):
 	asm = ""
-	asm += f"{label_name.upper()}_LEN = {len(idxs)}\n"
-	asm += f"{label_name.upper()}_SCR_ADDR = SCR_BUFF0_ADDR + ({pos_x}<<8 | {pos_y})\n"
-	asm += f"{label_name.upper()}_SCR_ADDR_END = SCR_BUFF0_ADDR + ({pos_x + tiles_w}<<8 | {pos_y + tiles_h * 8})\n"
+	# this is a len for copy_from_ram_disk asm func. it copies pairs of bytes. Therefor a len has to be calc as len = data_len // 2 + data_len % 2
+	idxs_data_copy_len = len(idxs) // 2 + len(idxs) % 2 + META_DATA_LEN
+	asm += f"{label_name.upper()}_COPY_LEN = {idxs_data_copy_len}\n"
+
+	#asm += f"{label_name.upper()}_SCR_ADDR = SCR_BUFF0_ADDR + ({pos_x}<<8 | {pos_y})\n"
+	#asm += f"{label_name.upper()}_SCR_ADDR_END = SCR_BUFF0_ADDR + ({pos_x + tiles_w}<<8 | {pos_y + tiles_h * 8})\n"
 	asm += "			.word 0 ; safety pair of bytes for reading by POP B\n"
 	asm += label_name + ":\n"
+	asm += f"			.word SCR_BUFF0_ADDR + ({pos_x}<<8 | {pos_y})	; scr addr\n"
+	asm += f"			.word SCR_BUFF0_ADDR + ({pos_x + tiles_w}<<8 | {(pos_y + tiles_h * 8) % 256})	; scr addr end\n"
 	asm += common.bytes_to_asm(idxs, tiles_w, True)
 
 	return asm
@@ -177,7 +192,7 @@ def export_gfx(source_j_path, export_gfx_path):
 	# asm += common_gfx.get_list_of_tiles(remap_idxs, "__" + source_name, png_name)
 	
 	# tile gfx data to asm
-	asm += gfx_to_asm(image, path_png, remap_idxs, "__" + png_name)
+	asm += gfx_to_asm(image, remap_idxs, "__" + png_name)
 
 	# save asm
 	export_dir = str(Path(export_gfx_path).parent) + "\\"		
@@ -216,6 +231,11 @@ def export_data(source_j_path, export_data_path):
 
 	# make a tile index remap dictionary, to have the first idx = 0
 	remap_idxs = remap_indices(tiled_file_j)
+
+	if len(remap_idxs) + META_DATA_LEN > TILED_IMG_IDXS_LEN_MAX:
+		print(f'export_tiled_img ERROR: image indices > "{TILED_IMG_IDXS_LEN_MAX}", path: {source_j_path}')
+		print("Stop export")
+		exit(1)
 
 	base_name = common.path_to_basename(tiled_file_path)
 
@@ -284,7 +304,7 @@ def is_source_updated(source_j_path):
 	source_dir = str(Path(source_j_path).parent) + "\\"
 	path_png = source_dir + source_j["path_png"]
 
-	tiled_file_path = source_j["path]"]
+	tiled_file_path = source_j["path"]
 	tiled_file_updated = build.is_file_updated(tiled_file_path)
 
 	if build.is_file_updated(source_j_path) | build.is_file_updated(path_png) | tiled_file_updated:

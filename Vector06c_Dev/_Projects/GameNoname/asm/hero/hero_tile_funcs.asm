@@ -230,7 +230,7 @@ hero_res_func_potion_red:
 			adi RESOURCE_POTION_RED_VAL
 			CLAMP_A()	
 			mov m, a
-			call game_ui_health_draw
+			call game_ui_draw_health
 			ret
 
 hero_cont_func_chest_small:
