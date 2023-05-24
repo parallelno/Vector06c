@@ -63,7 +63,7 @@ hero_sword_init:
 
 			; advance hl to bullet_status
 			inx h
-			mvi m, ACTOR_STATUS_INVIS
+			mvi m, ACTOR_STATUS_BIT_INVIS
 			; advance and set bullet_status_timer
 			inx h
 			mvi m, HERO_SWORD_STATUS_INVIS_DURATION
@@ -123,7 +123,7 @@ hero_sword_update:
 			LXI_H_TO_DIFF(bullet_status, bullet_update_ptr)
 			dad d
 			mov a, m
-			cpi ACTOR_STATUS_INVIS
+			cpi ACTOR_STATUS_BIT_INVIS
 			jz @delayUpdate
 
 @attkUpdate:

@@ -28,14 +28,15 @@ draw_image_zx0:
 			CALL_RAM_DISK_FUNC_BANK(@unpack)
 			CALL_RAM_DISK_FUNC(@decoded_scr_buff_data, __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 
-			hlt
+			;copy the pallete from a ram-disk, then requet for using it
 			lxi d, __image_intro_palette
-			mvi a, <(__RAM_DISK_M_IMAGES | RAM_DISK_M_8F)
-			call set_palette_from_ram_disk
+			mvi h, <(__RAM_DISK_M_IMAGES | RAM_DISK_M_8F)
+			call copy_palette_request_update
+						
 
 			lxi h, SCR_BUFF0_ADDR
 			call @copy_scr_data
-			HLT_(100)
+			;HLT_(100)
 			ret
 
 ; copy data into the screen buff

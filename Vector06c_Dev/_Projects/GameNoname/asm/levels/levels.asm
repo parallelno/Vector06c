@@ -32,12 +32,13 @@ level_init:
 			lxi b, LEVEL_INIT_TBL_LEN
 			call copy_mem 
 
-
-			; TODO: make set_palette_from_ram_disk work via CALL_RAM_DISK_FUNC
+			; copy a palette from the ram-disk, then request for using it
 			lhld level_palette_ptr
 			xchg
-            lda level_ram_disk_s_gfx
-			call set_palette_from_ram_disk
+			lxi h, level_ram_disk_s_gfx
+			mov h, m			
+			call copy_palette_request_update
+
 			mvi a, 1
 			sta border_color_idx
 

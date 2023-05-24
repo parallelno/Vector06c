@@ -17,7 +17,9 @@ hero_draw:
 			cpi HERO_STATUS_IMPACTED
 			jz @invisState
 			cpi HERO_STATUS_INVINCIBLE
-			jz @invisState			
+			jz @invisState
+			ani ACTOR_STATUS_BIT_INVIS
+			rnz
 
 @draw:
 			mov a, l
@@ -33,6 +35,7 @@ hero_draw:
 			xchg
 			shld hero_erase_wh
 			ret
+
 @invisState:
 			mvi a, %00110011
 			rrc
@@ -44,6 +47,10 @@ hero_draw:
 			jmp @saveParams
 
 hero_copy_to_scr:
+			lda hero_status
+			ani ACTOR_STATUS_BIT_INVIS
+			rnz
+
 			; get min(h, d), min(e,l)
 			lhld hero_erase_scr_addr_old
 			xchg
@@ -99,6 +106,10 @@ hero_copy_to_scr:
 			jmp sprite_copy_to_scr_v
 
 hero_erase:
+			lda hero_status
+			ani ACTOR_STATUS_BIT_INVIS
+			rnz
+			
 			; TODO: optimize. erase only that is outside of the updated hero region
 			lhld hero_erase_scr_addr
 			xchg

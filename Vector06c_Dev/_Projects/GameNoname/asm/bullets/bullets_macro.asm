@@ -9,10 +9,8 @@
 			LXI_H_TO_DIFF(bullet_status, bullet_draw_ptr)
 			dad d
 			mov a, m
-			; if it is invisible, return
-			; TODO: use ral instead of cpi ACTOR_STATUS_INVIS
-			cpi ACTOR_STATUS_INVIS
-			rz
+			ani ACTOR_STATUS_BIT_INVIS
+			rnz
 
 			LXI_D_TO_DIFF(bullet_pos_x+1, bullet_status)
 		.endif 

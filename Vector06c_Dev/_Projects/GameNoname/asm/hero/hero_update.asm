@@ -1,5 +1,4 @@
 .macro HERO_UPDATE_ANIM(anim_speed)
-			; anim idle update
 			lxi h, hero_anim_timer
 			mov a, m
 			adi anim_speed
@@ -23,6 +22,8 @@ hero_update:
 			cz hero_impacted_update
 			cpi HERO_STATUS_INVINCIBLE
 			cz hero_invincible_update
+			cpi HERO_STATUS_DEATH
+			jnc hero_dead ; all death statuses values are bigger than HERO_STATUS_DEATH
 
 			; check if an attack key pressed
 			lhld key_code
@@ -426,14 +427,147 @@ hero_impacted:
 			mov a, m
 			sub c
 			jc @dead
+			jz @dead
+			mov m, a
 			call game_ui_draw_health
 			ret
 @dead:
 			mvi m, 0
 			; check if he dies
 			call game_ui_draw_health
-
 			; hero's dead
-			; TODO: teleport the hero to the main scene if he died in the level
-			; TODO: teleport the hero to the catacombs entrance if a boss killed him
+
+			; set the status
+			lxi h, hero_status
+			mvi m, HERO_STATUS_DEATH_FADE_INIT_GB
+			ret
+
+hero_dead:
+			cpi HERO_STATUS_DEATH_FADE_INIT_GB
+			jz hero_dead_fade_init_gb
+			cpi HERO_STATUS_DEATH_FADE_GB
+			jz hero_dead_fade_gb
+			cpi HERO_STATUS_DEATH_FADE_R
+			jz hero_dead_fade_r	
+			cpi HERO_STATUS_DEATH_FALL_ANIM
+			jz hero_dead_fade_fall_anim
+			ret
+
+hero_dead_fade_init_gb:
+			KILL_ALL_MONSTERS()
+			KILL_ALL_BULLETS()
+
+			; set the status
+			lxi h, hero_status
+			mvi m, HERO_STATUS_DEATH_FADE_GB
+			ret
+
+HERO_STATUS_DEATH_FADE_UPDATE_RATE = %00010001
+HERO_STATUS_DEATH_FADE_GB_TIMER = 7
+hero_dead_fade_gb:
+			; fade out a pallete
+			; do a palette animation only every Nth frame
+@anim_rate:
+			mvi a, HERO_STATUS_DEATH_FADE_UPDATE_RATE
+			rrc
+			sta @anim_rate + 1
+			rnc
+
+			lxi h, palette
+			mvi c, PALETTE_COLORS
+			
+@fade_gb_counter:
+			mvi a, HERO_STATUS_DEATH_FADE_GB_TIMER
+			ora a
+			jz @next_status
+			dcr a
+			sta @fade_gb_counter + 1
+			
+@loop_bg:
+			mov a, m
+			rrc
+			ani %01011000
+			mov b, a
+			mov a, m
+			ani %00000111
+			ora b
+			mov m, a
+
+			inx h
+			dcr c
+			jnz @loop_bg
+
+@update_palette:
+			lxi h, palette_update_request
+			mvi m, PALETTE_UPD_REQ_YES
+			ret
+			
+@next_status:
+			; reset a fade timer
+			lxi h, @fade_gb_counter + 1
+			mvi m, HERO_STATUS_DEATH_FADE_GB_TIMER			
+
+			; reset anim timer
+			xra a
+			sta hero_anim_timer
+			; set the anim
+			lxi h, hero_r_attk
+			shld hero_anim_addr
+
+			; set the status
+			lxi h, hero_status
+			mvi m, HERO_STATUS_DEATH_FADE_R
+			ret
+
+HERO_STATUS_DEATH_FADE_R_TIMER = 7
+hero_dead_fade_r:
+			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_ATTACK)
+			; fade out R channel
+			; do a palette animation only every Nth frame
+@anim_rate:
+			mvi a, HERO_STATUS_DEATH_FADE_UPDATE_RATE
+			rrc
+			sta @anim_rate + 1
+			rnc
+
+			lxi h, palette
+			mvi c, PALETTE_COLORS
+
+@fade_r_counter:
+			mvi a, HERO_STATUS_DEATH_FADE_R_TIMER
+			ora a
+			jz @next_status
+			dcr a
+			sta @fade_r_counter + 1
+			
+@loop_r:
+			mov a, m
+			rrc
+			ani %011 
+			mov m, a
+
+			inx h
+			dcr c
+			jnz @loop_r
+
+@update_palette:
+			lxi h, palette_update_request
+			mvi m, PALETTE_UPD_REQ_YES
+			ret
+			
+@next_status:
+			; reset a fade timer
+			lxi h, @fade_r_counter + 1
+			mvi m, HERO_STATUS_DEATH_FADE_R_TIMER
+
+			; set the status
+			lxi h, hero_status
+			mvi m, HERO_STATUS_DEATH_FALL_ANIM
+			;advance hl to hero_status_timer
+			inx h
+			mvi m, HERO_STATUS_DEATH_FALL_ANIM_DURATION
+			ret
+
+
+hero_dead_fade_fall_anim:
 			ret

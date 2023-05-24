@@ -1,3 +1,34 @@
+; mark all actors killed
+; in:
+; hl - monster_update_ptr+1 or bullet_update_ptr+1
+; bc - runtime_data_len
+; ex.
+; KILL_ALL_MONSTERS()
+; KILL_ALL_BULLETS()
+actor_kill_all:
+@loop:
+			mov a, m
+			cpi ACTOR_RUNTIME_DATA_LAST
+			rnc
+			cpi ACTOR_RUNTIME_DATA_DESTR
+			jnc @next
+			; kill it
+			mvi m, ACTOR_RUNTIME_DATA_DESTR
+@next:
+			dad b
+			jmp @loop
+
+.macro KILL_ALL_MONSTERS()
+			lxi h, monster_update_ptr+1
+			lxi b, MONSTER_RUNTIME_DATA_LEN
+			call actor_kill_all
+.endmacro
+.macro KILL_ALL_BULLETS()
+			lxi h, bullet_update_ptr+1
+			lxi b, BULLET_RUNTIME_DATA_LEN
+			call actor_kill_all
+.endmacro			
+
 ; in:
 ; hl - ptr to animTimer (monster_anim_timer or bullet_anim_timer)
 ; a - anim speed

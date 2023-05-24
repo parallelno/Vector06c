@@ -10,6 +10,19 @@
 			out 3
 			in 2
 			sta key_code+1		
+			;check for a palette update
+			lda palette_update_request
+			ora a
+			jz @no_palette_update
+			; set a palette
+			; hl - the addr of the last item in the palette
+			lxi h, palette + PALETTE_COLORS - 1
+			call set_palette_int
+			; reset update
+			xra a
+			sta palette_update_request
+
+@no_palette_update:			
 			; a border color, scrolling set up
 			mvi a, PORT0_OUT_OUT
 			out 0
@@ -51,7 +64,7 @@
 
 			lxi h, game_draws_counter
 			mov a, m
-			mvi m, 0			
+			mvi m, 0
 			sta current_fps
 			call draw_fps
 			lxi h, ints_per_sec_counter

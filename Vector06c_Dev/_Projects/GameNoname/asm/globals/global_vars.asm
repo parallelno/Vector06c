@@ -8,6 +8,9 @@ key_code:
 key_code_old:
 			.word KEY_NO << 8 | ~KEY_NO
 
+palette_update_request:
+			.byte PALETTE_UPD_REQ_NO
+
 border_color_idx:
 			.byte TEMP_BYTE
 scr_offset_y:

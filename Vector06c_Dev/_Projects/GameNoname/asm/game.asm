@@ -25,7 +25,6 @@
 .include "asm\\levels\\room.asm"
 .include "asm\\levels\\backs.asm"
 .include "asm\\ui.asm"
-;.include "asm\\globals\\draw_image_zx0.asm"
 
 game_init:
 			call levels_init

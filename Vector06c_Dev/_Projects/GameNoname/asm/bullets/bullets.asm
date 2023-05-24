@@ -115,8 +115,8 @@ bullet_copy_to_scr:
 			dad d
 			; if it is invisible, return
 			mov a, m
-			cpi ACTOR_STATUS_INVIS
-			rz
+			ani ACTOR_STATUS_BIT_INVIS
+			rnz
 
 			; advance to bullet_erase_scr_addr
 			LXI_B_TO_DIFF(bullet_erase_scr_addr, bullet_status)			
@@ -220,8 +220,8 @@ bullet_erase:
 			dad d
 			; if it is invisible, return
 			mov a, m
-			cpi ACTOR_STATUS_INVIS
-			rz
+			ani ACTOR_STATUS_BIT_INVIS
+			rnz
 
 			; advance to bullet_erase_scr_addr
 			LXI_D_TO_DIFF(bullet_erase_scr_addr, bullet_status)

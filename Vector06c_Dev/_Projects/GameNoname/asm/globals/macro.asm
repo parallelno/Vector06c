@@ -290,9 +290,9 @@
 			NOP_(3)
 .endmacro
 
-.macro CLAMP_A()
+.macro CLAMP_A(val_max = $ff)
 			jnc @save
-			mvi a, $ff
+			mvi a, val_max
 @save:			
 .endmacro
 

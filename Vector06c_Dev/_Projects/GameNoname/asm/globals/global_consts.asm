@@ -17,9 +17,13 @@ SHOW_CPU_HIGHLOAD_ON_BORDER = false
 ; interuptions per sec
 INTS_PER_SEC			= 50
 
-; consts
+; hardware
 PORT0_OUT_OUT			= $88
 PORT0_OUT_IN			= $8a
+
+PALETTE_COLORS			= 16
+PALETTE_UPD_REQ_NO		= 0
+PALETTE_UPD_REQ_YES		= 1
 
 RESTART_ADDR 			= $0000
 INT_ADDR	 			= $0038

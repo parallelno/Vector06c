@@ -134,17 +134,28 @@ clear_ram_disk:
 			mvi a, RAM_DISK_S3
 			CLEAR_MEM_SP(false)
 			ret
-						
 
-INIT_COLOR_IDX = 15
+;copy the pallete from a ram-disk, then requet for using it
+; in:
+; de - ram-disk palette addr
+; h - ram-disk activation command
+copy_palette_request_update:
+			mvi l, PALETTE_COLORS / 2
+			lxi b, palette
+			call copy_from_ram_disk
+			lxi h, palette_update_request
+			mvi m, PALETTE_UPD_REQ_YES
+			ret
+
 ; Set palette
 ; input: hl - the addr of the last item in the palette
 ; use: hl, b, a
 set_palette:
 			hlt
+set_palette_int:			; call it from an interruption routine
 			mvi	a, PORT0_OUT_OUT
 			out	0
-			mvi	b, INIT_COLOR_IDX
+			mvi	b, PALETTE_COLORS - 1
 
 @loop:		mov	a, b
 			out	2
@@ -161,14 +172,13 @@ set_palette:
 			jp	@loop
 			ret
 			
-
+/*
 ; Set palette copied from the ram-disk w/o blocking interruptions
 ; input:
 ; de - the addr of the first item in the palette
 ; a - ram-disk activation command
 ; use:
 ; hl, bc, a
-PALETTE_COLORS = 16
 
 set_palette_from_ram_disk:
 			hlt
@@ -212,7 +222,7 @@ set_palette_from_ram_disk:
 			cpi PALETTE_COLORS
 			jnz	@loop
 			jmp restore_sp
-			
+*/
 
 ; Read a word from the ram-disk w/o blocking interruptions
 ; input:
