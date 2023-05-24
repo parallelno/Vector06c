@@ -47,10 +47,6 @@ hero_draw:
 			jmp @saveParams
 
 hero_copy_to_scr:
-			lda hero_status
-			ani ACTOR_STATUS_BIT_INVIS
-			rnz
-
 			; get min(h, d), min(e,l)
 			lhld hero_erase_scr_addr_old
 			xchg
@@ -106,10 +102,6 @@ hero_copy_to_scr:
 			jmp sprite_copy_to_scr_v
 
 hero_erase:
-			lda hero_status
-			ani ACTOR_STATUS_BIT_INVIS
-			rnz
-			
 			; TODO: optimize. erase only that is outside of the updated hero region
 			lhld hero_erase_scr_addr
 			xchg

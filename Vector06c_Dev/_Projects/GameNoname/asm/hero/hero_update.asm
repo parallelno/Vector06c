@@ -506,14 +506,14 @@ hero_dead_fade_gb:
 			; reset a fade timer
 			lxi h, @fade_gb_counter + 1
 			mvi m, HERO_STATUS_DEATH_FADE_GB_TIMER			
-
+/*
 			; reset anim timer
 			xra a
 			sta hero_anim_timer
 			; set the anim
 			lxi h, hero_r_attk
 			shld hero_anim_addr
-
+*/
 			; set the status
 			lxi h, hero_status
 			mvi m, HERO_STATUS_DEATH_FADE_R
