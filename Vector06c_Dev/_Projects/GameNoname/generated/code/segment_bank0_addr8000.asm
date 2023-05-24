@@ -15,6 +15,9 @@ __backs_sprites_rd_data_end:
 __decals_sprites_rd_data_start:
 .include "generated\\sprites\\decals_sprites.asm"
 __decals_sprites_rd_data_end:
+__vfx4_sprites_rd_data_start:
+.include "generated\\sprites\\vfx4_sprites.asm"
+__vfx4_sprites_rd_data_end:
 
 .align 2
 __chunk_end_bank0_addr8000_0:

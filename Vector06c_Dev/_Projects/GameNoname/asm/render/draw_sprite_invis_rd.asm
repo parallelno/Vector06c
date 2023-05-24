@@ -1,5 +1,5 @@
 ; =============================================
-; Do not draw a sprite. Just save return scr addr, width, height
+; It does not draw a sprite, but saves a return scr addr, width, height
 ; it is used for invinceble status
 ; it uses sp to read the sprite data
 ; ex. CALL_RAM_DISK_FUNC(__draw_sprite_invis_vm, __RAM_DISK_S_HERO_ATTACK01 | __RAM_DISK_M_DRAW_SPRITE_INVIS_VM | RAM_DISK_M_8F)

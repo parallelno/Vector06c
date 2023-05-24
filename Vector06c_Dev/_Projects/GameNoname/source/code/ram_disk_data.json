@@ -63,33 +63,28 @@
 								},
 								{
 									"asset_type" : "sprite",
-									"path" : "source\\sprites\\bomb.json", 
+									"path" : "source\\sprites\\bomb.json",
 									"export_dir" : "generated\\sprites\\"
-								},								
-								{
-									"asset_type" : "sprite",
-									"path" : "source\\sprites\\vfx4.json", 
-									"export_dir" : "generated\\sprites\\"
-								},								
+								},
 								{
 									"asset_type" : "font",
-									"path" : "source\\sprites\\font.json", 
+									"path" : "source\\sprites\\font.json",
 									"export_dir" : "generated\\sprites\\"
 								}
 							]
-						}  
+						}
 					]
 				},
 				{
 					"addr" : "$8000",
-					"chunks" : 
+					"chunks" :
 					[
 						{
 							"unpack_priority" : 0,
 							"assets" : [
 								{
 									"asset_type" : "level_data",
-									"path" : "source\\levels\\level00.json", 
+									"path" : "source\\levels\\level00.json",
 									"export_dir" : "generated\\levels\\"
 								},
 								{
@@ -100,8 +95,13 @@
 								{
 									"asset_type" : "decal",
 									"path" : "source\\sprites\\decals.json",
-									"export_dir" : "generated\\sprites\\" 
-								}							
+									"export_dir" : "generated\\sprites\\"
+								},								
+								{
+									"asset_type" : "sprite",
+									"path" : "source\\sprites\\vfx4.json", 
+									"export_dir" : "generated\\sprites\\"
+								}
 							]
 						},
 						{
@@ -109,21 +109,21 @@
 							"assets" : [
 								{
 									"asset_type" : "level_data",
-									"path" : "source\\levels\\level01.json", 
+									"path" : "source\\levels\\level01.json",
 									"export_dir" : "generated\\levels\\"
 								},
 								{
 									"asset_type" : "tiled_img_gfx",
-									"path" : "source\\sprites\\tiled_images.json", 
+									"path" : "source\\sprites\\tiled_images.json",
 									"export_dir" : "generated\\sprites\\"
 								},
 								{
 									"asset_type" : "tiled_img_data",
-									"path" : "source\\sprites\\tiled_images.json", 
+									"path" : "source\\sprites\\tiled_images.json",
 									"export_dir" : "generated\\sprites\\"
-								}																
+								}
 							]
-						}						
+						}
 					]
 				}
 			]
@@ -160,7 +160,7 @@
 				},
 				{
 					"addr" : "$8000",
-					"chunks" : 
+					"chunks" :
 					[
 						{
 							"unpack_priority" : 0,
@@ -178,7 +178,7 @@
 							"name" : "backbuffer2",
 							"addr" : "$A000",
 							"len" : "$6000"
-						}										
+						}
 					]
 				}
 			]
@@ -206,10 +206,10 @@
 									"asset_type" : "sprite",
 									"path" : "source\\sprites\\vampire.json",
 									"export_dir" : "generated\\sprites\\"
-								},								
+								},
 								{
 									"asset_type" : "sprite",
-									"path" : "source\\sprites\\vfx.json", 
+									"path" : "source\\sprites\\vfx.json",
 									"export_dir" : "generated\\sprites\\"
 								}
 							]
@@ -232,7 +232,7 @@
 									"asset_type" : "music",
 									"path" : "source\\music\\song01.ym"
 									,"export_dir" : "generated\\music\\"
-								}								
+								}
 							]
 						},
 						{
@@ -258,9 +258,9 @@
 							"assets" : [
 								{
 									"asset_type" : "level_gfx",
-									"path" : "source\\levels\\level00.json", 
+									"path" : "source\\levels\\level00.json",
 									"export_dir" : "generated\\levels\\"
-								}								
+								}
 							]
 						},
 						{
@@ -268,11 +268,11 @@
 							"assets" : [
 								{
 									"asset_type" : "level_gfx",
-									"path" : "source\\levels\\level01.json", 
+									"path" : "source\\levels\\level01.json",
 									"export_dir" : "generated\\levels\\"
-								}								
+								}
 							]
-						}			
+						}
 					]
 				},
 				{

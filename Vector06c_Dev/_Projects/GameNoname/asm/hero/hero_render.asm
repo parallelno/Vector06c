@@ -14,13 +14,11 @@ hero_draw:
 @spriteR:
 
 			lda hero_status
-			cpi HERO_STATUS_IMPACTED
-			jz @invisState
-			cpi HERO_STATUS_INVINCIBLE
-			jz @invisState
+			ani ACTOR_STATUS_BIT_BLINK
+			jnz @state_blink
+			lda hero_status
 			ani ACTOR_STATUS_BIT_INVIS
-			rnz
-
+			jnz @invis
 @draw:
 			mov a, l
 			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
@@ -36,10 +34,10 @@ hero_draw:
 			shld hero_erase_wh
 			ret
 
-@invisState:
+@state_blink:
 			mvi a, %00110011
 			rrc
-			sta @invisState+1
+			sta @state_blink + 1
 			jc @draw
 @invis:
 			mov a, l

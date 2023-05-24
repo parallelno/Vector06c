@@ -22,8 +22,9 @@ hero_update:
 			cz hero_impacted_update
 			cpi HERO_STATUS_INVINCIBLE
 			cz hero_invincible_update
-			cpi HERO_STATUS_DEATH
-			jnc hero_dead ; all death statuses values are bigger than HERO_STATUS_DEATH
+			ani ACTOR_STATUS_BIT_NON_GAMEPLAY ; A reg has a broken status value now
+			jnz hero_dead
+
 
 			; check if an attack key pressed
 			lhld key_code
@@ -63,7 +64,7 @@ hero_update:
 			ani HERO_DIR_HORIZ_RESET
 			ori HERO_DIR_RIGHT
 			mov m, a
-			
+
 			lxi h, hero_r_run
 			shld hero_anim_addr
 			jmp hero_update_temp_pos
@@ -167,7 +168,7 @@ hero_update:
 			jmp hero_update_temp_pos
 @setAnimRunUfaceL:
 			lxi h, hero_l_run
-			shld hero_anim_addr	
+			shld hero_anim_addr
 			jmp hero_update_temp_pos
 @setAnimRunD:
 			cpi KEY_DOWN
@@ -443,12 +444,13 @@ hero_impacted:
 			ret
 
 hero_dead:
+			lda hero_status
 			cpi HERO_STATUS_DEATH_FADE_INIT_GB
 			jz hero_dead_fade_init_gb
 			cpi HERO_STATUS_DEATH_FADE_GB
 			jz hero_dead_fade_gb
 			cpi HERO_STATUS_DEATH_FADE_R
-			jz hero_dead_fade_r	
+			jz hero_dead_fade_r
 			cpi HERO_STATUS_DEATH_FALL_ANIM
 			jz hero_dead_fade_fall_anim
 			ret
@@ -475,14 +477,14 @@ hero_dead_fade_gb:
 
 			lxi h, palette
 			mvi c, PALETTE_COLORS
-			
+
 @fade_gb_counter:
 			mvi a, HERO_STATUS_DEATH_FADE_GB_TIMER
 			ora a
 			jz @next_status
 			dcr a
 			sta @fade_gb_counter + 1
-			
+
 @loop_bg:
 			mov a, m
 			rrc
@@ -501,22 +503,25 @@ hero_dead_fade_gb:
 			lxi h, palette_update_request
 			mvi m, PALETTE_UPD_REQ_YES
 			ret
-			
+
 @next_status:
 			; reset a fade timer
 			lxi h, @fade_gb_counter + 1
-			mvi m, HERO_STATUS_DEATH_FADE_GB_TIMER			
-/*
-			; reset anim timer
-			xra a
-			sta hero_anim_timer
-			; set the anim
-			lxi h, hero_r_attk
-			shld hero_anim_addr
-*/
+			mvi m, HERO_STATUS_DEATH_FADE_GB_TIMER
+
 			; set the status
 			lxi h, hero_status
 			mvi m, HERO_STATUS_DEATH_FADE_R
+
+			; draw vfx
+			; bc - vfx scrXY
+			; de - vfx_anim_ptr (ex. vfx_puff)
+			lxi h, hero_pos_x + 1
+			mov b, m
+			INX_H(2)
+			mov c, m
+			lxi d, vfx4_hero_death
+			call vfx_init4			
 			ret
 
 HERO_STATUS_DEATH_FADE_R_TIMER = 7
@@ -539,13 +544,13 @@ hero_dead_fade_r:
 			jz @next_status
 			dcr a
 			sta @fade_r_counter + 1
-			
+
 @loop_r:
 			mov a, m
-			rrc
-			ani %011 
-			mov m, a
-
+			ora a
+			jz @next
+			dcr m
+@next:			
 			inx h
 			dcr c
 			jnz @loop_r
@@ -554,7 +559,7 @@ hero_dead_fade_r:
 			lxi h, palette_update_request
 			mvi m, PALETTE_UPD_REQ_YES
 			ret
-			
+
 @next_status:
 			; reset a fade timer
 			lxi h, @fade_r_counter + 1
@@ -566,8 +571,19 @@ hero_dead_fade_r:
 			;advance hl to hero_status_timer
 			inx h
 			mvi m, HERO_STATUS_DEATH_FALL_ANIM_DURATION
+			
+			; kill all the backs
+
+			; erase the screen
+
+			; apply a palette
+
+			; create an actor to move it to the right and spawn vfx_reward sparkle effects
+
+
 			ret
 
 
 hero_dead_fade_fall_anim:
+
 			ret

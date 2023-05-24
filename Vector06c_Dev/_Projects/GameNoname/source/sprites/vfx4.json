@@ -25,7 +25,11 @@
 		"hit"	: {
 			"frames" : ["hit0", "hit0", "hit1", "hit2", "hit3"],
 			"loop" : false
-		}
+		},
+		"hero_death"	: {
+			"frames" : ["hero_death1", "hero_death1", "hero_death1", "hero_death1", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2"],
+			"loop" : false
+		}		
 	},
 	"sprites" : [ 
 		{
@@ -75,6 +79,30 @@
 			"offset_y": 0,
 			"mask_alpha" : 0,
 			"mask_color" : 1			
-		}	
+		},
+		{
+			"name" : "hero_death1",
+			"x" : 16,
+			"y"	: 132,
+			"width" : 16,
+			"height" : 12,
+			"mask_x" : 16,
+			"mask_y" : 148, 			
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1			
+		},
+		{
+			"name" : "hero_death2",
+			"x" : 32,
+			"y"	: 136,
+			"width" : 16,
+			"height" : 8,
+			"mask_x" : 32,
+			"mask_y" : 152, 			
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1			
+		}
 	]
 }
