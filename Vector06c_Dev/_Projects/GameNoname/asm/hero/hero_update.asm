@@ -524,7 +524,7 @@ hero_dead_fade_gb:
 			INX_H(2)
 			mov c, m
 			lxi d, vfx4_hero_death
-			call vfx_init4		
+			call vfx_init4
 			ret
 
 HERO_STATUS_DEATH_FADE_R_TIMER = 7
@@ -578,25 +578,60 @@ hero_dead_fade_r:
 			mvi a, 1
 			sta hero_global_status_no_render
 			
-			; erase the screen
-			lxi b, SCR_BUFF3_ADDR
+			; set SCR_BUFF0, SCR_BUFF1, SCR_BUFF2 to zero
+			; set SCR_BUFF3 to $ff
+			; that represents the darkest possible color in the current palette
+			xra a
 			lxi d, SCR_BUFF_LEN * 3 / 32 - 1
-			xra a
-			call clear_mem_sp
+			call hero_erase_scr_buff
 
-			lxi h, $ffff
-			lxi b, 0
-			lxi d, SCR_BUFF_LEN / 32 - 1
-			xra a
-			call fill_mem_sp
+			; do the same for backbuffer and backbuffer2
+			; set SCR_BUFF1, SCR_BUFF2 to zero
+			; set SCR_BUFF3 to $ff
+			; that represents the darkest possible color in the current palette			
+			mvi a, __RAM_DISK_S_BACKBUFF
+			lxi d, SCR_BUFF_LEN * 2 / 32 - 1
+			call hero_erase_scr_buff
+
+			mvi a, __RAM_DISK_S_BACKBUFF2
+			lxi d, SCR_BUFF_LEN * 2 / 32 - 1
+			call hero_erase_scr_buff			
+
+			; fill up the tile_data_buff with tiledata = 1 (walkable tile, restore back, no decal)
+			lxi h, room_tiledata
+			mvi a, <room_tiledata_end
+			mvi c, 1
+			call fill_mem_short
 
 			; copy a palette from the ram-disk, then request for using it
 			call level_init_palette
 
-			; create an actor to move it to the right and spawn vfx_reward sparkle effects
+			; create an actor to move it to the right which spawns sparkle effects
+			lxi h, hero_pos_x + 1
+			mov b, m
+			mvi m, 256 - TILE_WIDTH ; sparker the end position where it goes
+			INX_H(2)
+			mov c, m
+			jmp sparker_init
 
-
-			ret
+; it fills SCR_BUFF3 with $ff
+; it erases SCR_BUFF2, optionally <SCR_BUFF1, SCR_BUFF0>
+; that represents the darkest possible color in the current palette
+; in:
+; a - ram-disk activation command
+;		a = 0 if you erase the main memory
+; de - buff_len/32-1 that have to be erased
+hero_erase_scr_buff:
+			; set SCR_BUFF0, SCR_BUFF1, SCR_BUFF2 to zero
+			lxi b, SCR_BUFF3_ADDR
+			push psw
+			call clear_mem_sp
+			pop psw
+			; set SCR_BUFF3 to $ff			
+			lxi h, $ffff
+			lxi b, 0
+			lxi d, SCR_BUFF_LEN / 32 - 1
+			jmp fill_mem_sp
 
 
 hero_dead_fade_fall_anim:

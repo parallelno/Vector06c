@@ -3,6 +3,7 @@
 .include "asm\\bullets\\hero_sword.asm"
 .include "asm\\bullets\\scythe.asm"
 .include "asm\\bullets\\bomb.asm"
+.include "asm\\bullets\\sparker.asm"
 .include "asm\\bullets\\vfx.asm"
 
 bullets_init:

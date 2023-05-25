@@ -56,8 +56,12 @@
 ; in:
 ; hl - bullet_anim_timer
 ; a - anim speed
-; out with no ret: 
-; hl - bullet_pos_y+1
+; out:
+; if no collision:
+;	it returns
+; if it collides:
+;	no returns
+;	hl - bullet_pos_y+1
 .macro BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BULLET_COLLISION_WIDTH, BULLET_COLLISION_HEIGHT, BULLET_DAMAGE)
 			call actor_anim_update
 @checkCollisionHero:

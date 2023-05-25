@@ -29,6 +29,10 @@
 		"hero_death"	: {
 			"frames" : ["hero_death1", "hero_death1", "hero_death1", "hero_death1", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2", "hero_death2"],
 			"loop" : false
+		},
+		"spark"	: {
+			"frames" : ["hit0", "hit1", "hit2", "hit3"],
+			"loop" : true
 		}		
 	},
 	"sprites" : [ 

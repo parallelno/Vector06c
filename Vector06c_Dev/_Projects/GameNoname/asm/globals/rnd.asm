@@ -3,10 +3,10 @@
 
 ; 16-bit xorshift pseudorandom number generator
 ; http://www.retroprogramming.com/2017/07/xorshift-pseudorandom-numbers-in-z80.html?m=1
-; returns:   
-; hl = pseudorandom number
-; use:
-; a, hl
+
+; out:   
+; hl - 16-bit pseudo-random number
+; a = h
 random:
 			lxi h, 1       ; seed must not be 0
 			mov a, h

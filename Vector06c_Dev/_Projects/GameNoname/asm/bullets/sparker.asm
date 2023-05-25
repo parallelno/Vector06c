@@ -1,3 +1,9 @@
+;=========================================================
+; This is non-gameplay bullet
+; It is used for one of the hero death 
+; statuses to spawn sparks along the line
+;=========================================================
+
 ; bullet AI:
 ; init:
 ;	status = moveForward
@@ -19,31 +25,26 @@
 ;				impact hero
 ;				death
 
-BOMB_MOVE_SPEED		= $0400				; low byte is a subpixel speed, high byte is a speed in pixels
-BOMB_MOVE_SPEED_NEG	= $ffff - $0400 + 1	; low byte is a subpixel speed, high byte is a speed in pixels
+SPARKER_MOVE_SPEED		= $0400				; low byte is a subpixel speed, high byte is a speed in pixels
+SPARKER_MOVE_SPEED_NEG	= $ffff - $0400 + 1	; low byte is a subpixel speed, high byte is a speed in pixels
 
 ; statuses.
-BOMB_STATUS_MOVE_THROW = 0
+SPARKER_STATUS_MOVE = 0
 
-; status duration in updates.
+; status duration in updates. can be 2,4,8,16,32, etc
 ; when updated do not forget update the code below (posDiffX / SPARKER_STATUS_MOVE_TIME) to match the new value
-BOMB_STATUS_MOVE_TIME	= 32
+SPARKER_STATUS_MOVE_TIME	= 64
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
-BOMB_ANIM_SPEED_MOVE	= 130
+SPARKER_ANIM_SPEED_MOVE	= 130
 
-; gameplay
-BOMB_DAMAGE = 1
-BOMB_COLLISION_WIDTH	= 10
-BOMB_COLLISION_HEIGHT	= 10
+; the rate when it is time to spawn a sparkle vfx.
+VFX_SPAWN_RATE = 5
 
 ; in:
 ; bc - caster pos
-; a - bullet_id
 ; movement speed based on the hero pos. it goes to that direction.
-bomb_init:
-			sta @bulletId+1
-
+sparker_init:
 			lxi h, bullet_update_ptr+1
 			mvi a, BULLET_RUNTIME_DATA_LEN
 			call actor_get_empty_data_ptr
@@ -51,42 +52,30 @@ bomb_init:
 			; hl - ptr to bullet_update_ptr+1
 			; advance hl to bullet_update_ptr
 			dcx h
-			mvi m, <bomb_update
+			mvi m, <sparker_update
 			inx h 
-			mvi m, >bomb_update
+			mvi m, >sparker_update
 			; advance hl to bullet_draw_ptr
 			inx h 
-			mvi m, <bomb_draw
+			mvi m, <sparker_draw
 			inx h 
-			mvi m, >bomb_draw
+			mvi m, >sparker_draw
 
 			; advance hl to bullet_id
 			inx h
-@bulletId:	mvi a, TEMP_BYTE
-			mov m, a
-
 			; advance hl to bullet_status
 			inx h
-			mvi m, BOMB_STATUS_MOVE_THROW
+			mvi m, SPARKER_STATUS_MOVE
 			; advance and set bullet_status_timer
 			inx h
-			mvi m, BOMB_STATUS_MOVE_TIME
+			mvi m, SPARKER_STATUS_MOVE_TIME
 			; advance hl to bullet_anim_ptr
 			INX_H(2)
 			
-			; a - bullet_id
-			cpi BOMB_SLOW_ID
-			jz @bombSlow
-@bombDmg:
-			mvi m, <bomb_dmg
+			mvi m, <vfx4_spark
 			inx h
-			mvi m, >bomb_dmg
-			jmp @eraseScrAddr
-@bombSlow:
-			mvi m, <bomb_run
-			inx h
-			mvi m, >bomb_run			
-@eraseScrAddr:
+			mvi m, >vfx4_spark
+
 			mov a, b
 			; a - posX
 			; scrX = posX/8 + $a0
@@ -144,12 +133,13 @@ bomb_init:
 			sbb a
 			mov d, a
 			xchg
-			; posDiffX / BOMB_STATUS_MOVE_TIME (it uses the fact that HL>>5 the same as HL<<3)
+			; posDiffX / SPARKER_STATUS_MOVE_TIME (it uses the fact that HL>>5 the same as HL<<3)
 			dad h
 			dad h 
-			dad h
+			;dad h
 			; to fill up L with %1111 if pos_diff < 0
-			ani %111 ; <(%0000000011111111 / BOMB_STATUS_DASH_TIME)
+			;ani %111 ; <(%0000000011111111 / SPARKER_STATUS_DASH_TIME)
+			ani %11 ; <(%0000000011111111 / SPARKER_STATUS_DASH_TIME)
 			ora l 
 			mov l, a
 			push h
@@ -163,12 +153,13 @@ bomb_init:
 			sbb a
 			mov d, a 
 			xchg
-			; posDiffY / BOMB_STATUS_MOVE_TIME 
+			; posDiffY / SPARKER_STATUS_MOVE_TIME 
 			dad h 
 			dad h 
-			dad h 
+			;dad h 
 			; to fill up L with %1111 if pos_diff < 0
-			ani %111 ; <(%0000000011111111 / BOMB_STATUS_DASH_TIME)
+			;ani %111 ; <(%0000000011111111 / SPARKER_STATUS_DASH_TIME)
+			ani %11 ; <(%0000000011111111 / SPARKER_STATUS_DASH_TIME)
 			ora l 
 			mov l, a
 			xchg
@@ -188,7 +179,7 @@ bomb_init:
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to bullet_update_ptr in the runtime data
-bomb_update:
+sparker_update:
 			; advance to bullet_status_timer
 			LXI_H_TO_DIFF(bullet_status_timer, bullet_update_ptr)
 			dad d
@@ -238,26 +229,57 @@ bomb_update:
 			inx h 
 			mov m, d
 			
+			shld @sparker_pos_ptr+1
 			; hl points to bullet_pos_x+1
 			; advance hl to bullet_anim_timer
 			LXI_B_TO_DIFF(bullet_anim_timer, bullet_pos_x+1)
 			dad b
-			mvi a, BOMB_ANIM_SPEED_MOVE
-			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_COLLISION_WIDTH, BOMB_COLLISION_HEIGHT, BOMB_DAMAGE)	
-@dieAfterDamage:
-			; advance hl to bullet_update_ptr+1
-			LXI_B_TO_DIFF(bullet_update_ptr+1, bullet_pos_y+1)
-			dad b
-			jmp actor_destroy
+			mvi a, SPARKER_ANIM_SPEED_MOVE
+			call actor_anim_update
+
+			; check if it is time to spawn VFX
+			lxi h, @vfx_spawn_rate
+			dcr m
+			rnz
+			mvi m, VFX_SPAWN_RATE
+			; draw vfx
+			; bc - vfx scrXY
+			; de - vfx_anim_ptr (ex. vfx_puff)
+@sparker_pos_ptr:
+			lxi h, TEMP_ADDR
+			; hl points to bullet_pos_x+1			
+			mov a, m
+			; pos_x to scr_x
+			; a - posX
+			; scrX = posX/8 + $a0
+			RRC_(3)
+			ani %00011111
+			adi SPRITE_X_SCR_ADDR		
+			mov b, a
+
+			; pos_y + rand val in the range (-3, 3)
+			INX_H(2)
+			mov c, m
+			call random
+			ani %0000_1111
+			sbi 7
+			add c
+			mov c, a
+
+			lxi d, vfx_reward
+			call vfx_init
+			ret
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
 			LXI_B_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
 			dad b
 			jmp actor_destroy
+@vfx_spawn_rate:
+			.byte VFX_SPAWN_RATE
 
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
-bomb_draw:
-			BULLET_DRAW(sprite_get_scr_addr_bomb, __RAM_DISK_S_BOMB)
+sparker_draw:
+			BULLET_DRAW(sprite_get_scr_addr_vfx4, __RAM_DISK_S_VFX4)
