@@ -162,8 +162,14 @@ hero_score = $7bd6 ; word
 palette = $7bd8 ; 16 bytes
 
 ;=============================================================================
+; hero global statuses
+; >0 - will NOT be rendered, copied to the screen, and erased in the back buffer
+; 0 - the opposite
+; TODO: use only a bit, then combine it with other hero global statuses.
+hero_global_status_no_render = $7be8 ; byte
+;=============================================================================
 ;
-;	free space = $7be8 - $7c10
+;	free space = $7be9 - $7c10
 ;
 
 ;=============================================================================

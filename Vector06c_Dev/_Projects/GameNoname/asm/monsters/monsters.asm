@@ -5,7 +5,17 @@
 .include "asm\\monsters\\burner.asm"
 .include "asm\\monsters\\knight.asm"
 
+monsters_init:
+			lxi h, monsters_runtime_data
+			shld monster_runtime_data_sorted
 
+			; set the last marker byte of runtime_data
+			mvi a, ACTOR_RUNTIME_DATA_END
+			sta monsters_runtime_data_end_marker + 1
+			; erase runtime_data
+			lxi h, monster_update_ptr + 1
+			call actor_erase_runtime_data
+			ret
 
 ; in:
 ; hl - 	posX, posY

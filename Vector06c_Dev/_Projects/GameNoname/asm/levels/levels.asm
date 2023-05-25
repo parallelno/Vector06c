@@ -33,11 +33,7 @@ level_init:
 			call copy_mem 
 
 			; copy a palette from the ram-disk, then request for using it
-			lhld level_palette_ptr
-			xchg
-			lxi h, level_ram_disk_s_gfx
-			mov h, m			
-			call copy_palette_request_update
+			call level_init_palette
 
 			mvi a, 1
 			sta border_color_idx
@@ -61,6 +57,11 @@ level_init:
 			lxi h, bullet_runtime_data_sorted
 			mvi a, <bullets_runtime_data_end
 			call clear_mem_short
+
+			; erase monsters
+			lxi h, monster_runtime_data_sorted
+			lxi b, monsters_runtime_data_end - monster_runtime_data_sorted
+			call clear_mem
 
 			; setup room resources
 			lhld level_resources_inst_data_pptr
@@ -96,6 +97,15 @@ level_init:
 			; reset level command
 			mvi a, LEVEL_COMMAND_NONE
 			sta level_command
+			ret
+
+; copy a palette from the ram-disk, then request for using it
+level_init_palette:
+			lhld level_palette_ptr
+			xchg
+			lxi h, level_ram_disk_s_gfx
+			mov h, m			
+			call copy_palette_request_update
 			ret
 
 level_update:

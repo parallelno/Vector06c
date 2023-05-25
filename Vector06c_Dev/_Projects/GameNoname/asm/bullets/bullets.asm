@@ -6,15 +6,12 @@
 .include "asm\\bullets\\vfx.asm"
 
 bullets_init:
-			; erase runtime_data
-			mvi a, ACTOR_RUNTIME_DATA_LAST
-			sta bullets_runtime_data + 1
+			mvi a, <bullets_runtime_data
+			sta bullet_runtime_data_sorted
 			; set the last marker byte of runtime_data
 			mvi a, ACTOR_RUNTIME_DATA_END
 			sta bullets_runtime_data_end_marker + 1
-
-			mvi a, <bullets_runtime_data
-			sta bullet_runtime_data_sorted
+			; erase runtime_data
 			lxi h, bullet_update_ptr + 1
 			jmp actor_erase_runtime_data
 

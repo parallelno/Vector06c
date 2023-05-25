@@ -1,9 +1,6 @@
 room_init:
-			lxi h, monster_update_ptr+1
-			call actor_erase_runtime_data
-			lxi h, bullet_update_ptr + 1
-			call actor_erase_runtime_data
-
+			call monsters_init
+			call bullets_init
 			call backs_init
 			call room_unpack
 			call room_init_tiles_gfx

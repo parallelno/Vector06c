@@ -1,4 +1,5 @@
-; mark all actors killed
+; mark all actors killed to let 
+; them wipe out from the screen
 ; in:
 ; hl - monster_update_ptr+1 or bullet_update_ptr+1
 ; bc - runtime_data_len

@@ -19,6 +19,8 @@ hero_init:
 			shld hero_erase_wh_old
 			lxi h, 0
 			shld hero_score
+			xra a
+			sta hero_global_status_no_render
 			ret
 
 ; input:

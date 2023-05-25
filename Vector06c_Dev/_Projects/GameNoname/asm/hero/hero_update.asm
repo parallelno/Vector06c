@@ -458,6 +458,9 @@ hero_dead:
 hero_dead_fade_init_gb:
 			KILL_ALL_MONSTERS()
 			KILL_ALL_BULLETS()
+			
+			; kill all the backs
+			call backs_init
 
 			; set the status
 			lxi h, hero_status
@@ -521,7 +524,7 @@ hero_dead_fade_gb:
 			INX_H(2)
 			mov c, m
 			lxi d, vfx4_hero_death
-			call vfx_init4			
+			call vfx_init4		
 			ret
 
 HERO_STATUS_DEATH_FADE_R_TIMER = 7
@@ -571,12 +574,24 @@ hero_dead_fade_r:
 			;advance hl to hero_status_timer
 			inx h
 			mvi m, HERO_STATUS_DEATH_FALL_ANIM_DURATION
+			; stop drawing a hero
+			mvi a, 1
+			sta hero_global_status_no_render
 			
-			; kill all the backs
-
 			; erase the screen
+			lxi b, SCR_BUFF3_ADDR
+			lxi d, SCR_BUFF_LEN * 3 / 32 - 1
+			xra a
+			call clear_mem_sp
 
-			; apply a palette
+			lxi h, $ffff
+			lxi b, 0
+			lxi d, SCR_BUFF_LEN / 32 - 1
+			xra a
+			call fill_mem_sp
+
+			; copy a palette from the ram-disk, then request for using it
+			call level_init_palette
 
 			; create an actor to move it to the right and spawn vfx_reward sparkle effects
 

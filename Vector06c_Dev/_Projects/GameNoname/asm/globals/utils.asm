@@ -9,7 +9,7 @@ restore_sp:
 			RAM_DISK_OFF()
 			ret
 			
-/*
+
 ; clear a memory buffer
 ; input:
 ; hl - addr to clear
@@ -25,9 +25,9 @@ clear_mem:
 			ora c
 			ora b
 			jnz @loop
-			ret
-*/
-; fill up an aligned memory buffer with a byte
+			ret		
+
+; fill up an aligned memory buffer with a byte.
 ; a buffer has to be stored in one $100 block of memory
 ; buffer len <=256
 ; input:
@@ -89,24 +89,46 @@ copy_mem:
 clear_mem_sp:
 			lxi h, $0000
 			dad sp
-			shld @restoreSP + 1
+			shld clear_mem_sp_restoreSP + 1
 			mov h, b
 			mov l, c
 			RAM_DISK_ON_BANK()
+clear_mem_sp_filler:
 			lxi b, $0000
 			sphl
 			mvi a, $ff
-@loop:
+clear_mem_sp_loop:
 			PUSH_B(16)
 			dcx d
 			cmp d
-			jnz @loop
-@restoreSP:
+			jnz clear_mem_sp_loop
+clear_mem_sp_restoreSP:
 			lxi sp, TEMP_WORD
 			RAM_DISK_OFF()
 			ret
-			
 
+; fill a memory buffer with a word using stack operations
+; can be used to clear ram-disk memory as well
+; input:
+; hl - a filler word
+; bc - the last addr of a erased buffer + 1
+; de - length/32 - 1
+; a - ram disk activation command
+; 		a = 0 to clear the main memory
+fill_mem_sp:
+			shld clear_mem_sp_filler + 1
+			call clear_mem_sp
+			lxi h, 0
+			shld clear_mem_sp_filler + 1
+			ret
+			
+; clear a memory buffer using stack operations
+; can be used to clear ram-disk memory as well
+; input:
+; bc - the last addr of a erased buffer + 1
+; de - length/32 - 1
+; a - ram disk activation command
+; 		a = 0 to clear the main memory
 clear_ram_disk:
 			lxi b, $0000
 			lxi d, $10000/32 - 1

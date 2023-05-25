@@ -19,6 +19,7 @@ monster_runtime_data_sorted:
 
 ; a list of monster runtime data structs.
 ; TODO: optimization. consider using JMP_4 instead of func ptrs like monster_update_ptr
+; TODO: move it over the buffers.asm
 monsters_runtime_data:
 monster_update_ptr:			.word TEMP_ADDR
 monster_draw_ptr:			.word TEMP_ADDR
@@ -46,4 +47,5 @@ MONSTER_RUNTIME_DATA_LEN = monster_runtime_data_end_addr - monsters_runtime_data
 
 ; the same structs for the rest of the monsters
 .storage MONSTER_RUNTIME_DATA_LEN * (MONSTERS_MAX-1), 0
-monsters_runtime_data_end_addr:	.word ACTOR_RUNTIME_DATA_END << 8
+monsters_runtime_data_end_marker:	.word ACTOR_RUNTIME_DATA_END << 8
+monsters_runtime_data_end: = monsters_runtime_data_end_marker + WORD_LEN
