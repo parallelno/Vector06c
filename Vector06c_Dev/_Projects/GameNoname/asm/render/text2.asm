@@ -4,12 +4,12 @@ room_test:
 			lxi b, 20
 			lxi h, test_text_data
 			
-			CALL_RAM_DISK_FUNC(draw_text2, __RAM_DISK_S_FONT)
+			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
 			
 			;NOP_(16)
 			lxi b, 5
 			lxi h, test_text_data2
-			CALL_RAM_DISK_FUNC(draw_text2, __RAM_DISK_S_FONT)
+			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
 			ret
 
 ; TODO: test
@@ -27,7 +27,7 @@ test_text_data2:
 ; input:
 ; hl - text addr
 ; bc - screen pos
-draw_text2:
+draw_text_ex:
 			; get a char code
 			mov e, m
 			; return if its code 0
@@ -141,7 +141,7 @@ draw_text2:
 			mov b, h
 			mov c, l
 			pop h
-			jmp draw_text2
+			jmp draw_text_ex
 
 @skip_dad_ptrs:
 			.word @shift0, @shift1,	@shift2, @shift3, @shift4, @shift5, @shift6, @shift7

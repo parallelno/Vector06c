@@ -68,4 +68,45 @@ game_ui_draw_bomb:
 @bomb_text:
 			.byte $30, $30, 0
 
+.macro DRAW_DIALOG(ram_disk_s_tiled_img_gfx, ram_disk_s_tiled_img_data, idxs_data_addr, idxs_data_len, tile_gfx_addr)
+			DRAW_TILED_IMG(ram_disk_s_tiled_img_gfx, ram_disk_s_tiled_img_data, idxs_data_addr, idxs_data_len, tile_gfx_addr)
+			; draw text
 
+			lxi b, $182d
+			lxi h, test_text_data1
+			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+
+			lxi b, $1821
+			lxi h, test_text_data2
+			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+
+			lxi b, $1815
+			lxi h, test_text_data3
+			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)						
+
+			lxi b, $1809
+			lxi h, test_text_data4
+			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)						
+			ret
+
+test_text_data1:
+.encoding "screencode", "mixed"
+			.text "The cold and the darkness of corridors rev-"
+			.byte 0
+test_text_data2:
+.encoding "screencode", "mixed"			
+			.text "ealed a mysterious figure. Two strong hands"
+			.byte 0
+test_text_data3:
+.encoding "screencode", "mixed"			
+			.text "lifted up the unconscious body and carried"
+			.byte 0			
+test_text_data4:
+.encoding "screencode", "mixed"			
+			.text "him out of the dungeon into the fresh air."
+			.byte 0
+			; reset updates
+			xra a
+			sta requested_updates
+			ret
+.endmacro

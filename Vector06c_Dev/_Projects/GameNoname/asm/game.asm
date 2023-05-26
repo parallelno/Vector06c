@@ -33,7 +33,7 @@ game_init:
 			call game_ui_init
 
 			xra a
-			sta update_request_counter
+			sta requested_updates
 			hlt
 
 @gameLoop:
@@ -47,7 +47,7 @@ game_update:
 			inr m
 
 			; check if an interuption happened
-			lda update_request_counter
+			lda requested_updates
 			ora a
 			rz
 @updateLoop:
@@ -61,7 +61,7 @@ game_update:
 			lhld key_code
 			shld key_code_old
 
-			lxi h, update_request_counter
+			lxi h, requested_updates
 			dcr m
 			jnz @updateLoop
 			ret

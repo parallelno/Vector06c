@@ -36,7 +36,7 @@
 			rrc
 			sta @updateSkipper+1
 			jnc @skipUpdate
-			lxi h, update_request_counter
+			lxi h, requested_updates
 			inr m
 @skipUpdate:
 			; fps update

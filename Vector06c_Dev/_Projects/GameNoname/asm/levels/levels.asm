@@ -120,7 +120,7 @@ level_update:
 			call room_init
 			call hero_init
 			xra a
-			lda	update_request_counter
+			lda	requested_updates
 			; reset the command
 			xra a
 			sta level_command

@@ -17,7 +17,7 @@ scr_offset_y:
 			.byte 255
 
 ; it is used to check how many updates needs to happened to sync with interruptions
-update_request_counter:
+requested_updates:
 			.byte TEMP_BYTE
 
 ram_disk_mode:
