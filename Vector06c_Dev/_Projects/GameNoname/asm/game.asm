@@ -24,7 +24,7 @@
 .include "asm\\levels\\levels.asm"
 .include "asm\\levels\\room.asm"
 .include "asm\\levels\\backs.asm"
-.include "asm\\ui.asm"
+.include "asm\\ui\\ui.asm"
 
 game_init:
 			call levels_init
@@ -34,7 +34,6 @@ game_init:
 
 			xra a
 			sta requested_updates
-			hlt
 
 @gameLoop:
 			CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
@@ -56,6 +55,7 @@ game_update:
 			call bullets_update
 			call level_update
 			call backs_update
+			call game_ui_update
 
 			; to check repeated key-pressing
 			lhld key_code
@@ -67,9 +67,12 @@ game_update:
 			ret
 
 game_draw:
-			lxi h, game_draws_counter
-			inr m
-
+			; update counter to calc fps
+			lhld game_draws_counter
+			inx h
+			shld game_draws_counter
+			
+			; draw funcs
 			call backs_draw
 
 			call hero_draw

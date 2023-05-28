@@ -27,9 +27,13 @@
 		"flag_front"	: {
 			"frames" : ["flag_front0", "flag_front1", "flag_front2", "flag_front3", "flag_front2", "flag_front1"],
 			"loop" : true
-		}		
+		},
+		"dialog_press_key"	: {
+			"frames" : ["dialog_press_key0", "dialog_press_key1"],
+			"loop" : true
+		}
 	},
-	"sprites" : [ 
+	"sprites" : [
 		{
 			"name" : "torch_front0",
 			"x" : 0,
@@ -93,6 +97,24 @@
 			"width" : 16,
 			"height" : 7,
 			"offset_y": 7
-		}				
+		},
+		{
+			"name" : "dialog_press_key0",
+			"x" : 32,
+			"y"	: 32,
+			"width" : 16,
+			"height" : 7,
+			"offset_y": 8,
+			"offset_x": 8
+		},
+		{
+			"name" : "dialog_press_key1",
+			"x" : 32,
+			"y"	: 41,
+			"width" : 16,
+			"height" : 7,
+			"offset_y": 8,
+			"offset_x": 8
+		}
 	]
 }

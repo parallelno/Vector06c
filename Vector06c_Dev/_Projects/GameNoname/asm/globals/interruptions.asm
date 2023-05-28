@@ -1,4 +1,44 @@
-.macro INTERRUPTION_MAIN_LOGIC()
+
+;----------------------------------------------------------------
+; The interruption sub which supports stack manipulations in 
+; the main program without di/ei.
+
+; If the main program is doing "pop RP" operation to read some data, 
+; and an interruption happens, then i8080 performs "push PC" 
+; corrupting the data where sp was pointing to. The interruption sub 
+; below restores the corrupted data using BC register pair. To make
+; it works the main program has to use only pop B when it needs to
+; use the stack to manipulate the data, also the data read by stack
+; has to have two extra bytes 0,0 stored in front of the actual data
+; to not let the "push PC" corrupts the data before BC pair gets it.
+interruption:
+			; get the return addr which this interruption call stored into the stack
+			xthl
+			shld interruption_return + 1
+			pop h
+			shld interruption_restoreHL + 1
+			; store psw as the first element in the interruption stack
+			; because the following dad psw corrupts it
+			push psw
+			pop h
+			shld STACK_INTERRUPTION_ADDR-2
+			
+			lxi h, 0
+			dad sp
+			shld interruption_restoreSP + 1
+
+			; restore two bytes that were corrupted by this interruption call
+			push b
+
+			; dismount ram disks to not damage the ram-disk data with the interruption stack
+			RAM_DISK_OFF_NO_RESTORE()
+			lxi sp, STACK_INTERRUPTION_ADDR-2
+			push b
+			push d
+
+			CALL_RAM_DISK_FUNC_NO_RESTORE(__sound_update, __RAM_DISK_S_SOUND | __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
+			
+			; interruption main logix start
 			; keyboard check
 			mvi a, PORT0_OUT_IN
 			out 0
@@ -11,7 +51,8 @@
 			in 2
 			sta key_code+1		
 			;check for a palette update
-			lda palette_update_request
+palette_update_request_:
+			mvi a, PALETTE_UPD_REQ_NO
 			ora a
 			jz @no_palette_update
 			; set a palette
@@ -42,76 +83,22 @@
 			; fps update
 			lxi h, ints_per_sec_counter
 			dcr m
-			jnz @skipSavingFps
-/*
-; TODO: test
-			lxi h, game_draws_counter
-			mov c, m
-			mvi b, 0
-@test_fps_counter:
+
+			jnz interruption_no_fps_update
+			; a second is over
+interruption_fps:
+			lxi h, TEMP_WORD
+			; hl - fps
+			mov a, l
 			lxi h, 0
-			dad b
-			shld @test_fps_counter+1
-
-@test_counter_in_sec:			
-			mvi a, 200
-			dcr a
-			sta @test_counter_in_sec+1
-@loop:
-			jz @loop
-; test end
-*/
-
-			lxi h, game_draws_counter
-			mov a, m
-			mvi m, 0
-			sta current_fps
+			shld interruption_fps + 1
+			; draw fps
+			; a - <fps
 			call draw_fps
 			lxi h, ints_per_sec_counter
 			mvi m, INTS_PER_SEC
-@skipSavingFps:	
-.endmacro
-
-;----------------------------------------------------------------
-; The interruption sub which supports stack manipulations in 
-; the main program without di/ei.
-
-; If the main program is doing "pop RP" operation to read some data, 
-; and an interruption happens, then i8080 performs "push PC" 
-; corrupting the data where sp was pointing to. The interruption sub 
-; below restores the corrupted data using BC register pair. To make
-; it works the main program has to use only pop B when it needs to
-; use the stack to manipulate the data, also the data read by stack
-; has to have two extra bytes 0,0 stored in front of the actual data
-; to not let the "push PC" corrupts the data before BC pair gets it.
-
-interruption:
-			; get the return addr which this interruption call stored into the stack
-			xthl
-			shld @return + 1
-			pop h
-			shld @restoreHL + 1
-			; store psw as the first element in the interruption stack
-			; because the following dad psw corrupts it
-			push psw
-			pop h
-			shld STACK_INTERRUPTION_ADDR-2
-			
-			lxi h, 0
-			dad sp
-			shld @restoreSP + 1
-
-			; restore two bytes that were corrupted by this interruption call
-			push b
-
-			; dismount ram disks to not damage the ram-disk data with the interruption stack
-			RAM_DISK_OFF_NO_RESTORE()
-			lxi sp, STACK_INTERRUPTION_ADDR-2
-			push b
-			push d
-
-			CALL_RAM_DISK_FUNC_NO_RESTORE(__sound_update, __RAM_DISK_S_SOUND | __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
-			INTERRUPTION_MAIN_LOGIC()
+interruption_no_fps_update:				
+			; interruption main logic complete
 
 			pop d
 			pop b
@@ -123,8 +110,18 @@ interruption:
 			; restore A
 			mov a, l
 
-@restoreHL:	lxi		h, TEMP_WORD
-@restoreSP:	lxi		sp, TEMP_ADDR
+interruption_restoreHL:	
+			lxi		h, TEMP_WORD
+interruption_restoreSP:	
+			lxi		sp, TEMP_ADDR
 			ei
-@return:	jmp TEMP_ADDR
-			
+interruption_return:	
+			jmp TEMP_ADDR
+
+ints_per_sec_counter:
+			.byte INTS_PER_SEC
+
+; a lopped counter increased every game draw call
+game_draws_counter = interruption_fps + 1
+palette_update_request = palette_update_request_ + 1
+

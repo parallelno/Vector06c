@@ -8,6 +8,8 @@ hero_dead:
 			jz hero_dead_fade_r
 			cpi HERO_STATUS_DEATH_WAIT_SPARKER
 			jz hero_dead_wait_sparker
+			;cpi ACTOR_STATUS_NO_UPDATE
+			;rz
 			ret
 
 hero_dead_fade_init_gb:
@@ -194,6 +196,4 @@ hero_dead_wait_sparker:
 			lxi h, hero_status_timer
 			dcr m
 			rnz
-			
-			DRAW_DIALOG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_dialog, __TILED_IMAGES_FRAME_INGAME_DIALOG_COPY_LEN, __tiled_images_tile1)
-			ret
+			DIALOG_INIT_JMP(dialog_init_hero_no_health)

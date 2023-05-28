@@ -21,6 +21,8 @@ TILED_IMG_SCR_BUFFS = 4
 TILED_IMG_TILE_H = 8
 TILE_IMG_TILE_LEN = TILED_IMG_TILE_H * TILED_IMG_SCR_BUFFS + 2 ; 8*4 bytes + a couple of safety bytes
 
+REPEATER_CODE = $ff
+
 draw_tiled_img:
 			sta @gfx_data_access + 1
 			
@@ -31,8 +33,6 @@ draw_tiled_img:
 @gfx_data_access:
 			mvi a, TEMP_BYTE
 			RAM_DISK_ON_BANK()
-			;CALL_RAM_DISK_FUNC_BANK(@draw)
-			;ret
 
 @draw:
 			lxi h, tiled_img_idxs
@@ -54,17 +54,38 @@ draw_tiled_img:
 			mov a, m
 			inx h
 			sta @check_end_line + 1			
+			; de - scr addr
 
 @loop:
 			; get tile_idx
+			mov c, m
+			inx h
+			; skip if tile_idx = 0
+			xra a
+			ora c
+			jz @skip
+			cpi REPEATER_CODE
+			jnz @it_is_idx
+
+			; it is REPEATER_CODE
+			; meaning the next two bytes represent
+			; idx and repeating counter
+			mov c, m
+			; c - tile_idx
+			inx h
 			mov a, m
 			inx h
-			push h
-			; skip if idx = 0
-			ora a
-			jz @skip
+			jmp @get_gfx_ptr
+@it_is_idx:
+			mvi a, 1
+
+@get_gfx_ptr:
+			; c - tile_idx
+			; a - repeating counter
+			sta @repeating_counter
 			; tile gfx ptr = tile_gfxs_ptr + tile_idx * 34
-			mov l, a
+			push h
+			mov l, c
 			mvi h, 0
 			; offset = tile_idx * 32
 			dad h
@@ -82,14 +103,26 @@ draw_tiled_img:
 			dad b
 			mov c, l
 			mov b, h
+			; bc - points to tile_gfx
+@repeat:
+			push b
 			call @draw_tile
-			; hl - screen addr + $60
-			mov a, h
-			adi -$60
-			mov h, a
+			pop b
 			xchg
-@skip:
+			; de - screen addr + $60
+			mov a, d
+			adi -$60 + 1
+			mov d, a
+			; de - scr_addr
+			; bc - tile_gfx_addr
+			lxi h, @repeating_counter
+			dcr m
+			jnz @repeat
+			; decr d register because to compensate the next inc d after @skip
+			dcr d
 			pop h
+@skip:
+			; advance pos_x to the next tile
 			inr d
 @check_end_line:
 			mvi a, TEMP_BYTE
@@ -107,7 +140,8 @@ draw_tiled_img:
 
 			RAM_DISK_OFF()
 			ret
-
+@repeating_counter:
+			.byte 1
 ; draw a tile (8x8 pixels)
 ; input:
 ; bc - a tile gfx ptr

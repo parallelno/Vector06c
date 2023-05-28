@@ -69,6 +69,7 @@
 ;		d <  %1111 - collision + animated background, back_id = d
 ;	 		back_id == 0 - torch front (tiledata = 15*16+0=241)
 ;   	    back_id == 1 - flag front (tiledata = 161)
+;   	    back_id == 2 - dialog_press_key (tiledata = 162)
 
 ; if tiledata > 0 then a tile is restored on the screen when a hero, a monster, or a bullet on it
 

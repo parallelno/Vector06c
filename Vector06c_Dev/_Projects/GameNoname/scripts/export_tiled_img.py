@@ -13,9 +13,12 @@ IMG_TILE_H = 8
 SCR_TILES_W = 32
 SCR_TILES_H = 32
 
+TILED_IMG_GFX_IDX_MAX = 255
 TILED_IMG_IDXS_LEN_MAX = 256
 
-META_DATA_LEN = 4 # scr addr, scr addr end
+META_DATA_LEN = 4
+
+REPEATER_CODE = 255
 
 def get_tiledata(bytes0, bytes1, bytes2, bytes3, use_mask):
 	if not use_mask:
@@ -110,9 +113,42 @@ def get_img_ptrs(images_j, label_prefix):
 	asm += "\n"
 	return asm
 
-def tile_idxs_to_asm(idxs, pos_x, pos_y, tiles_w, tiles_h, label_name):
+def pack_idxs(idxs_unpacked, tiles_w, tiles_h):
+	idxs = []
+	for j in range(tiles_h):
+		# convert the line into the pairs (idx, how many times it repeats)
+		repeaters = []
+		repeaters_lens = []
+		prev_idx = -1
+		for i in range(tiles_w):
+			idx = idxs_unpacked[j * tiles_w + i]
+			if idx != prev_idx:
+				repeaters.append(idx)
+				repeaters_lens.append(1)
+				prev_idx = idx
+			else:
+				repeaters_lens[-1] += 1
+
+		idxs_line = []
+		# decode pairs with len > 3 into (REPEATER_CODE, IDX, LEN)
+		for i, idx in enumerate(repeaters):
+			repeater_len = repeaters_lens[i]
+			if repeater_len <= 3:
+				for j in range(repeater_len):
+					idxs_line.append(idx)
+			else:
+				idxs_line.append(REPEATER_CODE)
+				idxs_line.append(idx)
+				idxs_line.append(repeater_len)
+		idxs.extend(idxs_line)
+	return idxs
+
+def tile_idxs_to_asm(idxs_unpacked, pos_x, pos_y, tiles_w, tiles_h, label_name):
+	idxs = pack_idxs(idxs_unpacked, tiles_w, tiles_h)
+
 	asm = ""
-	# this is a len for copy_from_ram_disk asm func. it copies pairs of bytes. Therefor a len has to be calc as len = data_len // 2 + data_len % 2
+	# idxs_data_copy_len represents how many pairs of bytes have to be copied by copy_from_ram_disk asm func, 
+	# it equals "data_len // 2 + data_len % 2"
 	idxs_data_copy_len = len(idxs) // 2 + len(idxs) % 2 + META_DATA_LEN
 	asm += f"{label_name.upper()}_COPY_LEN = {idxs_data_copy_len}\n"
 
@@ -124,7 +160,7 @@ def tile_idxs_to_asm(idxs, pos_x, pos_y, tiles_w, tiles_h, label_name):
 	asm += f"			.word SCR_BUFF0_ADDR + ({pos_x + tiles_w}<<8 | {(pos_y + tiles_h * 8) % 256})	; scr addr end\n"
 	asm += common.bytes_to_asm(idxs, tiles_w, True)
 
-	return asm
+	return asm, len(idxs) + META_DATA_LEN
 
 #=====================================================
 def export_data_if_updated(source_path, generated_dir, force_export):
@@ -185,6 +221,11 @@ def export_gfx(source_j_path, export_gfx_path):
 	# make a tile index remap dictionary, to have the first idx = 0
 	remap_idxs = remap_indices(tiled_file_j)
 
+	if len(remap_idxs) > TILED_IMG_GFX_IDX_MAX:
+		print(f'export_tiled_img ERROR: gfx_idxs > "{TILED_IMG_GFX_IDX_MAX}", path: {source_j_path}')
+		print("Stop export")
+		exit(1)	
+
 	# list of tiles addreses
 	png_name = common.path_to_basename(path_png)
 
@@ -231,12 +272,7 @@ def export_data(source_j_path, export_data_path):
 
 	# make a tile index remap dictionary, to have the first idx = 0
 	remap_idxs = remap_indices(tiled_file_j)
-
-	if len(remap_idxs) + META_DATA_LEN > TILED_IMG_IDXS_LEN_MAX:
-		print(f'export_tiled_img ERROR: image indices > "{TILED_IMG_IDXS_LEN_MAX}", path: {source_j_path}')
-		print("Stop export")
-		exit(1)
-
+ 
 	base_name = common.path_to_basename(tiled_file_path)
 
 	for layer in tiled_file_j["layers"]:
@@ -275,7 +311,7 @@ def export_data(source_j_path, export_data_path):
 					tile_first_y = t_y
 				if t_y > tile_last_y:
 					tile_last_y = t_y
-		
+
 		# image idxs to asm
 		idxs = []
 		for t_y in reversed(range(tile_first_y, tile_last_y + 1)):
@@ -292,8 +328,15 @@ def export_data(source_j_path, export_data_path):
 		tiles_w = tile_last_x - tile_first_x + 1
 		tiles_h = tile_last_y - tile_first_y + 1 
 
-		asm += tile_idxs_to_asm(idxs, pos_x, pos_y, tiles_w, tiles_h, label_name)
-	
+		tiled_img_asm, tiled_img_len = tile_idxs_to_asm(idxs, pos_x, pos_y, tiles_w, tiles_h, label_name)
+		asm += tiled_img_asm
+
+		# check if the length of the image fits the requirements
+		if tiled_img_len > TILED_IMG_IDXS_LEN_MAX:
+			print(f'export_tiled_img ERROR: tiled image {layer_name} > "{TILED_IMG_IDXS_LEN_MAX}", path: {source_j_path}')
+			print("Stop export")
+			exit(1)		
+	 
 	with open(export_data_path, "w") as file:
 		file.write(asm)
 

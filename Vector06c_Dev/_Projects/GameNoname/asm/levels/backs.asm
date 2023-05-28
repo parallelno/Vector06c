@@ -23,7 +23,7 @@ backs_init:
 ; input:
 ; b - tiledata
 ; c - tile_idx in the room_tiledata array.
-; a - back_id
+; a - back_id (not used)
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
 backs_spawn:

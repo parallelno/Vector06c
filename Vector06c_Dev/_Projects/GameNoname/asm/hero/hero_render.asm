@@ -14,11 +14,12 @@ hero_draw:
 @spriteR:
 
 			lda hero_status
-			ani ACTOR_STATUS_BIT_BLINK
-			jnz @state_blink
-			lda hero_status
 			ani ACTOR_STATUS_BIT_INVIS
 			jnz @invis
+			lda hero_status
+			ani ACTOR_STATUS_BIT_BLINK
+			jnz @state_blink
+
 @draw:
 			mov a, l
 			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
