@@ -37,8 +37,11 @@ interruption:
 			push d
 
 			CALL_RAM_DISK_FUNC_NO_RESTORE(__sound_update, __RAM_DISK_S_SOUND | __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
-			
-			; interruption main logix start
+
+;======================================================================================================================			
+;
+;			interruption main logic start
+;
 			; keyboard check
 			mvi a, PORT0_OUT_IN
 			out 0
@@ -98,7 +101,9 @@ interruption_fps:
 			lxi h, ints_per_sec_counter
 			mvi m, INTS_PER_SEC
 interruption_no_fps_update:				
-			; interruption main logic complete
+;======================================================================================================================			
+;
+;			; interruption main logic end
 
 			pop d
 			pop b

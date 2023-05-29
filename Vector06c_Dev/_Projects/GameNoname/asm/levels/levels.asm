@@ -1,7 +1,8 @@
 ;================================================================
-;	initialization levels data every game start
+;	levels data initialization every game start
 ;
 levels_init:
+			; TODO: set the level_idx to 0
 			mvi a, 1
 			sta level_idx
 
@@ -12,7 +13,7 @@ levels_init:
 			ret
 
 ;================================================================
-;	initialization level data every level start
+;	level data initialization every level start
 ;
 level_init:
 			; get the level init data ptr of the current level
@@ -85,8 +86,9 @@ level_init:
 			xra a
 			sta room_id
 
-			; setup a hero pos
-@start_pos_ptr:			
+			call room_init
+
+			; setup a hero pos	
 			lhld level_start_pos_ptr
 			xchg
 			lda level_ram_disk_s_data
@@ -94,8 +96,10 @@ level_init:
 			call hero_set_pos
 			call hero_init
 
+			call game_ui_draw
+			
 			; reset level command
-			mvi a, LEVEL_COMMAND_NONE
+			xra a
 			sta level_command
 			ret
 
@@ -113,16 +117,19 @@ level_update:
 			ora a
 			rz
 			cpi LEVEL_COMMAND_LOAD_DRAW_ROOM
-			;jnz @next_command_check
-			rnz
-
+			jz @load_draw_room
+			cpi LEVEL_COMMAND_LOAD_LEVEL
+			jz @load_level
+			ret
+@load_draw_room:
 			; load a new room
 			call room_init
 			call hero_init
+			; reset level command
 			xra a
-			sta	requested_updates
-			; reset the command
 			sta level_command
+			xra a
+			sta	requested_updates			
 			ret
-;@next_command_check:
-;            ret
+@load_level:
+			jmp level_init

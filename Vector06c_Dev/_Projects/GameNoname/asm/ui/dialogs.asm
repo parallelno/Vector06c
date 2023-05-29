@@ -6,6 +6,13 @@
 			lxi h, callbacks_tbl
 			jmp dialog_init
 .endmacro
+
+.macro TEXT(string):
+.encoding "screencode", "mixed"
+			.text string
+			.byte 0
+.endmacro
+
 ; init every dialog
 ; in:
 ; hl - callback_tbl addr (callback pptr)
@@ -36,13 +43,13 @@ dialog_update:
 			xchg
 			pchl
 
-@dialog_update_stay_in_current_step:
+@dialog_update_continue_this_step:
 			; decr callback pptr
 			lhld @callback_pptr + 1
 			DCX_H(2)
 			shld @callback_pptr + 1
 			ret
-dialog_update_stay_in_current_step = @dialog_update_stay_in_current_step
+dialog_update_continue_this_step = @dialog_update_continue_this_step
 
 dialog_update_no_updates:
 			.word NULL_PTR
@@ -91,30 +98,21 @@ dialog_init_hero_no_health:
 			lhld key_code
 			mvi a, KEY_SPACE
 			cmp h
-			jnz dialog_update_stay_in_current_step
+			jnz dialog_update_continue_this_step
 			; it's pressed
-			; load the level0
-			; update a room_id to teleport there
+			; requesting a level loading
 			xra a
-			sta room_id
-			; requesting room loading
-			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
+			sta level_idx
+			mvi a, LEVEL_COMMAND_LOAD_LEVEL
 			sta level_command
+			; set the room_id to teleport there
+			; set the hero_pos
+			; restore a hrero health by 75%
+			mvi a, HERO_HEALTH_MAX / 4 * 3
+			sta hero_health			
 			ret
 
-@text1:
-.encoding "screencode", "mixed"
-			.text "The cold and the darkness of corridors rev-"
-			.byte 0
-@text2:
-.encoding "screencode", "mixed"
-			.text "ealed a mysterious figure. Two strong hands"
-			.byte 0
-@text3:
-.encoding "screencode", "mixed"
-			.text "lifted up the unconscious body and carried"
-			.byte 0
-@text4:
-.encoding "screencode", "mixed"
-			.text "him out of the dungeon into the fresh air."
-			.byte 0
+@text1:		TEXT("The cold and the darkness of corridors rev-")
+@text2:		TEXT("ealed a mysterious figure. Two strong hands")
+@text3:		TEXT("lifted up the unconscious body and carried")
+@text4:		TEXT("him out of the dungeon into the fresh air.")

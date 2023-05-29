@@ -2,7 +2,7 @@
 .include "..\\render\\text_ex.asm"
 .include "dialogs.asm"
 
-game_ui_init:
+game_ui_draw:
 			call game_ui_draw_panel
 			call game_ui_draw_health
 			call game_ui_draw_score
