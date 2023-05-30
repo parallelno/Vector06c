@@ -11,6 +11,7 @@
 .include "generated\\code\\ram_disk_init.asm"
 .include "asm\\game_utils.asm"
 .include "asm\\main_menu.asm"
+.include "asm\\credits_screen.asm"
 .include "asm\\game.asm"
 
 main_start:
@@ -21,6 +22,8 @@ main_start:
 			cz main_menu
 			cpi GLOBAL_REQ_GAME
 			cz main_game
+			cpi GLOBAL_REQ_CREDITS
+			cz credits_screen	
 			jmp @loop
 
 code_seg_end:

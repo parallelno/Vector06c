@@ -1,0 +1,4 @@
+TODO:
+1. make a narator instead of HELP option in the main menu. Replace it with score board
+2. make normal and hard modes. more scores
+3. secret room for a narator. a player can find it.

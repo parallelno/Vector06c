@@ -68,8 +68,8 @@ dialog_init_hero_no_health:
 			mvi c, @pos_tiles_x + @pos_tiles_y * TILE_HEIGHT
 			; b - tiledata
 			; c - tile_idx in the room_tiledata array.			
-			call backs_spawn
-			ret
+			jmp backs_spawn
+
 @draw_text1:		
 			; draw text
 			lxi b, $102d

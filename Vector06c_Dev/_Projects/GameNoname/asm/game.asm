@@ -29,7 +29,7 @@
 main_game:
 			call levels_init
 			call level_init
-
+			
 			xra a
 			sta requested_updates
 

@@ -89,6 +89,8 @@ level_init:
 			xra a
 			sta room_id
 
+			call room_init
+
 			; setup a hero pos	
 			lhld level_start_pos_ptr
 			xchg
