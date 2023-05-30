@@ -7,6 +7,8 @@
 
 hero_init:
 			call hero_idle_start
+			
+			; reset key data			
 			lxi h, KEY_NO << 8 | KEY_NO
 			shld key_code
 

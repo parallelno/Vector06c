@@ -47,22 +47,22 @@ level_init:
 			mvi a, <rooms_spawn_rates_end
 			call clear_mem_short
 
-			; erase resources
+			; erase resources buffs
 			lxi h, hero_resources
 			mvi a, <hero_resources_end
 			call clear_mem_short
 
-			; erase backs
+			; erase backs buffs
 			lxi h, backs_runtime_data
 			mvi a, <backs_runtime_data_end
 			call clear_mem_short
 
-			; erase bullets
+			; erase bullets buffs
 			lxi h, bullet_runtime_data_sorted
 			mvi a, <bullets_runtime_data_end
 			call clear_mem_short
 
-			; erase monsters
+			; erase monsters buffs
 			lxi h, monster_runtime_data_sorted
 			lxi b, monsters_runtime_data_end - monster_runtime_data_sorted
 			call clear_mem

@@ -757,3 +757,13 @@ room_get_tiledata:
 			adi ROOM_WIDTH
 			mov m, a
 			ret
+
+; fill up the tile_data_buff with tiledata = 1 
+; (walkable tile, restore back, no decal)
+; in:
+; c - tiledata to fill
+room_fill_tiledata:
+			lxi h, room_tiledata
+			mvi a, <room_tiledata_end
+			call fill_mem_short
+			ret

@@ -5,6 +5,7 @@
 .include "asm\\bullets\\bomb.asm"
 .include "asm\\bullets\\sparker.asm"
 .include "asm\\bullets\\vfx.asm"
+.include "asm\\bullets\\cursor.asm"
 
 bullets_init:
 			mvi a, <bullets_runtime_data

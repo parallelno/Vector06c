@@ -1,21 +1,53 @@
-;.include "asm\\main_menu_consts.asm"
+MAIN_MENU_CURSOR_POS_X = $5800 ; .word
+MAIN_MENU_CURSOR_POS_Y = $8100 ; .word
+
+SETTING_POS = $6083
+SETTING_VERT_SPACING = 18
+
+MAIN_MENU_OPTIONS_MAX = 4
+
+cursor_option_id:
+			.byte 0
 
 main_menu:
-
 			; clear the screen	
 			xra a
 			lxi b, 0
 			lxi d, SCR_BUFF_LEN * 4 / 32 - 1
 			call clear_mem_sp
+			; clear the backbuffer2
+			mvi a, __RAM_DISK_S_BACKBUFF
+			lxi b, 0
+			lxi d, SCR_BUFF_LEN * 3 / 32 - 1
+			call clear_mem_sp
 
 			mvi a, 1
-			sta border_color_idx			
+			sta border_color_idx
 
 			call title_draw
 			call main_menu_ui_draw
 
+			; erase bullets buffs
+			lxi h, bullet_runtime_data_sorted
+			mvi a, <bullets_runtime_data_end
+			call clear_mem_short
+			; setup bullets runtime data
+			call bullets_init
+
+			; fill up the tile_data_buff with tiledata = 0
+			; (walkable tile, no back restore , no decal)
+			mvi c, 0
+			call room_fill_tiledata			
+
+			call main_menu_cursor_init
+
 			xra a
 			sta requested_updates
+
+			; reset key data
+			lxi h, KEY_NO << 8 | KEY_NO
+			shld key_code
+			shld key_code_old
 
 @loop:
 			; TODO: make it play a new song
@@ -33,9 +65,9 @@ main_menu_update:
 			ora a
 			rz
 @loop:
-			;call hero_update
+			call main_menu_cursor_update
 			;call monsters_update
-			;call bullets_update
+			call bullets_update
 			;call level_update
 			;call backs_update
 			;call game_ui_update
@@ -60,15 +92,15 @@ main_menu_draw:
 
 			;call hero_draw
 			;call monsters_draw
-			;call bullets_draw
+			call bullets_draw
 
 			;call hero_copy_to_scr
 			;call monsters_copy_to_scr
-			;call bullets_copy_to_scr
+			call bullets_copy_to_scr
 
 			;call hero_erase
 			;call monsters_erase
-			;call bullets_erase
+			call bullets_erase
 			ret
 
 main_menu_ui_draw:
@@ -79,18 +111,16 @@ main_menu_ui_draw:
 			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_main_menu, __TILED_IMAGES_FRAME_MAIN_MENU_COPY_LEN, __tiled_images_tile1)
 			
 			; draw mane menu settings
-			@setting_pos = $6083
-			@setting_vert_spacing = 18
-			lxi b, @setting_pos - @setting_vert_spacing * 0
+			lxi b, SETTING_POS - SETTING_VERT_SPACING * 0
 			lxi h, @text_start_game
 			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)			
-			lxi b, @setting_pos - @setting_vert_spacing * 1
+			lxi b, SETTING_POS - SETTING_VERT_SPACING * 1
 			lxi h, @text_options
 			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)	
-			lxi b, @setting_pos - @setting_vert_spacing * 2
+			lxi b, SETTING_POS - SETTING_VERT_SPACING * 2
 			lxi h, @text_help
 			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)	
-			lxi b, @setting_pos - @setting_vert_spacing * 3
+			lxi b, SETTING_POS - SETTING_VERT_SPACING * 3
 			lxi h, @text_credits
 			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)									
 			
@@ -128,4 +158,68 @@ title_draw:
 			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_main_menu_back2, __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __tiled_images_tile1)			
 			ret
 
+main_menu_cursor_update:
+			; check keys
+			; check if an attack key pressed
+			lhld key_code
+			mvi a, KEY_SPACE
+			cmp h
+			;jz hero_attack_start
 
+			; check if no arrow key pressed
+			mvi a, KEY_UP & KEY_DOWN
+			ora l
+			inr a
+			rz
+@cursor_pos_update:
+			; check if the same arrow keys pressed the prev update
+			lda key_code_old
+			cmp l
+			jnz @new_key_pressed
+			ret
+@new_key_pressed:
+			mov a, l
+			cpi KEY_DOWN
+			jz @cursor_move_down
+			cpi KEY_UP
+			jz @cursor_move_up
+			ret
+@cursor_move_up:
+			; check if a selected option is outside ofthe range [0 - MAIN_MENU_OPTIONS_MAX]
+			lda cursor_option_id
+			dcr a
+			rm ; return if a selected option = -1
+			sta cursor_option_id
+
+			lxi h, hero_pos_y+1
+			mov a, m
+			adi SETTING_VERT_SPACING
+			mov m, a
+			ret
+@cursor_move_down:		
+			; check if a selected option is outside ofthe range [0 - MAIN_MENU_OPTIONS_MAX]
+			lda cursor_option_id
+			inr a
+			cpi MAIN_MENU_OPTIONS_MAX
+			rnc ; return if a selected option >= MAIN_MENU_OPTIONS_MAX
+			sta cursor_option_id
+
+			lxi h, hero_pos_y+1
+			mov a, m
+			sui SETTING_VERT_SPACING
+			mov m, a
+			ret
+
+main_menu_cursor_init:
+			; create a cursor actor
+			lxi h, MAIN_MENU_CURSOR_POS_X
+			shld hero_pos_x
+			lxi h, MAIN_MENU_CURSOR_POS_Y
+			shld hero_pos_y
+
+			; reset selected option
+			xra a
+			sta cursor_option_id
+
+			lxi b, (>MAIN_MENU_CURSOR_POS_X)<<8 | >MAIN_MENU_CURSOR_POS_Y
+			jmp cursor_init

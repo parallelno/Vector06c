@@ -138,11 +138,14 @@ hero_dead_fade_r:
 			; fill all visual buffs with thedarkers color in the current palette
 			call fill_all_black
 
-			; fill up the tile_data_buff with tiledata = 1 (walkable tile, restore back, no decal)
-			lxi h, room_tiledata
-			mvi a, <room_tiledata_end
+			; fill up the tile_data_buff with tiledata = 1 
+			; (walkable tile, restore back, no decal)
+			;lxi h, room_tiledata
+			;mvi a, <room_tiledata_end
+			;mvi c, 1
+			;call fill_mem_short
 			mvi c, 1
-			call fill_mem_short
+			call room_fill_tiledata
 
 			; copy a palette from the ram-disk, then request for using it
 			call level_init_palette
