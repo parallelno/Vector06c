@@ -12,6 +12,8 @@ main_init:
 			lxi sp, STACK_TMP_MAIN_PROGRAM_ADDR
 			call ram_disk_init
 			lxi sp, STACK_MAIN_PROGRAM_ADDR
+			mvi a, GLOBAL_REQ_MAIN_MENU
+			sta global_request			
 			ei
             jmp main_start
 

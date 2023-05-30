@@ -6,6 +6,9 @@ levels_init:
 			mvi a, 1
 			sta level_idx
 
+			lxi h, 0
+			shld game_score
+
 			; erase global item statuses
 			lxi h, global_items
 			mvi a, <global_items_end
@@ -86,8 +89,6 @@ level_init:
 			xra a
 			sta room_id
 
-			call room_init
-
 			; setup a hero pos	
 			lhld level_start_pos_ptr
 			xchg
@@ -97,10 +98,10 @@ level_init:
 			call hero_init
 
 			call game_ui_draw
-			
+
 			; reset level command
 			xra a
-			sta level_command
+			sta global_request
 			ret
 
 ; copy a palette from the ram-disk, then request for using it
@@ -113,12 +114,12 @@ level_init_palette:
 			ret
 
 level_update:
-			lda level_command
+			lda global_request
 			ora a
 			rz
-			cpi LEVEL_COMMAND_LOAD_DRAW_ROOM
+			cpi GAME_REQ_ROOM_INIT
 			jz @load_draw_room
-			cpi LEVEL_COMMAND_LOAD_LEVEL
+			cpi GAME_REQ_LEVEL_INIT
 			jz @load_level
 			ret
 @load_draw_room:
@@ -127,7 +128,7 @@ level_update:
 			call hero_init
 			; reset level command
 			xra a
-			sta level_command
+			sta global_request
 			xra a
 			sta	requested_updates			
 			ret

@@ -35,7 +35,7 @@ game_ui_draw_health:
 
 HERO_SCORE_SCR_ADDR = $b5fb
 game_ui_draw_score:
-			lda hero_score
+			lda game_score
 			mov l, a
 			mvi h, 0
 			lxi d, @hero_score_text
@@ -50,7 +50,7 @@ game_ui_draw_score:
 
 UI_ITEM_BOMB_SCR_ADDR = $a8fb
 game_ui_draw_bomb:
-			;lda hero_score
+			;lda game_score
 			;mov l, a
 			; TODO: replace with loading a real item count
 			mvi l, 0

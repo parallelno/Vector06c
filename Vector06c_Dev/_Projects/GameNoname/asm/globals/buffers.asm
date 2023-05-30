@@ -133,7 +133,7 @@ backs_runtime_data_end:			= backs_runtime_data_end_marker + WORD_LEN
 
 ;=============================================================================
 ; a current command that is handled by the level update func
-level_command:			= $7bc3				; .byte
+global_request:			= $7bc3				; .byte
 ; the current level idx
 level_idx:				= $7bc4				; .byte
 ; the current room idx of the current level
@@ -156,7 +156,7 @@ level_init_tbl_end:					= $7bd6
 LEVEL_INIT_TBL_LEN = level_init_tbl_end - level_init_tbl
 ;=============================================================================
 ;
-hero_score = $7bd6 ; word
+game_score = $7bd6 ; word
 ;==================================
 ; palette
 palette = $7bd8 ; 16 bytes

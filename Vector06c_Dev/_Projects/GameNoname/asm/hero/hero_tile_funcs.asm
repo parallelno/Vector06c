@@ -170,8 +170,8 @@ hero_tile_func_teleport:
 			; update a room_id to teleport there
 			sta room_id
 			; requesting room loading
-			mvi a, LEVEL_COMMAND_LOAD_DRAW_ROOM
-			sta level_command
+			mvi a, GAME_REQ_ROOM_INIT
+			sta global_request
 
 			; check if the teleport on the left or right side
 			lda hero_pos_x+1

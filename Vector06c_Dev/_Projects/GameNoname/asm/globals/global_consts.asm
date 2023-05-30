@@ -118,6 +118,12 @@ SEGMENT_8000_0000_SIZE_MAX = 2 ^ 31
 ; to sort a list ob object to draw
 DRAW_LIST_FIRST_DATA_MARKER = 0
 
+; gameplay
+GAME_REQ				= %1000_0000
+GLOBAL_REQ_NONE			= 0
+GLOBAL_REQ_MAIN_MENU	= 1
+GLOBAL_REQ_GAME			= 2
+
 ; opcodes
 OPCODE_NOP  = 0
 OPCODE_XCHG = $eb

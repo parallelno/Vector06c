@@ -26,7 +26,7 @@
 .include "asm\\levels\\backs.asm"
 .include "asm\\ui\\ui.asm"
 
-game_init:
+main_game:
 			call levels_init
 			call level_init
 

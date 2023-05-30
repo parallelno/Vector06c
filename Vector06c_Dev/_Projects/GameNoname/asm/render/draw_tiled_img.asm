@@ -53,7 +53,7 @@ draw_tiled_img:
 			; store scr_x_end for checking the end of the line
 			mov a, m
 			inx h
-			sta @check_end_line + 1			
+			sta @check_end_line + 1
 			; de - scr addr
 
 @loop:
@@ -73,15 +73,27 @@ draw_tiled_img:
 			mov c, m
 			; c - tile_idx
 			inx h
-			mov a, m
+			mov b, m
 			inx h
-			jmp @get_gfx_ptr
+
+			; skip if tile_idx = 0
+			xra a
+			ora c
+			jnz @get_gfx_ptr
+			; tile_idx = 0,
+			; advance dce to the proper pos, and skip drawing
+			; b - repeating counter
+			mov a, d
+			add b
+			mov d, a
+			jmp @check_end_line
 @it_is_idx:
-			mvi a, 1
+			mvi b, 1
 
 @get_gfx_ptr:
 			; c - tile_idx
-			; a - repeating counter
+			; b - repeating counter
+			mov a, b
 			sta @repeating_counter
 			; tile gfx ptr = tile_gfxs_ptr + tile_idx * 34
 			push h
@@ -118,9 +130,10 @@ draw_tiled_img:
 			lxi h, @repeating_counter
 			dcr m
 			jnz @repeat
+			; restore a pointer to the next tile_idx
+			pop h
 			; decr d register because to compensate the next inc d after @skip
 			dcr d
-			pop h
 @skip:
 			; advance pos_x to the next tile
 			inr d

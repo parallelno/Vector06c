@@ -146,7 +146,7 @@ def pack_idxs(idxs_unpacked, tiles_w, tiles_h):
 def tile_idxs_to_asm(idxs_unpacked, pos_x, pos_y, tiles_w, tiles_h, label_name):
 	idxs = pack_idxs(idxs_unpacked, tiles_w, tiles_h)
 
-	asm = ""
+	asm = "" 
 	# idxs_data_copy_len represents how many pairs of bytes have to be copied by copy_from_ram_disk asm func, 
 	# it equals "data_len // 2 + data_len % 2"
 	idxs_data_copy_len = len(idxs) // 2 + len(idxs) % 2 + META_DATA_LEN
@@ -323,9 +323,9 @@ def export_data(source_j_path, export_data_path):
 					idxs.append(0)
 
 		label_name = "__" + base_name + "_" + layer_name
-		pos_x = SCR_TILES_W - tile_last_x - 1
+		pos_x = tile_first_x # SCR_TILES_W - tile_last_x - 1
 		pos_y = (SCR_TILES_H - tile_last_y - 1) * IMG_TILE_W
-		tiles_w = tile_last_x - tile_first_x + 1
+		tiles_w = tile_last_x - tile_first_x + 1   
 		tiles_h = tile_last_y - tile_first_y + 1 
 
 		tiled_img_asm, tiled_img_len = tile_idxs_to_asm(idxs, pos_x, pos_y, tiles_w, tiles_h, label_name)

@@ -9,18 +9,23 @@
 .include "asm\\globals\\utils.asm"
 .include "asm\\globals\\interruptions.asm"
 .include "generated\\code\\ram_disk_init.asm"
+.include "asm\\game_utils.asm"
+.include "asm\\main_menu.asm"
 .include "asm\\game.asm"
 
 main_start:
 			CALL_RAM_DISK_FUNC(__gcplayer_init, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
-@mainLoop:
-			;call main_menu
-			call game_init
-			jmp @mainLoop
+@loop:
+			lda global_request
+			cpi GLOBAL_REQ_MAIN_MENU
+			cz main_menu
+			cpi GLOBAL_REQ_GAME
+			cz main_game
+			jmp @loop
 
 code_seg_end:
 ; the ram disk data below will be moved into the ram-disk before the game starts. 
-; that means if it is stored at the end of the program, everything that is go
+; that means if it is stored at the end of the program, everything that goes
 ; to the ram-disk can overlap the screen addrs.
 .include "generated\\code\\ram_disk_data.asm"
 .end

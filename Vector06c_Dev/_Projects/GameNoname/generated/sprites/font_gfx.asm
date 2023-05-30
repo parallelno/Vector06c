@@ -126,7 +126,7 @@ __font_parent_r:
 			.word 0 ; safety pair of bytes for reading by POP B
 __font_comma:
 			.byte -1, -1 ; offset_y, offset_x
-			.word 0,128,
+			.word 128,64,
 			.byte 0, 3 ; next_char_offset
 
 			.word 0 ; safety pair of bytes for reading by POP B

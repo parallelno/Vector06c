@@ -17,8 +17,6 @@ hero_init:
 			; 16x15 size
 			lxi h, SPRITE_W_PACKED_MIN<<8 | SPRITE_H_MIN
 			shld hero_erase_wh_old
-			lxi h, 0
-			shld hero_score
 			xra a
 			sta hero_global_status_no_render
 			ret

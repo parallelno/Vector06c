@@ -103,8 +103,8 @@ dialog_init_hero_no_health:
 			; requesting a level loading
 			xra a
 			sta level_idx
-			mvi a, LEVEL_COMMAND_LOAD_LEVEL
-			sta level_command
+			mvi a, GAME_REQ_LEVEL_INIT
+			sta global_request
 			; set the room_id to teleport there
 			; set the hero_pos
 			; restore a hrero health by 75%

@@ -15,7 +15,7 @@ hero_dead:
 hero_dead_fade_init_gb:
 			KILL_ALL_MONSTERS()
 			KILL_ALL_BULLETS()
-			
+
 			; kill all the backs
 			call backs_init
 
@@ -110,7 +110,7 @@ hero_dead_fade_r:
 			ora a
 			jz @next
 			dcr m
-@next:			
+@next:
 			inx h
 			dcr c
 			jnz @loop_r
@@ -134,25 +134,9 @@ hero_dead_fade_r:
 			; stop drawing a hero
 			mvi a, 1
 			sta hero_global_status_no_render
-			
-			; set SCR_BUFF0, SCR_BUFF1, SCR_BUFF2 to zero
-			; set SCR_BUFF3 to $ff
-			; that represents the darkest possible color in the current palette
-			xra a
-			lxi d, SCR_BUFF_LEN * 3 / 32 - 1
-			call hero_erase_scr_buff
 
-			; do the same for backbuffer and backbuffer2
-			; set SCR_BUFF1, SCR_BUFF2 to zero
-			; set SCR_BUFF3 to $ff
-			; that represents the darkest possible color in the current palette			
-			mvi a, __RAM_DISK_S_BACKBUFF
-			lxi d, SCR_BUFF_LEN * 2 / 32 - 1
-			call hero_erase_scr_buff
-
-			mvi a, __RAM_DISK_S_BACKBUFF2
-			lxi d, SCR_BUFF_LEN * 2 / 32 - 1
-			call hero_erase_scr_buff			
+			; fill all visual buffs with thedarkers color in the current palette
+			call fill_all_black
 
 			; fill up the tile_data_buff with tiledata = 1 (walkable tile, restore back, no decal)
 			lxi h, room_tiledata
@@ -171,25 +155,6 @@ hero_dead_fade_r:
 			mov c, m
 			mvi m, 128
 			jmp sparker_init
-
-; it fills SCR_BUFF3 with $ff
-; it erases SCR_BUFF2, optionally <SCR_BUFF1, SCR_BUFF0>
-; that represents the darkest possible color in the current palette
-; in:
-; a - ram-disk activation command
-;		a = 0 if you erase the main memory
-; de - buff_len/32-1 that have to be erased
-hero_erase_scr_buff:
-			; set SCR_BUFF0, SCR_BUFF1, SCR_BUFF2 to zero
-			lxi b, SCR_BUFF3_ADDR
-			push psw
-			call clear_mem_sp
-			pop psw
-			; set SCR_BUFF3 to $ff			
-			lxi h, $ffff
-			lxi b, 0
-			lxi d, SCR_BUFF_LEN / 32 - 1
-			jmp fill_mem_sp
 
 
 hero_dead_wait_sparker:
