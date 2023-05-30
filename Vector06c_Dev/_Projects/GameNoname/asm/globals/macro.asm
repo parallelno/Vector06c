@@ -297,13 +297,14 @@
 .endmacro
 
 .macro CLAMP_A(val_max = $ff)
-			jnc @save
+			cpi val_max
+			jc @no_clamp
 			mvi a, val_max
-@save:			
+@no_clamp:
 .endmacro
 
 .macro CLAMP_HL()
-			jnc @save
+			jnc @no_clamp
 			lxi h, $ffff
-@save:
+@no_clamp:
 .endmacro

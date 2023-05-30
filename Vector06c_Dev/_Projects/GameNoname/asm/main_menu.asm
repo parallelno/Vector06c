@@ -9,6 +9,22 @@ MAIN_MENU_OPTIONS_MAX = 4
 cursor_option_id:
 			.byte 0
 
+
+; the area inbetween min-max is used to spawn bacground vfx
+main_scr_vfx_pos_max1 = $8690
+main_scr_vfx_pos_min1 = $8230
+
+main_scr_vfx_pos_max2 = $9c90
+main_scr_vfx_pos_min2 = $9730
+
+main_scr_vfx_pos_max3 = $84e0
+main_scr_vfx_pos_min3 = $82b0
+
+main_scr_vfx_pos_max4 = $9ce0
+main_scr_vfx_pos_min4 = $9ba0
+
+main_scr_vfx_spawn_rate = 10 ;(0 - no spawn, 255 - always spawn)
+
 main_menu:
 			; clear the screen	
 			xra a
@@ -124,15 +140,12 @@ main_menu_ui_draw:
 			lxi h, @text_credits
 			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)									
 			
-			@licensing_pos = $1420
+			@licensing_pos = $1a20
 			@licensing_vert_spacing = 12
 			; draw licensing
-			lxi b, @licensing_pos + @licensing_vert_spacing
-			lxi h, @text_license1
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)						
 			lxi b, @licensing_pos
-			lxi h, @text_license2
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)			
+			lxi h, @text_license
+			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
 			ret
 @text_start_game:
 			TEXT("START GAME")
@@ -142,10 +155,8 @@ main_menu_ui_draw:
 			TEXT("HELP")
 @text_credits:
 			TEXT("CREDITS")	
-@text_license1:
-			TEXT("2023. Developed by")
-@text_license2:			
-			TEXT("Alex, Fenia, Ilia, and Petr Fedotovskikh")
+@text_license:			
+			TEXT("2023. Developed by Fedotovskikh family")
 
 title_draw:
 			; title1
@@ -159,6 +170,11 @@ title_draw:
 			ret
 
 main_menu_cursor_update:
+			; spawn vfx
+			call random
+			sui main_scr_vfx_spawn_rate
+			cc @spawn_vfx
+
 			; check keys
 			; check if an attack key pressed
 			lhld key_code
@@ -209,6 +225,84 @@ main_menu_cursor_update:
 			sui SETTING_VERT_SPACING
 			mov m, a
 			ret
+@spawn_vfx:
+			; randomly chose an area to play vfx
+			call random
+
+			ani %11
+			jz @bottom_l
+			cpi 1
+			jz @bottom_r
+			cpi 2
+			jz @top_l
+@top_r:
+			; bc - vfx scr addr
+			lxi b, main_scr_vfx_pos_min4
+			; add random to the scr_x
+			mvi a, %0000_0011
+			ana l
+			add b
+			CLAMP_A(>main_scr_vfx_pos_max4)
+			mov b, a
+			; add random to the scr_y
+			mvi a, %0011_1111
+			ana h
+			add c
+			CLAMP_A(<main_scr_vfx_pos_max4)
+			mov c, a
+			jmp @vfx_init		
+@top_l:
+			; bc - vfx scr addr
+			lxi b, main_scr_vfx_pos_min3
+			; add random to the scr_x
+			mvi a, %0000_0011
+			ana l
+			add b
+			CLAMP_A(>main_scr_vfx_pos_max3)
+			mov b, a
+			; add random to the scr_y
+			mvi a, %0011_1111
+			ana h
+			add c
+			CLAMP_A(<main_scr_vfx_pos_max3)
+			mov c, a
+			jmp @vfx_init
+@bottom_r:
+			; bc - vfx scr addr
+			lxi b, main_scr_vfx_pos_min2
+			; add random to the scr_x
+			mvi a, %0000_0111
+			ana l
+			add b
+			CLAMP_A(>main_scr_vfx_pos_max2)
+			mov b, a
+			; add random to the scr_y
+			mvi a, %0111_1111
+			ana h
+			add c
+			CLAMP_A(<main_scr_vfx_pos_max2)
+			mov c, a
+			jmp @vfx_init
+@bottom_l:
+			; bc - vfx scr addr
+			lxi b, main_scr_vfx_pos_min1
+			; add random to the scr_x
+			mvi a, %0000_0111
+			ana l
+			add b
+			CLAMP_A(>main_scr_vfx_pos_max1)
+			mov b, a
+			; add random to the scr_y
+			mvi a, %0111_1111
+			ana h
+			add c
+			CLAMP_A(<main_scr_vfx_pos_max1)
+			mov c, a
+			jmp @vfx_init
+
+@vfx_init:
+			lxi d, vfx_reward
+			jmp vfx_init
 
 main_menu_cursor_init:
 			; create a cursor actor

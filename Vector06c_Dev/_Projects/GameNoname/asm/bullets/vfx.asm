@@ -1,6 +1,6 @@
 ; Init for preshifted VFX
 ; in:
-; bc - vfx posXY
+; bc - vfx pos_xy
 ; de - vfx_anim_ptr (ex. vfx_puff)
 vfx_init4:
 			xchg
@@ -34,15 +34,15 @@ vfx_init4:
 			mov m, d
 
 			mov a, b
-			; a - posX
-			; scrX = posX/8 + $a0
+			; a - pos_x
+			; scr_x = pos_x/8 + $a0
 			RRC_(3)
 			ani %00011111
 			adi SPRITE_X_SCR_ADDR
 			mvi e, 0
-			; a = scrX
-			; b = posX
-			; c = posY			
+			; a = scr_x
+			; b = pos_x
+			; c = pos_y			
 			; e = 0 and SPRITE_W_PACKED_MIN
 			; hl - ptr to bullet_erase_scr_addr_old			
 			
@@ -80,7 +80,7 @@ vfx_init4:
 
 ; Init for non-preshifted VFX (x coord aligned to 8 pixels )
 ; in:
-; bc - vfx scrXY
+; bc - vfx screen addr
 ; de - vfx_anim_ptr (ex. vfx_puff)
 vfx_init:
 			xchg
@@ -121,9 +121,8 @@ vfx_init:
 
 			mvi d, 2 ; anim ptr offset. used in draw func
 			mvi e, 0
-			; b = scrX
-			; c = posY			
-			; e = 0 and SPRITE_W_PACKED_MIN
+			; bc - screen addr
+			; e - 0 and SPRITE_W_PACKED_MIN
 			; hl - ptr to bullet_erase_scr_addr_old			
 			
 			; advance hl to bullet_erase_scr_addr
@@ -220,16 +219,16 @@ vfx_update:
 
 
 ; in:
-; hl - ptr to posX+1 (high byte in 16-bit pos)
+; hl - ptr to pos_x+1 (high byte in 16-bit pos)
 ; out:
 ; de - sprite screen addr
-; c - preshifted sprite idx*2 offset based on posX then +2
-; hl - ptr to posY+1
+; c - preshifted sprite idx*2 offset based on pos_x then +2
+; hl - ptr to pos_y+1
 ; use: a		
 sprite_get_scr_addr_vfx:
 			mov d, m 
 			inx h 
-			mov c, m ; (posY) contains an anim ptr offset to get a proper preshifted frame
+			mov c, m ; (pos_y) contains an anim ptr offset to get a proper preshifted frame
 			inx h 
 			mov e, m
 			ret
