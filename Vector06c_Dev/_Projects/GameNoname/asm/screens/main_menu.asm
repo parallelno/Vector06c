@@ -30,74 +30,43 @@ main_menu:
 			call main_menu_init
 
 @loop:
-			; return if a user hit any option in the main menu
+			; return when a user hits any option in the main menu
 			lda global_request
-@global_req:			
+@global_req:
 			cpi TEMP_BYTE
 			rnz
 
 			; TODO: make it play a new song
 			CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
-			call main_menu_update
-			call main_menu_draw
+
+			lxi h, main_menu_cursor_update
+			call screen_simple_update
+			call screen_simple_draw
 			jmp	 @loop
-
-main_menu_update:
-			lxi h, game_update_counter
-			inr m
-
-			; check if an interuption happened
-			lda requested_updates
-			ora a
-			rz
-@loop:
-			call main_menu_cursor_update
-			call backs_update
-			call bullets_update
-
-			; to check repeated key-pressing
-			lhld key_code
-			shld key_code_old
-
-			lxi h, requested_updates
-			dcr m
-			jnz @loop
-			ret
-
-main_menu_draw:
-			; update counter to calc fps
-			lhld game_draws_counter
-			inx h
-			shld game_draws_counter
 			
-			; draw funcs
-			call backs_draw
-			call bullets_draw
-			call bullets_copy_to_scr
-			call bullets_erase
-			ret
-
-main_menu_ui_draw:
-			lxi d, __tiled_images_palette
-			mvi h, <__RAM_DISK_S_TILED_IMAGES_GFX
-			call copy_palette_request_update
-			
+main_menu_back_draw:
+			call screen_palette_and_frame
+			; title1
+			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_title1, __TILED_IMAGES_TITLE1_COPY_LEN, __tiled_images_tile1)
+			; title2
+			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_title2, __TILED_IMAGES_TITLE2_COPY_LEN, __tiled_images_tile1)
+			; settings frame
 			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_main_menu, __TILED_IMAGES_FRAME_MAIN_MENU_COPY_LEN, __tiled_images_tile1)
-			
-			; draw mane menu settings
+
+			; draw main menu settings
 			lxi b, SETTING_POS - SETTING_VERT_SPACING * 0
 			lxi h, @text_start_game
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)			
+			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
 			lxi b, SETTING_POS - SETTING_VERT_SPACING * 1
 			lxi h, @text_options
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)	
+			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
 			lxi b, SETTING_POS - SETTING_VERT_SPACING * 2
 			lxi h, @text_help
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)	
+			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
 			lxi b, SETTING_POS - SETTING_VERT_SPACING * 3
 			lxi h, @text_credits
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)									
-			
+			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+
 			@licensing_pos = $1a20
 			@licensing_vert_spacing = 12
 			; draw licensing
@@ -112,20 +81,9 @@ main_menu_ui_draw:
 @text_help:
 			TEXT("SCORES")
 @text_credits:
-			TEXT("CREDITS")	
-@text_license:			
+			TEXT("CREDITS")
+@text_license:
 			TEXT("2023. Developed by Fedotovskikh family")
-
-title_draw:
-			; title1
-			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_title1, __TILED_IMAGES_TITLE1_COPY_LEN, __tiled_images_tile1)
-			; title2
-			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_title2, __TILED_IMAGES_TITLE2_COPY_LEN, __tiled_images_tile1)
-			; back1
-			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_main_menu_back1, __TILED_IMAGES_MAIN_MENU_BACK1_COPY_LEN, __tiled_images_tile1)
-			; back2
-			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_main_menu_back2, __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __tiled_images_tile1)			
-			ret
 
 main_menu_cursor_update:
 			; spawn vfx
@@ -170,7 +128,7 @@ main_menu_cursor_update:
 			adi SETTING_VERT_SPACING
 			mov m, a
 			ret
-@cursor_move_down:		
+@cursor_move_down:
 			; check if a selected option is outside ofthe range [0 - MAIN_MENU_OPTIONS_MAX]
 			lda cursor_option_id
 			inr a
@@ -208,7 +166,7 @@ main_menu_cursor_update:
 			add c
 			CLAMP_A(<main_scr_vfx_pos_max4)
 			mov c, a
-			jmp @vfx_init		
+			jmp @vfx_init
 @top_l:
 			; bc - vfx scr addr
 			lxi b, main_scr_vfx_pos_min3
@@ -268,6 +226,13 @@ main_menu_cursor_update:
 			ret
 
 main_menu_cursor_init:
+@cursor_inited:
+			mvi a, 0
+			ora a
+			jnz @no_init
+			inr a
+			sta @cursor_inited+1
+
 			; create a cursor actor
 			lxi h, MAIN_MENU_CURSOR_POS_X
 			shld hero_pos_x
@@ -278,15 +243,16 @@ main_menu_cursor_init:
 			xra a
 			sta cursor_option_id
 
-			lxi b, (>MAIN_MENU_CURSOR_POS_X)<<8 | >MAIN_MENU_CURSOR_POS_Y
+@no_init:
+			; spawn a cursor
+			mvi b, >MAIN_MENU_CURSOR_POS_X
+			lxi h, hero_pos_y + 1
+			mov c, m
 			jmp cursor_init
 
 main_menu_init:
-			call screen_simple_init	
-
-			call title_draw
-			call main_menu_ui_draw			
-
+			call screen_simple_init
+			call main_menu_back_draw
 			call main_menu_cursor_init
 
 			; dialog_press_key (tiledata = 162)
@@ -295,8 +261,8 @@ main_menu_init:
 			@pos_tiles_y = 4
 			mvi c, @pos_tiles_x + @pos_tiles_y * TILE_HEIGHT
 			; b - tiledata
-			; c - tile_idx in the room_tiledata array.			
-			call backs_spawn			
+			; c - tile_idx in the room_tiledata array.
+			call backs_spawn
 
 			xra a
 			sta requested_updates

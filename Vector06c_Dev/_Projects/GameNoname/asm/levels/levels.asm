@@ -132,7 +132,7 @@ level_update:
 			xra a
 			sta global_request
 			xra a
-			sta	requested_updates			
+			sta	requested_updates
 			ret
 @load_level:
 			jmp level_init

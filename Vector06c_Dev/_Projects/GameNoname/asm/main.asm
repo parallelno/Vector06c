@@ -10,8 +10,11 @@
 .include "asm\\globals\\interruptions.asm"
 .include "generated\\code\\ram_disk_init.asm"
 .include "asm\\game_utils.asm"
-.include "asm\\main_menu.asm"
-.include "asm\\credits_screen.asm"
+.include "asm\\screens\\screen_utils.asm"
+.include "asm\\screens\\main_menu.asm"
+.include "asm\\screens\\credits.asm"
+.include "asm\\screens\\scores.asm"
+.include "asm\\screens\\options.asm"
 .include "asm\\game.asm"
 
 main_start:
@@ -23,7 +26,11 @@ main_start:
 			cpi GLOBAL_REQ_GAME
 			cz main_game
 			cpi GLOBAL_REQ_CREDITS
-			cz credits_screen	
+			cz credits_screen
+			cpi GLOBAL_REQ_SCORES
+			cz scores_screen
+			cpi GLOBAL_REQ_OPTIONS
+			cz options_screen		
 			jmp @loop
 
 code_seg_end:
