@@ -1,12 +1,12 @@
 MAIN_MENU_CURSOR_POS_X = $5800 ; .word
-MAIN_MENU_CURSOR_POS_Y = $8100 ; .word
+MAIN_MENU_CURSOR_POS_Y_MAX = $8100 ; .word
 
 SETTING_POS = $6083
 SETTING_VERT_SPACING = 18
 
 MAIN_MENU_OPTIONS_MAX = 4
 
-cursor_option_id:
+main_menu_cursor_option_id:
 			.byte 0
 
 
@@ -118,10 +118,10 @@ main_menu_cursor_update:
 			ret
 @cursor_move_up:
 			; check if a selected option is outside ofthe range [0 - MAIN_MENU_OPTIONS_MAX]
-			lda cursor_option_id
+			lda main_menu_cursor_option_id
 			dcr a
 			rm ; return if a selected option = -1
-			sta cursor_option_id
+			sta main_menu_cursor_option_id
 
 			lxi h, hero_pos_y+1
 			mov a, m
@@ -130,11 +130,11 @@ main_menu_cursor_update:
 			ret
 @cursor_move_down:
 			; check if a selected option is outside ofthe range [0 - MAIN_MENU_OPTIONS_MAX]
-			lda cursor_option_id
+			lda main_menu_cursor_option_id
 			inr a
 			cpi MAIN_MENU_OPTIONS_MAX
 			rnc ; return if a selected option >= MAIN_MENU_OPTIONS_MAX
-			sta cursor_option_id
+			sta main_menu_cursor_option_id
 
 			lxi h, hero_pos_y+1
 			mov a, m
@@ -220,34 +220,50 @@ main_menu_cursor_update:
 			lxi d, vfx_reward
 			jmp vfx_init
 @go_to_option:
-			lda cursor_option_id
+			lda main_menu_cursor_option_id
 			adi GLOBAL_REQ_GAME
 			sta global_request
 			ret
 
 main_menu_cursor_init:
-@cursor_inited:
-			mvi a, 0
-			ora a
-			jnz @no_init
-			inr a
-			sta @cursor_inited+1
+			xra a
+@check_if_init:
+			jmp @init
+@init:
+			lxi h, @no_init
+			shld @check_if_init + 1
 
 			; create a cursor actor
 			lxi h, MAIN_MENU_CURSOR_POS_X
 			shld hero_pos_x
-			lxi h, MAIN_MENU_CURSOR_POS_Y
+			lxi h, MAIN_MENU_CURSOR_POS_Y_MAX
 			shld hero_pos_y
 
 			; reset selected option
-			xra a
-			sta cursor_option_id
+			; a = 0
+			sta main_menu_cursor_option_id
 
 @no_init:
-			; spawn a cursor
+			; a = 0
+			lxi h, main_menu_cursor_option_id
+			mov b, m
+			mvi a, >MAIN_MENU_CURSOR_POS_Y_MAX
+			; b - main_menu_cursor_option_id
+			; a - pos_y_max
+			; calc the cursor pos_y
+			
+@loop:		dcr b
+			jm @stop
+			sui SETTING_VERT_SPACING
+			jmp @loop
+@stop:
+			mov c, a
 			mvi b, >MAIN_MENU_CURSOR_POS_X
+
+			; spawn a cursor
+			; bc - a cursor pos
 			lxi h, hero_pos_y + 1
-			mov c, m
+			mov m, c
 			jmp cursor_init
 
 main_menu_init:
