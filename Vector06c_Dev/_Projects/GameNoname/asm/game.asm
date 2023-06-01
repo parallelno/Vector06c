@@ -30,8 +30,7 @@ main_game:
 			call levels_init
 			call level_init
 			
-			xra a
-			sta requested_updates
+			call reset_game_updates_counter
 
 @gameLoop:
 			CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
@@ -43,11 +42,9 @@ game_update:
 			lxi h, game_update_counter
 			inr m
 
-			; check if an interuption happened
-			lda requested_updates
-			ora a
-			rz
 @updateLoop:
+			CHECK_GAME_UPDATE_COUNTER(game_updates_counter)
+
 			call hero_update
 			call monsters_update
 			call bullets_update
@@ -59,10 +56,7 @@ game_update:
 			lhld key_code
 			shld key_code_old
 
-			lxi h, requested_updates
-			dcr m
-			jnz @updateLoop
-			ret
+			jmp @updateLoop
 
 game_draw:
 			; update counter to calc fps

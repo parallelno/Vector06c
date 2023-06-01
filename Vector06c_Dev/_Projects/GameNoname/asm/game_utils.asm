@@ -44,3 +44,8 @@ fill_buff_black:
 			lxi b, 0
 			lxi d, SCR_BUFF_LEN / 32 - 1
 			jmp fill_mem_sp
+
+reset_game_updates_counter:
+			xra a
+			sta game_updates_counter
+			ret

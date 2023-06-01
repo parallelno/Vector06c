@@ -1,5 +1,5 @@
-MAIN_MENU_CURSOR_POS_X = $5800 ; .word
-MAIN_MENU_CURSOR_POS_Y_MAX = $8100 ; .word
+MAIN_MENU_CURSOR_POS_X		= $5800 ; .word
+MAIN_MENU_CURSOR_POS_Y_MAX	= $8100 ; .word
 
 SETTING_POS = $6083
 SETTING_VERT_SPACING = 18
@@ -96,15 +96,15 @@ main_menu_cursor_update:
 			lhld key_code
 			mvi a, KEY_SPACE
 			cmp h
-			jz @go_to_option
+			jz @space_handling
 
-			; check if no arrow key pressed
+			; return if no arrow key pressed
 			mvi a, KEY_UP & KEY_DOWN
 			ora l
 			inr a
 			rz
-@cursor_pos_update:
-			; check if the same arrow keys pressed the prev update
+
+			; return if the same arrow keys was pressed last update
 			lda key_code_old
 			cmp l
 			jnz @new_key_pressed
@@ -219,7 +219,7 @@ main_menu_cursor_update:
 @vfx_init:
 			lxi d, vfx_reward
 			jmp vfx_init
-@go_to_option:
+@space_handling:
 			lda main_menu_cursor_option_id
 			adi GLOBAL_REQ_GAME
 			sta global_request
@@ -280,6 +280,5 @@ main_menu_init:
 			; c - tile_idx in the room_tiledata array.
 			call backs_spawn
 
-			xra a
-			sta requested_updates
+			call reset_game_updates_counter
 			ret

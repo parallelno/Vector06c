@@ -131,8 +131,7 @@ level_update:
 			; reset level command
 			xra a
 			sta global_request
-			xra a
-			sta	requested_updates
+			call reset_game_updates_counter
 			ret
 @load_level:
 			jmp level_init

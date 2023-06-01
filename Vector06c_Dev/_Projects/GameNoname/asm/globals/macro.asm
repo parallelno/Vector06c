@@ -308,3 +308,12 @@
 			lxi h, $ffff
 @no_clamp:
 .endmacro
+
+.macro CHECK_GAME_UPDATE_COUNTER(@game_updates_counter)
+			; check if an interuption happened
+			lxi h, @game_updates_counter
+			mov a, m
+			ora a
+			rz
+			dcr m
+.endmacro

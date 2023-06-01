@@ -1,11 +1,10 @@
 screen_space_checking:
-			; check keys
-			; check if the space key pressed
+			; return if non-space key was pressed
 			lhld key_code
 			mvi a, KEY_SPACE
 			cmp h
 			rnz
-
+			; set the global req to return to the main nemu
 			mvi a, GLOBAL_REQ_MAIN_MENU
 			sta global_request
 			ret
@@ -69,11 +68,9 @@ screen_simple_update:
 			lxi h, game_update_counter
 			inr m
 
-			; check if an interuption happened
-			lda requested_updates
-			ora a
-			rz
 @loop:
+			CHECK_GAME_UPDATE_COUNTER(game_updates_counter)
+
 @spec_update_func:
 			call TEMP_ADDR
 			call backs_update
@@ -83,10 +80,7 @@ screen_simple_update:
 			lhld key_code
 			shld key_code_old
 
-			lxi h, requested_updates
-			dcr m
-			jnz @loop
-			ret
+			jmp @loop
 
 screen_simple_draw:
 			; update counter to calc fps

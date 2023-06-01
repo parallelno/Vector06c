@@ -80,7 +80,7 @@ palette_update_request_:
 			rrc
 			sta @updateSkipper+1
 			jnc @skipUpdate
-			lxi h, requested_updates
+			lxi h, game_updates_counter
 			inr m
 @skipUpdate:
 			; fps update

@@ -135,6 +135,5 @@ credits_screen_init:
 			; c - tile_idx in the room_tiledata array.
 			call backs_spawn			
 
-			xra a
-			sta requested_updates
+			call reset_game_updates_counter
 			ret
