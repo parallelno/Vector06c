@@ -2,7 +2,8 @@ MAIN_MENU_CURSOR_POS_X		= $5800 ; .word
 MAIN_MENU_CURSOR_POS_Y_MAX	= $8100 ; .word
 
 SETTING_POS = $6083
-SETTING_VERT_SPACING = 18
+SETTING_LINE_SPACING = 18
+SETTING_PARAG_SPACING = 18
 
 MAIN_MENU_OPTIONS_MAX = 4
 
@@ -50,23 +51,16 @@ main_menu_back_draw:
 			; settings frame
 			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_main_menu, __TILED_IMAGES_FRAME_MAIN_MENU_COPY_LEN, __tiled_images_tile1)
 
+			@line_spacing = <(-SETTING_LINE_SPACING)
+			lxi b, @line_spacing<<8 | @line_spacing
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_set_spacing, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			; draw main menu settings
-			lxi b, SETTING_POS - SETTING_VERT_SPACING * 0
-			lxi h, __text_start_game
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			lxi b, SETTING_POS - SETTING_VERT_SPACING * 1
-			lxi h, __text_options
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			lxi b, SETTING_POS - SETTING_VERT_SPACING * 2
-			lxi h, __text_help
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			lxi b, SETTING_POS - SETTING_VERT_SPACING * 3
-			lxi h, __text_credits
+			lxi b, SETTING_POS
+			lxi h, __text_main_menu_settings
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
-			@licensing_pos = $1a20
-			@licensing_vert_spacing = 12
 			; draw licensing
+			@licensing_pos = $1a20			
 			lxi b, @licensing_pos
 			lxi h, __text_license
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
@@ -119,7 +113,7 @@ main_menu_cursor_update:
 
 			lxi h, hero_pos_y+1
 			mov a, m
-			adi SETTING_VERT_SPACING
+			adi SETTING_LINE_SPACING
 			mov m, a
 			ret
 @cursor_move_down:
@@ -132,7 +126,7 @@ main_menu_cursor_update:
 
 			lxi h, hero_pos_y+1
 			mov a, m
-			sui SETTING_VERT_SPACING
+			sui SETTING_LINE_SPACING
 			mov m, a
 			ret
 @spawn_vfx:
@@ -248,7 +242,7 @@ main_menu_cursor_init:
 			
 @loop:		dcr b
 			jm @stop
-			sui SETTING_VERT_SPACING
+			sui SETTING_LINE_SPACING
 			jmp @loop
 @stop:
 			mov c, a

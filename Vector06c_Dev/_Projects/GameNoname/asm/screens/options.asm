@@ -7,8 +7,8 @@ OPTIONS_CURSOR_POS_Y_OFFSET2	= 35	; when it is in the return section
 ;OPTIONS_TITLE_POS = $68d8
 
 OPTIONS_POS = $40d8; $40b8
-OPTIONS_LINE_SPACING = 14
-OPTIONS_PARAG_SPACING = 24
+OPTIONS_LINE_SPACING = -14
+OPTIONS_PARAG_SPACING = -24
 
 OPTIONS_ID_MUSIC	= 0
 OPTIONS_ID_SFX		= 1
@@ -53,7 +53,7 @@ options_settings_val_draw:
 
 options_setting_music_val_draw:
 @text_pos_y		.var  OPTIONS_POS
-			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
+			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
 
 			; erase music setting value
 			@scr_addr_x_offset = (OPTIONS_SETTING_VAL_POS_X/8)<<8
@@ -74,9 +74,9 @@ options_setting_music_val_draw:
 
 options_setting_sfx_val_draw:
 @text_pos_y		.var  OPTIONS_POS
-			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
+			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
 
-			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
+			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
 			; erase sfx setting value
 			@scr_addr_x_offset = (OPTIONS_SETTING_VAL_POS_X/8)<<8
 			lxi b, 2<<8 | 9
@@ -95,6 +95,8 @@ options_setting_sfx_val_draw:
 			ret
 
 options_screen_text_draw:
+			lxi b, (<OPTIONS_PARAG_SPACING)<<8 | <OPTIONS_LINE_SPACING
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_set_spacing, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 @text_pos_y		.var  OPTIONS_POS
 			; SETTINGS TITLE
@@ -102,18 +104,15 @@ options_screen_text_draw:
 			lxi h, __text_settings
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			; MUSIC
-			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
+			; SFX
+			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y
-			lxi h, __text_music
+			lxi h, __text_music_sfx
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, @text_pos_y + $2000
 			lxi h, __text_dots + 4 ; skip several dot symdols
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			; SFX
-			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
-			lxi b, @text_pos_y
-			lxi h, __text_sfx
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y + $1800
 			lxi h, __text_dots
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
@@ -121,65 +120,47 @@ options_screen_text_draw:
 			call options_settings_val_draw
 
 			; CONTROLS TITLE
-			@text_pos_y = @text_pos_y - OPTIONS_PARAG_SPACING
+			@text_pos_y = @text_pos_y + OPTIONS_PARAG_SPACING
 			lxi b, @text_pos_y + $2800
 			lxi h, __text_controls
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
-			; UP
-			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
+			; CONTROLS NAMES
+			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y
-			lxi h, __text_up
+			lxi h, __text_keys
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			
+			; DOTS
+			; UP
 			lxi b, @text_pos_y + $1800
 			lxi h, __text_dots
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			; DOWN
-			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
-			lxi b, @text_pos_y
-			lxi h, __text_down
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			lxi b, @text_pos_y + $1800
-			lxi h, __text_dots
+			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
+			lxi b, @text_pos_y + $2000
+			lxi h, __text_dots + 4
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
 			; LEFT
-			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
-			lxi b, @text_pos_y
-			lxi h, __text_left
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			lxi b, @text_pos_y + $1800
-			lxi h, __text_dots
+			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
+			lxi b, @text_pos_y + $2000
+			lxi h, __text_dots + 4
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
 			; RIGHT
-			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
-			lxi b, @text_pos_y
-			lxi h, __text_right
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			lxi b, @text_pos_y + $1800
-			lxi h, __text_dots
+			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
+			lxi b, @text_pos_y + $2000
+			lxi h, __text_dots + 4
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
 			; FIRE
-			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
-			lxi b, @text_pos_y
-			lxi h, __text_fire
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y + $1800
 			lxi h, __text_dots
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
 			; SELECT
-			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
-			lxi b, @text_pos_y
-			lxi h, __text_select
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			lxi b, @text_pos_y + $1800
-			lxi h, __text_dots
+			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
+			lxi b, @text_pos_y + $2800
+			lxi h, __text_dots + 8
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)												
-
-			; RETURN
-			@text_pos_y = @text_pos_y - OPTIONS_PARAG_SPACING
-			lxi b, @text_pos_y
-			lxi h, __text_return
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
 			ret
 
 options_screen_init:
@@ -244,7 +225,7 @@ options_cursor_pos_update:
 			
 @loop:		dcr b
 			jm @stop
-			sui OPTIONS_LINE_SPACING
+			adi OPTIONS_LINE_SPACING
 			jmp @loop
 @stop:
 			mov c, a

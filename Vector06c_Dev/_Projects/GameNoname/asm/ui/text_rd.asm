@@ -1,18 +1,18 @@
 ;===================================================================================
 ; main menu
 ;===================================================================================
-__text_start_game:
-			TEXT("START GAME")
-__text_options:
-			TEXT("OPTIONS")
-__text_help:
-			TEXT("SCORES")
-__text_credits:
+__text_main_menu_settings:
+			TEXT("START GAME", LINE_BREAK)
+			TEXT("OPTIONS", LINE_BREAK)
+			TEXT("SCORES", LINE_BREAK)
 			TEXT("CREDITS")
+
 __text_license:
 			TEXT("2023. Developed by Fedotovskikh family")
 
+;===================================================================================
 ; scores screen
+;===================================================================================
 __text_score_title:
 			TEXT("SCORE BOARD")
 __text_buff:
@@ -27,26 +27,19 @@ __text_setting_off:
 			TEXT("OFF")
 __text_settings:
 			TEXT("Settings:")
-__text_music:
-			TEXT("Music")
-__text_sfx:
+__text_music_sfx:
+			TEXT("Music", LINE_BREAK)
 			TEXT("SFX")
 __text_controls:
 			TEXT("Controls:")
 
-__text_up:
-			TEXT("UP")
-__text_down:
-			TEXT("DOWN")
-__text_left:
-			TEXT("LEFT")
-__text_right:
-			TEXT("RIGHT")
-__text_fire:
-			TEXT("FIRE")
-__text_select:
-			TEXT("SELECT")
-__text_return:
+__text_keys:
+			TEXT("UP", LINE_BREAK)
+			TEXT("DOWN", LINE_BREAK)
+			TEXT("LEFT", LINE_BREAK)
+			TEXT("RIGHT", LINE_BREAK)
+			TEXT("FIRE", LINE_BREAK)
+			TEXT("SELECT", PARAG_BREAK)
 			TEXT("Return to the Main Menu")			
 __text_dots:
 			TEXT("........................................")
@@ -54,40 +47,28 @@ __text_dots:
 ;===================================================================================
 ; credits screen
 ;===================================================================================
-__text_credits1:
-			TEXT("    This game was created because I truly")
-__text_credits2:
-			TEXT("believe in the awesomeness of the Soviet")
-__text_credits3:
-			TEXT("PC Vector 06c that shaped my life.")
-__text_credits4:			
-			TEXT("Code: Alex Fedotovskikh")
-__text_credits5:			
-			TEXT("Story and inspiration: Petr Fedotovskikh")
-__text_credits6:	
-			TEXT("Game mechanics: Ilia Fedotovskikh")
-__text_credits7:			
-			TEXT("Support and ideas: Fenia Fedotovskikh")
-__text_credits8:
-			TEXT("Level design: the whole family!")
-__text_credits9:			
-			TEXT("Feedback, sound API, v06x emulator: svofski")
-__text_credits10:
-			TEXT("ZX0 unpacking code: ivagor")
-__text_credits11:
-			TEXT("Big thanks to my amazing family for")
-__text_credits12:			
-			TEXT("working hard to make it a reality!")
-__text_credits13:
-			TEXT("Special thanks to zx-pk.ru community")
-__text_credits14:
-			TEXT("and especially to svofski and ivagor!")			
+__text_credits_:
+			TEXT("    This game was created because I truly", LINE_BREAK)
+			TEXT("believe in the awesomeness of the Soviet", LINE_BREAK)
+			TEXT("PC Vector 06c that shaped my life.", PARAG_BREAK)
+			TEXT("Code: Alex Fedotovskikh", LINE_BREAK)
+			TEXT("Story and inspiration: Petr Fedotovskikh", LINE_BREAK)
+			TEXT("Game mechanics: Ilia Fedotovskikh", LINE_BREAK)
+			TEXT("Support and ideas: Fenia Fedotovskikh", LINE_BREAK)
+			TEXT("Level design: the whole family!", LINE_BREAK)
+			TEXT("Feedback, sound API, v06x emulator: svofski", LINE_BREAK)
+			TEXT("ZX0 unpacking code: ivagor", PARAG_BREAK)
+			TEXT("Big thanks to my amazing family for", LINE_BREAK)
+			TEXT("working hard to make it a reality!", PARAG_BREAK)
+			TEXT("Special thanks to zx-pk.ru community", LINE_BREAK)
+			TEXT("and especially to svofski and ivagor!")
 
 ;===================================================================================
 ; dialogs
 ;===================================================================================
 ; no health
-__text_no_health1:		TEXT("The cold and the darkness of corridors rev-")
-__text_no_health2:		TEXT("ealed a mysterious figure. Two strong hands")
-__text_no_health3:		TEXT("lifted up the unconscious body and carried")
-__text_no_health4:		TEXT("him out of the dungeon into the fresh air.")
+__text_no_health:		
+			TEXT("The cold and the darkness of corridors rev-", LINE_BREAK)
+			TEXT("ealed a mysterious figure. Two strong hands", LINE_BREAK)
+			TEXT("lifted up the unconscious body and carried", LINE_BREAK)
+			TEXT("him out of the dungeon into the fresh air.")

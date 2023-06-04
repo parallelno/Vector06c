@@ -2,6 +2,8 @@
 .include "generated\\sprites\\font_gfx_ptrs.asm"
 
 __RAM_DISK_M_TEXT_EX = RAM_DISK_M | RAM_DISK_M_89
+LINE_SPACING_DEFAULT = -12
+PARAG_SPACING_DEFAULT = -24
 
 ; convert local labels into global
 ; call ex. CALL_RAM_DISK_FUNC(__draw_text_ex_rd_init, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
@@ -25,7 +27,29 @@ __draw_text_ex_rd_init:
 			jnz @loop
 			ret
 
+; set a default line and a paragraph spacing
+__draw_text_ex_rd_reset_spacing:
+			mvi a, LINE_SPACING_DEFAULT
+			sta draw_text_ex_rd_line_spacing + 1
+
+			mvi a, PARAG_SPACING_DEFAULT
+			sta draw_text_ex_rd_parag_spacing + 1
+			ret
+
+; set a line and a paragraph spacing
+; in:
+; c - line spacing
+; b - paragraph spacing
+__draw_text_ex_rd_set_spacing:
+			lxi h, draw_text_ex_rd_line_spacing + 1
+			mov m, c
+			lxi h, draw_text_ex_rd_parag_spacing + 1
+			mov m, b
+			ret
+
 ; draw a text with kerning. blend func - OR
+; char_id = 0 is EOD
+; char_id = LINE_BREAK is a new line
 ; in:
 ; hl - text addr
 ; bc - pos_xy
@@ -42,15 +66,26 @@ __draw_text_ex_rd_scr1:
 ; a - scr buff high addr, ex: >SCR_BUFF0_ADDR			
 draw_text_ex_rd:
 			sta @scr_buff_addr+1
+			; store pox_x
+			mov a, b
+			sta draw_text_ex_rd_restore_pos_x + 1
 @next_char:			
 			; get a char code
 			mov e, m
 			; return if its code 0
 			xra a
-			cmp e
+			ora e
 			rz
-			mov d, a ; d = 0
-			inx h
+			inx h			
+			; a - char_code
+			; check if it is the end of the line
+			cpi <LINE_BREAK
+			jz draw_text_ex_rd_line_spacing
+			; check if it is the end of the line
+			cpi <PARAG_BREAK
+			jz draw_text_ex_rd_parag_spacing
+
+			mvi d, 0
 			push h ; preserve the text data ptr
 			push b ; preserve pos_xy
 
@@ -156,8 +191,24 @@ draw_text_ex_rd:
 			dad b
 			mov b, h
 			mov c, l
-			pop h
+			pop h ; retore text addr
 			jmp @next_char
-
 @skip_dad_ptrs:
 			.word @shift0, @shift1,	@shift2, @shift3, @shift4, @shift5, @shift6, @shift7
+
+draw_text_ex_rd_next_char: = @next_char
+
+; move a position to the next paragraph
+draw_text_ex_rd_parag_spacing:
+			mvi a, PARAG_SPACING_DEFAULT
+			add c
+			mov c, a
+			jmp draw_text_ex_rd_restore_pos_x
+; move a position to the next line
+draw_text_ex_rd_line_spacing:
+			mvi a, LINE_SPACING_DEFAULT
+			add c
+			mov c, a
+draw_text_ex_rd_restore_pos_x:
+			mvi b, TEMP_BYTE			
+			jmp draw_text_ex_rd_next_char

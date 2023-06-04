@@ -135,6 +135,10 @@ GLOBAL_REQ_CREDITS		= 5
 ;
 SCORES_MAX	= 10
 
+; text
+LINE_BREAK	= $6a ;'\n'
+PARAG_BREAK	= $ff
+EOD			= 0
 
 ; opcodes
 OPCODE_NOP  = 0

@@ -318,8 +318,8 @@
 			dcr m
 .endmacro
 
-.macro TEXT(string):
+.macro TEXT(string, end_code = EOD):
 .encoding "screencode", "mixed"
 			.text string
-			.byte 0
+			.byte end_code
 .endmacro

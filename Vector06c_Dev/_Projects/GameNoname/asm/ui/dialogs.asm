@@ -51,7 +51,7 @@ dialog_update_no_updates:
 ;===========================================================================
 ; dialog when the hero looses all the health
 dialog_init_hero_no_health:
-			.word @draw_frame, @draw_text1, @draw_text2, @draw_text3, @draw_text4, @check_key, 0
+			.word @draw_frame, @draw_text, @check_key, 0			
 
 @draw_frame:
 			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_dialog, __TILED_IMAGES_FRAME_INGAME_DIALOG_COPY_LEN, __tiled_images_tile1)
@@ -63,28 +63,11 @@ dialog_init_hero_no_health:
 			; b - tiledata
 			; c - tile_idx in the room_tiledata array.			
 			jmp backs_spawn
-
-@draw_text1:		
+@draw_text:	
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_reset_spacing, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			; draw text
 			lxi b, $102d
-			lxi h, __text_no_health1
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			ret
-@draw_text2:
-			lxi b, $1021
-			lxi h, __text_no_health2
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			ret
-
-@draw_text3:
-			lxi b, $1015
-			lxi h, __text_no_health3
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			ret
-
-@draw_text4:			
-			lxi b, $1009
-			lxi h, __text_no_health4
+			lxi h, __text_no_health
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 @check_key:
@@ -101,7 +84,7 @@ dialog_init_hero_no_health:
 			sta global_request
 			; set the room_id to teleport there
 			; set the hero_pos
-			; restore a hrero health by 75%
+			; restore a hero health by 75%
 			mvi a, HERO_HEALTH_MAX / 4 * 3
 			sta hero_health			
 			ret
