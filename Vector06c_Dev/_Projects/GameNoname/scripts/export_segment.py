@@ -145,10 +145,14 @@ def export(bank_id, segment_j,
 				ram_include_paths.append(export_paths["ram"])
 				segment_include_path = export_paths["ram_disk"]
 			
-			elif asset["asset_type"] == build.ASSET_TYPE_FONT:
-				exported, export_paths = export_font.export_if_updated(asset["path"], asset["export_dir"], font_force_export | force_export)
+			elif asset["asset_type"] == build.ASSET_TYPE_FONT or asset["asset_type"] == build.ASSET_TYPE_FONT_RD:
+				font_gfx_ptrs_rd = False
+				if asset["asset_type"] == build.ASSET_TYPE_FONT_RD:
+					font_gfx_ptrs_rd = True
+				exported, export_paths = export_font.export_if_updated(asset["path"], asset["export_dir"], font_force_export | force_export, font_gfx_ptrs_rd)
 				segment_force_export |= exported
-				ram_include_paths.append(export_paths["ram"])
+				if asset["asset_type"] == build.ASSET_TYPE_FONT:
+					ram_include_paths.append(export_paths["ram"])
 				segment_include_path = export_paths["ram_disk"]
 
 			elif asset["asset_type"] == build.ASSET_TYPE_IMAGE:

@@ -6,13 +6,15 @@ import common
 import build
 
 def gfx_to_asm(label_prefix, source_j, image):
+	gfx_ptrs = {}
 	gfx_j = source_j["gfx"]
 	asm = label_prefix + "_gfx:"
 
 	backgrount_color_pos = source_j.get("color_sample_pos", [0,0])
 	backgrount_color_idx = image.getpixel((backgrount_color_pos[0], backgrount_color_pos[1]))
 	spacing = source_j.get("spacing", 1)
-
+	
+	char_addr_offset = 0
 	for char_j in gfx_j:
 		char_name = char_j["name"]
 		# every char gfx is 16 pxls width, there first 8 pixels are empty to support shifting
@@ -49,24 +51,43 @@ def gfx_to_asm(label_prefix, source_j, image):
 		asm += common.words_to_asm(data)
 		asm += f"			.byte 0, {width + spacing} ; next_char_offset\n"
 
-	return asm
+		char_addr_offset += 2 # safety pair of bytes for reading by POP B
+		gfx_ptrs[char_name] = char_addr_offset
+		char_addr_offset += 2 + len(data)*2 + 2 # offset_y, offset_x + data_len + next_char_offset
 
-def gfx_ptrs_to_asm(label_prefix, source_j):
-	asm = f"{label_prefix}_gfx_ptrs:\n"
+	return asm, gfx_ptrs
+ 
+def gfx_ptrs_to_asm(label_prefix, source_j, font_gfx_ptrs_rd = False, gfx_ptrs = None):
+	asm = ""
+	if font_gfx_ptrs_rd:
+		label_access_prefix = ""
+	else:
+		label_access_prefix = "__"
 
+	# if font_gfx_ptrs_rd == True, then add list of labels with relatives addresses
+	if font_gfx_ptrs_rd:
+		asm += "; relative label addresses. to global addr add __font_gfx\n"
+		for char_name in gfx_ptrs:
+			asm += f"{label_prefix}_{char_name} = {gfx_ptrs[char_name]}\n"
+
+	asm += f"{label_prefix}_gfx_ptrs:\n"
+
+	gfx_ptrs_len = len(source_j["gfx_ptrs"])
+	asm += f"GFX_PTRS_LEN = {gfx_ptrs_len}\n"
+	
 	numbers_in_line = 16
 	for i, char_name in enumerate(source_j["gfx_ptrs"]):
 		if i % numbers_in_line == 0:
 			if i != 0:
 				asm += "\n"
 			asm += "			.word "
-		asm += f"__{label_prefix}_{char_name}, "
+		asm += f"{label_access_prefix}{label_prefix}_{char_name}, "
 
 	asm +="\n"
 
 	return asm
 
-def export(source_j_path, asm_gfx_ptrs_path, asm_gfx_path):
+def export(source_j_path, asm_gfx_ptrs_path, asm_gfx_path, font_gfx_ptrs_rd = False):
 	source_name = common.path_to_basename(source_j_path)
 	source_dir = str(Path(source_j_path).parent) + "\\"
 	asm_gfx_ptrs_dir = str(Path(asm_gfx_ptrs_path).parent) + "\\"
@@ -83,12 +104,13 @@ def export(source_j_path, asm_gfx_ptrs_path, asm_gfx_path):
 	path_png = source_dir + source_j["path_png"]
 	image = Image.open(path_png)
 
-	asm_gfx_ptrs = gfx_ptrs_to_asm(source_name, source_j)
-
 	asm = "; " + source_j_path + "\n"
 	asm_gfx = asm + f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S" + "\n"
 	asm_gfx += asm + f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M" + "\n"
-	asm_gfx += gfx_to_asm("__" + source_name, source_j, image)
+	asm_gfx_, gfx_ptrs = gfx_to_asm("__" + source_name, source_j, image)
+	asm_gfx += asm_gfx_
+
+	asm_gfx_ptrs = gfx_ptrs_to_asm(source_name, source_j, font_gfx_ptrs_rd, gfx_ptrs)
 
 	# save asm
 	if not os.path.exists(asm_gfx_ptrs_dir):
@@ -103,7 +125,7 @@ def export(source_j_path, asm_gfx_ptrs_path, asm_gfx_path):
 	with open(asm_gfx_path, "w") as file:
 		file.write(asm_gfx)
 
-def export_if_updated(source_path, generated_dir, force_export):
+def export_if_updated(source_path, generated_dir, force_export, font_gfx_ptrs_rd = False):
 	source_name = common.path_to_basename(source_path)
 
 	gfx_ptrs_path = generated_dir + source_name + "_gfx_ptrs" + build.EXT_ASM
@@ -112,7 +134,7 @@ def export_if_updated(source_path, generated_dir, force_export):
 	export_paths = {"ram" : gfx_ptrs_path, "ram_disk" : gfx_path }
 
 	if force_export or is_source_updated(source_path):
-		export(source_path,	gfx_ptrs_path, gfx_path)
+		export(source_path,	gfx_ptrs_path, gfx_path, font_gfx_ptrs_rd)
 
 		print(f"export_font: {source_path} got exported.")
 		return True, export_paths

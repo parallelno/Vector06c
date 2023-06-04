@@ -348,7 +348,7 @@ vampire_update_shoot_prep:
 			mvi m, VAMPIRE_STATUS_SHOOT
 			
 			lxi h, __sfx_vampire_attack
-			CALL_RAM_DISK_FUNC_NO_RESTORE(__sfx_play, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(__sfx_play, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
 			ret
 
 vampire_update_shoot:

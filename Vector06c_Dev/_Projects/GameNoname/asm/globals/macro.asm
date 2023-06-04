@@ -317,3 +317,9 @@
 			rz
 			dcr m
 .endmacro
+
+.macro TEXT(string):
+.encoding "screencode", "mixed"
+			.text string
+			.byte 0
+.endmacro

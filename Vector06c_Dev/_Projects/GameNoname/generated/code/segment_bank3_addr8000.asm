@@ -24,6 +24,12 @@ __utils_rd_rd_data_end:
 __sprite_preshift_rd_rd_data_start:
 .include "asm\\render\\sprite_preshift_rd.asm"
 __sprite_preshift_rd_rd_data_end:
+__draw_text_ex_rd_rd_data_start:
+.include "asm\\render\\draw_text_ex_rd.asm"
+__draw_text_ex_rd_rd_data_end:
+__text_rd_rd_data_start:
+.include "asm\\ui\\text_rd.asm"
+__text_rd_rd_data_end:
 
 .align 2
 __chunk_end_bank3_addr8000_0:

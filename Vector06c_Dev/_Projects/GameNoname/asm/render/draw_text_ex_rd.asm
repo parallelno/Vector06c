@@ -1,33 +1,48 @@
-/*
-room_test:
-			; TODO: test
-			lxi b, 20
-			lxi h, test_text_data
-			
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
-			
-			;NOP_(16)
-			lxi b, 5
-			lxi h, test_text_data2
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+; TODO: make it to include automatically
+.include "generated\\sprites\\font_gfx_ptrs.asm"
+
+__RAM_DISK_M_TEXT_EX = RAM_DISK_M | RAM_DISK_M_89
+
+; convert local labels into global
+; call ex. CALL_RAM_DISK_FUNC(__draw_text_ex_rd_init, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+; in:
+; bc - __font_gfx addr
+__draw_text_ex_rd_init:
+			mvi a, GFX_PTRS_LEN
+			lxi h, font_gfx_ptrs
+@loop:		
+			mov e, m
+			inx h
+			mov d, m
+			xchg
+			dad b
+			xchg
+			mov m, d
+			dcx h
+			mov m, e
+			INX_H(2)
+			dcr a
+			jnz @loop
 			ret
 
-; TODO: test
-test_text_data:
-.encoding "screencode", "mixed"
-			.text "The quick brown fox jumps over the lazy dog"
-			.byte 0
-test_text_data2:
-.encoding "screencode", "mixed"
-			.text "One Ring to Rule them all"
-			.byte 0,
-; TODO: end test
-*/
-
-; input:
+; draw a text with kerning. blend func - OR
+; in:
 ; hl - text addr
-; bc - screen pos
-draw_text_ex:
+; bc - pos_xy
+; call ex. CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+__draw_text_ex_rd_scr3:
+			mvi a, >SCR_BUFF3_ADDR
+			jmp draw_text_ex_rd
+__draw_text_ex_rd_scr2:
+			mvi a, >SCR_BUFF2_ADDR
+			jmp draw_text_ex_rd
+__draw_text_ex_rd_scr1:
+			mvi a, >SCR_BUFF1_ADDR
+; draw a text with kerning. blend func - OR
+; a - scr buff high addr, ex: >SCR_BUFF0_ADDR			
+draw_text_ex_rd:
+			sta @scr_buff_addr+1
+@next_char:			
 			; get a char code
 			mov e, m
 			; return if its code 0
@@ -37,7 +52,7 @@ draw_text_ex:
 			mov d, a ; d = 0
 			inx h
 			push h ; preserve the text data ptr
-			push b ; preserve posXY
+			push b ; preserve pos_xy
 
 			; get a char gfx pptr
 			xchg
@@ -61,7 +76,7 @@ draw_text_ex:
 			mov l, c
 			; hl - scr pos
 
-			; add a posXY offset
+			; add a pos_xy offset
 			pop b
 			dad b
 
@@ -85,11 +100,12 @@ draw_text_ex:
 			shld @skip_dad + 1
 
 			; de - scr pos
-			; posXY to scr addr
+			; pos_xy to scr addr
 			mvi a, %11111000
 			ana d
 			RRC_(3)
-			adi >SCR_BUFF1_ADDR
+@scr_buff_addr:			
+			adi TEMP_ADDR;>SCR_BUFF1_ADDR
 			mov d, a
 
 			; draw a char
@@ -135,13 +151,13 @@ draw_text_ex:
 			; bc - a pos offset
 @restoreSP:
 			lxi sp, TEMP_ADDR
-			pop h ; restore posXY
-			; advance a posXY to the next char
+			pop h ; restore pos_xy
+			; advance a pos_xy to the next char
 			dad b
 			mov b, h
 			mov c, l
 			pop h
-			jmp draw_text_ex
+			jmp @next_char
 
 @skip_dad_ptrs:
 			.word @shift0, @shift1,	@shift2, @shift3, @shift4, @shift5, @shift6, @shift7

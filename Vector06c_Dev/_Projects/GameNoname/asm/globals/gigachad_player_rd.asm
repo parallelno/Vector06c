@@ -12,18 +12,18 @@
 __RAM_DISK_S_GCPLAYER = RAM_DISK_S
 __RAM_DISK_M_GCPLAYER = RAM_DISK_M
 
+setting_music	.byte SETTING_ON
+
 ; ex. CALL_RAM_DISK_FUNC(__gcplayer_init, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 __gcplayer_init:
-			call gcplayer_mute
+			call __gcplayer_mute
 			call gcplayer_clear_buffers
+			call __gcplayer_start
 			ret
 
+; uses to start a new song or to repeat a finished song
 ; ex. CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
-__gcplayer_start_repeat:
-			lda __gcplayer_update 
-			ora a
-			rz
-
+__gcplayer_start:
 			call gcplayer_tasks_init
 			call gcplayer_scheduler_init
 
@@ -34,17 +34,19 @@ __gcplayer_start_repeat:
 			sta gcplayer_buffer_idx
 			mvi a, -1
 			sta gcplayer_task_id
-			; turn on the updates
-			xra a
-			sta __gcplayer_update
+
+			call __gcplayer_unmute
 			ret
 			
 
 ; called by the unterruption routine
 ; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(__gcplayer_update, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 __gcplayer_update:
-			; ret will be replaced with NOP when the player inited
-			ret
+			; return if muted
+			lda setting_music
+			cpi SETTING_ON
+			rnz
+
 			; handle the current task
 			lxi h, gcplayer_task_id
 			mov a, m
@@ -306,38 +308,24 @@ GCPlayerUnpack:
 			jmp @Elias
 
 @exit:
+			; the sond ended
 			; restore sp
 			lhld GCPlayerSchedulerRestoreSp+1
 			sphl
-			; pop gcplayer_scheduler_update return addr 
+			; restart the music
+			call __gcplayer_start
+
+			; pop gcplayer_scheduler_update return addr
 			; to return right to the func that called __gcplayer_update
-			pop psw
-			; turn off the current music
-			mvi a, OPCODE_RET
-			sta __gcplayer_update
-			; return to the func that called __gcplayer_update		
+			pop psw			
+			; return to the func that called __gcplayer_update
 			ret
 			
-.macro CG_PLAYER_AY_UPDATE_REG(do_dcr = true, mode = 255)
+.macro CG_PLAYER_AY_UPDATE_REG(do_dcr = true)
 			mov a, e
 			out AY_PORT_REG
 
 			ldax b
-		.if mode == 1
-			; store envelope marker
-			;ani AY_REG_VOL_ENV_MASK
-			;mov d, a
-			;ldax b
-			;rrc
-			;ani %111	
-			;mvi a, 0
-			;ora d
-		.endif
-		
-		.if mode == 0
-			xra a
-		.endif
-
 			out AY_PORT_DATA
 		.if do_dcr
 			dcr b
@@ -375,14 +363,18 @@ gcplayer_ay_update:
 			CG_PLAYER_AY_UPDATE_REG() ; reg 2 (Tone FDIV CHB L)
 			CG_PLAYER_AY_UPDATE_REG() ; reg 1 (Tone FDIV CHA H)
 			CG_PLAYER_AY_UPDATE_REG() ; reg 0 (Tone FDIV CHA L)
-@sendData:
-			;CG_PLAYER_AY_UPDATE_REG() ; all other regs
+
 @doNotSendData:						
-			;jp @sendData
 			ret
 			
-
-gcplayer_mute:
+; to mute the player. It can continue the song after unmute
+; to call from this module: call __gcplayer_mute
+; to call outside: CALL_RAM_DISK_FUNC(__gcplayer_mute, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
+__gcplayer_mute:
+			; disable the updates
+			mvi a, SETTING_OFF
+			sta setting_music
+			; set zeros to AY regs to mute it
 			mvi e, GC_PLAYER_TASKS - 1
 @sendData:
 			mov a, e
@@ -393,3 +385,32 @@ gcplayer_mute:
 			jp @sendData
 			ret
 			
+; to unmute the player after being muted. It continues the song from where it has been stopped
+; to call from this module: call __gcplayer_unmute
+; to call outside: CALL_RAM_DISK_FUNC(__gcplayer_unmute, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
+__gcplayer_unmute:
+			mvi a, SETTING_ON
+			sta setting_music
+			ret
+
+; to flip mute/unmute
+; to call from this module: call __gcplayer_flip_mute
+; to call outside: CALL_RAM_DISK_FUNC(__gcplayer_flip_mute, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
+__gcplayer_flip_mute:
+			lxi h, setting_music
+			mov a, m
+			cma
+			mov m, a
+			cpi SETTING_OFF
+			jz __gcplayer_mute
+			jmp __gcplayer_unmute
+
+; return setting_music value
+; to call from this module: call __gcplayer_get_setting
+; to call outside: CALL_RAM_DISK_FUNC(__gcplayer_get_setting, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
+; out:
+; c - setting_music value
+__gcplayer_get_setting:
+			lda setting_music
+			mov c, a
+			ret

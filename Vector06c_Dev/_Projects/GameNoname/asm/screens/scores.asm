@@ -15,9 +15,6 @@ scores_screen:
 			cpi TEMP_BYTE  
 			rnz
 
-			; TODO: make it play a new song
-			CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
-			
 			lxi h, screen_space_checking	
 			call screen_simple_update
 			call screen_simple_draw
@@ -25,16 +22,16 @@ scores_screen:
 
 scores_screen_text_draw:
 			lxi b, SCORES_TITLE_POS
-			lxi h, @score_title
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_score_title
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			mvi e, SCORES_MAX
 			lxi b, SCORES_POS
 @loop:
 			push b
 			push d
-			lxi h, @text_buff
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_buff
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			pop d
 			pop b
 
@@ -47,11 +44,6 @@ scores_screen_text_draw:
 			jnz @loop
 
 			ret
-@score_title:
-			TEXT("SCORE BOARD")
-@text_buff:
-			TEXT("TEMPNAME .................. 65535")
-
 scores_screen_init:
 			call screen_simple_init
 			call screen_palette_and_frame

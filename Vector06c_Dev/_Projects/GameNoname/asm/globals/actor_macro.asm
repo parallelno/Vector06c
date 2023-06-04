@@ -105,7 +105,7 @@
 			jnc collisionHandler
 
 			lxi b, (ACTOR_COLLISION_WIDTH-1)<<8 | ACTOR_COLLISION_HEIGHT-1
-			; de - posXY
+			; de - pos_xy
 			; bc - width, height
 			call room_get_collision_tiledata
 			ani TILEDATA_COLLIDABLE

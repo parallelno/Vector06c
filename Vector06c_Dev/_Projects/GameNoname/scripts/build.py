@@ -12,6 +12,7 @@ SCR_BUFF_SIZE = 8192
 
 ASSET_TYPE_BACK			= "back"
 ASSET_TYPE_FONT			= "font"
+ASSET_TYPE_FONT_RD		= "font_rd" # font_gfx_ptrs.asm will be included into the main programm. it has to be included into the ram-disk asm code manually instead.
 ASSET_TYPE_SPRITE		= "sprite"
 
 ASSET_TYPE_LEVEL		= "level"

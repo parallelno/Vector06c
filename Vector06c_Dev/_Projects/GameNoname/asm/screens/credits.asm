@@ -13,9 +13,6 @@ credits_screen:
 			cpi TEMP_BYTE
 			rnz
 
-			; TODO: make it play a new song
-			CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
-
 			lxi h, screen_space_checking	
 			call screen_simple_update
 			call screen_simple_draw
@@ -24,102 +21,74 @@ credits_screen:
 credits_screen_text_draw:
 @text_pos_y		.var  CREDITS_POS
 			lxi b, @text_pos_y
-			lxi h, @text1
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)			
+			lxi h, __text_credits1
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
 
 			@text_pos_y = @text_pos_y - CREDITS_LINE_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text2
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)	
+			lxi h, __text_credits2
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)	
 
 			@text_pos_y = @text_pos_y - CREDITS_LINE_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text3
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)	
+			lxi h, __text_credits3
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)	
 
 			@text_pos_y = @text_pos_y - CREDITS_PARAG_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text4
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)									
+			lxi h, __text_credits4
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)									
 
 			@text_pos_y = @text_pos_y - CREDITS_LINE_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text5
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)	
+			lxi h, __text_credits5
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)	
 
 			@text_pos_y = @text_pos_y - CREDITS_LINE_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text6
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)							
+			lxi h, __text_credits6
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)							
 
 			@text_pos_y = @text_pos_y - CREDITS_LINE_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text7
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)		
+			lxi h, __text_credits7
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)		
 
 			@text_pos_y = @text_pos_y - CREDITS_LINE_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text8
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)		
+			lxi h, __text_credits8
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)		
 
 			@text_pos_y = @text_pos_y - CREDITS_LINE_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text9
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)		
+			lxi h, __text_credits9
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)		
 
 			@text_pos_y = @text_pos_y - CREDITS_LINE_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text10
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_credits10
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			@text_pos_y = @text_pos_y - CREDITS_PARAG_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text11
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)	
+			lxi h, __text_credits11
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)	
 
 			@text_pos_y = @text_pos_y - CREDITS_LINE_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text12
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)	
+			lxi h, __text_credits12
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			@text_pos_y = @text_pos_y - CREDITS_PARAG_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text13
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)				
+			lxi h, __text_credits13
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)				
 
 			@text_pos_y = @text_pos_y - CREDITS_LINE_SPACING 
 			lxi b, @text_pos_y
-			lxi h, @text14
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)																						
+			lxi h, __text_credits14
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)																						
 			ret
-@text1:
-			TEXT("    This game was created because I truly")
-@text2:
-			TEXT("believe in the awesomeness of the Soviet")
-@text3:
-			TEXT("PC Vector 06c that shaped my life.")
-@text4:			
-			TEXT("Code: Alex Fedotovskikh")
-@text5:			
-			TEXT("Story and inspiration: Petr Fedotovskikh")
-@text6:	
-			TEXT("Game mechanics: Ilia Fedotovskikh")
-@text7:			
-			TEXT("Support and ideas: Fenia Fedotovskikh")
-@text8:
-			TEXT("Level design: the whole family!")
-@text9:			
-			TEXT("Feedback, sound API, v06x emulator: svofski")
-@text10:
-			TEXT("ZX0 unpacking code: ivagor")
-@text11:
-			TEXT("Big thanks to my amazing family for")
-@text12:			
-			TEXT("working hard to make it a reality!")
-@text13:
-			TEXT("Special thanks to zx-pk.ru community")
-@text14:
-			TEXT("and especially to svofski and ivagor!")			
 
 credits_screen_init:
 			call screen_simple_init	

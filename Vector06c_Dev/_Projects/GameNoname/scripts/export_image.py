@@ -177,7 +177,7 @@ def atlas_to_image(tile_idxs_sorted, tiles_gfx, palette, out_width, out_height, 
 	return image
 
 def match_colors(image, image_ref):
-	# get a collection of posXY for every color in the image
+	# get a collection of pos_xy for every color in the image
 	color_positions = {}
 	pixels = image.load()
 	width, height = image.size
@@ -191,7 +191,7 @@ def match_colors(image, image_ref):
 
 			color_positions[color_index].append((x, y))
 
-	# for each color posXY collection find the most popular color_idx in the image_ref
+	# for each color pos_xy collection find the most popular color_idx in the image_ref
 	pixels_ref = image_ref.load()
 	image_palette = image.getpalette()
 	image_ref_palette = image_ref.getpalette()

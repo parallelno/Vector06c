@@ -27,7 +27,3 @@ game_update_counter:
 ; used for the movement
 char_temp_x:	.word 0 ; temporal X
 char_temp_y:	.word 0 ; temporal Y
-
-; settings
-setting_music:	.byte SETTING_ON
-setting_sfx:	.byte SETTING_ON

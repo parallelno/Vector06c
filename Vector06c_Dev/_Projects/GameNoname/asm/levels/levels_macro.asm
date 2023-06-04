@@ -41,7 +41,7 @@
 ; input:
 ; hl - ptr to the last tile_idx in the array room_get_tiledata_idxs
 .macro TILEDATA_HANDLING2(width, height, actor_tile_func_table)
-			; de - posXY 
+			; de - pos_xy 
 			lxi b, (width-1)<<8 | height-1
 			call room_get_tiledata
 @loop:

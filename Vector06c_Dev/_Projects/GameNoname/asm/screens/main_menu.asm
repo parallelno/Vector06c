@@ -36,9 +36,6 @@ main_menu:
 			cpi TEMP_BYTE
 			rnz
 
-			; TODO: make it play a new song
-			CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
-
 			lxi h, main_menu_cursor_update
 			call screen_simple_update
 			call screen_simple_draw
@@ -55,36 +52,25 @@ main_menu_back_draw:
 
 			; draw main menu settings
 			lxi b, SETTING_POS - SETTING_VERT_SPACING * 0
-			lxi h, @text_start_game
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_start_game
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, SETTING_POS - SETTING_VERT_SPACING * 1
-			lxi h, @text_options
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_options
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, SETTING_POS - SETTING_VERT_SPACING * 2
-			lxi h, @text_help
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_help
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, SETTING_POS - SETTING_VERT_SPACING * 3
-			lxi h, @text_credits
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_credits
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			@licensing_pos = $1a20
 			@licensing_vert_spacing = 12
 			; draw licensing
 			lxi b, @licensing_pos
-			lxi h, @text_license
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_license
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
-@text_start_game:
-			TEXT("START GAME")
-@text_options:
-			TEXT("OPTIONS")
-@text_help:
-			TEXT("SCORES")
-@text_credits:
-			TEXT("CREDITS")
-@text_license:
-			TEXT("2023. Developed by Fedotovskikh family")
-
 main_menu_cursor_update:
 			; spawn vfx
 			call random
@@ -93,11 +79,19 @@ main_menu_cursor_update:
 
 			; check keys
 			; check if the space key pressed
+			lhld key_code_old
+			xchg
 			lhld key_code
+			
 			mvi a, KEY_SPACE
 			cmp h
-			jz @space_handling
+			jnz @check_arrows
+			; check if a space was not pressed last time 
+			; to avoid multiple tyme pressing
+			cmp d
+			jnz @space_handling
 
+@check_arrows:
 			; return if no arrow key pressed
 			mvi a, KEY_UP & KEY_DOWN
 			ora l

@@ -33,7 +33,6 @@ main_game:
 			call reset_game_updates_counter
 
 @gameLoop:
-			CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 			call game_update
 			call game_draw
 			jmp	 @gameLoop

@@ -67,7 +67,7 @@
 									"export_dir" : "generated\\sprites\\"
 								},
 								{
-									"asset_type" : "font",
+									"asset_type" : "font_rd",
 									"path" : "source\\sprites\\font.json",
 									"export_dir" : "generated\\sprites\\"
 								}
@@ -306,6 +306,14 @@
 								{
 									"asset_type" : "code",
 									"path" : "asm\\render\\sprite_preshift_rd.asm"
+								},
+								{
+									"asset_type" : "code",
+									"path" : "asm\\render\\draw_text_ex_rd.asm"
+								},
+								{
+									"asset_type" : "code",
+									"path" : "asm\\ui\\text_rd.asm"
 								}
 							]
 						},

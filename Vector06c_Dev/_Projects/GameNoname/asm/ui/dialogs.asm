@@ -7,12 +7,6 @@
 			jmp dialog_init
 .endmacro
 
-.macro TEXT(string):
-.encoding "screencode", "mixed"
-			.text string
-			.byte 0
-.endmacro
-
 ; init every dialog
 ; in:
 ; hl - callback_tbl addr (callback pptr)
@@ -73,25 +67,25 @@ dialog_init_hero_no_health:
 @draw_text1:		
 			; draw text
 			lxi b, $102d
-			lxi h, @text1
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_no_health1
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 @draw_text2:
 			lxi b, $1021
-			lxi h, @text2
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_no_health2
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 
 @draw_text3:
 			lxi b, $1015
-			lxi h, @text3
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_no_health3
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 
 @draw_text4:			
 			lxi b, $1009
-			lxi h, @text4
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_no_health4
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 @check_key:
 			; check if a space key pressed
@@ -111,8 +105,3 @@ dialog_init_hero_no_health:
 			mvi a, HERO_HEALTH_MAX / 4 * 3
 			sta hero_health			
 			ret
-
-@text1:		TEXT("The cold and the darkness of corridors rev-")
-@text2:		TEXT("ealed a mysterious figure. Two strong hands")
-@text3:		TEXT("lifted up the unconscious body and carried")
-@text4:		TEXT("him out of the dungeon into the fresh air.")

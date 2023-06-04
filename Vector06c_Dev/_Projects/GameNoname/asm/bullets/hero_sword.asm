@@ -228,7 +228,7 @@ hero_sword_update:
 			dad d
 
 @setCollisionSize:
-			; store posXY
+			; store pos_xy
 			push h
 			; check if a bullet collides with a monster
 			mvi a, HERO_SWORD_COLLISION_WIDTH-1
@@ -239,7 +239,7 @@ hero_sword_update:
 			mov a, m
 			cpi ACTOR_RUNTIME_DATA_DESTR
 			pop d
-			; de - posXY
+			; de - pos_xy
 			; if not, check the tile it is on.
 			jnc @checkTiledata
 

@@ -10,6 +10,10 @@ TIMER_PORT_CH2	= $09
 
 SFX_DATA_EOF = 0
 
+setting_sfx		.byte SETTING_ON
+
+; TODO: use all 3 channels to simulate a volume change
+
 ; sfx data format:
 ; .word - frequency divider for channel0, freq = 1500000 / freq_div
 ; .word - frequency divider for channel1, 
@@ -96,58 +100,114 @@ __sfx_song_hi_pitch:
 			.dword 175<<16 | 1,
 			.word SFX_DATA_EOF
 
-sfx_stop:
+; send silence to the sound chip
+sfx_reg_mute:
 			; stop sound
 			mvi a, TIMER_INIT_CH0
 			out TIMER_PORT
 			mvi a, TIMER_INIT_CH1
 			out TIMER_PORT
+			ret
+sfx_stop:
+			; stop sound
+			call sfx_reg_mute
 			mvi a, OPCODE_RET
-			sta __sfx_update
+			sta sfx_update_ptr			
+			ret
+
+__sfx_init:
+			call sfx_stop
+			mvi a, SETTING_ON
+			sta setting_sfx
 			ret
 
 ; start the next sfx to play
-; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(__sfx_play, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
+; ex. CALL_RAM_DISK_FUNC(__sfx_play, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
 ; in:
 ; hl - sfx pointer
 __sfx_play:
-			shld __sfx_update+1
-			lxi h, __sfx_update
-			mvi m, OPCODE_LXI_H
+			shld sfx_update_ptr + 1
+			mvi a, OPCODE_LXI_H
+			sta sfx_update_ptr
 			ret
 
-; called by the interuption routine
-; ex. CALL_RAM_DISK_FUNC_NO_RESTORE(__sfx_update, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
 ; uses:
 ; hl, a, c
 __sfx_update:
-		lxi h, __sfx_vampire_attack
-		; check the end of the song
-		mov c, m
-		inx h
-		mov a, m
-		ora c
-		jz sfx_stop
-@play:
-		; set freq_div to ch0
-		mvi a, TIMER_INIT_CH0
-		out TIMER_PORT
-		mov a, c
-		out TIMER_PORT_CH0
-		mov a, m
-		inx h
-		out TIMER_PORT_CH0
+@song_ptr:
+			lxi h, TEMP_ADDR;__sfx_vampire_attack
 
-		; set freq_div to ch1
-		mvi a, TIMER_INIT_CH1
-		out TIMER_PORT
-		mov a, m
-		inx h
-		out TIMER_PORT_CH1
-		mov a, m
-		inx h
-		out TIMER_PORT_CH1
-		; store the current song ptr ch0		
-		shld __sfx_update+1		
-		ret
-sfx_end:
+			; return if muted
+			lda setting_sfx
+			cpi SETTING_ON
+			rnz
+
+			; check the end of the song
+			mov c, m
+			inx h
+			mov a, m
+			ora c
+			jz sfx_stop
+@play:
+			; set freq_div to ch0
+			mvi a, TIMER_INIT_CH0
+			out TIMER_PORT
+			mov a, c
+			out TIMER_PORT_CH0
+			mov a, m
+			inx h
+			out TIMER_PORT_CH0
+
+			; set freq_div to ch1
+			mvi a, TIMER_INIT_CH1
+			out TIMER_PORT
+			mov a, m
+			inx h
+			out TIMER_PORT_CH1
+			mov a, m
+			inx h
+			out TIMER_PORT_CH1
+			; store the current song ptr ch0		
+			shld @song_ptr + 1		
+			ret
+sfx_update_ptr: = @song_ptr
+
+; to mute the sfx player. It can continue the sfx after unmute
+; to call from this module: call __sfx_mute
+; to call outside: CALL_RAM_DISK_FUNC(__sfx_mute, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
+__sfx_mute:
+			call sfx_reg_mute
+			; disable the updates
+			mvi a, SETTING_OFF
+			sta setting_sfx
+			ret
+
+; to unmute the sfx player after being muted. It continues the sfx from where it has been stopped
+; to call from this module: call __sfx_unmute
+; to call outside: CALL_RAM_DISK_FUNC(__sfx_unmute, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
+__sfx_unmute:
+			mvi a, SETTING_ON
+			sta setting_sfx
+			ret
+
+; to flip mute/unmute
+; to call from this module: call __sfx_flip_mute
+; to call outside: CALL_RAM_DISK_FUNC(__sfx_flip_mute, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
+__sfx_flip_mute:
+			lxi h, setting_sfx
+			mov a, m
+			cma
+			mov m, a
+			cpi SETTING_OFF
+			jz __sfx_mute
+			jmp __sfx_unmute
+
+; return setting_sfx value
+; to call from this module: call __sfx_get_setting
+; to call outside: CALL_RAM_DISK_FUNC(__sfx_get_setting, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
+; out:
+; c - setting_sfx value
+__sfx_get_setting:
+			lda setting_sfx
+			mov c, a
+			ret

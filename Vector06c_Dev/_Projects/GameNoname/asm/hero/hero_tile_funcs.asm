@@ -157,7 +157,7 @@ hero_tile_func_resource:
 			pchl ; run a resource handler
 
 ; load a new room with room_id, move the hero to an
-; appropriate position based on his current posXY
+; appropriate position based on his current pos_xy
 ; input:
 ; a - room_id
 hero_tile_func_teleport:

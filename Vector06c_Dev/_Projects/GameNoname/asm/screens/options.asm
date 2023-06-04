@@ -40,162 +40,147 @@ options_screen:
 			cpi TEMP_BYTE
 			rnz
 
-			; TODO: make it play a new song
-			CALL_RAM_DISK_FUNC(__gcplayer_start_repeat, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
-
 			lxi h, options_screen_cursor_update
 			call screen_simple_update
 			call screen_simple_draw
 			jmp	@loop
 
+; erase and draw a music/sfx settings values
 options_settings_val_draw:
+			call options_setting_music_val_draw
+			call options_setting_sfx_val_draw
+			ret
+
+options_setting_music_val_draw:
 @text_pos_y		.var  OPTIONS_POS
 			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
-			lxi b, <@text_pos_y | OPTIONS_SETTING_VAL_POS_X<<8
-			lxi h, @text_on
-			lda setting_music
-			cpi SETTING_OFF
+
+			; erase music setting value
+			@scr_addr_x_offset = (OPTIONS_SETTING_VAL_POS_X/8)<<8
+			lxi b, 2<<8 | 9
+			lxi d, SCR_BUFF1_ADDR + <@text_pos_y | @scr_addr_x_offset
+			call sprite_copy_to_scr_v
+			; draw music setting value
+			lxi h, __text_setting_on
+			CALL_RAM_DISK_FUNC(__gcplayer_get_setting, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
+			mvi a, SETTING_OFF
+			cmp c
 			jnz @music_on
-			lxi h, @text_off
-@music_on:			
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_setting_off
+@music_on:
+			lxi b, <@text_pos_y | OPTIONS_SETTING_VAL_POS_X<<8
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			ret
+
+options_setting_sfx_val_draw:
+@text_pos_y		.var  OPTIONS_POS
+			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
 
 			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
-			lxi b, <@text_pos_y | OPTIONS_SETTING_VAL_POS_X<<8
-			lxi h, @text_on
-			lda setting_sfx
-			cpi SETTING_OFF
+			; erase sfx setting value
+			@scr_addr_x_offset = (OPTIONS_SETTING_VAL_POS_X/8)<<8
+			lxi b, 2<<8 | 9
+			lxi d, SCR_BUFF1_ADDR + <@text_pos_y | @scr_addr_x_offset
+			call sprite_copy_to_scr_v
+			; draw sfx setting value
+			lxi h, __text_setting_on
+			CALL_RAM_DISK_FUNC(__sfx_get_setting, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
+			mvi a, SETTING_OFF
+			cmp c
 			jnz @sfx_on
-			lxi h, @text_off
+			lxi h, __text_setting_off
 @sfx_on:
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi b, <@text_pos_y | OPTIONS_SETTING_VAL_POS_X<<8
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
-@text_on:
-			TEXT("ON")
-@text_off:
-			TEXT("OFF")
 
 options_screen_text_draw:
-			;lxi b, OPTIONS_TITLE_POS
-			;lxi h, @text_title
-			;CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
 
 @text_pos_y		.var  OPTIONS_POS
 			; SETTINGS TITLE
 			lxi b, @text_pos_y + $2800
-			lxi h, @text_settings
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_settings
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			; MUSIC
 			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y
-			lxi h, @text_music
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_music
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, @text_pos_y + $2000
-			lxi h, @text_dots + 4 ; skip several dot symdols
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_dots + 4 ; skip several dot symdols
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			; SFX
 			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y
-			lxi h, @text_sfx
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_sfx
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, @text_pos_y + $1800
-			lxi h, @text_dots
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_dots
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			call options_settings_val_draw
 
 			; CONTROLS TITLE
 			@text_pos_y = @text_pos_y - OPTIONS_PARAG_SPACING
 			lxi b, @text_pos_y + $2800
-			lxi h, @text_controls
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_controls
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			; UP
 			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y
-			lxi h, @text_up
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_up
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, @text_pos_y + $1800
-			lxi h, @text_dots
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_dots
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			; DOWN
 			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y
-			lxi h, @text_down
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_down
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, @text_pos_y + $1800
-			lxi h, @text_dots
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)			
+			lxi h, __text_dots
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
 			; LEFT
 			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y
-			lxi h, @text_left
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_left
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, @text_pos_y + $1800
-			lxi h, @text_dots
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)			
+			lxi h, __text_dots
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
 			; RIGHT
 			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y
-			lxi h, @text_right
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_right
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, @text_pos_y + $1800
-			lxi h, @text_dots
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)			
+			lxi h, __text_dots
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
 			; FIRE
 			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y
-			lxi h, @text_fire
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_fire
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, @text_pos_y + $1800
-			lxi h, @text_dots
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)			
+			lxi h, __text_dots
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
 			; SELECT
 			@text_pos_y = @text_pos_y - OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y
-			lxi h, @text_select
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)
+			lxi h, __text_select
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, @text_pos_y + $1800
-			lxi h, @text_dots
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)												
+			lxi h, __text_dots
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)												
 
 			; RETURN
 			@text_pos_y = @text_pos_y - OPTIONS_PARAG_SPACING
 			lxi b, @text_pos_y
-			lxi h, @text_return
-			CALL_RAM_DISK_FUNC(draw_text_ex, __RAM_DISK_S_FONT)			
+			lxi h, __text_return
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
 			ret
-
-@text_title:
-			TEXT("OPTIONS")			
-
-@text_settings:
-			TEXT("Settings:")
-@text_music:
-			TEXT("Music")
-@text_sfx:
-			TEXT("SFX")
-@text_controls:
-			TEXT("Controls:")
-@text_keys:
-			TEXT("UP")
-
-@text_up:
-			TEXT("UP")
-@text_down:
-			TEXT("DOWN")
-@text_left:
-			TEXT("LEFT")
-@text_right:
-			TEXT("RIGHT")
-@text_fire:
-			TEXT("FIRE")
-@text_select:
-			TEXT("SELECT")
-@text_return:
-			TEXT("Return to the Main Menu")			
-@text_dots:
-			TEXT("........................................")
 
 options_screen_init:
 			call screen_simple_init
@@ -276,11 +261,19 @@ options_cursor_pos_update:
 options_screen_cursor_update:
 			; check keys
 			; check if the space key pressed
+			lhld key_code_old
+			xchg
 			lhld key_code
+			
 			mvi a, KEY_SPACE
 			cmp h
-			jz @space_handling
+			jnz @check_arrows
+			; check if a space was not pressed last time 
+			; to avoid multiple tyme pressing
+			cmp d
+			jnz @space_handling
 
+@check_arrows:
 			; return if no arrow key pressed
 			mvi a, KEY_UP & KEY_DOWN
 			ora l
@@ -335,21 +328,15 @@ options_screen_cursor_update:
 @check_music:						
 			cpi OPTIONS_ID_MUSIC
 			jnz @check_sfx
-			; flip the setting on and off
-			lxi h, setting_music
-			mov a, m
-			cma
-			mov m, a
-			jmp options_settings_val_draw
+			CALL_RAM_DISK_FUNC(__gcplayer_flip_mute, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
+			jmp options_setting_music_val_draw
 @check_sfx:
 			cpi OPTIONS_ID_SFX
 			jnz @check_up
-			; flip the setting on and off
-			lxi h, setting_sfx
-			mov a, m
-			cma
-			mov m, a
-			jmp options_settings_val_draw
+			; flip the setting on/off
+			CALL_RAM_DISK_FUNC(__sfx_flip_mute, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
+
+			jmp options_setting_sfx_val_draw
 @check_up:
 			cpi OPTIONS_ID_UP
 			jnz @check_down

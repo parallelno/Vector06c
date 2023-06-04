@@ -167,6 +167,13 @@ palette = $7bd8 ; 16 bytes
 ; 0 - the opposite
 ; TODO: use only a bit, then combine it with other hero global statuses.
 hero_global_status_no_render = $7be8 ; byte
+
+;=============================================================================
+;
+; settings
+;
+
+
 ;=============================================================================
 ;
 ;	free space = $7be9 - $7c10

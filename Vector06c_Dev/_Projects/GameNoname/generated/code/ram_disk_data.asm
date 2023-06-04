@@ -13,7 +13,6 @@
 .include "generated\\sprites\\skeleton_anim.asm"
 .include "generated\\sprites\\scythe_anim.asm"
 .include "generated\\sprites\\bomb_anim.asm"
-.include "generated\\sprites\\font_gfx_ptrs.asm"
 .include "generated\\sprites\\backs_anim.asm"
 .include "generated\\sprites\\vfx4_anim.asm"
 .include "generated\\sprites\\knight_anim.asm"
@@ -62,13 +61,13 @@ chunk_bank3_addr8000_0:
 ;                             hero_sword_sprites [5226], 
 ; bank2 addr0    [ 8806 free] description: 
 ;                             hero_l_sprites [14466], vampire_sprites [7884], vfx_sprites [1356], 
-; bank2 addr8000 [19651 free] description: sound and music must be at >= $8000 addr. $F102-$FFFF music player runtime buffers 
-;                             sound_rd [705], song01 [8575], 
+; bank2 addr8000 [19563 free] description: sound and music must be at >= $8000 addr. $F102-$FFFF music player runtime buffers 
+;                             sound_rd [793], song01 [8575], 
 ; bank3 addr0    [21044 free] description: 
 ;                             level00_gfx [4834], level01_gfx [6634], 
-; bank3 addr8000 [ 5996 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering) 
-;                             sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], 
-; [125579 total/26901 compressed][82840 total free]
+; bank3 addr8000 [ 4439 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering) 
+;                             sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], draw_text_ex_rd [339], text_rd [930], 
+; [126936 total/27862 compressed][81195 total free]
 
 .if BUFFERS_START_ADDR < ram_disk_data
 			.error "the programm is too big. It overlaps with tables at the end of RAM"
