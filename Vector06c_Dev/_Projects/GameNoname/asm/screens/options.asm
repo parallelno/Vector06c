@@ -1,8 +1,11 @@
 ; text
-OPTIONS_TEXT_SETTINGS_W	= 140
+OPTIONS_TEXT_SETTINGS_W	= 144 ; a width of a setting text column
 OPTIONS_SETTING_VAL_W = 12
+OPTIONS_TEXT_TITLE_W = 30
 
 OPTIONS_POS_Y_MAX	= 216
+
+OPTIONS_SETTING_PREDEF_VAL_W = 95
 
 OPTIONS_LINE_SPACING = -14
 OPTIONS_PARAG_SPACING = -24
@@ -24,6 +27,8 @@ OPTIONS_HALF_SCR		= 128
 OPTIONS_POS_X		= OPTIONS_HALF_SCR - (OPTIONS_TEXT_SETTINGS_W/2)
 OPTIONS_POS = OPTIONS_POS_X<<8 | OPTIONS_POS_Y_MAX
 OPTIONS_SETTING_VAL_POS_X = OPTIONS_HALF_SCR + OPTIONS_TEXT_SETTINGS_W/2 - OPTIONS_SETTING_VAL_W
+OPTIONS_SETTING_PREDEF_VAL_POS_X = OPTIONS_HALF_SCR + OPTIONS_TEXT_SETTINGS_W/2 - OPTIONS_SETTING_PREDEF_VAL_W
+OPTIONS_SETTING_TITLE_POS_X = OPTIONS_HALF_SCR - OPTIONS_TEXT_TITLE_W/2
 
 OPTIONS_SECTION1_LAST_ID = OPTIONS_ID_SFX
 OPTIONS_SECTION2_LAST_ID = OPTIONS_ID_SELECT
@@ -143,7 +148,7 @@ options_screen_text_draw:
 
 @text_pos_y		.var  OPTIONS_POS
 			; SETTINGS TITLE
-			lxi b, @text_pos_y + $2800
+			lxi b, <@text_pos_y | OPTIONS_SETTING_TITLE_POS_X<<8
 			lxi h, __text_settings
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
@@ -164,7 +169,7 @@ options_screen_text_draw:
 
 			; CONTROLS TITLE
 			@text_pos_y = @text_pos_y + OPTIONS_PARAG_SPACING
-			lxi b, @text_pos_y + $2800
+			lxi b, <@text_pos_y | OPTIONS_SETTING_TITLE_POS_X<<8
 			lxi h, __text_controls
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
@@ -175,7 +180,7 @@ options_screen_text_draw:
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			; KEY PREDEFINED VALUES
-			lxi b, @text_pos_y | $2800
+			lxi b, <@text_pos_y | OPTIONS_SETTING_PREDEF_VAL_POS_X<<8
 			lxi h, __text_predef_keys
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 

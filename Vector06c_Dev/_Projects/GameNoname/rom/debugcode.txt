@@ -1206,7 +1206,7 @@ $0aa8 3e 00      mvi a,$00
 $0aaa b9         cmp c
 $0aab c2 b1 0a   jnz $0ab1
 $0aae 21 b4 8b   lxi h,$8bb4
-$0ab1 01 ca ba   lxi b,$baca
+$0ab1 01 ca bc   lxi b,$bcca
 $0ab4 3e 53      mvi a,$53
 $0ab6 32 36 01   sta $0136
 $0ab9 d3 10      out $10
@@ -1230,7 +1230,7 @@ $0ae1 3e 00      mvi a,$00
 $0ae3 b9         cmp c
 $0ae4 c2 ea 0a   jnz $0aea
 $0ae7 21 b4 8b   lxi h,$8bb4
-$0aea 01 bc ba   lxi b,$babc
+$0aea 01 bc bc   lxi b,$bcbc
 $0aed 3e 53      mvi a,$53
 $0aef 32 36 01   sta $0136
 $0af2 d3 10      out $10
@@ -1247,7 +1247,7 @@ $0b08 cd 88 8a   call $8a88
 $0b0b af         xra a
 $0b0c 32 36 01   sta $0136
 $0b0f d3 10      out $10
-$0b11 01 d8 62   lxi b,$62d8
+$0b11 01 d8 71   lxi b,$71d8
 $0b14 21 b8 8b   lxi h,$8bb8
 $0b17 3e 53      mvi a,$53
 $0b19 32 36 01   sta $0136
@@ -1256,7 +1256,7 @@ $0b1e cd 9b 8a   call $8a9b
 $0b21 af         xra a
 $0b22 32 36 01   sta $0136
 $0b25 d3 10      out $10
-$0b27 01 ca 3a   lxi b,$3aca
+$0b27 01 ca 38   lxi b,$38ca
 $0b2a 21 c2 8b   lxi h,$8bc2
 $0b2d 3e 53      mvi a,$53
 $0b2f 32 36 01   sta $0136
@@ -1265,7 +1265,7 @@ $0b34 cd 9b 8a   call $8a9b
 $0b37 af         xra a
 $0b38 32 36 01   sta $0136
 $0b3b d3 10      out $10
-$0b3d 01 ca 5a   lxi b,$5aca
+$0b3d 01 ca 58   lxi b,$58ca
 $0b40 21 11 8c   lxi h,$8c11
 $0b43 3e 53      mvi a,$53
 $0b45 32 36 01   sta $0136
@@ -1274,7 +1274,7 @@ $0b4a cd 9b 8a   call $8a9b
 $0b4d af         xra a
 $0b4e 32 36 01   sta $0136
 $0b51 d3 10      out $10
-$0b53 01 bc 52   lxi b,$52bc
+$0b53 01 bc 50   lxi b,$50bc
 $0b56 21 0d 8c   lxi h,$8c0d
 $0b59 3e 53      mvi a,$53
 $0b5b 32 36 01   sta $0136
@@ -1284,7 +1284,7 @@ $0b63 af         xra a
 $0b64 32 36 01   sta $0136
 $0b67 d3 10      out $10
 $0b69 cd 85 0a   call $0a85
-$0b6c 01 a4 62   lxi b,$62a4
+$0b6c 01 a4 71   lxi b,$71a4
 $0b6f 21 cc 8b   lxi h,$8bcc
 $0b72 3e 53      mvi a,$53
 $0b74 32 36 01   sta $0136
@@ -1293,7 +1293,7 @@ $0b79 cd 9b 8a   call $8a9b
 $0b7c af         xra a
 $0b7d 32 36 01   sta $0136
 $0b80 d3 10      out $10
-$0b82 01 96 3a   lxi b,$3a96
+$0b82 01 96 38   lxi b,$3896
 $0b85 21 d6 8b   lxi h,$8bd6
 $0b88 3e 53      mvi a,$53
 $0b8a 32 36 01   sta $0136
@@ -1302,7 +1302,7 @@ $0b8f cd 9b 8a   call $8a9b
 $0b92 af         xra a
 $0b93 32 36 01   sta $0136
 $0b96 d3 10      out $10
-$0b98 01 96 3a   lxi b,$3a96
+$0b98 01 96 69   lxi b,$6996
 $0b9b 21 46 8c   lxi h,$8c46
 $0b9e 3e 53      mvi a,$53
 $0ba0 32 36 01   sta $0136
@@ -1311,7 +1311,7 @@ $0ba5 cd 9b 8a   call $8a9b
 $0ba8 af         xra a
 $0ba9 32 36 01   sta $0136
 $0bac d3 10      out $10
-$0bae 01 96 52   lxi b,$5296
+$0bae 01 96 50   lxi b,$5096
 $0bb1 21 0d 8c   lxi h,$8c0d
 $0bb4 3e 53      mvi a,$53
 $0bb6 32 36 01   sta $0136
@@ -1320,7 +1320,7 @@ $0bbb cd 9b 8a   call $8a9b
 $0bbe af         xra a
 $0bbf 32 36 01   sta $0136
 $0bc2 d3 10      out $10
-$0bc4 01 88 5a   lxi b,$5a88
+$0bc4 01 88 58   lxi b,$5888
 $0bc7 21 11 8c   lxi h,$8c11
 $0bca 3e 53      mvi a,$53
 $0bcc 32 36 01   sta $0136
@@ -1329,7 +1329,7 @@ $0bd1 cd 9b 8a   call $8a9b
 $0bd4 af         xra a
 $0bd5 32 36 01   sta $0136
 $0bd8 d3 10      out $10
-$0bda 01 7a 5a   lxi b,$5a7a
+$0bda 01 7a 58   lxi b,$587a
 $0bdd 21 11 8c   lxi h,$8c11
 $0be0 3e 53      mvi a,$53
 $0be2 32 36 01   sta $0136
@@ -1338,7 +1338,7 @@ $0be7 cd 9b 8a   call $8a9b
 $0bea af         xra a
 $0beb 32 36 01   sta $0136
 $0bee d3 10      out $10
-$0bf0 01 6c 5a   lxi b,$5a6c
+$0bf0 01 6c 58   lxi b,$586c
 $0bf3 21 11 8c   lxi h,$8c11
 $0bf6 3e 53      mvi a,$53
 $0bf8 32 36 01   sta $0136
@@ -1347,7 +1347,7 @@ $0bfd cd 9b 8a   call $8a9b
 $0c00 af         xra a
 $0c01 32 36 01   sta $0136
 $0c04 d3 10      out $10
-$0c06 01 5e 52   lxi b,$525e
+$0c06 01 5e 50   lxi b,$505e
 $0c09 21 0d 8c   lxi h,$8c0d
 $0c0c 3e 53      mvi a,$53
 $0c0e 32 36 01   sta $0136
@@ -1356,7 +1356,7 @@ $0c13 cd 9b 8a   call $8a9b
 $0c16 af         xra a
 $0c17 32 36 01   sta $0136
 $0c1a d3 10      out $10
-$0c1c 01 50 62   lxi b,$6250
+$0c1c 01 50 60   lxi b,$6050
 $0c1f 21 15 8c   lxi h,$8c15
 $0c22 3e 53      mvi a,$53
 $0c24 32 36 01   sta $0136
@@ -1400,7 +1400,7 @@ $0c7b fa 83 0c   jm $0c83
 $0c7e c6 f2      adi $f2
 $0c80 c3 7a 0c   jmp $0c7a
 $0c83 4f         mov c,a
-$0c84 06 32      mvi b,$32
+$0c84 06 30      mvi b,$30
 $0c86 21 31 1a   lxi h,$1a31
 $0c89 70         mov m,b
 $0c8a 21 33 1a   lxi h,$1a33
