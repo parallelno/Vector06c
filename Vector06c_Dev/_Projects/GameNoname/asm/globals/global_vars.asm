@@ -1,4 +1,4 @@
-
+; a code of a pressed key on the keyboard
 ; TODO: move it to buffers.asm
 ; low byte	- Down, Right, Up, Left, ЗБ (DEL), ВК (Enter), ПС (Alt), TAB (Tab)
 ; hi byte 	- SPC, ^, ], \, [, Z, Y, X
@@ -7,6 +7,24 @@ key_code:
 ; key code of a previous update
 key_code_old:
 			.word KEY_NO << 8 | ~KEY_NO
+
+; a code of a pressed control on the joystick
+; joy_code formats:
+; 	joystick "P": ABxxDULR (bit = 0 means pressed)
+; 	joystick "C": BAxxDULR (bit = 0 means pressed)
+; 	joystick "USPID": URDLABxx (bit = 1 means pressed)
+; where:
+;	A - fire 1 key
+;	B - fire 2 key
+;	U - up key
+;	D - down key
+;	L - left key
+;	R - left key
+;	x - N/A
+joy_code:
+			.byte KEY_NO
+joy_code_old:
+			.byte KEY_NO
 
 border_color_idx:
 			.byte TEMP_BYTE

@@ -42,21 +42,14 @@ scores_screen_text_draw:
 
 			dcr e
 			jnz @loop
-
 			ret
+
 scores_screen_init:
 			call screen_simple_init
 			call screen_palette_and_frame
-			call scores_screen_text_draw
+			call screen_draw_return_text_button
 
-			; dialog_press_key (tiledata = 162)
-			mvi b, 162
-			@pos_tiles_x = 13
-			@pos_tiles_y = 1
-			mvi c, @pos_tiles_x + @pos_tiles_y * TILE_HEIGHT
-			; b - tiledata
-			; c - tile_idx in the room_tiledata array.
-			call backs_spawn
+			call scores_screen_text_draw
 
 			call reset_game_updates_counter
 			ret

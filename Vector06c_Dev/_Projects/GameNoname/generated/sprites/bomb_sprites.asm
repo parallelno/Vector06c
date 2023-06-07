@@ -9,7 +9,7 @@ __bomb_run0_0:
 			.byte 6, 0; height, width
 			.byte 207,0,207,0,207,48,135,72,135,48,135,48,3,120,3,120,3,132,3,132,3,120,3,120,135,48,135,48,135,72,207,48,207,0,207,0,
 
-			.byte -1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __bomb_run0_1:
 			.byte 4, 0; offset_y, offset_x
 			.byte 6, 0; height, width
@@ -33,7 +33,7 @@ __bomb_run1_0:
 			.byte 6, 0; height, width
 			.byte 207,0,207,0,207,48,135,72,135,48,135,0,3,0,3,120,3,132,3,132,3,120,3,0,135,0,135,48,135,72,207,48,207,0,207,0,
 
-			.byte -1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __bomb_run1_1:
 			.byte 4, 0; offset_y, offset_x
 			.byte 6, 0; height, width
@@ -57,7 +57,7 @@ __bomb_dmg0_0:
 			.byte 6, 0; height, width
 			.byte 207,0,207,0,207,48,135,120,135,48,135,48,3,120,3,120,3,252,3,252,3,120,3,120,135,48,135,48,135,120,207,48,207,0,207,0,
 
-			.byte -1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __bomb_dmg0_1:
 			.byte 4, 0; offset_y, offset_x
 			.byte 6, 0; height, width
@@ -81,7 +81,7 @@ __bomb_dmg1_0:
 			.byte 6, 0; height, width
 			.byte 207,48,207,48,207,48,135,120,135,72,135,72,3,132,3,132,3,252,3,252,3,132,3,132,135,72,135,72,135,120,207,48,207,48,207,48,
 
-			.byte -1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __bomb_dmg1_1:
 			.byte 4, 0; offset_y, offset_x
 			.byte 6, 0; height, width

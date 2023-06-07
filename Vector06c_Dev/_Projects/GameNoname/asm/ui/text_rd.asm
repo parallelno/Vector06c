@@ -40,9 +40,17 @@ __text_keys:
 			TEXT("RIGHT", LINE_BREAK)
 			TEXT("FIRE", LINE_BREAK)
 			TEXT("SELECT", PARAG_BREAK)
-			TEXT("Return to the Main Menu")			
+__text_return:			
+			TEXT("Return to the Main Menu")
 __text_dots:
 			TEXT("........................................")
+__text_change_settings:			
+			TEXT("Change settings")
+__text_predef_keys:
+			TEXT("Predefined K&J UP", LINE_BREAK)
+			TEXT("Predefined K&J DOWN", LINE_BREAK)
+			TEXT("Predefined K&J LEFT", LINE_BREAK)
+			TEXT("Predefined K&J RIGHT")
 
 ;===================================================================================
 ; credits screen
@@ -56,12 +64,12 @@ __text_credits_:
 			TEXT("Game mechanics: Ilia Fedotovskikh", LINE_BREAK)
 			TEXT("Support and ideas: Fenia Fedotovskikh", LINE_BREAK)
 			TEXT("Level design: the whole family!", LINE_BREAK)
-			TEXT("Feedback, sound API, v06x emulator: svofski", LINE_BREAK)
-			TEXT("ZX0 unpacking code: ivagor", PARAG_BREAK)
 			TEXT("Big thanks to my amazing family for", LINE_BREAK)
 			TEXT("working hard to make it a reality!", PARAG_BREAK)
 			TEXT("Special thanks to zx-pk.ru community", LINE_BREAK)
-			TEXT("and especially to svofski and ivagor!")
+			TEXT("and especially to ivagor, nzeemin, svofski,", LINE_BREAK)
+			TEXT("and jerry for their contribution and", LINE_BREAK)
+			TEXT("help!")
 
 ;===================================================================================
 ; dialogs

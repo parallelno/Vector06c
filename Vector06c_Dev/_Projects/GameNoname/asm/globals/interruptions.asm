@@ -42,7 +42,7 @@ interruption:
 ;
 ;			interruption main logic start
 ;
-			; keyboard check
+			; keyboard handling
 			mvi a, PORT0_OUT_IN
 			out 0
 			mvi a, %11111110
@@ -52,7 +52,15 @@ interruption:
 			mvi a, %01111111
 			out 3
 			in 2
-			sta key_code+1		
+			sta key_code+1
+
+			; joystick "P" handling
+			mvi a, $83
+			out 4
+			; get a joy_code
+			in $06
+			sta joy_code
+
 			;check for a palette update
 palette_update_request_:
 			mvi a, PALETTE_UPD_REQ_NO
@@ -75,14 +83,14 @@ palette_update_request_:
 			lda scr_offset_y
 			out 3
 			; used in the main program to keep the update synced with interuption
-@updateSkipper:
+@update_skipper:
 			mvi a, %01010101
 			rrc
-			sta @updateSkipper+1
-			jnc @skipUpdate
+			sta @update_skipper+1
+			jnc @skip_update
 			lxi h, game_updates_counter
 			inr m
-@skipUpdate:
+@skip_update:
 			; fps update
 			lxi h, ints_per_sec_counter
 			dcr m

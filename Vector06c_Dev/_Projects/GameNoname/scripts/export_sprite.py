@@ -223,8 +223,8 @@ def gfx_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 			asm += "\n"
 
 			copy_from_buff_offset = offset_x_preshifted_local//8
-			if width_preshifted == 8: 
-				copy_from_buff_offset -= 1
+			#if width_preshifted == 8:
+			#	copy_from_buff_offset -= 1
 
 			asm += "			.byte " + str(copy_from_buff_offset) + ", "+ str(mask_flag) + " ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)\n"
 			asm += label_prefix + "_" + sprite_name + "_" + str(i) + ":\n"

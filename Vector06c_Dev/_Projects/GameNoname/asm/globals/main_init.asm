@@ -16,4 +16,3 @@ main_init:
 			sta global_request			
 			ei
             jmp main_start
-

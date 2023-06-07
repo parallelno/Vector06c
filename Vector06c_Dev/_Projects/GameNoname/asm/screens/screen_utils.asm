@@ -92,5 +92,31 @@ screen_simple_draw:
 			call backs_draw
 			call bullets_draw
 			call bullets_copy_to_scr
-			call bullets_erase			
+			call bullets_erase
 			ret
+
+; draw a space button as a back object
+; draw a text referenced by __text_return label
+screen_draw_return_text_button:
+			; draw a text
+			@text_return_pos = $5819
+			lxi b, @text_return_pos
+			lxi h, __text_return
+
+; draw a space button as a back object
+; and a custom text at the custom pos
+; in:
+; hl - screen_pos
+; bc - text_addr
+screen_draw_return_button_custom_text:
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+
+			; braw a button
+			@pos_tiles_y = 1
+			@pos_tiles_x = 13			
+			mvi c, @pos_tiles_x + @pos_tiles_y * TILE_HEIGHT
+			; dialog_press_key (tiledata = 162)
+			mvi b, 162			
+			; b - tiledata
+			; c - tile_idx in the room_tiledata array.
+			jmp backs_spawn

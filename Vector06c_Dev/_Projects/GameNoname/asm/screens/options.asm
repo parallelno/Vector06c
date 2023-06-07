@@ -1,12 +1,9 @@
-OPTIONS_CURSOR_POS_X		= $38
-OPTIONS_CURSOR_POS_Y_MAX	= $c8	;$9a
+; text
+OPTIONS_TEXT_SETTINGS_W	= 140
+OPTIONS_SETTING_VAL_W = 12
 
-OPTIONS_CURSOR_POS_Y_OFFSET1	= 24	; when it is in the controls section
-OPTIONS_CURSOR_POS_Y_OFFSET2	= 35	; when it is in the return section
+OPTIONS_POS_Y_MAX	= 216
 
-;OPTIONS_TITLE_POS = $68d8
-
-OPTIONS_POS = $40d8; $40b8
 OPTIONS_LINE_SPACING = -14
 OPTIONS_PARAG_SPACING = -24
 
@@ -21,10 +18,22 @@ OPTIONS_ID_SELECT	= 7
 OPTIONS_ID_RETURN	= 8
 
 OPTIONS_MAX = 9
+;========================================
+OPTIONS_HALF_SCR		= 128
+
+OPTIONS_POS_X		= OPTIONS_HALF_SCR - (OPTIONS_TEXT_SETTINGS_W/2)
+OPTIONS_POS = OPTIONS_POS_X<<8 | OPTIONS_POS_Y_MAX
+OPTIONS_SETTING_VAL_POS_X = OPTIONS_HALF_SCR + OPTIONS_TEXT_SETTINGS_W/2 - OPTIONS_SETTING_VAL_W
+
 OPTIONS_SECTION1_LAST_ID = OPTIONS_ID_SFX
 OPTIONS_SECTION2_LAST_ID = OPTIONS_ID_SELECT
 
-OPTIONS_SETTING_VAL_POS_X = 170
+; cursor
+OPTIONS_CURSOR_POS_X		= OPTIONS_POS_X - 8
+OPTIONS_CURSOR_POS_Y_MAX	= OPTIONS_POS_Y_MAX - 16
+
+OPTIONS_CURSOR_POS_Y_OFFSET1	= - OPTIONS_PARAG_SPACING	; 24 ;when it is in the controls section
+OPTIONS_CURSOR_POS_Y_OFFSET2	= OPTIONS_CURSOR_POS_Y_OFFSET1 - OPTIONS_PARAG_SPACING + OPTIONS_LINE_SPACING	; 35; when it is in the return section
 
 option_cursor_setting_id:
 			.byte 0
@@ -32,6 +41,40 @@ option_cursor_setting_id:
 options_screen:
 			sta @global_req+1
 			call options_screen_init
+
+			; TODO: test
+			lxi d, $a330
+			lxi b, __bomb_run0_0
+			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_BOMB | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+
+			lxi d, $a330 + 16
+			lxi b, __bomb_run0_1
+			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_BOMB | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)			
+
+			lxi d, $a330 + 32
+			lxi b, __bomb_run0_2
+			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_BOMB | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+
+			lxi d, $a330 + 48
+			lxi b, __bomb_run0_3
+			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_BOMB | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+
+			lxi d, $a630
+			lxi b, __scythe_run3_0
+			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_SCYTHE | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+
+			lxi d, $a630 + 16
+			lxi b, __scythe_run3_1
+			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_SCYTHE | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)			
+
+			lxi d, $a630 + 32
+			lxi b, __scythe_run3_2
+			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_SCYTHE | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+
+			lxi d, $a630 + 48
+			lxi b, __scythe_run3_3
+			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_SCYTHE | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+			; TODO: test end
 
 @loop:
 			; return when a user hits a space button
@@ -103,8 +146,8 @@ options_screen_text_draw:
 			lxi b, @text_pos_y + $2800
 			lxi h, __text_settings
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			; MUSIC
-			; SFX
+
+			; MUSIC & SFX
 			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y
 			lxi h, __text_music_sfx
@@ -130,7 +173,12 @@ options_screen_text_draw:
 			lxi b, @text_pos_y
 			lxi h, __text_keys
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			
+
+			; KEY PREDEFINED VALUES
+			lxi b, @text_pos_y | $2800
+			lxi h, __text_predef_keys
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+
 			; DOTS
 			; UP
 			lxi b, @text_pos_y + $1800
@@ -160,22 +208,20 @@ options_screen_text_draw:
 			@text_pos_y = @text_pos_y + OPTIONS_LINE_SPACING
 			lxi b, @text_pos_y + $2800
 			lxi h, __text_dots + 8
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)												
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)							
 			ret
 
 options_screen_init:
 			call screen_simple_init
 			call screen_palette_and_frame
+			
+			lxi h, __text_change_settings
+			@text_change_settings_pos = $8a19
+			lxi b, @text_change_settings_pos
+			call screen_draw_return_button_custom_text
+			
 			call options_screen_text_draw
 			call option_screen_cursor_init
-			; dialog_press_key (tiledata = 162)
-			mvi b, 162
-			@pos_tiles_x = 13
-			@pos_tiles_y = 1
-			mvi c, @pos_tiles_x + @pos_tiles_y * TILE_HEIGHT
-			; b - tiledata
-			; c - tile_idx in the room_tiledata array.
-			call backs_spawn
 
 			call reset_game_updates_counter
 			ret
@@ -204,7 +250,7 @@ option_screen_cursor_init:
 ; (hero_pos_y + 1) = cursor_pos_y
 options_cursor_pos_update:
 			mov b, m
-			; check if the cursor is in the controls section
+			; check if the cursor is in the return section
 			mvi a, OPTIONS_SECTION2_LAST_ID
 			cmp b
 			mvi a, OPTIONS_CURSOR_POS_Y_MAX
@@ -234,7 +280,7 @@ options_cursor_pos_update:
 			; spawn a cursor
 			; bc - a cursor pos
 			lxi h, hero_pos_x + 1
-			mov m, b			
+			mov m, b
 			lxi h, hero_pos_y + 1
 			mov m, c
 			ret
@@ -323,6 +369,8 @@ options_screen_cursor_update:
 			jnz @check_down
 			; input and process a user provided key
 
+			;CALL_RAM_DISK_FUNC(__gcplayer_flip_mute, __RAM_DISK_S_GCPLAYER | __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)			
+;@check_joy_keys:
 			jmp options_settings_val_draw
 @check_down:
 			;adi GLOBAL_REQ_GAME

@@ -282,21 +282,24 @@ __draw_sprite_vm:
 			mov	l, c
 			sphl
 			xchg
-			; b - offset_x
-			; c - offset_y
 			pop b
+			; b - offset_x
+			; c - offset_y			
 			dad b
 			; store a sprite screen addr to return it from this func
 			shld drawSpriteScrAddr_ramDisk__+1
 
 			; store sprite width and height
-			; b - width, c - height
-			pop b
+			pop b			
 			mov d, b
 			mov e, c
 			xchg
+			; h, b - width, 
+			; l, c - height			
 			shld drawSpriteWidthHeight_ramDisk__+1
-			xchg
+			xchg		
+			; d, b - width, 
+			; e, c - height					
 			mov a, b
 			rrc
 			jc @width16

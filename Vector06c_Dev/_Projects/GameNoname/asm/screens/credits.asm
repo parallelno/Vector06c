@@ -20,25 +20,18 @@ credits_screen:
 
 credits_screen_text_draw:
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_reset_spacing, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-
+			; credits
 			lxi b, CREDITS_POS
 			lxi h, __text_credits_
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 
 credits_screen_init:
 			call screen_simple_init
 			call screen_palette_and_frame
-			call credits_screen_text_draw
+			call screen_draw_return_text_button
 
-			; dialog_press_key (tiledata = 162)
-			mvi b, 162
-			@pos_tiles_x = 13
-			@pos_tiles_y = 1
-			mvi c, @pos_tiles_x + @pos_tiles_y * TILE_HEIGHT
-			; b - tiledata
-			; c - tile_idx in the room_tiledata array.
-			call backs_spawn			
+			call credits_screen_text_draw
 
 			call reset_game_updates_counter
 			ret

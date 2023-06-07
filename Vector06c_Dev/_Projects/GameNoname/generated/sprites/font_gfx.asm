@@ -82,6 +82,12 @@ __font_d_quote:
 			.byte 0, 5 ; next_char_offset
 
 			.word 0 ; safety pair of bytes for reading by POP B
+__font_ampersand:
+			.byte 0, 0 ; offset_y, offset_x
+			.word 113,138,132,138,80,48,72,72,48,
+			.byte 0, 9 ; next_char_offset
+
+			.word 0 ; safety pair of bytes for reading by POP B
 __font_hash:
 			.byte 0, 0 ; offset_y, offset_x
 			.word 240,

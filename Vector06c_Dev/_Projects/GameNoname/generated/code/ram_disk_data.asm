@@ -51,8 +51,8 @@ chunk_bank3_addr8000_0:
 .incbin "generated\\bin\\chunk_bank3_addr8000_0.bin.zx0"
 
 ; ram-disk data layout
-; bank0 addr0    [ 3712 free] description: 
-;                             hero_r_sprites [14466], skeleton_sprites [10140], scythe_sprites [1626], bomb_sprites [960], font_gfx [1608], 
+; bank0 addr0    [ 3688 free] description: 
+;                             hero_r_sprites [14466], skeleton_sprites [10140], scythe_sprites [1626], bomb_sprites [960], font_gfx [1632], 
 ; bank0 addr8000 [14151 free] description: 
 ;                             level00_data [196], backs_sprites [620], decals_sprites [3640], vfx4_sprites [4686], level01_data [795], tiled_images_gfx [7702], tiled_images_data [978], 
 ; bank1 addr0    [ 6514 free] description: 
@@ -65,9 +65,9 @@ chunk_bank3_addr8000_0:
 ;                             sound_rd [793], song01 [8575], 
 ; bank3 addr0    [21044 free] description: 
 ;                             level00_gfx [4834], level01_gfx [6634], 
-; bank3 addr8000 [ 4388 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering) 
-;                             sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], draw_text_ex_rd [390], text_rd [930], 
-; [126987 total/27918 compressed][81144 total free]
+; bank3 addr8000 [ 4315 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering) 
+;                             sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], draw_text_ex_rd [390], text_rd [1003], 
+; [127084 total/27957 compressed][81047 total free]
 
 .if BUFFERS_START_ADDR < ram_disk_data
 			.error "the programm is too big. It overlaps with tables at the end of RAM"

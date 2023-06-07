@@ -45,7 +45,7 @@ __scythe_run1_2:
 			.byte 12, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __scythe_run1_3:
 			.byte 0, 1; offset_y, offset_x
 			.byte 12, 0; height, width
@@ -87,13 +87,13 @@ __scythe_run3_1:
 			.byte 12, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __scythe_run3_2:
 			.byte 0, 1; offset_y, offset_x
 			.byte 12, 0; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __scythe_run3_3:
 			.byte 0, 1; offset_y, offset_x
 			.byte 12, 0; height, width

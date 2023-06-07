@@ -19,10 +19,11 @@
 	],
 	"asset_type" : "font",
 	"path_png" : "art\\font.png",
+	"comment" : "gfx_ptrs uses commodore 64 charset where ",
 	"gfx_ptrs" : [
 		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 		"space", "space", "space", "space", "space",
-		"space", "exclamation", "quote", "space", "space", "space", "space", "quote", "parent_l", "parent_r", "space", "space", "comma", "dash", "period", "space",
+		"space", "exclamation", "quote", "space", "space", "space", "ampersand", "quote", "parent_l", "parent_r", "space", "space", "comma", "dash", "period", "space",
 		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "colon", "multidot", "space", "space", "space", "question",
 		"space", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
 	],
@@ -131,6 +132,14 @@
 			"y"	: 87,
 			"width" : 4,
 			"height" : 1,
+			"offset_y": 0
+		},
+		{
+			"name" : "ampersand",
+			"x" : 168,
+			"y"	: 55,
+			"width" : 8,
+			"height" : 9,
 			"offset_y": 0
 		},
 		{

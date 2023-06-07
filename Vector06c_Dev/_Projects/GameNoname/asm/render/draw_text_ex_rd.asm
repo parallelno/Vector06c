@@ -12,7 +12,7 @@ PARAG_SPACING_DEFAULT = -24
 __draw_text_ex_rd_init:
 			mvi a, GFX_PTRS_LEN
 			lxi h, font_gfx_ptrs
-@loop:		
+@loop:
 			mov e, m
 			inx h
 			mov d, m
@@ -63,20 +63,20 @@ __draw_text_ex_rd_scr2:
 __draw_text_ex_rd_scr1:
 			mvi a, >SCR_BUFF1_ADDR
 ; draw a text with kerning. blend func - OR
-; a - scr buff high addr, ex: >SCR_BUFF0_ADDR			
+; a - scr buff high addr, ex: >SCR_BUFF0_ADDR
 draw_text_ex_rd:
 			sta @scr_buff_addr+1
 			; store pox_x
 			mov a, b
 			sta draw_text_ex_rd_restore_pos_x + 1
-@next_char:			
+@next_char:
 			; get a char code
 			mov e, m
 			; return if its code 0
 			xra a
 			ora e
 			rz
-			inx h			
+			inx h
 			; a - char_code
 			; check if it is the end of the line
 			cpi <LINE_BREAK
@@ -139,7 +139,7 @@ draw_text_ex_rd:
 			mvi a, %11111000
 			ana d
 			RRC_(3)
-@scr_buff_addr:			
+@scr_buff_addr:
 			adi TEMP_ADDR;>SCR_BUFF1_ADDR
 			mov d, a
 
@@ -180,7 +180,7 @@ draw_text_ex_rd:
 			ora c
 			stax d
 			inr e
-			jmp @loop			
+			jmp @loop
 
 @advancePos:
 			; bc - a pos offset
@@ -210,5 +210,5 @@ draw_text_ex_rd_line_spacing:
 			add c
 			mov c, a
 draw_text_ex_rd_restore_pos_x:
-			mvi b, TEMP_BYTE			
+			mvi b, TEMP_BYTE
 			jmp draw_text_ex_rd_next_char

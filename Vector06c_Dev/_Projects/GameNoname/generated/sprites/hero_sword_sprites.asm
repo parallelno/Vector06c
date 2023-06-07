@@ -87,13 +87,13 @@ __hero_sword_sword_r0_5:
 			.byte 14, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __hero_sword_sword_r0_6:
 			.byte 2, 2; offset_y, offset_x
 			.byte 14, 0; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __hero_sword_sword_r0_7:
 			.byte 2, 2; offset_y, offset_x
 			.byte 14, 0; height, width
@@ -135,13 +135,13 @@ __hero_sword_sword_r1_5:
 			.byte 13, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __hero_sword_sword_r1_6:
 			.byte 0, 2; offset_y, offset_x
 			.byte 13, 0; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __hero_sword_sword_r1_7:
 			.byte 0, 2; offset_y, offset_x
 			.byte 13, 0; height, width
@@ -165,13 +165,13 @@ __hero_sword_sword_l0_2:
 			.byte 14, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __hero_sword_sword_l0_3:
 			.byte 2, 0; offset_y, offset_x
 			.byte 14, 0; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __hero_sword_sword_l0_4:
 			.byte 2, 0; offset_y, offset_x
 			.byte 14, 0; height, width
@@ -213,13 +213,13 @@ __hero_sword_sword_l1_2:
 			.byte 13, 1; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __hero_sword_sword_l1_3:
 			.byte 0, 0; offset_y, offset_x
 			.byte 13, 0; height, width
 			.byte 255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,255,0,
 
-			.byte 0, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
+			.byte 1, 1 ; safety pair of bytes for reading by POP B and also (copy_from_buff_offset, mask_flag)
 __hero_sword_sword_l1_4:
 			.byte 0, 0; offset_y, offset_x
 			.byte 13, 0; height, width
