@@ -34,6 +34,7 @@
 			; hl - animPtr
 			; c - preshifted sprite idx*2 offset
 			call sprite_get_addr
+			
 			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_BULLET | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			pop h
 			inx h

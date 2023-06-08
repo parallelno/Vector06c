@@ -9,7 +9,7 @@ fill_all_black:
 			; set SCR_BUFF0, SCR_BUFF1, SCR_BUFF2 to zero
 			; set SCR_BUFF3 to $ff
 			; that represents the darkest possible color in the current palette
-			xra a
+			A_TO_ZERO_CONST(RAM_DISK_OFF_CMD)
 			lxi d, SCR_BUFF_LEN * 3 / 32 - 1
 			call fill_buff_black
 

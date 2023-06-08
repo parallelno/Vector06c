@@ -4,10 +4,10 @@
 ; in:
 ; de - ptr to monster_draw_ptr in the runtime data
 ; TODO: try to convert it into a function
-.macro MONSTER_DRAW(SpriteGetScrAddr_monster, __RAM_DISK_S_MONSTER)
+.macro MONSTER_DRAW(sprite_get_scr_addr_monster, __RAM_DISK_S_MONSTER)
 			LXI_H_TO_DIFF(monster_pos_x+1, monster_draw_ptr)
 			dad d
-			call SpriteGetScrAddr_monster
+			call sprite_get_scr_addr_monster
 			; hl - ptr to monster_pos_y+1
 			; tmp a = c
 			mov a, c

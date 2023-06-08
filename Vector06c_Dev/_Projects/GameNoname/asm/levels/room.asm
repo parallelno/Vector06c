@@ -364,7 +364,7 @@ room_copy_scr_to_backbuffs:
 .macro ROOM_DECAL_DRAW(gfx_ptrs, backbuffers = false)
 			lxi h, gfx_ptrs
 		.if backbuffers
-			xra a
+			A_TO_ZERO_CONST(OPCODE_NOP)
 			sta room_decal_draw_backbuffers
 		.endif
 		.if backbuffers == false

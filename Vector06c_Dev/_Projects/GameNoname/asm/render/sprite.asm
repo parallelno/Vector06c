@@ -11,7 +11,6 @@ sprite_get_addr:
 			inx h
 			mov b, m
 			ret
-			
 
 ; in:
 ; hl - ptr to posX+1 (high byte in 16-bit pos)
@@ -21,22 +20,23 @@ sprite_get_addr:
 ; hl - ptr to posY+1
 ; use: a
 sprite_get_scr_addr8:
+			; calc preshifted sprite idx*2 offset
+			mov	a, m
+			ani SPRITES_PRESHIFTED_8 - 1 ; %0000_0111
+			rlc
+			adi 2 ; because there are two bytes of next_frame_offset in front of sprite ptrs
+			mov	c, a
 			; calc screen addr X
 			mov	a, m
-			ani SPRITES_PRESHIFTED_8 - 1
-			rlc
-			adi 2 ; because there are two bytes of nextFrameOffset in front of sprite ptrs
-			mov	c, a
-			mov	a, m
 			RRC_(3)
-			ani		%00011111
-			adi		SPRITE_X_SCR_ADDR
-			inx h
-			inx h
-			; de - sprite screen addr
+			ani %00011111
+			adi SPRITE_X_SCR_ADDR
+			INX_H(2)
 			mov e, m
 			mov	d, a
+			; de - sprite screen addr			
 			ret
+
 ; in:
 ; hl - ptr to posX+1 (high byte in 16-bit pos)
 ; out:
@@ -46,20 +46,20 @@ sprite_get_scr_addr8:
 ; use: a	
 ; TODO: think of optimization. replace mov a, m; ani, with mvi, ana m
 sprite_get_scr_addr4:
+			; calc preshifted sprite idx*2 offset
+			mov	a, m
+			ani (SPRITES_PRESHIFTED_4 - 1) * 2 ; %0000_0110
+			adi 2 ; because there are two bytes of next_frame_offset in front of sprite ptrs
+			mov	c, a
 			; calc screen addr X
 			mov	a, m
-			ani (SPRITES_PRESHIFTED_4 - 1) * 2
-			adi 2 ; because there are two bytes of nextFrameOffset in front of sprite ptrs
-			mov	c, a
-			mov	a, m
 			RRC_(3)
-			ani		%00011111
-			adi		SPRITE_X_SCR_ADDR
-			inx h
-			inx h
-			; de - sprite screen addr
+			ani %00011111
+			adi SPRITE_X_SCR_ADDR
+			INX_H(2)
 			mov e, m
 			mov	d, a
+			; de - sprite screen addr			
 			ret
 			
 

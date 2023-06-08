@@ -1,11 +1,11 @@
 ; text
-OPTIONS_TEXT_SETTINGS_W	= 144 ; a width of a setting text column
+OPTIONS_TEXT_SETTINGS_W	= 112 ; a width of a setting text column
 OPTIONS_SETTING_VAL_W = 12
 OPTIONS_TEXT_TITLE_W = 30
+OPTIONS_SETTING_PREDEF_VAL_W = 12
 
 OPTIONS_POS_Y_MAX	= 216
 
-OPTIONS_SETTING_PREDEF_VAL_W = 95
 
 OPTIONS_LINE_SPACING = -14
 OPTIONS_PARAG_SPACING = -24
@@ -239,7 +239,7 @@ option_screen_cursor_init:
 			shld @check_if_init + 1
 
 			; reset selected option
-			xra a
+			A_TO_ZERO_CONST(OPTIONS_ID_MUSIC)
 			sta option_cursor_setting_id
 
 @no_init:

@@ -45,25 +45,16 @@ interruption:
 			; keyboard handling
 			mvi a, PORT0_OUT_IN
 			out 0
-			mvi a, %11111110
-			out 3
-			in 2
-			sta key_code
-			mvi a, %01111111
-			out 3
-			in 2
-			sta key_code+1
+
+			call key_handling_full
 
 			; joystick "P" handling
-			mvi a, $83
-			out 4
-			; get a joy_code
 			in $06
 			sta joy_code
 
 			;check for a palette update
 palette_update_request_:
-			mvi a, PALETTE_UPD_REQ_NO
+			mvi a, PALETTE_UPD_REQ_NO ; this constant value is mutable, do not replace it with xra a
 			ora a
 			jz @no_palette_update
 			; set a palette
@@ -71,7 +62,7 @@ palette_update_request_:
 			lxi h, palette + PALETTE_COLORS - 1
 			call set_palette_int
 			; reset update
-			xra a
+			A_TO_ZERO_CONST(PALETTE_UPD_REQ_NO)
 			sta palette_update_request
 
 @no_palette_update:			

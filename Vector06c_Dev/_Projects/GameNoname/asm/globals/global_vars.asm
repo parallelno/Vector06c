@@ -3,10 +3,10 @@
 ; low byte	- Down, Right, Up, Left, ЗБ (DEL), ВК (Enter), ПС (Alt), TAB (Tab)
 ; hi byte 	- SPC, ^, ], \, [, Z, Y, X
 key_code:
-			.word KEY_NO << 8 | ~KEY_NO
+			.storage KEY_LINE_NUM, KEY_NO
 ; key code of a previous update
 key_code_old:
-			.word KEY_NO << 8 | ~KEY_NO
+			.storage KEY_LINE_NUM, KEY_NO
 
 ; a code of a pressed control on the joystick
 ; joy_code formats:

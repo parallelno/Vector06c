@@ -47,10 +47,10 @@ __text_dots:
 __text_change_settings:			
 			TEXT("Change settings")
 __text_predef_keys:
-			TEXT("Predefined K&J UP", LINE_BREAK)
-			TEXT("Predefined K&J DOWN", LINE_BREAK)
-			TEXT("Predefined K&J LEFT", LINE_BREAK)
-			TEXT("Predefined K&J RIGHT")
+			TEXT("UP", LINE_BREAK)
+			TEXT("DOWN", LINE_BREAK)
+			TEXT("LEFT", LINE_BREAK)
+			TEXT("RIGHT")
 
 ;===================================================================================
 ; credits screen

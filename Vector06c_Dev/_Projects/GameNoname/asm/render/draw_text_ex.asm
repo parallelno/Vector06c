@@ -59,12 +59,8 @@ draw_text_ex:
 			mvi a, %111
 			ana h
 			; make a ptr to skip_dad dad h
-			rlc
-			adi <@skip_dad_ptrs
-			mov e, a
-			mvi a, >@skip_dad_ptrs
-			aci 0
-			mov d, a
+			; de = a * 2 + @skip_dad_ptrs
+			AX2_ADD_INT_DE(@skip_dad_ptrs)
 
 			; read skip_ptr
 			xchg

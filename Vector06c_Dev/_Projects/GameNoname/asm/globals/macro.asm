@@ -318,8 +318,47 @@
 			dcr m
 .endmacro
 
-.macro TEXT(string, end_code = EOD):
+.macro TEXT(string, end_code = EOD)
 .encoding "screencode", "mixed"
 			.text string
 			.byte end_code
 .endmacro
+
+; bc = a * 2 + int16_const
+; cpuc = 40
+.macro AX2_ADD_INT_BC(int16_const)
+			rlc
+			adi <int16_const
+			mov c, a
+			aci >int16_const
+			sub c
+			mov b, a
+.endmacro
+; de = a * 2 + int16_const
+; cpuc = 40
+.macro AX2_ADD_INT_DE(int16_const)
+			rlc
+			adi <int16_const
+			mov e, a
+			aci >int16_const
+			sub e
+			mov d, a
+.endmacro
+; hl = a * 2 + int16_const
+; cpuc = 40
+.macro AX2_ADD_INT_HL(int16_const)
+			rlc
+			adi <int16_const
+			mov l, a
+			aci >int16_const
+			sub l
+			mov h, a
+.endmacro
+
+.macro A_TO_ZERO_CONST(int8_const)
+		.if int8_const != 0
+			.error "A_TO_ZERO_CONST macros is used for a non-zero constant assignment, val = ", int8_const
+		.endif
+			xra a
+.endmacro
+			
