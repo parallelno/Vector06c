@@ -9,8 +9,8 @@ hero_init:
 			call hero_idle_start
 			
 			; reset key data			
-			lxi h, KEY_NO << 8 | KEY_NO
-			shld key_code
+			mvi a, ACTION_CODE_NO
+			sta action_code
 
 			lxi h, hero_pos_x+1
 			call sprite_get_scr_addr8

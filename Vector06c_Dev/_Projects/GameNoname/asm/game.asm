@@ -52,8 +52,8 @@ game_update:
 			call game_ui_update
 
 			; to check repeated key-pressing
-			lhld key_code
-			shld key_code_old
+			lda action_code
+			sta action_code_old
 
 			jmp @updateLoop
 

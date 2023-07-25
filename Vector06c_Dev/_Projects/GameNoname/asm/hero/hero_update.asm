@@ -29,21 +29,24 @@ hero_update:
 
 
 			; check if an attack key pressed
-			lhld key_code
-			mvi a, KEY_SPACE
-			cmp h
+			lhld action_code
+			; h - action_code_old
+			; l - action_code
+
+			mvi a, ACTION_CODE_FIRE1
+			cmp l
 			jz hero_attack_start
 
 			; check if no arrow key pressed
-			mvi a, KEY_LEFT & KEY_RIGHT & KEY_UP & KEY_DOWN
+			mvi a, ACTION_CODE_LEFT & ACTION_CODE_RIGHT & ACTION_CODE_UP & ACTION_CODE_DOWN
 			ora l
 			inr a
 			jz hero_idle_update
 
 @checkMoveKeys:
 			; check if the same arrow keys pressed the prev update
-			lda key_code_old
-			cmp l
+			mov a, l
+			cmp h
 			jnz @moveKeysPressed
 
 			; update a move anim
@@ -51,9 +54,9 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @moveKeysPressed:
-			mov a, l
+			; a - action_code
 @setAnimRunR:
-			cpi KEY_RIGHT
+			cpi ACTION_CODE_RIGHT
 			jnz @setAnimRunRU
 
 			lxi h, HERO_RUN_SPEED
@@ -72,7 +75,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunRU:
-			cpi KEY_RIGHT & KEY_UP
+			cpi ACTION_CODE_RIGHT & ACTION_CODE_UP
 			jnz @setAnimRunRD
 
 			lxi h, HERO_RUN_SPEED_D
@@ -86,7 +89,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunRD:
-			cpi KEY_RIGHT & KEY_DOWN
+			cpi ACTION_CODE_RIGHT & ACTION_CODE_DOWN
 			jnz @setAnimRunL
 
 			lxi h, HERO_RUN_SPEED_D
@@ -101,7 +104,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunL:
-			cpi KEY_LEFT
+			cpi ACTION_CODE_LEFT
 			jnz @setAnimRunLU
 
 			LXI_H_NEG(HERO_RUN_SPEED)
@@ -120,7 +123,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunLU:
-			cpi KEY_LEFT & KEY_UP
+			cpi ACTION_CODE_LEFT & ACTION_CODE_UP
 			jnz @setAnimRunLD
 
 			LXI_H_NEG(HERO_RUN_SPEED_D)
@@ -135,7 +138,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunLD:
-			cpi KEY_LEFT & KEY_DOWN
+			cpi ACTION_CODE_LEFT & ACTION_CODE_DOWN
 			jnz @setAnimRunU
 
 			LXI_H_NEG(HERO_RUN_SPEED_D)
@@ -149,7 +152,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunU:
-			cpi KEY_UP
+			cpi ACTION_CODE_UP
 			jnz @setAnimRunD
 
 			lxi h, 0
@@ -173,7 +176,7 @@ hero_update:
 			shld hero_anim_addr
 			jmp hero_update_temp_pos
 @setAnimRunD:
-			cpi KEY_DOWN
+			cpi ACTION_CODE_DOWN
 			rnz
 
 			lxi h, 0
@@ -337,8 +340,8 @@ hero_idle_start:
 
 hero_idle_update:
 			; check if the same keys pressed the prev update
-			lda key_code_old
-			cmp l
+			mov a, l
+			cmp h
 			jnz hero_idle_start
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_IDLE)
 			ret

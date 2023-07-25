@@ -72,9 +72,8 @@ dialog_init_hero_no_health:
 			ret
 @check_key:
 			; check if a space key pressed
-			lhld key_code
-			mvi a, KEY_SPACE
-			cmp h
+			lda action_code
+			cpi ACTION_CODE_FIRE1
 			jnz dialog_update_continue_this_step
 			; it's pressed
 			; requesting a level loading

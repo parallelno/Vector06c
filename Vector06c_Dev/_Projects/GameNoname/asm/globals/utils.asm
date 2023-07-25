@@ -157,58 +157,6 @@ clear_ram_disk:
 			CLEAR_MEM_SP(false)
 			ret
 
-
-key_handling_full:
-			lxi h, key_code
-			; line 0
-			mvi a, %1111_1110
-			out 3
-			in 2
-			mov m, a
-			inx h
-			; line 1
-			mvi a, %0111_1111
-			out 3
-			in 2
-			mov m, a
-			inx h
-			; line 2
-			mvi a, %1011_1111
-			out 3
-			in 2
-			mov m, a
-			inx h
-			; line 3
-			mvi a, %1101_1111
-			out 3
-			in 2
-			mov m, a
-			inx h
-			; line 4
-			mvi a, %1110_1111
-			out 3
-			in 2
-			mov m, a						
-			inx h
-			; line 5
-			mvi a, %1111_0111
-			out 3
-			in 2
-			mov m, a
-			inx h
-			; line 6
-			mvi a, %1111_1011
-			out 3
-			in 2
-			mov m, a
-			inx h
-			; line 7
-			mvi a, %1111_1101
-			out 3
-			in 2
-			mov m, a	
-			ret
-
 ;copy the pallete from a ram-disk, then requet for using it
 ; in:
 ; de - ram-disk palette addr

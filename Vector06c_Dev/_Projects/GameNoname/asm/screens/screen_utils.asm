@@ -1,8 +1,7 @@
 screen_space_checking:
 			; return if non-space key was pressed
-			lhld key_code
-			mvi a, KEY_SPACE
-			cmp h
+			lda action_code
+			cpi ACTION_CODE_FIRE1
 			rnz
 			; set the global req to return to the main nemu
 			mvi a, GLOBAL_REQ_MAIN_MENU
@@ -45,9 +44,9 @@ screen_simple_init:
 			call room_fill_tiledata
 
 			; reset key data
-			lxi h, KEY_NO << 8 | KEY_NO
-			shld key_code
-			shld key_code_old
+			mvi a, ACTION_CODE_NO
+			sta action_code
+
 			ret
 
 screen_palette_and_frame:
@@ -77,8 +76,8 @@ screen_simple_update:
 			call bullets_update
 
 			; to check repeated key-pressing
-			lhld key_code
-			shld key_code_old
+			lda action_code
+			sta action_code_old
 
 			jmp @loop
 

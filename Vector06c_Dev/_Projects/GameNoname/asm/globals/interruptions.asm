@@ -42,15 +42,7 @@ interruption:
 ;
 ;			interruption main logic start
 ;
-			; keyboard handling
-			mvi a, PORT0_OUT_IN
-			out 0
-
-			call key_handling_full
-
-			; joystick "P" handling
-			in $06
-			sta joy_code
+			call controls_check
 
 			;check for a palette update
 palette_update_request_:
@@ -128,4 +120,3 @@ ints_per_sec_counter:
 ; a lopped counter increased every game draw call
 game_draws_counter = interruption_fps + 1
 palette_update_request = palette_update_request_ + 1
-

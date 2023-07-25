@@ -293,36 +293,36 @@ options_cursor_pos_update:
 options_screen_cursor_update:
 			; check keys
 			; check if the space key pressed
-			lhld key_code_old
-			xchg
-			lhld key_code
+			lhld action_code
+			; h - action_code_old
+			; l - action_code
 			
-			mvi a, KEY_SPACE
-			cmp h
+			mvi a, ACTION_CODE_FIRE1
+			cmp l
 			jnz @check_arrows
 			; check if a space was not pressed last time 
 			; to avoid multiple tyme pressing
-			cmp d
+			cmp h
 			jnz @space_handling
 
 @check_arrows:
 			; return if no arrow key pressed
-			mvi a, KEY_UP & KEY_DOWN
+			mvi a, ACTION_CODE_UP & ACTION_CODE_DOWN
 			ora l
 			inr a
 			rz
 
 			; return if the same arrow keys was pressed last update
-			lda key_code_old
-			cmp l
+			mov a, l
+			cmp h
 			jnz @new_key_pressed
 			ret
 
 @new_key_pressed:
-			mov a, l
-			cpi KEY_DOWN
+			; a - action_code
+			cpi ACTION_CODE_DOWN
 			jz @cursor_move_down
-			cpi KEY_UP
+			cpi ACTION_CODE_UP
 			jz @cursor_move_up
 			ret
 @cursor_move_up:

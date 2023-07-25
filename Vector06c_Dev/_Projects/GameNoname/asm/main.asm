@@ -7,6 +7,7 @@
 .include "asm\\globals\\global_vars.asm"
 
 .include "asm\\globals\\utils.asm"
+.include "asm\\globals\\controls.asm"
 .include "asm\\globals\\interruptions.asm"
 .include "generated\\code\\ram_disk_init.asm"
 .include "asm\\game_utils.asm"
