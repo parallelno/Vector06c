@@ -33,7 +33,7 @@ main_start:
 			cpi GLOBAL_REQ_SCORES
 			cz scores_screen
 			cpi GLOBAL_REQ_OPTIONS
-			cz options_screen		
+			cz settings_screen		
 			jmp @loop
 
 code_seg_end:
