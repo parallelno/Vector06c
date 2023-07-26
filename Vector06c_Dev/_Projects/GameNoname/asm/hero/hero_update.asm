@@ -33,12 +33,12 @@ hero_update:
 			; h - action_code_old
 			; l - action_code
 
-			mvi a, ACTION_CODE_FIRE1
+			mvi a, CONTROL_CODE_FIRE1
 			cmp l
 			jz hero_attack_start
 
 			; check if no arrow key pressed
-			mvi a, ACTION_CODE_LEFT & ACTION_CODE_RIGHT & ACTION_CODE_UP & ACTION_CODE_DOWN
+			mvi a, CONTROL_CODE_LEFT & CONTROL_CODE_RIGHT & CONTROL_CODE_UP & CONTROL_CODE_DOWN
 			ora l
 			inr a
 			jz hero_idle_update
@@ -56,7 +56,7 @@ hero_update:
 @moveKeysPressed:
 			; a - action_code
 @setAnimRunR:
-			cpi ACTION_CODE_RIGHT
+			cpi CONTROL_CODE_RIGHT
 			jnz @setAnimRunRU
 
 			lxi h, HERO_RUN_SPEED
@@ -75,7 +75,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunRU:
-			cpi ACTION_CODE_RIGHT & ACTION_CODE_UP
+			cpi CONTROL_CODE_RIGHT & CONTROL_CODE_UP
 			jnz @setAnimRunRD
 
 			lxi h, HERO_RUN_SPEED_D
@@ -89,7 +89,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunRD:
-			cpi ACTION_CODE_RIGHT & ACTION_CODE_DOWN
+			cpi CONTROL_CODE_RIGHT & CONTROL_CODE_DOWN
 			jnz @setAnimRunL
 
 			lxi h, HERO_RUN_SPEED_D
@@ -104,7 +104,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunL:
-			cpi ACTION_CODE_LEFT
+			cpi CONTROL_CODE_LEFT
 			jnz @setAnimRunLU
 
 			LXI_H_NEG(HERO_RUN_SPEED)
@@ -123,7 +123,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunLU:
-			cpi ACTION_CODE_LEFT & ACTION_CODE_UP
+			cpi CONTROL_CODE_LEFT & CONTROL_CODE_UP
 			jnz @setAnimRunLD
 
 			LXI_H_NEG(HERO_RUN_SPEED_D)
@@ -138,7 +138,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunLD:
-			cpi ACTION_CODE_LEFT & ACTION_CODE_DOWN
+			cpi CONTROL_CODE_LEFT & CONTROL_CODE_DOWN
 			jnz @setAnimRunU
 
 			LXI_H_NEG(HERO_RUN_SPEED_D)
@@ -152,7 +152,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunU:
-			cpi ACTION_CODE_UP
+			cpi CONTROL_CODE_UP
 			jnz @setAnimRunD
 
 			lxi h, 0
@@ -176,7 +176,7 @@ hero_update:
 			shld hero_anim_addr
 			jmp hero_update_temp_pos
 @setAnimRunD:
-			cpi ACTION_CODE_DOWN
+			cpi CONTROL_CODE_DOWN
 			rnz
 
 			lxi h, 0

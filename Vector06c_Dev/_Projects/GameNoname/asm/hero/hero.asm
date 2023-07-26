@@ -9,7 +9,7 @@ hero_init:
 			call hero_idle_start
 			
 			; reset key data			
-			mvi a, ACTION_CODE_NO
+			mvi a, CONTROL_CODE_NO
 			sta action_code
 
 			lxi h, hero_pos_x+1

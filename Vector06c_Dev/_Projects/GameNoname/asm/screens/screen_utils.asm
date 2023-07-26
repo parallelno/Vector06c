@@ -1,7 +1,7 @@
 screen_space_checking:
 			; return if non-space key was pressed
 			lda action_code
-			cpi ACTION_CODE_FIRE1
+			cpi CONTROL_CODE_FIRE1
 			rnz
 			; set the global req to return to the main nemu
 			mvi a, GLOBAL_REQ_MAIN_MENU
@@ -44,7 +44,7 @@ screen_simple_init:
 			call room_fill_tiledata
 
 			; reset key data
-			mvi a, ACTION_CODE_NO
+			mvi a, CONTROL_CODE_NO
 			sta action_code
 
 			ret

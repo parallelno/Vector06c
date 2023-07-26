@@ -73,7 +73,7 @@ dialog_init_hero_no_health:
 @check_key:
 			; check if a space key pressed
 			lda action_code
-			cpi ACTION_CODE_FIRE1
+			cpi CONTROL_CODE_FIRE1
 			jnz dialog_update_continue_this_step
 			; it's pressed
 			; requesting a level loading

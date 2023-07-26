@@ -24,8 +24,7 @@
 ;				impact hero
 ;				death
 
-;CURSOR_MOVE_SPEED		= $0100				; low byte is a subpixel speed, high byte is a speed in pixels
-;CURSOR_MOVE_SPEED_NEG	= $ffff - $0100 + 1	; low byte is a subpixel speed, high byte is a speed in pixels
+CURSOR_MOVE_SPEED_MAX		= 14
 
 ; statuses.
 ;CURSOR_STATUS_MOVE = 0
@@ -127,10 +126,20 @@ cursor_update:
 			; move up
 			RRC_(2)
 			ani %0011_1111
+			; clamp to max speed
+			cpi CURSOR_MOVE_SPEED_MAX
+			jc @no_clamp
+			mvi a, CURSOR_MOVE_SPEED_MAX
+@no_clamp:
 			jmp @apply_pos
 @move_down:			
 			RRC_(2)
 			ori %1100_0000
+			; clamp to max speed
+			cpi -CURSOR_MOVE_SPEED_MAX
+			jnc @no_clamp2
+			mvi a, -CURSOR_MOVE_SPEED_MAX
+@no_clamp2:
 @apply_pos:
 			; add velocity to the bullet pos
 			add m

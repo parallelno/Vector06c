@@ -77,7 +77,7 @@ main_menu_cursor_update:
 			; h - action_code_old
 			; l - action_code
 			
-			mvi a, ACTION_CODE_FIRE1
+			mvi a, CONTROL_CODE_FIRE1
 			cmp l
 			jnz @check_arrows
 			; check if a space was not pressed last time 
@@ -87,7 +87,7 @@ main_menu_cursor_update:
 
 @check_arrows:
 			; return if no arrow key pressed
-			mvi a, ACTION_CODE_UP & ACTION_CODE_DOWN
+			mvi a, CONTROL_CODE_UP & CONTROL_CODE_DOWN
 			ora l
 			inr a
 			rz
@@ -99,9 +99,9 @@ main_menu_cursor_update:
 			ret
 @new_key_pressed:
 			; a - action_code
-			cpi ACTION_CODE_DOWN
+			cpi CONTROL_CODE_DOWN
 			jz @cursor_move_down
-			cpi ACTION_CODE_UP
+			cpi CONTROL_CODE_UP
 			jz @cursor_move_up
 			ret
 @cursor_move_up:

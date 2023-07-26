@@ -27,30 +27,45 @@ __text_setting_off:
 			TEXT("OFF")
 __text_settings:
 			TEXT("Settings:")
-__text_music_sfx:
+__text_settings_names:
 			TEXT("Music", LINE_BREAK)
-			TEXT("SFX")
-__text_controls:
-			TEXT("Controls:")
-
-__text_keys:
-			TEXT("UP", LINE_BREAK)
-			TEXT("DOWN", LINE_BREAK)
-			TEXT("LEFT", LINE_BREAK)
-			TEXT("RIGHT", LINE_BREAK)
-			TEXT("FIRE", LINE_BREAK)
-			TEXT("SELECT", PARAG_BREAK)
-__text_return:			
+			TEXT("SFX", PARAG_BREAK)
+			TEXT("Control Preset .........", LINE_BREAK)
+			TEXT(" UP ..............................", LINE_BREAK)
+			TEXT(" DOWN ......................", LINE_BREAK)
+			TEXT(" LEFT ........................", LINE_BREAK)
+			TEXT(" RIGHT .....................", LINE_BREAK)
+			TEXT(" FIRE ..........................", LINE_BREAK)
+			TEXT(" SELECT ..................", LINE_BREAK)
+			TEXT(" RETURN ................", PARAG_BREAK)
+__text_return:		
 			TEXT("Return to the Main Menu")
 __text_dots:
 			TEXT("........................................")
 __text_change_settings:			
 			TEXT("Change settings")
-__text_predef_keys:
-			TEXT("UP", LINE_BREAK)
-			TEXT("DOWN", LINE_BREAK)
-			TEXT("LEFT", LINE_BREAK)
-			TEXT("RIGHT")
+
+__text_control_preset_key:
+			TEXT("Keys")
+__text_control_preset_joy:
+			TEXT("JoyP1")
+
+__text_controls_keyboard:
+			TEXT("K UP", LINE_BREAK)
+			TEXT("K DOWN", LINE_BREAK)
+			TEXT("K LEFT", LINE_BREAK)
+			TEXT("K RIGHT", LINE_BREAK)
+			TEXT("K SPACE", LINE_BREAK)
+			TEXT("K PS", LINE_BREAK)
+			TEXT("K TAB")
+__text_controls_joystic:
+			TEXT("J UP", LINE_BREAK)
+			TEXT("J DOWN", LINE_BREAK)
+			TEXT("J LEFT", LINE_BREAK)
+			TEXT("J RIGHT", LINE_BREAK)
+			TEXT("J FIRE1", LINE_BREAK)
+			TEXT("J FIRE2", LINE_BREAK)
+			TEXT("K TAB")
 
 ;===================================================================================
 ; credits screen
