@@ -63,8 +63,13 @@ controls_keys_check:
 			add e
 			mov a, d
 			rar
-			stc
-			rar ; CONTROL_CODE_NOTUSED has always no action
+			mov d, a
+			; check CONTROL_CODE_KEY_SPACE			
+			mvi a, KEY_CODE_SPACE
+			ora b
+			add e
+			mov a, d
+			rar
 			mov d, a
 			; check CONTROL_CODE_FIRE2
 			mvi a, KEY_CODE_ALT
@@ -85,8 +90,8 @@ controls_keys_check:
 controls_joy_check:
 			; read joystick "P" code
 			in $06
-			ori ~CONTROL_CODE_RETURN ; to set the bit to 1 representing a no action status
-			mov c, a
+			ori ~(CONTROL_CODE_KEY_SPACE && CONTROL_CODE_RETURN) ; set the default value (no action)
+			mov e, a
 			
 			; read key_code
 			mvi a, PORT0_OUT_IN
@@ -95,14 +100,32 @@ controls_joy_check:
 			mvi a, KEY_CODE_LINE_0 ; %1111_1110
 			out 3
 			in 2
+			mov c, a
+			; line 7
+			mvi a, KEY_CODE_LINE_7 ; %0111_1111
+			out 3
+			in 2
+			mov b, a
+
 			; check CONTROL_CODE_RETURN
-			ani <(~KEY_CODE_TAB)
+			mvi a, ~KEY_CODE_TAB
+			ana c
 			jnz @key_return_not_pressed
 			mvi a, CONTROL_CODE_RETURN
-			ana c ; set the bit to 0 representing an action
-			mov c, a
+			ana e ; set the bit to 0 representing an action
+			mov e, a
 @key_return_not_pressed:
-			mov a, c
+
+			; check CONTROL_CODE_RETURN
+			mvi a, ~KEY_CODE_SPACE
+			ana b
+			jnz @key_space_not_pressed
+			mvi a, CONTROL_CODE_KEY_SPACE
+			ana e ; set the bit to 0 representing an action
+			mov e, a
+@key_space_not_pressed:
+
+			mov a, e
 			sta action_code
 			ret
 

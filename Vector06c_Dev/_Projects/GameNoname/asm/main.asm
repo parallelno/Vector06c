@@ -15,7 +15,7 @@
 .include "asm\\screens\\main_menu.asm"
 .include "asm\\screens\\credits.asm"
 .include "asm\\screens\\scores.asm"
-.include "asm\\screens\\options.asm"
+.include "asm\\screens\\settings.asm"
 .include "asm\\game.asm"
 
 main_start:

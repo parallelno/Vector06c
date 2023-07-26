@@ -157,6 +157,29 @@ clear_ram_disk:
 			CLEAR_MEM_SP(false)
 			ret
 
+; erase a block in the screen buff
+; in:
+; hl - scr_addr
+; b - width/8
+; c - height
+erase_screen_block:
+			mov a, c
+			add l
+			mov c, l
+@loop:
+			mvi m, 0
+			inr l
+			cmp l
+			jnz @loop
+			
+			inr h
+			mov l, c
+
+			dcr b
+			jnz @loop
+			ret
+
+
 ;copy the pallete from a ram-disk, then requet for using it
 ; in:
 ; de - ram-disk palette addr

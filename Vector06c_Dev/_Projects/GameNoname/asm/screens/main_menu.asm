@@ -77,8 +77,8 @@ main_menu_cursor_update:
 			; h - action_code_old
 			; l - action_code
 			
-			mvi a, CONTROL_CODE_FIRE1
-			cmp l
+			mvi a, ~CONTROL_CODE_KEY_SPACE
+			ana l
 			jnz @check_arrows
 			; check if a space was not pressed last time 
 			; to avoid multiple tyme pressing

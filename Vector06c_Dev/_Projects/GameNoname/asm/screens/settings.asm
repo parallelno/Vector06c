@@ -85,29 +85,13 @@ options_screen_text_draw:
 			lxi h, __text_settings
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
-			; MUSIC & SFX
+			; MUSIC & SFX & Controls
 			@text_pos = @text_pos + OPTIONS_LINE_SPACING
 			lxi b, @text_pos
 			lxi h, __text_settings_names
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			/*
-			; MUSIC & SFX dots
-			lxi b, $2000 | @text_pos
-			lxi h, __text_dots + 4 ; skip several dot symdols
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			@text_pos = @text_pos + OPTIONS_LINE_SPACING
-			lxi b, $1e00 | @text_pos
-			lxi h, __text_dots
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
-			; MUSIC & SFX setting values
-			*/
 			call options_settings_val_draw
-			; KEY PREDEFINED VALUES
-			// lxi b, OPTIONS_SETTING_PREDEF_VAL_POS_X<<8 | <@text_pos
-			// lxi h, __text_predef_keys
-			// CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-
 			ret
 
 option_screen_cursor_init:
@@ -182,13 +166,18 @@ options_setting_controls_val_draw:
 @text_pos	.var  OPTIONS_POS
 			@text_pos = @text_pos + OPTIONS_LINE_SPACING * 2 + OPTIONS_PARAG_SPACING
 			
-			; erase a setting value
-			@scr_addr_x_offset = (OPTIONS_SETTING_VAL_POS_X/8)<<8
-			lxi b, 3<<8 | 9
-			lxi d, SCR_BUFF1_ADDR + <@text_pos | @scr_addr_x_offset
-			call sprite_copy_to_scr_v
+			; erase a CONTROL PRESET settings value
+			lxi b, 4<<8 | 9
+			lxi h, SCR_BUFF1_ADDR + <@text_pos | (OPTIONS_SETTING_VAL_POS_X/8)<<8
+			call erase_screen_block
+
+			; erase a Controls settings value
+			lxi b, 6<<8 | 95
+			lxi h, SCR_BUFF1_ADDR + <@text_pos + OPTIONS_LINE_SPACING * 7 | (OPTIONS_SUB_SETTING_VAL_POS_X/8)<<8
+			call erase_screen_block
+
 			; get a setting value
-			call controls_get_preset
+			call controls_get_preset			
 
 			cpi CONTROL_PRESET_KEYBOARD
 			jz @control_preset_keyboard
@@ -211,7 +200,8 @@ options_setting_controls_val_draw:
 			; draw controls
 			lxi h, __text_controls_keyboard
 			lxi b, OPTIONS_SUB_SETTING_VAL_POS_X<<8 | <@text_pos + OPTIONS_LINE_SPACING
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
+			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+
 			ret
 
 
@@ -266,11 +256,12 @@ options_screen_cursor_update:
 			; h - action_code_old
 			; l - action_code
 
-			mvi a, CONTROL_CODE_FIRE1
-			cmp l
+			mvi a, ~CONTROL_CODE_KEY_SPACE
+			ana l
 			jnz @check_arrows
 			; check if a space was not pressed last time
 			; to avoid multiple tyme pressing
+			mov a, l
 			cmp h
 			jnz @space_handling
 
