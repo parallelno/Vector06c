@@ -84,6 +84,7 @@ controls_keys_check:
 			add e
 			mov a, d
 			rar
+			cma
 			sta action_code
 			ret
 
@@ -126,6 +127,7 @@ controls_joy_check:
 @key_space_not_pressed:
 
 			mov a, e
+			cma
 			sta action_code
 			ret
 

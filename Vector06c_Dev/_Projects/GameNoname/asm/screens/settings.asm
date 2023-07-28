@@ -24,7 +24,7 @@ SETTINGS_SECTION2_LAST_ID = SETTINGS_ID_CONTROLS
 SETTINGS_CURSOR_POS_Y_OFFSET1	= - SETTINGS_PARAG_SPACING + SETTINGS_LINE_SPACING	; when it is in the controls section
 SETTINGS_CURSOR_POS_Y_OFFSET2	= SETTINGS_CURSOR_POS_Y_OFFSET1 - SETTINGS_PARAG_SPACING - SETTINGS_LINE_SPACING * 6	; when it is in the return section
 ;========================================
-; non need to adjust
+; no need to adjust
 SETTINGS_HALF_SCR		= 128
 
 SETTINGS_POS_X						= SETTINGS_HALF_SCR - (SETTINGS_TEXT_SETTINGS_W/2)
@@ -38,7 +38,7 @@ SETTINGS_SETTING_TITLE_POS_X			= SETTINGS_HALF_SCR - SETTINGS_TEXT_TITLE_W/2
 SETTINGS_CURSOR_POS_X		= SETTINGS_POS_X - 8
 SETTINGS_CURSOR_POS_Y_MAX	= SETTINGS_POS_Y_MAX - 16
 
-; non need to adjust - end
+; no need to adjust - end
 ;========================================
 
 
@@ -254,35 +254,23 @@ settings_screen_cursor_update:
 			; h - action_code_old
 			; l - action_code
 
-			mvi a, ~CONTROL_CODE_KEY_SPACE
-			ana l
-			jnz @check_arrows
-			; check if a space was not pressed last time
-			; to avoid multiple tyme pressing
+			; return if the same key was pressed last time 
+			; to avoid multiple times pressing
 			mov a, l
 			cmp h
+			rz
+
+			mvi a, CONTROL_CODE_KEY_SPACE | CONTROL_CODE_FIRE1
+			ana l
 			jnz @space_handling
 
 @check_arrows:
-			; return if no arrow key pressed
-			mvi a, CONTROL_CODE_UP & CONTROL_CODE_DOWN
-			ora l
-			inr a
-			rz
-
-			; return if the same arrow keys was pressed last update
 			mov a, l
-			cmp h
-			jnz @new_key_pressed
-			ret
-
-@new_key_pressed:
 			; a - action_code
 			cpi CONTROL_CODE_DOWN
 			jz @cursor_move_down
 			cpi CONTROL_CODE_UP
-			jz @cursor_move_up
-			ret
+			rnz
 @cursor_move_up:
 			; check if a selected setting is outside of the range [0 - SETTINGS_MAX]
 			lxi h, settings_cursor_setting_id
@@ -329,9 +317,8 @@ settings_screen_cursor_update:
 			jmp setting_sfx_val_draw
 @check_controls:
 			cpi SETTINGS_ID_CONTROLS
-			jnz @check_down
+			rnz
 			; flip the control preset keys/joy
 			call controls_flip_preset
 			jmp setting_controls_val_draw
-@check_down:
 			ret

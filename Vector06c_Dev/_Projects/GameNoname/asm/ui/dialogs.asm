@@ -71,10 +71,10 @@ dialog_init_hero_no_health:
 			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 @check_key:
-			; check if a space key pressed
+			; check if a fire action is pressed
 			lda action_code
-			cpi CONTROL_CODE_FIRE1
-			jnz dialog_update_continue_this_step
+			ani CONTROL_CODE_FIRE1 | CONTROL_CODE_KEY_SPACE
+			jz dialog_update_continue_this_step
 			; it's pressed
 			; requesting a level loading
 			xra a

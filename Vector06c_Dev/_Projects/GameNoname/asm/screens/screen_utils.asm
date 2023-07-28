@@ -1,8 +1,8 @@
 screen_space_checking:
 			; return if non-space key was pressed
 			lda action_code
-			ani ~CONTROL_CODE_KEY_SPACE
-			rnz
+			ani CONTROL_CODE_KEY_SPACE | CONTROL_CODE_FIRE1
+			rz
 			; set the global req to return to the main nemu
 			mvi a, GLOBAL_REQ_MAIN_MENU
 			sta global_request

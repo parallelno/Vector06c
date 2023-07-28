@@ -34,27 +34,27 @@ hero_update:
 			; l - action_code
 
 			mvi a, CONTROL_CODE_FIRE1
-			cmp l
-			jz hero_attack_start
+			ana l
+			jnz hero_attack_start
 
 			; check if no arrow key pressed
-			mvi a, CONTROL_CODE_LEFT & CONTROL_CODE_RIGHT & CONTROL_CODE_UP & CONTROL_CODE_DOWN
-			ora l
-			inr a
+			mvi a, CONTROL_CODE_LEFT | CONTROL_CODE_RIGHT | CONTROL_CODE_UP | CONTROL_CODE_DOWN
+			ana l
 			jz hero_idle_update
 
 @checkMoveKeys:
 			; check if the same arrow keys pressed the prev update
-			mov a, l
-			cmp h
+			; a = action_code & (CONTROL_CODE_LEFT | CONTROL_CODE_RIGHT | CONTROL_CODE_UP | CONTROL_CODE_DOWN)
+			xra h ; it erases bits if they are equal in both action_code_old and action_code
+			ani CONTROL_CODE_LEFT | CONTROL_CODE_RIGHT | CONTROL_CODE_UP | CONTROL_CODE_DOWN
 			jnz @moveKeysPressed
-
-			; update a move anim
+			
+			; continue the same direction
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_MOVE)
 			jmp hero_update_temp_pos
 
 @moveKeysPressed:
-			; a - action_code
+			mov a, l
 @setAnimRunR:
 			cpi CONTROL_CODE_RIGHT
 			jnz @setAnimRunRU
@@ -75,7 +75,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunRU:
-			cpi CONTROL_CODE_RIGHT & CONTROL_CODE_UP
+			cpi CONTROL_CODE_RIGHT | CONTROL_CODE_UP
 			jnz @setAnimRunRD
 
 			lxi h, HERO_RUN_SPEED_D
@@ -89,7 +89,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunRD:
-			cpi CONTROL_CODE_RIGHT & CONTROL_CODE_DOWN
+			cpi CONTROL_CODE_RIGHT | CONTROL_CODE_DOWN
 			jnz @setAnimRunL
 
 			lxi h, HERO_RUN_SPEED_D
@@ -123,7 +123,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunLU:
-			cpi CONTROL_CODE_LEFT & CONTROL_CODE_UP
+			cpi CONTROL_CODE_LEFT | CONTROL_CODE_UP
 			jnz @setAnimRunLD
 
 			LXI_H_NEG(HERO_RUN_SPEED_D)
@@ -138,7 +138,7 @@ hero_update:
 			jmp hero_update_temp_pos
 
 @setAnimRunLD:
-			cpi CONTROL_CODE_LEFT & CONTROL_CODE_DOWN
+			cpi CONTROL_CODE_LEFT | CONTROL_CODE_DOWN
 			jnz @setAnimRunU
 
 			LXI_H_NEG(HERO_RUN_SPEED_D)

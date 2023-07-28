@@ -63,11 +63,11 @@ chunk_bank3_addr8000_0:
 ;                             hero_l_sprites [14466], vampire_sprites [7884], vfx_sprites [1356], 
 ; bank2 addr8000 [19563 free] description: sound and music must be at >= $8000 addr. $F102-$FFFF music player runtime buffers 
 ;                             sound_rd [793], song01 [8575], 
-; bank3 addr0    [21044 free] description: 
-;                             level00_gfx [4834], level01_gfx [6634], 
+; bank3 addr0    [20916 free] description: 
+;                             level00_gfx [4962], level01_gfx [6634], 
 ; bank3 addr8000 [ 4096 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering) 
 ;                             sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], draw_text_ex_rd [389], text_rd [1223], 
-; [127303 total/28023 compressed][80828 total free]
+; [127431 total/28273 compressed][80700 total free]
 
 .if BUFFERS_START_ADDR < ram_disk_data
 			.error "the programm is too big. It overlaps with tables at the end of RAM"

@@ -76,34 +76,24 @@ main_menu_cursor_update:
 			lhld action_code
 			; h - action_code_old
 			; l - action_code
-			
-			mvi a, ~CONTROL_CODE_KEY_SPACE
-			ana l
-			jnz @check_arrows
-			; check if a space was not pressed last time 
-			; to avoid multiple tyme pressing
+
+			; return if the same key was pressed last time 
+			; to avoid multiple times pressing
+			mov a, l
 			cmp h
+			rz
+
+			mvi a, CONTROL_CODE_KEY_SPACE | CONTROL_CODE_FIRE1
+			ana l
 			jnz @space_handling
 
 @check_arrows:
-			; return if no arrow key pressed
-			mvi a, CONTROL_CODE_UP & CONTROL_CODE_DOWN
-			ora l
-			inr a
-			rz
-
-			; return if the same arrow keys was pressed last update
 			mov a, l
-			cmp h
-			jnz @new_key_pressed
-			ret
-@new_key_pressed:
 			; a - action_code
 			cpi CONTROL_CODE_DOWN
 			jz @cursor_move_down
 			cpi CONTROL_CODE_UP
-			jz @cursor_move_up
-			ret
+			rnz
 @cursor_move_up:
 			; check if a selected option is outside ofthe range [0 - MAIN_MENU_OPTIONS_MAX]
 			lda main_menu_cursor_option_id
