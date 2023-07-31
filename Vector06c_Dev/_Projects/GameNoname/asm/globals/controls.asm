@@ -12,81 +12,75 @@ controls_check_func_ptr_flipped:
 
 
 controls_keys_check:
-			; read key_code
 			mvi a, PORT0_OUT_IN
 			out 0
 			; line 0
-			mvi a, KEY_CODE_LINE_0 ; %1111_1110
+			mvi a, KEY_CODE_LINE_0
 			out 3
 			in 2
 			mov c, a
+
 			; line 7
-			mvi a, KEY_CODE_LINE_7 ; %0111_1111
+			mvi a, KEY_CODE_LINE_7
 			out 3
 			in 2
-			mov b, a
 
-			mvi e, 1 ; to check overflow and then extract CY flag
-			; D is used to store action_code
-			; D reg initialization is redundant because it will be rotated over all of the bits
-
-			; check CONTROL_CODE_RIGHT
-			mvi a, KEY_CODE_RIGHT
-			ora c
-			add e
-			rar
-			mov d, a
-			; check CONTROL_CODE_LEFT
-			mvi a, KEY_CODE_LEFT
-			ora c
-			add e
-			mov a, d
-			rar
-			mov d, a
-			; check CONTROL_CODE_UP
-			mvi a, KEY_CODE_UP
-			ora c
-			add e
-			mov a, d
-			rar
-			mov d, a
-			; check CONTROL_CODE_DOWN
-			mvi a, KEY_CODE_DOWN
-			ora c
-			add e
-			mov a, d
-			rar
-			mov d, a
-			; check CONTROL_CODE_RETURN
-			mvi a, KEY_CODE_TAB
-			ora c
-			add e
-			mov a, d
-			rar
-			mov d, a
-			; check CONTROL_CODE_KEY_SPACE			
-			mvi a, KEY_CODE_SPACE
-			ora b
-			add e
-			mov a, d
-			rar
-			mov d, a
-			; check CONTROL_CODE_FIRE2
-			mvi a, KEY_CODE_ALT
-			ora c
-			add e
-			mov a, d
-			rar
-			mov d, a
-			; check CONTROL_CODE_FIRE1
-			mvi a, KEY_CODE_SPACE
-			ora b
-			add e
-			mov a, d
-			rar
-			cma
+			ral 								; extract KEY_CODE_SPACE
+			mov a, c
+			ral 								; add KEY_CODE_SPACE to the key line 0
+			ani %111 ; bits: alt, tab, space, but inverset
+			adi <keys_to_controls_alt_tab_space
+			mov l, a
+			aci >keys_to_controls_alt_tab_space
+			sub l
+			mov h, a
+			mov e, m
+			
+			mvi a, %1111_0000
+			ana c
+			RRC_(4)
+			adi <keys_to_controls_arrows
+			mov l, a
+			aci >keys_to_controls_arrows
+			sub l
+			mov h, a
+			mov a, m
+			ora e
 			sta action_code
 			ret
+keys_to_controls_arrows: 
+			; bits that form an offset in this tbl: down, right, up, left. they are inversed
+			; bits of data: 0,0,0,0, CONTROL_CODE_DOWN, CONTROL_CODE_UP, CONTROL_CODE_LEFT, CONTROL_CODE_RIGHT
+			.byte %1111 ; none
+			.byte %1101 ; 
+			.byte %1011 ; 
+			.byte %1001 ; 
+			.byte %1110 ; 
+			.byte %1100 ; 
+			.byte %1010 ; 
+			.byte %1000 ; 
+
+			.byte %0111 ; right + up + left
+			.byte %0101 ; right + up
+			.byte %0011 ; 
+			.byte %0001 ; 
+			.byte %0110 ; 
+			.byte %0100 ; 
+			.byte %0010	; right + up + down
+			.byte 0		; right + up + left + down
+			
+keys_to_controls_alt_tab_space: 
+			; bits that form an offset in this tbl: alt, tab, space. they are inversed
+			; bits of data: CONTROL_CODE_FIRE1, CONTROL_CODE_FIRE2, CONTROL_CODE_KEY_SPACE, CONTROL_CODE_RETURN, 0,0,0,0
+			.byte %1111_0000 ; none
+			.byte %0101_0000 ; space
+			.byte %1110_0000 ; tab
+			.byte %0100_0000 ; tab + space
+			.byte %1011_0000 ; alt
+			.byte %0001_0000 ; alt + space
+			.byte %1010_0000 ; alt + tab
+			.byte 0			 ; alt + space + tab			
+			
 
 controls_joy_check:
 			; read joystick "P" code
@@ -98,12 +92,12 @@ controls_joy_check:
 			mvi a, PORT0_OUT_IN
 			out 0
 			; line 0
-			mvi a, KEY_CODE_LINE_0 ; %1111_1110
+			mvi a, KEY_CODE_LINE_0
 			out 3
 			in 2
 			mov c, a
 			; line 7
-			mvi a, KEY_CODE_LINE_7 ; %0111_1111
+			mvi a, KEY_CODE_LINE_7
 			out 3
 			in 2
 			mov b, a

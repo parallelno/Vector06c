@@ -21,7 +21,7 @@
 main_start:
 			CALL_RAM_DISK_FUNC(__sound_init, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
 			lxi b, __font_gfx
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_init, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_init, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 @loop:
 			lda global_request
 			cpi GLOBAL_REQ_MAIN_MENU

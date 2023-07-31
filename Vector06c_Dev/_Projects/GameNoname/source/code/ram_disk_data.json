@@ -309,7 +309,7 @@
 								},
 								{
 									"asset_type" : "code",
-									"path" : "asm\\render\\draw_text_ex_rd.asm"
+									"path" : "asm\\render\\text_ex_rd.asm"
 								},
 								{
 									"asset_type" : "code",

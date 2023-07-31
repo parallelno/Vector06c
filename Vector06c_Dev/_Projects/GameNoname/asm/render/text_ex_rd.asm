@@ -6,10 +6,10 @@ LINE_SPACING_DEFAULT = -12
 PARAG_SPACING_DEFAULT = -24
 
 ; convert local labels into global
-; call ex. CALL_RAM_DISK_FUNC(__draw_text_ex_rd_init, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+; call ex. CALL_RAM_DISK_FUNC(__text_ex_rd_init, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 ; in:
 ; bc - __font_gfx addr
-__draw_text_ex_rd_init:
+__text_ex_rd_init:
 			mvi a, GFX_PTRS_LEN
 			lxi h, font_gfx_ptrs
 @loop:
@@ -28,22 +28,22 @@ __draw_text_ex_rd_init:
 			ret
 
 ; set a default line and a paragraph spacing
-__draw_text_ex_rd_reset_spacing:
+__text_ex_rd_reset_spacing:
 			mvi a, LINE_SPACING_DEFAULT
-			sta draw_text_ex_rd_line_spacing + 1
+			sta text_ex_rd_line_spacing + 1
 
 			mvi a, PARAG_SPACING_DEFAULT
-			sta draw_text_ex_rd_parag_spacing + 1
+			sta text_ex_rd_parag_spacing + 1
 			ret
 
 ; set a line and a paragraph spacing
 ; in:
 ; c - line spacing
 ; b - paragraph spacing
-__draw_text_ex_rd_set_spacing:
-			lxi h, draw_text_ex_rd_line_spacing + 1
+__text_ex_rd_set_spacing:
+			lxi h, text_ex_rd_line_spacing + 1
 			mov m, c
-			lxi h, draw_text_ex_rd_parag_spacing + 1
+			lxi h, text_ex_rd_parag_spacing + 1
 			mov m, b
 			ret
 
@@ -53,22 +53,22 @@ __draw_text_ex_rd_set_spacing:
 ; in:
 ; hl - text addr
 ; bc - pos_xy
-; call ex. CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-__draw_text_ex_rd_scr3:
+; call ex. CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+__text_ex_rd_scr3:
 			mvi a, >SCR_BUFF3_ADDR
-			jmp draw_text_ex_rd
-__draw_text_ex_rd_scr2:
+			jmp text_ex_rd_draw
+__text_ex_rd_scr2:
 			mvi a, >SCR_BUFF2_ADDR
-			jmp draw_text_ex_rd
-__draw_text_ex_rd_scr1:
+			jmp text_ex_rd_draw
+__text_ex_rd_scr1:
 			mvi a, >SCR_BUFF1_ADDR
 ; draw a text with kerning. blend func - OR
 ; a - scr buff high addr, ex: >SCR_BUFF0_ADDR
-draw_text_ex_rd:
+text_ex_rd_draw:
 			sta @scr_buff_addr+1
 			; store pox_x
 			mov a, b
-			sta draw_text_ex_rd_restore_pos_x + 1
+			sta text_ex_rd_restore_pos_x + 1
 @next_char:
 			; get a char code
 			mov e, m
@@ -80,10 +80,10 @@ draw_text_ex_rd:
 			; a - char_code
 			; check if it is the end of the line
 			cpi <LINE_BREAK
-			jz draw_text_ex_rd_line_spacing
+			jz text_ex_rd_line_spacing
 			; check if it is the end of the line
 			cpi <PARAG_BREAK
-			jz draw_text_ex_rd_parag_spacing
+			jz text_ex_rd_parag_spacing
 
 			mvi d, 0
 			push h ; preserve the text data ptr
@@ -192,19 +192,19 @@ draw_text_ex_rd:
 @skip_dad_ptrs:
 			.word @shift0, @shift1,	@shift2, @shift3, @shift4, @shift5, @shift6, @shift7
 
-draw_text_ex_rd_next_char: = @next_char
+text_ex_rd_next_char: = @next_char
 
 ; move a position to the next paragraph
-draw_text_ex_rd_parag_spacing:
+text_ex_rd_parag_spacing:
 			mvi a, PARAG_SPACING_DEFAULT
 			add c
 			mov c, a
-			jmp draw_text_ex_rd_restore_pos_x
+			jmp text_ex_rd_restore_pos_x
 ; move a position to the next line
-draw_text_ex_rd_line_spacing:
+text_ex_rd_line_spacing:
 			mvi a, LINE_SPACING_DEFAULT
 			add c
 			mov c, a
-draw_text_ex_rd_restore_pos_x:
+text_ex_rd_restore_pos_x:
 			mvi b, TEMP_BYTE
-			jmp draw_text_ex_rd_next_char
+			jmp text_ex_rd_next_char

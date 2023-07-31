@@ -27,8 +27,7 @@ hero_update:
 			ani ACTOR_STATUS_BIT_NON_GAMEPLAY ; A reg has a broken status value now
 			jnz hero_dead
 
-
-			; check if an attack key pressed
+			; check if an attack key is pressed
 			lhld action_code
 			; h - action_code_old
 			; l - action_code
@@ -37,23 +36,32 @@ hero_update:
 			ana l
 			jnz hero_attack_start
 
-			; check if no arrow key pressed
+			; if no arrow key is pressed, do IDLE
 			mvi a, CONTROL_CODE_LEFT | CONTROL_CODE_RIGHT | CONTROL_CODE_UP | CONTROL_CODE_DOWN
 			ana l
 			jz hero_idle_update
 
-@checkMoveKeys:
+			; some arrow keys got pressed
+			; if the status was idle last time, start the move
+			lda hero_status
+			cpi HERO_STATUS_IDLE
+			jz @check_move_keys
+
 			; check if the same arrow keys pressed the prev update
-			; a = action_code & (CONTROL_CODE_LEFT | CONTROL_CODE_RIGHT | CONTROL_CODE_UP | CONTROL_CODE_DOWN)
-			xra h ; it erases bits if they are equal in both action_code_old and action_code
-			ani CONTROL_CODE_LEFT | CONTROL_CODE_RIGHT | CONTROL_CODE_UP | CONTROL_CODE_DOWN
-			jnz @moveKeysPressed
+			mov a, l
+			;xra h ; it erases bits if they are equal in both action_code_old and action_code
+			;ani CONTROL_CODE_LEFT | CONTROL_CODE_RIGHT | CONTROL_CODE_UP | CONTROL_CODE_DOWN
+			cmp h
+			jnz @check_move_keys
 			
 			; continue the same direction
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_MOVE)
 			jmp hero_update_temp_pos
 
-@moveKeysPressed:
+@check_move_keys:
+			mvi a, HERO_STATUS_MOVE
+			sta hero_status
+
 			mov a, l
 @setAnimRunR:
 			cpi CONTROL_CODE_RIGHT

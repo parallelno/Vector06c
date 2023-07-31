@@ -55,6 +55,7 @@ dialog_init_hero_no_health:
 
 @draw_frame:
 			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_dialog, __TILED_IMAGES_FRAME_INGAME_DIALOG_COPY_LEN, __tiled_images_tile1)
+			; draw an animated spacebar
 			; dialog_press_key (tiledata = 162)
 			mvi b, 162
 			@pos_tiles_x = 14
@@ -64,11 +65,11 @@ dialog_init_hero_no_health:
 			; c - tile_idx in the room_tiledata array.			
 			jmp backs_spawn
 @draw_text:	
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_reset_spacing, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_reset_spacing, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			; draw text
 			lxi b, $102d
 			lxi h, __text_no_health
-			CALL_RAM_DISK_FUNC(__draw_text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 @check_key:
 			; check if a fire action is pressed

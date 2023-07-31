@@ -66,7 +66,7 @@ chunk_bank3_addr8000_0:
 ; bank3 addr0    [20916 free] description: 
 ;                             level00_gfx [4962], level01_gfx [6634], 
 ; bank3 addr8000 [ 4096 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering) 
-;                             sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], draw_text_ex_rd [389], text_rd [1223], 
+;                             sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], text_ex_rd [389], text_rd [1223], 
 ; [127431 total/28273 compressed][80700 total free]
 
 .if BUFFERS_START_ADDR < ram_disk_data
