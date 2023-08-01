@@ -40,7 +40,7 @@ HERO_STATUS_DEATH_WAIT_SPARKER_DURATION	= 35
 ; animation speed (the less the slower, 0-255, 255 means next frame every update)
 HERO_ANIM_SPEED_MOVE	= 65
 HERO_ANIM_SPEED_IDLE	= 4
-HERO_ANIM_SPEED_ATTACK	= 80
+HERO_ANIM_SPEED_ATTACK	= 160
 
 ; gameplay
 HERO_HEALTH_MAX = 8
