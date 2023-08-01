@@ -69,7 +69,7 @@ dialog_init_hero_no_health:
 			; draw text
 			lxi b, $102d
 			lxi h, __text_no_health
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr3, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 @check_key:
 			; check if a fire action is pressed
