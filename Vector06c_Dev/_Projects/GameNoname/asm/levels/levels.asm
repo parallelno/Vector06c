@@ -3,7 +3,7 @@
 ;
 levels_init:
 			; TODO: set the level_idx to 0
-			mvi a, 1
+			mvi a, LEVEL_FIRST
 			sta level_idx
 
 			lxi h, 0
