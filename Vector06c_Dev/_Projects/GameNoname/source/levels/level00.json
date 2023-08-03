@@ -21,8 +21,8 @@
 	],
 	"asset_type" : "level",
 	"hero_start_pos" : {
-		"x" : 48,
-		"y" : 160
+		"x" : 120,
+		"y" : 140
 	},
 	"rooms" : [
 		{"path" : "level00_room00.tmj"}
