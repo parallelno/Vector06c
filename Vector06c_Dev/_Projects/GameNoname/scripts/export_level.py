@@ -32,19 +32,17 @@ def room_tiles_to_asm(room_j, remap_idxs, room_data_label):
 		asm += "\n"
 	return asm
 
-def room_tiles_data_to_asm(room_j, room_path, source_dir):
+def room_tiles_data_to_asm(data, width, height, room_path, source_dir):
 	asm = "; " + source_dir + room_path + "\n"
 	label_prefix = common.path_to_basename(room_path)
 
 	asm += "__" + label_prefix + "_tilesData:\n"
-	width = room_j["width"]
-	height = room_j["height"]
 
 	for y in reversed(range(height)):
 		asm += "			.byte "
 		for x in range(width):
 			i = y*width + x
-			t_idx = room_j["data"][i]
+			t_idx = data[i]
 			asm += str(t_idx) + ", "
 		asm += "\n"
 	return asm
@@ -255,7 +253,7 @@ def export_data(source_j_path, export_data_path):
 
 	room_paths = source_j["rooms"]
 	rooms_j = []
-	# load and parse tiled map
+	# load and process tiled map
 	for room_path_p in room_paths:
 		room_path = source_dir + room_path_p['path']
 		with open(room_path, "rb") as file:
@@ -278,31 +276,18 @@ def export_data(source_j_path, export_data_path):
 		room_path = room_paths[room_id]['path']
 		room_data_label = get_room_data_label(room_path, source_dir)
 
-		asm_room_data = ".org 0 \n"
-		asm_room_data += room_tiles_to_asm(room_j["layers"][0], remap_idxs, room_data_label)
-		asm_room_data += room_tiles_data_to_asm(room_j["layers"][1], room_path, source_dir)
-		# save room data to a temp file
-		asm_room_data_path_asm = export_dir + "room_data" + build.EXT_ASM
-		asm_room_data_path_bin = export_dir + "room_data" + build.EXT_BIN
-		asm_room_data_path_zx0 = export_dir + "room_data" + build.EXT_BIN_ZX0
-
-		with open(asm_room_data_path_asm, "w") as file:
-			file.write(asm_room_data)
-		# asm to temp bin
-		common.run_command(f"{build.assembler_path} {asm_room_data_path_asm} "
-			f" {asm_room_data_path_bin}")
-		# pack a room data
-		common.run_command(f"{build.zx0_path} {asm_room_data_path_bin} {asm_room_data_path_zx0}")
-		# load bin
-		with open(asm_room_data_path_zx0, "rb") as file:
-			asm += "\n			.word 0 ; safety pair of bytes for reading by POP B\n"
-			asm += room_data_label
-			asm += common.bytes_to_asm(file.read())
-
-		# del tmp files
-		common.delete_file(asm_room_data_path_asm)
-		common.delete_file(asm_room_data_path_bin) 
-		common.delete_file(asm_room_data_path_zx0)
+		asm_room_data = room_tiles_to_asm(room_j["layers"][0], remap_idxs, room_data_label)
+		
+		# clamp tiledata values into the range 
+		tiledatas_unclamped = room_j["layers"][1]["data"]
+		tiledatas = [x % 256 for x in tiledatas_unclamped]
+		
+		width = room_j["width"]
+		height = room_j["height"]
+		asm_room_data += room_tiles_data_to_asm(tiledatas, width, height, room_path, source_dir)
+		asm += "\n			.word 0 ; safety pair of bytes for reading by POP B\n"
+		asm += room_data_label			
+		asm += common.asm_compress_to_asm(asm_room_data)
 
 		# collect resource data
 		# TODO: get this from asm file
@@ -318,7 +303,7 @@ def export_data(source_j_path, export_data_path):
 		WORD_LEN			= 2
 		NULL_PTR			= "NULL_PTR"
 
-		for i, tiledata in enumerate(room_j["layers"][1]["data"]):
+		for i, tiledata in enumerate(tiledatas):
 			width = room_j["width"]
 			height = room_j["height"]
 			dy, dx = divmod(i, width)
