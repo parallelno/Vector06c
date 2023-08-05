@@ -54,7 +54,7 @@ palette_update_request_:
 			lxi h, palette + PALETTE_COLORS - 1
 			call set_palette_int
 			; reset update
-			A_TO_ZERO_CONST(PALETTE_UPD_REQ_NO)
+			A_TO_ZERO(PALETTE_UPD_REQ_NO)
 			sta palette_update_request
 
 @no_palette_update:			

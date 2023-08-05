@@ -66,8 +66,6 @@ hero_tile_func_item:
 			pop b
 			lxi d, vfx_reward
 			call vfx_init
-
-			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_breakables, BREAKABLE_SPAWN_RATE_DELTA, BREAKABLE_SPAWN_RATE_MAX)
 			ret
 
 ; handler func for resources

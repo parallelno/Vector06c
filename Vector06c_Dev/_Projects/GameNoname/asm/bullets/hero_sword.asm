@@ -277,7 +277,7 @@ hero_sword_func_container:
 			mvi m, <CONTAINERS_STATUS_ACQUIRED
 
 @no_container_found:
-			; erase item_id from tiledata
+			; erase container_id from tiledata
 			mvi b, >room_tiledata
 			mvi a, TILEDATA_RESTORE_TILE
 			stax b

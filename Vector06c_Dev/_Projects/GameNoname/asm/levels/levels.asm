@@ -21,7 +21,7 @@ levels_init:
 level_init:
 			; get the level init data ptr of the current level
 			lda level_idx
-			AX2_ADD_INT_HL(levels_init_tbls_ptrs)
+			HL_TO_AX2_PLUS_INT16(levels_init_tbls_ptrs)
 
 			mov e, m
 			inx h
@@ -99,7 +99,7 @@ level_init:
 			call game_ui_draw
 
 			; reset level command
-			A_TO_ZERO_CONST(GLOBAL_REQ_NONE)
+			A_TO_ZERO(GLOBAL_REQ_NONE)
 			sta global_request
 			ret
 
@@ -126,7 +126,7 @@ level_update:
 			call room_init
 			call hero_init
 			; reset level command
-			A_TO_ZERO_CONST(GLOBAL_REQ_NONE)
+			A_TO_ZERO(GLOBAL_REQ_NONE)
 			sta global_request
 			call reset_game_updates_counter
 			ret

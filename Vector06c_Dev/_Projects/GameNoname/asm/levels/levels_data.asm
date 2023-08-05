@@ -22,10 +22,11 @@
 ; ffff == 5, teleport to 48-63 room_id, room_id = d+48
 
 ; ffff == 6, a global item. a hero interacts with it when he steps on it. item_id = d. see buffers.asm->global_items for details
-;		item_id = 0 - key blue
-;		item_id = 1 - key red
-;		item_id = 2 - key green
-;		item_id = 3 - key magma
+;		item_id = 0 - storytelling - an invisible tiledata to open a dialog window
+;		item_id = 1 - key blue
+;		item_id = 2 - key red
+;		item_id = 3 - key green
+;		item_id = 4 - key magma
 
 ; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. resource_id = d. see buffers.asm->resources_inst_data for details
 ;		resource_id == 0 - a coin (tiledata = 7*16+0 = 160)

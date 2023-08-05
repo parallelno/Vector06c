@@ -75,22 +75,22 @@ hero_res_func_tbl:
 			RET_4()								; resource_id == 12
 			RET_4()								; resource_id == 13
 			RET_4()								; resource_id == 14
-			RET_4()								; resource_id == 15 (collision) called only when a hero is stuck into collision tiles
+			RET_4()								; resource_id == 15
 
 ; funcs to handle the container pick up process. more info is in level_data.asm->room_tiledata
 hero_cont_func_tbl:
-			JMP_4( hero_cont_func_chest_small)	; resource_id == 1
-			JMP_4( hero_cont_func_chest_big)	; resource_id == 2
-			JMP_4( hero_cont_func_chest_weapon0); resource_id == 3
-			RET_4()								; resource_id == 4
-			RET_4()								; resource_id == 5
-			RET_4()								; resource_id == 6
-			RET_4()								; resource_id == 7
-			RET_4()								; resource_id == 8
-			RET_4()								; resource_id == 9
-			RET_4()								; resource_id == 10
-			RET_4()								; resource_id == 11
-			RET_4()								; resource_id == 12
-			RET_4()								; resource_id == 13
-			RET_4()								; resource_id == 14
-			RET_4()								; resource_id == 15 (collision) called only when a hero is stuck into collision tiles
+			JMP_4( hero_cont_func_chest_small)	; container_id == 1
+			JMP_4( hero_cont_func_chest_big)	; container_id == 2
+			JMP_4( hero_cont_func_chest_weapon0); container_id == 3
+			RET_4()								; container_id == 4
+			RET_4()								; container_id == 5
+			RET_4()								; container_id == 6
+			RET_4()								; container_id == 7
+			RET_4()								; container_id == 8
+			RET_4()								; container_id == 9
+			RET_4()								; container_id == 10
+			RET_4()								; container_id == 11
+			RET_4()								; container_id == 12
+			RET_4()								; container_id == 13
+			RET_4()								; container_id == 14
+			RET_4()								; container_id == 15

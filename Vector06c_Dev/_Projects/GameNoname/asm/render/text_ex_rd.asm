@@ -120,7 +120,7 @@ text_ex_rd_draw:
 			ana h
 			; make a ptr to skip_dad dad h
 			; de = a * 2 + @skip_dad_ptrs
-			AX2_ADD_INT_DE(@skip_dad_ptrs)
+			DE_TO_AX2_PLUS_INT16(@skip_dad_ptrs)
 
 			; read skip_ptr
 			xchg

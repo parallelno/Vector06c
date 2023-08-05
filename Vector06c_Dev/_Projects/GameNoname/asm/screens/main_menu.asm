@@ -204,7 +204,7 @@ main_menu_cursor_update:
 			ret
 
 main_menu_cursor_init:
-			A_TO_ZERO_CONST(GLOBAL_REQ_NONE)
+			A_TO_ZERO(GLOBAL_REQ_NONE)
 @check_if_init:
 			jmp @init
 @init:

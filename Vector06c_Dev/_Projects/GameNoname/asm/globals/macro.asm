@@ -106,6 +106,33 @@
 		.endloop
 .endmacro
 
+.macro LXI_B(val)
+	.if val < 0
+		lxi b, $ffff + val + 1
+	.endif
+	.if val >= 0
+		lxi b, val
+	.endif
+.endmacro
+
+.macro LXI_D(val)
+	.if val < 0
+		lxi d, $ffff + val + 1
+	.endif
+	.if val >= 0
+		lxi d, val
+	.endif
+.endmacro
+
+.macro LXI_H(val)
+	.if val < 0
+		lxi h, $ffff + val + 1
+	.endif
+	.if val >= 0
+		lxi h, val
+	.endif
+.endmacro
+
 .macro MVI_A_TO_DIFF(offsetTo, offsetFrom)
 		offsetAddr = offsetTo - offsetFrom
 		.if offsetAddr > 0
@@ -146,36 +173,23 @@
 		.endif
 .endmacro
 
-.macro LXI_B(val)
-	.if val < 0
-		lxi b, $ffff + val + 1
-	.endif
-	.if val >= 0
-		lxi b, val
-	.endif
-.endmacro
-
-.macro LXI_D(val)
-	.if val < 0
-		lxi d, $ffff + val + 1
-	.endif
-	.if val >= 0
-		lxi d, val
-	.endif
-.endmacro
-
-.macro LXI_H(val)
-	.if val < 0
-		lxi h, $ffff + val + 1
-	.endif
-	.if val >= 0
-		lxi h, val
-	.endif
-.endmacro
-
 .macro LXI_H_NEG(val)
 		lxi h, $ffff - val + 1
 .endmacro
+
+; to replace xra a with meaningful macros
+.macro A_TO_ZERO(int8_const, useXRA = true)
+		.if int8_const != 0
+			.error "A_TO_ZERO macros is used for a non-zero constant assignment, val = ", int8_const
+		.endif
+		.if useXRA
+			xra a
+		.endif
+		.if useXRA == false
+			mvi a, 0
+		.endif
+.endmacro
+
 ;================================== ALL RAM_DISK_* macros has to be placed BEFORE lxi sp, *, and sphl! ;==================================
 ; has to be placed right BEFORE lxi sp, addr, and sphl
 ; mount the ram-disk w/o storing mode
@@ -210,24 +224,14 @@
 ; dismount the ram-disk
 ; has to be in the main program only and be placed after lxi sp, ADDR or sphl
 .macro RAM_DISK_OFF(useXRA = true)
-		.if useXRA
-			xra a
-		.endif
-		.if useXRA == false
-			mvi a, 0
-		.endif
+			A_TO_ZERO(RAM_DISK_OFF_CMD, useXRA)
 			sta ram_disk_mode			
 			out $10
 .endmacro
 ; dismount the ram-disk w/o storing mode
 ; should be used inside the interruption call or with disabled interruptions
 .macro RAM_DISK_OFF_NO_RESTORE(useXRA = true)
-		.if useXRA
-			xra a
-		.endif
-		.if useXRA == false
-			mvi a, 0
-		.endif
+			A_TO_ZERO(RAM_DISK_OFF_CMD, useXRA)
 			out $10
 .endmacro
 ;==================================================================================================
@@ -326,7 +330,7 @@
 
 ; bc = a * 2 + int16_const
 ; cpuc = 40
-.macro AX2_ADD_INT_BC(int16_const)
+.macro BC_TO_AX2_PLUS_INT16(int16_const)
 			rlc
 			adi <int16_const
 			mov c, a
@@ -336,7 +340,7 @@
 .endmacro
 ; de = a * 2 + int16_const
 ; cpuc = 40
-.macro AX2_ADD_INT_DE(int16_const)
+.macro DE_TO_AX2_PLUS_INT16(int16_const)
 			rlc
 			adi <int16_const
 			mov e, a
@@ -346,7 +350,7 @@
 .endmacro
 ; hl = a * 2 + int16_const
 ; cpuc = 40
-.macro AX2_ADD_INT_HL(int16_const)
+.macro HL_TO_AX2_PLUS_INT16(int16_const)
 			rlc
 			adi <int16_const
 			mov l, a
@@ -355,10 +359,3 @@
 			mov h, a
 .endmacro
 
-.macro A_TO_ZERO_CONST(int8_const)
-		.if int8_const != 0
-			.error "A_TO_ZERO_CONST macros is used for a non-zero constant assignment, val = ", int8_const
-		.endif
-			xra a
-.endmacro
-			

@@ -220,6 +220,9 @@ room_tiledata_breakable_spawn:
 room_tiledata_item_spawn:
 			lxi h, @restore_tiledata+1
 			mov m, b
+			; check if it's storytelling dialog tiledata
+			ora a
+			jz @restore_tiledata
 
 			ADD_A(2) ; to make a JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
@@ -364,7 +367,7 @@ room_copy_scr_to_backbuffs:
 .macro ROOM_DECAL_DRAW(gfx_ptrs, backbuffers = false)
 			lxi h, gfx_ptrs
 		.if backbuffers
-			A_TO_ZERO_CONST(OPCODE_NOP)
+			A_TO_ZERO(OPCODE_NOP)
 			sta room_decal_draw_backbuffers
 		.endif
 		.if backbuffers == false

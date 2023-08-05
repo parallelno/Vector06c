@@ -102,7 +102,7 @@ settings_screen_cursor_init:
 			shld @check_if_init + 1
 
 			; reset selected settings
-			A_TO_ZERO_CONST(SETTINGS_ID_MUSIC)
+			A_TO_ZERO(SETTINGS_ID_MUSIC)
 			sta settings_cursor_setting_id
 
 @no_init:
