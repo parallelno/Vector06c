@@ -7,7 +7,12 @@ hero_tile_func_item:
 			mvi h, >global_items
 			adi <global_items
 			mov l, a
-			mvi m, <ITEM_STATUS_ACQUIRED
+
+			; return if the global item has already being acquired
+			mvi a, ITEM_STATUS_ACQUIRED
+			cmp m
+			push psw ; store the Z flag to return if the 
+			mov m, a
 
 			; erase item_id from tiledata
 			mvi b, >room_tiledata
