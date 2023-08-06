@@ -257,7 +257,7 @@ hero_sword_update:
 			ret
 
 ; in:
-; a - door_id
+; a - container_id
 ; c - tile_idx
 hero_sword_func_container:
 			; store tile_idx
@@ -366,7 +366,7 @@ hero_sword_func_door:
 			ani %00001110
 			rrc
 
-			adi <global_items
+			adi <global_items + 1 ; because the first keys has id = 1
 			mov l, a
 			mov a, m
 			cpi <ITEM_STATUS_NOT_ACQUIRED

@@ -76,7 +76,10 @@ dialog_init_hero_no_health:
 			rz
 			; it's pressed
 			; requesting a level loading
-			A_TO_ZERO(LEVEL_FIRST)
+			
+			;A_TO_ZERO(LEVEL_FIRST)
+			mvi a, 1
+
 			sta level_idx
 			mvi a, GAME_REQ_LEVEL_INIT
 			sta global_request
