@@ -237,7 +237,7 @@ room_tiledata_item_spawn:
 			mvi a, TILEDATA_RESTORE_TILE
 			rnz ; status != 0 means this item was picked up
 
-			ROOM_DECAL_DRAW(__items_gfx_ptrs - WORD_LEN) ;  subtraction of WORD_LEN needs because there is no gfx for item_id=0
+			ROOM_DECAL_DRAW(__items_gfx_ptrs - WORD_LEN * 2) ;  subtraction of 2*WORD_LEN needs because there is no gfx for item_id=0 and there is a safety word after every pointer. check __items_gfx_ptrs:
 @restore_tiledata:
 			mvi a, TEMP_BYTE
 			ret

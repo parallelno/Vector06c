@@ -8775,7 +8775,7 @@ $3bbe 7e         mov a,m
 $3bbf b7         ora a
 $3bc0 3e 01      mvi a,$01
 $3bc2 c0         rnz
-$3bc3 21 6e 83   lxi h,$836e
+$3bc3 21 6c 83   lxi h,$836c
 $3bc6 3e c9      mvi a,$c9
 $3bc8 32 ce 3c   sta $3cce
 $3bcb cd a3 3c   call $3ca3
