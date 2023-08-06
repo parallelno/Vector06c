@@ -3,21 +3,32 @@
 ; a - item_id
 ; c - tile_idx
 hero_tile_func_item:
-			; update global item status
+			mov e, a ; tmp item_id to e
+			; get a global item status ptr
 			mvi h, >global_items
 			adi <global_items
 			mov l, a
-
-			; return if the global item has already being acquired
-			mvi a, ITEM_STATUS_ACQUIRED
-			cmp m
-			push psw ; store the Z flag to return if the 
-			mov m, a
 
 			; erase item_id from tiledata
 			mvi b, >room_tiledata
 			mvi a, TILEDATA_RESTORE_TILE
 			stax b
+
+			; hl - a global item status ptr
+			; return if the global item has already being acquired
+			mvi a, ITEM_STATUS_ACQUIRED
+			cmp m
+			rz
+			; if not acquired, set status to acquired
+			mov m, a
+
+			; check if the item is storytelling
+			; e - item_id
+			A_TO_ZERO(TILEDATA_ITEM_STORYTELLING)
+			ora e
+			jz dialog_init_storytelling
+
+		
 			; calc tile gfx ptr
 			mov l, c
 			mvi h, 0

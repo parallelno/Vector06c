@@ -7,6 +7,7 @@
 .include "asm\\bullets\\vfx.asm"
 .include "asm\\bullets\\cursor.asm"
 
+; mark erased the runtime bullet data 
 bullets_init:
 			mvi a, <bullets_runtime_data
 			sta bullet_runtime_data_sorted

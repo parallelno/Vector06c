@@ -44,10 +44,16 @@ game_update:
 @updateLoop:
 			CHECK_GAME_UPDATE_COUNTER(game_updates_counter)
 
+			; check the pause
+			lda global_request
+			cpi GAME_REQ_PAUSE
+			jz @pause
+
 			call hero_update
 			call monsters_update
 			call bullets_update
 			call level_update
+@pause:			
 			call backs_update
 			call game_ui_update
 
@@ -65,6 +71,11 @@ game_draw:
 			
 			; draw funcs
 			call backs_draw
+
+			; return if the game paused
+			lda global_request
+			cpi GAME_REQ_PAUSE
+			rz
 
 			call hero_draw
 			call monsters_draw
