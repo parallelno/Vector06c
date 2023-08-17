@@ -31,17 +31,16 @@ main_game:
 			call level_init
 			
 			call reset_game_updates_counter
-
-@gameLoop:
+@loop:
 			call game_update
 			call game_draw
-			jmp	 @gameLoop
+			jmp	@loop
 
 game_update:
 			lxi h, game_update_counter
 			inr m
 
-@updateLoop:
+@loop:
 			CHECK_GAME_UPDATE_COUNTER(game_updates_counter)
 
 			; check the pause
@@ -61,7 +60,7 @@ game_update:
 			lda action_code
 			sta action_code_old
 
-			jmp @updateLoop
+			jmp @loop
 
 game_draw:
 			; update counter to calc fps

@@ -108,7 +108,7 @@ level_init_palette:
 			lhld level_palette_ptr
 			xchg
 			lxi h, level_ram_disk_s_gfx
-			mov h, m			
+			mov h, m
 			call copy_palette_request_update
 			ret
 
@@ -120,12 +120,20 @@ level_update:
 			jz @load_draw_room
 			cpi GAME_REQ_LEVEL_INIT
 			jz @load_level
+			cpi GAME_REQ_ROOM_DRAW
+			jz @room_draw
 			ret
 @load_draw_room:
 			; load a new room
 			call room_init
 			call hero_init
 			; reset level command
+			A_TO_ZERO(GLOBAL_REQ_NONE)
+			sta global_request
+			call reset_game_updates_counter
+			ret
+@room_draw:
+			call room_draw
 			A_TO_ZERO(GLOBAL_REQ_NONE)
 			sta global_request
 			call reset_game_updates_counter

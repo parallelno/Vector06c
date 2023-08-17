@@ -1,13 +1,13 @@
 ; bullet AI:
 ; init:
-;	status = moveForward
-;	statusTimer = moveForwardTimer
+;	status = move_forward
+;	status_timer = moveForwardTimer
 ;	speed = caster dir
-; moveForward:
-;	decr statusTimer
-;	if statusTimer = 0
+; move_forward:
+;	decr status_timer
+;	if status_timer = 0
 ;		status = moveBackward
-;		statusTimer = moveBackwardTimer
+;		status_timer = moveBackwardTimer
 ;	else:
 ;		try to move a bullet
 ;		if bullet collides with tiles:
@@ -23,8 +23,8 @@
 ;				impact hero
 ;				death
 ; moveBackward:
-;	decr statusTimer
-;	if statusTimer = 0
+;	decr status_timer
+;	if status_timer = 0
 ;		death
 ;	else:
 ;		try to move a bullet

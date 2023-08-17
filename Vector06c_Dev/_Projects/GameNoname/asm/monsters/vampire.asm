@@ -3,23 +3,23 @@
 ;	 status = detectHeroInit
 ; detectHeroInit:
 ;	status = detectHero
-;	statusTimer = detectHeroTime
+;	status_timer = detectHeroTime
 ;	anim = idle.
 ; detectHero:
-;	decr statusTimer
-;	if statusTimer == 0:
+;	decr status_timer
+;	if status_timer == 0:
 ;		status = moveInit
 ;	else:
 ;		if distance(mob, hero) < a casting radius:
 ;			status = castPrep
-;			statusTimer = castPrepTime
+;			status_timer = castPrepTime
 ;			anim = cast
 ;		else:
 ;			updateAnim
 ;			check mod-hero collision, impact if collides
 ; castPrep:
-;	decr statusTimer
-;	if statusTimer == 0:
+;	decr status_timer
+;	if status_timer == 0:
 ;		status = cast
 ;		anim = cast
 ;	else:
@@ -27,23 +27,23 @@
 ;		check mod-hero collision, impact if collides
 ; cast:
 ;	status = relax
-;	statusTimer = relaxTime
+;	status_timer = relaxTime
 ;	spawn a projectile along the mob dir
 ; relax:
-;	decr statusTimer
-;	if statusTimer == 0:
+;	decr status_timer
+;	if status_timer == 0:
 ;		status = moveInit
 ;	else:
 ;		updateAnim
 ;		check mod-hero collision, impact if collides
 ; moveInit:
 ;	status = move
-;	statusTimer = random
+;	status_timer = random
 ;	speed = random dir
 ;	set anim along the dir
 ; move:
-;	decr statusTimer
-;	if statusTimer = 0
+;	decr status_timer
+;	if status_timer = 0
 ;		status = detectHeroInit
 ;	else:
 ;		try to move a mob

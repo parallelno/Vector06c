@@ -190,6 +190,45 @@
 		.endif
 .endmacro
 
+.macro HL_TO_A_PLUS_INT16(int16_const)
+			adi <int16_const
+			mov l, a
+			aci >int16_const
+			sub l
+			mov h, a
+.endmacro
+
+; bc = a * 2 + int16_const
+; cpuc = 40
+.macro BC_TO_AX2_PLUS_INT16(int16_const)
+			rlc
+			adi <int16_const
+			mov c, a
+			aci >int16_const
+			sub c
+			mov b, a
+.endmacro
+; de = a * 2 + int16_const
+; cpuc = 40
+.macro DE_TO_AX2_PLUS_INT16(int16_const)
+			rlc
+			adi <int16_const
+			mov e, a
+			aci >int16_const
+			sub e
+			mov d, a
+.endmacro
+; hl = a * 2 + int16_const
+; cpuc = 40
+.macro HL_TO_AX2_PLUS_INT16(int16_const)
+			rlc
+			adi <int16_const
+			mov l, a
+			aci >int16_const
+			sub l
+			mov h, a
+.endmacro
+
 ;================================== ALL RAM_DISK_* macros has to be placed BEFORE lxi sp, *, and sphl! ;==================================
 ; has to be placed right BEFORE lxi sp, addr, and sphl
 ; mount the ram-disk w/o storing mode
@@ -328,34 +367,5 @@
 			.byte end_code
 .endmacro
 
-; bc = a * 2 + int16_const
-; cpuc = 40
-.macro BC_TO_AX2_PLUS_INT16(int16_const)
-			rlc
-			adi <int16_const
-			mov c, a
-			aci >int16_const
-			sub c
-			mov b, a
-.endmacro
-; de = a * 2 + int16_const
-; cpuc = 40
-.macro DE_TO_AX2_PLUS_INT16(int16_const)
-			rlc
-			adi <int16_const
-			mov e, a
-			aci >int16_const
-			sub e
-			mov d, a
-.endmacro
-; hl = a * 2 + int16_const
-; cpuc = 40
-.macro HL_TO_AX2_PLUS_INT16(int16_const)
-			rlc
-			adi <int16_const
-			mov l, a
-			aci >int16_const
-			sub l
-			mov h, a
-.endmacro
+
 

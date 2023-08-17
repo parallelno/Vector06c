@@ -6,12 +6,12 @@
 
 ; bullet AI:
 ; init:
-;	status = moveForward
-;	statusTimer = moveForwardTimer
+;	status = move_forward
+;	status_timer = moveForwardTimer
 ;	speed = caster dir
-; moveForward:
-;	decr statusTimer
-;	if statusTimer = 0
+; move_forward:
+;	decr status_timer
+;	if status_timer = 0
 ;		death
 ;	else:
 ;		try to move a bullet

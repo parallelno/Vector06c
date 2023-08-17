@@ -97,8 +97,13 @@ __text_no_health:
 			TEXT("him out of the dungeon into the fresh air.")
 
 ; level0_house
-__text_game_story_intro:		
-			TEXT("TEST TEST!", LINE_BREAK)
+__text_game_story_intro1:
+			TEXT("TEST 1", LINE_BREAK)
 			TEXT("ealed a mysterious figure. Two strong hands", LINE_BREAK)
 			TEXT("lifted up the unconscious body and carried", LINE_BREAK)
 			TEXT("him out of the dungeon into the fresh air.")
+__text_game_story_intro2:
+			TEXT("TEST 2", LINE_BREAK)
+			TEXT("ealed a mysterious figure. Two strong hands", LINE_BREAK)
+			TEXT("lifted up the unconscious body and carried", LINE_BREAK)
+			TEXT("him out of the dungeon into the fresh air.")			

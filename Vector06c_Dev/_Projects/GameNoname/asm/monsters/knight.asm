@@ -3,11 +3,11 @@
 ;	 status = detectHeroInit
 ; detectHeroInit:
 ;	status = detectHero
-;	statusTimer = detectHeroTime
+;	status_timer = detectHeroTime
 ;	anim = idle.
 ; detectHero:
-;	decr statusTimer
-;	if statusTimer == 0:
+;	decr status_timer
+;	if status_timer == 0:
 ;		status = moveInit
 ;	else:
 ;		if distance(mob, hero) < a defence radius:
@@ -17,7 +17,7 @@
 ;			check mod-hero collision, impact if collides
 ; defencePrep:
 ;	status = defence
-;	statusTimer = defenceTime
+;	status_timer = defenceTime
 ;	anim = run to the hero dir
 ;	
 ; defence:
@@ -31,12 +31,12 @@
 ;		status = detectHeroInit
 ; moveInit:
 ;	status = move
-;	statusTimer = random
+;	status_timer = random
 ;	speed = random dir only along one axis
 ;	set anim along the dir
 ; move:
-;	decr statusTimer
-;	if statusTimer = 0
+;	decr status_timer
+;	if status_timer = 0
 ;		status = detectHeroInit
 ;	else:
 ;		try to move a mob

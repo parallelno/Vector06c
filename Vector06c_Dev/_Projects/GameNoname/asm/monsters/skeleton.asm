@@ -3,46 +3,46 @@
 ;	 status = detectHeroInit
 ; detectHeroInit:
 ;	status = detectHero
-;	statusTimer = detectHeroTime
+;	status_timer = detectHeroTime
 ;	anim = idle.
 ; detectHero:
-;	decr statusTimer
-;	if statusTimer == 0:
+;	decr status_timer
+;	if status_timer == 0:
 ;		status = moveInit
 ;	else:
 ;		if distance(mob, hero) < a shooting radius:
 ;			status = shootPrep
-;			statusTimer = shootPrepTime
+;			status_timer = shootPrepTime
 ;			anim to the hero dir
 ;		else:
 ;			updateAnim
 ;			check mod-hero collision, impact if collides
 ; shootPrep:
-;	decr statusTimer
-;	if statusTimer == 0:
+;	decr status_timer
+;	if status_timer == 0:
 ;		status = shoot
 ;	else:
 ;		updateAnim
 ;		check mod-hero collision, impact if collides
 ; shoot:
 ;	status = relax
-;	statusTimer = relaxTime
+;	status_timer = relaxTime
 ;	spawn a projectile along the mob dir
 ; relax:
-;	decr statusTimer
-;	if statusTimer == 0:
+;	decr status_timer
+;	if status_timer == 0:
 ;		status = moveInit
 ;	else:
 ;		updateAnim
 ;		check mod-hero collision, impact if collides
 ; moveInit:
 ;	status = move
-;	statusTimer = random
+;	status_timer = random
 ;	speed = random dir
 ;	set anim along the dir
 ; move:
-;	decr statusTimer
-;	if statusTimer = 0
+;	decr status_timer
+;	if status_timer = 0
 ;		status = detectHeroInit
 ;	else:
 ;		try to move a mob

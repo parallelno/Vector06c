@@ -4,12 +4,15 @@ room_init:
 			call backs_init
 			call room_unpack
 			call room_init_tiles_gfx
-			lda level_ram_disk_s_gfx
-			CALL_RAM_DISK_FUNC_BANK(room_draw_tiles)
+			call room_draw
 			call room_handle_room_tiledata
 			call room_copy_scr_to_backbuffs
 			ret
 
+room_draw:
+			lda level_ram_disk_s_gfx
+			CALL_RAM_DISK_FUNC_BANK(room_draw_tiles)
+			ret
 
 ; uncompress room gfx tile_idx buffer + room tiledata buffer into the room_tiles_gfx_ptrs + offset
 ; offset = (size of room_tiles_gfx_ptrs buffer) / 2. the result of the copy operation is

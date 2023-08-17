@@ -29,21 +29,14 @@ controls_keys_check:
 			mov a, c
 			ral 								; add KEY_CODE_SPACE to the key line 0
 			ani %111 ; bits: alt, tab, space, but inverset
-			adi <keys_to_controls_alt_tab_space
-			mov l, a
-			aci >keys_to_controls_alt_tab_space
-			sub l
-			mov h, a
+			HL_TO_A_PLUS_INT16(keys_to_controls_alt_tab_space)
+
 			mov e, m
 			
 			mvi a, %1111_0000
 			ana c
 			RRC_(4)
-			adi <keys_to_controls_arrows
-			mov l, a
-			aci >keys_to_controls_arrows
-			sub l
-			mov h, a
+			HL_TO_A_PLUS_INT16(keys_to_controls_arrows)
 			mov a, m
 			ora e
 			sta action_code

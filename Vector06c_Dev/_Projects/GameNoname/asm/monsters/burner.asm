@@ -3,23 +3,23 @@
 ;	 status = detectHeroInit
 ; detectHeroInit:
 ;	status = detectHero
-;	statusTimer = detectHeroTime
+;	status_timer = detectHeroTime
 ;	anim = idle.
 ; detectHero:
-;	decr statusTimer
-;	if statusTimer == 0:
+;	decr status_timer
+;	if status_timer == 0:
 ;		status = moveInit
 ;	else:
 ;		if distance(mob, hero) < a dashing radius:
 ;			status = dashPrep
-;			statusTimer = dashPrepTime
+;			status_timer = dashPrepTime
 ;			anim to the hero dir
 ;		else:
 ;			updateAnim
 ;			check mod-hero collision, impact if collides
 ; dashPrep:
-;	decr statusTimer
-;	if statusTimer == 0:
+;	decr status_timer
+;	if status_timer == 0:
 ;		status = dash
 ;		anim = run
 ;		speed directly to the hero pos
@@ -27,29 +27,29 @@
 ;		updateAnim
 ;		check mod-hero collision, impact if collides
 ; dash:
-;	decr statusTimer
-;	if statusTimer == 0:
+;	decr status_timer
+;	if status_timer == 0:
 ;		status = relax
-;		statusTimer = relaxTime
+;		status_timer = relaxTime
 ;	else:
 ;		move a mob
 ;		updateAnim
 ;		check mod-hero collision, impact if collides
 ; relax:
-;	decr statusTimer
-;	if statusTimer == 0:
+;	decr status_timer
+;	if status_timer == 0:
 ;		status = moveInit
 ;	else:
 ;		updateAnim
 ;		check mod-hero collision, impact if collides
 ; moveInit:
 ;	status = move
-;	statusTimer = random
+;	status_timer = random
 ;	speed = random dir
 ;	set anim along the dir
 ; move:
-;	decr statusTimer
-;	if statusTimer = 0
+;	decr status_timer
+;	if status_timer = 0
 ;		status = detectHeroInit
 ;	else:
 ;		try to move a mob

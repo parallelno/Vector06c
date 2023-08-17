@@ -47,8 +47,10 @@ dialog_draw_text_ptr:
 			lxi h, TEMP_ADDR
 			CALL_RAM_DISK_FUNC(__text_ex_rd_scr3, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
-.macro DIALOG_DRAW_TEXT(text_ptr)
+.macro DIALOG_DRAW_TEXT(text_ptr = NULL_PTR)
+		.if text_ptr
 			lxi h, text_ptr
+		.endif
 			shld dialog_draw_text_ptr + 1
 			call dialog_draw_text
 .endmacro
@@ -92,6 +94,23 @@ dialog_init_hero_no_health:
 ; dialog when a hero picks up the global item called TILEDATA_ITEM_STORYTELLING
 ; it pauses everything except backs and ui, it erases backs
 ; when this dialog closes, the game continues
+; the limitations: LEVEL_IDX_0 in a range of 0-1
+DIALOG_STORYTELLING_TEXTS_END = 255
+
+.macro STORYTELLING_TEXT_ENTITY(level_id = TEMP_BYTE, room_id = TEMP_BYTE, text_ptr = NULL_PTR)
+			; 0RRR_RRRL - RRRRRR - room_id, L - level_idx
+			.byte room_id<<2 | level_id
+			.word text_ptr
+.endmacro
+
+STORYTELLING_TEXT_ENTITY_LEN = 3
+
+dialog_storytelling_texts_ptrs:
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_0, __text_game_story_intro2)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_1, __text_game_story_intro2)
+@end_data:
+STORYTELLING_TEXT_COUNT = (@end_data - dialog_storytelling_texts_ptrs) / STORYTELLING_TEXT_ENTITY_LEN
+
 dialog_init_storytelling:
 			mvi a, GAME_REQ_PAUSE
 			sta global_request
@@ -102,26 +121,51 @@ dialog_init_storytelling:
 			; draw a dialog
 			call dialog_draw_frame
 
-			; get the text
-			; draw text
-			DIALOG_DRAW_TEXT(__text_game_story_intro)
+			; get the text depending on the level_idx and room_id
+			lda level_idx
+			rrc
+			lda room_id
+			ral
+			mov c, a
+			; c - 0RRR_RRRL - RRRRRR - room_id, L - level_idx
+
+			lxi h, dialog_storytelling_texts_ptrs
+			lxi d, 3
+			mvi b, STORYTELLING_TEXT_COUNT
+@loop:
+			mov a, m
+			; a - ERRR_RRRL - E - end marker, RRRRRR - room_id, L - level_idx
+			cmp c
+			jz @draw_text
+			dad d
+			dcr b
+			jnz @loop
+			ret
+
+@draw_text:
+			; get the text ptr
+			inx h
+			mov e, m
+			inx h
+			mov d, m
+			xchg
+			; hl - text pptr
+			DIALOG_DRAW_TEXT()
 
 			DIALOG_INIT(dialog_storytelling)
 			ret
 
 dialog_storytelling:
 			.word @check_key, DIALOG_EMPTY_CALLBACK
-			
+	
 @check_key:
 			; check if a fire action is pressed
 			lda action_code
 			ani CONTROL_CODE_FIRE1 | CONTROL_CODE_KEY_SPACE
 			rz
 			; it's pressed
-			; requesting a level loading
-			mvi a, GAME_REQ_ROOM_INIT
+			mvi a, GAME_REQ_ROOM_DRAW
 			sta global_request
-			;call room_init
 			jmp dialog_update_next_step
 
 
