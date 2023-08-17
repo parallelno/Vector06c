@@ -77,10 +77,9 @@ dialog_init_hero_no_health:
 			ani CONTROL_CODE_FIRE1 | CONTROL_CODE_KEY_SPACE
 			rz
 			; it's pressed
-			; requesting a level loading
 			
-			;A_TO_ZERO(LEVEL_FIRST)
-			mvi a, 1
+			; requesting a level loading
+			A_TO_ZERO(LEVEL_FIRST)
 
 			sta level_idx
 			mvi a, GAME_REQ_LEVEL_INIT
@@ -95,10 +94,11 @@ dialog_init_hero_no_health:
 ; it pauses everything except backs and ui, it erases backs
 ; when this dialog closes, the game continues
 ; the limitations: LEVEL_IDX_0 in a range of 0-1
-DIALOG_STORYTELLING_TEXTS_END = 255
 
 .macro STORYTELLING_TEXT_ENTITY(level_id = TEMP_BYTE, room_id = TEMP_BYTE, text_ptr = NULL_PTR)
-			; 0RRR_RRRL - RRRRRR - room_id, L - level_idx
+			; 0RRR_RRRL
+			; 	RRRRRR - room_id, 
+			;	L - level_idx
 			.byte room_id<<2 | level_id
 			.word text_ptr
 .endmacro
@@ -121,20 +121,19 @@ dialog_init_storytelling:
 			; draw a dialog
 			call dialog_draw_frame
 
-			; get the text depending on the level_idx and room_id
+			; get the text ptr based on the level_idx and room_id
 			lda level_idx
 			rrc
 			lda room_id
 			ral
 			mov c, a
-			; c - 0RRR_RRRL - RRRRRR - room_id, L - level_idx
-
+			; c - 0RRR_RRRL: RRRRRR - room_id, L - level_idx
 			lxi h, dialog_storytelling_texts_ptrs
 			lxi d, 3
 			mvi b, STORYTELLING_TEXT_COUNT
 @loop:
 			mov a, m
-			; a - ERRR_RRRL - E - end marker, RRRRRR - room_id, L - level_idx
+			; a - 0RRR_RRRL: RRRRRR - room_id, L - level_idx
 			cmp c
 			jz @draw_text
 			dad d
@@ -157,7 +156,7 @@ dialog_init_storytelling:
 
 dialog_storytelling:
 			.word @check_key, DIALOG_EMPTY_CALLBACK
-	
+
 @check_key:
 			; check if a fire action is pressed
 			lda action_code
@@ -166,6 +165,9 @@ dialog_storytelling:
 			; it's pressed
 			mvi a, GAME_REQ_ROOM_DRAW
 			sta global_request
+			; TODO: restore Backs
+			; TODO: restore breakables he same configuraton they were created
+
 			jmp dialog_update_next_step
 
 
