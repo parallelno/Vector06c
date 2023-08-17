@@ -188,13 +188,13 @@ bit_is_0:
 		mov l,a
 		mov b,a
 		cma
-mulLoop:
+mul_loop:
 		dad h
 		jnc mul0
 		dad d
 mul0:
 		add a
-		jm mulLoop
+		jm mul_loop
 #ELSE
 		mvi d,0
 		mov l,d

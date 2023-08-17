@@ -15,7 +15,7 @@
 ;			status_timer = dashPrepTime
 ;			anim to the hero dir
 ;		else:
-;			updateAnim
+;			update_anim
 ;			check mod-hero collision, impact if collides
 ; dashPrep:
 ;	decr status_timer
@@ -24,7 +24,7 @@
 ;		anim = run
 ;		speed directly to the hero pos
 ;	else:
-;		updateAnim
+;		update_anim
 ;		check mod-hero collision, impact if collides
 ; dash:
 ;	decr status_timer
@@ -33,14 +33,14 @@
 ;		status_timer = relaxTime
 ;	else:
 ;		move a mob
-;		updateAnim
+;		update_anim
 ;		check mod-hero collision, impact if collides
 ; relax:
 ;	decr status_timer
 ;	if status_timer == 0:
 ;		status = moveInit
 ;	else:
-;		updateAnim
+;		update_anim
 ;		check mod-hero collision, impact if collides
 ; moveInit:
 ;	status = move
@@ -57,7 +57,7 @@
 ;			status = moveInit
 ;		else:
 ;			accept new pos
-;			updateAnim
+;			update_anim
 ;			check mod-hero collision, impact if collides
 
 
@@ -292,7 +292,7 @@ burner_update_move:
 			inx h
 			dcr m
 			jz @setDetectHeroInit
-@updateMovement:
+@update_movement:
 			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, BURNER_COLLISION_WIDTH, BURNER_COLLISION_HEIGHT, @setMoveInit) 
 			
 			; hl points to monster_pos_y+1

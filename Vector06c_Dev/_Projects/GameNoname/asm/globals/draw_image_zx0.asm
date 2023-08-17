@@ -200,7 +200,7 @@ draw_image_zx0:
 			call @elias
 @ldir:
 			sta @restoreA1+1
-@ldirLoop:
+@ldir_loop:
 			ldax d
 			sta @storeA+1
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
@@ -216,13 +216,13 @@ draw_image_zx0:
 			dcx h
 			mov a, h
 			ora l
-			jnz @ldirLoop
+			jnz @ldir_loop
 
 @restoreA1:
 			mvi a, TEMP_BYTE		
 			add a
 
-			jc @newOffset
+			jc @new_offset
 			call @elias
 @copy:
 			xchg
@@ -231,7 +231,7 @@ draw_image_zx0:
 			dad b
 			xchg
 
-@ldirUnpacked:
+@ldir_unpacked:
 			sta @restoreA2+1
 			RAM_DISK_ON(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 @ldirUnpackedLoop:
@@ -256,7 +256,7 @@ draw_image_zx0:
 			xthl
 			xchg
 			jnc @literals
-@newOffset:
+@new_offset:
 			call @elias
 			mov h, a
 			pop psw
@@ -273,24 +273,24 @@ draw_image_zx0:
 			xthl
 			mov a, h
 			lxi h, 1
-			cnc @eliasBacktrack
+			cnc @elias_backtrack
 			inx h
 			jmp @copy
 
 @elias:
 			inr l
-@eliasLoop:
+@elias_loop:
 			add a
-			jnz @eliasSkip
+			jnz @elias_skip
 			ldax d
 			inx d
 			ral
-@eliasSkip:
+@elias_skip:
 			rc
-@eliasBacktrack:
+@elias_backtrack:
 			dad h
 			add a
-			jnc @eliasLoop
+			jnc @elias_loop
 			jmp @elias
 			
 

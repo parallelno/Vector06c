@@ -13,7 +13,7 @@
 ;		if distance(mob, hero) < a defence radius:
 ;			status = defencePrep
 ;		else:
-;			updateAnim
+;			update_anim
 ;			check mod-hero collision, impact if collides
 ; defencePrep:
 ;	status = defence
@@ -25,7 +25,7 @@
 ;		try to move a mob toward a hero, reset one coord to move along one axis
 ;		if mob do not collides with tiles:
 ;			accept new pos
-;		updateAnim
+;		update_anim
 ;		check mod-hero collision, impact if collides
 ;	else:
 ;		status = detectHeroInit
@@ -44,7 +44,7 @@
 ;			status = moveInit
 ;		else:
 ;			accept new pos
-;			updateAnim
+;			update_anim
 ;			check mod-hero collision, impact if collides
 
 ; statuses.
@@ -274,7 +274,7 @@ knight_update_defence:
 			inx h
 			dcr m
 			jz @setDetectHeroInit
-@updateMovement:
+@update_movement:
 			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, @collidedWithTiles) 
 			
 			; hl points to monster_pos_y+1
@@ -388,7 +388,7 @@ knight_update_move:
 			inx h
 			dcr m
 			jz @setDetectHeroInit
-@updateMovement:
+@update_movement:
 			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, @setMoveInit) 
 			
 			; hl points to monster_pos_y+1

@@ -21,7 +21,7 @@
 			mov h, m
 			mov l, b
 			mov c, a
-			; hl - animPtr
+			; hl - anim_ptr
 			; c - preshifted sprite idx*2 offset
 			call sprite_get_addr
 
@@ -78,7 +78,7 @@
 			add c
 			cmp b
 			rc
-@collidesHero:
+@collides_hero:
 			; hero collides
 			; send him a damage
 			mvi c, MONSTER_DAMAGE

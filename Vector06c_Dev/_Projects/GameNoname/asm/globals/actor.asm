@@ -31,12 +31,12 @@ actor_kill_all:
 .endmacro			
 
 ; in:
-; hl - ptr to animTimer (monster_anim_timer or bullet_anim_timer)
+; hl - ptr to anim_timer (monster_anim_timer or bullet_anim_timer)
 ; a - anim speed
 ; use:
 ; de, bc, hl
 ; out:
-; hl points to animPtr (bullet_anim_ptr or monster_anim_ptr)
+; hl points to anim_ptr (bullet_anim_ptr or monster_anim_ptr)
 actor_anim_update:
 			; update monster_anim_timer
 			add m

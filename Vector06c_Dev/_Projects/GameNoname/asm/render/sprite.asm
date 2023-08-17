@@ -1,6 +1,6 @@
 ; get a sprite data addr
 ; in:
-; hl - animPtr
+; hl - anim_ptr
 ; c - preshifted sprite idx*2 offset based on posX then +2
 ; out:
 ; bc - ptr to a sprite

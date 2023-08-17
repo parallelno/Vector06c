@@ -6,23 +6,23 @@
 ; move_forward:
 ;	decr status_timer
 ;	if status_timer = 0
-;		status = moveBackward
+;		status = move_backward
 ;		status_timer = moveBackwardTimer
 ;	else:
 ;		try to move a bullet
 ;		if bullet collides with tiles:
-;			if status = moveBackward:
+;			if status = move_backward:
 ;				die
 ;			else:
-;				status = moveBackward
+;				status = move_backward
 ;		else:
 ;			accept new pos
-;			updateAnim
+;			update_anim
 ;			check bullet-hero collision
 ;			if bullet collides with hero:
 ;				impact hero
 ;				death
-; moveBackward:
+; move_backward:
 ;	decr status_timer
 ;	if status_timer = 0
 ;		death
@@ -32,7 +32,7 @@
 ;			death
 ;		else:
 ;			accept new pos
-;			updateAnim
+;			update_anim
 ;			check bullet-hero collision
 ;			if bullet collides with hero:
 ;				impact hero
@@ -146,12 +146,12 @@ scythe_init:
 @dir:
 			mvi a, TEMP_BYTE ; direction (BULLET_DIR_*)
 			cpi BULLET_DIR_R
-			jz @moveRight
+			jz @move_right
 			cpi BULLET_DIR_L
-			jz @moveLeft
+			jz @move_left
 			cpi BULLET_DIR_U
-			jz @moveUp
-@moveDown:
+			jz @move_up
+@move_down:
 			mov m, e
 			inx h
 			mov m, e
@@ -161,7 +161,7 @@ scythe_init:
 			inx h
 			mvi m, >SCYTHE_MOVE_SPEED_NEG
 			ret	
-@moveUp:
+@move_up:
 			mov m, e
 			inx h
 			mov m, e
@@ -171,7 +171,7 @@ scythe_init:
 			inx h
 			mvi m, >SCYTHE_MOVE_SPEED
 			ret
-@moveLeft:
+@move_left:
 			mvi m, <SCYTHE_MOVE_SPEED_NEG
 			inx h
 			mvi m, >SCYTHE_MOVE_SPEED_NEG
@@ -181,7 +181,7 @@ scythe_init:
 			inx h
 			mov m, e
 			ret			
-@moveRight:
+@move_right:
 			mvi m, <SCYTHE_MOVE_SPEED
 			inx h
 			mvi m, >SCYTHE_MOVE_SPEED
@@ -199,10 +199,10 @@ scythe_update:
 			; advance to bullet_status_timer
 			LXI_H_TO_DIFF(bullet_status_timer, bullet_update_ptr)
 			dad d
-@updateMove:
+@update_move:
 			dcr m
 			jz @die
-@updateMovement:
+@update_movement:
 			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bullet_status_timer, bullet_pos_x, SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, @setBounceAfterTileCollision) 
 			
 			; hl points to bullet_pos_y+1
@@ -222,7 +222,7 @@ scythe_update:
 			; advance hl to bullet_status_timer
 			LXI_B_TO_DIFF(bullet_status_timer, bullet_pos_x)
 			dad b
-@setBounce:
+@set_bounce:
 			; hl - ptr to bullet_status_timer
 			; advance hl to bullet_status
 			dcx h

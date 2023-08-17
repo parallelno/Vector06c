@@ -69,7 +69,7 @@ bullets_data_func_caller:
 ; use:
 ; de, a
 bullets_common_func_caller:
-			shld @funcPtr+1
+			shld @func_ptr+1
 			lxi h, bullet_update_ptr+1
 @loop:
 			mov a, m
@@ -80,7 +80,7 @@ bullets_common_func_caller:
 			ret
 @call_func:			
 			push h
-@funcPtr:
+@func_ptr:
 			call TEMP_ADDR
 			pop h
 @next_data:

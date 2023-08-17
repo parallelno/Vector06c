@@ -27,7 +27,7 @@ __gcplayer_start:
 			call gcplayer_tasks_init
 			call gcplayer_scheduler_init
 
-			; set bufferIdx GC_PLAYER_TASKS bytes prior to the init unpacking addr (0),
+			; set buffer_idx GC_PLAYER_TASKS bytes prior to the init unpacking addr (0),
 			; to let zx0 unpack data for GC_PLAYER_TASKS number of regs
 			; that means the music will be GC_PLAYER_TASKS number of frames delayed
 			mvi a, -GC_PLAYER_TASKS
@@ -64,7 +64,7 @@ __gcplayer_update:
 			ret
 			
 
-; bufferN[bufferIdx] data will be send to AY for each register accordingly
+; bufferN[buffer_idx] data will be send to AY for each register accordingly
 gcplayer_buffer_idx:
 			.byte TEMP_BYTE
 gcplayer_task_id:
@@ -95,7 +95,7 @@ gcplayer_tasks_init:
 			mov h, a
 			mov l, b
 			push h
-			; store the regData addr to a task stack
+			; store the reg_data addr to a task stack
 			xchg
 			dcx h
 			mov d, m
@@ -139,7 +139,7 @@ gcplayer_scheduler_init:
 gcplayer_clear_buffers:
 			mvi h, >gcplayer_buffer00
 			mvi a, (>gcplayer_buffer13) + 1
-@nextBuff:
+@next_buff:
 			mvi l, -GC_PLAYER_TASKS
 @loop:
 			mvi m, 0
@@ -147,12 +147,12 @@ gcplayer_clear_buffers:
 			jnz @loop
 			inr h	
 			cmp h
-			jnz @nextBuff
+			jnz @next_buff
 			ret
 			
 
 ; this func restores the context of the current task
-; then calls GCPlayerUnpack to let it continue unpacking regData
+; then calls GCPlayerUnpack to let it continue unpacking reg_data
 ; this code is performed during an interruption
 gcplayer_scheduler_update:
 			lxi h, 0
@@ -203,7 +203,7 @@ GCPlayerSchedulerRestoreSp:
 			ret
 			
 
-; unpacks 16 bytes of regData for the current task
+; unpacks 16 bytes of reg_data for the current task
 ; this function is called during an interruption
 ; Parameters (forward):
 ; DE: source address (compressed data)
@@ -235,7 +235,7 @@ GCPlayerUnpack:
 			pop psw
 			add a
 
-			jc @newOffset
+			jc @new_offset
 			call @Elias
 @copy:
 			xchg
@@ -270,7 +270,7 @@ GCPlayerUnpack:
 			xthl
 			xchg
 			jnc @literals
-@newOffset:
+@new_offset:
 			call @Elias
 			mov h, a
 			pop psw
@@ -287,24 +287,24 @@ GCPlayerUnpack:
 			xthl
 			mov a, h
 			lxi h, 1
-			cnc @eliasBacktrack
+			cnc @elias_backtrack
 			inx h
 			jmp @copy
 
 @Elias:
 			inr l
-@eliasLoop:	
+@elias_loop:	
 			add a
-			jnz @eliasSkip
+			jnz @elias_skip
 			ldax d
 			inx d
 			ral
-@eliasSkip:
+@elias_skip:
 			rc
-@eliasBacktrack:
+@elias_backtrack:
 			dad h
 			add a
-			jnc @eliasLoop
+			jnc @elias_loop
 			jmp @Elias
 
 @exit:
@@ -335,7 +335,7 @@ GCPlayerUnpack:
 
 ; send buffers data to AY regs
 ; input:
-; hl = bufferIdx
+; hl = buffer_idx
 ; if envelope shape reg13 data = $ff, then don't send data to reg13
 ; AY-3-8910 ports
 
@@ -376,13 +376,13 @@ __gcplayer_mute:
 			sta setting_music
 			; set zeros to AY regs to mute it
 			mvi e, GC_PLAYER_TASKS - 1
-@sendData:
+@send_data:
 			mov a, e
 			out AY_PORT_REG
 			xra a
 			out AY_PORT_DATA
 			dcr e
-			jp @sendData
+			jp @send_data
 			ret
 			
 ; to unmute the player after being muted. It continues the song from where it has been stopped

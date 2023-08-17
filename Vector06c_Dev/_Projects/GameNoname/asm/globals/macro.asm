@@ -133,43 +133,43 @@
 	.endif
 .endmacro
 
-.macro MVI_A_TO_DIFF(offsetTo, offsetFrom)
-		offsetAddr = offsetTo - offsetFrom
-		.if offsetAddr > 0
-			mvi a, <offsetAddr
+.macro MVI_A_TO_DIFF(offset_to, offset_from)
+		offset_addr = offset_to - offset_from
+		.if offset_addr > 0
+			mvi a, <offset_addr
 		.endif
-		.if offsetAddr < 0
-			mvi a, <($ffff + offsetAddr + 1)
-		.endif
-.endmacro
-
-.macro LXI_B_TO_DIFF(offsetTo, offsetFrom)
-		offsetAddr = offsetTo - offsetFrom
-		.if offsetAddr > 0
-			lxi b, offsetAddr
-		.endif
-		.if offsetAddr < 0
-			lxi b, $ffff + offsetAddr + 1
+		.if offset_addr < 0
+			mvi a, <($ffff + offset_addr + 1)
 		.endif
 .endmacro
 
-.macro LXI_D_TO_DIFF(offsetTo, offsetFrom)
-		offsetAddr = offsetTo - offsetFrom
-		.if offsetAddr > 0
-			lxi d, offsetAddr
+.macro LXI_B_TO_DIFF(offset_to, offset_from)
+		offset_addr = offset_to - offset_from
+		.if offset_addr > 0
+			lxi b, offset_addr
 		.endif
-		.if offsetAddr < 0
-			lxi d, $ffff + offsetAddr + 1
+		.if offset_addr < 0
+			lxi b, $ffff + offset_addr + 1
 		.endif
 .endmacro
 
-.macro LXI_H_TO_DIFF(offsetTo, offsetFrom)
-		offsetAddr = offsetTo - offsetFrom
-		.if offsetAddr > 0
-			lxi h, offsetAddr
+.macro LXI_D_TO_DIFF(offset_to, offset_from)
+		offset_addr = offset_to - offset_from
+		.if offset_addr > 0
+			lxi d, offset_addr
 		.endif
-		.if offsetAddr < 0
-			lxi h, $ffff + offsetAddr + 1
+		.if offset_addr < 0
+			lxi d, $ffff + offset_addr + 1
+		.endif
+.endmacro
+
+.macro LXI_H_TO_DIFF(offset_to, offset_from)
+		offset_addr = offset_to - offset_from
+		.if offset_addr > 0
+			lxi h, offset_addr
+		.endif
+		.if offset_addr < 0
+			lxi h, $ffff + offset_addr + 1
 		.endif
 .endmacro
 
@@ -274,39 +274,39 @@
 			out $10
 .endmacro
 ;==================================================================================================
-.macro CALL_RAM_DISK_FUNC(funcAddr, _command, disableInt = false, useXRA = true)
-		.if disableInt
+.macro CALL_RAM_DISK_FUNC(func_addr, _command, disable_int = false, useXRA = true)
+		.if disable_int
 			di
 		.endif
 			RAM_DISK_ON(_command)
-			call funcAddr
+			call func_addr
 			RAM_DISK_OFF(useXRA)
-		.if disableInt
+		.if disable_int
 			ei
 		.endif
 .endmacro
 
 ; a - ram disk activation command
-.macro CALL_RAM_DISK_FUNC_BANK(funcAddr, disableInt = false, useXRA = true)
-		.if disableInt
+.macro CALL_RAM_DISK_FUNC_BANK(func_addr, disable_int = false, useXRA = true)
+		.if disable_int
 			di
 		.endif
 			RAM_DISK_ON_BANK()
-			call funcAddr
+			call func_addr
 			RAM_DISK_OFF(useXRA)
-		.if disableInt
+		.if disable_int
 			ei
 		.endif
 .endmacro
 
-.macro CALL_RAM_DISK_FUNC_NO_RESTORE(funcAddr, _command, disableInt = false, useXRA = true)
-		.if disableInt
+.macro CALL_RAM_DISK_FUNC_NO_RESTORE(func_addr, _command, disable_int = false, useXRA = true)
+		.if disable_int
 			di
 		.endif
 			RAM_DISK_ON_NO_RESTORE(_command)
-			call funcAddr
+			call func_addr
 			RAM_DISK_OFF_NO_RESTORE(useXRA)
-		.if disableInt
+		.if disable_int
 			ei
 		.endif
 .endmacro

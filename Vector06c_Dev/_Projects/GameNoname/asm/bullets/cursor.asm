@@ -18,7 +18,7 @@
 ;			death
 ;		else:
 ;			accept new pos
-;			updateAnim
+;			update_anim
 ;			check bullet-hero collision, 
 ;			if bullet collides with hero:
 ;				impact hero

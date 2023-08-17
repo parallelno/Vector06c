@@ -28,7 +28,7 @@ dzx0:
 @literals:
 			call @elias
 			call @ldir
-			jc @newOffset
+			jc @new_offset
 			call @elias
 @copy:
 			xchg
@@ -42,7 +42,7 @@ dzx0:
 			xthl
 			xchg
 			jnc @literals
-@newOffset:
+@new_offset:
 			call @elias
 			mov h, a
 			pop psw
@@ -59,23 +59,23 @@ dzx0:
 			xthl
 			mov a, h
 			lxi h,1
-			cnc @eliasBacktrack
+			cnc @elias_backtrack
 			inx h
 			jmp @copy
 @elias:
 			inr l
-@eliasLoop:
+@elias_loop:
 			add a
-			jnz @eliasSkip
+			jnz @elias_skip
 			ldax d
 			inx d
 			ral
-@eliasSkip:
+@elias_skip:
 			rc
-@eliasBacktrack:
+@elias_backtrack:
 			dad h
 			add a
-			jnc @eliasLoop
+			jnc @elias_loop
 			jmp @elias
 
 @ldir:
@@ -115,7 +115,7 @@ dzx0_rd:
 			call @elias
 @ldir:
 			sta @restoreA1+1
-@ldirLoop:
+@ldir_loop:
 			ldax d
 			sta @storeA+1
 			; turn on the ram-disk
@@ -132,13 +132,13 @@ dzx0_rd:
 			dcx h
 			mov a, h
 			ora l
-			jnz @ldirLoop
+			jnz @ldir_loop
 
 @restoreA1:
 			mvi a, TEMP_BYTE		
 			add a
 
-			jc @newOffset
+			jc @new_offset
 			call @elias
 @copy:
 			xchg
@@ -147,7 +147,7 @@ dzx0_rd:
 			dad b
 			xchg
 
-@ldirUnpacked:
+@ldir_unpacked:
 			sta @restoreA2+1
 			; turn on the ram-disk
 @ramDiskCmd2:
@@ -173,7 +173,7 @@ dzx0_rd:
 			xthl
 			xchg
 			jnc @literals
-@newOffset:
+@new_offset:
 			call @elias
 			mov h, a
 			pop psw
@@ -190,23 +190,23 @@ dzx0_rd:
 			xthl
 			mov a, h
 			lxi h, 1
-			cnc @eliasBacktrack
+			cnc @elias_backtrack
 			inx h
 			jmp @copy
 
 @elias:
 			inr l
-@eliasLoop:
+@elias_loop:
 			add a
-			jnz @eliasSkip
+			jnz @elias_skip
 			ldax d
 			inx d
 			ral
-@eliasSkip:
+@elias_skip:
 			rc
-@eliasBacktrack:
+@elias_backtrack:
 			dad h
 			add a
-			jnc @eliasLoop
+			jnc @elias_loop
 			jmp @elias
 			

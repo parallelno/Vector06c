@@ -144,7 +144,7 @@ monsters_data_func_caller:
 ; use:
 ; de, a
 monsters_common_func_caller:
-			shld @funcPtr+1
+			shld @func_ptr+1
 			lxi h, monster_update_ptr+1
 @loop:
 			mov a, m
@@ -155,7 +155,7 @@ monsters_common_func_caller:
 			ret
 @call_func:			
 			push h
-@funcPtr:
+@func_ptr:
 			call TEMP_ADDR
 			pop h
 @next_data:

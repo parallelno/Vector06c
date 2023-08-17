@@ -31,7 +31,7 @@
 			mov h, m
 			mov l, b
 			mov c, a
-			; hl - animPtr
+			; hl - anim_ptr
 			; c - preshifted sprite idx*2 offset
 			call sprite_get_addr
 			
@@ -95,7 +95,7 @@
 			add c
 			cmp b
 			rc
-@collidesHero:
+@collides_hero:
 			; hero collides
 			; hl points to bullet_pos_y+1
 			push h

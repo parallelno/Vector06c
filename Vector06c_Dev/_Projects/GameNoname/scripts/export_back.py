@@ -74,8 +74,8 @@ def anims_to_asm(label_prefix, source_j):
 				if loop == False:
 					next_frame_offset_low = -1
 				else:
-					offsetAddr = 1
-					next_frame_offset_low = 255 - (frame_count - 1) * (preshifted_sprites + offsetAddr) * 2 + 1
+					offset_addr = 1
+					next_frame_offset_low = 255 - (frame_count - 1) * (preshifted_sprites + offset_addr) * 2 + 1
 					next_frame_offset_low -= 1 # decrease the offset to save one instruction in the game code
 					
 				asm += f"			.byte {next_frame_offset_low}, {next_frame_offset_hi_str} ; offset to the first frame\n"

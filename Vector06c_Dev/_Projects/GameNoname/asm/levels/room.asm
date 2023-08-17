@@ -204,12 +204,12 @@ room_tiledata_breakable_spawn:
 			ADD_A(2) ; to make a JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 
-			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_breakables, @noSpawn)
+			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_breakables, @no_spawn)
 			ROOM_DECAL_DRAW(__breakable_gfx_ptrs)
 @restore_tiledata:
 			mvi a, TEMP_BYTE
 			ret
-@noSpawn:
+@no_spawn:
 			mvi a, TILEDATA_RESTORE_TILE
 			ret			
 
@@ -253,7 +253,7 @@ room_tiledata_item_spawn:
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
 room_tiledata_resource_spawn:
-			lxi h, @restoreTiledata+1
+			lxi h, @restore_tiledata+1
 			mov m, b
 
 			lxi h, room_id
@@ -268,7 +268,7 @@ room_tiledata_resource_spawn:
 			; resource is found, means it is not picked up
 			; c = tile_idx
 			ROOM_DECAL_DRAW(__resources_gfx_ptrs)
-@restoreTiledata:
+@restore_tiledata:
 			mvi a, TEMP_BYTE
 			ret
 @picked_up:
@@ -436,7 +436,7 @@ room_draw_tiles:
 			mvi e, 0
 			; set a pointer to the first item in the list of addrs of tile graphics
 			lxi h, room_tiles_gfx_ptrs
-@newLine
+@new_line
 			; reset the x. it's a high byte of the first screen buffer addr
 			mvi d, >SCR_BUFF0_ADDR
 @loop:
@@ -464,7 +464,7 @@ room_draw_tiles:
 			add e
 			mov e, a
 			cpi ROOM_HEIGHT * TILE_HEIGHT
-			jc @newLine
+			jc @new_line
 			ret
 
 ; check tiles if they need to be restored.

@@ -19,7 +19,7 @@
 ;			death
 ;		else:
 ;			accept new pos
-;			updateAnim
+;			update_anim
 ;			check bullet-hero collision, 
 ;			if bullet collides with hero:
 ;				impact hero
@@ -183,10 +183,10 @@ sparker_update:
 			; advance to bullet_status_timer
 			LXI_H_TO_DIFF(bullet_status_timer, bullet_update_ptr)
 			dad d
-@updateMove:
+@update_move:
 			dcr m
 			jz @die
-@updateMovement:
+@update_movement:
 			; hl - ptr to bullet_status_timer
 			; advance hl to bullet_speed_y+1
 			LXI_B_TO_DIFF(bullet_speed_y+1, bullet_status_timer)

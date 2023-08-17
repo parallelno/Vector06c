@@ -158,7 +158,7 @@ vfx_init:
 			ret
 
 ; in:
-; hl - ptr to animTimer (monster_anim_timer or bullet_anim_timer)
+; hl - ptr to anim_timer (monster_anim_timer or bullet_anim_timer)
 ; a - anim speed
 ; use:
 ; de, bc, hl, a

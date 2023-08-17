@@ -13,7 +13,7 @@
 ;			death
 ;		else:
 ;			accept new pos
-;			updateAnim
+;			update_anim
 ;			check bullet-hero collision, 
 ;			if bullet collides with hero:
 ;				impact hero
@@ -42,7 +42,7 @@ BOMB_COLLISION_HEIGHT	= 10
 ; a - bullet_id
 ; movement speed based on the hero pos. it goes to that direction.
 bomb_init:
-			sta @bulletId+1
+			sta @bullet_id+1
 
 			lxi h, bullet_update_ptr+1
 			mvi a, BULLET_RUNTIME_DATA_LEN
@@ -62,7 +62,7 @@ bomb_init:
 
 			; advance hl to bullet_id
 			inx h
-@bulletId:	mvi a, TEMP_BYTE
+@bullet_id:	mvi a, TEMP_BYTE
 			mov m, a
 
 			; advance hl to bullet_status
@@ -76,13 +76,13 @@ bomb_init:
 			
 			; a - bullet_id
 			cpi BOMB_SLOW_ID
-			jz @bombSlow
-@bombDmg:
+			jz @bomb_slow
+@bomb_dmg:
 			mvi m, <bomb_dmg
 			inx h
 			mvi m, >bomb_dmg
 			jmp @eraseScrAddr
-@bombSlow:
+@bomb_slow:
 			mvi m, <bomb_run
 			inx h
 			mvi m, >bomb_run			
@@ -192,10 +192,10 @@ bomb_update:
 			; advance to bullet_status_timer
 			LXI_H_TO_DIFF(bullet_status_timer, bullet_update_ptr)
 			dad d
-@updateMove:
+@update_move:
 			dcr m
 			jz @die
-@updateMovement:
+@update_movement:
 			; hl - ptr to bullet_status_timer
 			; advance hl to bullet_speed_y+1
 			LXI_B_TO_DIFF(bullet_speed_y+1, bullet_status_timer)

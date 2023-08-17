@@ -15,14 +15,14 @@
 ;			status_timer = shootPrepTime
 ;			anim to the hero dir
 ;		else:
-;			updateAnim
+;			update_anim
 ;			check mod-hero collision, impact if collides
 ; shootPrep:
 ;	decr status_timer
 ;	if status_timer == 0:
 ;		status = shoot
 ;	else:
-;		updateAnim
+;		update_anim
 ;		check mod-hero collision, impact if collides
 ; shoot:
 ;	status = relax
@@ -33,7 +33,7 @@
 ;	if status_timer == 0:
 ;		status = moveInit
 ;	else:
-;		updateAnim
+;		update_anim
 ;		check mod-hero collision, impact if collides
 ; moveInit:
 ;	status = move
@@ -50,7 +50,7 @@
 ;			status = moveInit
 ;		else:
 ;			accept new pos
-;			updateAnim
+;			update_anim
 ;			check mod-hero collision, impact if collides
 
 ; statuses.
@@ -283,7 +283,7 @@ skeleton_update_move:
 			inx h
 			dcr m
 			jz @setDetectHeroInit
-@updateMovement:
+@update_movement:
 			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, SKELETON_COLLISION_WIDTH, SKELETON_COLLISION_HEIGHT, @setMoveInit) 
 			
 			; hl points to monster_pos_y+1

@@ -3,7 +3,7 @@
 ; for ex. HERO_STATUS_ATTACK plays hero_attk_r or hero_attk_l depending on the direction and it spawns a weapon trail
 HERO_SWORD_STATUS_ATTACK = 0
 
-; duration of statuses (in updateDurations)
+; duration of statuses (in update_durations)
 HERO_SWORD_STATUS_INVIS_DURATION	= 6
 HERO_SWORD_STATUS_ATTACK_DURATION	= 6
 
@@ -124,9 +124,9 @@ hero_sword_update:
 			dad d
 			mov a, m
 			cpi ACTOR_STATUS_BIT_INVIS
-			jz @delayUpdate
+			jz @delay_update
 
-@attkUpdate:
+@attk_update:
 			; hl - ptr to bullet_status
 			; advance and decr bullet_status_timer
 			inx h
@@ -171,7 +171,7 @@ hero_sword_update:
 			dad d
 			jmp actor_destroy
 
-@delayUpdate:
+@delay_update:
 			; hl - ptr to bullet_status
 			; advance and decr bullet_status_timer
 			inx h
@@ -241,7 +241,7 @@ hero_sword_update:
 			pop d
 			; de - pos_xy
 			; if not, check the tile it is on.
-			jnc @checkTiledata
+			jnc @check_tiledata
 
 			; advance hl to monster_impacted_ptr
 			LXI_B_TO_DIFF(monster_impacted_ptr, monster_update_ptr+1)
@@ -252,7 +252,7 @@ hero_sword_update:
 			mov d, m
 			xchg
 			pchl
-@checkTiledata:
+@check_tiledata:
 			TILEDATA_HANDLING2(HERO_SWORD_COLLISION_WIDTH, HERO_SWORD_COLLISION_HEIGHT, hero_sword_tile_func_tbl)
 			ret
 

@@ -76,12 +76,12 @@ copy_mem:
 ; hl
 
 ; TODO: optimize. make it works without stopping (di/ei) interruptions.
-.macro CLEAR_MEM_SP(disableInt)
-		.if disableInt
+.macro CLEAR_MEM_SP(disable_int)
+		.if disable_int
 			di
 		.endif
 			call clear_mem_sp
-		.if disableInt
+		.if disable_int
 			ei
 		.endif			
 .endmacro

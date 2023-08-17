@@ -15,7 +15,7 @@
 ;			status_timer = castPrepTime
 ;			anim = cast
 ;		else:
-;			updateAnim
+;			update_anim
 ;			check mod-hero collision, impact if collides
 ; castPrep:
 ;	decr status_timer
@@ -23,7 +23,7 @@
 ;		status = cast
 ;		anim = cast
 ;	else:
-;		updateAnim
+;		update_anim
 ;		check mod-hero collision, impact if collides
 ; cast:
 ;	status = relax
@@ -34,7 +34,7 @@
 ;	if status_timer == 0:
 ;		status = moveInit
 ;	else:
-;		updateAnim
+;		update_anim
 ;		check mod-hero collision, impact if collides
 ; moveInit:
 ;	status = move
@@ -51,7 +51,7 @@
 ;			status = moveInit
 ;		else:
 ;			accept new pos
-;			updateAnim
+;			update_anim
 ;			check mod-hero collision, impact if collides
 
 ; statuses.
@@ -284,7 +284,7 @@ vampire_update_move:
 			inx h
 			dcr m
 			jz @setDetectHeroInit
-@updateMovement:
+@update_movement:
 			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, @setMoveInit) 
 			
 			; hl points to monster_pos_y+1

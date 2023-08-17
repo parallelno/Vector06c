@@ -48,7 +48,7 @@
 ; hl points to actorStatusTimer
 ; out:
 ; hl points to actorPosY+1
-.macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actorStatusTimer, actorPosX, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, collisionHandler) 
+.macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actorStatusTimer, actorPosX, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, collision_handler) 
 			LXI_B_TO_DIFF(actorPosX, actorStatusTimer)
 			dad b
 			push h ; (stack) <- posX ptr, to restore it in @applyNewPos
@@ -94,22 +94,22 @@
 			mov e, h
 			; check if X<TILE_WIDTH or > ROOM_WIDTH * TILE_WIDTH - TILE_WIDTH
 			cpi TILE_WIDTH
-			jc collisionHandler
+			jc collision_handler
 			cpi ROOM_WIDTH * TILE_WIDTH - TILE_WIDTH
-			jnc collisionHandler
+			jnc collision_handler
 			; check if Y<TILE_HEIGHT or > ROOM_HEIGHT * TILE_HEIGHT - TILE_HEIGHT
 			mov a, e
 			cpi TILE_HEIGHT
-			jc collisionHandler
+			jc collision_handler
 			cpi ROOM_HEIGHT * TILE_HEIGHT - TILE_HEIGHT
-			jnc collisionHandler
+			jnc collision_handler
 
 			lxi b, (ACTOR_COLLISION_WIDTH-1)<<8 | ACTOR_COLLISION_HEIGHT-1
 			; de - pos_xy
 			; bc - width, height
 			call room_get_collision_tiledata
 			ani TILEDATA_COLLIDABLE
-			jnz collisionHandler
+			jnz collision_handler
 
 @applyNewPos:
 			pop h
