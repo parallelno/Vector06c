@@ -190,6 +190,8 @@
 		.endif
 .endmacro
 
+; hl = a + int16_const
+; 36 cpuc
 .macro HL_TO_A_PLUS_INT16(int16_const)
 			adi <int16_const
 			mov l, a
@@ -232,8 +234,8 @@
 ;================================== ALL RAM_DISK_* macros has to be placed BEFORE lxi sp, *, and sphl! ;==================================
 ; has to be placed right BEFORE lxi sp, addr, and sphl
 ; mount the ram-disk w/o storing mode
-.macro RAM_DISK_ON_NO_RESTORE(_command)
-			mvi a, <_command
+.macro RAM_DISK_ON_NO_RESTORE(command)
+			mvi a, <command
 			out $10
 .endmacro
 ; restore the ram-disk mode
@@ -242,14 +244,13 @@
 			out $10
 .endmacro
 ; mount the ram-disk
-; has to be placed right BEFORE lxi sp, addr, and sphl
-.macro RAM_DISK_ON(_command)
-			mvi a, <_command
+; command is a ram disk activation command
+.macro RAM_DISK_ON(command)
+			mvi a, <command
 			sta ram_disk_mode
 			out $10
 .endmacro
 ; mount the ram-disk
-; has to be placed right BEFORE lxi sp, addr, and sphl
 ; a - ram disk activation command
 .macro RAM_DISK_ON_BANK()
 			sta ram_disk_mode

@@ -1,39 +1,4 @@
-; a tiledata handler. 
-; tiledata should be in the format: ffffDDDD
-;		ffff is a func_id of a func handler in the func_table
-;		DDDD is a func argument
-; call a handler func with DDDD stored in a, bc passed in the func depends on the context
-; input:
-; hl - a pointer to a tiledata in a format ffffDDDD.
-; keeps hl unchanged
-; use:
-; de, a
-; bc - depends on the func in the func_table
-.macro TILEDATA_HANDLING(func_table, skip_func_zero = false)
-			mov a, m
-			push h	
-			; extract a function
-			ani TILEDATA_FUNC_MASK
-		.if skip_func_zero
-			; if func_id == 0, that means it is a walkable (non-interactable) tile, we skip it.
-			jz @funcReturnAddr
-		.endif
-			RRC_(2) ; to make a jmp table ptr with a 4 byte allignment
-			mov e, a
-			mvi d, 0
-			; extract a func argument
-			mov a, m
-			ani TILEDATA_ARG_MASK
-			lxi h, func_table
-			dad d
-			lxi d, @funcReturnAddr
-			push d
-			pchl
-@funcReturnAddr:
-			pop h
-.endmacro
-
-; a tiledata handler. 
+; a tiledata handler.
 ; tiledata should be in the format: ffffDDDD
 ;		ffff is a func_id of a func handler in the func_table
 ;		DDDD is a func argument
@@ -41,14 +6,14 @@
 ; input:
 ; hl - ptr to the last tile_idx in the array room_get_tiledata_idxs
 .macro TILEDATA_HANDLING2(width, height, actor_tile_func_table)
-			; de - pos_xy 
+			; de - pos_xy
 			lxi b, (width-1)<<8 | height-1
 			call room_get_tiledata
 @loop:
 			mov a, m
 			cpi TILE_IDX_INVALID
 			rz
-			
+
 			mov c, a
 			; c - tile_idx
 			mvi b, >room_tiledata
@@ -91,7 +56,7 @@
 			call random
 			cmp e
 			jc doNotSpawn
-.endmacro			
+.endmacro
 
 .macro ROOM_SPAWN_RATE_UPDATE(rate, SPAWN_RATE_DELTA, SPAWN_RATE_MIN)
 			; increase death_rate
@@ -105,7 +70,7 @@
 			mov m, a
 			jnc @next
 			mvi m, SPAWN_RATE_MIN
-@next:			
+@next:
 .endmacro
 
 ; look up a resource by its room_id, tile_idx
@@ -133,7 +98,7 @@
 			mov e, a
 			; e = inst_counter - 1
 			; d = room_id
-			; find a resource in resource_inst_data	
+			; find a resource in resource_inst_data
 			mov a, d
 @search_loop:
 			dcx h

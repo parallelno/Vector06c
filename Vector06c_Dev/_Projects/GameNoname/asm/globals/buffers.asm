@@ -130,6 +130,7 @@ BACK_RUNTIME_DATA_LEN = back_runtime_data_end - backs_runtime_data
 ; the same structs for the rest of the backs
 backs_runtime_data_end_marker:	= back_runtime_data_end + BACK_RUNTIME_DATA_LEN * (BACKS_MAX-1) ;.word ACTOR_RUNTIME_DATA_END << 8
 backs_runtime_data_end:			= backs_runtime_data_end_marker + WORD_LEN
+BACKS_RUNTIME_DATA_LEN = backs_runtime_data_end - backs_runtime_data
 
 ;=============================================================================
 ; a current command that is handled by the level update func

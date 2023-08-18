@@ -19,8 +19,7 @@ hero_init:
 			; 16x15 size
 			lxi h, SPRITE_W_PACKED_MIN<<8 | SPRITE_H_MIN
 			shld hero_erase_wh_old
-			; TODO: replace it with a CONST
-			xra a
+			A_TO_ZERO(HERO_RENDER_STATUS_TRUE)
 			sta hero_global_status_no_render
 			ret
 

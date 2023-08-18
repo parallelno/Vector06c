@@ -14,10 +14,10 @@ hero_erase_scr_addr:		.word TEMP_ADDR
 hero_erase_scr_addr_old:	.word TEMP_ADDR
 hero_erase_wh:				.word TEMP_WORD
 hero_erase_wh_old:			.word TEMP_WORD
-hero_pos_x:					.word TEMP_WORD
-hero_pos_y:					.word TEMP_WORD
-hero_speed_x:				.word TEMP_WORD
-hero_speed_y:				.word TEMP_WORD
+hero_pos_x:					.word TEMP_WORD ; first byte is a sub-pixel coord
+hero_pos_y:					.word TEMP_WORD ; first byte is a sub-pixel coord
+hero_speed_x:				.word TEMP_WORD ; first byte is a sub-pixel coord speed
+hero_speed_y:				.word TEMP_WORD ; first byte is a sub-pixel coord speed
 hero_data_prev_pptr:		.word DRAW_LIST_FIRST_DATA_MARKER
 hero_data_next_pptr:		.word monster_data_next_pptr
 ;

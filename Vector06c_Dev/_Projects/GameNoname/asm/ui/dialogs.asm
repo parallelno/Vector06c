@@ -90,28 +90,69 @@ dialog_init_hero_no_health:
 			jmp dialog_update_next_step
 
 ;===========================================================================
-; dialog when a hero picks up the global item called TILEDATA_ITEM_STORYTELLING
+; dialog when a hero picks up the global item called TILEDATA_ITEM_ID_STORYTELLING
 ; it pauses everything except backs and ui, it erases backs
-; when this dialog closes, the game continues
-; the limitations: LEVEL_IDX_0 in a range of 0-1
-
+; when this dialog closes, the game redraws the room, then continues
+; the limitations: LEVEL_IDX_0 in a range of 0-3
+STORYTELLING_TEXT_STATUS_NEW = 0
+STORYTELLING_TEXT_STATUS_OLD = 1
+STORYTELLING_TEXT_ENTITY_LEN = 4
 .macro STORYTELLING_TEXT_ENTITY(level_id = TEMP_BYTE, room_id = TEMP_BYTE, text_ptr = NULL_PTR)
-			; 0RRR_RRRL
+			; RRRR_RRLL
 			; 	RRRRRR - room_id, 
-			;	L - level_idx
+			;	LL - level_idx
 			.byte room_id<<2 | level_id
+			.byte STORYTELLING_TEXT_STATUS_NEW
 			.word text_ptr
 .endmacro
 
-STORYTELLING_TEXT_ENTITY_LEN = 3
-
 dialog_storytelling_texts_ptrs:
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_0, __text_game_story_intro2)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_0, __text_game_story_intro1)
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_1, __text_game_story_intro2)
 @end_data:
 STORYTELLING_TEXT_COUNT = (@end_data - dialog_storytelling_texts_ptrs) / STORYTELLING_TEXT_ENTITY_LEN
 
-dialog_init_storytelling:
+; restores storytelling text statuses
+dialog_storytelling_init:
+			lxi h, dialog_storytelling_texts_ptrs+1 ; status offset = 1 byte
+			lxi d, STORYTELLING_TEXT_ENTITY_LEN
+			mvi c, STORYTELLING_TEXT_COUNT
+@loop:
+			mvi m, STORYTELLING_TEXT_STATUS_NEW
+			dad d
+			dcr c
+			jnz @loop
+			ret
+
+; called to handle TILEDATA_ITEM_ID_STORYTELLING
+dialog_storytelling:
+			; get the text ptr based on the level_idx and room_id
+			lda room_id
+			RLC_(2)
+			lxi h, level_idx 
+			ora m
+			mov b, a
+			; b - RRRR_RRLL: RRRRR - room_id, L - level_idx
+			lxi h, dialog_storytelling_texts_ptrs
+			lxi d, STORYTELLING_TEXT_ENTITY_LEN
+			mvi c, STORYTELLING_TEXT_COUNT
+@loop:
+			mov a, m
+			; a - RRRR_RRLL: RRRRRR - room_id, LL - level_idx
+			cmp b
+			jz @check_status
+			dad d
+			dcr c
+			jnz @loop
+			ret
+@check_status:
+            inx h
+			A_TO_ZERO(STORYTELLING_TEXT_STATUS_NEW)
+			cmp m
+			rnz
+			mvi m, STORYTELLING_TEXT_STATUS_OLD
+			push h
+
 			mvi a, GAME_REQ_PAUSE
 			sta global_request
 			
@@ -121,28 +162,8 @@ dialog_init_storytelling:
 			; draw a dialog
 			call dialog_draw_frame
 
-			; get the text ptr based on the level_idx and room_id
-			lda level_idx
-			rrc
-			lda room_id
-			ral
-			mov c, a
-			; c - 0RRR_RRRL: RRRRRR - room_id, L - level_idx
-			lxi h, dialog_storytelling_texts_ptrs
-			lxi d, 3
-			mvi b, STORYTELLING_TEXT_COUNT
-@loop:
-			mov a, m
-			; a - 0RRR_RRRL: RRRRRR - room_id, L - level_idx
-			cmp c
-			jz @draw_text
-			dad d
-			dcr b
-			jnz @loop
-			ret
-
-@draw_text:
 			; get the text ptr
+			pop h
 			inx h
 			mov e, m
 			inx h
@@ -151,10 +172,10 @@ dialog_init_storytelling:
 			; hl - text pptr
 			DIALOG_DRAW_TEXT()
 
-			DIALOG_INIT(dialog_storytelling)
+			DIALOG_INIT(dialog_storytelling_steps)
 			ret
 
-dialog_storytelling:
+dialog_storytelling_steps:
 			.word @check_key, DIALOG_EMPTY_CALLBACK
 
 @check_key:
@@ -166,7 +187,8 @@ dialog_storytelling:
 			mvi a, GAME_REQ_ROOM_DRAW
 			sta global_request
 			; TODO: restore Backs
-			; TODO: restore breakables he same configuraton they were created
+			; TODO: restore breakables the same configuraton they were created
+			;call backs_restore_from_temp
 
 			jmp dialog_update_next_step
 

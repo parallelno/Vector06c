@@ -98,12 +98,12 @@ __text_no_health:
 
 ; level0_house
 __text_game_story_intro1:
-			TEXT("TEST 1", LINE_BREAK)
-			TEXT("ealed a mysterious figure. Two strong hands", LINE_BREAK)
-			TEXT("lifted up the unconscious body and carried", LINE_BREAK)
-			TEXT("him out of the dungeon into the fresh air.")
+			TEXT("I was totally ready to enjoy one more sugary", LINE_BREAK)
+			TEXT("popsicle, but then the whole new world burst", LINE_BREAK)
+			TEXT("forth right before my eyes. Let's go! Time", LINE_BREAK)
+			TEXT("to unleash some serious exploration magic!")	
 __text_game_story_intro2:
-			TEXT("TEST 2", LINE_BREAK)
-			TEXT("ealed a mysterious figure. Two strong hands", LINE_BREAK)
-			TEXT("lifted up the unconscious body and carried", LINE_BREAK)
-			TEXT("him out of the dungeon into the fresh air.")			
+			TEXT("Who's that dude on my road?", LINE_BREAK)
+			TEXT("Not cool with his mega-spooky vibe, for sure.", LINE_BREAK)
+			TEXT("Lucky for us, he's shieldless. Time to school", LINE_BREAK)
+			TEXT("that goofball in some true hero moves!")

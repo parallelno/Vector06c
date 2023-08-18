@@ -25,6 +25,7 @@
 		"y" : 140
 	},
 	"rooms" : [
-		{"path" : "level00_room00.tmj"}
+		{"path" : "level00_room00.tmj"},
+		{"path" : "level00_room01.tmj"}
 	]
 }

@@ -189,7 +189,6 @@
 			inx h
 			mov m, a
 @ret:
-			; return zero to erase the tiledata
-			; there this monster was in the room_tiledata
-			xra a
+			; return TILEDATA_NO_COLLISION to make the tile walkable where a monster spawned
+			A_TO_ZERO(TILEDATA_NO_COLLISION)
 .endmacro

@@ -93,7 +93,6 @@ room_tiledata_funcs:
 			JMP_4(room_tiledata_decal_collidable_spawn)	; func_id = 14
 			JMP_4(room_tiledata_back_spawn)				; func_id = 15
 
-
 ; level init data ptr and ram-disk access commands
 levels_init_tbls_ptrs:
 				.word level00_init_tbls, level01_init_tbls

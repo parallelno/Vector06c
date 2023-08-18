@@ -19,16 +19,16 @@ hero_tile_func_item:
 			mvi a, ITEM_STATUS_ACQUIRED
 			cmp m
 			rz
-			; if not acquired, set status to acquired
-			mov m, a
 
 			; check if the item is storytelling
 			; e - item_id
-			A_TO_ZERO(TILEDATA_ITEM_STORYTELLING)
+			A_TO_ZERO(TILEDATA_ITEM_ID_STORYTELLING)
 			ora e
-			jz dialog_init_storytelling
+			jz dialog_storytelling
 
-		
+			; if not acquired, set status to acquired
+			mvi m, ITEM_STATUS_ACQUIRED
+
 			; calc tile gfx ptr
 			mov l, c
 			mvi h, 0

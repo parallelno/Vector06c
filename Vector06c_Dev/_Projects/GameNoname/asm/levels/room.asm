@@ -1,17 +1,23 @@
 room_init:
 			call monsters_init
+room_draw:
 			call bullets_init
 			call backs_init
 			call room_unpack
 			call room_init_tiles_gfx
-			call room_draw
+			call room_draw_tiles
 			call room_handle_room_tiledata
 			call room_copy_scr_to_backbuffs
 			ret
 
-room_draw:
-			lda level_ram_disk_s_gfx
-			CALL_RAM_DISK_FUNC_BANK(room_draw_tiles)
+ROOM_TILEDATA_HANDLING_ALL			= OPCODE_JMP
+ROOM_TILEDATA_HANDLING_NO_MONSTERS	= OPCODE_JNZ
+room_redraw:
+			mvi a, ROOM_TILEDATA_HANDLING_NO_MONSTERS
+			sta room_handle_room_tiledata_check
+			call room_draw
+			mvi a, ROOM_TILEDATA_HANDLING_ALL
+			sta room_handle_room_tiledata_check
 			ret
 
 ; uncompress room gfx tile_idx buffer + room tiledata buffer into the room_tiles_gfx_ptrs + offset
@@ -34,7 +40,7 @@ room_unpack:
 			; load a pointer to a room gfx tile_idx buffer
 			xchg
 			lda level_ram_disk_s_data
-			; TODO: why is it called without CALL_RAM_DISK_FUNC???
+			; TODO: why is it called without CALL_RAM_DISK_FUNC??? FIX IT
 			call get_word_from_ram_disk
 			mov d, b
 			mov e, c
@@ -97,24 +103,48 @@ room_init_tiles_gfx:
 			dcr a
 			jnz @loop
 			ret
-
-; calls the tiledata handler func to spawn spawn a monster, etc
+			
+; calls the tiledata handler func to spawn a back, brealabkes, monster, etc
 room_handle_room_tiledata:
 			; handle the tiledata calling tiledata funcs
 			lxi h, room_tiledata
 			mvi c, 0
 @loop:
-			mov b, m
 			push b
-			TILEDATA_HANDLING(room_tiledata_funcs)
+			push h
+			mov b, m
+			; b - tiledata
+			; extract a function
+			mvi a, TILEDATA_FUNC_MASK
+			ana b
+			
+			; check if this func skippable
+			cpi TILEDATA_FUNC_ID_MONSERS<<4
+@check:			
+			jmp @no_skip
+			A_TO_ZERO(TILEDATA_NO_COLLISION)
+			jmp @funcReturnAddr
+
+@no_skip:
+			RRC_(2) ; to make a jmp table ptr with a 4 byte allignment
+			HL_TO_A_PLUS_INT16(room_tiledata_funcs)
+			; extract a func argument
+			mvi a, TILEDATA_ARG_MASK
+			ana b
+			lxi d, @funcReturnAddr
+			push d
+			pchl
+@funcReturnAddr:
+			pop h
 			pop b
-			mov m, a ; save tiledata back into room_tiledata. funcs (ex. burner_init etc.) can replace A with 0 to make it walkable
+			mov m, a ; save tiledata returned by indivisual handle func (ex. backs_spawn) back into room_tiledata.
 			inx h
 			inr c
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
 			cmp c
 			jnz @loop
 			ret
+room_handle_room_tiledata_check = @check
 
 ; a tiledata handler. it just copies the tiledata.
 ; it copies the tiledata byte into the room_tiledata as it is
@@ -125,6 +155,16 @@ room_handle_room_tiledata:
 room_tiledata_copy:
             ; just return the same tiledata
 			mov a, b
+			ret
+
+; a tiledata handler. it returns tiledata = TILEDATA_NO_COLLISION.
+; it copies the tiledata byte into the room_tiledata as it is
+; input:
+; b - tiledata
+; out:
+; a - tiledata that will be saved back into room_tiledata
+room_tiledata_erase:
+			A_TO_ZERO(TILEDATA_NO_COLLISION)
 			ret
 
 ; a tiledata handler. spawn a monster.
@@ -211,7 +251,7 @@ room_tiledata_breakable_spawn:
 			ret
 @no_spawn:
 			mvi a, TILEDATA_RESTORE_TILE
-			ret			
+			ret
 
 ; a tiledata handler. spawn items.
 ; input:
@@ -224,7 +264,7 @@ room_tiledata_item_spawn:
 			lxi h, @restore_tiledata+1
 			mov m, b
 			; check if it's storytelling dialog tiledata
-			ora a
+			ora a ; TILEDATA_ITEM_ID_STORYTELLING = 0
 			jz @restore_tiledata
 
 			ADD_A(2) ; to make a JMP_4 ptr
@@ -320,13 +360,13 @@ room_tiledata_door_spawn:
 			ADD_A(2) ; to make a JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 
-			; check global item status
+			; check the global item status
 			mvi h, >global_items
 			mvi a, %00001110
 			ana b
 			rrc
 
-			adi <global_items
+			adi <global_items + 1 ; because the first keys has id = 1
 			mov l, a
 			mov a, m
 			cpi <ITEM_STATUS_USED
@@ -400,7 +440,7 @@ room_decal_draw:
 			mov d, a
 			; de - scr addr
 			push d
-			
+
 room_decal_draw_ptr_offset:
 			lxi d, TEMP_WORD
 			dad d
@@ -425,13 +465,15 @@ room_decal_draw_backbuffers:
 			pop d
 			pop b
 			CALL_RAM_DISK_FUNC(draw_decal_v, <__RAM_DISK_S_DECALS | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF)
-			ret	
+			ret
 
 ;=========================================================
 ; draw a room tiles. It might be a main screen, or a back buffer
-; call ex. CALL_RAM_DISK_FUNC(room_draw_tiles, <__RAM_DISK_S_LEVEL01_GFX)
-; __RAM_DISK_S_LEVEL01_GFX - ram-disk activation command where tile gfx stored
+; call ex. call room_draw_tiles
 room_draw_tiles:
+			lda level_ram_disk_s_gfx
+			RAM_DISK_ON_BANK()
+
 			; set y = 0
 			mvi e, 0
 			; set a pointer to the first item in the list of addrs of tile graphics
@@ -465,6 +507,7 @@ room_draw_tiles:
 			mov e, a
 			cpi ROOM_HEIGHT * TILE_HEIGHT
 			jc @new_line
+			RAM_DISK_OFF()
 			ret
 
 ; check tiles if they need to be restored.
@@ -764,7 +807,7 @@ room_get_tiledata:
 			mov m, a
 			ret
 
-; fill up the tile_data_buff with tiledata = 1 
+; fill up the tile_data_buff with tiledata = 1
 ; (walkable tile, restore back, no decal)
 ; in:
 ; c - tiledata to fill

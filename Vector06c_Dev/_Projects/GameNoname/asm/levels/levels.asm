@@ -117,26 +117,26 @@ level_update:
 			ora a
 			rz
 			cpi GAME_REQ_ROOM_INIT
-			jz @load_draw_room
+			jz @room_load_draw
 			cpi GAME_REQ_LEVEL_INIT
-			jz @load_level
+			jz @level_load
 			cpi GAME_REQ_ROOM_DRAW
 			jz @room_draw
 			ret
-@load_draw_room:
+@room_load_draw:
+			call hero_init
 			; load a new room
 			call room_init
-			call hero_init
 			; reset level command
 			A_TO_ZERO(GLOBAL_REQ_NONE)
 			sta global_request
 			call reset_game_updates_counter
 			ret
 @room_draw:
-			call room_draw
+			call room_redraw
 			A_TO_ZERO(GLOBAL_REQ_NONE)
 			sta global_request
 			call reset_game_updates_counter
 			ret
-@load_level:
+@level_load:
 			jmp level_init

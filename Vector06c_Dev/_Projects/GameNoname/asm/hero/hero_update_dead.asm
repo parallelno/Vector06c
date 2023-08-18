@@ -132,8 +132,7 @@ hero_dead_fade_r:
 			inx h
 			mvi m, HERO_STATUS_DEATH_WAIT_SPARKER_DURATION
 			; stop drawing a hero
-			; TODO: replace it with a CONST
-			mvi a, 1
+			mvi a, HERO_RENDER_STATUS_FALSE
 			sta hero_global_status_no_render
 
 			; fill all visual buffs with thedarkers color in the current palette

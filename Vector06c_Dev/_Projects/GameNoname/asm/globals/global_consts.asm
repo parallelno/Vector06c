@@ -115,6 +115,7 @@ DRAW_LIST_FIRST_DATA_MARKER = 0
 SETTING_OFF	= 0
 SETTING_ON	= $ff
 
+;===========================================================================
 ; gameplay
 GAME_REQ				= %1000_0000
 GLOBAL_REQ_NONE			= 0
@@ -134,6 +135,7 @@ ROOM_ID_1	= 1
 
 SCORES_MAX	= 10
 
+;===========================================================================
 ; text
 LINE_BREAK	= $6a ;'\n'
 PARAG_BREAK	= $ff
@@ -145,9 +147,10 @@ OPCODE_XCHG = $eb
 OPCODE_RET  = $c9
 OPCODE_RC	= $d8
 OPCODE_RNC  = $d0
-OPCODE_JMP	= $C3
-OPCODE_JC	= $DA
-OPCODE_JNC	= $D2
+OPCODE_JMP	= $c3
+OPCODE_JNZ	= $c2
+OPCODE_JC	= $dA
+OPCODE_JNC	= $d2
 OPCODE_MOV_E_M = $5e
 OPCODE_MOV_E_A = $5f
 OPCODE_MOV_D_B = $50
@@ -155,7 +158,7 @@ OPCODE_MOV_D_M = $56
 OPCODE_MOV_D_A = $57
 OPCODE_MOV_M_B = $70
 OPCODE_MOV_M_A = $77
-OPCODE_POP_B = $C1
+OPCODE_POP_B = $c1
 OPCODE_STC	= $37
 OPCODE_INX_D = $13
 OPCODE_LXI_H = $21
