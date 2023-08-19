@@ -80,7 +80,7 @@ gcplayer_tasks_init:
 			dad sp
 			shld @restoreSP+1
 
-			lxi sp, GCPlayerTaskStack13 + GC_PLAYER_STACK_SIZE
+			lxi sp, gsplayer_task_stack13 + GC_PLAYER_STACK_SIZE
 			lxi d, GCPlayerAyRegDataPtrs + GC_PLAYER_TASKS * ADDR_LEN
 			; b = 0, c = a task counter * 2
 			lxi b, (GC_PLAYER_TASKS - 1) * ADDR_LEN
@@ -103,8 +103,8 @@ gcplayer_tasks_init:
 			mov e, m
 			push d
 			xchg
-			; store taskSP to GCPlayerTaskSPs
-			lxi h, GCPlayerTaskSPs
+			; store taskSP to gsplayer_task_sps
+			lxi h, gsplayer_task_sps
 			dad b
 			shld @storeTaskSP+1
 			; move sp back 4 bytes to skip storing HL, PSW because zx0 doesnt use them to init
@@ -127,8 +127,8 @@ gcplayer_tasks_init:
 
 ; Set the current task stack pointer to the first task stack pointer
 gcplayer_scheduler_init:
-			lxi h, GCPlayerTaskSPs
-			shld GCPlayerCurrentTaskSPp
+			lxi h, gsplayer_task_sps
+			shld gsplayer_current_task_spp
 			ret
 			
 
@@ -158,10 +158,10 @@ gcplayer_scheduler_update:
 			lxi h, 0
 			dad sp
 			shld GCPlayerSchedulerRestoreSp+1
-			lhld GCPlayerCurrentTaskSPp
+			lhld gsplayer_current_task_spp
 			mov e, m 
 			inx h 
-			mov d, m ; de = &GCPlayerTaskSPs[n]
+			mov d, m ; de = &gsplayer_task_sps[n]
 			xchg
 			sphl
 			; restore a task context and return into it
@@ -183,21 +183,21 @@ gcplayer_scheduler_store_task_context:
 			lxi h, 0 
 			dad sp
 			xchg
-			lhld GCPlayerCurrentTaskSPp
+			lhld gsplayer_current_task_spp
 			mov m, e 
 			inx h 
 			mov m, d 
 			inx h
-			mvi a, <GCPlayerTaskSPsEnd
+			mvi a, <gsplayer_task_sps_end
 			cmp l
 			jnz @storeNextTaskSp
-			mvi a, >GCPlayerTaskSPsEnd
+			mvi a, >gsplayer_task_sps_end
 			cmp h
 			jnz @storeNextTaskSp
-			; (GCPlayerCurrentTaskSPp) = GCPlayerTaskSPs[0]
-			lxi h, GCPlayerTaskSPs
+			; (gsplayer_current_task_spp) = gsplayer_task_sps[0]
+			lxi h, gsplayer_task_sps
 @storeNextTaskSp:
-			shld GCPlayerCurrentTaskSPp
+			shld gsplayer_current_task_spp
 GCPlayerSchedulerRestoreSp:
 			lxi sp, TEMP_ADDR
 			ret

@@ -3,31 +3,31 @@ GC_PLAYER_STACK_SIZE = 16
 GC_PLAYER_BUFFER_SIZE = $100
 
 gcplayer_buffer = $10000 - GC_PLAYER_BUFFER_SIZE * GC_PLAYER_TASKS
-GCPlayerTaskStack = gcplayer_buffer - GC_PLAYER_STACK_SIZE * GC_PLAYER_TASKS
+gsplayer_task_stack = gcplayer_buffer - GC_PLAYER_STACK_SIZE * GC_PLAYER_TASKS
 
-; array of task stack pointers. GCPlayerTaskSPs[i] = taskSP
-GCPlayerTaskSPs = GCPlayerTaskStack - GC_PLAYER_TASKS * WORD_LEN
-GCPlayerTaskSPsEnd = GCPlayerTaskStack
+; array of task stack pointers. gsplayer_task_sps[i] = taskSP
+gsplayer_task_sps = gsplayer_task_stack - GC_PLAYER_TASKS * WORD_LEN
+gsplayer_task_sps_end = gsplayer_task_stack
 
-; a pointer to a current task sp. *GCPlayerCurrentTaskSPp = GCPlayerTaskSPs[currentTask]
-GCPlayerCurrentTaskSPp = GCPlayerTaskSPs - WORD_LEN;
-__gigachad_buffers = GCPlayerCurrentTaskSPp
+; a pointer to a current task sp. *gsplayer_current_task_spp = gsplayer_task_sps[current_task]
+gsplayer_current_task_spp = gsplayer_task_sps - WORD_LEN;
+__gigachad_buffers = gsplayer_current_task_spp
 
 ; task stacks
-GCPlayerTaskStack00 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 0
-GCPlayerTaskStack01 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 1
-GCPlayerTaskStack02 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 2
-GCPlayerTaskStack03 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 3
-GCPlayerTaskStack04 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 4
-GCPlayerTaskStack05 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 5
-GCPlayerTaskStack06 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 6
-GCPlayerTaskStack07 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 7
-GCPlayerTaskStack08 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 8
-GCPlayerTaskStack09 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 9
-GCPlayerTaskStack10 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 10
-GCPlayerTaskStack11 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 11
-GCPlayerTaskStack12 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 12
-GCPlayerTaskStack13 = GCPlayerTaskStack + GC_PLAYER_STACK_SIZE * 13
+gsplayer_task_stack00 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 0
+gsplayer_task_stack01 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 1
+gsplayer_task_stack02 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 2
+gsplayer_task_stack03 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 3
+gsplayer_task_stack04 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 4
+gsplayer_task_stack05 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 5
+gsplayer_task_stack06 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 6
+gsplayer_task_stack07 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 7
+gsplayer_task_stack08 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 8
+gsplayer_task_stack09 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 9
+gsplayer_task_stack10 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 10
+gsplayer_task_stack11 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 11
+gsplayer_task_stack12 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 12
+gsplayer_task_stack13 = gsplayer_task_stack + GC_PLAYER_STACK_SIZE * 13
 
 gcplayer_buffer00 = gcplayer_buffer + GC_PLAYER_BUFFER_SIZE * 0
 gcplayer_buffer01 = gcplayer_buffer + GC_PLAYER_BUFFER_SIZE * 1

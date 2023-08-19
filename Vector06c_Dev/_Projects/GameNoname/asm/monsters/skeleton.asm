@@ -2,13 +2,13 @@
 ; init:
 ;	 status = detectHeroInit
 ; detectHeroInit:
-;	status = detectHero
+;	status = detect_hero
 ;	status_timer = detectHeroTime
 ;	anim = idle.
-; detectHero:
+; detect_hero:
 ;	decr status_timer
 ;	if status_timer == 0:
-;		status = moveInit
+;		status = move_init
 ;	else:
 ;		if distance(mob, hero) < a shooting radius:
 ;			status = shootPrep
@@ -26,16 +26,16 @@
 ;		check mod-hero collision, impact if collides
 ; shoot:
 ;	status = relax
-;	status_timer = relaxTime
+;	status_timer = relax_time
 ;	spawn a projectile along the mob dir
 ; relax:
 ;	decr status_timer
 ;	if status_timer == 0:
-;		status = moveInit
+;		status = move_init
 ;	else:
 ;		update_anim
 ;		check mod-hero collision, impact if collides
-; moveInit:
+; move_init:
 ;	status = move
 ;	status_timer = random
 ;	speed = random dir
@@ -47,7 +47,7 @@
 ;	else:
 ;		try to move a mob
 ;		if mob collides with tiles:
-;			status = moveInit
+;			status = move_init
 ;		else:
 ;			accept new pos
 ;			update_anim
@@ -139,36 +139,36 @@ skeleton_update_detect_hero:
 			; advance hl to monster_status_timer
 			inx h
 			dcr m
-			jz @setMoveInit
-@checkMobHeroDistance:
+			jz @set_move_init
+@check_mob_hero_distance:
 			; advance hl to monster_pos_x+1
 			LXI_B_TO_DIFF(monster_pos_x+1, monster_status_timer)
 			dad b
 			; check hero-monster posX diff
 			lda hero_pos_x+1
 			sub m
-			jc @checkNegPosXDiff
+			jc @check_neg_pos_x_diff
 			cpi SKELETON_DETECT_HERO_DISTANCE
-			jc @checkPosYDiff
-			jmp @updateAnimHeroDetectX
-@checkNegPosXDiff:
+			jc @check_pos_y_diff
+			jmp @update_anim_hero_detect_x
+@check_neg_pos_x_diff:
 			cpi -SKELETON_DETECT_HERO_DISTANCE
-			jnc @checkPosYDiff
-			jmp @updateAnimHeroDetectX
-@checkPosYDiff:
+			jnc @check_pos_y_diff
+			jmp @update_anim_hero_detect_x
+@check_pos_y_diff:
 			; advance hl to monster_pos_y+1
 			INX_H(2)
 			; check hero-monster posY diff
 			lda hero_pos_y+1
 			sub m
-			jc @checkNegPosYDiff
+			jc @check_neg_pos_y_diff
 			cpi SKELETON_DETECT_HERO_DISTANCE
 			jc @detectsHero
-			jmp @updateAnimHeroDetectY
-@checkNegPosYDiff:
+			jmp @update_anim_hero_detect_y
+@check_neg_pos_y_diff:
 			cpi -SKELETON_DETECT_HERO_DISTANCE
 			jnc @detectsHero
-			jmp @updateAnimHeroDetectY
+			jmp @update_anim_hero_detect_y
 @detectsHero:
 			; hl = monster_pos_y+1
 			; advance hl to monster_status
@@ -184,20 +184,20 @@ skeleton_update_detect_hero:
 			inx h
 			mvi m, >skeleton_idle
 			ret
-@updateAnimHeroDetectX:
+@update_anim_hero_detect_x:
 			; advance hl to monster_anim_timer
 			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_x+1)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_DETECT_HERO
 			jmp skeleton_update_anim_check_collision_hero
-@updateAnimHeroDetectY:
+@update_anim_hero_detect_y:
 			; advance hl to monster_anim_timer
 			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_y+1)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_DETECT_HERO
 			jmp skeleton_update_anim_check_collision_hero
 
-@setMoveInit:
+@set_move_init:
  			; hl - ptr to monster_status_timer
 			mvi m, SKELETON_STATUS_MOVE_TIME
 			; advance hl to monster_status
@@ -219,12 +219,12 @@ skeleton_update_move_init:
 
 			mvi c, 0 ; tmp c=0
 			cpi $40
-			jc @speedXp
+			jc @speed_x_positive
 			cpi $80
-			jc @speedYp
+			jc @speed_y_positive
 			cpi $c0
-			jc @speedXn
-@speedYn:
+			jc @speed_x_negative
+@speed_y_negative:
 			mov m, c
 			inx h
 			mov m, c
@@ -232,8 +232,8 @@ skeleton_update_move_init:
 			mvi m, <SKELETON_MOVE_SPEED_NEG
 			inx h
 			mvi m, >SKELETON_MOVE_SPEED_NEG
-			jmp @setAnim
-@speedYp:
+			jmp @set_anim
+@speed_y_positive:
 			mov m, c
 			inx h
 			mov m, c
@@ -241,8 +241,8 @@ skeleton_update_move_init:
 			mvi m, <SKELETON_MOVE_SPEED
 			inx h
 			mvi m, >SKELETON_MOVE_SPEED
-			jmp @setAnim
-@speedXn:
+			jmp @set_anim
+@speed_x_negative:
 			mvi m, <SKELETON_MOVE_SPEED_NEG
 			inx h
 			mvi m, >SKELETON_MOVE_SPEED_NEG
@@ -250,8 +250,8 @@ skeleton_update_move_init:
 			mov m, c
 			inx h
 			mov m, c
-			jmp @setAnim
-@speedXp:
+			jmp @set_anim
+@speed_x_positive:
 			mvi m, <SKELETON_MOVE_SPEED
 			inx h
 			mvi m, >SKELETON_MOVE_SPEED
@@ -259,19 +259,19 @@ skeleton_update_move_init:
 			mov m, c
 			inx h
 			mov m, c
-@setAnim:
+@set_anim:
 			LXI_B_TO_DIFF(monster_anim_ptr, monster_speed_y+1)
 			dad b
 			; a = rnd
 			ora a
 			; if rnd is positive (up or right movement), then play skeleton_run_r anim
-			jp @setAnimRunR
-@setAnimRunL:
+			jp @set_anim_run_r
+@set_anim_run_l:
 			mvi m, <skeleton_run_l
 			inx h
 			mvi m, >skeleton_run_l
 			ret
-@setAnimRunR:
+@set_anim_run_r:
 			mvi m, <skeleton_run_r
 			inx h
 			mvi m, >skeleton_run_r
@@ -282,9 +282,9 @@ skeleton_update_move:
 			; advance hl to monster_status_timer
 			inx h
 			dcr m
-			jz @setDetectHeroInit
+			jz @set_detect_hero_init
 @update_movement:
-			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, SKELETON_COLLISION_WIDTH, SKELETON_COLLISION_HEIGHT, @setMoveInit) 
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, SKELETON_COLLISION_WIDTH, SKELETON_COLLISION_HEIGHT, @set_move_init) 
 			
 			; hl points to monster_pos_y+1
 			; advance hl to monster_anim_timer
@@ -293,7 +293,7 @@ skeleton_update_move:
 			mvi a, SKELETON_ANIM_SPEED_MOVE
 			jmp skeleton_update_anim_check_collision_hero
 
-@setMoveInit:
+@set_move_init:
 			pop h
 			; hl points to monster_pos_x
 			; advance hl to monster_status
@@ -303,7 +303,7 @@ skeleton_update_move:
 			inx h
 			mvi m, SKELETON_STATUS_MOVE_TIME
 			ret
-@setDetectHeroInit:
+@set_detect_hero_init:
  			; hl - ptr to monster_status_timer
 			mvi m, SKELETON_STATUS_MOVE_TIME
 			; advance hl to monster_status
@@ -316,13 +316,13 @@ skeleton_update_relax:
 			; advance hl to monster_status_timer
 			inx h
 			dcr m
-			jz @setMoveInit
+			jz @set_move_init
 			; advance hl to monster_anim_timer
 			LXI_B_TO_DIFF(monster_anim_timer, monster_status_timer)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_RELAX
 			jmp skeleton_update_anim_check_collision_hero
- @setMoveInit:
+ @set_move_init:
  			; hl - ptr to monster_status_timer
 			mvi m, SKELETON_STATUS_MOVE_TIME
 			; advance hl to monster_status

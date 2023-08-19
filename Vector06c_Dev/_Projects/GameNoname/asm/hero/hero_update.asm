@@ -63,7 +63,7 @@ hero_update:
 			sta hero_status
 
 			mov a, l
-@setAnimRunR:
+@set_anim_run_r:
 			cpi CONTROL_CODE_RIGHT
 			jnz @setAnimRunRU
 
@@ -98,7 +98,7 @@ hero_update:
 
 @setAnimRunRD:
 			cpi CONTROL_CODE_RIGHT | CONTROL_CODE_DOWN
-			jnz @setAnimRunL
+			jnz @set_anim_run_l
 
 			lxi h, HERO_RUN_SPEED_D
 			shld hero_speed_x
@@ -111,7 +111,7 @@ hero_update:
 			shld hero_anim_addr
 			jmp hero_update_temp_pos
 
-@setAnimRunL:
+@set_anim_run_l:
 			cpi CONTROL_CODE_LEFT
 			jnz @setAnimRunLU
 

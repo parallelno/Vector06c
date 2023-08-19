@@ -25,7 +25,7 @@ hero_draw:
 			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
 			CALL_RAM_DISK_FUNC_BANK(__draw_sprite_vm)
 
-@saveParams:
+@save_params:
 			; store an old scr addr, width, and height
 			lxi h, hero_erase_scr_addr
 			mov m, c
@@ -43,7 +43,7 @@ hero_draw:
 @invis:
 			mov a, l
 			CALL_RAM_DISK_FUNC_BANK(__draw_sprite_invis_vm)
-			jmp @saveParams
+			jmp @save_params
 
 hero_copy_to_scr:
 			lda hero_global_status_no_render
