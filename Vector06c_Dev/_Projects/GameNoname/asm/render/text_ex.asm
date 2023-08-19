@@ -21,7 +21,7 @@ draw_text_ex:
 			; get a char code
 			mov e, m
 			; return if its code 0
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			cmp e
 			rz
 			mov d, a ; d = 0
@@ -85,7 +85,7 @@ draw_text_ex:
 			; shift a pair of gfx bytes
 			pop b
 			; check if it is the end of the char gfx
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			ora b
 			jnz @advancePos
 			mov l, c

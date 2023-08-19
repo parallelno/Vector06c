@@ -78,7 +78,7 @@ int8_to_ascii_dec_decr:
 FPS_SCR_ADDR = $bdfb
 draw_fps:
 			lhld DrawText_restoreSP+1
-			shld @tmpRestoreSP
+			shld @tmp_restore_sp
 			;lxi h, @fps_text
 			;call int_to_ascii_hex
 			mov l, a
@@ -89,7 +89,7 @@ draw_fps:
 			lxi h, @fps_text
 			lxi b, FPS_SCR_ADDR
 			call draw_text
-			lhld @tmpRestoreSP
+			lhld @tmp_restore_sp
 			shld DrawText_restoreSP+1
 			ret
 
@@ -97,7 +97,7 @@ draw_fps:
 			.byte $30
 @fps_text:
 			.byte $30, $30, 0
-@tmpRestoreSP:
+@tmp_restore_sp:
             .word TEMP_ADDR
 
 ; input:
@@ -107,7 +107,7 @@ draw_text:
 			; get a char
 			mov e, m
 			; return if its code 0
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			cmp e
 			rz
 			inx h

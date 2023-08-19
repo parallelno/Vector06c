@@ -41,6 +41,7 @@ TEMP_BYTE				= $00
 TEMP_WORD				= $0000
 TEMP_ADDR				= $0000
 NULL_PTR				= $0
+NULL_BYTE				= $0
 
 ; levels
 TILE_WIDTH		= 16

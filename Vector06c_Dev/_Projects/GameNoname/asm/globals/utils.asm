@@ -18,7 +18,7 @@ restore_sp:
 ; a
 clear_mem:
 @loop:
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			mov m, a
 			inx h
 			dcx b
@@ -59,8 +59,7 @@ copy_mem:
 			inx d
 			dcx b
 
-			xra a
-			ora c
+			mov a, c
 			ora b
 			jnz @loop
 			ret
@@ -185,9 +184,8 @@ erase_screen_block:
 ; de - ram-disk palette addr
 ; h - ram-disk activation command
 copy_palette_request_update:
-			mvi l, PALETTE_COLORS / 2
 			lxi b, palette
-			call copy_from_ram_disk
+			COPY_FROM_RAM_DISK(PALETTE_COLORS)
 			lxi h, palette_update_request
 			mvi m, PALETTE_UPD_REQ_YES
 			ret
@@ -368,20 +366,28 @@ copy_to_ram_disk32:
 			RAM_DISK_OFF()
 			ret
 
-; Copy data (max 512) from the ram-disk to ram w/o blocking interruptions
+; Copy data (max 510) from the ram-disk to ram w/o blocking interruptions
 ; input:
 ; h - ram-disk activation command
 ; l - data length / 2
 ; de - data addr in the ram-disk
 ; bc - destination addr
 
+
+; this macro is for checking if the length fits the range 1-510
+.macro COPY_FROM_RAM_DISK(length)
+		.if length > 255*2
+			.error "The length is bigger than supported (510)"
+		.endif
+		.if length > 0
+			mvi l, length/2
+			call copy_from_ram_disk
+		.endif
+.endmacro
+
 ; TODO: optimize. check if it is more efficient to copy a data stored
 ; in $8000 and higher with a direct access like mov
 copy_from_ram_disk:
-			; check if the length == 0
-			xra a
-			cmp l
-			rz
 			; store sp
 			push h
 			lxi h, $0002

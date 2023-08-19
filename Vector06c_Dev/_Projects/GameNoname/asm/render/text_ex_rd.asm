@@ -73,7 +73,7 @@ text_ex_rd_draw:
 			; get a char code
 			mov e, m
 			; return if its code 0
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			ora e
 			rz
 			inx h
@@ -145,9 +145,9 @@ text_ex_rd_draw:
 			; shift a pair of gfx bytes
 			pop b
 			; check if it is the end of the char gfx
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			ora b
-			jnz @advancePos
+			jnz @advance_pos
 			mov l, c
 			mov h, b
 @skip_dad:	jmp TEMP_ADDR
@@ -178,7 +178,7 @@ text_ex_rd_draw:
 			inr e
 			jmp @loop
 
-@advancePos:
+@advance_pos:
 			; bc - a pos offset
 @restoreSP:
 			lxi sp, TEMP_ADDR

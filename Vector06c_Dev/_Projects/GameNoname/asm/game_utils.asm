@@ -46,6 +46,6 @@ fill_buff_black:
 			jmp fill_mem_sp
 
 reset_game_updates_counter:
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			sta game_updates_counter
 			ret

@@ -281,7 +281,7 @@ hero_check_tiledata:
 			mov d, m
 			INX_H(2)
 			mov e, m
-			TILEDATA_HANDLING2(HERO_COLLISION_WIDTH, HERO_COLLISION_HEIGHT, hero_tile_func_tbl)
+			TILEDATA_HANDLING(HERO_COLLISION_WIDTH, HERO_COLLISION_HEIGHT, hero_tile_func_tbl)
 			ret
 
 hero_attack_start:
@@ -293,7 +293,7 @@ hero_attack_start:
 			mvi m, HERO_STATUS_ATTACK_DURATION
 
 			; reset anim timer
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			sta hero_anim_timer
 
 			; speed = 0
@@ -325,8 +325,8 @@ hero_idle_start:
 			; set status
 			mvi a, HERO_STATUS_IDLE
 			sta hero_status
-			; reset anim timer
-			xra a
+			; reset the anim timer
+			A_TO_ZERO(NULL_BYTE)
 			sta hero_anim_timer
 
 			; speed = 0

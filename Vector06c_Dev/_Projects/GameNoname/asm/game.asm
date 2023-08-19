@@ -1,6 +1,6 @@
 .include "asm\\game_consts.asm"
-.include "asm\\levels\\levels_consts.asm"
-.include "asm\\levels\\levels_macro.asm"
+.include "asm\\levels\\room_consts.asm"
+.include "asm\\levels\\room_macro.asm"
 .include "asm\\levels\\levels_data.asm"
 .include "asm\\levels\\backs_consts.asm"
 
@@ -27,7 +27,7 @@
 .include "asm\\ui\\ui.asm"
 
 main_game:
-			call levels_init
+			call game_init
 			call level_init
 			
 			call reset_game_updates_counter
@@ -35,6 +35,19 @@ main_game:
 			call game_update
 			call game_draw
 			jmp	@loop
+
+game_init:
+			lxi h, 0
+			shld game_score
+
+			mvi a, LEVEL_FIRST
+			sta level_idx
+
+			; erase global item statuses
+			lxi h, global_items
+			mvi a, <global_items_end
+			call clear_mem_short
+			ret
 
 game_update:
 			lxi h, game_update_counter

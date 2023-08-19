@@ -61,7 +61,7 @@ draw_tiled_img:
 			mov c, m
 			inx h
 			; skip if tile_idx = 0
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			ora c
 			jz @skip
 			cpi REPEATER_CODE
@@ -77,7 +77,7 @@ draw_tiled_img:
 			inx h
 
 			; skip if tile_idx = 0
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			ora c
 			jnz @get_gfx_ptr
 			; tile_idx = 0,

@@ -1,21 +1,4 @@
 ;================================================================
-;	levels data initialization every game start
-;
-levels_init:
-			; TODO: set the level_idx to 0
-			mvi a, LEVEL_FIRST
-			sta level_idx
-
-			lxi h, 0
-			shld game_score
-
-			; erase global item statuses
-			lxi h, global_items
-			mvi a, <global_items_end
-			call clear_mem_short
-			ret
-
-;================================================================
 ;	level data initialization every level start
 ;
 level_init:
@@ -69,21 +52,19 @@ level_init:
 			xchg
 			lxi h, level_ram_disk_s_data
 			mov h, m
-			mvi l, RESOURCES_LEN / 2
 			lxi b, resources_inst_data_ptrs
-			call copy_from_ram_disk
+			COPY_FROM_RAM_DISK(RESOURCES_LEN)
 
 			; setup room containers
 			lhld level_containers_inst_data_pptr
 			xchg
 			lxi h, level_ram_disk_s_data
 			mov h, m
-			mvi l, CONTAINERS_LEN / 2
 			lxi b, containers_inst_data_ptrs
-			call copy_from_ram_disk
+			COPY_FROM_RAM_DISK(CONTAINERS_LEN)
 
 			; reset room_id
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			sta room_id
 
 			call room_init

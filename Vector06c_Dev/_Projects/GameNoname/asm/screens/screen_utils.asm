@@ -11,7 +11,7 @@ screen_space_checking:
 
 screen_simple_init:
 			; clear the screen	
-			xra a
+			A_TO_ZERO(RAM_DISK_OFF_CMD)
 			lxi b, 0
 			lxi d, SCR_BUFF_LEN * 4 / 32 - 1
 			call clear_mem_sp
@@ -21,6 +21,7 @@ screen_simple_init:
 			lxi d, SCR_BUFF_LEN * 3 / 32 - 1
 			call clear_mem_sp
 
+			; TODO: replace 1 with a const
 			mvi a, 1
 			sta border_color_idx
 

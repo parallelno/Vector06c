@@ -177,7 +177,7 @@
 		lxi h, $ffff - val + 1
 .endmacro
 
-; to replace xra a with meaningful macros
+; to replace xra a with a meaningful macro
 .macro A_TO_ZERO(int8_const, useXRA = true)
 		.if int8_const != 0
 			.error "A_TO_ZERO macros is used for a non-zero constant assignment, val = ", int8_const

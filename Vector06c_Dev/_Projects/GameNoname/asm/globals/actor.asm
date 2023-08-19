@@ -36,7 +36,8 @@ actor_kill_all:
 ; use:
 ; de, bc, hl
 ; out:
-; hl points to anim_ptr (bullet_anim_ptr or monster_anim_ptr)
+; hl points to *_anim_ptr
+; C flag = 1 means the animation reached the last frame
 actor_anim_update:
 			; update monster_anim_timer
 			add m

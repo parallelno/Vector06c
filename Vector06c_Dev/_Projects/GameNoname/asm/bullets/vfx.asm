@@ -157,50 +157,6 @@ vfx_init:
 			mov m, c
 			ret
 
-; in:
-; hl - ptr to anim_timer (monster_anim_timer or bullet_anim_timer)
-; a - anim speed
-; use:
-; de, bc, hl, a
-; out:
-; S flag = 1 means this is the end of anim
-;   if S==0, then hl points to bullet_anim_ptr
-;   if S==1, then de points to bullet_anim_ptr + 1
-vfx_anim_update:
-			; update monster_anim_timer
-			add m
-			mov m, a
-			; advance hl to monster_anim_ptr
-			inx h ; to make hl point to monster_anim_ptr when it returns
-			rnc
-			; read the ptr to a current frame
-			mov e, m
-			inx h
-			mov d, m
-			xchg
-			; hl - the ptr to a current frame
-			; get the offset to the next frame
-			mov c, m
-			; check if it starts looping on the last frame
-			xra a
-			ora c
-			rm ; if it loops, return
-
-			inx h
-			mov b, m
-			; advance the current frame ptr to the next frame
-			dad b
-			xchg
-			; de - the next frame ptr
-			; hl points to monster_anim_ptr+1
-			; store de into the monster_anim_ptr
-			mov m, d
-			dcx h
-			mov m, e
-			; reset S flag to indicate this is not the end of anim
-			xra a
-			ret
-
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to bullet_update_ptr in the runtime data
@@ -208,12 +164,12 @@ vfx_update:
 			LXI_H_TO_DIFF(bullet_anim_timer, bullet_update_ptr)
 			dad d
 			mvi a, VFX_ANIM_SPEED
-			call vfx_anim_update
-			rp
+			call actor_anim_update
+			rnc
 @die:
-			; de points to bullet_anim_ptr + 1
+			; hl points to bullet_anim_ptr
 			; advance hl to bullet_update_ptr+1
-			LXI_H_TO_DIFF(bullet_update_ptr+1, bullet_anim_ptr + 1)
+			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_anim_ptr)
 			dad d
 			jmp actor_destroy
 

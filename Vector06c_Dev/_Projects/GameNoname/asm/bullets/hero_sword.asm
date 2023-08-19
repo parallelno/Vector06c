@@ -137,35 +137,9 @@ hero_sword_update:
 @attkAnimUpdate:
 			; advance to bullet_anim_timer
 			inx h
-			; update it
-			mov a, m
-			adi HERO_SWORD_ANIM_SPEED_ATTACK
-			mov m, a
-			jnc @skipAnimUpdate
-
-			; advance to bullet_anim_ptr
-			inx h
-			; read the ptr to a current frame
-			mov e, m
-			inx h
-			mov d, m
-			xchg
-			; hl - the ptr to a current frame
-			; get the offset to the next frame
-			mov c, m
-			inx h
-			mov b, m
-			; advance the current frame ptr to the next frame
-			dad b
-			xchg
-			; de - the next frame ptr
-			; store de into the bullet_anim_ptr
-			mov m, d
-			dcx h
-			mov m, e
-@skipAnimUpdate:
-			; update movement if needed
-			ret
+			mvi a, HERO_SWORD_ANIM_SPEED_ATTACK
+			jmp actor_anim_update
+			
 @destroy:
 			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
 			dad d
@@ -253,7 +227,7 @@ hero_sword_update:
 			xchg
 			pchl
 @check_tiledata:
-			TILEDATA_HANDLING2(HERO_SWORD_COLLISION_WIDTH, HERO_SWORD_COLLISION_HEIGHT, hero_sword_tile_func_tbl)
+			TILEDATA_HANDLING(HERO_SWORD_COLLISION_WIDTH, HERO_SWORD_COLLISION_HEIGHT, hero_sword_tile_func_tbl)
 			ret
 
 ; in:

@@ -42,7 +42,7 @@ draw_back_v:
 			dad b
 			pop b
 			mov d, c
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			cmp b
 			jnz @drawWidth16
 @drawWidth8:			

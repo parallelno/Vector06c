@@ -164,7 +164,7 @@ SpriteToBuff:
 ; c - height
 .macro SPRITE_TO_BUFF(sourceWidth)
 			; check a mask_flag
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			ora b
 			jz @WithoutMask
 @withMask:
@@ -217,7 +217,7 @@ SpriteToBuff:
 			inx d
 	.endif
 			; empty the first color byte
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			stax d
 			inx d
 .endmacro
@@ -266,7 +266,7 @@ SpriteFromBuff:
 
 			; if there is a mask, 
 			; then double the amount of bytes to copy
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			ora b
 			jz @width24NoMask
 			mov a, c
@@ -287,7 +287,7 @@ SpriteFromBuff:
 ; e - copy_from_buff_offset
 .macro SPRITE_FROM_BUFF(targetWidth)
 			; check a mask_flag
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			ora b
 			jz @WithoutMask
 @withMask:
@@ -306,7 +306,7 @@ SpriteFromBuff:
 
 			; e - copy_from_buff_offset
 			; check copy_from_buff_offset
-			xra a
+			A_TO_ZERO(NULL_BYTE)
 			ora e
 			lxi d, __sprite_tmp_buff
 			jz @no_offset
