@@ -305,7 +305,7 @@ copy_to_ram_disk:
 			; store sp
 			lxi h, $0000
 			dad sp
-			shld @restoreSP+1
+			shld @restore_sp+1
 			RAM_DISK_ON_BANK()
 @restoreTargetAddr:
 			lxi h, TEMP_WORD
@@ -318,7 +318,7 @@ copy_to_ram_disk:
 			ora c
 			jnz @loop
 
-@restoreSP:
+@restore_sp:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
 			ret
@@ -348,7 +348,7 @@ copy_to_ram_disk32:
 			; store sp
 			lxi h, $0000
 			dad sp
-			shld @restoreSP+1
+			shld @restore_sp+1
 			RAM_DISK_ON_BANK()
 @restoreTargetAddr:
 			lxi h, TEMP_WORD
@@ -361,7 +361,7 @@ copy_to_ram_disk32:
 			ora c
 			jnz @loop
 
-@restoreSP:
+@restore_sp:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
 			ret

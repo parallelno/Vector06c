@@ -11,13 +11,13 @@
 ;		status = move_init
 ;	else:
 ;		if distance(mob, hero) < a casting radius:
-;			status = castPrep
+;			status = cast_prep
 ;			status_timer = castPrepTime
 ;			anim = cast
 ;		else:
 ;			update_anim
 ;			check mod-hero collision, impact if collides
-; castPrep:
+; cast_prep:
 ;	decr status_timer
 ;	if status_timer == 0:
 ;		status = cast
@@ -335,13 +335,13 @@ vampire_update_shoot_prep:
 			; advance hl to monster_status_timer
 			inx h
 			dcr m
-			jz @setShoot
+			jz @set_shoot
 			; advance hl to monster_anim_timer
 			LXI_B_TO_DIFF(monster_anim_timer, monster_status_timer)
 			dad b
 			mvi a, VAMPIRE_ANIM_SPEED_SHOOT_PREP
 			jmp vampire_update_anim_check_collision_hero
- @setShoot:
+ @set_shoot:
   			; hl - ptr to monster_status_timer
 			; advance hl to monster_status
 			dcx h

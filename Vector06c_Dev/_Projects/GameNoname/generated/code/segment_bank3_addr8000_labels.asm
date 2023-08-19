@@ -22,7 +22,6 @@ __utils_rd_rd_data_end               = $83af
 __sprite_preshift_rd_rd_data_start   = $83af
 __sprite_dup_preshift                = $83af
 __sprite_tmp_buff                    = $8894
-__spriteduppreshiftEnd               = $89b4
 __sprite_preshift_rd_rd_data_end     = $89b4
 __text_ex_rd_rd_data_start           = $89b4
 __RAM_DISK_M_TEXT_EX                 = $43

@@ -103,7 +103,7 @@ text_ex_rd_draw:
 			; preserve SP
 			lxi h, 0
 			dad sp
-			shld @restoreSP + 1
+			shld @restore_sp + 1
 			xchg
 			; hl points to a char gfx
 			sphl
@@ -180,7 +180,7 @@ text_ex_rd_draw:
 
 @advance_pos:
 			; bc - a pos offset
-@restoreSP:
+@restore_sp:
 			lxi sp, TEMP_ADDR
 			pop h ; restore pos_xy
 			; advance a pos_xy to the next char

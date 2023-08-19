@@ -172,7 +172,7 @@ draw_tiled_img:
 			; store sp
 			lxi h, $0000
 			dad sp
-			shld @restoreSP + 1
+			shld @restore_sp + 1
 			; sp = BC
 			mov h, b
 			mov l, c
@@ -184,7 +184,7 @@ draw_tiled_img:
 			; sp - tile_gfx data
 			; de - next scr addr offset
 			TILED_IMG_DRAWTILE()
-@restoreSP:
+@restore_sp:
 			lxi sp, TEMP_ADDR
 			ret
 

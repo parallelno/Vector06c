@@ -11,13 +11,13 @@
 ;		status = move_init
 ;	else:
 ;		if distance(mob, hero) < a shooting radius:
-;			status = shootPrep
+;			status = shoot_prep
 ;			status_timer = shootPrepTime
 ;			anim to the hero dir
 ;		else:
 ;			update_anim
 ;			check mod-hero collision, impact if collides
-; shootPrep:
+; shoot_prep:
 ;	decr status_timer
 ;	if status_timer == 0:
 ;		status = shoot
@@ -163,13 +163,13 @@ skeleton_update_detect_hero:
 			sub m
 			jc @check_neg_pos_y_diff
 			cpi SKELETON_DETECT_HERO_DISTANCE
-			jc @detectsHero
+			jc @detect_hero
 			jmp @update_anim_hero_detect_y
 @check_neg_pos_y_diff:
 			cpi -SKELETON_DETECT_HERO_DISTANCE
-			jnc @detectsHero
+			jnc @detect_hero
 			jmp @update_anim_hero_detect_y
-@detectsHero:
+@detect_hero:
 			; hl = monster_pos_y+1
 			; advance hl to monster_status
 			LXI_B_TO_DIFF(monster_status, monster_pos_y+1)
@@ -335,13 +335,13 @@ skeleton_update_shoot_prep:
 			; advance hl to monster_status_timer
 			inx h
 			dcr m
-			jz @setShoot
+			jz @set_shoot
 			; advance hl to monster_anim_timer
 			LXI_B_TO_DIFF(monster_anim_timer, monster_status_timer)
 			dad b
 			mvi a, SKELETON_ANIM_SPEED_SHOOT_PREP
 			jmp skeleton_update_anim_check_collision_hero
- @setShoot:
+ @set_shoot:
   			; hl - ptr to monster_status_timer
 			; advance hl to monster_status
 			dcx h
@@ -360,28 +360,28 @@ skeleton_update_shoot:
 			mov a, m
 			inx h
 			ora m
-			jz @shootVert
+			jz @shoot_vert
 			mov a, m
 			ora a
 			mvi a, BULLET_DIR_R
-			jp @shootRight
-@shootLeft:
+			jp @shoot_right
+@shoot_left:
 			mvi a, BULLET_DIR_L
-@shootRight:
+@shoot_right:
 			LXI_B_TO_DIFF(monster_pos_x+1, monster_speed_x+1)
-			jmp @setBulletPos
-@shootVert:
+			jmp @set_bullet_pos
+@shoot_vert:
 			; advance hl to monster_speed_y+1
 			INX_H(2)
 			mov a, m
 			ora a
 			mvi a, BULLET_DIR_U
-			jp @shootUp
-@shootDown:
+			jp @shoot_up
+@shoot_down:
 			mvi a, BULLET_DIR_D
-@shootUp:
+@shoot_up:
 			LXI_B_TO_DIFF(monster_pos_x+1, monster_speed_y+1)
-@setBulletPos:
+@set_bullet_pos:
 			dad b
 			mov b, m
 			INX_H(2)

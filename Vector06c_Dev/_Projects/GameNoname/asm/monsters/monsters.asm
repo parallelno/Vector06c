@@ -27,67 +27,67 @@ monsters_init:
 ; use:
 ; b
 monsters_get_first_collided:
-			sta @colliderWidth+1
+			sta @collider_width+1
 			mov a, c
-			sta @colliderHeight+1
+			sta @collider_height+1
 			mov a, h
-			sta @colliderPosX+1
+			sta @collider_pos_x+1
 			mov a, l
-			sta @colliderPosY+1
+			sta @collider_pos_y+1
 			lxi h, monster_update_ptr+1
 
 @loop:
 			mov a, m
 			cpi ACTOR_RUNTIME_DATA_DESTR
-			jc @checkCollision
+			jc @check_collision
 			cpi ACTOR_RUNTIME_DATA_LAST
 			jc @next_data
 			; no collision against all alive monsters
 			ret
-@checkCollision:
+@check_collision:
 			push h
 			; advance hl to monster_type
 			LXI_B_TO_DIFF(monster_type, monster_update_ptr+1)
 			dad b
 			mov a, m
 			cpi MONSTER_TYPE_ALLY
-			jz @noCollision
+			jz @no_collision
 
 			; advance hl to monster_pos_x+1
 			LXI_B_TO_DIFF(monster_pos_x+1, monster_type)
 			dad b
 			; horizontal check
 			mov c, m 	; monster posX
-@colliderPosX:
+@collider_pos_x:
 			mvi a, TEMP_BYTE
 			mov b, a	; tmp
-@colliderWidth:
+@collider_width:
 			adi TEMP_BYTE
 			cmp c
-			jc @noCollision
+			jc @no_collision
 			mvi a, SKELETON_COLLISION_WIDTH-1
 			add c
 			cmp b
-			jc @noCollision
+			jc @no_collision
 			; vertical check
 			INX_H(2)
 			mov c, m ; monster posY
-@colliderPosY:
+@collider_pos_y:
 			mvi a, TEMP_BYTE
 			mov b, a
-@colliderHeight:
+@collider_height:
 			adi TEMP_BYTE
 			cmp c
-			jc @noCollision
+			jc @no_collision
 			mvi a, SKELETON_COLLISION_HEIGHT-1
 			add c
 			cmp b
-			jc @noCollision
+			jc @no_collision
 
 			; collides
 			pop h
 			ret
-@noCollision:
+@no_collision:
 			pop h
 @next_data:
 			lxi b, MONSTER_RUNTIME_DATA_LEN

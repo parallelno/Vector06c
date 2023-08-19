@@ -12,13 +12,13 @@
 ; 		0 - one byte width, 
 ;		1 - two bytes width, 
 ; pixel format:
-; oddLine:
+; odd_line:
 ; 1st screen buff : 1 -> 2
 ; 2nd screen buff : 4 <- 3
 ; 3rd screen buff : 6 <- 5
 ; 4rd screen buff : 8 <- 7
 ; y++
-; evenLine:
+; even_line:
 ; 4rd screen buff : 9 -> 10
 ; 3nd screen buff : 12 <- 11
 ; 2st screen buff : 14 <- 13
@@ -30,7 +30,7 @@ draw_back_v:
 			; store sp
 			lxi h, $0000
 			dad sp
-			shld @restoreSP + 1
+			shld @restore_sp + 1
 			; sp = BC
 			mov h, b
 			mov l, c
@@ -47,7 +47,7 @@ draw_back_v:
 			jnz @drawWidth16
 @drawWidth8:			
 ; TODO: support width = 8
-			jmp @restoreSP
+			jmp @restore_sp
 
 ; hl - scr addr
 ; sp - pixel data
@@ -65,7 +65,7 @@ draw_back_v:
 			mov e, a
 			adi $20
 
-@oddLine:
+@odd_line:
 @scr8:
 			pop b					
 			mov m, c				
@@ -92,9 +92,9 @@ draw_back_v:
 			
 			inr l
 			dcr d
-			jz @restoreSP
+			jz @restore_sp
 
-@evenLine:
+@even_line:
 @scrE2:
 			pop b					
 			mov m, c				
@@ -121,8 +121,8 @@ draw_back_v:
 			
 			inr l
 			dcr d
-			jnz @oddLine			
+			jnz @odd_line			
 
-@restoreSP:		
+@restore_sp:		
 			lxi sp, TEMP_ADDR
 			ret

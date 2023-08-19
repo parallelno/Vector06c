@@ -19,17 +19,17 @@ MASK_BYTE_COLOR_BYTE_LEN = 2
 ; used:
 ; de, bc, a
 __sprite_dup_preshift:
-			shld @dataOffset0+1
-			shld @dataOffset1+1
+			shld @data_offset0+1
+			shld @data_offset1+1
 
 			xchg
 			mov a, m
 			cpi PRESHIFT_MIN
 			rc ; return if preshifted_sprites is below 4
-			sta @preshiftedSprites+1
-			sta @preshiftedSprites2+1
+			sta @preshifted_sprites+1
+			sta @preshifted_sprites2+1
 			inx h
-@getAnimAddr:
+@get_anim_addr:
 			; get anim addr
 			mov e, m
 			inx h
@@ -46,15 +46,15 @@ __sprite_dup_preshift:
 
 			xchg
 			; get the next anim frame addr offset
-@getNextFrameOffset:
+@get_next_frame_offset:
 			mov e, m
 			inx h
 			mov d, m
 			mov a, d
-			sta @checkLastFrame+1
+			sta @check_last_frame+1
 			push h
 			dad d
-			shld @nextFrameAddr+1
+			shld @next_frame_addr+1
 			pop h
 			inx h
 			; get the source sprite addr. like skeleton_run_r0_0
@@ -64,22 +64,22 @@ __sprite_dup_preshift:
 			inx h
 			xchg
 			; add an offset inside the bank to the source sprite addr
-@dataOffset0:
+@data_offset0:
 			lxi b, TEMP_ADDR
 			dad b
 			; check if a frame is already preshifted
 			dcx h
 			mov a, m
 			ora a
-			jz @nextFrameAddr
+			jz @next_frame_addr
 			; mark a first sprite of this frame being preshifted
 			dcr m
 
 			push d
-			call SpriteToBuff
+			call sprite_to_buff
 			pop h
 
-@preshiftedSprites:
+@preshifted_sprites:
 			mvi c, TEMP_BYTE
 			; decr preshiftedSprites because we do not need 
 			; to update the first sprite in a frame
@@ -97,7 +97,7 @@ __sprite_dup_preshift:
 			dcx h
 
 
-@preshiftedSpritesloop:
+@preshifted_sprites_loop:
 			; get a target sprite addr to preshift
 			mov d, m
 			dcx h
@@ -107,36 +107,36 @@ __sprite_dup_preshift:
 			push h
 
 			; add an offset inside the bank to the target sprite
-@dataOffset1:
+@data_offset1:
 			lxi h, TEMP_ADDR
 			dad d
 			push h
-@preshiftedSprites2:
+@preshifted_sprites2:
 			mvi e, TEMP_BYTE
-			call SpriteBuffPreshift ; check target addr and preshift counter
+			call sprite_buff_preshift ; check target addr and preshift counter
 			pop h
-			call SpriteFromBuff
+			call sprite_from_buff
 
 			pop h
 			pop b
 			dcr c
-			jnz @preshiftedSpritesloop
+			jnz @preshifted_sprites_loop
 
-@nextFrameAddr:
+@next_frame_addr:
 			lxi h, TEMP_ADDR
-@checkLastFrame:
+@check_last_frame:
 			mvi a, TEMP_BYTE
 			ora a
-			jz @getNextFrameOffset
+			jz @get_next_frame_offset
 
 			pop h
-			jmp @getAnimAddr
+			jmp @get_anim_addr
 			
 ;================================================================
 ; copy a sprite to a temp buffer (16*24 pxls max. w/wo a mask)
 ; in:
 ; hl - an original sprite data addr - 1
-SpriteToBuff:
+sprite_to_buff:
 			dcx h
 			; get a mask_flag
 			; 0 = no mask
@@ -166,10 +166,10 @@ SpriteToBuff:
 			; check a mask_flag
 			A_TO_ZERO(NULL_BYTE)
 			ora b
-			jz @WithoutMask
-@withMask:
+			jz @without_mask
+@with_mask:
 			SPRITE_TO_BUFF_(sourceWidth, True)
-@WithoutMask:
+@without_mask:
 			SPRITE_TO_BUFF_(sourceWidth, False)
 .endmacro
 
@@ -235,7 +235,7 @@ SpriteToBuff:
 ; copy a sprite from a temp buffer (24*24 pxls max. w/wo a mask)
 ; in:
 ; hl - a target sprite data addr
-SpriteFromBuff:
+sprite_from_buff:
 			DCX_H(2)
 			mov e, m
 			; e - copy_from_buff_offset
@@ -268,17 +268,17 @@ SpriteFromBuff:
 			; then double the amount of bytes to copy
 			A_TO_ZERO(NULL_BYTE)
 			ora b
-			jz @width24NoMask
+			jz @width24_no_mask
 			mov a, c
 			add a
 			mov c, a
 
-@width24NoMask:			
+@width24_no_mask:			
 			lxi d, __sprite_tmp_buff
-@width24Loop:	
+@width24_loop:	
 			SPRITE_FROM_BUFF_COPY_LINE(SPRITE_W24 * SPRITE_SCR_BUFFS * COLOR_BYTE_LEN)
 			dcr c
-			jnz @width24Loop
+			jnz @width24_loop
 			ret
 
 ; hl - sprite data addr
@@ -289,10 +289,10 @@ SpriteFromBuff:
 			; check a mask_flag
 			A_TO_ZERO(NULL_BYTE)
 			ora b
-			jz @WithoutMask
-@withMask:
+			jz @without_mask
+@with_mask:
 			SPRITE_FROM_BUFF_(targetWidth, True)
-@WithoutMask:
+@without_mask:
 			SPRITE_FROM_BUFF_(targetWidth, False)
 .endmacro
 
@@ -425,7 +425,7 @@ SpriteFromBuff:
 ; e - preshifted_sprites
 ;	8 - shift by 1 pxl
 ;	4 - shift by 2 pxls
-SpriteBuffPreshift:
+sprite_buff_preshift:
 			; get a preshift
 			DCX_H(2)
 			mov b, m
@@ -610,5 +610,3 @@ SpriteBuffPreshift:
 ; order of bytes the same as in the final sprite described in draw_sprite_rd.asm
 __sprite_tmp_buff:
 			.storage SPRITE_W16 * MASK_BYTE_COLOR_BYTE_LEN * SPRITE_SCR_BUFFS * SPRITE_PRESHIFT_H_MAX
-
-__spriteduppreshiftEnd:

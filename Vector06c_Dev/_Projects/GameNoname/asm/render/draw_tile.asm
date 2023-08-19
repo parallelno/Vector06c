@@ -18,7 +18,7 @@ draw_tile_16x16:
 			; store sp
 			lxi h, $0000
 			dad sp
-			shld @restoreSP + 1
+			shld @restore_sp + 1
 			; sp = BC
 			mov h, b
 			mov l, c
@@ -39,14 +39,14 @@ draw_tile_16x16:
 			mov a, e
 			rrc
 			mov e, a
-			jnc @eraseTileBuf
+			jnc @erase_tile_buf
 
 			DRAWTILE16x16_DRAW_BUF()
-			jmp @nextBuf
+			jmp @next_buf
 
-@eraseTileBuf:
+@erase_tile_buf:
 			DRAWTILE16x16_ERASE_BUF()
-@nextBuf:
+@next_buf:
 			; move X to the next scr buff
 			mvi a, $20
 			add h
@@ -54,7 +54,7 @@ draw_tile_16x16:
 
 			dcr d
 			jnz @loop
-@restoreSP:		
+@restore_sp:		
 			lxi sp, TEMP_ADDR
 			ret
 			
@@ -123,7 +123,7 @@ draw_tile_16x16_back_buff:
 			; store sp
 			lxi h, $0000
 			dad sp
-			shld @restoreSP + 1
+			shld @restore_sp + 1
 			; sp = BC
 			mov h, b
 			mov l, c
@@ -144,19 +144,19 @@ draw_tile_16x16_back_buff:
 @loop:
 			mvi a, >SCR_BUFF1_ADDR
 			cmp h
-			jnc @skipBuf
+			jnc @skip_buf
 
 			mov a, e
 			rrc
 			mov e, a
-			jnc @eraseTileBuf
+			jnc @erase_tile_buf
 
 			DRAWTILE16x16_DRAW_BUF()
-			jmp @nextBuf
+			jmp @next_buf
 
-@eraseTileBuf:
+@erase_tile_buf:
 			DRAWTILE16x16_ERASE_BUF()
-@nextBuf:
+@next_buf:
 			; move X to the next scr buff
 			mvi a, $20
 			add h
@@ -164,17 +164,17 @@ draw_tile_16x16_back_buff:
 
 			dcr d
 			jnz @loop
-@restoreSP:		
+@restore_sp:		
 			lxi sp, TEMP_ADDR
 			ret
 
-@skipBuf:
+@skip_buf:
 			mov a, e
 			rrc
 			mov e, a
-			jnc @nextBuf
+			jnc @next_buf
 			DRAWTILE16x16_DRAW_BUF_SKIP()
-			jmp @nextBuf
+			jmp @next_buf
 
 .macro DRAWTILE16x16_DRAW_BUF_SKIP()
 		.loop 16

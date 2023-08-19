@@ -1,5 +1,5 @@
 ; a newly inited room uses this list to call a monster Init func
-; it's ordered by monster_id (see tiledata format in levelsData.asm)
+; it's ordered by monster_id (see tiledata format in levels_data.asm)
 monsters_inits:
 monsters_init0:	JMP_4( skeleton_init)
 monsters_init1:	JMP_4( vampire_init)

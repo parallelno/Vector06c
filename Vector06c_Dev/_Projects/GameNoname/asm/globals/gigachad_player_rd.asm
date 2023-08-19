@@ -78,7 +78,7 @@ gcplayer_tasks_init:
 			di
 			lxi h, 0
 			dad sp
-			shld @restoreSP+1
+			shld @restore_sp+1
 
 			lxi sp, gsplayer_task_stack13 + GC_PLAYER_STACK_SIZE
 			lxi d, GCPlayerAyRegDataPtrs + GC_PLAYER_TASKS * ADDR_LEN
@@ -120,7 +120,7 @@ gcplayer_tasks_init:
 			dcr c
 			dcr c
 			jp @loop
-@restoreSP: lxi sp, TEMP_ADDR
+@restore_sp: lxi sp, TEMP_ADDR
 			ei 
 			ret
 			
