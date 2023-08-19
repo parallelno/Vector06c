@@ -47,7 +47,7 @@ def words_to_asm(data, numbers_in_line = 16):
 		asm += str(word) + ","
 	return asm + "\n"
 
-def bin_to_asm(path, outPath):
+def bin_to_asm(path, out_path):
 	with open(path, "rb") as file:
 		txt = ""
 		while True:
@@ -58,16 +58,16 @@ def bin_to_asm(path, outPath):
 					txt += str(byte) + ", " 
 			else: break
 		
-		with open(outPath, "w") as fw:
+		with open(out_path, "w") as fw:
 			fw.write(txt)
 
-def run_command(command, comment = "", checkPath = ""):
+def run_command(command, comment = "", check_path = ""):
 	if comment != "" : 
 		print(comment)
-	if checkPath == "" or os.path.isfile(checkPath):
+	if check_path == "" or os.path.isfile(check_path):
 		os.system(command)
 	else:
-		print(f"run_command ERROR: command: {command} is failed. file {checkPath} doesn't exist")
+		print(f"run_command ERROR: command: {command} is failed. file {check_path} doesn't exist")
 		exit(1)
 
 def delete_file(path):
@@ -81,17 +81,17 @@ def load_json(source_j_path):
 
 def remove_double_slashes(path):
 	res = ""
-	doubledSlashe = False
+	doubled_slashe = False
 	for char in path:
 		if char != '\\':
 			res += char
-			doubledSlashe = False
+			doubled_slashe = False
 		else:
-			if doubledSlashe == False:
+			if doubled_slashe == False:
 				res += char
-				doubledSlashe = True
+				doubled_slashe = True
 			else:
-				doubledSlashe = False
+				doubled_slashe = False
 	return res
 
 def double_slashes(path):

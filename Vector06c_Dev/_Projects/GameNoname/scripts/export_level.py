@@ -49,7 +49,7 @@ def room_tiles_data_to_asm(data, width, height, room_path, source_dir):
 
 def get_tiledata(bytes0, bytes1, bytes2, bytes3):
 	all_bytes = [bytes0, bytes1, bytes2, bytes3]
-	# data structure description is in drawTile.asm
+	# data structure description is in draw_tile.asm
 	mask = 0
 	data = []
 	for bytes in all_bytes:

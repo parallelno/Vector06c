@@ -71,8 +71,8 @@ def build_db_init(path):
 		os.mkdir(dir)
 	build_db_path = path
 
-def is_asm_updated(asmPath):
-	with open(asmPath, "rb") as file:
+def is_asm_updated(asm_path):
+	with open(asm_path, "rb") as file:
 		lines = file.readlines()
 
 	includes = []
@@ -92,13 +92,13 @@ def is_asm_updated(asmPath):
 				includes.append(path[:path_end_q2])
 			continue
 
-	anyIncUpdated = False
-	for incPath in includes:
-		anyIncUpdated |= is_file_updated(incPath)
-		if anyIncUpdated:
+	any_inc_updated = False
+	for inc_path in includes:
+		any_inc_updated |= is_file_updated(inc_path)
+		if any_inc_updated:
 			break
 
-	return anyIncUpdated | is_file_updated(asmPath)
+	return any_inc_updated | is_file_updated(asm_path)
 
 def is_file_updated(path):
 	con = sqlite3.connect(build_db_path)
@@ -108,7 +108,7 @@ def is_file_updated(path):
 
 	if not os.path.exists(path):
 		return True
-	modificationTime = int(os.path.getmtime(path))
+	modification_time = int(os.path.getmtime(path))
 
 
 	res = cur.execute("SELECT * FROM files WHERE path = '%s'" % path)
@@ -116,16 +116,16 @@ def is_file_updated(path):
 	ents = res.fetchall()
 
 	if not ents:
-		cur.execute("INSERT INTO files VALUES ('" + path + "', " + str(modificationTime) + ")")
+		cur.execute("INSERT INTO files VALUES ('" + path + "', " + str(modification_time) + ")")
 		modified = True
 	else:
-		if ents[0][1] == modificationTime:
+		if ents[0][1] == modification_time:
 			modified = False
 		else:
 			sql = ''' UPDATE files
               SET modtime = ?
               WHERE path = ?'''
-			cur.execute(sql, (modificationTime, path))
+			cur.execute(sql, (modification_time, path))
 			modified = True
 
 	# done with DB

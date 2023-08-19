@@ -86,7 +86,7 @@ def export_if_updated(source_path, generated_dir, force_export):
 	else:
 		return False, export_paths
 
-def export(source_path, export_path, cleanTmp = True):
+def export(source_path, export_path, clean_tmp = True):
 
 	source_name = os.path.splitext(source_path)[0]
 	export_dir = str(Path(export_path).parent) + "\\"
@@ -94,35 +94,35 @@ def export(source_path, export_path, cleanTmp = True):
 		os.mkdir(export_dir)
 
 	try:
-		[regData, comment1, comment2, comment3] = readym(source_path)
+		[reg_data, comment1, comment2, comment3] = readym(source_path)
 	except:
 		sys.stderr.write(f'export_music: error reading f{source_path}\n')
 		exit(1)
 
-	with open(export_path, "w") as fileInc:
+	with open(export_path, "w") as file_inc:
 		# task stacks
 		# song's credits
-		fileInc.write(f'; {comment1}\n; {comment2}\n; {comment3}\n')
-		# redData ptrs. 
-		fileInc.write(f'GCPlayerAyRegDataPtrs: .word ')
-		for i, _ in enumerate(regData[0:14]):
-			fileInc.write(f'ayRegData{i:02d}, ')
-		fileInc.write(f'\n')
+		file_inc.write(f'; {comment1}\n; {comment2}\n; {comment3}\n')
+		# reg_data ptrs. 
+		file_inc.write(f'gcplayer_ay_reg_data_ptrs: .word ')
+		for i, _ in enumerate(reg_data[0:14]):
+			file_inc.write(f'ay_reg_data{i:02d}, ')
+		file_inc.write(f'\n')
 
-		for i, c in enumerate(regData[0:14]):
-			binFile = f"source_name{i:02d}.bin"
+		for i, c in enumerate(reg_data[0:14]):
+			bin_file = f"source_name{i:02d}.bin"
 			zx0File = f"source_name{i:02d}.zx0"
-			with open(binFile, "wb") as f:
+			with open(bin_file, "wb") as f:
 				f.write(c)
 			
 			common.delete_file(zx0File)
-			common.run_command(f"{build.zx0_path} -w 256 {binFile} {zx0File}")
+			common.run_command(f"{build.zx0_path} -w 256 {bin_file} {zx0File}")
 
 			with open(zx0File, "rb") as f:
-				dbname = f"ayRegData{i:02d}"
+				dbname = f"ay_reg_data{i:02d}"
 				data = f.read()
-				fileInc.write(f'{dbname}: .byte ' + ",".join("$%02x" % x for x in data) + "\n")
-			if cleanTmp:
+				file_inc.write(f'{dbname}: .byte ' + ",".join("$%02x" % x for x in data) + "\n")
+			if clean_tmp:
 				print("export_music: clean up tmp resources")
-				common.delete_file(binFile)
+				common.delete_file(bin_file)
 				common.delete_file(zx0File)

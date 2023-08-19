@@ -87,7 +87,7 @@ draw_text_ex:
 			; check if it is the end of the char gfx
 			A_TO_ZERO(NULL_BYTE)
 			ora b
-			jnz @advancePos
+			jnz @advance_pos
 			mov l, c
 			mov h, b
 @skip_dad:	jmp TEMP_ADDR
@@ -118,7 +118,7 @@ draw_text_ex:
 			inr e
 			jmp @loop			
 
-@advancePos:
+@advance_pos:
 			; bc - a pos offset
 @restore_sp:
 			lxi sp, TEMP_ADDR

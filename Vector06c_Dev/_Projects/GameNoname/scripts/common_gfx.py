@@ -11,11 +11,11 @@ def bytes_to_asm_tiled(data):
 
 # find the most leftest or rightest pixel in a sprite
 # return its dx
-def find_sprite_horiz_border(forwardSearch, sprite_img, mask_alpha, width, height):
+def find_sprite_horiz_border(forward_search, sprite_img, mask_alpha, width, height):
 	stop_flag = False
 	for dx in range(width):
 		for dy in range(height):
-			if forwardSearch:
+			if forward_search:
 				dx2 = dx
 			else:
 				dx2 = width - 1 - dx

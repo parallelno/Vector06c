@@ -46,7 +46,7 @@ def sprite_data(bytes0, bytes1, bytes2, bytes3, w, h):
 def anims_to_asm(label_prefix, source_j):
 	asm = ""
 
-	# make a list of animNames
+	# make a list of anim_names
 	asm += label_prefix + "_anims:\n"
 	asm += "			.word "
 	for anim_name in source_j["anims"]:

@@ -65,21 +65,21 @@ def anims_to_asm(label_prefix, source_j, source_j_path):
 		asm += label_prefix + "_preshifted_sprites:\n"
 		asm += f"			.byte " + str(preshifted_sprites) + "\n"
 
-	# make a list of animNames
+	# make a list of anim_names
 	asm += label_prefix + "_anims:\n"
 	asm += "			.word "
-	for animName in source_j["anims"]:
-		asm += label_prefix + "_" + animName + ", "
+	for anim_name in source_j["anims"]:
+		asm += label_prefix + "_" + anim_name + ", "
 	asm += "0, \n"
 
 	# make a list of sprites for an every anim
-	for animName in source_j["anims"]:
+	for anim_name in source_j["anims"]:
 
-		asm += label_prefix + "_" + animName + ":\n"
+		asm += label_prefix + "_" + anim_name + ":\n"
  
-		anims = source_j["anims"][animName]["frames"]
-		loop = source_j["anims"][animName]["loop"]
-		frame_count = len(source_j["anims"][animName]["frames"])
+		anims = source_j["anims"][anim_name]["frames"]
+		loop = source_j["anims"][anim_name]["loop"]
+		frame_count = len(source_j["anims"][anim_name]["frames"])
 		for i, frame in enumerate(anims):
 
 			if i < frame_count-1:

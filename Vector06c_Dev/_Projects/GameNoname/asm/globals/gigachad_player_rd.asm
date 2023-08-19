@@ -72,7 +72,7 @@ gcplayer_task_id:
 			
 
 ;==========================================
-; create a GCPlayerUnpack tasks
+; create a gcplayer_unpack tasks
 ;
 gcplayer_tasks_init:
 			di
@@ -81,12 +81,12 @@ gcplayer_tasks_init:
 			shld @restore_sp+1
 
 			lxi sp, gsplayer_task_stack13 + GC_PLAYER_STACK_SIZE
-			lxi d, GCPlayerAyRegDataPtrs + GC_PLAYER_TASKS * ADDR_LEN
+			lxi d, gcplayer_ay_reg_data_ptrs + GC_PLAYER_TASKS * ADDR_LEN
 			; b = 0, c = a task counter * 2
 			lxi b, (GC_PLAYER_TASKS - 1) * ADDR_LEN
 @loop:
 			; store zx0 entry point to a task stack
-			lxi h, GCPlayerUnpack
+			lxi h, gcplayer_unpack
 			push h
 			; store the buffer addr to a task stack
 			mov a, c
@@ -152,7 +152,7 @@ gcplayer_clear_buffers:
 			
 
 ; this func restores the context of the current task
-; then calls GCPlayerUnpack to let it continue unpacking reg_data
+; then calls gcplayer_unpack to let it continue unpacking reg_data
 ; this code is performed during an interruption
 gcplayer_scheduler_update:
 			lxi h, 0
@@ -169,10 +169,10 @@ gcplayer_scheduler_update:
 			pop h
 			pop d
 			pop b
-			; go to GCPlayerUnpack
+			; go to gcplayer_unpack
 			ret
 
-; GCPlayerUnpack task calls this after unpacking 16 bytes.
+; gcplayer_unpack task calls this after unpacking 16 bytes.
 ; it stores all the registers of the current task
 gcplayer_scheduler_store_task_context:
 			push b
@@ -210,7 +210,7 @@ GCPlayerSchedulerRestoreSp:
 ; BC: destination address (decompressing)
 ; unpack every 16 bytes into a current task circular buffer, 
 ; then call gcplayer_scheduler_store_task_context
-GCPlayerUnpack:
+gcplayer_unpack:
 			lxi h, $ffff
 			push h
 			inx h

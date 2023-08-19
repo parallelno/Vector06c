@@ -106,7 +106,7 @@ sprite_copy_to_scr_v:
 			mvi b, 0
 
 			; hl - an addr of a copy routine
-			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * JMP_4_LEN
+			lxi h, @copy_routine_addrs - SPRITE_COPY_TO_SCR_H_MIN * JMP_4_LEN
 			dad b
 			; run the copy routine
 			pchl
@@ -128,7 +128,7 @@ sprite_copy_to_scr_v:
 @h19:		COPY_SPRITE_TO_SCR(19)
 @h20:		COPY_SPRITE_TO_SCR(20)
 
-@copyRoutineAddrs:
+@copy_routine_addrs:
 			JMP_4(@h05)
 			JMP_4(@h06)
 			JMP_4(@h07)
@@ -146,12 +146,12 @@ sprite_copy_to_scr_v:
 			JMP_4(@h19)
 			JMP_4(@h20)		
 
-.macro COPY_SPRITE_TO_SCR_PB(moveUp = true)
+.macro COPY_SPRITE_TO_SCR_PB(move_up = true)
 			pop b
 			mov m, c
 			inr l
 			mov m, b
-		.if moveUp == true
+		.if move_up == true
 			inr l
 		.endif
 .endmacro
@@ -160,14 +160,14 @@ sprite_copy_to_scr_v:
 			mov m, c
 .endmacro
 
-.macro COPY_SPRITE_TO_SCR_LOOP(height, heightOdd)
-	.if heightOdd
+.macro COPY_SPRITE_TO_SCR_LOOP(height, height_odd)
+	.if height_odd
 		.loop height / 2 - 1
 			COPY_SPRITE_TO_SCR_PB()
 		.endloop
 			COPY_SPRITE_TO_SCR_B()
 	.endif
-	.if heightOdd == false
+	.if height_odd == false
 		.loop height / 2 - 2
 			COPY_SPRITE_TO_SCR_PB()
 		.endloop
@@ -176,7 +176,7 @@ sprite_copy_to_scr_v:
 .endmacro
 
 .macro COPY_SPRITE_TO_SCR(height)
-			heightOdd = (height / 2)*2 != height
+			height_odd = (height / 2)*2 != height
 			; hl - scr addr
 			xchg
 			; d - width
@@ -184,7 +184,7 @@ sprite_copy_to_scr_v:
 			; to restore X
 			mov e, h
 
-@nextColumn:
+@next_column:
 			RAM_DISK_ON(__RAM_DISK_S_BACKBUFF | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			; read without a stack operations because
 			; we have to load BC before using POP B
@@ -199,13 +199,13 @@ sprite_copy_to_scr_v:
 			inr l
 			sphl
 
-			COPY_SPRITE_TO_SCR_LOOP(height, heightOdd)
+			COPY_SPRITE_TO_SCR_LOOP(height, height_odd)
 
 			; advance Y to the bottom of the sprite, X to the next scr buff
-	.if heightOdd
+	.if height_odd
 			lxi h, $2000-height+2-1-1
 	.endif
-	.if heightOdd == false
+	.if height_odd == false
 			lxi h, $2000-height+2-1
 	.endif
 			dad sp
@@ -213,12 +213,12 @@ sprite_copy_to_scr_v:
 			; between sta and out $10 in RAM_DISK_ON(__RAM_DISK_S_BACKBUFF) in the code above
 			lxi sp, STACK_INTERRUPTION_ADDR
 
-			jnc @nextColumn
+			jnc @next_column
 			; advance Y to the next column
 			inr e
 			mov h, e
 			dcr d
-			jp @nextColumn
+			jp @next_column
 			jmp restore_sp
 .endmacro
 
@@ -239,10 +239,10 @@ sprite_copy_to_back_buff_v:
 			; h=min(h, SPRITE_COPY_TO_SCR_H_MAX)
 			mov a, l
 			cpi SPRITE_COPY_TO_SCR_H_MAX
-			jc @doNotSetMin
-@setMin:
+			jc @do_not_set_min
+@set_min:
 			mvi a, SPRITE_COPY_TO_SCR_H_MAX
-@doNotSetMin:
+@do_not_set_min:
 
 			; BC = an offset in the copy routine table
 			ADD_A(2)	; to make a JMP_4 ptr
@@ -257,7 +257,7 @@ sprite_copy_to_back_buff_v:
 			shld restore_sp + 1
 
 			; hl - an addr of a copy routine
-			lxi h, @copyRoutineAddrs - SPRITE_COPY_TO_SCR_H_MIN * JMP_4_LEN
+			lxi h, @copy_routine_addrs - SPRITE_COPY_TO_SCR_H_MIN * JMP_4_LEN
 			dad b
 			; run the copy routine
 			pchl
@@ -279,7 +279,7 @@ sprite_copy_to_back_buff_v:
 @h19:		COPY_SPRITE_TO_SCR2(19)
 @h20:		COPY_SPRITE_TO_SCR2(20)
 
-@copyRoutineAddrs:
+@copy_routine_addrs:
 			JMP_4(@h05)
 			JMP_4(@h06)
 			JMP_4(@h07)
@@ -297,12 +297,12 @@ sprite_copy_to_back_buff_v:
 			JMP_4(@h19)
 			JMP_4(@h20)					
 
-.macro COPY_SPRITE_TO_SCR_PB2(moveUp = true)
+.macro COPY_SPRITE_TO_SCR_PB2(move_up = true)
 			pop b
 			mov m, c
 			inr l
 			mov m, b
-		.if moveUp == true
+		.if move_up == true
 			inr l
 		.endif
 .endmacro
@@ -312,15 +312,15 @@ sprite_copy_to_back_buff_v:
 .endmacro
 
 .macro COPY_SPRITE_TO_SCR_LOOP2(height)
-			heightOdd = (height / 2)*2 != height
+			height_odd = (height / 2)*2 != height
 
-	.if heightOdd
+	.if height_odd
 		.loop height / 2 - 1
 			COPY_SPRITE_TO_SCR_PB()
 		.endloop
 			COPY_SPRITE_TO_SCR_B()
 	.endif
-	.if heightOdd == false
+	.if height_odd == false
 		.loop height / 2 - 2
 			COPY_SPRITE_TO_SCR_PB()
 		.endloop
@@ -333,7 +333,7 @@ sprite_copy_to_back_buff_v:
 			xchg
 			; d - width
 			mov d, a
-@nextColumn:
+@next_column:
 			RAM_DISK_ON(__RAM_DISK_S_BACKBUFF2 | __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_8F)
 			; read without a stack operations because
 			; we need fill up BC prior to use POP B
@@ -359,13 +359,13 @@ sprite_copy_to_back_buff_v:
 			lxi b, $2000-height+2
 			dad b
 
-			jnc @nextColumn
+			jnc @next_column
 			; advance Y to the next column
 			mvi a, -$20*3+1
 			add h
 			mov h, a
 			dcr d
-			jp @nextColumn
+			jp @next_column
 			jmp restore_sp
 .endmacro
 

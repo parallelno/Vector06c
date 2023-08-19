@@ -81,7 +81,7 @@ __sprite_dup_preshift:
 
 @preshifted_sprites:
 			mvi c, TEMP_BYTE
-			; decr preshiftedSprites because we do not need 
+			; decr preshifted_sprites because we do not need 
 			; to update the first sprite in a frame
 			dcr c
 			
@@ -162,55 +162,55 @@ sprite_to_buff:
 ; hl - sprite data addr
 ; b - 0 = no mask, 1 = mask
 ; c - height
-.macro SPRITE_TO_BUFF(sourceWidth)
+.macro SPRITE_TO_BUFF(source_width)
 			; check a mask_flag
 			A_TO_ZERO(NULL_BYTE)
 			ora b
 			jz @without_mask
 @with_mask:
-			SPRITE_TO_BUFF_(sourceWidth, True)
+			SPRITE_TO_BUFF_(source_width, True)
 @without_mask:
-			SPRITE_TO_BUFF_(sourceWidth, False)
+			SPRITE_TO_BUFF_(source_width, False)
 .endmacro
 
-.macro SPRITE_TO_BUFF_(sourceWidth, withMask)
-		.if withMask
+.macro SPRITE_TO_BUFF_(source_width, with_mask)
+		.if with_mask
 			SP_BYTE_LEN = MASK_BYTE_COLOR_BYTE_LEN
 		.endif
-		.if withMask == false
+		.if with_mask == false
 			SP_BYTE_LEN = COLOR_BYTE_LEN
 		.endif
 
 			lxi d, __sprite_tmp_buff
 @loop:
 			; screen buff 0
-			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
-			SPRITE_TO_BUFF_COPY_LINE(sourceWidth / 8 * SP_BYTE_LEN)
-		.if sourceWidth == 8
-			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+			SPRITE_TO_BUFF_EMPTY_BYTE(with_mask)
+			SPRITE_TO_BUFF_COPY_LINE(source_width / 8 * SP_BYTE_LEN)
+		.if source_width == 8
+			SPRITE_TO_BUFF_EMPTY_BYTE(with_mask)
 		.endif			
 			
 			; screen buff 1
-		.if sourceWidth == 8
-			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+		.if source_width == 8
+			SPRITE_TO_BUFF_EMPTY_BYTE(with_mask)
 		.endif			
-			SPRITE_TO_BUFF_COPY_LINE(sourceWidth / 8 * SP_BYTE_LEN)
-			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+			SPRITE_TO_BUFF_COPY_LINE(source_width / 8 * SP_BYTE_LEN)
+			SPRITE_TO_BUFF_EMPTY_BYTE(with_mask)
 			
 			; screen buff 2
-		.if sourceWidth == 8
-			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+		.if source_width == 8
+			SPRITE_TO_BUFF_EMPTY_BYTE(with_mask)
 		.endif			
-			SPRITE_TO_BUFF_COPY_LINE(sourceWidth / 8 * SP_BYTE_LEN)
-			SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
+			SPRITE_TO_BUFF_COPY_LINE(source_width / 8 * SP_BYTE_LEN)
+			SPRITE_TO_BUFF_EMPTY_BYTE(with_mask)
 
 			dcr c
 			jnz @loop
 			ret
 .endmacro
 
-.macro SPRITE_TO_BUFF_EMPTY_BYTE(withMask)
-	.if withMask
+.macro SPRITE_TO_BUFF_EMPTY_BYTE(with_mask)
+	.if with_mask
 			; empty the first mask byte
 			mvi a, $ff
 			stax d
@@ -285,22 +285,22 @@ sprite_from_buff:
 ; b - 0 = no mask, 1 = mask
 ; c - height
 ; e - copy_from_buff_offset
-.macro SPRITE_FROM_BUFF(targetWidth)
+.macro SPRITE_FROM_BUFF(target_width)
 			; check a mask_flag
 			A_TO_ZERO(NULL_BYTE)
 			ora b
 			jz @without_mask
 @with_mask:
-			SPRITE_FROM_BUFF_(targetWidth, True)
+			SPRITE_FROM_BUFF_(target_width, True)
 @without_mask:
-			SPRITE_FROM_BUFF_(targetWidth, False)
+			SPRITE_FROM_BUFF_(target_width, False)
 .endmacro
 
-.macro SPRITE_FROM_BUFF_(targetWidth, withMask)
-		.if withMask
+.macro SPRITE_FROM_BUFF_(target_width, with_mask)
+		.if with_mask
 			SP_BYTE_LEN = MASK_BYTE_COLOR_BYTE_LEN
 		.endif
-		.if withMask == false
+		.if with_mask == false
 			SP_BYTE_LEN = COLOR_BYTE_LEN
 		.endif
 
@@ -314,43 +314,43 @@ sprite_from_buff:
 @offset:
 
 		; skip the 1st colunm
-		.if targetWidth == 8
+		.if target_width == 8
 			; copy the 2nd column only
 			; screen buff 0
 			; forward line
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
-			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)		
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)
+			SPRITE_FROM_BUFF_COPY_LINE(target_width / 8 * SP_BYTE_LEN)		
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)
 
 			; screen buff 1
 			; backward line
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)			
-			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)			
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)			
+			SPRITE_FROM_BUFF_COPY_LINE(target_width / 8 * SP_BYTE_LEN)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)			
 
 			; screen buff 2
 			; backward line
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)			
-			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)									
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)			
+			SPRITE_FROM_BUFF_COPY_LINE(target_width / 8 * SP_BYTE_LEN)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)									
 		.endif
 
-		.if targetWidth == 16
+		.if target_width == 16
 			; copy 2nd, and 3rd column only
 			; screen buff 0
 			; forward line
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
-			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)
+			SPRITE_FROM_BUFF_COPY_LINE(target_width / 8 * SP_BYTE_LEN)
 
 			; screen buff 1
 			; backward line
-			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+			SPRITE_FROM_BUFF_COPY_LINE(target_width / 8 * SP_BYTE_LEN)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)
 
 			; screen buff 2			
 			; backward line
-			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+			SPRITE_FROM_BUFF_COPY_LINE(target_width / 8 * SP_BYTE_LEN)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)
 		.endif
 		
 			dcr c
@@ -359,42 +359,42 @@ sprite_from_buff:
 
 @no_offset:
 		; skip the last 3rd column
-		.if targetWidth == 8
+		.if target_width == 8
 			; copy the 2nd colunm only
 			; screen buff 0
 			; forward line
-			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+			SPRITE_FROM_BUFF_COPY_LINE(target_width / 8 * SP_BYTE_LEN)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)
 
 			; screen buff 1
 			; backward line
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)			
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
-			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)			
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)
+			SPRITE_FROM_BUFF_COPY_LINE(target_width / 8 * SP_BYTE_LEN)
 
 			; screen buff 2
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)			
-			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)			
+			SPRITE_FROM_BUFF_COPY_LINE(target_width / 8 * SP_BYTE_LEN)
 		.endif
 
-		.if targetWidth == 16
+		.if target_width == 16
 			; copy the 1st and 2nd columns
 			; screen buff 0
 			; forward line
-			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+			SPRITE_FROM_BUFF_COPY_LINE(target_width / 8 * SP_BYTE_LEN)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)
 
 			; screen buff 1
 			; backward line			
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
-			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)
+			SPRITE_FROM_BUFF_COPY_LINE(target_width / 8 * SP_BYTE_LEN)
 
 			; screen buff 2
 			; backward line
-			SPRITE_FROM_BUFF_SKIP_BYTE(withMask)			
-			SPRITE_FROM_BUFF_COPY_LINE(targetWidth / 8 * SP_BYTE_LEN)
+			SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)			
+			SPRITE_FROM_BUFF_COPY_LINE(target_width / 8 * SP_BYTE_LEN)
 		.endif
 		
 			dcr c
@@ -402,9 +402,9 @@ sprite_from_buff:
 			ret
 .endmacro
 
-.macro SPRITE_FROM_BUFF_SKIP_BYTE(withMask)
+.macro SPRITE_FROM_BUFF_SKIP_BYTE(with_mask)
 			inx d
-		.if withMask
+		.if with_mask
 			inx d
 		.endif
 .endmacro

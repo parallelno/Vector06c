@@ -61,17 +61,17 @@ __erase_sprite:
 			jmp Ret_ramDisk__
 			
 
-.macro ERASE_SPRITE_SP_COL(nextColumn = true)
+.macro ERASE_SPRITE_SP_COL(next_column = true)
 	col .var 0
 	.loop 3
 			col = col+1
 			sphl
 			PUSH_B(8)
-		.if nextColumn == true || col < 3
+		.if next_column == true || col < 3
 			dad d
 		.endif
 	.endloop
-		.if nextColumn == true
+		.if next_column == true
 			; advance to the next column
 			mvi a, $20*5+1
 			add h
