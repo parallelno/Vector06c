@@ -440,18 +440,15 @@ hero_impacted:
 			lxi h, hero_health
 			mov a, m
 			sub c
-			jc @dead
-			jz @dead
-			mov m, a
-			call game_ui_draw_health
-			ret
-@dead:
-			mvi m, 0
-			; check if he dies
-			call game_ui_draw_health
-			; hero's dead
 
-			; set the status
-			lxi h, hero_status
-			mvi m, HERO_STATUS_DEATH_FADE_INIT_GB
-			ret
+			; clamp to 0
+			jnc @no_clamp
+			A_TO_ZERO(NULL_BYTE)
+@no_clamp:
+			mov m, a
+			jnz @not_dead
+			; dead
+			mvi a, HERO_STATUS_DEATH_FADE_INIT_GB
+			sta hero_status
+@not_dead:
+			jmp game_ui_draw_health

@@ -1,8 +1,11 @@
-DIALOG_EMPTY_CALLBACK_PTR:
-			.word DIALOG_EMPTY_CALLBACK
+dialogs_init:
+			jmp dialog_storytelling_init
 
 DIALOG_EMPTY_CALLBACK:
 			ret
+
+DIALOG_EMPTY_CALLBACK_PTR:
+			.word DIALOG_EMPTY_CALLBACK
 
 ; init dialog
 ; in:
@@ -38,7 +41,7 @@ dialog_draw_frame:
 			jmp backs_spawn
 
 ; draw a text on the SCR_BUFF3
-; use macro DIALOG_DRAW_TEXT to call this func
+; use macro DIALOG_DRAW_TEXT or DIALOG_DRAW_TEXT_HL to call this func
 dialog_draw_text:
 			CALL_RAM_DISK_FUNC(__text_ex_rd_reset_spacing, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			; draw text
@@ -47,10 +50,13 @@ dialog_draw_text_ptr:
 			lxi h, TEMP_ADDR
 			CALL_RAM_DISK_FUNC(__text_ex_rd_scr3, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
-.macro DIALOG_DRAW_TEXT(text_ptr = NULL_PTR)
-		.if text_ptr
+.macro DIALOG_DRAW_TEXT(text_ptr)
 			lxi h, text_ptr
-		.endif
+			shld dialog_draw_text_ptr + 1
+			call dialog_draw_text
+.endmacro
+; it assumes that hl regs contains text_ptr
+.macro DIALOG_DRAW_TEXT_HL()
 			shld dialog_draw_text_ptr + 1
 			call dialog_draw_text
 .endmacro
@@ -80,7 +86,6 @@ dialog_init_hero_no_health:
 			
 			; requesting a level loading
 			A_TO_ZERO(LEVEL_FIRST)
-
 			sta level_idx
 			mvi a, GAME_REQ_LEVEL_INIT
 			sta global_request
@@ -170,7 +175,7 @@ dialog_storytelling:
 			mov d, m
 			xchg
 			; hl - text pptr
-			DIALOG_DRAW_TEXT()
+			DIALOG_DRAW_TEXT_HL()
 
 			DIALOG_INIT(dialog_storytelling_steps)
 			ret

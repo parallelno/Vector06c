@@ -39,14 +39,8 @@ main_game:
 game_init:
 			lxi h, 0
 			shld game_score
-
-			mvi a, LEVEL_FIRST
-			sta level_idx
-
-			; erase global item statuses
-			lxi h, global_items
-			mvi a, <global_items_end
-			call clear_mem_short
+			call levels_init
+			call dialogs_init
 			ret
 
 game_update:

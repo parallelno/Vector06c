@@ -1,4 +1,16 @@
 ;================================================================
+;	levels data initialization every game start
+;
+levels_init:
+			mvi a, LEVEL_FIRST
+			sta level_idx
+
+			; erase global item statuses
+			lxi h, global_items
+			mvi a, <global_items_end
+			jmp clear_mem_short
+
+;================================================================
 ;	level data initialization every level start
 ;
 level_init:

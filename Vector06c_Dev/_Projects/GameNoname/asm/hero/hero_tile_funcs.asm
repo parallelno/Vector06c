@@ -242,7 +242,6 @@ hero_res_func_potion_red:
 			lxi h, hero_health
 			mov a, m
 			adi RESOURCE_POTION_RED_VAL
-			; TODO: ERROR: clamp does not work
 			CLAMP_A(HERO_HEALTH_MAX)
 			mov m, a
 			call game_ui_draw_health

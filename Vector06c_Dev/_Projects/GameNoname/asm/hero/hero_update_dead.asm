@@ -16,13 +16,12 @@ hero_dead_fade_init_gb:
 			KILL_ALL_MONSTERS()
 			KILL_ALL_BULLETS()
 
-			; kill all the backs
-			call backs_init
-
 			; set the status
-			lxi h, hero_status
-			mvi m, HERO_STATUS_DEATH_FADE_GB
-			ret
+			mvi a, HERO_STATUS_DEATH_FADE_GB
+			sta hero_status
+
+			; kill all the backs
+			jmp backs_init
 
 HERO_STATUS_DEATH_FADE_UPDATE_RATE = %00010001
 HERO_STATUS_DEATH_FADE_GB_TIMER = 7
