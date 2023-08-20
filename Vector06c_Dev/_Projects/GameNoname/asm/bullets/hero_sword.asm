@@ -31,7 +31,7 @@ hero_sword_tile_func_tbl:
 			RET_4()								; func_id == 7
 			RET_4()								; func_id == 8
 			RET_4()								; func_id == 9
-			RET_4()								; func_id == 10
+			JMP_4( hero_sword_func_messages)	; func_id == 10
 			JMP_4( hero_sword_func_container)	; func_id == 11
 			JMP_4( hero_sword_func_door)		; func_id == 12
 			JMP_4( hero_sword_func_breakable)	; func_id == 13 ; breakable
@@ -506,6 +506,19 @@ hero_sword_func_breakable:
 
 			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_breakables, BREAKABLE_SPAWN_RATE_DELTA, BREAKABLE_SPAWN_RATE_MAX)
 			ret
+
+; in:
+; a - message_id
+; c - tile_idx
+hero_sword_func_messages:
+			cpi TIMEDATA_MESSAGE_HOME_DOOR
+			jz @game_over
+			ret
+@game_over:
+			; draw a dialog
+			DIALOG_INIT(dialog_init_hero_knocked_his_home_door)
+			ret
+
 
 ; draw a sprite into a backbuffer
 ; in:

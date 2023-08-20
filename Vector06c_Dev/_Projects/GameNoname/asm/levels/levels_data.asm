@@ -37,16 +37,17 @@
 
 ; ffff == 8, ???
 ; ffff == 9, ???
-; ffff == 10, ???
+; ffff == 10, messages. activated when a hero hits it. message_id = d
+;		message_id == 0 - when he hits his house door
 
-; ffff == 11, a collidable container that leaves rewards on the floor when a hero hits it. container_id = d
+; ffff == 11, collidable containers that leave rewards on the floor when a hero hits it. container_id = d
 ;		container_id == 0 - a small chest. small money reward
 ;		container_id == 1 - a big chest. big money reward
 ;		container_id == 2 - a chest with a weapon 1
 ;		container_id == 3 - a chest with a weapon 2
 ;		container_id == 4 - a chest with a weapon 3
-;		container_id == 13 - a monster spawner chest. it spawns a chest monster when opened
-;		container_id == 14 - a crate with a teleport under it to a unique location
+;		container_id == 5 - a monster spawner chest. it spawns a chest monster when opened
+;		container_id == 6 - a crate with a teleport under it to a unique location
 
 ; ffff == 12, doors. a hero interacts with it only when he hits it with a weapon. door_id = d
 ;		door_id == 0 - a door 1a
@@ -58,11 +59,11 @@
 ;		door_id == 6 - a door 4a
 ;		door_id == 7 - a door 4b
 
-; ffff == 13, a breakable item, a hero can only break it with a hit and get a random reward. a room tracks how many it was broken to manage a reward and a spawn rate. breakable_id = d
+; ffff == 13, breakable items, a hero can only break it with a hit and get a random reward. a room tracks how many it was broken to manage a reward and a spawn rate. breakable_id = d
 ;		breakable_id == 0 - a barrel (tiledata = 13*16+0 = 208)
 ;		breakable_id == 1 - a crate
 
-; ffff == 14, a decal collidable. it's drawn on top of tiles to increase background variety. decal_collidable_id = d
+; ffff == 14, decals collidable. it's drawn on top of tiles to increase background variety. decal_collidable_id = d
 ;		decal_collidable_id == 0 - a spider web
 
 ; ffff == 15,

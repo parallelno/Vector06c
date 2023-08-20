@@ -90,11 +90,17 @@ __text_credits_:
 ; dialogs
 ;===================================================================================
 ; no health
-__text_no_health:		
+__text_no_health:
 			TEXT("The cold and the darkness of corridors rev-", LINE_BREAK)
 			TEXT("ealed a mysterious figure. Two strong hands", LINE_BREAK)
 			TEXT("lifted up the unconscious body and carried", LINE_BREAK)
 			TEXT("him out of the dungeon into the fresh air.")
+
+__text_knocked_his_home_door:		
+			TEXT("Oh, that was super freshy outside for a walk", LINE_BREAK)
+			TEXT("today! Next time, my buddy Natias has to", LINE_BREAK)
+			TEXT("come along, no question. Gotta swing by and", LINE_BREAK)
+			TEXT("hit him up tomorrow for sure!")
 
 ; level0_house
 __text_game_story_intro1:

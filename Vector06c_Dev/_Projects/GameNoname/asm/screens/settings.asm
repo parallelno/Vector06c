@@ -46,6 +46,7 @@ settings_cursor_setting_id:
 			.byte 0
 
 settings_screen:
+			lda global_request
 			sta @global_req+1
 			call settings_screen_init
 @loop:

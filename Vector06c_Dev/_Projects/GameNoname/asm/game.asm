@@ -52,8 +52,10 @@ game_update:
 
 			; check the pause
 			lda global_request
-			cpi GAME_REQ_PAUSE
+			cpi GAME_REQ_PAUSE			
 			jz @pause
+			cpi GAME_REQ_END_HOME
+			jz @end
 
 			call hero_update
 			call monsters_update
@@ -66,8 +68,12 @@ game_update:
 			; to check repeated key-pressing
 			lda action_code
 			sta action_code_old
-
 			jmp @loop
+@end:		
+			mvi a, GLOBAL_REQ_END_HOME
+			sta global_request
+			POP_H(1) ; to return into main_start loop
+			ret
 
 game_draw:
 			; update counter to calc fps

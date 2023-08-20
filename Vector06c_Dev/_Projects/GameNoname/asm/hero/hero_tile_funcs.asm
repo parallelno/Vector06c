@@ -22,7 +22,7 @@ hero_tile_func_item:
 
 			; check if the item is storytelling
 			; e - item_id
-			A_TO_ZERO(TILEDATA_ITEM_ID_STORYTELLING)
+			A_TO_ZERO(TILEDATA_STORYTELLING)
 			ora e
 			jz dialog_storytelling
 

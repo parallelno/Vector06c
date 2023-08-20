@@ -16,7 +16,9 @@
 .include "asm\\screens\\credits.asm"
 .include "asm\\screens\\scores.asm"
 .include "asm\\screens\\settings.asm"
+.include "asm\\screens\\ending_home.asm"
 .include "asm\\game.asm"
+.include "asm\\main_data.asm"
 
 main_start:
 			CALL_RAM_DISK_FUNC(__sound_init, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
@@ -24,17 +26,14 @@ main_start:
 			CALL_RAM_DISK_FUNC(__text_ex_rd_init, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 @loop:
 			lda global_request
-			cpi GLOBAL_REQ_MAIN_MENU
-			cz main_menu
-			cpi GLOBAL_REQ_GAME
-			cz main_game
-			cpi GLOBAL_REQ_CREDITS
-			cz credits_screen
-			cpi GLOBAL_REQ_SCORES
-			cz scores_screen
-			cpi GLOBAL_REQ_OPTIONS
-			cz settings_screen		
-			jmp @loop
+			HL_TO_AX2_PLUS_INT16(main_screens_call_ptrs) ; because GLOBAL_REQ_NONE is excluded from main_screens_call_ptrs
+			mov e, m
+			inx h
+			mov d, m
+			lxi h, @loop
+			push h
+			xchg
+			pchl
 
 code_seg_end:
 ; the ram disk data below will be moved into the ram-disk before the game starts. 

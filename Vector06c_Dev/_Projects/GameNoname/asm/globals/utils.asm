@@ -410,3 +410,6 @@ copy_from_ram_disk:
 			dcr e
 			jnz @loop
 			jmp restore_sp
+
+; empty func
+func_ret:	ret

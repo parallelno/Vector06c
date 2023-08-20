@@ -27,6 +27,7 @@ main_scr_vfx_pos_min4 = $9ba0
 main_scr_vfx_spawn_rate = 10 ;(0 - no spawn, 255 - spawn every update)
 
 main_menu:
+			lda global_request
 			sta @global_req+1
 			call main_menu_init
 

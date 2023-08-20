@@ -5,6 +5,7 @@ SCORES_LINE_SPACING = 14
 SCORES_PARAG_SPACING = 24
 
 scores_screen:
+			lda global_request
 			sta @global_req+1
 			call scores_screen_init
 

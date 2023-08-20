@@ -95,7 +95,35 @@ dialog_init_hero_no_health:
 			jmp dialog_update_next_step
 
 ;===========================================================================
-; dialog when a hero picks up the global item called TILEDATA_ITEM_ID_STORYTELLING
+; dialog when the hero knovked his home door. The game ends after showing the dialog
+dialog_init_hero_knocked_his_home_door:
+			.word @init, @draw_text, @check_key, DIALOG_EMPTY_CALLBACK
+
+@init:		
+			; disable hero updates
+			mvi a, GAME_REQ_PAUSE
+			sta global_request
+			call dialog_draw_frame
+			jmp dialog_update_next_step
+
+@draw_text:	
+			DIALOG_DRAW_TEXT(__text_knocked_his_home_door)
+			jmp dialog_update_next_step
+			 
+@check_key:
+			; check if a fire action is pressed
+			lda action_code
+			ani CONTROL_CODE_FIRE1 | CONTROL_CODE_KEY_SPACE
+			rz
+			; it's pressed
+			
+			; requesting a level loading
+			mvi a, GAME_REQ_END_HOME
+			sta global_request
+			jmp dialog_update_next_step
+
+;===========================================================================
+; dialog when a hero picks up the global item called TILEDATA_STORYTELLING
 ; it pauses everything except backs and ui, it erases backs
 ; when this dialog closes, the game redraws the room, then continues
 ; the limitations: LEVEL_IDX_0 in a range of 0-3
@@ -129,7 +157,7 @@ dialog_storytelling_init:
 			jnz @loop
 			ret
 
-; called to handle TILEDATA_ITEM_ID_STORYTELLING
+; called to handle TILEDATA_STORYTELLING
 dialog_storytelling:
 			; get the text ptr based on the level_idx and room_id
 			lda room_id

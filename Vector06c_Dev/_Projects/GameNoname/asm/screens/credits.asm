@@ -3,6 +3,7 @@ CREDITS_LINE_SPACING = 12
 CREDITS_PARAG_SPACING = 24
 
 credits_screen:
+			lda global_request
 			sta @global_req+1
 			call credits_screen_init
 

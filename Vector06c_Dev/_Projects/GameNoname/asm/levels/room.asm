@@ -264,7 +264,7 @@ room_tiledata_item_spawn:
 			lxi h, @restore_tiledata+1
 			mov m, b
 			; check if it's storytelling dialog tiledata
-			ora a ; TILEDATA_ITEM_ID_STORYTELLING = 0
+			ora a ; TILEDATA_STORYTELLING = 0
 			jz @restore_tiledata
 
 			ADD_A(2) ; to make a JMP_4 ptr

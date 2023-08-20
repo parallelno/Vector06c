@@ -28,8 +28,8 @@ __game_score_containers:
 			.word 50	; entity_id == 2 - a chest with a weapon 1
 			.word 75	; entity_id == 3 - a chest with a weapon 2
 			.word 120	; entity_id == 4 - a chest with a weapon 3
-			.word 10	; entity_id == 13 - a monster spawner chest. it spawns a chest monster when opened
-			.word 50	; entity_id == 14 - a crate with a teleport under it to a unique location
+			.word 10	; entity_id == 5 - a monster spawner chest. it spawns a chest monster when opened
+			.word 50	; entity_id == 6 - a crate with a teleport under it to a unique location
 
 ; func_id = 12
 game_score_doors:
