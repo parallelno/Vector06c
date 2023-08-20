@@ -231,6 +231,15 @@
 			mov h, a
 .endmacro
 
+.macro HL_TO_AX4_PLUS_INT16(int16_const)
+			RLC_(2)
+			adi <int16_const
+			mov l, a
+			aci >int16_const
+			sub l
+			mov h, a
+.endmacro
+
 ;================================== ALL RAM_DISK_* macros has to be placed BEFORE lxi sp, *, and sphl! ;==================================
 ; has to be placed right BEFORE lxi sp, addr, and sphl
 ; mount the ram-disk w/o storing mode

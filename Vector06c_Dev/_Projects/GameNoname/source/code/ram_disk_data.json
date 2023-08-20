@@ -285,6 +285,10 @@
 							"assets" : [
 								{
 									"asset_type" : "code",
+									"path" : "asm\\globals\\global_consts_rd.asm"
+								},
+								{
+									"asset_type" : "code",
 									"path" : "asm\\render\\sprite_rd.asm"
 								},
 								{
@@ -314,6 +318,9 @@
 								{
 									"asset_type" : "code",
 									"path" : "asm\\ui\\text_rd.asm"
+								},								{
+									"asset_type" : "code",
+									"path" : "asm\\game_score_data_rd.asm"
 								}
 							]
 						},

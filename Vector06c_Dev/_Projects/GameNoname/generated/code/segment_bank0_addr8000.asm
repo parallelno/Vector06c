@@ -1,6 +1,5 @@
 .org $8000
 .include "asm\\globals\\global_consts.asm"
-.include "asm\\globals\\macro.asm"
 RAM_DISK_S = RAM_DISK_S0
 RAM_DISK_M = RAM_DISK_M0
 

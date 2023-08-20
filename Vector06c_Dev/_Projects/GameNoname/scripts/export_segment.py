@@ -110,7 +110,6 @@ def export(bank_id, segment_j,
 	addr_s_wo_hex_sym = common.get_addr_wo_prefix(addr_s)
 	asm = f'.org {addr_s}\n'
 	asm += '.include "asm\\\\globals\\\\global_consts.asm"\n'
-	asm += '.include "asm\\\\globals\\\\macro.asm"\n'
 	asm += f'RAM_DISK_S = RAM_DISK_S{bank_id}\n'
 	asm += f'RAM_DISK_M = RAM_DISK_M{bank_id}\n\n'
 

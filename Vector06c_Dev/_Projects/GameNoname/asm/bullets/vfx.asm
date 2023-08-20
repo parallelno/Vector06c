@@ -192,13 +192,11 @@ sprite_get_scr_addr_vfx:
 ; draw a non-preshifted sprite into a backbuffer
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
-; TODO: make it use preshift 2
 vfx_draw:
 			BULLET_DRAW(sprite_get_scr_addr_vfx, __RAM_DISK_S_VFX, false)
 
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
-; TODO: make it use preshift 2
 vfx_draw4:
 			BULLET_DRAW(sprite_get_scr_addr_vfx4, __RAM_DISK_S_VFX4, false)

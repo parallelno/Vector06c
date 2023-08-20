@@ -29,6 +29,13 @@ hero_tile_func_item:
 			; if not acquired, set status to acquired
 			mvi m, ITEM_STATUS_ACQUIRED
 
+			; add score points
+			push b
+			mvi c, TILEDATA_FUNC_ID_ITEMS
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			call game_ui_draw_score
+			pop b
+
 			; calc tile gfx ptr
 			mov l, c
 			mvi h, 0
@@ -161,13 +168,18 @@ hero_tile_func_resource:
 			call vfx_init
 
 			; update a hero resource
-			lxi h, hero_res_func_tbl
-@restore_resource_id:			
+@restore_resource_id:
 			mvi a, TEMP_BYTE
-			ADD_A(2) ; resource_id to JMP_4 ptr
-			mov c, a
-			mvi b, 0
-			dad b
+
+			; add score points
+			push psw
+			mov e, a
+			mvi c, TILEDATA_FUNC_ID_RESOURCES
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			call game_ui_draw_score
+			pop psw
+
+			HL_TO_AX4_PLUS_INT16(hero_res_func_tbl)
 			pchl ; run a resource handler
 
 ; load a new room with room_id, move the hero to an
@@ -219,15 +231,6 @@ hero_tile_func_teleport:
 @teleportBottomToTop:
 			mvi a, (ROOM_HEIGHT - 1 ) * TILE_HEIGHT - HERO_COLLISION_HEIGHT
 			sta hero_pos_y+1
-			ret
-
-
-hero_res_func_coin:
-			lhld hero_res_score_l
-			lxi d, RESOURCE_COIN_VAL
-			dad d
-			CLAMP_HL()
-			shld hero_res_score_l
 			ret
 
 hero_res_func_potion_blue:

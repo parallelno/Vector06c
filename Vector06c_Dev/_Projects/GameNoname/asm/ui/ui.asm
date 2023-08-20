@@ -38,9 +38,11 @@ game_ui_draw_score:
 			lhld game_score
 
 			lxi d, @hero_score_text
+			push d
 			call int16_to_ascii_dec
 
-			lxi h, @hero_score_text
+			pop h
+			; hl = @hero_score_text
 			lxi b, HERO_SCORE_SCR_ADDR
 			call draw_text
 			ret

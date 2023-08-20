@@ -14,7 +14,7 @@ __clear_mem_sp:
 			; store SP
 			lxi h, 0
 			dad sp
-			shld restoreSP_ramDisk__ + 1
+			shld restore_sp_ram_disk__ + 1
 
 			mov h, b
 			mov l, c		
@@ -26,4 +26,4 @@ __clear_mem_sp:
 			dcx d
 			cmp d
 			jnz @loop
-			jmp Ret_ramDisk__
+			jmp ret_ram_disk__

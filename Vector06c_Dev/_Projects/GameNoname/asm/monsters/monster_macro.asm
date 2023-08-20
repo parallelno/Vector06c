@@ -91,7 +91,7 @@
 ; a - monster_id * 4
 ;ex. MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 .macro MONSTER_INIT(MONSTER_UPDATE, MONSTER_DRAW, MONSTER_IMPACT, MONSTER_HEALTH, MONSTER_STATUS_DETECT_HERO_INIT, MONSTER_ANIM)
-			RRC_(2) ; to get monsterID
+			RRC_(2) ; to get monster_id
 			sta @monster_id+1
 
 			; TODO: move the code into a spawner init routine
@@ -120,7 +120,8 @@
 
 			; advance hl to monster_id
 			inx h
-@monster_id:	mvi m, TEMP_BYTE
+@monster_id:
+			mvi m, TEMP_BYTE
 
 			; advance hl to monster_type
 			inx h

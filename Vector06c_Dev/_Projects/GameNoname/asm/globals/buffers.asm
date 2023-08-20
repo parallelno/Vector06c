@@ -29,9 +29,8 @@ bullet_pos_x:				= bullet_erase_wh_old + WORD_LEN		;.word TEMP_WORD
 bullet_pos_y:				= bullet_pos_x + WORD_LEN				;.word TEMP_WORD
 bullet_speed_x:				= bullet_pos_y + WORD_LEN				;.word TEMP_WORD
 bullet_speed_y:				= bullet_speed_x + WORD_LEN				;.word TEMP_WORD
-bullet_runtime_data_end:	= bullet_speed_y + WORD_LEN
-
-BULLET_RUNTIME_DATA_LEN = bullet_runtime_data_end - bullets_runtime_data ; $1a; bullet_runtime_data_end_addr-bullets_runtime_data
+@data_end:					= bullet_speed_y + WORD_LEN
+BULLET_RUNTIME_DATA_LEN = @data_end - bullets_runtime_data ; $1a; bullet_runtime_data_end_addr-bullets_runtime_data
 
 ; the same structs for the rest of the bullets
 bullets_runtime_data_end_marker: = bullets_runtime_data + BULLET_RUNTIME_DATA_LEN * BULLETS_MAX ; $78ff ; :		.word ACTOR_RUNTIME_DATA_END << 8
@@ -60,7 +59,6 @@ CONTAINERS_STATUS_ACQUIRED	= $ff
 
 containers_inst_data_ptrs:	= $7900
 ;containers_inst_data:		= containers_inst_data_ptrs + used_unique_containers (can vary) + 1
-containers_inst_data_end:	= containers_inst_data_ptrs + CONTAINERS_LEN
 
 ;=============================================================================
 ; statuses of resource instances placed in rooms. 
@@ -86,7 +84,6 @@ RESOURCES_STATUS_ACQUIRED	= $ff
 
 resources_inst_data_ptrs:	= $7a00
 ;resources_inst_data:		= resources_inst_data_ptrs + used_unique_resources (can vary) + 1
-resources_inst_data_end:	= resources_inst_data_ptrs + RESOURCES_LEN
 
 ;=============================================================================
 ; rooms spawn rates. each byte represents a spawn rate in a particular room.
@@ -110,10 +107,12 @@ rooms_spawn_rates_end:			= rooms_spawn_rate_breakables + ROOMS_MAX ; $7b80
 HERO_RESOURCES_LEN	= 5
 
 hero_resources:		= $7b80
-hero_res_score_l:	= hero_resources + 0
-hero_res_score_h:	= hero_resources + 1
-hero_res_ammo:		= hero_resources + 2
-hero_res_mana:		= hero_resources + 3
+hero_res_ammo:		= hero_resources + 0
+hero_res_mana:		= hero_resources + 1
+; TODO: there are 3 bytes free
+; hero_res_??		= hero_resource + 2
+; hero_res_??		= hero_resource + 3
+; hero_res_??		= hero_resource + 4
 hero_resources_end:	= hero_resources + HERO_RESOURCES_LEN
 
 ;=============================================================================
@@ -232,10 +231,6 @@ BUFFERS_END_ADDR	= room_tiledata_end
 
 
 ; TODO: update checkers after finalizing buffers layout
-.if rooms_spawn_rates_end > room_tiles_gfx_ptrs
-	.error "rooms_spawn_rates_end and room_tiles_gfx_ptrs overlap"
-.endif
-
 .if room_tiles_gfx_ptrs_end > room_tiledata
 	.error "room_tiles_gfx_ptrs_end and room_tiledata overlap"
 .endif

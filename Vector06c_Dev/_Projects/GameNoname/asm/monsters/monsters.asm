@@ -329,6 +329,17 @@ monster_impacted:
 			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_monsters, MONSTER_SPAWN_RATE_DELTA, MONSTER_SPAWN_RATE_MAX)
 			; de - ptr to monster_impacted_ptr+1
 
+			push d
+			; advance hl to monster_id
+			LXI_H_TO_DIFF(monster_id, monster_impacted_ptr+1)
+			dad d
+			; add score points
+			mov e, m
+			mvi c, TILEDATA_FUNC_ID_MONSTERS
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			call game_ui_draw_score
+			pop d			
+
 			; play a hit vfx
 			; advance hl to monster_pos_x+1
 			LXI_H_TO_DIFF(monster_pos_x+1, monster_impacted_ptr+1)

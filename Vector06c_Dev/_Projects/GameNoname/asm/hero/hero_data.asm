@@ -61,7 +61,7 @@ hero_tile_func_tbl:
 
 ; funcs to handle the resource pick up process. more info is in level_data.asm->room_tiledata
 hero_res_func_tbl:
-			JMP_4( hero_res_func_coin)			; resource_id == 1
+			RET_4()								; resource_id == 1
 			JMP_4( hero_res_func_potion_blue)	; resource_id == 2
 			JMP_4( hero_res_func_potion_red)	; resource_id == 3
 			RET_4()								; resource_id == 4

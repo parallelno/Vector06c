@@ -119,7 +119,7 @@ room_handle_room_tiledata:
 			ana b
 			
 			; check if this func skippable
-			cpi TILEDATA_FUNC_ID_MONSERS<<4
+			cpi TILEDATA_FUNC_ID_MONSTERS<<4
 @check:			
 			jmp @no_skip
 			A_TO_ZERO(TILEDATA_NO_COLLISION)

@@ -320,6 +320,15 @@ hero_sword_func_container:
 			lxi h, hero_cont_func_tbl
 @restore_container_id:			
 			mvi a, TEMP_BYTE
+
+			; add score points
+			push psw
+			mov e, a
+			mvi c, TILEDATA_FUNC_ID_CONTAINERS
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			call game_ui_draw_score
+			pop psw
+
 			ADD_A(2) ; container_id to JMP_4 ptr
 			mov c, a
 			mvi b, 0
@@ -338,7 +347,7 @@ hero_sword_func_door:
 			; check global item status
 			mvi h, >global_items
 			ani %00001110
-			rrc
+			rrc	
 
 			adi <global_items + 1 ; because the first keys has id = 1
 			mov l, a
@@ -352,6 +361,14 @@ hero_sword_func_door:
 
 			; update the key status
 			mvi m, <ITEM_STATUS_USED
+
+			; add score points
+			push b
+			mov e, b
+			mvi c, TILEDATA_FUNC_ID_DOORS
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			call game_ui_draw_score
+			pop b
 			
 			; erase breakable_id from tiledata
 			mvi b, >room_tiledata
@@ -422,6 +439,14 @@ hero_sword_func_door:
 ; a - breakable_id
 ; c - tile_idx
 hero_sword_func_breakable:
+			; add score points
+			push b
+			mov e, a
+			mvi c, TILEDATA_FUNC_ID_BREAKABLES
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			call game_ui_draw_score
+			pop b
+
 			; erase breakable_id from tiledata
 			mvi b, >room_tiledata
 			mvi a, TILEDATA_RESTORE_TILE

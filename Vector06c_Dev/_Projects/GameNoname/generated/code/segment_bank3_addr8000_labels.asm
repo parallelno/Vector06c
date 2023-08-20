@@ -1,4 +1,6 @@
 __chunk_start_bank3_addr8000_0       = $8000
+__global_consts_rd_rd_data_start     = $8000
+__global_consts_rd_rd_data_end       = $8000
 __sprite_rd_rd_data_start            = $8000
 __RAM_DISK_M_ERASE_SPRITE            = $03
 __erase_sprite                       = $8004
@@ -53,4 +55,9 @@ __text_no_health                     = $8f52
 __text_game_story_intro1             = $9000
 __text_game_story_intro2             = $90b0
 __text_rd_rd_data_end                = $914f
-__chunk_end_bank3_addr8000_0         = $9150
+__game_score_data_rd_rd_data_start   = $914f
+__game_score_containers              = $916b
+__game_score_lists_ptrs              = $918d
+__game_score_add                     = $91a7
+__game_score_data_rd_rd_data_end     = $91c3
+__chunk_end_bank3_addr8000_0         = $91c4

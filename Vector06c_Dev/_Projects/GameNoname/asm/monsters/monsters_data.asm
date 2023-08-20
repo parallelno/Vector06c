@@ -41,9 +41,9 @@ monster_speed_x:			.word TEMP_WORD
 monster_speed_y:			.word TEMP_WORD
 monster_data_prev_pptr:		.word TEMP_WORD
 monster_data_next_pptr:		.word TEMP_WORD
-monster_runtime_data_end_addr:
+@end_data:
 
-MONSTER_RUNTIME_DATA_LEN = monster_runtime_data_end_addr - monsters_runtime_data
+MONSTER_RUNTIME_DATA_LEN = @end_data - monsters_runtime_data
 
 ; the same structs for the rest of the monsters
 .storage MONSTER_RUNTIME_DATA_LEN * (MONSTERS_MAX-1), 0

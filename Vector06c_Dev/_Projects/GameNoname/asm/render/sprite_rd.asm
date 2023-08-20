@@ -1,8 +1,8 @@
 
-; sharetable chunk of code to restore SP and 
+; common chunk of code to restore SP and 
 ; return a couple of parameters within HL, C
-Ret_ramDisk__:
-restoreSP_ramDisk__:
+ret_ram_disk__:
+restore_sp_ram_disk__:
 			lxi sp, TEMP_ADDR
 			ret
 			
@@ -30,7 +30,7 @@ __erase_sprite:
 			; store SP
 			lxi h, 0
 			dad sp
-			shld restoreSP_ramDisk__ + 1
+			shld restore_sp_ram_disk__ + 1
 
 			xchg
 
@@ -58,7 +58,7 @@ __erase_sprite:
 			ERASE_SPRITE_SP_COL()
 @width8:
 			ERASE_SPRITE_SP_COL(false)
-			jmp Ret_ramDisk__
+			jmp ret_ram_disk__
 			
 
 .macro ERASE_SPRITE_SP_COL(next_column = true)
