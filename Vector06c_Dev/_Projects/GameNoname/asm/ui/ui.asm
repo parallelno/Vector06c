@@ -37,17 +37,17 @@ HERO_SCORE_SCR_ADDR = $b5fb
 game_ui_draw_score:  
 			lhld game_score
 
-			lxi d, @hero_score_text
+			lxi d, game_ui_score
 			push d
 			call int16_to_ascii_dec
 
 			pop h
-			; hl = @hero_score_text
+			; hl = game_ui_score
 			lxi b, HERO_SCORE_SCR_ADDR
 			call draw_text
 			ret
-@hero_score_text:
-			.byte $30, $30, $30, $30, $30, 0
+game_ui_score:
+			.byte $30, $30, $30, $30, $30, $30, 0
 
 UI_ITEM_BOMB_SCR_ADDR = $a8fb
 game_ui_draw_bomb:

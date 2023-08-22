@@ -5,4 +5,4 @@ main_screens_call_ptrs:
 			.word settings_screen	; GLOBAL_REQ_OPTIONS	= 3
 			.word scores_screen		; GLOBAL_REQ_SCORES		= 4
 			.word credits_screen	; GLOBAL_REQ_CREDITS	= 5
-			.word ending_home		; GLOBAL_REQ_END_HOME	= 6
+			.word stats_screen		; GLOBAL_REQ_END_HOME	= 6

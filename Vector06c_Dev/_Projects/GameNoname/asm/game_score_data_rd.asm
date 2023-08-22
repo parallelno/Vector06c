@@ -1,3 +1,5 @@
+__RAM_DISK_S_SCORE = RAM_DISK_M | RAM_DISK_M_89
+
 ; func_id = 1
 game_score_monsters:
 			.word 5		; entity_id == 0 - skeleton (tiledata = 1*16+0=16)
@@ -20,6 +22,10 @@ game_score_resources:
 			.word 1		; entity_id == 0 - a coin (tiledata = 7*16+0 = 160)
 			.word 6		; entity_id == 1 - a potion blue
 			.word 9		; entity_id == 2 - a potion red
+
+; func_id = 10
+__game_score_secrets:
+			.word 2000	; entity_id == 0 - a home door trigger
 
 ; func_id = 11
 __game_score_containers:
@@ -57,19 +63,56 @@ __game_score_lists_ptrs:
 			.word game_score_resources
 			.word NULL_PTR
 			.word NULL_PTR
-			.word NULL_PTR
+			.word __game_score_secrets
 			.word __game_score_containers
 			.word game_score_doors
 			.word game_score_breakables
 
+__game_stats:
+			.word 0			; monsters
+			.word NULL_BYTE
+			.word NULL_BYTE
+			.word NULL_BYTE
+			.word NULL_BYTE
+			.word 0			; items
+			.word 0			; resource: coins
+			.word 0			; resource: a blue potion
+			.word 0			; resource: a red potion			
+			.word 0			; secrets (sometimes triggers)
+			.word 0			; containers
+			.word 0			; doors
+			.word 0			; breakables
+__game_stats_end:
+
 ; add score points to game_score
-; call ex. 
+; call ex. CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 ; in:
 ; c - func_id
 ; e - entity_id
 ; ex: to add score points of a dead vampire, a = 1, c = 1
 __game_score_add:
+			; check if it is a resource
 			mov a, c
+			cpi TILEDATA_FUNC_ID_RESOURCES
+			jnz @count_entity
+			; we're processing a resource.
+			; we have space to count the first three resources indivisually
+			; clamp the entity_id to 0-2
+			mov a, e
+			CLAMP_A(2)
+			add c
+
+@count_entity:
+			; get the ptr to the partucular entity
+			HL_TO_AX2_PLUS_INT16(__game_stats - WORD_LEN) ; because the list starts with func_id=1
+			; increase the entity counter
+			inr m
+			jnz @score_add
+			inx h
+			inr m
+@score_add:
+			mov a, c
+			; get the ptr to the scores of partucular entity
 			HL_TO_AX2_PLUS_INT16(__game_score_lists_ptrs - WORD_LEN) ; because the list starts with func_id=1
 			; get a score list ptr
 			mov c, m
@@ -89,4 +132,39 @@ __game_score_add:
 			lhld game_score
 			dad d
 			shld game_score
+			ret
+
+; init for in-game score data
+; call ex. CALL_RAM_DISK_FUNC(__game_score_init, __RAM_DISK_S_SCORE)
+__game_score_init:
+			lxi h, 0
+			shld game_score
+			
+			lxi h, __game_stats
+			mvi a, <__game_stats_end
+			;call clear_mem
+			; TODO: think of repacing this duplication below with call clear_mem
+;clear_mem:
+			mvi c, 0
+@loop:
+			mov m, c
+			inx h
+			cmp l
+			jnz @loop
+			ret
+
+; read game stats
+; call ex. CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
+; in:
+; c - stats_id (offset in __game_stats)
+; out:
+; de - stats
+__game_stats_get:
+			mov a, c
+			; get the ptr to the partucular entity
+			HL_TO_AX2_PLUS_INT16(__game_stats - WORD_LEN) ; because the list starts with func_id=1
+			; increase the entity counter
+			mov e, m
+			inx h
+			mov d, m
 			ret

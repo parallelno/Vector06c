@@ -31,7 +31,7 @@ hero_sword_tile_func_tbl:
 			RET_4()								; func_id == 7
 			RET_4()								; func_id == 8
 			RET_4()								; func_id == 9
-			JMP_4( hero_sword_func_messages)	; func_id == 10
+			JMP_4( hero_sword_func_triggers)	; func_id == 10
 			JMP_4( hero_sword_func_container)	; func_id == 11
 			JMP_4( hero_sword_func_door)		; func_id == 12
 			JMP_4( hero_sword_func_breakable)	; func_id == 13 ; breakable
@@ -325,7 +325,7 @@ hero_sword_func_container:
 			push psw
 			mov e, a
 			mvi c, TILEDATA_FUNC_ID_CONTAINERS
-			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE | __RAM_DISK_M_TEXT_EX)
 			call game_ui_draw_score
 			pop psw
 
@@ -366,7 +366,7 @@ hero_sword_func_door:
 			push b
 			mov e, b
 			mvi c, TILEDATA_FUNC_ID_DOORS
-			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score
 			pop b
 			
@@ -443,7 +443,7 @@ hero_sword_func_breakable:
 			push b
 			mov e, a
 			mvi c, TILEDATA_FUNC_ID_BREAKABLES
-			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score
 			pop b
 
@@ -508,10 +508,15 @@ hero_sword_func_breakable:
 			ret
 
 ; in:
-; a - message_id
+; a - trigger_id
 ; c - tile_idx
-hero_sword_func_messages:
-			cpi TIMEDATA_MESSAGE_HOME_DOOR
+hero_sword_func_triggers:
+			push psw
+			mvi c, TILEDATA_FUNC_ID_TRIGGERS
+			mov e, a
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
+			pop psw
+			cpi TIMEDATA_TRIGGER_HOME_DOOR
 			jz @game_over
 			ret
 @game_over:

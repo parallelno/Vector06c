@@ -70,7 +70,7 @@ __text_controls_joystic:
 ;===================================================================================
 ; credits screen
 ;===================================================================================
-__text_credits_:
+__text_credits:
 			TEXT("    This game was created because I truly", LINE_BREAK)
 			TEXT("believe in the awesomeness of the Soviet", LINE_BREAK)
 			TEXT("PC Vector 06c that shaped my life.", PARAG_BREAK)
@@ -85,6 +85,25 @@ __text_credits_:
 			TEXT("and especially to ivagor, nzeemin, svofski,", LINE_BREAK)
 			TEXT("and jerry for their contribution and", LINE_BREAK)
 			TEXT("help!")
+
+;===================================================================================
+; end game
+__text_game_stats:
+			TEXT("    Congratulations, hero! You were really", LINE_BREAK)
+			TEXT("good in this epic quest! Time to celebrate", LINE_BREAK)
+			TEXT("with a royal feast of popsicles watching a", LINE_BREAK)
+			TEXT("lowdown on your epic journey below:", PARAG_BREAK)
+
+			TEXT("Monsters defeated:", LINE_BREAK)
+			TEXT("Items acquired:", LINE_BREAK)
+			TEXT("Coins collected:", LINE_BREAK)
+			TEXT("Containers opened:", LINE_BREAK)
+			TEXT("Doors unlocked:", LINE_BREAK)
+			TEXT("Breakables broken:", LINE_BREAK)
+			TEXT("Total score:", PARAG_BREAK)
+			TEXT("You've left an indelible mark on this world.", LINE_BREAK)
+			TEXT("Keep your sword sharp and your heart brim-", LINE_BREAK)
+			TEXT("ming with courage, for new quests!")
 
 ;===================================================================================
 ; dialogs

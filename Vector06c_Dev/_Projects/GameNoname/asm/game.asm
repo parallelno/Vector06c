@@ -1,5 +1,4 @@
 .include "asm\\game_consts.asm"
-.include "asm\\levels\\room_consts.asm"
 .include "asm\\levels\\room_macro.asm"
 .include "asm\\levels\\levels_data.asm"
 .include "asm\\levels\\backs_consts.asm"
@@ -37,8 +36,7 @@ main_game:
 			jmp	@loop
 
 game_init:
-			lxi h, 0
-			shld game_score
+			CALL_RAM_DISK_FUNC(__game_score_init, __RAM_DISK_S_SCORE)
 			call levels_init
 			call dialogs_init
 			ret

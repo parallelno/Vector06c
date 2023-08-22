@@ -137,6 +137,9 @@ ROOM_ID_1	= 1
 
 SCORES_MAX	= 10
 
+SECRET_ENDING_HOME	= 1
+SECRETS_MAX = 16
+
 ;===========================================================================
 ; text
 LINE_BREAK	= $6a ;'\n'

@@ -6,6 +6,8 @@
 .include "asm\\globals\\main_init.asm"
 .include "asm\\globals\\global_vars.asm"
 
+.include "asm\\levels\\room_consts.asm" ; moved from a game.asm over here because of sone compilers issues. it was not able to find some consts
+
 .include "asm\\globals\\utils.asm"
 .include "asm\\globals\\controls.asm"
 .include "asm\\globals\\interruptions.asm"
@@ -16,7 +18,7 @@
 .include "asm\\screens\\credits.asm"
 .include "asm\\screens\\scores.asm"
 .include "asm\\screens\\settings.asm"
-.include "asm\\screens\\ending_home.asm"
+.include "asm\\screens\\stats.asm"
 .include "asm\\game.asm"
 .include "asm\\main_data.asm"
 

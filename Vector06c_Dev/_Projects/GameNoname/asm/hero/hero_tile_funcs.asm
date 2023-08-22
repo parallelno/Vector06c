@@ -32,7 +32,7 @@ hero_tile_func_item:
 			; add score points
 			push b
 			mvi c, TILEDATA_FUNC_ID_ITEMS
-			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score
 			pop b
 
@@ -175,7 +175,7 @@ hero_tile_func_resource:
 			push psw
 			mov e, a
 			mvi c, TILEDATA_FUNC_ID_RESOURCES
-			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score
 			pop psw
 

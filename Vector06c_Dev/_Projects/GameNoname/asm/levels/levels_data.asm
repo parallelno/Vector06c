@@ -37,8 +37,8 @@
 
 ; ffff == 8, ???
 ; ffff == 9, ???
-; ffff == 10, messages. activated when a hero hits it. message_id = d
-;		message_id == 0 - when he hits his house door
+; ffff == 10, triggers. activated when a hero hits it. trigger_id = d
+;		trigger_id == 0 - when he hits his house door
 
 ; ffff == 11, collidable containers that leave rewards on the floor when a hero hits it. container_id = d
 ;		container_id == 0 - a small chest. small money reward
