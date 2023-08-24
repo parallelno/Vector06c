@@ -87,7 +87,7 @@ __text_credits:
 			TEXT("help!")
 
 ;===================================================================================
-; end game
+; stats
 __text_game_stats:
 			TEXT("    Congratulations, hero! You were really", LINE_BREAK)
 			TEXT("good in this epic quest! Time to celebrate", LINE_BREAK)
@@ -101,6 +101,7 @@ __text_game_stats:
 			TEXT("Doors unlocked:", LINE_BREAK)
 			TEXT("Breakables broken:", LINE_BREAK)
 			TEXT("Total score:", PARAG_BREAK)
+
 			TEXT("You've left an indelible mark on this world.", LINE_BREAK)
 			TEXT("Keep your sword sharp and your heart brim-", LINE_BREAK)
 			TEXT("ming with courage, for new quests!")

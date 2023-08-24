@@ -9816,7 +9816,7 @@ $4498 11 a7 44   lxi d,$44a7
 $449b d5         push d
 $449c cd ca 40   call $40ca
 $449f e1         pop h
-$44a0 01 fb b5   lxi b,$b5fb
+$44a0 01 fb b4   lxi b,$b4fb
 $44a3 cd 22 41   call $4122
 $44a6 c9         ret
 

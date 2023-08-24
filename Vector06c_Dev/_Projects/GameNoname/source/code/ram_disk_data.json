@@ -238,7 +238,7 @@
 						{
 							"description" : "$F102-$FFFF music player runtime buffers",
 							"reserved" : true,
-							"name" : "gigachad_buffers",
+							"name" : "music_player_buffers",
 							"addr" : "$f102",
 							"len" : "$efd"
 						}

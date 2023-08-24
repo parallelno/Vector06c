@@ -33,7 +33,7 @@ game_ui_draw_health:
 @text:
 			.byte $31,$30,0
 
-HERO_SCORE_SCR_ADDR = $b5fb
+HERO_SCORE_SCR_ADDR = $b4fb
 game_ui_draw_score:  
 			lhld game_score
 
