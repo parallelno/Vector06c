@@ -9,7 +9,7 @@
 .include "asm\\globals\\utils.asm"
 .include "asm\\globals\\interruptions.asm"
 
-.include "asm\\music_player_segaboy_famicom.asm"
+.include "asm\\music_player_segaboy.asm"
 
 main_start:
 			call music_player_segaboy_init
