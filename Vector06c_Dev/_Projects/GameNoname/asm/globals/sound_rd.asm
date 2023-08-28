@@ -1,7 +1,7 @@
 
 .include "asm\\globals\\macro.asm"
 
-.include "asm\\globals\\music_player_buffers_rd.asm" ; it's included first because it contains aligned buffers.
+.include "asm\\globals\\music_player_gigachad_buffers_rd.asm" ; it's included first because it contains aligned buffers.
 .include "asm\\globals\\music_player_gigachad_rd.asm"
 .include "asm\\globals\\sfx_rd.asm"
 

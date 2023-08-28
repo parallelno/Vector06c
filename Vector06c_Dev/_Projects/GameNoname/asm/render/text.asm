@@ -1,3 +1,4 @@
+/*
 ; 8-bit integer to ASCII (hex)
 ; in:
 ; a - byte to convert
@@ -29,7 +30,7 @@ int_to_ascii_hex:
 			add c
 			mov m, a
 			ret
-
+*/
 ; 8-bit integer to ASCII (decimal)
 ; in: 
 ; hl - number to convert

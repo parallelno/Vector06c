@@ -1,5 +1,4 @@
 .include "..\\render\\text.asm"
-;.include "..\\render\\text_ex.asm"
 .include "dialogs.asm"
 
 game_ui_draw:

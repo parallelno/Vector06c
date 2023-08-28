@@ -21,7 +21,7 @@ dialog_update:
 			lhld DIALOG_EMPTY_CALLBACK_PTR
 			pchl
 
-; should be called when a dialog step should be go the the next step
+; call when a dialog step routine is about to go the the next step
 dialog_update_next_step:
 			lhld dialog_update + 1
 			INX_H(2)
@@ -219,10 +219,7 @@ dialog_storytelling_steps:
 			; it's pressed
 			mvi a, GAME_REQ_ROOM_DRAW
 			sta global_request
-			; TODO: restore Backs
 			; TODO: restore breakables the same configuraton they were created
-			;call backs_restore_from_temp
-
 			jmp dialog_update_next_step
 
 

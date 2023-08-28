@@ -72,6 +72,7 @@ actor_anim_update:
 ; a - RUNTIME_DATA_LEN
 ; return:
 ; hl - a ptr to an empty actor runtime_data+1
+; CRITICAL: if entities're to many, it returns bypassing the caller func. So, do not use PUSH before calling this func
 ; uses:
 ; hl, de, a
 actor_get_empty_data_ptr:

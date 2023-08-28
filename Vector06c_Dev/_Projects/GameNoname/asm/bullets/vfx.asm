@@ -2,6 +2,7 @@
 ; in:
 ; bc - vfx pos_xy
 ; de - vfx_anim_ptr (ex. vfx_puff)
+; it utilizes bullet runtime data
 vfx_init4:
 			xchg
 			shld @anim_ptr + 1
@@ -82,6 +83,7 @@ vfx_init4:
 ; in:
 ; bc - vfx screen addr
 ; de - vfx_anim_ptr (ex. vfx_puff)
+; it utilizes bullet runtime data
 vfx_init:
 			xchg
 			shld @anim_ptr + 1
@@ -102,8 +104,14 @@ vfx_init:
 			inx h 
 			mvi m, >vfx_draw
 
+			; advance hl to bullet_id
+			inx h
+			; advance hl to bullet_status
+			inx h
+			mvi m, VFX_STATUS_DEFAULT
+
 			; advance hl to bullet_anim_ptr
-			MVI_A_TO_DIFF(bullet_anim_ptr, bullet_draw_ptr + 1)
+			MVI_A_TO_DIFF(bullet_anim_ptr, bullet_status)
 			add l
 			mov l, a
 			
