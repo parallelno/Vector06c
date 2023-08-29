@@ -15,7 +15,7 @@ __items_gfx_ptrs: .word __decals_key_blue, 0, __decals_key_red, 0, __decals_key_
 __resources_gfx_ptrs: .word __decals_coin, 0, __decals_potion_blue, 0, __decals_potion_red, 
 
 			.word 0  ; safety pair of bytes for reading by POP B
-__breakable_gfx_ptrs: .word __decals_barrel, 0, __decals_crate, 
+__breakable_gfx_ptrs: .word __decals_barrel, 0, __decals_crate, 0, __decals_cabbage, 
 
 			.word 0  ; safety pair of bytes for reading by POP B
 __doors_gfx_ptrs: .word __decals_door_blue_l, 0, __decals_door_blue_r, 0, __decals_door_red_l, 0, __decals_door_red_r, 
@@ -63,6 +63,13 @@ __decals_crate:
 			.byte 0, 0; offset_y, offset_x
 			.byte 16, 1; height, width
 			.byte 0,3,0,0,0,0,0,0,252,255,0,3,128,4,224,31,24,96,0,0,0,1,0,0,8,64,0,0,6,128,0,1,169,70,232,127,0,0,64,41,0,0,41,64,0,0,232,127,71,169,0,0,171,71,232,127,0,0,64,43,0,0,59,96,0,0,232,127,103,187,0,0,192,15,8,64,0,0,8,64,0,0,127,248,0,0,248,127,255,255,0,0,128,7,224,31,24,96,0,0,0,0,63,248,0,64,240,63,255,191,0,3,160,20,248,127,0,0,16,32,0,3,32,16,0,0,248,127,20,160,0,3,191,252,240,63,0,64,248,63,0,3,32,24,0,64,224,31,28,160,0,3,255,252,0,0,0,0,0,0,
+
+
+			.word 0  ; safety pair of bytes for reading by POP B
+__decals_cabbage:
+			.byte 0, 0; offset_y, offset_x
+			.byte 15, 1; height, width
+			.byte 224,3,0,0,0,0,12,28,244,27,224,3,12,8,244,19,112,0,112,0,128,1,0,152,152,0,154,97,6,126,128,1,85,28,224,74,248,10,224,10,192,1,27,124,124,27,124,27,130,36,128,1,65,62,192,55,252,54,192,54,128,1,100,98,126,100,226,119,156,27,128,1,55,128,254,111,126,88,126,72,128,1,72,66,66,72,254,111,188,55,128,1,111,156,238,120,122,23,98,16,128,1,48,66,94,54,230,123,188,79,192,1,39,238,118,31,56,24,16,24,192,3,30,180,180,30,252,62,72,33,224,7,25,0,248,31,248,6,248,6,254,31,1,224,224,1,224,1,0,0,
 
 
 			.word 0  ; safety pair of bytes for reading by POP B
