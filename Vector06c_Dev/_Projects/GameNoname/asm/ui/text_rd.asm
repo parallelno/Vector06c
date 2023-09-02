@@ -123,13 +123,18 @@ __text_knocked_his_home_door:
 			TEXT("hit him up tomorrow for sure!")
 
 ; level0_house
-__text_game_story_intro1:
-			TEXT("I was totally ready to enjoy one more sugary", LINE_BREAK)
-			TEXT("popsicle, but then the whole new world burst", LINE_BREAK)
-			TEXT("forth right before my eyes. Let's go! Time", LINE_BREAK)
-			TEXT("to unleash some serious exploration magic!")	
-__text_game_story_intro2:
+__text_game_story_home:
+			TEXT("Rad day for my morning jog! Legs are ready", LINE_BREAK)
+			TEXT("for some serious adventuring action.", LINE_BREAK)
+			TEXT("If it's all about collecting, count me in!")
+__text_game_story_cabbage_farm_fence:
+			TEXT("Oh my glob, guess what? Mom's on a cabbage", LINE_BREAK)
+			TEXT("quest, and you know what they say - no", LINE_BREAK)
+			TEXT("cabbage left behind! Gonna scoop up those", LINE_BREAK)
+			TEXT("leafy greens like a true adventurer!")
+/*
 			TEXT("Who's that dude on my road?", LINE_BREAK)
 			TEXT("Not cool with his mega-spooky vibe, for sure.", LINE_BREAK)
 			TEXT("Lucky for us, he's shieldless. Time to school", LINE_BREAK)
 			TEXT("that goofball in some true hero moves!")
+*/

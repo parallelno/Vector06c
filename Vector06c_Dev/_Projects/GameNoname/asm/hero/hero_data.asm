@@ -18,6 +18,7 @@ hero_pos_x:					.word TEMP_WORD ; first byte is a sub-pixel coord
 hero_pos_y:					.word TEMP_WORD ; first byte is a sub-pixel coord
 hero_speed_x:				.word TEMP_WORD ; first byte is a sub-pixel coord speed
 hero_speed_y:				.word TEMP_WORD ; first byte is a sub-pixel coord speed
+hero_weapon:				.byte TEMP_WORD ; STTN_MMMM: S - sword, T - TNT, I - invis, M - mana
 hero_data_prev_pptr:		.word DRAW_LIST_FIRST_DATA_MARKER
 hero_data_next_pptr:		.word monster_data_next_pptr
 ;

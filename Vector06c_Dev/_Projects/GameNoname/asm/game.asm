@@ -39,6 +39,7 @@ game_init:
 			CALL_RAM_DISK_FUNC(__game_score_init, __RAM_DISK_S_SCORE)
 			call levels_init
 			call dialogs_init
+			call hero_game_init
 			ret
 
 game_update:

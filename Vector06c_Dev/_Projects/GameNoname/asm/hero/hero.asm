@@ -5,11 +5,16 @@
 .include "asm\\hero\\hero_render.asm"
 
 
+hero_game_init:
+			A_TO_ZERO(HERO_NO_WEAPON)
+			sta hero_weapon
+			ret
+
 hero_init:
 			call hero_idle_start
 			
 			; reset key data			
-			mvi a, CONTROL_CODE_NO
+			A_TO_ZERO(CONTROL_CODE_NO)
 			sta action_code
 
 			lxi h, hero_pos_x+1

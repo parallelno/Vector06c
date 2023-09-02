@@ -25,7 +25,7 @@
 		"y" : 140
 	},
 	"rooms" : [
-		{"path" : "level00_room00.tmj"},
-		{"path" : "level00_room01.tmj"}
+		{"path" : "level00_home.tmj"},
+		{"path" : "level00_cabbage_farm_fence.tmj"}
 	]
 }
