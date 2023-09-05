@@ -285,11 +285,6 @@ hero_check_tiledata:
 			ret
 
 hero_attack_start:
-			; check if a sword is available
-			lda hero_weapon
-			rlc
-			rnc ; return if no sword
-
 			; set the status
 			lxi h, hero_status
 			mvi m, HERO_STATUS_ATTACK

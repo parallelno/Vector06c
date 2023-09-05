@@ -10,7 +10,7 @@ __level00_palette:
 
 			.word 0 ; safety pair of bytes for reading by POP B
 __level00_tiles_addr:
-			.word __level00_tile0, 0, __level00_tile1, 0, __level00_tile2, 0, __level00_tile3, 0, __level00_tile4, 0, __level00_tile5, 0, __level00_tile6, 0, __level00_tile7, 0, __level00_tile8, 0, __level00_tile9, 0, __level00_tile10, 0, __level00_tile11, 0, __level00_tile12, 0, __level00_tile13, 0, __level00_tile14, 0, __level00_tile15, 0, __level00_tile16, 0, __level00_tile17, 0, __level00_tile18, 0, __level00_tile19, 0, __level00_tile20, 0, __level00_tile21, 0, __level00_tile22, 0, __level00_tile23, 0, __level00_tile24, 0, __level00_tile25, 0, __level00_tile26, 0, __level00_tile27, 0, __level00_tile28, 0, __level00_tile29, 0, __level00_tile30, 0, __level00_tile31, 0, __level00_tile32, 0, __level00_tile33, 0, __level00_tile34, 0, __level00_tile35, 0, __level00_tile36, 0, __level00_tile37, 0, __level00_tile38, 0, __level00_tile39, 0, __level00_tile40, 
+			.word __level00_tile0, 0, __level00_tile1, 0, __level00_tile2, 0, __level00_tile3, 0, __level00_tile4, 0, __level00_tile5, 0, __level00_tile6, 0, __level00_tile7, 0, __level00_tile8, 0, __level00_tile9, 0, __level00_tile10, 0, __level00_tile11, 0, __level00_tile12, 0, __level00_tile13, 0, __level00_tile14, 0, __level00_tile15, 0, __level00_tile16, 0, __level00_tile17, 0, __level00_tile18, 0, __level00_tile19, 0, __level00_tile20, 0, __level00_tile21, 0, __level00_tile22, 0, __level00_tile23, 0, __level00_tile24, 0, __level00_tile25, 0, __level00_tile26, 0, __level00_tile27, 0, __level00_tile28, 0, __level00_tile29, 0, __level00_tile30, 0, __level00_tile31, 0, __level00_tile32, 0, __level00_tile33, 0, __level00_tile34, 0, __level00_tile35, 0, __level00_tile36, 0, __level00_tile37, 0, __level00_tile38, 0, __level00_tile39, 0, __level00_tile40, 0, __level00_tile41, 0, __level00_tile42, 0, __level00_tile43, 0, __level00_tile44, 
 
 ; source\levels\art\level00.png
 __level00_tiles:
@@ -487,3 +487,39 @@ __level00_tile40:
 			.byte 192,192,192,192,240,240,240,112,96,104,78,12,8,0,0,0,
 			.byte 255,255,255,248,240,63,129,191,248,126,255,255,253,255,255,255,
 			.byte 255,255,255,63,111,159,159,239,159,159,189,243,247,255,255,255,
+			.word 0 ; safety pair of bytes for reading by POP B
+__level00_tile41:
+			.byte 15 ; mask
+			.byte 4 ; counter
+			.byte 0,0,1,24,0,0,0,0,0,0,0,0,0,0,0,0,
+			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,2,8,0,
+			.byte 0,0,1,24,24,0,0,0,0,0,1,0,0,0,0,0,
+			.byte 0,0,224,16,48,192,0,0,0,0,0,0,0,34,8,0,
+			.byte 0,1,7,56,28,0,1,1,0,0,1,2,1,0,0,0,
+			.byte 0,0,224,240,240,208,16,16,16,144,208,240,240,86,12,112,
+			.byte 0,0,6,32,28,1,2,2,2,7,13,9,8,6,1,0,
+			.byte 0,224,240,24,60,239,200,8,8,8,8,8,8,172,240,0,
+			.word 0 ; safety pair of bytes for reading by POP B
+__level00_tile42:
+			.byte 8 ; mask
+			.byte 4 ; counter
+			.byte 0,0,0,0,0,0,0,0,0,255,0,0,0,0,0,0,
+			.byte 0,0,0,0,0,0,255,0,0,0,0,0,0,0,0,0,
+			.word 0 ; safety pair of bytes for reading by POP B
+__level00_tile43:
+			.byte 15 ; mask
+			.byte 4 ; counter
+			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+			.byte 0,0,0,0,0,0,0,0,0,0,0,0,0,192,0,0,
+			.byte 0,0,0,0,0,0,0,0,0,0,0,3,5,3,0,0,
+			.byte 0,0,128,64,128,0,0,0,0,0,0,0,0,192,0,0,
+			.byte 6,17,54,7,5,4,6,6,12,0,3,7,14,3,0,0,
+			.byte 0,0,128,192,192,128,64,64,64,64,128,128,0,192,128,0,
+			.byte 0,14,25,8,8,8,8,8,16,24,220,51,21,11,3,0,
+			.byte 0,192,160,96,160,32,32,32,32,0,64,64,128,0,0,0,
+			.word 0 ; safety pair of bytes for reading by POP B
+__level00_tile44:
+			.byte 8 ; mask
+			.byte 4 ; counter
+			.byte 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
+			.byte 255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,

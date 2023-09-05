@@ -3,12 +3,13 @@
 ;		ffff is a func_id of a func handler in the func_table
 ;		DDDD is a func argument
 ; call a handler func with func_id=ffff, A = DDDD, C=tile_idx
-; input:
-; hl - ptr to the last tile_idx in the array room_get_tiledata_idxs
+; in:
+; de - pos_xy
 .macro TILEDATA_HANDLING(width, height, actor_tile_func_table)
 			; de - pos_xy
 			lxi b, (width-1)<<8 | height-1
 			call room_get_tiledata
+			; hl - ptr to the last tile_idx in the array room_get_tiledata_idxs			
 @loop:
 			mov a, m
 			cpi TILE_IDX_INVALID

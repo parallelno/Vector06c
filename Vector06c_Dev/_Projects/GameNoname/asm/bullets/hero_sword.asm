@@ -39,6 +39,12 @@ hero_sword_tile_func_tbl:
 			RET_4()								; func_id == 15 ; collision
 
 hero_sword_init:
+
+			; check if a sword is available
+			lda hero_weapon
+			rlc
+			jnc @no_sord
+
 			lxi h, bullet_update_ptr+1
 			mvi a, BULLET_RUNTIME_DATA_LEN
 			call actor_get_empty_data_ptr
@@ -98,7 +104,7 @@ hero_sword_init:
 			; advance hl to bullet_erase_wh_old
 			dcx h
 			; set the mimimum supported height
-			mvi m, 5
+			mvi m, SPRITE_COPY_TO_SCR_H_MIN
 			; advance hl to bullet_erase_scr_addr_old+1
 			LXI_D_TO_DIFF(bullet_erase_scr_addr_old+1, bullet_erase_wh_old)
 			dad d
@@ -113,7 +119,27 @@ hero_sword_init:
 			; c = posY
 			mov m, c
 			ret
+@no_sord:
+			; get a hero pos
+			lxi h, hero_pos_x+1
+			mov d, m
+			INX_H(2)
+			mov e, m
 
+			; check direction
+			lda hero_dir_x
+			rrc
+			lxi h, HERO_SWORD_COLLISION_OFFSET_X_L<<8 | HERO_SWORD_COLLISION_OFFSET_Y_L			
+			jnc @left
+@right:
+			lxi h, HERO_SWORD_COLLISION_OFFSET_X_R<<8 | HERO_SWORD_COLLISION_OFFSET_Y_R
+@left:
+			dad d
+			xchg
+			; de - pos_xy
+			TILEDATA_HANDLING(HERO_SWORD_COLLISION_WIDTH, HERO_SWORD_COLLISION_HEIGHT, hero_sword_tile_func_tbl)
+			ret
+			
 
 ; anim and a gameplay logic update
 ; in:
@@ -123,8 +149,8 @@ hero_sword_update:
 			LXI_H_TO_DIFF(bullet_status, bullet_update_ptr)
 			dad d
 			mov a, m
-			cpi ACTOR_STATUS_BIT_INVIS
-			jz @delay_update
+			ani ACTOR_STATUS_BIT_INVIS
+			jnz @delay_update
 
 @attk_update:
 			; hl - ptr to bullet_status
@@ -183,7 +209,7 @@ hero_sword_update:
 			mov e, m
 			lxi h, HERO_SWORD_COLLISION_OFFSET_X_R<<8 | HERO_SWORD_COLLISION_OFFSET_Y_R
 			dad d
-			jmp @setCollisionSize
+			jmp @check_monster_collision
 @attkL:
 			mvi m, < hero_sword_attk_l
 			inx h
@@ -201,7 +227,7 @@ hero_sword_update:
 			lxi h, HERO_SWORD_COLLISION_OFFSET_X_L<<8 | HERO_SWORD_COLLISION_OFFSET_Y_L
 			dad d
 
-@setCollisionSize:
+@check_monster_collision:
 			; store pos_xy
 			push h
 			; check if a bullet collides with a monster
@@ -214,19 +240,20 @@ hero_sword_update:
 			cpi ACTOR_RUNTIME_DATA_DESTR
 			pop d
 			; de - pos_xy
-			; if not, check the tile it is on.
+			; if a monster's alive, check the tile it is on.
 			jnc @check_tiledata
 
 			; advance hl to monster_impacted_ptr
 			LXI_B_TO_DIFF(monster_impacted_ptr, monster_update_ptr+1)
 			dad b
-			; call bulletImpactPtr
 			mov e, m
 			inx h
 			mov d, m
 			xchg
+			; call a monster_impact func
 			pchl
 @check_tiledata:
+			; de - pos_xy
 			TILEDATA_HANDLING(HERO_SWORD_COLLISION_WIDTH, HERO_SWORD_COLLISION_HEIGHT, hero_sword_tile_func_tbl)
 			ret
 
@@ -439,9 +466,15 @@ hero_sword_func_door:
 ; a - breakable_id
 ; c - tile_idx
 hero_sword_func_breakable:
+			mov e, a
+			; check if a sword is available
+			lda hero_weapon
+			rlc
+			rnc ; return if no sword
+
 			; add score points
 			push b
-			mov e, a
+			; e - breakable_id
 			mvi c, TILEDATA_FUNC_ID_BREAKABLES
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score
@@ -518,11 +551,26 @@ hero_sword_func_triggers:
 			pop psw
 			cpi TIMEDATA_TRIGGER_HOME_DOOR
 			jz @game_over
+			cpi TIMEDATA_TRIGGER_FRIEND_DOOR
+			jz @friends_home_door
 			ret
 @game_over:
-			; draw a dialog
+			; init a dialog
 			DIALOG_INIT(dialog_init_hero_knocked_his_home_door)
 			ret
+@friends_home_door:
+			; add a key 0
+			lxi h, global_items + 1 ; because item_id starts with 1
+			; check its status
+			mvi a, ITEM_STATUS_NOT_ACQUIRED
+			cmp m
+			rnz ; retuen if it is acquired or used
+
+			; set its status to ITEM_STATUS_ACQUIRED
+			mvi m, ITEM_STATUS_ACQUIRED
+			
+			; init a dialog
+			jmp dialog_quest_message_init
 
 
 ; draw a sprite into a backbuffer

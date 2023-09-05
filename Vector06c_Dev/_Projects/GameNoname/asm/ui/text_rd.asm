@@ -122,16 +122,36 @@ __text_knocked_his_home_door:
 			TEXT("come along, no question. Gotta swing by and", LINE_BREAK)
 			TEXT("hit him up tomorrow for sure!")
 
-; level0_house
+__text_knocked_his_friend_door:		
+			TEXT("Natias ain't here now. He's left home since the", LINE_BREAK)
+			TEXT("crack of dawn. Be a sweetie and fetch dried", LINE_BREAK)
+			TEXT("clothes from the backyard, and I'll give you", LINE_BREAK)
+			TEXT("a freshly baked popsicle pie, deal?")
+
+;===================================================================================
+; storytelling
+;===================================================================================
 __text_game_story_home:
 			TEXT("Rad day for my morning jog! Legs are ready", LINE_BREAK)
 			TEXT("for some serious adventuring action.", LINE_BREAK)
 			TEXT("If it's all about collecting, count me in!")
-__text_game_story_cabbage_farm_fence:
+
+__text_game_story_farm_fence:
 			TEXT("Oh my glob, guess what? Mom's on a cabbage", LINE_BREAK)
 			TEXT("quest, and you know what they say - no", LINE_BREAK)
 			TEXT("cabbage left behind! Gonna scoop up those", LINE_BREAK)
 			TEXT("leafy greens like a true adventurer!")
+
+__text_game_story_road_to_friends_home:
+			TEXT("Wait a minute! Who's the cheeky one", LINE_BREAK)
+			TEXT("cluttering up the road? Gotta snag a hero", LINE_BREAK)
+			TEXT("thingamajig to clear the path for some", LINE_BREAK)
+			TEXT("righteous heroing!")
+
+__text_game_story_friends_home:
+			TEXT("Check it, my buddy's cave! He said he'd", LINE_BREAK)
+			TEXT(" be around today. Gotta jog his memory", LINE_BREAK)
+			TEXT(" 'bout that promise, ya know?")
 /*
 			TEXT("Who's that dude on my road?", LINE_BREAK)
 			TEXT("Not cool with his mega-spooky vibe, for sure.", LINE_BREAK)

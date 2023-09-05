@@ -2,22 +2,22 @@
 	"path_png" : "art\\level00.png",
 	"palette" :
 	[ 
-		{"x": 0,	"y" : 256},
-		{"x": 16,	"y" : 256},
-		{"x": 32,	"y" : 256},
-		{"x": 48,	"y" : 256},
-		{"x": 64,	"y" : 256},
-		{"x": 80,	"y" : 256},
-		{"x": 96,	"y" : 256},
-		{"x": 112,	"y" : 256},
-		{"x": 128,	"y" : 256},
-		{"x": 144,	"y" : 256},
-		{"x": 160,	"y" : 256},
-		{"x": 176,	"y" : 256},
-		{"x": 192,	"y" : 256},
-		{"x": 208,	"y" : 256},
-		{"x": 234,	"y" : 260},
-		{"x": 240,	"y" : 256}
+		{"x": 0,	"y" : 0},
+		{"x": 16,	"y" : 0},
+		{"x": 32,	"y" : 0},
+		{"x": 48,	"y" : 0},
+		{"x": 64,	"y" : 0},
+		{"x": 80,	"y" : 0},
+		{"x": 96,	"y" : 0},
+		{"x": 112,	"y" : 0},
+		{"x": 128,	"y" : 0},
+		{"x": 144,	"y" : 0},
+		{"x": 160,	"y" : 0},
+		{"x": 176,	"y" : 0},
+		{"x": 192,	"y" : 0},
+		{"x": 208,	"y" : 0},
+		{"x": 234,	"y" : 0},
+		{"x": 240,	"y" : 0}
 	],
 	"asset_type" : "level",
 	"hero_start_pos" : {
@@ -26,6 +26,17 @@
 	},
 	"rooms" : [
 		{"path" : "level00_home.tmj"},
-		{"path" : "level00_cabbage_farm_fence.tmj"}
+		{"path" : "level00_farm_fence.tmj"},
+		{"path" : "level00_road_to_friends_home.tmj"},
+		{"path" : "level00_friends_home.tmj"},
+		{"path" : "level00_friends_home_backyard.tmj"},
+		{"path" : "level00_friends_secret_place.tmj"},
+		{"path" : "level00_cross_road.tmj"},
+		{"path" : "level00_farm_entrance.tmj"},
+		{"path" : "level00_farm_storage.tmj"},
+		{"path" : "level00_loop.tmj"},
+		{"path" : "level00_dungeon_entrance.tmj"},
+		{"path" : "level00_abandoned_home.tmj"},
+		{"path" : "level00_lost_coins.tmj"}
 	]
 }

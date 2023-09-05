@@ -22,11 +22,11 @@
 	"lists" : {
 		"decals_walkable" : ["bones", "skull"],
 		"decals_collidable" : ["web1"],
-		"items" : ["key_blue", "key_red", "key_green", "key_magma"],
+		"items" : ["key_0", "key_1", "key_1", "key_3", "key_4", "dry_clothes"],
 		"resources" : ["coin", "potion_blue", "potion_red"],
 		"breakable" : ["barrel", "crate", "cabbage"],
-		"doors" : ["door_blue_l", "door_blue_r", "door_red_l", "door_red_r"],
-		"doors_opened" : ["door_blue_open_l", "door_blue_open_r", "door_red_open_l", "door_red_open_r"],
+		"doors" : ["door_0_l", "door_0_r", "door_1_l", "door_1_r", "door_1_l", "door_1_r", "door_0_l", "door_0_r", "door_4_l", "door_4_r"],
+		"doors_opened" : ["door_0_open_l", "door_0_open_r", "door_1_open_l", "door_1_open_r", "door_1_open_l", "door_1_open_r", "door_0_open_l", "door_0_open_r", "door_1_open_l", "door_1_open_r"],
 		"containers" : ["chest_small", "chest_big", "chest_weapon0"],
 		"containers_opened" : ["chest_small_opened", "chest_big_opened", "chest_weapon0_opened"]
 	},
@@ -104,7 +104,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "key_blue",
+			"name" : "key_0",
 			"x" : 0,
 			"y"	: 101,
 			"width" : 16,
@@ -114,9 +114,9 @@
 			"mask_y" : 117, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		},
+		},		
 		{
-			"name" : "key_red",
+			"name" : "key_1",
 			"x" : 16,
 			"y"	: 101,
 			"width" : 16,
@@ -128,19 +128,7 @@
 			"mask_color" : 1
 		},
 		{
-			"name" : "key_green",
-			"x" : 32,
-			"y"	: 101,
-			"width" : 16,
-			"height" : 10,
-			"offset_y" : 1,
-			"mask_x" : 32,
-			"mask_y" : 117, 
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},	
-		{
-			"name" : "key_magma",
+			"name" : "key_3",
 			"x" : 48,
 			"y"	: 101,
 			"width" : 16,
@@ -150,7 +138,31 @@
 			"mask_y" : 117, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
+		},	
+		{
+			"name" : "key_4",
+			"x" : 64,
+			"y"	: 101,
+			"width" : 16,
+			"height" : 10,
+			"offset_y" : 1,
+			"mask_x" : 64,
+			"mask_y" : 117, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
 		},
+		{
+			"name" : "dry_clothes",
+			"x" : 64,
+			"y"	: 102,
+			"width" : 16,
+			"height" : 10,
+			"offset_y" : 0,
+			"mask_x" : 64,
+			"mask_y" : 117, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},		
 		{
 			"name" : "coin",
 			"x" : 0,
@@ -186,33 +198,9 @@
 			"mask_y" : 115, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		},
-		{
-			"name" : "door_blue_l",
-			"x" : 0,
-			"y"	: 161,
-			"width" : 16,
-			"height" : 15,
-			"offset_y" : 0,
-			"mask_x" : 0,
-			"mask_y" : 177, 
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},	
-		{
-			"name" : "door_blue_r",
-			"x" : 16,
-			"y"	: 161,
-			"width" : 16,
-			"height" : 15,
-			"offset_y" : 0,
-			"mask_x" : 16,
-			"mask_y" : 177, 
-			"mask_alpha" : 0,
-			"mask_color" : 1
 		},			
 		{
-			"name" : "door_red_l",
+			"name" : "door_0_l",
 			"x" : 32,
 			"y"	: 160,
 			"width" : 16,
@@ -224,7 +212,7 @@
 			"mask_color" : 1
 		},	
 		{
-			"name" : "door_red_r",
+			"name" : "door_0_r",
 			"x" : 48,
 			"y"	: 160,
 			"width" : 16,
@@ -234,33 +222,57 @@
 			"mask_y" : 176, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		},	
+		},
 		{
-			"name" : "door_blue_open_l",
-			"x" : 48,
-			"y"	: 229,
+			"name" : "door_1_l",
+			"x" : 0,
+			"y"	: 161,
 			"width" : 16,
-			"height" : 11,
+			"height" : 15,
 			"offset_y" : 0,
-			"mask_x" : 48,
-			"mask_y" : 245, 
+			"mask_x" : 0,
+			"mask_y" : 177, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},	
 		{
-			"name" : "door_blue_open_r",
-			"x" : 64,
-			"y"	: 229,
+			"name" : "door_1_r",
+			"x" : 16,
+			"y"	: 161,
 			"width" : 16,
-			"height" : 11,
+			"height" : 15,
+			"offset_y" : 0,
+			"mask_x" : 16,
+			"mask_y" : 177, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "door_4_l",
+			"x" : 64,
+			"y"	: 161,
+			"width" : 16,
+			"height" : 15,
 			"offset_y" : 0,
 			"mask_x" : 64,
-			"mask_y" : 245, 
+			"mask_y" : 177, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},	
 		{
-			"name" : "door_red_open_l",
+			"name" : "door_4_r",
+			"x" : 80,
+			"y"	: 161,
+			"width" : 16,
+			"height" : 15,
+			"offset_y" : 0,
+			"mask_x" : 80,
+			"mask_y" : 177, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "door_0_open_l",
 			"x" : 16,
 			"y"	: 224,
 			"width" : 16,
@@ -273,7 +285,7 @@
 			"mask_color" : 1
 		},	
 		{
-			"name" : "door_red_open_r",
+			"name" : "door_0_open_r",
 			"x" : 32,
 			"y"	: 224,
 			"width" : 16,
@@ -285,6 +297,30 @@
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},
+		{
+			"name" : "door_1_open_l",
+			"x" : 48,
+			"y"	: 229,
+			"width" : 16,
+			"height" : 11,
+			"offset_y" : 0,
+			"mask_x" : 48,
+			"mask_y" : 245, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},	
+		{
+			"name" : "door_1_open_r",
+			"x" : 64,
+			"y"	: 229,
+			"width" : 16,
+			"height" : 11,
+			"offset_y" : 0,
+			"mask_x" : 64,
+			"mask_y" : 245, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},	
 		{
 			"name" : "chest_small",
 			"x" : 0,

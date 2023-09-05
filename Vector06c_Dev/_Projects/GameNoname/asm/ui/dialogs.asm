@@ -95,7 +95,8 @@ dialog_init_hero_no_health:
 			jmp dialog_update_next_step
 
 ;===========================================================================
-; dialog when the hero knovked his home door. The game ends after showing the dialog
+; dialog when the hero knocked his home door. 
+; The game ends after showing the dialog
 dialog_init_hero_knocked_his_home_door:
 			.word @init, @draw_text, @check_key, DIALOG_EMPTY_CALLBACK
 
@@ -123,6 +124,14 @@ dialog_init_hero_knocked_his_home_door:
 			jmp dialog_update_next_step
 
 ;===========================================================================
+; dialog when the hero knocked his friend door
+; A hero gets a key 0 to open he backyard
+dialog_quest_message_init:
+            lxi h, @ptr_to_3
+			jmp dialog_quest_message
+@ptr_to_3:
+			.byte 3
+;===========================================================================
 ; dialog when a hero picks up the global item called TILEDATA_STORYTELLING
 ; it pauses everything except backs and ui, it erases backs
 ; when this dialog closes, the game redraws the room, then continues
@@ -141,7 +150,10 @@ STORYTELLING_TEXT_ENTITY_LEN = 4
 
 dialog_storytelling_texts_ptrs:
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_0, __text_game_story_home)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_1, __text_game_story_cabbage_farm_fence)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_1, __text_game_story_farm_fence)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_2, __text_game_story_road_to_friends_home)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_3, __text_game_story_friends_home)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_3, ROOM_ID_3, __text_knocked_his_friend_door) ; this is a quest dialog when a hero knocks his friend's door
 @end_data:
 STORYTELLING_TEXT_COUNT = (@end_data - dialog_storytelling_texts_ptrs) / STORYTELLING_TEXT_ENTITY_LEN
 
@@ -160,9 +172,12 @@ dialog_storytelling_init:
 ; called to handle TILEDATA_STORYTELLING
 dialog_storytelling:
 			; get the text ptr based on the level_idx and room_id
+			lxi h, level_idx 			
+; in:
+; hl - ptr to level_idx
+dialog_quest_message:
 			lda room_id
 			RLC_(2)
-			lxi h, level_idx 
 			ora m
 			mov b, a
 			; b - RRRR_RRLL: RRRRR - room_id, L - level_idx

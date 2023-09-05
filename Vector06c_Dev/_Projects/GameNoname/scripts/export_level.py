@@ -83,7 +83,7 @@ def gfx_to_asm(room_j, image, path, remap_idxs, label_prefix):
 	for t_idx in remap_idxs:
 		# get a tile as a color index 2d array
 		tile_img = []
-		idx = t_idx - 1 # because in Tiled exported data the first tile index is 1 instead of 0.
+		idx = (t_idx - 1) % 256 # because in Tiled exported data the first tile index is 1 instead of 0.
 		sx = idx % width * tileW
 		sy = idx // width * tileH
 		for y in range(sy, sy + tileH):
