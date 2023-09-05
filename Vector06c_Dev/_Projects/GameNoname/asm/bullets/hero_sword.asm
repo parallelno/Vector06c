@@ -376,7 +376,7 @@ hero_sword_func_door:
 			ani %00001110
 			rrc	
 
-			adi <global_items + 1 ; because the first keys has id = 1
+			adi <global_items - 1 ; because the first item_id = 1
 			mov l, a
 			mov a, m
 			cpi <ITEM_STATUS_NOT_ACQUIRED
@@ -560,7 +560,7 @@ hero_sword_func_triggers:
 			ret
 @friends_home_door:
 			; add a key 0
-			lxi h, global_items + 1 ; because item_id starts with 1
+			lxi h, global_items - 1 ; because the first item_id = 1
 			; check its status
 			mvi a, ITEM_STATUS_NOT_ACQUIRED
 			cmp m

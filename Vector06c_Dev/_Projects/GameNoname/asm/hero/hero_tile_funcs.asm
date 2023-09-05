@@ -6,7 +6,7 @@ hero_tile_func_item:
 			mov e, a ; tmp item_id to e
 			; get a global item status ptr
 			mvi h, >global_items
-			adi <global_items
+			adi <global_items - 1 ; because the first item_id = 1
 			mov l, a
 
 			; erase item_id from tiledata

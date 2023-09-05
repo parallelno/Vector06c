@@ -273,7 +273,7 @@ room_tiledata_item_spawn:
 			; check global item status
 			mvi h, >global_items
 			RRC_(2)
-			adi <global_items
+			adi <global_items - 1 ; because the first item_id = 1
 			mov l, a
 			mov a, m
 			ora a
@@ -366,7 +366,7 @@ room_tiledata_door_spawn:
 			ana b
 			rrc
 
-			adi <global_items + 1 ; because the first keys has id = 1
+			adi <global_items ; because the first door_id = 0
 			mov l, a
 			mov a, m
 			cpi <ITEM_STATUS_USED

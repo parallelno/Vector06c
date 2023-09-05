@@ -184,14 +184,14 @@ hero_global_status_no_render = $7be8 ; byte
 ITEM_STATUS_NOT_ACQUIRED	= 0
 ITEM_STATUS_ACQUIRED		= 1
 ITEM_STATUS_USED			= 2
-ITEMS_MAX					= 16
+ITEMS_MAX					= 15 ; item_id = 0 is reserved for dialog tiledata
 
 ; data format:
 ; .loop ITEMS_MAX
 ;	.byte - status of item_id = N
 ; .endloop
 
-global_items:		= $7c10
+global_items:		= $7c11
 global_items_end:	= global_items + ITEMS_MAX
 
 ;=============================================================================
