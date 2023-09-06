@@ -250,6 +250,11 @@ hero_res_func_potion_red:
 			call game_ui_draw_health
 			ret
 
+hero_res_func_clothes:
+			lxi h, hero_res_clothes
+			inr m
+			ret
+
 hero_cont_func_chest_small:
 hero_cont_func_chest_big:
 hero_cont_func_chest_weapon0:

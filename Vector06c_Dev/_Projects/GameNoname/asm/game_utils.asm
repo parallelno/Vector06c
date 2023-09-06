@@ -49,3 +49,20 @@ reset_game_updates_counter:
 			A_TO_ZERO(NULL_BYTE)
 			sta game_updates_counter
 			ret
+
+.macro PAUSE(time, no_ret = false)
+			lxi h, time
+		.if no_ret
+			jmp pause
+		.endif
+		.if no_ret == false
+			call pause
+		.endif
+.endmacro
+pause:
+			A_TO_ZERO(0)
+			lxi h, 65000
+@loop:		dcx h
+			cmp h
+			jnz @loop
+			ret

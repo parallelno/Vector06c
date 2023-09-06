@@ -43,13 +43,13 @@ trigger_hero_knocks_his_friend_door:
 			call dialog_is_inited
 			rz
 
-			lxi h, global_items + ITEM_ID_KEY_0 ; because key 0 item_id addr = global_items
-			; check key 0 status
+			lxi h, global_items + ITEM_ID_KEY_0 - 1 ; because the first item_id = 1
+			; check the key 0 status
 			A_TO_ZERO(ITEM_STATUS_NOT_ACQUIRED)
 			cmp m
 			jnz @check_clothes; if it is acquired or used, check clothes item
 
-			; if it's not acquired, set its status of key_0 = ITEM_STATUS_ACQUIRED
+			; if a key_0 isn't acquired, set key_0 status = ITEM_STATUS_ACQUIRED
 			mvi m, ITEM_STATUS_ACQUIRED
 			; init a dialog
 			mvi a, GAME_REQ_PAUSE
@@ -57,36 +57,31 @@ trigger_hero_knocks_his_friend_door:
 			lxi d, __text_knocked_his_friend_door
 			jmp dialog_init
 
+@check_clothes:
 			; key_0 is acquired
 			; check if clothes are acquired
-@check_clothes:
-			lxi h, global_items + ITEM_ID_CLOTHES
-			mov a, m
-			cpi ITEM_STATUS_ACQUIRED
-			jc @clothes_not_acquired
-			jz @clothes_acquired
-@clothes_used:
-			; clothes returnes more than once
-			mvi a, GAME_REQ_PAUSE
-			lxi h, dialog_callback_room_redraw
-			lxi d, __text_knocked_his_friend_door_clothes_returned
-			jmp dialog_init
-
-@clothes_acquired:
-			; init a dialog
-			mvi a, GAME_REQ_PAUSE
-			lxi h, dialog_callback_room_redraw
-			lxi d, __text_knocked_his_friend_door_clothes_returns
-			jmp dialog_init					
-
+			lxi h, hero_resources + RES_ID_CLOTHES
+			A_TO_ZERO(0)
+			cmp m
+			jnz @clothes_acquired
 @clothes_not_acquired:
-			; init a dialog
+			; the hero returns without clothes
 			mvi a, GAME_REQ_PAUSE
 			lxi h, dialog_callback_room_redraw
 			lxi d, __text_knocked_his_friend_door_no_clothes
 			jmp dialog_init
 
-
+@clothes_acquired:
+			; a hero returns with clothes
+			; remove the clothes item
+			; a = 0
+			mov m, a
+			; TODO: add score points
+			; init a dialog
+			mvi a, GAME_REQ_PAUSE
+			lxi h, dialog_callback_room_redraw
+			lxi d, __text_knocked_his_friend_door_clothes_returns
+			jmp dialog_init
 
 
 

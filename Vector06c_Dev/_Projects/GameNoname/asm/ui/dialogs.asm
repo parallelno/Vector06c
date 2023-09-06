@@ -74,7 +74,9 @@ dialog_draw_frame_text:
 			pop h
 			; hl - text ptr
 			CALL_RAM_DISK_FUNC(__text_ex_rd_scr3, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			ret
+
+			; pause to prevent closing a dialog right after opening
+			PAUSE(65000, true)
 
 
 ;===========================================================================
@@ -122,9 +124,6 @@ dialog_storytelling_init:
 dialog_storytelling:
 			; get the text ptr based on the level_idx and room_id
 			lxi h, level_idx
-; in:
-; hl - ptr to level_idx
-dialog_quest_message:
 			lda room_id
 			; look up the dialog
 			RLC_(2)

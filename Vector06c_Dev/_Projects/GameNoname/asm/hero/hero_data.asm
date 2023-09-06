@@ -65,7 +65,7 @@ hero_res_func_tbl:
 			RET_4()								; resource_id == 1
 			JMP_4( hero_res_func_potion_blue)	; resource_id == 2
 			JMP_4( hero_res_func_potion_red)	; resource_id == 3
-			RET_4()								; resource_id == 4
+			JMP_4( hero_res_func_clothes)		; resource_id == 4
 			RET_4()								; resource_id == 5
 			RET_4()								; resource_id == 6
 			RET_4()								; resource_id == 7

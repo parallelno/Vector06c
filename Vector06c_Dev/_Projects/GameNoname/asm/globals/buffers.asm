@@ -110,9 +110,9 @@ hero_resources:		= $7b80
 hero_res_ammo:		= hero_resources + 0
 hero_res_mana:		= hero_resources + 1
 ; TODO: there are 3 bytes free
-; hero_res_??		= hero_resource + 2
-; hero_res_??		= hero_resource + 3
-; hero_res_??		= hero_resource + 4
+hero_res_clothes:	= hero_resources + 2
+; hero_res_??		= hero_resources + 3
+; hero_res_??		= hero_resources + 4
 hero_resources_end:	= hero_resources + HERO_RESOURCES_LEN
 
 ;=============================================================================
