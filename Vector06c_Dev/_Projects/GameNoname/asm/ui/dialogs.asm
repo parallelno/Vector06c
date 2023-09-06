@@ -1,11 +1,11 @@
 dialogs_init:
 			jmp dialog_storytelling_init
 
-DIALOG_EMPTY_CALLBACK:
+dialog_empty_callback:
 			ret
 
-DIALOG_EMPTY_CALLBACK_PTR:
-			.word DIALOG_EMPTY_CALLBACK
+dialog_empty_callback_ptr:
+			.word dialog_empty_callback
 
 ; init dialog
 ; in:
@@ -18,7 +18,7 @@ DIALOG_EMPTY_CALLBACK_PTR:
 ; invoke a dialog callback func
 ; if the callback pptr == NULL_PTR, return
 dialog_update:
-			lhld DIALOG_EMPTY_CALLBACK_PTR
+			lhld dialog_empty_callback_ptr
 			pchl
 
 ; call when a dialog step routine is about to go the the next step
@@ -28,7 +28,15 @@ dialog_update_next_step:
 			shld dialog_update + 1
 			ret
 
+dialog_update_stop:
+			lxi h, dialog_empty_callback_ptr
+			shld dialog_update + 1
+			ret
+
 dialog_draw_frame:
+			; mark erased the runtime back data
+			call backs_init
+			; draw a frame
 			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_dialog, __TILED_IMAGES_FRAME_INGAME_DIALOG_COPY_LEN, __tiled_images_tile1)
 			; draw an animated spacebar
 			; dialog_press_key (tiledata = 162)
@@ -41,40 +49,29 @@ dialog_draw_frame:
 			jmp backs_spawn
 
 ; draw a text on the SCR_BUFF3
-; use macro DIALOG_DRAW_TEXT or DIALOG_DRAW_TEXT_HL to call this func
+; in:
+; hl - text ptr
 dialog_draw_text:
+			push h
 			CALL_RAM_DISK_FUNC(__text_ex_rd_reset_spacing, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
-			; draw text
-			lxi b, $102d
-dialog_draw_text_ptr:
-			lxi h, TEMP_ADDR
+			lxi b, $102d	; text pos
+			pop h
 			CALL_RAM_DISK_FUNC(__text_ex_rd_scr3, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
-.macro DIALOG_DRAW_TEXT(text_ptr)
-			lxi h, text_ptr
-			shld dialog_draw_text_ptr + 1
-			call dialog_draw_text
-.endmacro
-; it assumes that hl regs contains text_ptr
-.macro DIALOG_DRAW_TEXT_HL()
-			shld dialog_draw_text_ptr + 1
-			call dialog_draw_text
-.endmacro
 
 ;===========================================================================
 ; dialog when the hero looses all the health
 dialog_init_hero_no_health:
-			.word @init, @draw_text, @check_key, DIALOG_EMPTY_CALLBACK
+			.word @init, @check_key
 
 @init:		
 			; disable hero updates
 			mvi a, ACTOR_STATUS_NO_UPDATE
 			sta hero_status
 			call dialog_draw_frame
-			jmp dialog_update_next_step
+			lxi h, __text_no_health
+			call dialog_draw_text
 
-@draw_text:	
-			DIALOG_DRAW_TEXT(__text_no_health)
 			jmp dialog_update_next_step
 			 
 @check_key:
@@ -92,23 +89,21 @@ dialog_init_hero_no_health:
 			; restore a hero health
 			mvi a, HERO_HEALTH_MAX
 			sta hero_health
-			jmp dialog_update_next_step
+			jmp dialog_update_stop
 
 ;===========================================================================
 ; dialog when the hero knocked his home door. 
 ; The game ends after showing the dialog
 dialog_init_hero_knocked_his_home_door:
-			.word @init, @draw_text, @check_key, DIALOG_EMPTY_CALLBACK
+			.word @init, @check_key
 
 @init:		
-			; disable hero updates
 			mvi a, GAME_REQ_PAUSE
 			sta global_request
 			call dialog_draw_frame
-			jmp dialog_update_next_step
+			lxi h, __text_knocked_his_home_door
+			call dialog_draw_text
 
-@draw_text:	
-			DIALOG_DRAW_TEXT(__text_knocked_his_home_door)
 			jmp dialog_update_next_step
 			 
 @check_key:
@@ -121,7 +116,7 @@ dialog_init_hero_knocked_his_home_door:
 			; requesting a level loading
 			mvi a, GAME_REQ_END_HOME
 			sta global_request
-			jmp dialog_update_next_step
+			jmp dialog_update_stop
 
 ;===========================================================================
 ; dialog when the hero knocked his friend door
@@ -133,9 +128,11 @@ dialog_quest_message_init:
 			.byte 3
 ;===========================================================================
 ; dialog when a hero picks up the global item called TILEDATA_STORYTELLING
+; it proceeds only if the dialog wasn't shown before
 ; it pauses everything except backs and ui, it erases backs
 ; when this dialog closes, the game redraws the room, then continues
 ; the limitations: LEVEL_IDX_0 in a range of 0-3
+; one dialog per room
 STORYTELLING_TEXT_STATUS_NEW = 0
 STORYTELLING_TEXT_STATUS_OLD = 1
 STORYTELLING_TEXT_ENTITY_LEN = 4
@@ -148,6 +145,7 @@ STORYTELLING_TEXT_ENTITY_LEN = 4
 			.word text_ptr
 .endmacro
 
+; this array contains all dialogs statues (shown, not shown) and text ptrs
 dialog_storytelling_texts_ptrs:
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_0, __text_game_story_home)
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_1, __text_game_story_farm_fence)
@@ -157,7 +155,7 @@ dialog_storytelling_texts_ptrs:
 @end_data:
 STORYTELLING_TEXT_COUNT = (@end_data - dialog_storytelling_texts_ptrs) / STORYTELLING_TEXT_ENTITY_LEN
 
-; restores storytelling text statuses
+; restores storytelling dialog statuses
 dialog_storytelling_init:
 			lxi h, dialog_storytelling_texts_ptrs+1 ; status offset = 1 byte
 			lxi d, STORYTELLING_TEXT_ENTITY_LEN
@@ -170,13 +168,15 @@ dialog_storytelling_init:
 			ret
 
 ; called to handle TILEDATA_STORYTELLING
+; level_id and room_id define what dialog to show
 dialog_storytelling:
 			; get the text ptr based on the level_idx and room_id
-			lxi h, level_idx 			
+			lxi h, level_idx
 ; in:
 ; hl - ptr to level_idx
 dialog_quest_message:
 			lda room_id
+			; look up the dialog
 			RLC_(2)
 			ora m
 			mov b, a
@@ -204,9 +204,6 @@ dialog_quest_message:
 			mvi a, GAME_REQ_PAUSE
 			sta global_request
 			
-			; mark erased the runtime back data
-			call backs_init
-
 			; draw a dialog
 			call dialog_draw_frame
 
@@ -218,13 +215,13 @@ dialog_quest_message:
 			mov d, m
 			xchg
 			; hl - text pptr
-			DIALOG_DRAW_TEXT_HL()
+			call dialog_draw_text
 
 			DIALOG_INIT(dialog_storytelling_steps)
 			ret
 
 dialog_storytelling_steps:
-			.word @check_key, DIALOG_EMPTY_CALLBACK
+			.word @check_key
 
 @check_key:
 			; check if a fire action is pressed
@@ -235,6 +232,6 @@ dialog_storytelling_steps:
 			mvi a, GAME_REQ_ROOM_DRAW
 			sta global_request
 			; TODO: restore breakables the same configuraton they were created
-			jmp dialog_update_next_step
+			jmp dialog_update_stop
 
 

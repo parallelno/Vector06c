@@ -560,18 +560,28 @@ hero_sword_func_triggers:
 			ret
 @friends_home_door:
 			; add a key 0
-			lxi h, global_items - 1 ; because the first item_id = 1
+			lxi h, global_items + ITEM_ID_KEY_0 ; because key 0 item_id addr = global_items
 			; check its status
 			mvi a, ITEM_STATUS_NOT_ACQUIRED
 			cmp m
-			rnz ; retuen if it is acquired or used
+			jnz @check_clothes; if it is acquired or used, check clothes item
 
 			; set its status to ITEM_STATUS_ACQUIRED
-			mvi m, ITEM_STATUS_ACQUIRED
-			
+			mvi m, ITEM_STATUS_ACQUIRED	
 			; init a dialog
 			jmp dialog_quest_message_init
 
+@check_clothes:
+			lxi h, global_items + ITEM_ID_CLOTHES
+			mvi a, ITEM_STATUS_ACQUIRED
+			cmp m
+			jnz @clothes_used; if it is acquired or used, check clothes item
+			; clothes haven't been returned yet
+			; init a dialog
+			jmp dialog_quest_message_init
+@clothes_used:
+			; clothes were returned once
+			
 
 ; draw a sprite into a backbuffer
 ; in:

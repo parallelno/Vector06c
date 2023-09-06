@@ -8,6 +8,8 @@
 hero_game_init:
 			A_TO_ZERO(HERO_NO_WEAPON)
 			sta hero_weapon
+			mvi a, HERO_HEALTH_MAX
+			sta hero_health			
 			ret
 
 hero_init:
