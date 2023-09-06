@@ -128,20 +128,12 @@ __text_knocked_his_friend_door:
 			TEXT("clothes from the backyard, and I'll give you", LINE_BREAK)
 			TEXT("a freshly baked popsicle pie, deal?")
 __text_knocked_his_friend_door_no_clothes:		
-			TEXT("No clothes - no pie!", LINE_BREAK)
-			TEXT("No clothes - no pie!", LINE_BREAK)
-			TEXT("No clothes - no pie!", LINE_BREAK)
-			TEXT("No freshly baked popsicle pie!")
+			TEXT("Oh, sugar, no clothes means no pie, remember?", LINE_BREAK)
+			TEXT("We had a straight-up deal.")
 __text_knocked_his_friend_door_clothes_returns:		
-			TEXT("Pie is yours!", LINE_BREAK)
-			TEXT("Pie is yours!", LINE_BREAK)
-			TEXT("Pie is yours!", LINE_BREAK)
-			TEXT("Freshly baked popsicle pie is yours!")
-__text_knocked_his_friend_door_clothes_returned:
-			TEXT("Again!", LINE_BREAK)
-			TEXT("Pie is yours!", LINE_BREAK)
-			TEXT("Pie is yours!", LINE_BREAK)
-			TEXT("Freshly baked popsicle pie is yours!")			
+			TEXT("Sweetie, you're the best helper in the world!", LINE_BREAK)
+			TEXT("Here's a fresh-baked popsicle pie, piping chill.", LINE_BREAK)
+			TEXT("Hurry and take it home before it warms up!")			
 
 ;===================================================================================
 ; storytelling
@@ -165,8 +157,20 @@ __text_game_story_road_to_friends_home:
 
 __text_game_story_friends_home:
 			TEXT("Check it, my buddy's cave! He said he'd", LINE_BREAK)
-			TEXT(" be around today. Gotta jog his memory", LINE_BREAK)
-			TEXT(" 'bout that promise, ya know?")
+			TEXT("be around today. Gotta jog his memory", LINE_BREAK)
+			TEXT("'bout that promise, ya know?")
+
+__text_game_story_friends_backyard:
+			TEXT("Really??? It looks like a hidden lair in", LINE_BREAK)
+			TEXT("the bushes! I'm gonna investigate my", LINE_BREAK)
+			TEXT("friend's secret spot. Those bones at the", LINE_BREAK)
+			TEXT("entrance are a spooky clue!")
+
+__text_game_story_friends_secret_place:
+			TEXT("Oh no, there are bones and skulls all over", LINE_BREAK)
+			TEXT("the place! I worry my friend can be in a real", LINE_BREAK)
+			TEXT("danger! I gonna find and rescue him no matter", LINE_BREAK)
+			TEXT("the cost!")
 /*
 			TEXT("Who's that dude on my road?", LINE_BREAK)
 			TEXT("Not cool with his mega-spooky vibe, for sure.", LINE_BREAK)

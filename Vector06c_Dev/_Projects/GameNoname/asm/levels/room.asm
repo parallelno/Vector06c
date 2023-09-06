@@ -358,19 +358,19 @@ room_tiledata_door_spawn:
 			mov m, b
 
 			ADD_A(2) ; to make a JMP_4 ptr
-			sta room_decal_draw_ptr_offset+1
+			sta room_decal_draw_ptr_offset + 1
 
 			; check the global item status
-			mvi h, >global_items
 			mvi a, %00001110
 			ana b
 			rrc
 
 			adi <global_items ; because the first door_id = 0
 			mov l, a
+			mvi h, >global_items
 			mov a, m
 			cpi <ITEM_STATUS_USED
-			jz @opened	; status != ITEM_STATUS_NOT_ACQUIRED means a door is opened
+			jz @opened	; status == ITEM_STATUS_USED means a door is opened
 
 			ROOM_DECAL_DRAW(__doors_gfx_ptrs, true)
 @tiledata:
@@ -441,6 +441,8 @@ room_decal_draw:
 			; de - scr addr
 			push d
 
+; it assumes that room_decal_draw_ptr_offset + 1 is filled up with a decal_id * 4
+; upfont calling room_decal_draw_ptr_offset
 room_decal_draw_ptr_offset:
 			lxi d, TEMP_WORD
 			dad d
@@ -457,7 +459,7 @@ room_decal_draw_ptr_offset:
 			pop d
 			pop b
 room_decal_draw_backbuffers:
-			ret
+			ret		; mutable. do not change
 
 			push b
 			push d

@@ -104,6 +104,8 @@ dialog_storytelling_texts_ptrs:
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_1, __text_game_story_farm_fence)
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_2, __text_game_story_road_to_friends_home)
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_3, __text_game_story_friends_home)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_4, __text_game_story_friends_backyard)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_5, __text_game_story_friends_secret_place)
 @end_data:
 STORYTELLING_TEXT_COUNT = (@end_data - dialog_storytelling_texts_ptrs) / STORYTELLING_TEXT_ENTITY_LEN
 

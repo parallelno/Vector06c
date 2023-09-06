@@ -129,7 +129,7 @@ hero_sword_init:
 			; check direction
 			lda hero_dir_x
 			rrc
-			lxi h, HERO_SWORD_COLLISION_OFFSET_X_L<<8 | HERO_SWORD_COLLISION_OFFSET_Y_L			
+			lxi h, HERO_SWORD_COLLISION_OFFSET_X_L<<8 | HERO_SWORD_COLLISION_OFFSET_Y_L
 			jnc @left
 @right:
 			lxi h, HERO_SWORD_COLLISION_OFFSET_X_R<<8 | HERO_SWORD_COLLISION_OFFSET_Y_R
@@ -139,7 +139,7 @@ hero_sword_init:
 			; de - pos_xy
 			TILEDATA_HANDLING(HERO_SWORD_COLLISION_WIDTH, HERO_SWORD_COLLISION_HEIGHT, hero_sword_tile_func_tbl)
 			ret
-			
+
 
 ; anim and a gameplay logic update
 ; in:
@@ -165,7 +165,7 @@ hero_sword_update:
 			inx h
 			mvi a, HERO_SWORD_ANIM_SPEED_ATTACK
 			jmp actor_anim_update
-			
+
 @destroy:
 			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
 			dad d
@@ -345,7 +345,7 @@ hero_sword_func_container:
 
 			; update a hero container
 			lxi h, hero_cont_func_tbl
-@restore_container_id:			
+@restore_container_id:
 			mvi a, TEMP_BYTE
 
 			; add score points
@@ -372,12 +372,12 @@ hero_sword_func_door:
 
 			mov b, a ; temp b = door_id
 			; check global item status
-			mvi h, >global_items
 			ani %00001110
-			rrc	
+			rrc
 
-			adi <global_items - 1 ; because the first item_id = 1
+			adi <global_items
 			mov l, a
+			mvi h, >global_items
 			mov a, m
 			cpi <ITEM_STATUS_NOT_ACQUIRED
 			rz	; if status == ITEM_STATUS_NOT_ACQUIRED, means a hero does't have a proper key to open the door
@@ -396,7 +396,7 @@ hero_sword_func_door:
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score
 			pop b
-			
+
 			; erase breakable_id from tiledata
 			mvi b, >room_tiledata
 			mvi a, TILEDATA_RESTORE_TILE
@@ -427,14 +427,14 @@ hero_sword_func_door:
 			mov d, a
 
 			; bc - a tile gfx ptr
-			; de - screen addr	
+			; de - screen addr
 			push d ; for vfx
 
 			push b
 			push d
 			; draw a tile on the screen
 			lda level_ram_disk_s_gfx
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)			
+			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
 			pop d
 			pop b
 
@@ -456,7 +456,7 @@ hero_sword_func_door:
 			mvi c, TEMP_BYTE
 			; c - tile_idx in the room_tiledata array
 			ROOM_DECAL_DRAW(__doors_opened_gfx_ptrs, true)
-			
+
 			; draw vfx
 			pop b
 			lxi d, vfx_puff
@@ -515,7 +515,7 @@ hero_sword_func_breakable:
 			push d
 			; draw a tile on the screen
 			lda level_ram_disk_s_gfx
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)			
+			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
 			pop d
 			pop b
 			push b
@@ -531,7 +531,7 @@ hero_sword_func_breakable:
 			lda level_ram_disk_s_gfx
 			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
 			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			
+
 			; draw vfx
 			pop b
 			lxi d, vfx_puff
