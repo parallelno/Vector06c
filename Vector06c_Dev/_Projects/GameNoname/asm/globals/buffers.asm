@@ -70,10 +70,10 @@ RESOURCES_STATUS_ACQUIRED	= $ff
 
 ; data format:
 ; resources_inst_data_ptrs:
-; .loop RESOURCES_UNIQUE_MAX
+; .loop RESOURCES_USED_IN_LEVELS
 ;	.byte - a low byte ptr to resources_inst_data for particular resource
 ; .endloop
-; .byte - a low byte ptr to the next addr after the last resource_NN_inst_data_ptr
+; .byte - a low byte ptr to the next addr after the last element in resources_inst_data
 ; resources_inst_data:
 ; .loop RESOURCES_UNIQUE_MAX
 ;	resource_inst_data:

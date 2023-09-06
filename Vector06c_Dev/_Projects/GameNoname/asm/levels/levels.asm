@@ -59,7 +59,7 @@ level_init:
 			lxi b, monsters_runtime_data_end - monster_runtime_data_sorted
 			call clear_mem
 
-			; setup room resources
+			; setup resources
 			lhld level_resources_inst_data_pptr
 			xchg
 			lxi h, level_ram_disk_s_data
@@ -67,7 +67,7 @@ level_init:
 			lxi b, resources_inst_data_ptrs
 			COPY_FROM_RAM_DISK(RESOURCES_LEN)
 
-			; setup room containers
+			; setup containers
 			lhld level_containers_inst_data_pptr
 			xchg
 			lxi h, level_ram_disk_s_data

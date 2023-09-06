@@ -174,7 +174,7 @@ __level00_lost_coins:
 			.byte 148,44,85,165,0,21,112,0,8,
 
 __level00_resources_inst_data_ptrs:
-			.byte 5, NULL_PTR, NULL_PTR, 13, 19, 
+			.byte 5, 13, 13, 13, 19, 
 __level00_resources_inst_data:
 			.byte 146, 1, 214, 2, 218, 2, 202, 2, 
 			.byte 134, 4, 135, 4, 101, 4, 

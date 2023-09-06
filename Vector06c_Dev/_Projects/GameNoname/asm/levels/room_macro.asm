@@ -91,7 +91,8 @@
 			mov l, m
 			; hl - ptr to the next resource_inst_data
 			; (h<<8 + a) - ptr to resource_inst_data.
-			; make instance counter
+			; make an instance counter
+			; a - a low byte ptr to resources_inst_data for particular resource
 			sub l
 			cma
 			cmc ; make C flag = 0

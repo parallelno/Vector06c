@@ -341,11 +341,11 @@ def export_data(source_j_path, export_data_path):
 		resources_inst_data_ptrs_len = len(resources_sorted) + 1
 
 		for i, tiledata in enumerate(resources_sorted):
+			inst_len = len(resources_sorted[tiledata]) * WORD_LEN							
 			if len(resources_sorted[tiledata]) > 0:
 				asm += str(ptr + resources_inst_data_ptrs_len) + ", "
-			else:
-				asm += NULL_PTR + ", "
-			inst_len = len(resources_sorted[tiledata]) * WORD_LEN
+			else:     
+				asm += str(ptr + inst_len + resources_inst_data_ptrs_len) + ", "				
 			ptr += inst_len			
 				
 		asm += str(ptr + resources_inst_data_ptrs_len) + ", "
@@ -383,12 +383,11 @@ def export_data(source_j_path, export_data_path):
 		ptr = 0
 		containers_inst_data_ptrs_len = len(containers_sorted) + 1
 		for i, tiledata in enumerate(containers_sorted):
+			inst_len = len(containers_sorted[tiledata]) * WORD_LEN
 			if len(containers_sorted[tiledata]) > 0:
 				asm += str(ptr + containers_inst_data_ptrs_len) + ", "
 			else:
-				asm += NULL_PTR + ", "
-
-			inst_len = len(containers_sorted[tiledata]) * WORD_LEN			
+				asm += str(ptr + inst_len + containers_inst_data_ptrs_len) + ", "			
 			ptr += inst_len
 		asm += str(ptr + containers_inst_data_ptrs_len) + ", "
 

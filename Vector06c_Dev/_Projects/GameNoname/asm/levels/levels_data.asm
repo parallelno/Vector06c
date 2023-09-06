@@ -23,15 +23,18 @@
 
 ; ffff == 6, a global item. a hero interacts with it when he steps on it. item_id = d. see buffers.asm->global_items for details
 ;		item_id = 0 - storytelling - an invisible tiledata to open a dialog window
-;		item_id = 1 - key blue
-;		item_id = 2 - key red
-;		item_id = 3 - key green
-;		item_id = 4 - key magma
+;		item_id = 1 - key 0
+;		item_id = 2 - key 1
+;		item_id = 3 - key 2
+;		item_id = 4 - key 3
+;		item_id = 5 - key 4
+;		item_id = 6 - key 5
 
 ; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. resource_id = d. see buffers.asm->resources_inst_data for details
 ;		resource_id == 0 - a coin (tiledata = 7*16+0 = 160)
 ;		resource_id == 1 - a potion blue
 ;		resource_id == 2 - a potion red
+;		resource_id == 3 - clothes
 
 ; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable (a hero and monsters can't step on that tile)
 

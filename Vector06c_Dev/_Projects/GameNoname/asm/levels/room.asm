@@ -304,6 +304,9 @@ room_tiledata_resource_spawn:
 			sta room_decal_draw_ptr_offset+1
 
 			; find a resource
+			; d - room_id
+			; l - resource_id
+			; c - tile_idx
 			FIND_INSTANCE(@picked_up, resources_inst_data_ptrs)
 			; resource is found, means it is not picked up
 			; c = tile_idx
