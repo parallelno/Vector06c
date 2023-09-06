@@ -163,5 +163,5 @@ hero_dead_wait_sparker:
 			lxi h, hero_status_timer
 			dcr m
 			rnz
-			DIALOG_INIT(dialog_init_hero_no_health)
+			jmp trigger_hero_no_health
 			ret

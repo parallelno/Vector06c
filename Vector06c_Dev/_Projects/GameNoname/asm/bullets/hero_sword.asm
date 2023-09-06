@@ -556,32 +556,10 @@ hero_sword_func_triggers:
 			ret
 @game_over:
 			; init a dialog
-			DIALOG_INIT(dialog_init_hero_knocked_his_home_door)
-			ret
+			jmp trigger_hero_knocks_his_home_door
+
 @friends_home_door:
-			; add a key 0
-			lxi h, global_items + ITEM_ID_KEY_0 ; because key 0 item_id addr = global_items
-			; check its status
-			mvi a, ITEM_STATUS_NOT_ACQUIRED
-			cmp m
-			jnz @check_clothes; if it is acquired or used, check clothes item
-
-			; set its status to ITEM_STATUS_ACQUIRED
-			mvi m, ITEM_STATUS_ACQUIRED	
-			; init a dialog
-			jmp dialog_quest_message_init
-
-@check_clothes:
-			lxi h, global_items + ITEM_ID_CLOTHES
-			mvi a, ITEM_STATUS_ACQUIRED
-			cmp m
-			jnz @clothes_used; if it is acquired or used, check clothes item
-			; clothes haven't been returned yet
-			; init a dialog
-			jmp dialog_quest_message_init
-@clothes_used:
-			; clothes were returned once
-			
+			jmp trigger_hero_knocks_his_friend_door
 
 ; draw a sprite into a backbuffer
 ; in:

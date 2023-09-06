@@ -1,39 +1,60 @@
 dialogs_init:
 			jmp dialog_storytelling_init
 
-dialog_empty_callback:
-			ret
-
-dialog_empty_callback_ptr:
-			.word dialog_empty_callback
-
-; init dialog
-; in:
+; init a callback, draw a frame, a text
 ; hl - callback_tbl addr (callback pptr)
-.macro DIALOG_INIT(dialog_callbacks_ptr)
-			lxi h, dialog_callbacks_ptr
-			shld dialog_update + 1
-.endmacro
+; de - text ptr
+; a - global_request
+dialog_init:
+			sta global_request
+
+			call dialog_is_inited
+			rz ; if it is NOP, that means a dialog is already initiated
+
+			A_TO_ZERO(OPCODE_NOP)
+			sta dialog_update
+
+			; store a callback ptr
+			shld dialog_update_callback + 1
+			xchg
+			; hl - text_ptr
+			jmp dialog_draw_frame_text
+
+; check if dialog is already inited
+; it is used to prevent multiple dialog_init calls when a hero
+; hits several trigger tiledatas
+; out:
+; z flag = 1 if a dialog is already initiated
+dialog_is_inited:
+			lda dialog_update
+			ora a ; check if it is NOP
+			ret
 
 ; invoke a dialog callback func
 ; if the callback pptr == NULL_PTR, return
 dialog_update:
-			lhld dialog_empty_callback_ptr
-			pchl
+			ret ; do not change, it is mutable
 
-; call when a dialog step routine is about to go the the next step
-dialog_update_next_step:
-			lhld dialog_update + 1
-			INX_H(2)
-			shld dialog_update + 1
-			ret
+			; check if a fire action is pressed
+			lda action_code
+			ani CONTROL_CODE_FIRE1 | CONTROL_CODE_KEY_SPACE
+			rz
+			xra a
+			sta action_code
 
-dialog_update_stop:
-			lxi h, dialog_empty_callback_ptr
-			shld dialog_update + 1
-			ret
+			; dialog_update_stop
+			mvi a, OPCODE_RET
+			sta dialog_update
+dialog_update_callback:
+			; call a callback
+			jmp dialog_update_callback
 
-dialog_draw_frame:
+
+; draw a frame and a text on the SCR_BUFF3
+; in:
+; hl - text ptr
+dialog_draw_frame_text:
+			push h
 			; mark erased the runtime back data
 			call backs_init
 			; draw a frame
@@ -46,86 +67,16 @@ dialog_draw_frame:
 			mvi c, @pos_tiles_x + @pos_tiles_y * TILE_HEIGHT
 			; b - tiledata
 			; c - tile_idx in the room_tiledata array.			
-			jmp backs_spawn
+			call backs_spawn
 
-; draw a text on the SCR_BUFF3
-; in:
-; hl - text ptr
-dialog_draw_text:
-			push h
 			CALL_RAM_DISK_FUNC(__text_ex_rd_reset_spacing, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			lxi b, $102d	; text pos
 			pop h
+			; hl - text ptr
 			CALL_RAM_DISK_FUNC(__text_ex_rd_scr3, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 
-;===========================================================================
-; dialog when the hero looses all the health
-dialog_init_hero_no_health:
-			.word @init, @check_key
 
-@init:		
-			; disable hero updates
-			mvi a, ACTOR_STATUS_NO_UPDATE
-			sta hero_status
-			call dialog_draw_frame
-			lxi h, __text_no_health
-			call dialog_draw_text
-
-			jmp dialog_update_next_step
-			 
-@check_key:
-			; check if a fire action is pressed
-			lda action_code
-			ani CONTROL_CODE_FIRE1 | CONTROL_CODE_KEY_SPACE
-			rz
-			; it's pressed
-			
-			; requesting a level loading
-			A_TO_ZERO(LEVEL_FIRST)
-			sta level_idx
-			mvi a, GAME_REQ_LEVEL_INIT
-			sta global_request
-			; restore a hero health
-			mvi a, HERO_HEALTH_MAX
-			sta hero_health
-			jmp dialog_update_stop
-
-;===========================================================================
-; dialog when the hero knocked his home door. 
-; The game ends after showing the dialog
-dialog_init_hero_knocked_his_home_door:
-			.word @init, @check_key
-
-@init:		
-			mvi a, GAME_REQ_PAUSE
-			sta global_request
-			call dialog_draw_frame
-			lxi h, __text_knocked_his_home_door
-			call dialog_draw_text
-
-			jmp dialog_update_next_step
-			 
-@check_key:
-			; check if a fire action is pressed
-			lda action_code
-			ani CONTROL_CODE_FIRE1 | CONTROL_CODE_KEY_SPACE
-			rz
-			; it's pressed
-			
-			; requesting a level loading
-			mvi a, GAME_REQ_END_HOME
-			sta global_request
-			jmp dialog_update_stop
-
-;===========================================================================
-; dialog when the hero knocked his friend door
-; A hero gets a key 0 to open he backyard
-dialog_quest_message_init:
-            lxi h, @ptr_to_3
-			jmp dialog_quest_message
-@ptr_to_3:
-			.byte 3
 ;===========================================================================
 ; dialog when a hero picks up the global item called TILEDATA_STORYTELLING
 ; it proceeds only if the dialog wasn't shown before
@@ -151,7 +102,6 @@ dialog_storytelling_texts_ptrs:
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_1, __text_game_story_farm_fence)
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_2, __text_game_story_road_to_friends_home)
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_3, __text_game_story_friends_home)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_3, ROOM_ID_3, __text_knocked_his_friend_door) ; this is a quest dialog when a hero knocks his friend's door
 @end_data:
 STORYTELLING_TEXT_COUNT = (@end_data - dialog_storytelling_texts_ptrs) / STORYTELLING_TEXT_ENTITY_LEN
 
@@ -201,37 +151,22 @@ dialog_quest_message:
 			mvi m, STORYTELLING_TEXT_STATUS_OLD
 			push h
 
-			mvi a, GAME_REQ_PAUSE
-			sta global_request
-			
-			; draw a dialog
-			call dialog_draw_frame
-
 			; get the text ptr
 			pop h
 			inx h
 			mov e, m
 			inx h
 			mov d, m
-			xchg
-			; hl - text pptr
-			call dialog_draw_text
 
-			DIALOG_INIT(dialog_storytelling_steps)
-			ret
+			; de - text pptr
+			lxi h, dialog_callback_room_redraw
+			mvi a, GAME_REQ_PAUSE
+			jmp dialog_init
 
-dialog_storytelling_steps:
-			.word @check_key
-
-@check_key:
-			; check if a fire action is pressed
-			lda action_code
-			ani CONTROL_CODE_FIRE1 | CONTROL_CODE_KEY_SPACE
-			rz
-			; it's pressed
+dialog_callback_room_redraw:
 			mvi a, GAME_REQ_ROOM_DRAW
 			sta global_request
 			; TODO: restore breakables the same configuraton they were created
-			jmp dialog_update_stop
+			ret
 
 

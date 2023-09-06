@@ -65,9 +65,9 @@ chunk_bank3_addr8000_0:
 ;                             sound_rd [793], song01 [8575], 
 ; bank3 addr0    [20092 free] description: 
 ;                             level00_gfx [5626], level01_gfx [6794], 
-; bank3 addr8000 [ 2621 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering) 
-;                             global_consts_rd [0], sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], text_ex_rd [389], text_rd [2492], game_score_data_rd [206], 
-; [132599 total/32377 compressed][75532 total free]
+; bank3 addr8000 [ 2376 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering) 
+;                             global_consts_rd [0], sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], text_ex_rd [389], text_rd [2737], game_score_data_rd [206], 
+; [132844 total/32423 compressed][75287 total free]
 
 .if BUFFERS_START_ADDR < ram_disk_data
 			.error "the programm is too big. It overlaps with tables at the end of RAM"

@@ -24,6 +24,7 @@
 .include "asm\\levels\\room.asm"
 .include "asm\\levels\\backs.asm"
 .include "asm\\ui\\ui.asm"
+.include "asm\\triggers.asm"
 
 main_game:
 			call game_init

@@ -127,6 +127,21 @@ __text_knocked_his_friend_door:
 			TEXT("crack of dawn. Be a sweetie and fetch dried", LINE_BREAK)
 			TEXT("clothes from the backyard, and I'll give you", LINE_BREAK)
 			TEXT("a freshly baked popsicle pie, deal?")
+__text_knocked_his_friend_door_no_clothes:		
+			TEXT("No clothes - no pie!", LINE_BREAK)
+			TEXT("No clothes - no pie!", LINE_BREAK)
+			TEXT("No clothes - no pie!", LINE_BREAK)
+			TEXT("No freshly baked popsicle pie!")
+__text_knocked_his_friend_door_clothes_returns:		
+			TEXT("Pie is yours!", LINE_BREAK)
+			TEXT("Pie is yours!", LINE_BREAK)
+			TEXT("Pie is yours!", LINE_BREAK)
+			TEXT("Freshly baked popsicle pie is yours!")
+__text_knocked_his_friend_door_clothes_returned:
+			TEXT("Again!", LINE_BREAK)
+			TEXT("Pie is yours!", LINE_BREAK)
+			TEXT("Pie is yours!", LINE_BREAK)
+			TEXT("Freshly baked popsicle pie is yours!")			
 
 ;===================================================================================
 ; storytelling
