@@ -261,7 +261,11 @@ hero_cont_func_chest_sword:
 			lxi h, hero_weapon
 			ora m
 			mov m, a
-			ret
+			; init a dialog
+			mvi a, GAME_REQ_PAUSE
+			lxi h, dialog_callback_room_redraw
+			lxi d, __text_hero_gets_sword
+			jmp dialog_init
 
 hero_cont_func_chest_big:
 hero_cont_func_chest_weapon0:

@@ -109,7 +109,6 @@ __text_game_stats:
 ;===================================================================================
 ; dialogs
 ;===================================================================================
-; no health
 __text_no_health:
 			TEXT("The cold and the darkness of corridors rev-", LINE_BREAK)
 			TEXT("ealed a mysterious figure. Two strong hands", LINE_BREAK)
@@ -134,7 +133,11 @@ __text_knocked_his_friend_door_clothes_returns:
 			TEXT("Sweetie, you're the best helper in the world!", LINE_BREAK)
 			TEXT("Here's a fresh-baked popsicle pie, piping chill.", LINE_BREAK)
 			TEXT("Hurry and take it home before it warms up!")			
-
+__text_hero_gets_sword:
+			TEXT("I don't believe my eyes, It is a legendary", LINE_BREAK)
+			TEXT("sword, no doubt about it! Who would have", LINE_BREAK)
+			TEXT("imagined my friend left it for me? This sharpy", LINE_BREAK)
+			TEXT("little boy will free my friend in no time!")
 ;===================================================================================
 ; storytelling
 ;===================================================================================
@@ -171,6 +174,7 @@ __text_game_story_friends_secret_place:
 			TEXT("the place! I worry my friend can be in a real", LINE_BREAK)
 			TEXT("danger! I gonna find and rescue him no matter", LINE_BREAK)
 			TEXT("the cost!")
+
 /*
 			TEXT("Who's that dude on my road?", LINE_BREAK)
 			TEXT("Not cool with his mega-spooky vibe, for sure.", LINE_BREAK)

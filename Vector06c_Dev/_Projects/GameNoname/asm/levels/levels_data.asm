@@ -14,7 +14,9 @@
 ;		monster_id == 2 - burner (tiledata = 18)
 ;		monster_id == 3 - knight horizontal walk (tiledata = 19)
 ;		monster_id == 4 - knight vertical walk (tiledata = 20)
-;		monster_id == 5 - monster chest (tiledata = 21)
+;		monster_id == 5 - burner that run to the right
+;		monster_id == 6 - burner that run to up
+;		monster_id == 7 - monster chest (tiledata = 21)
 
 ; ffff == 2, teleport to 0-15 room_id, room_id = d
 ; ffff == 3, teleport to 16-31 room_id, room_id = d+16
@@ -29,6 +31,8 @@
 ;		item_id = 4 - key 3
 ;		item_id = 5 - key 4
 ;		item_id = 6 - key 5
+; 		TODO: there should be invisible items like ones below
+;		item_id == 15 - reserved for burner_right and burner_up state
 
 ; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. resource_id = d. see buffers.asm->resources_inst_data for details
 ;		resource_id == 0 - a coin (tiledata = 7*16+0 = 160)

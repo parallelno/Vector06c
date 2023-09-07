@@ -1,27 +1,27 @@
-; hl points to actorStatusTimer
+; hl points to actor_status_timer
 ; out:
-; hl points to actorPosX+1
-.macro ACTOR_UPDATE_MOVEMENT(actorStatusTimer, actorSpeedY)
- 			; hl - ptr to actorStatusTimer
+; hl points to actor_pos_x+1
+.macro ACTOR_UPDATE_MOVEMENT(actor_status_timer, actorSpeedY)
+ 			; hl - ptr to actor_status_timer
 			; advance hl to actorSpeedY+1
-			LXI_B_TO_DIFF(actorSpeedY+1, actorStatusTimer)
+			LXI_B_TO_DIFF(actorSpeedY+1, actor_status_timer)
 			dad b
-			; bc <- speedY
+			; bc <- speed_y
 			mov b, m
 			dcx h
 			mov c, m
 			dcx h
-			; stack <- speedX
+			; stack <- speed_x
 			mov d, m
 			dcx h
 			mov e, m
 			dcx h
 			push d
-			; de <- posY
+			; de <- pos_y
 			mov d, m
 			dcx h
 			mov e, m
-			; (posY) <- posY + speedY
+			; (pos_y) <- pos_y + speed_y
 			xchg
 			dad b
 			xchg
@@ -29,12 +29,12 @@
 			inx h 
 			mov m, d
 			DCX_H(2)
-			; hl points to speedX+1
-			; de <- posX
+			; hl points to speed_x+1
+			; de <- pos_x
 			mov d, m
 			dcx h
 			mov e, m
-			; (posX) <- posX + speedX
+			; (pos_x) <- pos_x + speed_x
 			xchg
 			pop b
 			dad b
@@ -45,48 +45,48 @@
 .endmacro
 
 ; in:
-; hl points to actorStatusTimer
+; hl points to actor_status_timer
 ; out:
-; hl points to actorPosY+1
-.macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actorStatusTimer, actorPosX, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, collision_handler) 
-			LXI_B_TO_DIFF(actorPosX, actorStatusTimer)
+; hl points to actor_pos_y+1
+.macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actor_status_timer, actor_pos_x, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, collision_handler) 
+			LXI_B_TO_DIFF(actor_pos_x, actor_status_timer)
 			dad b
-			push h ; (stack) <- posX ptr, to restore it in @applyNewPos
-			; bc <- posX
+			push h ; (stack) <- pos_x ptr, to restore it in @apply_new_pos
+			; bc <- pos_x
 			mov c, m
 			inx h
 			mov b, m
 			inx h
-			; stack <- posY
+			; stack <- pos_y
 			mov e, m
 			inx h
 			mov d, m
 			inx h
 			push d
-			; de <- speedX
+			; de <- speed_x
 			mov e, m
 			inx h
 			mov d, m
 			inx h
-			; (newPosX) <- posX + speedX
+			; (new_pos_x) <- pos_x + speed_x
 			xchg
 			dad b
-			shld @newPosX+1
-			mov a, h ; posX + speedX for checking a collision
+			shld @new_pos_x + 1
+			mov a, h ; pos_x + speed_x for checking a collision
 			xchg
-			; hl points to speedY
-			; de <- speedY
+			; hl points to speed_y
+			; de <- speed_y
 			mov e, m
 			inx h
 			mov d, m
-			; (newPosY) <- posY + speedY
+			; (new_pos_y) <- pos_y + speed_y
 			xchg
 			pop b
 			dad b
-			shld @newPosY+1
-			; a - posX + speedX
-			; hl - posY + speedY
-			; de - points to speedY+1
+			shld @new_pos_y + 1
+			; a - pos_x + speed_x
+			; hl - pos_y + speed_y
+			; de - points to speed_y+1
 
 			; check the collision tiles
 			
@@ -111,17 +111,17 @@
 			ani TILEDATA_COLLIDABLE
 			jnz collision_handler
 
-@applyNewPos:
+@apply_new_pos:
 			pop h
-			; hl points to posX
-@newPosX:	lxi d, TEMP_WORD
-@newPosY:	lxi b, TEMP_WORD
-			; store a new posX
+			; hl points to pos_x
+@new_pos_x:	lxi d, TEMP_WORD
+@new_pos_y:	lxi b, TEMP_WORD
+			; store a new pos_x
 			mov m, e
 			inx h
 			mov m, d
 			inx h
-			; store a new posY
+			; store a new pos_y
 			mov m, c
 			inx h
 			mov m, b
