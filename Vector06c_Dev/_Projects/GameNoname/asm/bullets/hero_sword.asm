@@ -347,19 +347,17 @@ hero_sword_func_container:
 			lxi h, hero_cont_func_tbl
 @restore_container_id:
 			mvi a, TEMP_BYTE
+			mov e, a ; temp
+			HL_TO_AX4_PLUS_INT16(hero_cont_func_tbl)
+			push h
 
 			; add score points
-			push psw
-			mov e, a
+			; e - container_id
 			mvi c, TILEDATA_FUNC_ID_CONTAINERS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE | __RAM_DISK_M_TEXT_EX)
 			call game_ui_draw_score
-			pop psw
-
-			ADD_A(2) ; container_id to JMP_4 ptr
-			mov c, a
-			mvi b, 0
-			dad b
+			pop h
+			; hl - a container handler func ptr
 			pchl ; run a container handler
 
 ; in:

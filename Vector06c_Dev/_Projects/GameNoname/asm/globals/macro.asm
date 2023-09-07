@@ -203,7 +203,7 @@
 ; bc = a * 2 + int16_const
 ; cpuc = 40
 .macro BC_TO_AX2_PLUS_INT16(int16_const)
-			rlc
+			add a
 			adi <int16_const
 			mov c, a
 			aci >int16_const
@@ -213,7 +213,7 @@
 ; de = a * 2 + int16_const
 ; cpuc = 40
 .macro DE_TO_AX2_PLUS_INT16(int16_const)
-			rlc
+			add a
 			adi <int16_const
 			mov e, a
 			aci >int16_const
@@ -223,7 +223,7 @@
 ; hl = a * 2 + int16_const
 ; cpuc = 40
 .macro HL_TO_AX2_PLUS_INT16(int16_const)
-			rlc
+			add a
 			adi <int16_const
 			mov l, a
 			aci >int16_const
@@ -231,8 +231,9 @@
 			mov h, a
 .endmacro
 
+; cpuc = 44 
 .macro HL_TO_AX4_PLUS_INT16(int16_const)
-			RLC_(2)
+			ADD_A(2)
 			adi <int16_const
 			mov l, a
 			aci >int16_const

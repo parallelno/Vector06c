@@ -80,7 +80,7 @@ hero_res_func_tbl:
 
 ; funcs to handle the container pick up process. more info is in level_data.asm->room_tiledata
 hero_cont_func_tbl:
-			JMP_4( hero_cont_func_chest_small)	; container_id == 1
+			JMP_4( hero_cont_func_chest_sword)	; container_id == 1
 			JMP_4( hero_cont_func_chest_big)	; container_id == 2
 			JMP_4( hero_cont_func_chest_weapon0); container_id == 3
 			RET_4()								; container_id == 4

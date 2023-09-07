@@ -6,7 +6,7 @@
 
 
 hero_game_init:
-			A_TO_ZERO(HERO_NO_WEAPON)
+			A_TO_ZERO(HERO_WEAPON_NONE)
 			sta hero_weapon
 			mvi a, HERO_HEALTH_MAX
 			sta hero_health			

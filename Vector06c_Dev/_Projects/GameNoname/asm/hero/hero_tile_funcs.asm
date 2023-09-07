@@ -255,7 +255,14 @@ hero_res_func_clothes:
 			inr m
 			ret
 
-hero_cont_func_chest_small:
+hero_cont_func_chest_sword:
+            ; acquire a sword
+			mvi a, HERO_WEAPON_SWORD
+			lxi h, hero_weapon
+			ora m
+			mov m, a
+			ret
+
 hero_cont_func_chest_big:
 hero_cont_func_chest_weapon0:
 			ret
