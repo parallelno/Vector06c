@@ -201,8 +201,7 @@ hero_sword_update:
 			; check enemies-attk01 sprite collision
 			; hl - ptr to bullet_anim_ptr+1
 			; advance hl to bullet_pos_x+1
-			LXI_B_TO_DIFF(bullet_pos_x+1, bullet_anim_ptr+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(bullet_pos_x+1, bullet_anim_ptr+1)
 			; add a collision offset
 			mov d, m
 			INX_H(2)
@@ -218,8 +217,7 @@ hero_sword_update:
 			; check enemies-attk01 sprite collision
 			; hl - ptr to bullet_anim_ptr+1
 			; advance hl to bullet_pos_x+1
-			LXI_B_TO_DIFF(bullet_pos_x+1, bullet_anim_ptr+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(bullet_pos_x+1, bullet_anim_ptr+1)
 			; add a collision offset
 			mov d, m
 			INX_H(2)
@@ -244,8 +242,7 @@ hero_sword_update:
 			jnc @check_tiledata
 
 			; advance hl to monster_impacted_ptr
-			LXI_B_TO_DIFF(monster_impacted_ptr, monster_update_ptr+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_impacted_ptr, monster_update_ptr+1)
 			mov e, m
 			inx h
 			mov d, m

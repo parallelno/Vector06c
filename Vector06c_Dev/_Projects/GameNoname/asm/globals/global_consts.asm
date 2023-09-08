@@ -205,9 +205,9 @@ SCORES_MAX	= 10
 SECRET_ENDING_HOME	= 1
 SECRETS_MAX = 16
 
-ITEM_ID_KEY_0	= 1
-
-RES_ID_CLOTHES	= 2
+ITEM_ID_KEY_0			= 1
+ITEM_ID_BURNER_QUEST	= 15
+RES_ID_CLOTHES			= 2
 ;===========================================================================
 ; text
 LINE_BREAK	= $6a ;'\n'

@@ -1,4 +1,4 @@
-	; 
+	;
 HERO_RUN_SPEED		= $0200 ; low byte is a subpixel speed, high byte is a speed in pixels
 HERO_RUN_SPEED_N	= $ffff - HERO_RUN_SPEED + 1
 HERO_RUN_SPEED_D	= $016a ; for diagonal moves
@@ -52,5 +52,5 @@ HERO_HEALTH_MAX = 8
 HERO_COLLISION_WIDTH	= 15
 HERO_COLLISION_HEIGHT	= 11
 
-HERO_WEAPON_NONE			= 0
-HERO_WEAPON_SWORD       = 1<<7
+HERO_WEAPON_NONE	= 0
+HERO_WEAPON_SWORD	= 1<<7

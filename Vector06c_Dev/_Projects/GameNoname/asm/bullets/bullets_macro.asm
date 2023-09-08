@@ -23,8 +23,7 @@
 			; tmpA <- c
 			mov a, c
 			; advance to bullet_anim_ptr
-			LXI_B_TO_DIFF(bullet_anim_ptr, bullet_pos_y+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(bullet_anim_ptr, bullet_pos_y+1)
 			mov b, m
 			inx h
 			push h
@@ -44,8 +43,7 @@
 			inx h
 			mov m, b
 			; advance to bullet_erase_wh
-			LXI_B_TO_DIFF(bullet_erase_wh, bullet_erase_scr_addr+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(bullet_erase_wh, bullet_erase_scr_addr+1)
 			; store a width and a height into bullet_erase_wh
 			mov m, e
 			inx h
@@ -69,8 +67,7 @@
 			; hl points to bullet_anim_ptr
 			; TODO: check hero-bullet collision not every frame			
 			; advance hl to bullet_pos_x
-			LXI_B_TO_DIFF(bullet_pos_x+1, bullet_anim_ptr)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(bullet_pos_x+1, bullet_anim_ptr)
 			; horizontal check
 			mov c, m ; posX
 			lda hero_pos_x+1

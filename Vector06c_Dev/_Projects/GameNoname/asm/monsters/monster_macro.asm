@@ -13,8 +13,7 @@
 			mov a, c
 
 			; advance hl to monster_anim_ptr
-			LXI_B_TO_DIFF(monster_anim_ptr, monster_pos_y+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_pos_y+1)
 			mov b, m
 			inx h
 			push h
@@ -34,8 +33,7 @@
 			inx h
 			mov m, b
 			; advance hl to monster_erase_wh
-			LXI_B_TO_DIFF(monster_erase_wh, monster_erase_scr_addr+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_erase_wh, monster_erase_scr_addr+1)
 			; store a width and a height into monster_erase_wh
 			mov m, e
 			inx h
@@ -52,8 +50,7 @@
 			; hl points to monster_anim_ptr
 			; TODO: check hero-monster collision not every frame
 			; advance hl to monster_pos_x
-			LXI_B_TO_DIFF(monster_pos_x+1, monster_anim_ptr)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_pos_x+1, monster_anim_ptr)
 			; horizontal check
 			mov c, m ; posX
 			lda hero_pos_x+1

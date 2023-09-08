@@ -147,16 +147,14 @@ cursor_update:
 
 			; hl points to bullet_pos_y+1
 			; advance hl to bullet_anim_timer
-			LXI_B_TO_DIFF(bullet_anim_timer, bullet_pos_y+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(bullet_anim_timer, bullet_pos_y+1)
 			mvi a, CURSOR_ANIM_SPEED_MOVE
 			call actor_anim_update
 			ret
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			LXI_B_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(bullet_update_ptr+1, bullet_status_timer)
 			jmp actor_destroy
 @vfx_spawn_rate:
 			.byte VFX_SPAWN_RATE

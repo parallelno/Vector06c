@@ -207,29 +207,25 @@ scythe_update:
 			
 			; hl points to bullet_pos_y+1
 			; advance hl to bullet_anim_timer
-			LXI_B_TO_DIFF(bullet_anim_timer, bullet_pos_y+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(bullet_anim_timer, bullet_pos_y+1)
 			mvi a, SCYTHE_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, SCYTHE_DAMAGE)	
 @dieAfterDamage:
 			; advance hl to bullet_update_ptr+1
-			LXI_B_TO_DIFF(bullet_update_ptr+1, bullet_pos_y+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(bullet_update_ptr+1, bullet_pos_y+1)
 			jmp actor_destroy
 @setBounceAfterTileCollision:
 			pop h
 			; hl points to posX
 			; advance hl to bullet_status_timer
-			LXI_B_TO_DIFF(bullet_status_timer, bullet_pos_x)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(bullet_status_timer, bullet_pos_x)
 @set_bounce:
 			; hl - ptr to bullet_status_timer
 			; advance hl to bullet_status
 			dcx h
 			mvi m, SCYTHE_STATUS_MOVE_BOUNCE
 			; advance hl to bullet_speed_x
-			LXI_B_TO_DIFF(bullet_speed_x, bullet_status)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(bullet_speed_x, bullet_status)
 			mov a, m
 			inx h
 			ora m
@@ -264,8 +260,7 @@ scythe_update:
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			LXI_B_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(bullet_update_ptr+1, bullet_status_timer)
 			jmp actor_destroy
 
 ; draw a sprite into a backbuffer

@@ -173,6 +173,17 @@
 		.endif
 .endmacro
 
+.macro HL_ADVANCE_BY_DIFF_B(offset_to, offset_from)
+		LXI_B_TO_DIFF(offset_to, offset_from)
+		dad b
+.endmacro
+
+.macro HL_ADVANCE_BY_DIFF_D(offset_to, offset_from)
+		LXI_D_TO_DIFF(offset_to, offset_from)
+		dad d
+.endmacro
+
+
 .macro LXI_H_NEG(val)
 		lxi h, $ffff - val + 1
 .endmacro

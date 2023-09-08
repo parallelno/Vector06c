@@ -127,8 +127,7 @@ skeleton_update_detect_hero_init:
 			mvi m, SKELETON_STATUS_DETECT_HERO
 			inx h
 			mvi m, SKELETON_STATUS_DETECT_HERO_TIME
-			LXI_B_TO_DIFF(monster_anim_ptr, monster_status_timer)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_status_timer)
 			mvi m, <skeleton_idle
 			inx h
 			mvi m, >skeleton_idle
@@ -142,8 +141,7 @@ skeleton_update_detect_hero:
 			jz @set_move_init
 @check_mob_hero_distance:
 			; advance hl to monster_pos_x+1
-			LXI_B_TO_DIFF(monster_pos_x+1, monster_status_timer)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_pos_x+1, monster_status_timer)
 			; check hero-monster posX diff
 			lda hero_pos_x+1
 			sub m
@@ -172,28 +170,24 @@ skeleton_update_detect_hero:
 @detect_hero:
 			; hl = monster_pos_y+1
 			; advance hl to monster_status
-			LXI_B_TO_DIFF(monster_status, monster_pos_y+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_status, monster_pos_y+1)
 			mvi m, SKELETON_STATUS_SHOOT_PREP
 			inx h
 			mvi m, SKELETON_STATUS_SHOOT_PREP_TIME
 			; advance hl to monster_anim_ptr
-			LXI_B_TO_DIFF(monster_anim_ptr, monster_status_timer)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_status_timer)
 			mvi m, <skeleton_idle
 			inx h
 			mvi m, >skeleton_idle
 			ret
 @update_anim_hero_detect_x:
 			; advance hl to monster_anim_timer
-			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_x+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_x+1)
 			mvi a, SKELETON_ANIM_SPEED_DETECT_HERO
 			jmp skeleton_update_anim_check_collision_hero
 @update_anim_hero_detect_y:
 			; advance hl to monster_anim_timer
-			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_y+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_y+1)
 			mvi a, SKELETON_ANIM_SPEED_DETECT_HERO
 			jmp skeleton_update_anim_check_collision_hero
 
@@ -260,8 +254,7 @@ skeleton_update_move_init:
 			inx h
 			mov m, c
 @set_anim:
-			LXI_B_TO_DIFF(monster_anim_ptr, monster_speed_y+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_speed_y+1)
 			; a = rnd
 			ora a
 			; if rnd is positive (up or right movement), then play skeleton_run_r anim
@@ -288,8 +281,7 @@ skeleton_update_move:
 			
 			; hl points to monster_pos_y+1
 			; advance hl to monster_anim_timer
-			LXI_B_TO_DIFF(monster_anim_timer, monster_pos_y+1)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_y+1)
 			mvi a, SKELETON_ANIM_SPEED_MOVE
 			jmp skeleton_update_anim_check_collision_hero
 
@@ -297,8 +289,7 @@ skeleton_update_move:
 			pop h
 			; hl points to monster_pos_x
 			; advance hl to monster_status
-			LXI_B_TO_DIFF(monster_status, monster_pos_x)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_status, monster_pos_x)
 			mvi m, SKELETON_STATUS_MOVE_INIT
 			inx h
 			mvi m, SKELETON_STATUS_MOVE_TIME
@@ -318,8 +309,7 @@ skeleton_update_relax:
 			dcr m
 			jz @set_move_init
 			; advance hl to monster_anim_timer
-			LXI_B_TO_DIFF(monster_anim_timer, monster_status_timer)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_status_timer)
 			mvi a, SKELETON_ANIM_SPEED_RELAX
 			jmp skeleton_update_anim_check_collision_hero
  @set_move_init:
@@ -337,8 +327,7 @@ skeleton_update_shoot_prep:
 			dcr m
 			jz @set_shoot
 			; advance hl to monster_anim_timer
-			LXI_B_TO_DIFF(monster_anim_timer, monster_status_timer)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_status_timer)
 			mvi a, SKELETON_ANIM_SPEED_SHOOT_PREP
 			jmp skeleton_update_anim_check_collision_hero
  @set_shoot:
@@ -355,8 +344,7 @@ skeleton_update_shoot:
 			inx h
 			mvi m, SKELETON_STATUS_RELAX_TIME
 
-			LXI_B_TO_DIFF(monster_speed_x, monster_status_timer)
-			dad b
+			HL_ADVANCE_BY_DIFF_B(monster_speed_x, monster_status_timer)
 			mov a, m
 			inx h
 			ora m
