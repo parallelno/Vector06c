@@ -175,6 +175,21 @@ __text_game_story_friends_secret_place:
 			TEXT("danger! I gonna find and rescue him no matter", LINE_BREAK)
 			TEXT("the cost!")
 
+__text_game_story_crossroad:
+			TEXT("I'm shaken! A terrible monster and the corpses", LINE_BREAK)
+			TEXT("of our beloved villagers! It's clear who the", LINE_BREAK)
+			TEXT("culprit is here! You better be trembling!", LINE_BREAK)
+			TEXT("I'm going to teach you a lesson!!!")
+
+__text_game_story_loop:
+			TEXT("You better watch out, little rolling furry", LINE_BREAK)
+			TEXT("burner, because there's no escaping from me!")
+
+__text_game_story_lost_coins:
+			TEXT("Wow, wow, wow!!! My intuition never fails me!", LINE_BREAK)
+			TEXT("I just knew there had to be treasures on this", LINE_BREAK)
+			TEXT("heroic journey! Everyone, look at my pockets,", LINE_BREAK)
+			TEXT("coins are about to overflow them!")
 /*
 			TEXT("Who's that dude on my road?", LINE_BREAK)
 			TEXT("Not cool with his mega-spooky vibe, for sure.", LINE_BREAK)
