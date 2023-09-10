@@ -1,6 +1,6 @@
 ;=========================================================
-; This is non-gameplay bullet
-; It is used for one of the hero death 
+; This is a non-gameplay bullet
+; It is used for one of the hero death visual sequence
 ; statuses to spawn sparks along the line
 ;=========================================================
 
@@ -46,8 +46,9 @@ VFX_SPAWN_RATE = 5
 ; movement speed based on the hero pos. it goes to that direction.
 sparker_init:
 			lxi h, bullet_update_ptr+1
-			mvi a, BULLET_RUNTIME_DATA_LEN
+			mvi e, BULLET_RUNTIME_DATA_LEN
 			call actor_get_empty_data_ptr
+			rnz ; return because too many objects
 
 			; hl - ptr to bullet_update_ptr+1
 			; advance hl to bullet_update_ptr

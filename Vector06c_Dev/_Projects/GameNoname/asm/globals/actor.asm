@@ -75,9 +75,9 @@ actor_anim_update:
 ; z flag != 1 if no memory for a new entity
 ; uses:
 ; hl, de, a
+; TODO: optimize. store hl into lastRemovedMonsterRuntimeDataPtr
 actor_get_empty_data_ptr:
-			sta @len1 + 1
-			sta @next_data + 1
+			mvi d, 0
 @loop:
 			mov a, m
 			cpi ACTOR_RUNTIME_DATA_EMPTY
@@ -85,29 +85,23 @@ actor_get_empty_data_ptr:
 			rz
 			jc @next_data
 			cpi ACTOR_RUNTIME_DATA_LAST
-			jnz @too_many_objects
-			; it is the end of the last monster data
+			rnz ; too many objects
+			; we reached the end of the last existing actor's runtime data
+			; there is at least a room for one more monster
+
+			; there are only to cases left
+			; if it is the last possible monster, then ACTOR_RUNTIME_DATA_END is stored after that data
+			; in other case ACTOR_RUNTIME_DATA_LAST is stored after that data
 			xchg
-@len1:
-			lxi h, TEMP_WORD
 			dad d
-			mvi a, ACTOR_RUNTIME_DATA_END
-			cmp m
+			mvi a, ACTOR_RUNTIME_DATA_LAST
+			ora m
+			mov m, a
 			xchg
-			; if the next after the last data is end, then just return
-			rz
-			; if not the end, then set it as the last
-			xchg
-			mvi m, ACTOR_RUNTIME_DATA_LAST
-			xchg
-			; TODO: optimize. store hl into lastRemovedMonsterRuntimeDataPtr
-			ret
-@too_many_objects:
-			; return bypassing a func that called this func
-			pop psw
+			; if the next byte after the last actor's runtime data is ACTOR_RUNTIME_DATA_END, then just return
+			cmp a ; to set z flag
 			ret
 @next_data:
-			lxi d, TEMP_WORD
 			dad d
 			jmp @loop
 

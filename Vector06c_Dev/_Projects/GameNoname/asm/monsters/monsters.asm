@@ -54,9 +54,9 @@ monster_init:
 			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_monsters, @ret)
 
 			lxi h, monster_update_ptr+1
-			mvi a, MONSTER_RUNTIME_DATA_LEN
+			mvi e, MONSTER_RUNTIME_DATA_LEN
 			call actor_get_empty_data_ptr
-			;rnz ; no memory for a new entity	
+			jnz restore_sp ; return because too many objects
 			
 			; hl - ptr to monster_update_ptr+1
 			; advance hl to monster_update_ptr

@@ -28,8 +28,9 @@ backs_init:
 ; a - tiledata that will be saved back into room_tiledata
 backs_spawn:
 			lxi h, back_anim_ptr + 1
-			mvi a, BACK_RUNTIME_DATA_LEN
+			mvi e, BACK_RUNTIME_DATA_LEN
 			call actor_get_empty_data_ptr
+			rnz ; return because too many objects
 
 			; hl - ptr to back_update_ptr+1
 			; advance hl to back_anim_ptr

@@ -42,8 +42,9 @@ CURSOR_ANIM_SPEED_MOVE	= 30
 ; movement speed based on the hero pos. it goes to that direction.
 cursor_init:
 			lxi h, bullet_update_ptr+1
-			mvi a, BULLET_RUNTIME_DATA_LEN
+			mvi e, BULLET_RUNTIME_DATA_LEN
 			call actor_get_empty_data_ptr
+			rnz ; return because too many objects
 
 			; hl - ptr to bullet_update_ptr+1
 			; advance hl to bullet_update_ptr
