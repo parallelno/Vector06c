@@ -69,10 +69,10 @@ actor_anim_update:
 ; look up an empty spot in the actor (monster, bullet, back, fx) runtime data
 ; in:
 ; hl - ptr to runtime_data+1, ex monster_update_ptr+1
-; a - RUNTIME_DATA_LEN
+; e - RUNTIME_DATA_LEN
 ; return:
 ; hl - a ptr to an empty actor runtime_data+1
-; CRITICAL: if entities're to many, it returns bypassing the caller func. So, do not use PUSH before calling this func
+; z flag != 1 if no memory for a new entity
 ; uses:
 ; hl, de, a
 actor_get_empty_data_ptr:

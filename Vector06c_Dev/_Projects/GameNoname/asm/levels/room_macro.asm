@@ -46,6 +46,8 @@
 			jmp @loop
 .endmacro
 
+; use:
+; hl, e, a
 .macro ROOM_SPAWN_RATE_CHECK(rate_ptr, doNotSpawn)
 			; check rooms_break_rate if it needs to spawn
 			lda room_id

@@ -100,15 +100,17 @@ STORYTELLING_TEXT_ENTITY_LEN = 4
 
 ; this array contains all dialogs statues (shown, not shown) and text ptrs
 dialog_storytelling_texts_ptrs:
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_0, __text_game_story_home)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_1, __text_game_story_farm_fence)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_2, __text_game_story_road_to_friends_home)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_3, __text_game_story_friends_home)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_4, __text_game_story_friends_backyard)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_5, __text_game_story_friends_secret_place)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_6, __text_game_story_crossroad)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_9, __text_game_story_loop)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_12, __text_game_story_lost_coins)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_0, __text_storytelling_home)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_1, __text_storytelling_farm_fence)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_2, __text_storytelling_road_to_friends_home)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_3, __text_storytelling_friends_home)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_4, __text_storytelling_friends_backyard)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_5, __text_storytelling_friends_secret_place)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_6, __text_storytelling_crossroad)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_9, __text_storytelling_loop)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_12, __text_storytelling_lost_coins)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_7, __text_storytelling_farm_entrance)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_8, __text_storytelling_farm_storage)
 @end_data:
 STORYTELLING_TEXT_COUNT = (@end_data - dialog_storytelling_texts_ptrs) / STORYTELLING_TEXT_ENTITY_LEN
 

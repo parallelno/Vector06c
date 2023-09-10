@@ -88,9 +88,115 @@ KNIGHT_DETECT_HERO_DISTANCE = 60
 ; out:
 ; a = 0
 knight_init:
-			MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
-			ret
 
+/*
+			; check a monster_id
+			; if it is a KNIGHT_QUEST_ID do an additional logic
+			mvi b, KNIGHT_ID * 4
+			cmp b
+			jz @init ; if it is a KNIGHT_ID go init it, then return
+
+			mov b, a ; temp
+
+			; when a hero grad more than aome amount of cabbages,
+			; he gets a special item item_id_fart and a weapon that looks like
+			; farting that lasts some time. when a hero comes over the 
+			; a monster with a monster_id = KNIGHT_QUEST_ID a monster runs 
+			; away to the right size of the screen.
+			
+			; check if a hero has item_id_fart
+			lda global_items + ITEM_ID_KNIGHT_QUEST - 1; because the first item_id = 1
+			cpi ITEM_STATUS_USED
+			rz ; return if item_id_fart was used
+
+			mov a, b
+			; a - monster_id * 4
+			call @init
+
+			; hl - ptr to monster_pos_y + 1
+			; advance hl to monster_anim_ptr
+			; set run_r anim
+			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_pos_y + 1)
+			mvi m, <knight_defence_r
+			inx h
+			mvi m, >knight_defence_r
+
+			; advance hl to monster_update_ptr
+			HL_ADVANCE_BY_DIFF_B(monster_update_ptr, monster_anim_ptr + 1)
+			mvi m, <knight_quest_update
+			inx h
+			mvi m, >knight_quest_update
+
+			; return TILEDATA_NO_COLLISION to make the tile walkable where a monster spawned
+			A_TO_ZERO(TILEDATA_NO_COLLISION)
+			ret
+@init:
+*/
+			MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
+			;ret
+
+/*
+; update for KNIGHT_QUEST_ID
+; anim and a gameplay logic update
+; in:
+; de - ptr to monster_update_ptr in the runtime data
+knight_quest_update:
+			; store de
+			push d
+			; advance hl to monster_id
+			LXI_H_TO_DIFF(monster_id, monster_update_ptr)
+			dad d
+			; check what burner it is
+			mov a, m
+			cpi BURNER_RIGHT_ID
+			jz @burner_right
+@burner_up:			
+			; advance hl to monster_speed_y + 1
+			HL_ADVANCE_BY_DIFF_B(monster_pos_y + 1, monster_id)
+			; hl - ptr to monster_pos_y + 1
+			; increase pos_y
+			mov a, m
+			adi >BURNER_QUEST_SPEED
+			mov m, a
+
+			; advance hl to monster_update_ptr
+			pop h
+
+			; check if a burner hits the screen border
+			cpi BURNER_QUEST_MAX_POS_Y
+			jnc @death
+			jmp @update_anim
+
+@burner_right:
+			; advance hl to monster_pos_x + 1
+			HL_ADVANCE_BY_DIFF_B(monster_pos_x + 1, monster_id)
+			; hl - ptr to monster_pos_x + 1
+			; increase pos_x
+			mov a, m
+			adi >BURNER_QUEST_SPEED
+			mov m, a
+
+			; advance hl to monster_update_ptr
+			pop h
+
+			; check if a burner hits the screen border
+			cpi BURNER_QUEST_MAX_POS_X
+			jnc @death
+@update_anim:
+			; hl points to monster_update_ptr
+			; advance hl to monster_anim_timer
+			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_update_ptr)
+
+			mvi a, BURNER_ANIM_SPEED_MOVE
+			jmp burner_update_anim_check_collision_hero
+@death:
+			; hl points to monster_update_ptr
+			; advance hl to monster_update_ptr + 1
+			inx h
+			; mark this monster dead death
+			jmp actor_destroy
+*/
+; update for BURNER_ID
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data

@@ -95,7 +95,6 @@ SKELETON_DETECT_HERO_DISTANCE = 60
 ; a = 0
 skeleton_init:
 			MONSTER_INIT(skeleton_update, skeleton_draw, monster_impacted, SKELETON_HEALTH, SKELETON_STATUS_DETECT_HERO_INIT, skeleton_idle)
-			ret
 
 ; anim and a gameplay logic update
 ; in:

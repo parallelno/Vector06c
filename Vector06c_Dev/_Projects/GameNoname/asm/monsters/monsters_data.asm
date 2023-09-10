@@ -16,6 +16,7 @@ KNIGHT_HORIZ_ID	= 3
 KNIGHT_VERT_ID	= 4
 BURNER_RIGHT_ID	= 5
 BURNER_UP_ID	= 6
+KNIGHT_QUEST_ID = 7
 
 ; ptr to the first monster data in the sorted list
 monster_runtime_data_sorted:

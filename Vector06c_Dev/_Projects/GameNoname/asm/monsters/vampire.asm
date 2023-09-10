@@ -96,7 +96,6 @@ VAMPIRE_DETECT_HERO_DISTANCE = 90
 ; a = 0
 vampire_init:
 			MONSTER_INIT(vampire_update, vampire_draw, monster_impacted, VAMPIRE_HEALTH, VAMPIRE_STATUS_DETECT_HERO_INIT, vampire_idle)
-			ret
 
 ; anim and a gameplay logic update
 ; in:

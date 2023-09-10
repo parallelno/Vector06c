@@ -121,7 +121,7 @@ draw_text:
 			dad h
 			dad h
 			dad h
-			lxi d, test_font
+			lxi d, test_font - 384 ; 384 - to exclude alhabet and leave only numbers
 			dad d
 			xchg
 
@@ -174,6 +174,7 @@ DrawText_restoreSP:
 
 
 test_font:
+/*
 			; space ($00)
 			.byte 0,0,0,0
 			.byte 0,0,0,0
@@ -233,6 +234,7 @@ test_font:
 			.byte 0	
 			; rest of the alphabet
 			.storage 8*$29, 0
+*/
 			; 0 ($30)
 			.byte %00111110
 			.byte %01000011
@@ -323,6 +325,7 @@ test_font:
 			.byte %00000100
 			.byte %00111000
 			.byte 0	
+/*
 			; heart ($3A)
 			.byte %00110110
 			.byte %01111101
@@ -332,3 +335,4 @@ test_font:
 			.byte %00011100
 			.byte %00001000
 			.byte 0				
+*/

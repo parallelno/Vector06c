@@ -157,23 +157,21 @@ burner_init:
 
 			; advance hl to monster_update_ptr
 			HL_ADVANCE_BY_DIFF_B(monster_update_ptr, monster_anim_ptr + 1)
-			mvi m, <burner_update_right_or_up
+			mvi m, <burner_quest_update
 			inx h
-			mvi m, >burner_update_right_or_up	
+			mvi m, >burner_quest_update	
 
 			; return TILEDATA_NO_COLLISION to make the tile walkable where a monster spawned
 			A_TO_ZERO(TILEDATA_NO_COLLISION)
 			ret
 @init:
 			MONSTER_INIT(burner_update, burner_draw, monster_impacted, BURNER_HEALTH, BURNER_STATUS_DETECT_HERO_INIT, burner_idle)
-			A_TO_ZERO(TILEDATA_NO_COLLISION)
-			ret
 
+; update for BURNER_RIGHT_ID or BURNER_UP_ID
 ; anim and a gameplay logic update
-; it is for BURNER_RIGHT_ID or BURNER_UP_ID
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data
-burner_update_right_or_up:
+burner_quest_update:
 			; store de
 			push d
 			; advance hl to monster_id
@@ -229,6 +227,7 @@ burner_update_right_or_up:
 			; mark this monster dead death
 			jmp actor_destroy
 
+; uppdate for BURNER_ID
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data

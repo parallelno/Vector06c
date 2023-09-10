@@ -252,6 +252,13 @@
 			mov h, a
 .endmacro
 
+.macro CPI_WITH_ZERO(int8_const = 0)
+		.if int8_const != 0
+			.error "CPI_WITH_ZERO macros is used with a non-zero constant, val = ", int8_const
+		.endif
+		ora a
+.endmacro
+
 ;================================== ALL RAM_DISK_* macros has to be placed BEFORE lxi sp, *, and sphl! ;==================================
 ; has to be placed right BEFORE lxi sp, addr, and sphl
 ; mount the ram-disk w/o storing mode

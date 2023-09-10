@@ -206,6 +206,7 @@ SECRET_ENDING_HOME	= 1
 SECRETS_MAX = 16
 
 ITEM_ID_KEY_0			= 1
+ITEM_ID_KNIGHT_QUEST	= 14
 ITEM_ID_BURNER_QUEST	= 15
 RES_ID_CLOTHES			= 2
 ;===========================================================================

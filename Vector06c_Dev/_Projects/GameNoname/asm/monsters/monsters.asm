@@ -17,6 +17,152 @@ monsters_init:
 			call actor_erase_runtime_data
 			ret
 
+
+; monster initialization
+; in:
+; c - tile_idx in the room_tiledata array.
+; a - monster_id * 4
+;ex. MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
+.macro MONSTER_INIT(MONSTER_UPDATE, MONSTER_DRAW, MONSTER_IMPACT, MONSTER_HEALTH, MONSTER_STATUS, MONSTER_ANIM)
+			lxi d, @init_data
+			jmp monster_init
+
+			.word TEMP_WORD  ; safety word
+@init_data:
+			.word MONSTER_UPDATE, MONSTER_DRAW, MONSTER_IMPACT, MONSTER_STATUS<<8 | MONSTER_HEALTH, MONSTER_ANIM
+.endmacro
+
+; monster initialization
+; in:
+; de - ptr to monster_data: .word MONSTER_ANIM, MONSTER_STATUS | MONSTER_HEALTH<<8, MONSTER_IMPACT, MONSTER_DRAW, MONSTER_UPDATE
+; c - tile_idx in the room_tiledata array.
+; a - monster_id * 4
+monster_init:
+			; c - tile_idx in the room_tiledata array.
+			lxi h, 0
+			dad	sp
+			shld restore_sp + 1
+
+			xchg
+			sphl
+			
+			; init code
+			RRC_(2) ; to get monster_id
+			sta @monster_id+1
+
+			; TODO: move the code into a spawner init routine
+			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_monsters, @ret)
+
+			lxi h, monster_update_ptr+1
+			mvi a, MONSTER_RUNTIME_DATA_LEN
+			call actor_get_empty_data_ptr
+			;rnz ; no memory for a new entity	
+			
+			; hl - ptr to monster_update_ptr+1
+			; advance hl to monster_update_ptr
+			dcx h
+			pop d
+			; de - ptr to monster_update_ptr
+			mov m, e
+			inx h
+			mov m, d
+			; advance hl to monster_draw_ptr
+			inx h
+			pop d
+			; de - ptr to monster_draw_ptr
+			mov m, e
+			inx h
+			mov m, d
+			; advance hl to monster_impacted_ptr
+			inx h
+			pop d
+			; de - ptr to monster_impacted_ptr
+			mov m, e
+			inx h
+			mov m, d
+
+			; advance hl to monster_id
+			inx h
+@monster_id:
+			mvi m, TEMP_BYTE
+
+			; advance hl to monster_type
+			inx h
+			mvi m, MONSTER_TYPE_ENEMY
+			; advance hl to monster_health
+			inx h
+			pop d
+			; d - MONSTER_STATUS
+			; e - MONSTER_HEALTH
+			mov m, e
+			; advance hl to monster_status
+			inx h
+			mov m, d
+			; advance hl to monster_anim_ptr
+			LXI_D_TO_DIFF(monster_anim_ptr, monster_status)
+			dad d
+			pop d
+			; de - monster_anim_ptr
+			mov m, e
+			inx h
+			mov m, d
+
+			; c - tile_idx
+			; posX = tile_idx % ROOM_WIDTH * TILE_WIDTH
+			mvi a, %00001111
+			ana c
+			RLC_(4)
+			mov b, a
+			; scrX = posX/8 + $a0
+			RRC_(3)
+			adi SPRITE_X_SCR_ADDR
+			mov d, a
+			; posY = (tile_idx % ROOM_WIDTH) * TILE_WIDTH
+			mvi a, %11110000
+			ana c
+			mvi e, 0
+			; d = scrX
+			; b = posX
+			; a = posY
+			; e = 0 and SPRITE_W_PACKED_MIN
+			; hl - ptr to monster_update_ptr+1
+
+			; advance hl to monster_erase_scr_addr
+			inx h
+			mov m, a
+			inx h
+			mov m, d
+			; advance hl to monster_erase_scr_addr_old
+			inx h
+			mov m, a
+			inx h
+			mov m, d
+			; advance hl to monster_erase_wh
+			inx h
+			mvi m, SPRITE_H_MIN
+			inx h
+			mov m, e
+			; advance hl to monster_erase_wh_old
+			inx h
+			mvi m, SPRITE_H_MIN
+			inx h
+			mov m, e
+			; advance hl to monster_pos_x
+			inx h
+			mov m, e
+			inx h
+			mov m, b
+			; advance hl to monster_pos_y
+			inx h
+			mov m, e
+			inx h
+			mov m, a
+@ret:
+			; return TILEDATA_RESTORE_TILE to make the tile where a monster spawned walkable and restorable
+			mvi a, TILEDATA_RESTORE_TILE
+			jmp restore_sp
+
+
 ; in:
 ; hl - 	posX, posY
 ; a  - 	collider width

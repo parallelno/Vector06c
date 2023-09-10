@@ -39,7 +39,6 @@ hero_sword_tile_func_tbl:
 			RET_4()								; func_id == 15 ; collision
 
 hero_sword_init:
-
 			; check if a sword is available
 			lda hero_weapon
 			rlc

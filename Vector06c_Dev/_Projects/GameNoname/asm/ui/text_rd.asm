@@ -141,58 +141,64 @@ __text_hero_gets_sword:
 ;===================================================================================
 ; storytelling
 ;===================================================================================
-__text_game_story_home:
+__text_storytelling_home:
 			TEXT("Rad day for my morning jog! Legs are ready", LINE_BREAK)
 			TEXT("for some serious adventuring action.", LINE_BREAK)
 			TEXT("If it's all about collecting, count me in!")
 
-__text_game_story_farm_fence:
+__text_storytelling_farm_fence:
 			TEXT("Oh my glob, guess what? Mom's on a cabbage", LINE_BREAK)
 			TEXT("quest, and you know what they say - no", LINE_BREAK)
 			TEXT("cabbage left behind! Gonna scoop up those", LINE_BREAK)
 			TEXT("leafy greens like a true adventurer!")
 
-__text_game_story_road_to_friends_home:
+__text_storytelling_road_to_friends_home:
 			TEXT("Wait a minute! Who's the cheeky one", LINE_BREAK)
 			TEXT("cluttering up the road? Gotta snag a hero", LINE_BREAK)
 			TEXT("thingamajig to clear the path for some", LINE_BREAK)
 			TEXT("righteous heroing!")
 
-__text_game_story_friends_home:
+__text_storytelling_friends_home:
 			TEXT("Check it, my buddy's cave! He said he'd", LINE_BREAK)
 			TEXT("be around today. Gotta jog his memory", LINE_BREAK)
 			TEXT("'bout that promise, ya know?")
 
-__text_game_story_friends_backyard:
+__text_storytelling_friends_backyard:
 			TEXT("Really??? It looks like a hidden lair in", LINE_BREAK)
 			TEXT("the bushes! I'm gonna investigate my", LINE_BREAK)
 			TEXT("friend's secret spot. Those bones at the", LINE_BREAK)
 			TEXT("entrance are a spooky clue!")
 
-__text_game_story_friends_secret_place:
+__text_storytelling_friends_secret_place:
 			TEXT("Oh no, there are bones and skulls all over", LINE_BREAK)
 			TEXT("the place! I worry my friend can be in a real", LINE_BREAK)
 			TEXT("danger! I gonna find and rescue him no matter", LINE_BREAK)
 			TEXT("the cost!")
 
-__text_game_story_crossroad:
+__text_storytelling_crossroad:
 			TEXT("I'm shaken! A terrible monster and the corpses", LINE_BREAK)
 			TEXT("of our beloved villagers! It's clear who the", LINE_BREAK)
 			TEXT("culprit is here! You better be trembling!", LINE_BREAK)
 			TEXT("I'm going to teach you a lesson!!!")
 
-__text_game_story_loop:
+__text_storytelling_loop:
 			TEXT("You better watch out, little rolling furry", LINE_BREAK)
 			TEXT("burner, because there's no escaping from me!")
 
-__text_game_story_lost_coins:
+__text_storytelling_lost_coins:
 			TEXT("Wow, wow, wow!!! My intuition never fails me!", LINE_BREAK)
 			TEXT("I just knew there had to be treasures on this", LINE_BREAK)
 			TEXT("heroic journey! Everyone, look at my pockets,", LINE_BREAK)
 			TEXT("coins are about to overflow them!")
-/*
+
+__text_storytelling_farm_entrance:
+			TEXT("Every time I lay eyes on cabbage, I get all", LINE_BREAK)
+			TEXT("hungry up in here. But you gotta watch out,", LINE_BREAK)
+			TEXT("'cause if you munch too much, your tummy", LINE_BREAK)
+			TEXT("might throw a grumble fit!")
+
+__text_storytelling_farm_storage:
 			TEXT("Who's that dude on my road?", LINE_BREAK)
 			TEXT("Not cool with his mega-spooky vibe, for sure.", LINE_BREAK)
 			TEXT("Lucky for us, he's shieldless. Time to school", LINE_BREAK)
 			TEXT("that goofball in some true hero moves!")
-*/
