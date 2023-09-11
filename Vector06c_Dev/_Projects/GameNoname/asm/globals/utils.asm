@@ -32,7 +32,7 @@ clear_mem:
 ; buffer len <=256
 ; input:
 ; hl - addr to clear
-; a - the next addr after a buffer
+; a - the next addr (a low byte of address) after a buffer
 ; c - filler, if fill_mem_short is called
 ; use:
 ; a

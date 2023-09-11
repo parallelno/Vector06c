@@ -222,8 +222,8 @@ hero_update_temp_pos:
 			shld char_temp_y
 
 			; check the collision tiles
-			mov d, b ; posX
-			mov e, h ; posY
+			mov d, b ; pos_x
+			mov e, h ; pos_y
 			lxi b, (HERO_COLLISION_WIDTH-1)<<8 | HERO_COLLISION_HEIGHT-1
 			call room_get_collision_tiledata
 			ani TILEDATA_FUNC_MASK

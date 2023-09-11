@@ -242,13 +242,15 @@ hero_res_func_potion_blue:
 			ret
 
 hero_res_func_potion_red:
+			mvi a, RESOURCE_POTION_RED_VAL
+; in:
+; a - health increase
+hero_health_increase:
 			lxi h, hero_health
-			mov a, m
-			adi RESOURCE_POTION_RED_VAL
+			add m
 			CLAMP_A(HERO_HEALTH_MAX)
 			mov m, a
-			call game_ui_draw_health
-			ret
+			jmp game_ui_draw_health
 
 hero_res_func_clothes:
 			lxi h, hero_res_clothes

@@ -19,11 +19,12 @@
 		.endif
 			dad d
 			call sprite_get_scr_addr_bullet
-			; hl - ptr to bullet_pos_y+1
-			; tmpA <- c
-			mov a, c
+			; de - sprite screen addr
+			; c - preshifted sprite idx*2 offset based on pos_x then +2
+			; hl - ptr to pos_y+1
+			mov a, c ; temp
 			; advance to bullet_anim_ptr
-			HL_ADVANCE_BY_DIFF_B(bullet_anim_ptr, bullet_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_anim_ptr, bullet_pos_y+1)
 			mov b, m
 			inx h
 			push h
@@ -43,7 +44,7 @@
 			inx h
 			mov m, b
 			; advance to bullet_erase_wh
-			HL_ADVANCE_BY_DIFF_B(bullet_erase_wh, bullet_erase_scr_addr+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_erase_wh, bullet_erase_scr_addr+1)
 			; store a width and a height into bullet_erase_wh
 			mov m, e
 			inx h
@@ -67,9 +68,9 @@
 			; hl points to bullet_anim_ptr
 			; TODO: check hero-bullet collision not every frame			
 			; advance hl to bullet_pos_x
-			HL_ADVANCE_BY_DIFF_B(bullet_pos_x+1, bullet_anim_ptr)
+			HL_ADVANCE_BY_DIFF_BC(bullet_pos_x+1, bullet_anim_ptr)
 			; horizontal check
-			mov c, m ; posX
+			mov c, m ; pos_x
 			lda hero_pos_x+1
 			mov b, a ; tmp
 			adi HERO_COLLISION_WIDTH-1
@@ -82,7 +83,7 @@
 			; vertical check
 			; advance hl to bullet_pos_y+1
 			INX_H(2)
-			mov c, m ; posY
+			mov c, m ; pos_y
 			lda hero_pos_y+1
 			mov b, a
 			adi HERO_COLLISION_HEIGHT-1

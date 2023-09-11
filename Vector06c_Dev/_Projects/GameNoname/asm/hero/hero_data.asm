@@ -10,10 +10,10 @@ hero_status_timer:			.byte 0	; a duration of the status. ticks every update
 hero_anim_timer:			.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
 hero_anim_addr:				.word TEMP_ADDR ; holds the current frame ptr
 hero_dir_x:					.byte 1 		; 1-right, 0-left
-hero_erase_scr_addr:		.word TEMP_ADDR
-hero_erase_scr_addr_old:	.word TEMP_ADDR
-hero_erase_wh:				.word TEMP_WORD
-hero_erase_wh_old:			.word TEMP_WORD
+hero_erase_scr_addr:		.word TEMP_ADDR	; screen addr for erasing
+hero_erase_scr_addr_old:	.word TEMP_ADDR	; screen addr for erasing last frame 
+hero_erase_wh:				.word TEMP_WORD	; width, height
+hero_erase_wh_old:			.word TEMP_WORD	; width, height last frame
 hero_pos_x:					.word TEMP_WORD ; first byte is a sub-pixel coord
 hero_pos_y:					.word TEMP_WORD ; first byte is a sub-pixel coord
 hero_speed_x:				.word TEMP_WORD ; first byte is a sub-pixel coord speed

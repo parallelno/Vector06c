@@ -27,7 +27,8 @@ monsters_init:
 			lxi d, @init_data
 			jmp monster_init
 
-			.word TEMP_WORD  ; safety word
+			.word TEMP_WORD  ; safety word because "call actor_get_empty_data_ptr"
+			.word TEMP_WORD  ; safety word because an interruption can call
 @init_data:
 			.word MONSTER_UPDATE, MONSTER_DRAW, MONSTER_IMPACT, MONSTER_STATUS<<8 | MONSTER_HEALTH, MONSTER_ANIM
 .endmacro
@@ -38,15 +39,12 @@ monsters_init:
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
 monster_init:
-			; c - tile_idx in the room_tiledata array.
 			lxi h, 0
 			dad	sp
 			shld restore_sp + 1
-
 			xchg
 			sphl
-			
-			; init code
+
 			RRC_(2) ; to get monster_id
 			sta @monster_id+1
 
@@ -57,29 +55,32 @@ monster_init:
 			mvi e, MONSTER_RUNTIME_DATA_LEN
 			call actor_get_empty_data_ptr
 			jnz restore_sp ; return because too many objects
+
+			mov a, c
+			; a - tile_idx in the room_tiledata array
+			; hl - ptr to monster_update_ptr+1			
 			
-			; hl - ptr to monster_update_ptr+1
 			; advance hl to monster_update_ptr
 			dcx h
-			pop d
-			; de - ptr to monster_update_ptr
-			mov m, e
+			pop b ; use bc to read from the stack is requirenment
+			; bc - ptr to monster_update_ptr
+			mov m, c
 			inx h
-			mov m, d
+			mov m, b
 			; advance hl to monster_draw_ptr
 			inx h
-			pop d
-			; de - ptr to monster_draw_ptr
-			mov m, e
+			pop b
+			; bc - ptr to monster_draw_ptr
+			mov m, c
 			inx h
-			mov m, d
+			mov m, b
 			; advance hl to monster_impacted_ptr
 			inx h
-			pop d
-			; de - ptr to monster_impacted_ptr
-			mov m, e
+			pop b
+			; bc - ptr to monster_impacted_ptr
+			mov m, c
 			inx h
-			mov m, d
+			mov m, b
 
 			; advance hl to monster_id
 			inx h
@@ -91,39 +92,43 @@ monster_init:
 			mvi m, MONSTER_TYPE_ENEMY
 			; advance hl to monster_health
 			inx h
-			pop d
-			; d - MONSTER_STATUS
-			; e - MONSTER_HEALTH
-			mov m, e
+			pop b
+			; b - MONSTER_STATUS
+			; c - MONSTER_HEALTH
+			mov m, c
 			; advance hl to monster_status
 			inx h
-			mov m, d
+			mov m, b
+			
 			; advance hl to monster_anim_ptr
 			LXI_D_TO_DIFF(monster_anim_ptr, monster_status)
 			dad d
-			pop d
-			; de - monster_anim_ptr
-			mov m, e
-			inx h
-			mov m, d
 
-			; c - tile_idx
-			; posX = tile_idx % ROOM_WIDTH * TILE_WIDTH
+			mov e, a
+			; e - tile_idx
+			
+			pop b
+			; bc - monster_anim_ptr
+			mov m, c
+			inx h
+			mov m, b
+
+			; e - tile_idx
+			; pos_x = tile_idx % ROOM_WIDTH * TILE_WIDTH
 			mvi a, %00001111
-			ana c
+			ana e
 			RLC_(4)
-			mov b, a
-			; scrX = posX/8 + $a0
+			sta @pos_x + 1
+			; scr_x = pos_x/8 + $a0
 			RRC_(3)
 			adi SPRITE_X_SCR_ADDR
 			mov d, a
-			; posY = (tile_idx % ROOM_WIDTH) * TILE_WIDTH
+			; pos_y = (tile_idx % ROOM_WIDTH) * TILE_WIDTH
 			mvi a, %11110000
-			ana c
+			ana e
 			mvi e, 0
-			; d = scrX
-			; b = posX
-			; a = posY
+			; d = scr_x
+			; a = pos_y
 			; e = 0 and SPRITE_W_PACKED_MIN
 			; hl - ptr to monster_update_ptr+1
 
@@ -151,7 +156,8 @@ monster_init:
 			inx h
 			mov m, e
 			inx h
-			mov m, b
+@pos_x:			
+			mvi m, TEMP_BYTE ; pos_x
 			; advance hl to monster_pos_y
 			inx h
 			mov m, e
@@ -164,7 +170,7 @@ monster_init:
 
 
 ; in:
-; hl - 	posX, posY
+; hl - 	pos_x, pos_y
 ; a  - 	collider width
 ; c  - 	collider height
 ; out:
@@ -193,15 +199,15 @@ monsters_get_first_collided:
 @check_collision:
 			push h
 			; advance hl to monster_type
-			HL_ADVANCE_BY_DIFF_B(monster_type, monster_update_ptr+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_type, monster_update_ptr+1)
 			mov a, m
 			cpi MONSTER_TYPE_ALLY
 			jz @no_collision
 
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_B(monster_pos_x+1, monster_type)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_type)
 			; horizontal check
-			mov c, m 	; monster posX
+			mov c, m 	; monster pos_x
 @collider_pos_x:
 			mvi a, TEMP_BYTE
 			mov b, a	; tmp
@@ -215,7 +221,7 @@ monsters_get_first_collided:
 			jc @no_collision
 			; vertical check
 			INX_H(2)
-			mov c, m ; monster posY
+			mov c, m ; monster pos_y
 @collider_pos_y:
 			mvi a, TEMP_BYTE
 			mov b, a
@@ -237,7 +243,7 @@ monsters_get_first_collided:
 			lxi b, MONSTER_RUNTIME_DATA_LEN
 			dad b
 			jmp @loop
-			
+
 
 ; call all active monsters' Update/Draw func
 ; a func will get DE pointing to a func ptr (ex.:monster_update_ptr or monster_draw_ptr) in the runtime data
@@ -266,7 +272,7 @@ monsters_data_func_caller:
 			; advance to a func ptr
 			dad d
 			; read the func addr
-			mov d, m 
+			mov d, m
 			dcx h
 			mov e, m
 			xchg
@@ -278,8 +284,8 @@ monsters_data_func_caller:
 			lxi d, MONSTER_RUNTIME_DATA_LEN
 			dad d
 			jmp @loop
-			ret			
-			
+			ret
+
 
 ; call a provided func (monster_copy_to_scr, monster_erase) if a monster is alive
 ; a func will get HL pointing to a monster_update_ptr+1 in the runtime data, and A holding a MONSTER_RUNTIME_DATA_* status
@@ -297,7 +303,7 @@ monsters_common_func_caller:
 			jz @next_data
 			; it is the last or the end, so return
 			ret
-@call_func:			
+@call_func:
 			push h
 @func_ptr:
 			call TEMP_ADDR
@@ -307,7 +313,7 @@ monsters_common_func_caller:
 			dad d
 			jmp @loop
 			ret
-			
+
 monsters_update:
 			lxi h, 0
 			jmp monsters_data_func_caller
@@ -337,7 +343,7 @@ monster_copy_to_scr:
 			rnz
 
 			; advance to monster_erase_scr_addr
-			HL_ADVANCE_BY_DIFF_B(monster_erase_scr_addr, monster_status)			
+			HL_ADVANCE_BY_DIFF_BC(monster_erase_scr_addr, monster_status)
 			; read monster_erase_scr_addr
 			mov c, m
 			inx h
@@ -366,7 +372,7 @@ monster_copy_to_scr:
 @keep_old_x:
 			mov a, e
 			cmp c
-			jc @keep_old_y 
+			jc @keep_old_y
 			mov e, c
 @keep_old_y:
 			; tmp store a scr addr to copy
@@ -407,7 +413,7 @@ monster_copy_to_scr:
 @keep_old_tr_x:
 			mov a, l
 			cmp e
-			jnc @keep_old_tr_y 
+			jnc @keep_old_tr_y
 			mov l, e
 @keep_old_tr_y:
 			; hl - top-right corner scr addr to copy
@@ -416,10 +422,10 @@ monster_copy_to_scr:
 			; calc bc (width, height)
 			mov a, h
 			sub d
-			mov b, a 
+			mov b, a
 			mov a, l
 			sub e
-			mov c, a 
+			mov c, a
 			jmp sprite_copy_to_scr_v
 
 
@@ -447,10 +453,10 @@ monster_erase:
 			inx h
 			mov d, m
 
-			HL_ADVANCE_BY_DIFF_B(monster_erase_wh, monster_erase_scr_addr+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_erase_wh, monster_erase_scr_addr+1)
 			mov a, m
 			inx h
-			mov h, m			
+			mov h, m
 			mov l, a
 			; hl - monster_erase_wh
 			; de - monster_erase_scr_addr
@@ -461,7 +467,7 @@ monster_erase:
 			call room_check_tiledata_restorable
 			pop d
 			pop h
-						
+
 			jnz sprite_copy_to_back_buff_v ; restore a background
 			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 			ret
@@ -481,7 +487,7 @@ monster_impacted:
 			mvi c, TILEDATA_FUNC_ID_MONSTERS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score
-			pop d			
+			pop d
 
 			; play a hit vfx
 			; advance hl to monster_pos_x+1

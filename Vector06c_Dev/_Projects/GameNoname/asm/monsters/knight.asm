@@ -19,7 +19,7 @@
 ;	status = defence
 ;	status_timer = defence_time
 ;	anim = run to the hero dir
-;	
+;
 ; defence:
 ;	if distance(mob, hero) < a defence radius:
 ;		try to move a mob toward a hero, reset one coord to move along one axis
@@ -80,6 +80,11 @@ KNIGHT_DEFENCE_SPEED_NEG	= $ffff - $100 + 1
 
 KNIGHT_DETECT_HERO_DISTANCE = 60
 
+; knight quest
+KNIGHT_QUEST_DETECT_HERO_DISTANCE	= 25
+KNIGHT_QUEST_SPEED					= $0400
+KNIGHT_QUEST_MAX_POS_Y				= 255 - 16 - 14
+
 ;========================================================
 ; called to spawn this monster
 ; in:
@@ -88,114 +93,107 @@ KNIGHT_DETECT_HERO_DISTANCE = 60
 ; out:
 ; a = 0
 knight_init:
-
-/*
 			; check a monster_id
-			; if it is a KNIGHT_QUEST_ID do an additional logic
-			mvi b, KNIGHT_ID * 4
+			mvi b, KNIGHT_QUEST_ID * 4
 			cmp b
-			jz @init ; if it is a KNIGHT_ID go init it, then return
+			jz @knight_quest_init
 
-			mov b, a ; temp
-
-			; when a hero grad more than aome amount of cabbages,
-			; he gets a special item item_id_fart and a weapon that looks like
-			; farting that lasts some time. when a hero comes over the 
-			; a monster with a monster_id = KNIGHT_QUEST_ID a monster runs 
-			; away to the right size of the screen.
-			
-			; check if a hero has item_id_fart
-			lda global_items + ITEM_ID_KNIGHT_QUEST - 1; because the first item_id = 1
-			cpi ITEM_STATUS_USED
-			rz ; return if item_id_fart was used
-
-			mov a, b
-			; a - monster_id * 4
-			call @init
-
-			; hl - ptr to monster_pos_y + 1
-			; advance hl to monster_anim_ptr
-			; set run_r anim
-			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_pos_y + 1)
-			mvi m, <knight_defence_r
-			inx h
-			mvi m, >knight_defence_r
-
-			; advance hl to monster_update_ptr
-			HL_ADVANCE_BY_DIFF_B(monster_update_ptr, monster_anim_ptr + 1)
-			mvi m, <knight_quest_update
-			inx h
-			mvi m, >knight_quest_update
-
-			; return TILEDATA_NO_COLLISION to make the tile walkable where a monster spawned
-			A_TO_ZERO(TILEDATA_NO_COLLISION)
-			ret
-@init:
-*/
 			MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
-			;ret
+@knight_quest_init:
+			mov b, a ; temp
+			; if ITEM_ID_FART is used, do not create a monster
+			lda global_items + ITEM_ID_FART - 1	; because the first item_id = 1
+			cpi ITEM_STATUS_USED
+			rz
+			
+			mov a, b
+			MONSTER_INIT(knight_quest_update, knight_draw, func_ret, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 
-/*
-; update for KNIGHT_QUEST_ID
+; update for BURNER_QUEST_ID
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data
 knight_quest_update:
-			; store de
+			; check if the hero has ITEM_ID_FART
+			lda global_items + ITEM_ID_FART - 1	; because the first item_id = 1
+			cpi ITEM_STATUS_ACQUIRED
+			jc knight_update ; ITEM_ID_FART is not acquired
+			jnz @run_up ; ITEM_ID_FART is used
+
 			push d
-			; advance hl to monster_id
-			LXI_H_TO_DIFF(monster_id, monster_update_ptr)
+			; check hero to monster distance
+@check_mob_hero_distance:
+			; advance hl to monster_pos_x+1
+			LXI_H_TO_DIFF(monster_pos_x+1, monster_update_ptr)
 			dad d
-			; check what burner it is
-			mov a, m
-			cpi BURNER_RIGHT_ID
-			jz @burner_right
-@burner_up:			
+			; check hero-monster pos_x diff
+			lda hero_pos_x+1
+			sub m
+			jc @check_neg_pos_x_diff
+			cpi KNIGHT_QUEST_DETECT_HERO_DISTANCE
+			jc @check_pos_y_diff
+			jmp @hero_no_detected
+@check_neg_pos_x_diff:
+			cpi -KNIGHT_QUEST_DETECT_HERO_DISTANCE
+			jnc @check_pos_y_diff
+			jmp @hero_no_detected
+@check_pos_y_diff:
+			; advance hl to monster_pos_y+1
+			INX_H(2)
+			; check hero-monster pos_y diff
+			lda hero_pos_y+1
+			sub m
+			jc @check_neg_pos_y_diff
+			cpi KNIGHT_QUEST_DETECT_HERO_DISTANCE
+			jc @hero_detected
+			jmp @hero_no_detected
+@check_neg_pos_y_diff:
+			cpi -KNIGHT_QUEST_DETECT_HERO_DISTANCE
+			jnc @hero_detected
+			jmp @hero_no_detected
+@hero_detected:
+			; mob is about to run up
+			; set the status of ITEM_ID_FART used
+			mvi a, ITEM_STATUS_USED
+			sta global_items + ITEM_ID_FART - 1	; because the first item_id = 1
+@hero_no_detected:
+			pop d
+			; d - monster_update_ptr
+			jmp knight_update
+
+@run_up:
+			; de - ptr to monster_update_ptr
+			push d
+			; this monster goes up to the edge of the screen, then dies
 			; advance hl to monster_speed_y + 1
-			HL_ADVANCE_BY_DIFF_B(monster_pos_y + 1, monster_id)
+			LXI_H_TO_DIFF(monster_pos_y + 1, monster_update_ptr)
+			dad d
+
 			; hl - ptr to monster_pos_y + 1
 			; increase pos_y
 			mov a, m
-			adi >BURNER_QUEST_SPEED
+			adi >KNIGHT_QUEST_SPEED
 			mov m, a
 
 			; advance hl to monster_update_ptr
 			pop h
 
-			; check if a burner hits the screen border
-			cpi BURNER_QUEST_MAX_POS_Y
+			; check if a knight hits the screen border
+			cpi KNIGHT_QUEST_MAX_POS_Y
 			jnc @death
-			jmp @update_anim
-
-@burner_right:
-			; advance hl to monster_pos_x + 1
-			HL_ADVANCE_BY_DIFF_B(monster_pos_x + 1, monster_id)
-			; hl - ptr to monster_pos_x + 1
-			; increase pos_x
-			mov a, m
-			adi >BURNER_QUEST_SPEED
-			mov m, a
-
-			; advance hl to monster_update_ptr
-			pop h
-
-			; check if a burner hits the screen border
-			cpi BURNER_QUEST_MAX_POS_X
-			jnc @death
-@update_anim:
 			; hl points to monster_update_ptr
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_update_ptr)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_update_ptr)
 
 			mvi a, BURNER_ANIM_SPEED_MOVE
-			jmp burner_update_anim_check_collision_hero
+			jmp knight_update_anim_check_collision_hero
 @death:
 			; hl points to monster_update_ptr
 			; advance hl to monster_update_ptr + 1
 			inx h
 			; mark this monster dead death
 			jmp actor_destroy
-*/
+
 ; update for BURNER_ID
 ; anim and a gameplay logic update
 ; in:
@@ -211,7 +209,7 @@ knight_update:
 			cpi KNIGHT_STATUS_DETECT_HERO
 			jz knight_update_detect_hero
 			cpi KNIGHT_STATUS_DEFENCE
-			jz knight_update_defence			
+			jz knight_update_defence
 			cpi KNIGHT_STATUS_MOVE_INIT
 			jz knight_update_move_init
 			cpi KNIGHT_STATUS_DEFENCE_INIT
@@ -225,7 +223,7 @@ knight_update_detect_hero_init:
 			mvi m, KNIGHT_STATUS_DETECT_HERO
 			inx h
 			mvi m, KNIGHT_STATUS_DETECT_HERO_TIME
-			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_status_timer)
 			mvi m, <knight_idle
 			inx h
 			mvi m, >knight_idle
@@ -239,8 +237,8 @@ knight_update_detect_hero:
 			jz @set_move_init
 @check_mob_hero_distance:
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_B(monster_pos_x+1, monster_status_timer)
-			; check hero-monster posX diff
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_status_timer)
+			; check hero-monster pos_x diff
 			lda hero_pos_x+1
 			sub m
 			jc @check_neg_pos_x_diff
@@ -254,7 +252,7 @@ knight_update_detect_hero:
 @check_pos_y_diff:
 			; advance hl to monster_pos_y+1
 			INX_H(2)
-			; check hero-monster posY diff
+			; check hero-monster pos_y diff
 			lda hero_pos_y+1
 			sub m
 			jc @check_neg_pos_y_diff
@@ -268,18 +266,18 @@ knight_update_detect_hero:
 @hero_detected:
 			; hl = monster_pos_y+1
 			; advance hl to monster_status
-			HL_ADVANCE_BY_DIFF_B(monster_status, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_pos_y+1)
 			mvi m, KNIGHT_STATUS_DEFENCE_INIT
 			ret
-			
+
 @update_anim_hero_detect_x:
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_x+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_x+1)
 			mvi a, KNIGHT_ANIM_SPEED_DETECT_HERO
 			jmp knight_update_anim_check_collision_hero
 @update_anim_hero_detect_y:
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_y+1)
 			mvi a, KNIGHT_ANIM_SPEED_DETECT_HERO
 			jmp knight_update_anim_check_collision_hero
 
@@ -300,29 +298,29 @@ knight_update_defence_init:
 @check_anim_dir:
 			; aim the monster to the hero dir
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_B(monster_pos_x+1, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_status_timer)
 			lda hero_pos_x+1
 			cmp m
 			lxi d, knight_defence_l
 			jc @dir_x_neg
-@dir_x_positive:			
+@dir_x_positive:
 			lxi d, knight_defence_r
 @dir_x_neg:
 			; advance hl to monster_anim_ptr
-			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_pos_x+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_pos_x+1)
 			mov m, e
 			inx h
 			mov m, d
 
 			; set the speed according to a monster_id (KNIGHT_HORIZ_ID / KNIGHT_VERT_ID)
 			; advance hl to monster_id
-			HL_ADVANCE_BY_DIFF_B(monster_id, monster_anim_ptr+1)
-			mov a, m		
-			cpi <KNIGHT_HORIZ_ID
-			jnz @speed_vert
+			HL_ADVANCE_BY_DIFF_BC(monster_id, monster_anim_ptr+1)
+			mov a, m
+			cpi KNIGHT_VERT_ID
+			jz @speed_vert
 @speed_horiz:
 			; advance hl to monster_speed_x
-			HL_ADVANCE_BY_DIFF_B(monster_speed_x, monster_id)
+			HL_ADVANCE_BY_DIFF_BC(monster_speed_x, monster_id)
 			; dir positive if e == knight_defence_r and vise versa
 			mvi a, <knight_defence_r
 			cmp e
@@ -343,7 +341,7 @@ knight_update_defence_init:
 			ret
 @speed_vert:
 			; advance hl to monster_pos_y+1
-			HL_ADVANCE_BY_DIFF_B(monster_pos_y+1, monster_id)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_y+1, monster_id)
 			lda hero_pos_y+1
 			cmp m
 			lxi d, KNIGHT_DEFENCE_SPEED_NEG
@@ -371,11 +369,11 @@ knight_update_defence:
 			dcr m
 			jz @set_detect_hero_init
 @update_movement:
-			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, @collided_with_tiles) 
-			
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, @collided_with_tiles)
+
 			; hl points to monster_pos_y+1
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_y+1)
 			mvi a, KNIGHT_ANIM_SPEED_DEFENCE
 			jmp knight_update_anim_check_collision_hero
 
@@ -383,7 +381,7 @@ knight_update_defence:
 			pop h
 			; hl points to monster_pos_x
 			; advance hl to monster_status
-			HL_ADVANCE_BY_DIFF_B(monster_status, monster_pos_x)
+			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_pos_x)
 			mvi m, KNIGHT_STATUS_DEFENCE_INIT
 			ret
 @set_detect_hero_init:
@@ -392,7 +390,7 @@ knight_update_defence:
 			; advance hl to monster_status
 			dcx h
 			mvi m, KNIGHT_STATUS_DETECT_HERO_INIT
-			ret	
+			ret
 
 knight_update_move_init:
 			; hl = monster_status
@@ -403,9 +401,9 @@ knight_update_move_init:
 			LXI_D_TO_DIFF(monster_id, monster_status)
 			dad d
 			mov a, m
-			cpi <KNIGHT_HORIZ_ID
+			cpi KNIGHT_VERT_ID
 			lxi b, (%10000000)<<8 ; tmp c = 0 
-			jnz @vertical_movement
+			jz @vertical_movement
 			mvi b, %00000000
 @vertical_movement:			
 			xchg
@@ -458,7 +456,7 @@ knight_update_move_init:
 			inx h
 			mov m, c
 @set_anim:
-			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_speed_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_speed_y+1)
 			; a = rnd
 			;ora a
 			adi $40
@@ -482,11 +480,11 @@ knight_update_move:
 			dcr m
 			jz @set_detect_hero_init
 @update_movement:
-			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, @set_move_init) 
-			
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, @set_move_init)
+
 			; hl points to monster_pos_y+1
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_y+1)
 			mvi a, KNIGHT_ANIM_SPEED_MOVE
 			jmp knight_update_anim_check_collision_hero
 
@@ -494,7 +492,7 @@ knight_update_move:
 			pop h
 			; hl points to monster_pos_x
 			; advance hl to monster_status
-			HL_ADVANCE_BY_DIFF_B(monster_status, monster_pos_x)
+			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_pos_x)
 			mvi m, KNIGHT_STATUS_MOVE_INIT
 			ret
 @set_detect_hero_init:

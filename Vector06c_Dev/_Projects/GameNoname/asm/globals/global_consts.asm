@@ -205,10 +205,7 @@ SCORES_MAX	= 10
 SECRET_ENDING_HOME	= 1
 SECRETS_MAX = 16
 
-ITEM_ID_KEY_0			= 1
-ITEM_ID_KNIGHT_QUEST	= 14
-ITEM_ID_BURNER_QUEST	= 15
-RES_ID_CLOTHES			= 2
+CABBAGE_MAX = 10 ; it is a max for a quest resource hero_res_cabbage
 ;===========================================================================
 ; text
 LINE_BREAK	= $6a ;'\n'

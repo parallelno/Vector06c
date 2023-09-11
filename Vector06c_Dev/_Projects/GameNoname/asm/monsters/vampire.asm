@@ -127,7 +127,7 @@ vampire_update_detect_hero_init:
 			mvi m, VAMPIRE_STATUS_DETECT_HERO
 			inx h
 			mvi m, VAMPIRE_STATUS_DETECT_HERO_TIME
-			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_status_timer)
 			mvi m, <vampire_idle
 			inx h
 			mvi m, >vampire_idle
@@ -141,8 +141,8 @@ vampire_update_detect_hero:
 			jz @set_move_init
 @check_mob_hero_distance:
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_B(monster_pos_x+1, monster_status_timer)
-			; check hero-monster posX diff
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_status_timer)
+			; check hero-monster pos_x diff
 			lda hero_pos_x+1
 			sub m
 			jc @check_neg_pos_x_diff
@@ -156,7 +156,7 @@ vampire_update_detect_hero:
 @check_pos_y_diff:
 			; advance hl to monster_pos_y+1
 			INX_H(2)
-			; check hero-monster posY diff
+			; check hero-monster pos_y diff
 			lda hero_pos_y+1
 			sub m
 			jc @check_neg_pos_y_diff
@@ -170,24 +170,24 @@ vampire_update_detect_hero:
 @hero_detected:
 			; hl = monster_pos_y+1
 			; advance hl to monster_status
-			HL_ADVANCE_BY_DIFF_B(monster_status, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_pos_y+1)
 			mvi m, VAMPIRE_STATUS_SHOOT_PREP
 			inx h
 			mvi m, VAMPIRE_STATUS_SHOOT_PREP_TIME
 			; advance hl to monster_anim_ptr
-			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_status_timer)
 			mvi m, <vampire_cast
 			inx h
 			mvi m, >vampire_cast
 			ret
 @update_anim_hero_detect_x:
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_x+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_x+1)
 			mvi a, VAMPIRE_ANIM_SPEED_DETECT_HERO
 			jmp vampire_update_anim_check_collision_hero
 @update_anim_hero_detect_y:
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_y+1)
 			mvi a, VAMPIRE_ANIM_SPEED_DETECT_HERO
 			jmp vampire_update_anim_check_collision_hero
 
@@ -254,7 +254,7 @@ vampire_update_move_init:
 			inx h
 			mov m, c
 @set_anim:
-			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_speed_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_speed_y+1)
 			; a = rnd
 			ora a
 			; if rnd is positive (up or right movement), then play vampire_run_r anim
@@ -281,7 +281,7 @@ vampire_update_move:
 			
 			; hl points to monster_pos_y+1
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_y+1)
 			mvi a, VAMPIRE_ANIM_SPEED_MOVE
 			jmp vampire_update_anim_check_collision_hero
 
@@ -289,7 +289,7 @@ vampire_update_move:
 			pop h
 			; hl points to monster_pos_x
 			; advance hl to monster_status
-			HL_ADVANCE_BY_DIFF_B(monster_status, monster_pos_x)
+			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_pos_x)
 			mvi m, VAMPIRE_STATUS_MOVE_INIT
 			inx h
 			mvi m, VAMPIRE_STATUS_MOVE_TIME
@@ -308,7 +308,7 @@ vampire_update_relax:
 			dcr m
 			jz @set_move_init
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_status_timer)
 			mvi a, VAMPIRE_ANIM_SPEED_RELAX
 			jmp vampire_update_anim_check_collision_hero
  @set_move_init:
@@ -326,7 +326,7 @@ vampire_update_shoot_prep:
 			dcr m
 			jz @set_shoot
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_status_timer)
 			mvi a, VAMPIRE_ANIM_SPEED_SHOOT_PREP
 			jmp vampire_update_anim_check_collision_hero
  @set_shoot:
@@ -347,7 +347,7 @@ vampire_update_shoot:
 			mvi m, VAMPIRE_STATUS_RELAX_TIME
 
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_B(monster_pos_x+1, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_status_timer)
 			mov b, m
 			INX_H(2)
 			mov c, m

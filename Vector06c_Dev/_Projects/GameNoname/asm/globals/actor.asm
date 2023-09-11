@@ -86,21 +86,26 @@ actor_get_empty_data_ptr:
 			jc @next_data
 			cpi ACTOR_RUNTIME_DATA_LAST
 			rnz ; too many objects
-			; we reached the end of the last existing actor's runtime data
-			; there is at least a room for one more monster
+			; hl points to a vacant monster_data
 
-			; there are only to cases left
-			; if it is the last possible monster, then ACTOR_RUNTIME_DATA_END is stored after that data
-			; in other case ACTOR_RUNTIME_DATA_LAST is stored after that data
+			; if (hl + monster_data_len) points to ACTOR_RUNTIME_DATA_END, just return hl
+			; in other case store ACTOR_RUNTIME_DATA_LAST marker to (hl + monster_data_len) 
+			; to mark this monster data the last element in monste runtime data array
+
 			xchg
 			dad d
-			mvi a, ACTOR_RUNTIME_DATA_LAST
-			ora m
-			mov m, a
+			; hl - ptr to a marker after the vacant monster runtme data
+			mov a, m
+			cpi ACTOR_RUNTIME_DATA_END
 			xchg
-			; if the next byte after the last actor's runtime data is ACTOR_RUNTIME_DATA_END, then just return
+			rz ; it is ACTOR_RUNTIME_DATA_END, no need to store ACTOR_RUNTIME_DATA_LAST marker
+			; it is not, store ACTOR_RUNTIME_DATA_LAST marker
+			xchg
+			mvi m, ACTOR_RUNTIME_DATA_LAST
 			cmp a ; to set z flag
+			xchg
 			ret
+
 @next_data:
 			dad d
 			jmp @loop

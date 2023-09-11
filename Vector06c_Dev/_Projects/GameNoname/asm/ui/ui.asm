@@ -15,6 +15,8 @@ game_ui_draw_panel:
 			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_top, __TILED_IMAGES_FRAME_INGAME_TOP_COPY_LEN, __tiled_images_tile1)
 			ret
 
+; use:
+; all
 HEALTH_SCR_ADDR = $a3fb
 game_ui_draw_health:
 			lda hero_health

@@ -78,15 +78,15 @@ sparker_init:
 			mvi m, >vfx4_spark
 
 			mov a, b
-			; a - posX
-			; scrX = posX/8 + $a0
+			; a - pos_x
+			; scr_x = pos_x/8 + $a0
 			RRC_(3)
 			ani %00011111
 			adi SPRITE_X_SCR_ADDR
 			mvi e, 0
-			; a = scrX
-			; b = posX
-			; c = posY			
+			; a = scr_x
+			; b = pos_x
+			; c = pos_y			
 			; e = 0 and SPRITE_W_PACKED_MIN
 			; hl - ptr to bullet_erase_scr_addr_old			
 			
@@ -121,8 +121,8 @@ sparker_init:
 			inx h
 			mov m, c
 			
-			; b = posX
-			; c = posY	
+			; b = pos_x
+			; c = pos_y	
 			; set a projectile speed towards the hero
 			; pos_diff =  hero_pos - burnerPosX
 			; speed = pos_diff / VAMPIRE_STATUS_DASH_TIME			
@@ -190,7 +190,7 @@ sparker_update:
 @update_movement:
 			; hl - ptr to bullet_status_timer
 			; advance hl to bullet_speed_y+1
-			HL_ADVANCE_BY_DIFF_B(bullet_speed_y+1, bullet_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(bullet_speed_y+1, bullet_status_timer)
 			; bc <- speedY
 			mov b, m
 			dcx h
@@ -202,11 +202,11 @@ sparker_update:
 			mov e, m
 			dcx h
 			push d
-			; de <- posY
+			; de <- pos_y
 			mov d, m
 			dcx h
 			mov e, m
-			; (posY) <- posY + speedY
+			; (pos_y) <- pos_y + speedY
 			xchg
 			dad b
 			xchg
@@ -216,11 +216,11 @@ sparker_update:
 			mov m, d
 			DCX_H(2)
 			; hl points to speedX+1
-			; de <- posX
+			; de <- pos_x
 			mov d, m
 			dcx h
 			mov e, m
-			; (posX) <- posX + speedX
+			; (pos_x) <- pos_x + speedX
 			xchg
 			pop b
 			dad b
@@ -232,7 +232,7 @@ sparker_update:
 			shld @sparker_pos_ptr+1
 			; hl points to bullet_pos_x+1
 			; advance hl to bullet_anim_timer
-			HL_ADVANCE_BY_DIFF_B(bullet_anim_timer, bullet_pos_x+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_anim_timer, bullet_pos_x+1)
 			mvi a, SPARKER_ANIM_SPEED_MOVE
 			call actor_anim_update
 
@@ -242,15 +242,15 @@ sparker_update:
 			rnz
 			mvi m, VFX_SPAWN_RATE
 			; draw vfx
-			; bc - vfx scrXY
+			; bc - vfx scr_xy
 			; de - vfx_anim_ptr (ex. vfx_puff)
 @sparker_pos_ptr:
 			lxi h, TEMP_ADDR
 			; hl points to bullet_pos_x+1			
 			mov a, m
 			; pos_x to scr_x
-			; a - posX
-			; scrX = posX/8 + $a0
+			; a - pos_x
+			; scr_x = pos_x/8 + $a0
 			RRC_(3)
 			ani %00011111
 			adi SPRITE_X_SCR_ADDR		
@@ -271,7 +271,7 @@ sparker_update:
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE_BY_DIFF_B(bullet_update_ptr+1, bullet_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(bullet_update_ptr+1, bullet_status_timer)
 			jmp actor_destroy
 @vfx_spawn_rate:
 			.byte VFX_SPAWN_RATE

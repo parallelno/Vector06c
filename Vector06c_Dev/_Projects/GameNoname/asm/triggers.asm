@@ -60,7 +60,7 @@ trigger_hero_knocks_his_friend_door:
 @check_clothes:
 			; key_0 is acquired
 			; check if clothes are acquired
-			lxi h, hero_resources + RES_ID_CLOTHES
+			lxi h, hero_res_clothes
 			A_TO_ZERO(0)
 			cmp m
 			jnz @clothes_acquired

@@ -4,6 +4,7 @@
 .include "asm\\bullets\\scythe.asm"
 .include "asm\\bullets\\bomb.asm"
 .include "asm\\bullets\\sparker.asm"
+.include "asm\\bullets\\fart.asm"
 .include "asm\\bullets\\vfx.asm"
 .include "asm\\bullets\\cursor.asm"
 
@@ -119,7 +120,7 @@ bullet_copy_to_scr:
 			rnz
 
 			; advance to bullet_erase_scr_addr
-			HL_ADVANCE_BY_DIFF_B(bullet_erase_scr_addr, bullet_status)			
+			HL_ADVANCE_BY_DIFF_BC(bullet_erase_scr_addr, bullet_status)			
 			; read bullet_erase_scr_addr
 			mov c, m
 			inx h
@@ -229,7 +230,7 @@ bullet_erase:
 			inx h
 			mov d, m
 
-			HL_ADVANCE_BY_DIFF_B(bullet_erase_wh, bullet_erase_scr_addr+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_erase_wh, bullet_erase_scr_addr+1)
 			mov a, m
 			inx h
 			mov h, m			

@@ -26,21 +26,21 @@
 
 ; ffff == 6, a global item. a hero interacts with it when he steps on it. item_id = d. see buffers.asm->global_items for details
 ;		item_id = 0 - storytelling - an invisible tiledata to open a dialog window
-;		item_id = 1 - key 0
+		ITEM_ID_KEY_0			= 1	; 	key 0
 ;		item_id = 2 - key 1
 ;		item_id = 3 - key 2
 ;		item_id = 4 - key 3
 ;		item_id = 5 - key 4
 ;		item_id = 6 - key 5
 ; 		TODO: there should be invisible items like ones below
-;		item_id_fart == 14 - reserved for a quest to scare away knight_quest
-;		item_id_burner == 15 - reserved for burner_quest
+		ITEM_ID_FART			= 14	; reserved for a quest to scare away knight_quest
+		ITEM_ID_BURNER_QUEST	= 15	; reserved for burner_quest
 
 ; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. resource_id = d. see buffers.asm->resources_inst_data for details
 ;		resource_id == 0 - a coin (tiledata = 7*16+0 = 160)
 ;		resource_id == 1 - a potion blue
 ;		resource_id == 2 - a potion red
-;		resource_id == 3 - clothes
+		RES_ID_CLOTHES	= 3	; clothes
 
 ; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable (a hero and monsters can't step on that tile)
 
@@ -71,6 +71,7 @@
 ; ffff == 13, breakable items, a hero can only break it with a hit and get a random reward. a room tracks how many it was broken to manage a reward and a spawn rate. breakable_id = d
 ;		breakable_id == 0 - a barrel (tiledata = 13*16+0 = 208)
 ;		breakable_id == 1 - a crate
+		BREAKABLE_ID_CABBAGE = 2 ;cabbage
 
 ; ffff == 14, decals collidable. it's drawn on top of tiles to increase background variety. decal_collidable_id = d
 ;		decal_collidable_id == 0 - a spider web

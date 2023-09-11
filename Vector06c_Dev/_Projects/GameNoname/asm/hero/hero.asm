@@ -31,8 +31,8 @@ hero_init:
 			ret
 
 ; input:
-; b - posX
-; c - posY
+; b - pos_x
+; c - pos_y
 ; use:
 ; a
 hero_set_pos:

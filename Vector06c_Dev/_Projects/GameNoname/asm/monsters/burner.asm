@@ -150,13 +150,13 @@ burner_init:
 			; hl - ptr to monster_pos_y + 1
 			; advance hl to monster_anim_ptr
 			; set run_r anim
-			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_pos_y + 1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_pos_y + 1)
 			mvi m, <burner_dash
 			inx h
 			mvi m, >burner_dash
 
 			; advance hl to monster_update_ptr
-			HL_ADVANCE_BY_DIFF_B(monster_update_ptr, monster_anim_ptr + 1)
+			HL_ADVANCE_BY_DIFF_BC(monster_update_ptr, monster_anim_ptr + 1)
 			mvi m, <burner_quest_update
 			inx h
 			mvi m, >burner_quest_update	
@@ -183,7 +183,7 @@ burner_quest_update:
 			jz @burner_right
 @burner_up:			
 			; advance hl to monster_speed_y + 1
-			HL_ADVANCE_BY_DIFF_B(monster_pos_y + 1, monster_id)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_y + 1, monster_id)
 			; hl - ptr to monster_pos_y + 1
 			; increase pos_y
 			mov a, m
@@ -200,7 +200,7 @@ burner_quest_update:
 
 @burner_right:
 			; advance hl to monster_pos_x + 1
-			HL_ADVANCE_BY_DIFF_B(monster_pos_x + 1, monster_id)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x + 1, monster_id)
 			; hl - ptr to monster_pos_x + 1
 			; increase pos_x
 			mov a, m
@@ -216,7 +216,7 @@ burner_quest_update:
 @update_anim:
 			; hl points to monster_update_ptr
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_update_ptr)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_update_ptr)
 
 			mvi a, BURNER_ANIM_SPEED_MOVE
 			jmp burner_update_anim_check_collision_hero
@@ -257,7 +257,7 @@ burner_update_detect_hero_init:
 			mvi m, BURNER_STATUS_DETECT_HERO
 			inx h
 			mvi m, BURNER_STATUS_DETECT_HERO_TIME
-			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_status_timer)
 			mvi m, <burner_idle
 			inx h
 			mvi m, >burner_idle
@@ -271,8 +271,8 @@ burner_update_detect_hero:
 			jz @set_move_init
 @check_mob_hero_distance:
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_B(monster_pos_x+1, monster_status_timer)
-			; check hero-monster posX diff
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_status_timer)
+			; check hero-monster pos_x diff
 			lda hero_pos_x+1
 			sub m
 			jc @check_neg_pos_x_diff
@@ -286,7 +286,7 @@ burner_update_detect_hero:
 @check_pos_y_diff:
 			; advance hl to monster_pos_y+1
 			INX_H(2)
-			; check hero-monster posY diff
+			; check hero-monster pos_y diff
 			lda hero_pos_y+1
 			sub m
 			jc @check_neg_pos_y_diff
@@ -300,12 +300,12 @@ burner_update_detect_hero:
 @hero_detected:
 			; hl = monster_pos_y+1
 			; advance hl to monster_status
-			HL_ADVANCE_BY_DIFF_B(monster_status, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_pos_y+1)
 			mvi m, BURNER_STATUS_DASH_PREP
 			inx h
 			mvi m, BURNER_STATUS_DASH_PREP_TIME
 			; advance hl to monster_anim_ptr
-			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_status_timer)
 			mvi m, <burner_dash
 			inx h
 			mvi m, >burner_dash
@@ -313,12 +313,12 @@ burner_update_detect_hero:
 			
 @update_anim_hero_detect_x:
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_x+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_x+1)
 			mvi a, BURNER_ANIM_SPEED_DETECT_HERO
 			jmp burner_update_anim_check_collision_hero
 @update_anim_hero_detect_y:
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_y+1)
 			mvi a, BURNER_ANIM_SPEED_DETECT_HERO
 			jmp burner_update_anim_check_collision_hero
 
@@ -383,7 +383,7 @@ burner_update_move_init:
 			inx h
 			mov m, c
 @set_anim:
-			HL_ADVANCE_BY_DIFF_B(monster_anim_ptr, monster_speed_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_speed_y+1)
 			; a = rnd
 			ora a
 			; if rnd is positive (up or right movement), then play burner_run_r anim
@@ -410,7 +410,7 @@ burner_update_move:
 			
 			; hl points to monster_pos_y+1
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_y+1)
 			mvi a, BURNER_ANIM_SPEED_MOVE
 			jmp burner_update_anim_check_collision_hero
 
@@ -418,7 +418,7 @@ burner_update_move:
 			pop h
 			; hl points to monster_pos_x
 			; advance hl to monster_status
-			HL_ADVANCE_BY_DIFF_B(monster_status, monster_pos_x)
+			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_pos_x)
 			mvi m, BURNER_STATUS_MOVE_INIT
 			inx h
 			mvi m, BURNER_STATUS_MOVE_TIME
@@ -437,7 +437,7 @@ burner_update_relax:
 			dcr m
 			jz @set_move_init
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_status_timer)
 			mvi a, BURNER_ANIM_SPEED_RELAX
 			jmp burner_update_anim_check_collision_hero
  @set_move_init:
@@ -455,7 +455,7 @@ burner_update_dash_prep:
 			dcr m
 			jz @set_dash
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_status_timer)
 			mvi a, BURNER_ANIM_SPEED_DASH_PREP
 			jmp burner_update_anim_check_collision_hero
  @set_dash:
@@ -465,10 +465,10 @@ burner_update_dash_prep:
 			dcx h
 			mvi m, BURNER_STATUS_DASH
 			; advance hl to monster_pos_x
-			HL_ADVANCE_BY_DIFF_B(monster_pos_x, monster_status)
-			; reset sub pixel posX
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x, monster_status)
+			; reset sub pixel pos_x
 			mvi m, 0
-			; advance hl to posX+1
+			; advance hl to pos_x+1
 			inx h
 			; pos_diff =  hero_pos - burnerPosX
 			; speed = pos_diff / BURNER_STATUS_DASH_TIME
@@ -491,11 +491,11 @@ burner_update_dash_prep:
 			mov l, a
 			push h
 			xchg
-			; advance hl to posY
+			; advance hl to pos_y
 			inx h
-			; reset sub pixel posY
+			; reset sub pixel pos_y
 			mvi m, 0
-			; advance hl to posY+1
+			; advance hl to pos_y+1
 			inx h
 			; do the same for Y
 			lda hero_pos_y+1
@@ -538,7 +538,7 @@ burner_update_dash:
 @apply_movement:
 			ACTOR_UPDATE_MOVEMENT(monster_status_timer, monster_speed_y)
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_B(monster_anim_timer, monster_pos_x+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_x+1)
 			mvi a, BURNER_ANIM_SPEED_DASH
 			jmp actor_anim_update
 @set_move_init:

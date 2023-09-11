@@ -26,12 +26,28 @@
 			"frames" : ["puff0", "puff0", "puff1", "puff2", "puff3"],
 			"loop" : false
 		},
+		"puff_loop"	: {
+			"frames" : ["puff0", "puff0", "puff1", "puff2", "puff3", "invis", "invis", "invis"],
+			"loop" : true
+		},
 		"reward"	: {
 			"frames" : ["reward0", "reward1", "reward3", "reward2", "reward3", "reward0", "reward3"],
 			"loop" : false
 		}
 	},
 	"sprites" : [ 
+		{
+			"name" : "invis",
+			"x" : 0,
+			"y"	: 35,
+			"width" : 8,
+			"height" : 5,
+			"mask_x" : 0,
+			"mask_y" : 16,
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},		
 		{
 			"name" : "puff0",
 			"x" : 0,

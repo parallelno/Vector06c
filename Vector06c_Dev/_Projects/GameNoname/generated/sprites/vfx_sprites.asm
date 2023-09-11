@@ -4,6 +4,12 @@ __RAM_DISK_S_VFX = RAM_DISK_S
 __RAM_DISK_M_VFX = RAM_DISK_M
 __vfx_sprites:
 			.byte 1,1  ; safety pair of bytes for reading by POP B, and also (mask_flag, preshifting is done)
+__vfx_invis_0:
+			.byte 0, 0; offset_y, offset_x
+			.byte 5, 0; height, width
+			.byte 255,3,255,12,255,0,255,0,255,16,255,15,255,6,255,25,255,0,255,0,255,15,255,0,255,0,255,0,255,0,
+
+			.byte 1,1  ; safety pair of bytes for reading by POP B, and also (mask_flag, preshifting is done)
 __vfx_puff0_0:
 			.byte 2, 0; offset_y, offset_x
 			.byte 11, 1; height, width

@@ -79,17 +79,17 @@ hero_sword_init:
 			; advance hl to bullet_pos_y+1
 			LXI_D_TO_DIFF(bullet_pos_y+1, bullet_status_timer)
 			dad d
-			; set posY
+			; set pos_y
 			lda hero_pos_y+1
-			; tmp c = posY
+			; tmp c = pos_y
 			mov c, a
-			; set posY
+			; set pos_y
 			mov m, a
 			dcx h
 			mov m, b
 			; advance hl to bullet_pos_x+1
 			dcx h
-			; set posX
+			; set pos_x
 			lda hero_pos_x+1
 
 			mov m, a
@@ -108,15 +108,15 @@ hero_sword_init:
 			; advance hl to bullet_erase_scr_addr_old+1
 			LXI_D_TO_DIFF(bullet_erase_scr_addr_old+1, bullet_erase_wh_old)
 			dad d
-			; a - posX
-			; scrX = posX/8 + $a0
+			; a - pos_x
+			; scr_x = pos_x/8 + $a0
 			RRC_(3)
 			ani %00011111
 			adi SPRITE_X_SCR_ADDR
 			mov m, a
 			; advance hl to bullet_erase_scr_addr_old
 			dcx h
-			; c = posY
+			; c = pos_y
 			mov m, c
 			ret
 @no_sord:
@@ -201,7 +201,7 @@ hero_sword_update:
 			; check enemies-attk01 sprite collision
 			; hl - ptr to bullet_anim_ptr+1
 			; advance hl to bullet_pos_x+1
-			HL_ADVANCE_BY_DIFF_B(bullet_pos_x+1, bullet_anim_ptr+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_pos_x+1, bullet_anim_ptr+1)
 			; add a collision offset
 			mov d, m
 			INX_H(2)
@@ -217,7 +217,7 @@ hero_sword_update:
 			; check enemies-attk01 sprite collision
 			; hl - ptr to bullet_anim_ptr+1
 			; advance hl to bullet_pos_x+1
-			HL_ADVANCE_BY_DIFF_B(bullet_pos_x+1, bullet_anim_ptr+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_pos_x+1, bullet_anim_ptr+1)
 			; add a collision offset
 			mov d, m
 			INX_H(2)
@@ -242,7 +242,7 @@ hero_sword_update:
 			jnc @check_tiledata
 
 			; advance hl to monster_impacted_ptr
-			HL_ADVANCE_BY_DIFF_B(monster_impacted_ptr, monster_update_ptr+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_impacted_ptr, monster_update_ptr+1)
 			mov e, m
 			inx h
 			mov d, m
@@ -467,9 +467,44 @@ hero_sword_func_breakable:
 			rlc
 			rnc ; return if no sword
 
+			; if breakable_id == BREAKABLE_ID_CABBAGE, spawn a fart bullet
+			; e - breakable_id
+			mvi a, BREAKABLE_ID_CABBAGE
+			cmp e
+			jnz @no_fart
+@cabbage:
+			mvi a, CABBAGE_HEALH_VAL
+			push b
+			call hero_health_increase
+			pop b
+			; add the cabbage resource
+			lxi h, hero_res_cabbage
+			inr m
+			mvi a, CABBAGE_MAX
+			cmp m
+			jnz @no_fart
+			mvi m, 0
+			; a hero got fart
+			lxi h, global_items + ITEM_ID_FART - 1	; because the first item_id = 1
+			mov a, m
+			CPI_WITH_ZERO(ITEM_STATUS_NOT_ACQUIRED)
+			jnz @no_new_fart
+			mvi m, ITEM_STATUS_ACQUIRED
+@no_new_fart:
+
+			push b ; store tile_idx
+			; spawn the fart actor
+			lxi h, hero_erase_scr_addr
+			mov c, m
+			inx h
+			mov b, m
+			lxi d, vfx_puff_loop
+			call fart_init
+			pop b ; restore tile_idx
+
+@no_fart:
 			; add score points
 			push b
-			; e - breakable_id
 			mvi c, TILEDATA_FUNC_ID_BREAKABLES
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score
@@ -532,8 +567,8 @@ hero_sword_func_breakable:
 			lxi d, vfx_puff
 			call vfx_init
 
-			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_breakables, BREAKABLE_SPAWN_RATE_DELTA, BREAKABLE_SPAWN_RATE_MAX)
 			ret
+			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_breakables, BREAKABLE_SPAWN_RATE_DELTA, BREAKABLE_SPAWN_RATE_MAX)
 
 ; in:
 ; a - trigger_id

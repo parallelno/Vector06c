@@ -89,15 +89,15 @@ bomb_init:
 			mvi m, >bomb_run			
 @eraseScrAddr:
 			mov a, b
-			; a - posX
-			; scrX = posX/8 + $a0
+			; a - pos_x
+			; scr_x = pos_x/8 + $a0
 			RRC_(3)
 			ani %00011111
 			adi SPRITE_X_SCR_ADDR
 			mvi e, 0
-			; a = scrX
-			; b = posX
-			; c = posY			
+			; a = scr_x
+			; b = pos_x
+			; c = pos_y			
 			; e = 0 and SPRITE_W_PACKED_MIN
 			; hl - ptr to bullet_erase_scr_addr_old			
 			
@@ -132,8 +132,8 @@ bomb_init:
 			inx h
 			mov m, c
 			
-			; b = posX
-			; c = posY	
+			; b = pos_x
+			; c = pos_y	
 			; set a projectile speed towards the hero
 			; pos_diff =  hero_pos - burnerPosX
 			; speed = pos_diff / VAMPIRE_STATUS_DASH_TIME			
@@ -199,7 +199,7 @@ bomb_update:
 @update_movement:
 			; hl - ptr to bullet_status_timer
 			; advance hl to bullet_speed_y+1
-			HL_ADVANCE_BY_DIFF_B(bullet_speed_y+1, bullet_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(bullet_speed_y+1, bullet_status_timer)
 			; bc <- speedY
 			mov b, m
 			dcx h
@@ -211,11 +211,11 @@ bomb_update:
 			mov e, m
 			dcx h
 			push d
-			; de <- posY
+			; de <- pos_y
 			mov d, m
 			dcx h
 			mov e, m
-			; (posY) <- posY + speedY
+			; (pos_y) <- pos_y + speedY
 			xchg
 			dad b
 			xchg
@@ -225,11 +225,11 @@ bomb_update:
 			mov m, d
 			DCX_H(2)
 			; hl points to speedX+1
-			; de <- posX
+			; de <- pos_x
 			mov d, m
 			dcx h
 			mov e, m
-			; (posX) <- posX + speedX
+			; (pos_x) <- pos_x + speedX
 			xchg
 			pop b
 			dad b
@@ -240,17 +240,17 @@ bomb_update:
 			
 			; hl points to bullet_pos_x+1
 			; advance hl to bullet_anim_timer
-			HL_ADVANCE_BY_DIFF_B(bullet_anim_timer, bullet_pos_x+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_anim_timer, bullet_pos_x+1)
 			mvi a, BOMB_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_COLLISION_WIDTH, BOMB_COLLISION_HEIGHT, BOMB_DAMAGE)	
 @dieAfterDamage:
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE_BY_DIFF_B(bullet_update_ptr+1, bullet_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_update_ptr+1, bullet_pos_y+1)
 			jmp actor_destroy
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE_BY_DIFF_B(bullet_update_ptr+1, bullet_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(bullet_update_ptr+1, bullet_status_timer)
 			jmp actor_destroy
 
 ; draw a sprite into a backbuffer

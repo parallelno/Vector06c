@@ -30,12 +30,13 @@ bullet_pos_y:				= bullet_pos_x + WORD_LEN				;.word TEMP_WORD
 bullet_speed_x:				= bullet_pos_y + WORD_LEN				;.word TEMP_WORD
 bullet_speed_y:				= bullet_speed_x + WORD_LEN				;.word TEMP_WORD
 @data_end:					= bullet_speed_y + WORD_LEN
+
 BULLET_RUNTIME_DATA_LEN = @data_end - bullets_runtime_data ; $1a; bullet_runtime_data_end_addr-bullets_runtime_data
 
 ; the same structs for the rest of the bullets
 bullets_runtime_data_end_marker: = bullets_runtime_data + BULLET_RUNTIME_DATA_LEN * BULLETS_MAX ; $78ff ; :		.word ACTOR_RUNTIME_DATA_END << 8
 bullets_runtime_data_end: = bullets_runtime_data_end_marker + WORD_LEN
-
+bullets_runtime_data_len: = bullets_runtime_data_end - bullets_runtime_data
 ;=============================================================================
 ; statuses of container instances. each instance is represented by a pair of bytes (room_id, tile_idx)
 ; this data is aligned to $100, the length is <= $100
@@ -111,7 +112,7 @@ hero_res_ammo:		= hero_resources + 0
 hero_res_mana:		= hero_resources + 1
 ; TODO: there are 3 bytes free
 hero_res_clothes:	= hero_resources + 2
-; hero_res_??		= hero_resources + 3
+hero_res_cabbage:	= hero_resources + 3 ; it is a quest resource
 ; hero_res_??		= hero_resources + 4
 hero_resources_end:	= hero_resources + HERO_RESOURCES_LEN
 

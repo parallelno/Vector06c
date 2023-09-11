@@ -66,15 +66,15 @@ cursor_init:
 			mvi m, >bomb_run
 
 			mov a, b
-			; a - posX
-			; scrX = posX/8 + $a0
+			; a - pos_x
+			; scr_x = pos_x/8 + $a0
 			RRC_(3)
 			ani %00011111
 			adi SPRITE_X_SCR_ADDR
 			mvi e, 0
-			; a = scrX
-			; b = posX
-			; c = posY			
+			; a = scr_x
+			; b = pos_x
+			; c = pos_y			
 			; e = 0 and SPRITE_W_PACKED_MIN
 			; hl - ptr to bullet_erase_scr_addr_old			
 			
@@ -148,14 +148,14 @@ cursor_update:
 
 			; hl points to bullet_pos_y+1
 			; advance hl to bullet_anim_timer
-			HL_ADVANCE_BY_DIFF_B(bullet_anim_timer, bullet_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_anim_timer, bullet_pos_y+1)
 			mvi a, CURSOR_ANIM_SPEED_MOVE
 			call actor_anim_update
 			ret
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE_BY_DIFF_B(bullet_update_ptr+1, bullet_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(bullet_update_ptr+1, bullet_status_timer)
 			jmp actor_destroy
 @vfx_spawn_rate:
 			.byte VFX_SPAWN_RATE

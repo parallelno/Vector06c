@@ -100,15 +100,15 @@ scythe_init:
 			mvi m, >scythe_run
 
 			mov a, b
-			; a - posX
-			; scrX = posX/8 + $a0
+			; a - pos_x
+			; scr_x = pos_x/8 + $a0
 			RRC_(3)
 			ani %00011111
 			adi SPRITE_X_SCR_ADDR
 			mvi e, 0
-			; a = scrX
-			; b = posX
-			; c = posY			
+			; a = scr_x
+			; b = pos_x
+			; c = pos_y			
 			; e = 0 and SPRITE_W_PACKED_MIN
 			; hl - ptr to bullet_erase_scr_addr_old			
 			
@@ -208,25 +208,25 @@ scythe_update:
 			
 			; hl points to bullet_pos_y+1
 			; advance hl to bullet_anim_timer
-			HL_ADVANCE_BY_DIFF_B(bullet_anim_timer, bullet_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_anim_timer, bullet_pos_y+1)
 			mvi a, SCYTHE_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, SCYTHE_DAMAGE)	
 @dieAfterDamage:
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE_BY_DIFF_B(bullet_update_ptr+1, bullet_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_update_ptr+1, bullet_pos_y+1)
 			jmp actor_destroy
 @setBounceAfterTileCollision:
 			pop h
-			; hl points to posX
+			; hl points to pos_x
 			; advance hl to bullet_status_timer
-			HL_ADVANCE_BY_DIFF_B(bullet_status_timer, bullet_pos_x)
+			HL_ADVANCE_BY_DIFF_BC(bullet_status_timer, bullet_pos_x)
 @set_bounce:
 			; hl - ptr to bullet_status_timer
 			; advance hl to bullet_status
 			dcx h
 			mvi m, SCYTHE_STATUS_MOVE_BOUNCE
 			; advance hl to bullet_speed_x
-			HL_ADVANCE_BY_DIFF_B(bullet_speed_x, bullet_status)
+			HL_ADVANCE_BY_DIFF_BC(bullet_speed_x, bullet_status)
 			mov a, m
 			inx h
 			ora m
@@ -261,7 +261,7 @@ scythe_update:
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE_BY_DIFF_B(bullet_update_ptr+1, bullet_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(bullet_update_ptr+1, bullet_status_timer)
 			jmp actor_destroy
 
 ; draw a sprite into a backbuffer

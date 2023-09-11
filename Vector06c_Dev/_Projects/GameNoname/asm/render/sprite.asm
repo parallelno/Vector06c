@@ -1,7 +1,7 @@
 ; get a sprite data addr
 ; in:
 ; hl - anim_ptr
-; c - preshifted sprite idx*2 offset based on posX then +2
+; c - preshifted sprite idx*2 offset based on pos_x then +2
 ; out:
 ; bc - ptr to a sprite
 sprite_get_addr:
@@ -13,11 +13,11 @@ sprite_get_addr:
 			ret
 
 ; in:
-; hl - ptr to posX+1 (high byte in 16-bit pos)
+; hl - ptr to pos_x+1 (high byte in 16-bit pos)
 ; out:
 ; de - sprite screen addr
-; c - preshifted sprite idx*2 offset based on posX then +2
-; hl - ptr to posY+1
+; c - preshifted sprite idx*2 offset based on pos_x then +2
+; hl - ptr to pos_y+1
 ; use: a
 sprite_get_scr_addr8:
 			; calc preshifted sprite idx*2 offset
@@ -38,11 +38,11 @@ sprite_get_scr_addr8:
 			ret
 
 ; in:
-; hl - ptr to posX+1 (high byte in 16-bit pos)
+; hl - ptr to pos_x+1 (high byte in 16-bit pos)
 ; out:
 ; de - sprite screen addr
-; c - preshifted sprite idx*2 offset based on posX then +2
-; hl - ptr to posY+1
+; c - preshifted sprite idx*2 offset based on pos_x then +2
+; hl - ptr to pos_y+1
 ; use: a	
 ; TODO: think of optimization. replace mov a, m; ani, with mvi, ana m
 sprite_get_scr_addr4:

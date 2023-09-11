@@ -46,9 +46,11 @@
 			jmp @loop
 .endmacro
 
+; check a spawn_rate which address is (rate_ptr + room_id
 ; use:
 ; hl, e, a
-.macro ROOM_SPAWN_RATE_CHECK(rate_ptr, doNotSpawn)
+; TODO: an issue that this macro does not check what level it is. rooms_spawn_rates array does not contain a proper data for all levels
+.macro ROOM_SPAWN_RATE_CHECK(rate_ptr, do_not_spawn)
 			; check rooms_break_rate if it needs to spawn
 			lda room_id
 			adi <rate_ptr
@@ -58,7 +60,7 @@
 			mov e, m
 			call random
 			cmp e
-			jc doNotSpawn
+			jc do_not_spawn
 .endmacro
 
 .macro ROOM_SPAWN_RATE_UPDATE(rate, SPAWN_RATE_DELTA, SPAWN_RATE_MIN)

@@ -506,7 +506,7 @@ room_draw_tiles:
 			cmp d
 			jnz @loop
 
-			; move posY up to the next tile line
+			; move pos_y up to the next tile line
 			mvi a, TILE_HEIGHT
 			add e
 			mov e, a
@@ -591,8 +591,8 @@ room_check_tiledata_restorable:
 ; if several tile corners stays on the same tile,
 ; they all read same tiledata to let collision logic works properly
 ; in:
-; d - posX
-; e - posY
+; d - pos_x
+; e - pos_y
 ; b - width-1
 ; c - height-1
 ; out:
@@ -710,8 +710,8 @@ room_get_collision_tiledata:
 ; collects idxs of tiles that intersect with a sprite
 ; if 2+ corners are in the same tile, only one idx is stored
 ; in:
-; d - posX
-; e - posY
+; d - pos_x
+; e - pos_y
 ; b - width-1
 ; c - height-1
 ; out: room_get_tiledata_buff

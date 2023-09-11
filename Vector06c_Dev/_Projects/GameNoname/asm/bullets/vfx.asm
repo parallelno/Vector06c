@@ -129,9 +129,10 @@ vfx_init:
 			ori SPRITE_X_SCR_ADDR
 			mov b, a
 
-			mvi d, 2 ; anim ptr offset. used in draw func
+			mvi d, 2
 			mvi e, 0
 			; bc - screen addr
+			; d - anim ptr offset. used in a draw func			
 			; e - 0 and SPRITE_W_PACKED_MIN
 			; hl - ptr to bullet_erase_scr_addr_old			
 			
@@ -161,7 +162,6 @@ vfx_init:
 			mov m, b
 			; advance hl to bullet_pos_y
 			inx h
-@anim_ptr_offset:
 			mov m, d
 			inx h
 			mov m, c

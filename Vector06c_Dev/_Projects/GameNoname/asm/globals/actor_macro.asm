@@ -4,7 +4,7 @@
 .macro ACTOR_UPDATE_MOVEMENT(actor_status_timer, actorSpeedY)
  			; hl - ptr to actor_status_timer
 			; advance hl to actorSpeedY+1
-			HL_ADVANCE_BY_DIFF_B(actorSpeedY+1, actor_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(actorSpeedY+1, actor_status_timer)
 			; bc <- speed_y
 			mov b, m
 			dcx h
@@ -48,7 +48,7 @@
 ; out:
 ; hl points to actor_pos_y+1
 .macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actor_status_timer, actor_pos_x, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, collision_handler) 
-			HL_ADVANCE_BY_DIFF_B(actor_pos_x, actor_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(actor_pos_x, actor_status_timer)
 			push h ; (stack) <- pos_x ptr, to restore it in @apply_new_pos
 			; bc <- pos_x
 			mov c, m
