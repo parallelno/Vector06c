@@ -22,7 +22,7 @@
 	"lists" : {
 		"decals_walkable" : ["bones", "skull"],
 		"decals_collidable" : ["web1"],
-		"items" : ["key_0", "key_1", "key_1", "key_3", "key_4"],
+		"items" : ["key_0", "key_1", "key_1", "key_2", "key_3"],
 		"resources" : ["coin", "potion_blue", "potion_red", "dry_clothes"],
 		"breakable" : ["barrel", "crate", "cabbage"],
 		"doors" : ["door_0_l", "door_0_r", "door_1_l", "door_1_r", "door_1_l", "door_1_r", "door_0_l", "door_0_r", "door_4_l", "door_4_r"],
@@ -105,18 +105,6 @@
 		},
 		{
 			"name" : "key_0",
-			"x" : 0,
-			"y"	: 101,
-			"width" : 16,
-			"height" : 10,
-			"offset_y" : 1,
-			"mask_x" : 0,
-			"mask_y" : 117, 
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},		
-		{
-			"name" : "key_1",
 			"x" : 16,
 			"y"	: 101,
 			"width" : 16,
@@ -126,7 +114,31 @@
 			"mask_y" : 117, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
+		},		
+		{
+			"name" : "key_1",
+			"x" : 0,
+			"y"	: 101,
+			"width" : 16,
+			"height" : 10,
+			"offset_y" : 1,
+			"mask_x" : 0,
+			"mask_y" : 117, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
 		},
+		{
+			"name" : "key_2",
+			"x" : 32,
+			"y"	: 101,
+			"width" : 16,
+			"height" : 10,
+			"offset_y" : 1,
+			"mask_x" : 32,
+			"mask_y" : 117, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},	
 		{
 			"name" : "key_3",
 			"x" : 48,
@@ -135,18 +147,6 @@
 			"height" : 10,
 			"offset_y" : 1,
 			"mask_x" : 48,
-			"mask_y" : 117, 
-			"mask_alpha" : 0,
-			"mask_color" : 1
-		},	
-		{
-			"name" : "key_4",
-			"x" : 64,
-			"y"	: 101,
-			"width" : 16,
-			"height" : 10,
-			"offset_y" : 1,
-			"mask_x" : 64,
 			"mask_y" : 117, 
 			"mask_alpha" : 0,
 			"mask_color" : 1

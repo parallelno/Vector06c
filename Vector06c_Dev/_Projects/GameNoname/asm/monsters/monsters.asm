@@ -502,8 +502,14 @@ monster_impacted:
 			call vfx_init4
 			pop h
 
-			; mark this monster dead death
+			; recrease monster's health
+			LXI_D_TO_DIFF(monster_health, monster_pos_y+1)
+			dad d
+			dcr m
+			rnz
+
+			; mark this monster dead
 			; advance hl to monster_update_ptr+1
-			LXI_D_TO_DIFF(monster_update_ptr+1, monster_pos_y+1)
+			LXI_D_TO_DIFF(monster_update_ptr+1, monster_health)
 			dad d
 			jmp actor_destroy
