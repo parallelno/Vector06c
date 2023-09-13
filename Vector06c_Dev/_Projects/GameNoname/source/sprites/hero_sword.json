@@ -86,7 +86,8 @@
 			"mask_x" : 0,
 			"mask_y" : 81,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "sword_l1",
@@ -99,7 +100,8 @@
 			"mask_x" : 24,
 			"mask_y" : 81,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		}		
 	]
 }

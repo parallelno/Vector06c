@@ -110,13 +110,13 @@ def export(source_path, export_path, clean_tmp = True):
 		file_inc.write(f'\n')
 
 		for i, c in enumerate(reg_data[0:14]):
-			bin_file = f"source_name{i:02d}.bin"
-			zx0File = f"source_name{i:02d}.zx0"
+			bin_file = f"source_name{i:02d}{build.EXT_BIN}"
+			zx0File = f"source_name{i:02d}{build.EXT_ZX0}"
 			with open(bin_file, "wb") as f:
 				f.write(c)
 			
 			common.delete_file(zx0File)
-			common.run_command(f"{build.zx0_path} -w 256 {bin_file} {zx0File}")
+			common.run_command(f"{build.zx0salvadore_path} -w 256 {bin_file} {zx0File}")
 
 			with open(zx0File, "rb") as f:
 				dbname = f"ay_reg_data{i:02d}"

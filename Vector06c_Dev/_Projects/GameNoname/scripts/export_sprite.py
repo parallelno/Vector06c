@@ -144,11 +144,15 @@ def gfx_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 		width = sprite["width"]
 		height = sprite["height"]
 		offset_x = 0
+		mirrored = False
 		if sprite.get("offset_x") is not None:
 			offset_x = sprite["offset_x"]
 		offset_y = 0
 		if sprite.get("offset_y") is not None:
 			offset_y = sprite["offset_y"]
+
+		if sprite.get("mirrored") is not None:
+			mirrored = sprite["mirrored"]
 
 		# get a sprite as a color index 2d array
 		sprite_img = []
@@ -162,7 +166,7 @@ def gfx_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 
 		# convert indexes into bit lists.
 		bits0, bits1, bits2, bits3 = common_gfx.indexes_to_bit_lists(sprite_img)
-
+		
 		# combite bits into byte lists
 		#bytes0 = common.combine_bits_to_bytes(bits0) # 8000-9FFF # from left to right, from bottom to top
 		bytes1 = common.combine_bits_to_bytes(bits1) # A000-BFFF
@@ -189,6 +193,32 @@ def gfx_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 
 			mask_bytes = common.combine_bits_to_bytes(mask_img)
 
+		# TODO: make runtime sprite mirroring feature
+		# it saves: 2256 bytes (hero_l, and monsters)
+		'''
+		Success. Size: 54468 bytes ($d4c4) in 1.750s
+
+		monster runtime data moved over buffers
+		Success. Size: 53954 bytes ($d2c2) in 1.057s
+		gain -514
+
+		Success. Size: 53212 bytes ($cfdc) in 1.144s
+		gain -742
+
+		all monsters
+		Success. Size: 51698 bytes ($c9f2) in 1.075s
+		gain -1514
+		total gain -2256
+		'''
+		if mirrored:
+			l = len(bytes1)
+			bytes1 = [0] * l
+			bytes2 = [0] * l
+			bytes3 = [0] * l
+			if mirrored:
+				lm = len(mask_bytes)
+				mask_bytes = [0] * lm
+
 		# to support a sprite render function
 		data = sprite_data(bytes1, bytes2, bytes3, width, height, mask_bytes)
 
@@ -208,7 +238,7 @@ def gfx_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 
 		asm += common_gfx.bytes_to_asm_tiled(data)
 
- 
+
 		# find leftest pixel dx
 		dx_l = common_gfx.find_sprite_horiz_border(True, sprite_img, mask_alpha, width, height)
 		# find rightest pixel dx

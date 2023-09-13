@@ -18,7 +18,7 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths):
 		asm += f'.include "{common.double_slashes(labels_path)}"\n'
 	asm += "\n"
 
-	asm += "; main-ram data (sprite anims, etc.)\n"
+	asm += "sprite_anims:\n"
 	for name in segments_paths:
 		ram_data_paths = segments_paths[name]["ram_include_paths"]
 		for ram_data_path in ram_data_paths:
@@ -62,7 +62,7 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_paths):
 		chunk_id = chunk_j["chunk_id"]
 		addr_s_wo_hex_sym = common.get_addr_wo_prefix(addr_s)
 		chunk_name = build.get_chunk_name(bank_id, addr_s_wo_hex_sym, chunk_id)
-		chunk_path = generated_bin_dir + chunk_name + build.EXT_BIN_ZX0
+		chunk_path = generated_bin_dir + chunk_name + build.packer_bin_ext
 		asm += f"{chunk_name}:\n"
 		asm += f'.incbin "{common.double_slashes(chunk_path)}"\n'
 

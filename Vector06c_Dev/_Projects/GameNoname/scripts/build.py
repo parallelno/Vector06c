@@ -33,17 +33,30 @@ EXT_ASM			= ".asm"
 EXT_BIN			= ".bin"
 EXT_ZX0			= ".zx0"
 EXT_BIN_ZX0		= ".bin.zx0"
+EXT_UPKR		= ".upkr"
 EXT_BIN_UPKR	= ".bin.upkr"
 EXT_ROM			= ".rom"
 EXT_YM			= ".ym"
 
+PACKER_ZX0				= 0
+PACKER_ZX0_SALVADORE	= 1
+PACKER_UPKR				= 2
+
 # global vars
 build_db_path = "generated\\build.db"
 assembler_path = "..\\..\\retroassembler\\retroassembler.exe -C=8080 -c"
-assembler_labels_cmd = " -x"
-zx0_path = "tools\\zx0salvador.exe -v -classic"
-upkr_path = "tools\\upkr.exe --z80"
 emulator_path = "..\\..\\Emu80\\Emu80qt.exe"
+
+assembler_labels_cmd = " -x"
+
+zx0_path = "tools\\zx0 -c"
+zx0salvadore_path = "tools\\zx0salvador.exe -v -classic"
+upkr_path = "tools\\upkr.exe --z80"
+
+packer_path 	= ""
+packer_ext		= ""
+packer_bin_ext	= ""
+
 # end global vars
 
 BIN_DIR = "bin\\"
@@ -56,9 +69,25 @@ def set_assembler_labels_cmd(cmd):
 	global assembler_labels_cmd
 	assembler_labels_cmd = cmd
 
-def set_zx0_path(path):
-	global zx0_path
-	zx0_path = path
+def set_packer(packer):
+	global packer_path
+	global packer_ext
+	global packer_bin_ext
+	if packer == PACKER_ZX0:
+		packer_path = zx0_path
+		packer_ext = EXT_ZX0
+		packer_bin_ext = EXT_BIN_ZX0
+
+	if packer == PACKER_ZX0_SALVADORE:
+		packer_path = zx0salvadore_path
+		packer_ext = EXT_ZX0
+		packer_bin_ext = EXT_BIN_ZX0
+
+	if packer == PACKER_UPKR:
+		packer_path = upkr_path
+		packer_ext = EXT_UPKR
+		packer_bin_ext = EXT_BIN_UPKR
+
 
 def set_emulator_path(path):
 	global emulator_path

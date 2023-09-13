@@ -93,7 +93,8 @@
 			"mask_x" : 16,
 			"mask_y" : 98,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "run_l1",
@@ -104,7 +105,8 @@
 			"mask_x" : 16,
 			"mask_y" : 114,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "run_l2",
@@ -115,7 +117,8 @@
 			"mask_x" : 16,
 			"mask_y" : 129,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "run_l3",
@@ -126,7 +129,8 @@
 			"mask_x" : 16,
 			"mask_y" : 145,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "cast_0",

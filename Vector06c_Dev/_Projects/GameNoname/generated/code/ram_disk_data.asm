@@ -8,7 +8,7 @@
 .include "generated\\code\\segment_bank3_addr0_labels.asm"
 .include "generated\\code\\segment_bank3_addr8000_labels.asm"
 
-; main-ram data (sprite anims, etc.)
+sprite_anims:
 .include "generated\\sprites\\hero_r_anim.asm"
 .include "generated\\sprites\\skeleton_anim.asm"
 .include "generated\\sprites\\scythe_anim.asm"
@@ -63,11 +63,11 @@ chunk_bank3_addr8000_0:
 ;                             hero_l_sprites [13818], vampire_sprites [7884], vfx_sprites [1392], 
 ; bank2 addr8000 [19563 free] description: sound and music must be at >= $8000 addr. $F102-$FFFF music player runtime buffers 
 ;                             sound_rd [793], song01 [8575], 
-; bank3 addr0    [19956 free] description: 
-;                             level00_gfx [5762], level01_gfx [6794], 
+; bank3 addr0    [19996 free] description: 
+;                             level00_gfx [5722], level01_gfx [6794], 
 ; bank3 addr8000 [ 1202 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering) 
 ;                             global_consts_rd [0], sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [87], sprite_preshift_rd [1541], text_ex_rd [389], text_rd [3911], game_score_data_rd [206], 
-; [136221 total/35336 compressed][71909 total free]
+; [136181 total/35323 compressed][71949 total free]
 
 .if BUFFERS_START_ADDR < ram_disk_data
 			.error "the programm is too big. It overlaps with tables at the end of RAM"

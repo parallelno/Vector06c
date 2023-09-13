@@ -2,6 +2,47 @@
 ; TODO: move all global vars here
 ; TODO: rename buffers.asm to vars.asm
 ;=============================================================================
+; monsters runtime data
+; ptr to the first monster data in the sorted list
+monster_runtime_data_sorted:	= $7512 ; .word monster_update_ptr
+
+; a list of monster runtime data structs.
+; TODO: optimization. consider using JMP_4 instead of func ptrs like monster_update_ptr
+; TODO: move it over the buffers.asm
+; TODO: write a script to convert .byte into label and an address
+monsters_runtime_data:		= $7514	; $7712 - $1fe (512)(MONSTER_RUNTIME_DATA_LEN * MONSTERS_MAX)
+monster_update_ptr:			= $7514	; .word TEMP_ADDR
+monster_draw_ptr:			= $7516 ; .word TEMP_ADDR
+monster_impacted_ptr:		= $7518 ; .word TEMP_WORD ; called by a hero's bullet, another monster, etc. to affect this monster
+monster_id:					= $751a ; .byte TEMP_BYTE
+monster_type:				= $751b ; .byte TEMP_BYTE
+monster_health:				= $751c ; .byte TEMP_BYTE
+monster_status:				= $751d ; .byte TEMP_BYTE
+monster_status_timer:		= $751e ; .byte TEMP_BYTE
+monster_anim_timer:			= $751f ; .byte TEMP_BYTE
+monster_anim_ptr:			= $7520 ; .word TEMP_ADDR
+monster_erase_scr_addr:		= $7522 ; .word TEMP_WORD
+monster_erase_scr_addr_old:	= $7524 ; .word TEMP_ADDR
+monster_erase_wh:			= $7526 ; .word TEMP_WORD
+monster_erase_wh_old:		= $7528 ; .word TEMP_WORD
+monster_pos_x:				= $752a ; .word TEMP_WORD
+monster_pos_y:				= $752c ; .word TEMP_WORD
+monster_speed_x:			= $752e ; .word TEMP_WORD
+monster_speed_y:			= $7530 ; .word TEMP_WORD
+monster_data_prev_pptr:		= $7532 ; .word TEMP_WORD
+monster_data_next_pptr:		= $7534 ; .word TEMP_WORD
+;@end_data:
+
+MONSTER_RUNTIME_DATA_LEN = $22 ; @end_data - monsters_runtime_data
+
+; the same structs for the rest of the monsters
+;.storage MONSTER_RUNTIME_DATA_LEN * (MONSTERS_MAX-1), 0
+
+monsters_runtime_data_end_marker:	= $7712		; .word ACTOR_RUNTIME_DATA_END << 8
+monsters_runtime_data_end:			= $7714		; monsters_runtime_data_end_marker + WORD_LEN
+MONSTERS_RUNTIME_DATA_LEN = monsters_runtime_data_end - monster_runtime_data_sorted
+
+;=============================================================================
 ; tiled image indices buffer
 tiled_img_idxs:	= $7714
 TILED_IMG_IDXS_LEN = $100
@@ -224,10 +265,10 @@ room_tiledata:		= $7e00
 room_tiledata_end:	= room_tiledata + ROOM_TILEDATA_LEN
 
 ;=============================================================================
-; check buffer overlapping
+; buffer overlapping checker
 ;
 
-BUFFERS_START_ADDR	= tiled_img_idxs
+BUFFERS_START_ADDR	= monster_runtime_data_sorted
 BUFFERS_END_ADDR	= room_tiledata_end
 
 

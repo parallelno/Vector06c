@@ -119,7 +119,8 @@
 			"mask_x" : 16,
 			"mask_y" : 130,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "run_l1",
@@ -130,7 +131,8 @@
 			"mask_x" : 16,
 			"mask_y" : 145,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "run_l2",
@@ -141,7 +143,8 @@
 			"mask_x" : 16,
 			"mask_y" : 161,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "run_l3",
@@ -152,7 +155,8 @@
 			"mask_x" : 16,
 			"mask_y" : 178,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "defence_r0",
@@ -207,7 +211,8 @@
 			"mask_x" : 48,
 			"mask_y" : 130,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "defence_l1",
@@ -218,7 +223,8 @@
 			"mask_x" : 48,
 			"mask_y" : 145,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "defence_l2",
@@ -229,7 +235,8 @@
 			"mask_x" : 48,
 			"mask_y" : 161,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "defence_l3",
@@ -240,7 +247,8 @@
 			"mask_x" : 48,
 			"mask_y" : 178,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		}	
 	]
 }

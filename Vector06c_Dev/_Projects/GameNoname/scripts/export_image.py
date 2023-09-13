@@ -287,23 +287,23 @@ def color_indices_to_asm(image):
 			data2.append(b1)
 			data2.append(b2)
 			data2.append(b3)
-	with open("temp\\tmp2.bin", "wb") as fw:
+	with open(f"temp\\tmp2{build.EXT_BIN}", "wb") as fw:
 		fw.write(bytearray(data2))
 	'''
 	return common.bytes_to_asm(data)
 
-def image_to_asm(image, label_prefix, extention = build.EXT_BIN_ZX0):
+def image_to_asm(image, label_prefix):
 	asm = common_gfx.image_palette_to_asm(image.getpalette(), label_prefix)
 	asm += "\n"
 	asm += "			.word 0 ; safety pair of bytes for reading by POP B\n"
 	asm += label_prefix + "_gfx:\n"
-	asm += common.asm_compress_to_asm(color_indices_to_asm(image), extention, delete_tmp_bin=False)
+	asm += common.asm_compress_to_asm(color_indices_to_asm(image), delete_tmp_bin=False)
 	
 	return asm
 
 #==================================================================================================================================================
 #
-def convert_to_asm(image, label_prefix, source_j_path, tile_size = 2, n_clusters = 512, random_state = 42, extention = build.EXT_BIN_ZX0, n_init = 'auto'):
+def convert_to_asm(image, label_prefix, source_j_path, tile_size = 2, n_clusters = 512, random_state = 42, n_init = 'auto'):
 	
 	width = image.width // tile_size * tile_size
 	height = image.height // tile_size * tile_size
@@ -332,7 +332,7 @@ def convert_to_asm(image, label_prefix, source_j_path, tile_size = 2, n_clusters
 	image_decoded = atlas_to_image(tile_idxs, tiles_gfx, atlas_indexed.getpalette(), width, height, tile_size)
 	image_decoded_matched_colors = match_colors(image_decoded, img_vec06c)
 	
-	return image_to_asm(image_decoded_matched_colors, label_prefix, extention)
+	return image_to_asm(image_decoded_matched_colors, label_prefix)
 
 def export_if_updated(source_path, generated_dir, force_export):
 	source_name = common.path_to_basename(source_path)
@@ -387,7 +387,7 @@ def export(source_j_path, asmSpritePath):
 
 		image = Image.open(path_png)
 
-		asm += convert_to_asm(image, label_prefix, source_j_path, tile_size, n_clusters, random_state, extention)
+		asm += convert_to_asm(image, label_prefix, source_j_path, tile_size, n_clusters, random_state)
 
 	# save asm
 	if not os.path.exists(asm_sprite_dir):

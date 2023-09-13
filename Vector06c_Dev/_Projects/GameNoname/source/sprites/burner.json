@@ -151,7 +151,8 @@
 			"mask_x" : 16,
 			"mask_y" : 160,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "run_l1",
@@ -164,7 +165,8 @@
 			"mask_x" : 16,
 			"mask_y" : 176,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "run_l2",
@@ -177,7 +179,8 @@
 			"mask_x" : 16,
 			"mask_y" : 192,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		},
 		{
 			"name" : "run_l3",
@@ -190,7 +193,8 @@
 			"mask_x" : 16,
 			"mask_y" : 208,
 			"mask_alpha" : 0,
-			"mask_color" : 1
+			"mask_color" : 1,
+			"mirrored" : false
 		}
 	]
 }

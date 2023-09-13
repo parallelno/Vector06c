@@ -6,7 +6,7 @@ import common
 
 build.set_assembler_path("..\\..\\retroassembler\\retroassembler.exe -C=8080 -c")
 build.set_assembler_labels_cmd(" -x")
-build.set_zx0_path("tools\\zx0salvador.exe -v -classic")
+build.set_packer(build.PACKER_ZX0_SALVADORE)
 build.set_emulator_path("..\\..\\Emu80\\Emu80qt.exe")
 
 source_path = "asm\\main.asm"
@@ -24,7 +24,7 @@ print("build a rom file:")
 rom_name = os.path.basename(os.getcwd())
 bin_path = rom_dir + rom_name + build.EXT_BIN
 rom_path = rom_dir + rom_name + build.EXT_ROM
- 
+
 
 common.delete_file(bin_path)
 common.delete_file(rom_path) 

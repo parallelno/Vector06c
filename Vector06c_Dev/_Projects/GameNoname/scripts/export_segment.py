@@ -90,10 +90,10 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 		chunk_paths = split_segment(segment_bin_path, labels_path)
 
 		for chunk_path in chunk_paths:
-			zx0_chunk_path = chunk_path + build.EXT_ZX0
+			zx0_chunk_path = chunk_path + build.packer_ext
 
 			common.delete_file(zx0_chunk_path)
-			common.run_command(f"{build.zx0_path} {chunk_path} {zx0_chunk_path}")
+			common.run_command(f"{build.packer_path} {chunk_path} {zx0_chunk_path}")
 
 		print(f"segment: {source_name} got exported.")
 
