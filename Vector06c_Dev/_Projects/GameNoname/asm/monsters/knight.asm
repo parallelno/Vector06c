@@ -367,7 +367,15 @@ knight_update_defence:
 			; advance hl to monster_status_timer
 			inx h
 			dcr m
-			jz @set_detect_hero_init
+			jnz @update_movement
+			; defence time is over
+ 			; hl - ptr to monster_status_timer
+			mvi m, KNIGHT_STATUS_DETECT_HERO_TIME ; TODO: seems unnecessary code
+			; advance hl to monster_status
+			dcx h
+			mvi m, KNIGHT_STATUS_DETECT_HERO_INIT
+			ret
+
 @update_movement:
 			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(monster_status_timer, monster_pos_x, KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, @collided_with_tiles)
 
@@ -383,14 +391,11 @@ knight_update_defence:
 			; advance hl to monster_status
 			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_pos_x)
 			mvi m, KNIGHT_STATUS_DEFENCE_INIT
-			ret
-@set_detect_hero_init:
- 			; hl - ptr to monster_status_timer
-			mvi m, KNIGHT_STATUS_DETECT_HERO_TIME ; TODO: seems unnecessary code
-			; advance hl to monster_status
-			dcx h
-			mvi m, KNIGHT_STATUS_DETECT_HERO_INIT
-			ret
+			; hl points to monster_status
+			; advance hl to monster_anim_timer
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_status)
+			mvi a, KNIGHT_ANIM_SPEED_DEFENCE
+			jmp knight_update_anim_check_collision_hero			
 
 knight_update_move_init:
 			; hl = monster_status
@@ -507,10 +512,10 @@ knight_update_move:
 ; in:
 ; hl - monster_anim_timer
 ; a - anim speed
+; bc, de, hl, a
 knight_update_anim_check_collision_hero:
 			call actor_anim_update
 			MONSTER_CHECK_COLLISION_HERO(KNIGHT_COLLISION_WIDTH, KNIGHT_COLLISION_HEIGHT, KNIGHT_DAMAGE)
-
 
 ; draw a sprite into a backbuffer
 ; in:

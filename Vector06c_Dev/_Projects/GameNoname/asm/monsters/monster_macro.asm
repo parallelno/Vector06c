@@ -46,6 +46,9 @@
 ; ex MONSTER_CHECK_COLLISION_HERO(VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, VAMPIRE_DAMAGE)
 ; in:
 ; hl points to monster_anim_ptr
+; uses:
+; bc, de, hl, a
+; think of converting this macro into a func. it'll save 168 bytes.
 .macro MONSTER_CHECK_COLLISION_HERO(MONSTER_COLLISION_WIDTH, MONSTER_COLLISION_HEIGHT, MONSTER_DAMAGE)
 			; hl points to monster_anim_ptr
 			; TODO: check hero-monster collision not every frame

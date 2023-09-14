@@ -47,6 +47,9 @@
 ; hl points to actor_status_timer
 ; out:
 ; hl points to actor_pos_y+1
+; uses:
+; bc, de, hl, a
+; TODO: think of converting it into func. it saves > 492 bytes
 .macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actor_status_timer, actor_pos_x, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, collision_handler) 
 			HL_ADVANCE_BY_DIFF_BC(actor_pos_x, actor_status_timer)
 			push h ; (stack) <- pos_x ptr, to restore it in @apply_new_pos

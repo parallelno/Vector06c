@@ -369,6 +369,8 @@ hero_invincible_update:
 			rnz
 			jmp hero_idle_start
 
+; uses:
+; hl, de, a
 hero_impacted_start:
 			; set the status
 			lxi h, hero_status
@@ -425,6 +427,8 @@ hero_impacted_update:
 ; handle the damage
 ; in:
 ; c - damage (positive number)
+; uses:
+; a, hl, de
 hero_impacted:
 			lda hero_status
 			cpi HERO_STATUS_INVINCIBLE
