@@ -2,7 +2,7 @@
 ; image unpacker/renderer
 ; ex. CALL_RAM_DISK_FUNC(draw_image_zx0, __RAM_DISK_M_IMAGES | RAM_DISK_M_8F)
 ;
-; based on ZX0 8080 decoder v7 by Ivan Gorodetsky -  OLD FILE FORMAT v1
+; based on ZX0 i8080 decoder v7 by Ivan Gorodetsky -  OLD FILE FORMAT v1
 ; which based on ZX0 z80 decoder by Einar Saukas
 
 ; unpacks from the ram-disk $8000-$FFFF to ram

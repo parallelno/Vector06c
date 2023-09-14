@@ -1,14 +1,15 @@
 ;----------------------------------------------------------------
-; draw a decal sprite with an alpha (8xN, 16xN pixels)
+; draw a decal sprite with an alpha channel (16xN pixels) 
+; TODO: support width = 8
 ; input:
 ; bc - decal sprite data addr
 ; de - screen addr, d=[$80, $9f]
 ; use: a, hl, sp
 
 ; data format:
-; .word - two safety bytes to prevent a data corruption by the interruption  func
-; .byte - height
-; .byte - width
+; .word - two safety bytes to prevent a data corruption by the interruption func
+; .byte offset_y, offset_x
+; .byte height, width
 ; 		0 - one byte width,
 ;		1 - two bytes width,
 ; pixel format:
@@ -52,24 +53,29 @@
 			mov m, a
 .endmacro
 
+; the description is above!
 draw_decal_v:
 			; store sp
 			lxi h, $0000
 			dad sp
 			shld @restore_sp + 1
-			; sp = BC
+			; bc - decal sprite data addr
 			mov h, b
 			mov l, c
 			sphl
 			xchg
+			pop b
 			; b - offset_x
 			; c - offset_y
-			pop b
+			; hl - scr addr			
 			dad b
 			pop b
+			
+			A_TO_ZERO(0)	; this is a fix of line: dcr b
+			cmp b			; we SHOULD NOT modify BC to prevent stack corruption!
+
 			mov a, c
-			dcr b
-			jz @drawWidth16
+			jnz @drawWidth16
 @drawWidth8:
 ; TODO: support width = 8
 			jmp @restore_sp

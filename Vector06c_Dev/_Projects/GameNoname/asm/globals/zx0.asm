@@ -100,7 +100,7 @@ dzx0:
 	; bc - uncompressed data addr
 	; a - ram-disk activation command
 	;
-	; based on ZX0 8080 decoder v7 by Ivan Gorodetsky -  OLD FILE FORMAT v1
+	; based on ZX0 i8080 decoder v7 by Ivan Gorodetsky -  OLD FILE FORMAT v1
 	; which based on ZX0 z80 decoder by Einar Saukas
 
 dzx0_rd:

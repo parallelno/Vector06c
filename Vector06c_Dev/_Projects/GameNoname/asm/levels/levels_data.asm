@@ -69,9 +69,9 @@
 ;		door_id == 7 - a door 4b
 
 ; ffff == 13, breakable items, a hero can only break it with a hit and get a random reward. a room tracks how many it was broken to manage a reward and a spawn rate. breakable_id = d
-;		breakable_id == 0 - a barrel (tiledata = 13*16+0 = 208)
+;		breakable_id == 0 - a barrel (tiledata = 13*16+0 = 208, $d0)
 ;		breakable_id == 1 - a crate
-		BREAKABLE_ID_CABBAGE = 2 ;cabbage
+		BREAKABLE_ID_CABBAGE = 2 ;cabbage (tiledata = $d2)
 
 ; ffff == 14, decals collidable. it's drawn on top of tiles to increase background variety. decal_collidable_id = d
 ;		decal_collidable_id == 0 - a spider web

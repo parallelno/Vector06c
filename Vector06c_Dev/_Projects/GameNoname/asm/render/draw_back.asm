@@ -1,5 +1,5 @@
 ;----------------------------------------------------------------
-; draw a background sprite without an alpha (8xN, 16xN pixels)
+; draw a background sprite without an alpha channel (8xN, 16xN pixels)
 ; input:
 ; bc - back sprite data addr
 ; de - screen addr, d=[$80, $9f]
@@ -31,16 +31,18 @@ draw_back_v:
 			lxi h, $0000
 			dad sp
 			shld @restore_sp + 1
-			; sp = BC
+			; bc - decal sprite data addr			
 			mov h, b
 			mov l, c
 			sphl
 			xchg
+			pop b
 			; b - offset_x
 			; c - offset_y
-			pop b
+			; hl - scr addr					
 			dad b
 			pop b
+
 			mov d, c
 			A_TO_ZERO(NULL_BYTE)
 			cmp b

@@ -405,10 +405,11 @@ room_copy_scr_to_backbuffs:
 
 ;=========================================================
 ; draw a decal onto the screen, and backbuffers
+; requires: store item_id*4 into room_decal_draw_ptr_offset+1 addr prior calling this
 ; in:
-; hl - ptr to the graphics, ex. __doors_gfx_ptrs
 ; c - tile_idx in the room_tiledata array.
-; save item_id*4 into room_decal_draw_ptr_offset+1 addr
+; use:
+; hl - ptr to the graphics, ex. __doors_gfx_ptrs
 ; backbuffers = true means draw onto backbuffers as well
 .macro ROOM_DECAL_DRAW(gfx_ptrs, backbuffers = false)
 			lxi h, gfx_ptrs
@@ -425,10 +426,10 @@ room_copy_scr_to_backbuffs:
 
 ; draw a decal onto the screen, and backbuffers
 ; ex. ROOM_DECAL_DRAW(__containers_gfx_ptrs, true)
+; requires: store item_id*4 into room_decal_draw_ptr_offset+1 addr prior calling this
 ; in:
 ; hl - ptr to the graphics, ex. __doors_gfx_ptrs
 ; c - tile_idx in the room_tiledata array.
-; save item_id*4 into room_decal_draw_ptr_offset+1 addr
 room_decal_draw:
 			; scr_y = tile_idx % ROOM_WIDTH
 			mvi a, %11110000
@@ -444,8 +445,7 @@ room_decal_draw:
 			; de - scr addr
 			push d
 
-; it assumes that room_decal_draw_ptr_offset + 1 is filled up with a decal_id * 4
-; upfont calling room_decal_draw_ptr_offset
+; requires: store item_id*4 into room_decal_draw_ptr_offset+1 addr prior calling this
 room_decal_draw_ptr_offset:
 			lxi d, TEMP_WORD
 			dad d
