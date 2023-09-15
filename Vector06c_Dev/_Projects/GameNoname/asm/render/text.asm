@@ -112,7 +112,8 @@ draw_text:
 			cmp e
 			rz
 			inx h
-			mvi d, 0 // TODO: mov d, a ;optimization
+			; a = 0
+			mov d, a
 			push h
 
 			; get the char gfx addr

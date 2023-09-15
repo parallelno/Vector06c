@@ -43,8 +43,7 @@ sprite_get_scr_addr8:
 ; de - sprite screen addr
 ; c - preshifted sprite idx*2 offset based on pos_x then +2
 ; hl - ptr to pos_y+1
-; use: a	
-; TODO: think of optimization. replace mov a, m; ani, with mvi, ana m
+; use: a
 sprite_get_scr_addr4:
 			; calc preshifted sprite idx*2 offset
 			mov	a, m

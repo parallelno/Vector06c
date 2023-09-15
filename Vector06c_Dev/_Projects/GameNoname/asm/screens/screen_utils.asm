@@ -21,8 +21,7 @@ screen_simple_init:
 			lxi d, SCR_BUFF_LEN * 3 / 32 - 1
 			call clear_mem_sp
 
-			; TODO: replace 1 with a const
-			mvi a, 1
+			mvi a, BORDER_COLOT_IDX
 			sta border_color_idx
 
 			; erase backs buffs

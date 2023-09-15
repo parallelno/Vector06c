@@ -48,7 +48,6 @@ monster_init:
 			RRC_(2) ; to get monster_id
 			sta @monster_id+1
 
-			; TODO: move the code into a spawner init routine
 			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_monsters, @ret)
 
 			lxi h, monster_update_ptr+1

@@ -275,7 +275,6 @@ set_palette_from_ram_disk:
 ; hl
 ; out:
 ; bc - data
-
 ; TODO: optimize. make a special version of that func for accessing $8000 and higher with a direct access
 get_word_from_ram_disk:
 			; store sp

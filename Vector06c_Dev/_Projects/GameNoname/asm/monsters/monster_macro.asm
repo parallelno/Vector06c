@@ -3,7 +3,7 @@
 ; ex. MONSTER_DRAW(sprite_get_scr_addr_skeleton, __RAM_DISK_S_SKELETON)
 ; in:
 ; de - ptr to monster_draw_ptr in the runtime data
-; TODO: try to convert it into a function
+; TODO: think of converting it into a function it will save 50*4 = 200 bytes
 .macro MONSTER_DRAW(sprite_get_scr_addr_monster, __RAM_DISK_S_MONSTER)
 			LXI_H_TO_DIFF(monster_pos_x+1, monster_draw_ptr)
 			dad d
@@ -51,7 +51,6 @@
 ; think of converting this macro into a func. it'll save 168 bytes.
 .macro MONSTER_CHECK_COLLISION_HERO(MONSTER_COLLISION_WIDTH, MONSTER_COLLISION_HEIGHT, MONSTER_DAMAGE)
 			; hl points to monster_anim_ptr
-			; TODO: check hero-monster collision not every frame
 			; advance hl to monster_pos_x
 			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_anim_ptr)
 			; horizontal check

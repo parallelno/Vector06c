@@ -201,9 +201,6 @@ skeleton_update_detect_hero:
 skeleton_update_move_init:
 			; hl = monster_status
 			mvi m, SKELETON_STATUS_MOVE
-			;inx h
-			;mvi m, SKELETON_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
-
 			xchg
 			call random
 			; advance hl to monster_speed_x

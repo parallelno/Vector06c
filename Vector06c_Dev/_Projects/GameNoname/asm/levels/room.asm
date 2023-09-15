@@ -387,8 +387,6 @@ room_tiledata_door_spawn:
 
 room_copy_scr_to_backbuffs:
 			; copy $a000-$ffff scr buffs to the ram-disk back buffer
-			; TODO: optimization. think of making copy process while the gameplay started.
-			; or do not copy tile gfx for non-restorable tiles
 			lxi d, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi h, 0; SCR_BUFF1_ADDR + SCR_BUFF_LEN * 3
 			lxi b, SCR_BUFF_LEN * 3 / 32

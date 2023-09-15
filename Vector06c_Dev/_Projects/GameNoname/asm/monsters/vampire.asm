@@ -202,9 +202,6 @@ vampire_update_detect_hero:
 vampire_update_move_init:
 			; hl = monster_status
 			mvi m, VAMPIRE_STATUS_MOVE
-			;inx h
-			;mvi m, VAMPIRE_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
-
 			xchg
 			call random
 			; advance hl to monster_speed_x

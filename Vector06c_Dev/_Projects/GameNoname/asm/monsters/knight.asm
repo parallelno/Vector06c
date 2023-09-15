@@ -370,7 +370,6 @@ knight_update_defence:
 			jnz @update_movement
 			; defence time is over
  			; hl - ptr to monster_status_timer
-			mvi m, KNIGHT_STATUS_DETECT_HERO_TIME ; TODO: seems unnecessary code
 			; advance hl to monster_status
 			dcx h
 			mvi m, KNIGHT_STATUS_DETECT_HERO_INIT
@@ -502,7 +501,6 @@ knight_update_move:
 			ret
 @set_detect_hero_init:
  			; hl - ptr to monster_status_timer
-			mvi m, KNIGHT_STATUS_DETECT_HERO_TIME ; TODO: seems unnecessary code
 			; advance hl to monster_status
 			dcx h
 			mvi m, KNIGHT_STATUS_DETECT_HERO_INIT
