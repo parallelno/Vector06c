@@ -21,31 +21,35 @@ restore_sp_ram_disk__:
 __RAM_DISK_M_ERASE_SPRITE = RAM_DISK_M
 
 __erase_sprite: 
-			mov b, h
-			; adjust Y
-			mov a, e
-			add l
-			mov e, a
+			mov a, h
+			mvi h, 0
+			xchg
+			; d = 0
+			; e - height
+			; hl - scr addr
+			dad d
+			xchg
+			; de - scr addr
+			; h - 0
+			; l - height
+			; a - width (0-3)
 
 			; store SP
-			lxi h, 0
+			mov l, h
 			dad sp
 			shld restore_sp_ram_disk__ + 1
 
 			xchg
+			; hl - scr addr
 
-			mov a, b
-
-			; (backbuff addr) = BC
-			lxi b, 0
-			; to move the next scr buff
-			lxi d, $2000
+			lxi b, 0				; filler
+			lxi d, $2000 			; to move the next scr buff
 
 			rrc
 			jc @width16or32
 			rrc
 			jc @width24
-			jnc @width8
+			jmp @width8
 @width16or32:
 			rrc
 			jnc @width16
@@ -62,6 +66,12 @@ __erase_sprite:
 			
 
 .macro ERASE_SPRITE_SP_COL(next_column = true)
+
+	; TODO: issue. there is an problem with this macro
+	; when it erases the last two bytes with PUSH B
+	; an interruption call erases two more bytes below it.
+	; there is one solution balow, but it costly
+	; think of a better solution.
 	col .var 0
 	.loop 3
 			col = col+1
@@ -72,10 +82,56 @@ __erase_sprite:
 		.endif
 	.endloop
 		.if next_column == true
-			; advance to the next column
+			; advance to the next column of the first scr buff
 			mvi a, $20*5+1
 			add h
 			mov h, a
 		.endif
+
+/*
+	col .var 0
+	.loop 3
+			col = col+1
+			sphl
+			PUSH_B(7)
+		.if next_column == true || col < 3
+			dad d
+		.endif
+	.endloop
+		.if next_column == true
+
+			; erase last two bytes without stack ops to fix the issue 
+			; when the interruption func writes outside of the tile
+			lxi h, (<(-$20*3))<<8 | <(-1)
+			dad sp
+			; hl points to the second sprite line from below in the first scr buff
+			; a = $20*5+1 to advance to the next buffer
+			; bc = 0
+			; de = $2000
+			mvi m, 0
+			dcr l
+			mvi m, 0
+			; move to the seconf scr buff
+			dad d
+			mvi m, 0
+			inr l
+			mvi m, 0
+			; move to the seconf scr buff
+			dad d
+			mvi m, 0
+			dcr l
+			mvi m, 0			
+
+			; advance to the next column of the first scr buff
+			lxi h, 
+			dad sp
+			; 144
+			
+			;w16 cc 1092
+			;w24 cc 1524
+		.endif
+*/
+
+				
 .endmacro
 			

@@ -361,6 +361,9 @@ hero_invincible_start:
 			;advance hl to hero_status_timer
 			inx h
 			mvi m, HERO_STATUS_INVINCIBLE_DURATION
+			; turn off reversed speed
+			A_TO_ZERO(CONTROL_CODE_NO)
+			sta action_code
 			ret
 
 hero_invincible_update:
@@ -368,6 +371,49 @@ hero_invincible_update:
 			dcr m
 			rnz
 			jmp hero_idle_start
+
+
+hero_impacted_update:
+			lxi h, hero_status_timer
+			dcr m
+			jz hero_invincible_start
+			; move the hero
+			jmp hero_update_temp_pos
+
+
+; handling the damage
+; in:
+; c - damage (positive number)
+; uses:
+; a, hl, de
+hero_impacted:
+			lda hero_status
+			cpi HERO_STATUS_INVINCIBLE ; this is invincible + hero blinking status
+			rz
+			cpi HERO_STATUS_IMPACTED ; to handle it once per upcomming damage. it is also invincible
+			rz
+
+			lxi h, __sfx_bomb_attack
+			CALL_RAM_DISK_FUNC(__sfx_play, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
+
+			call hero_impacted_start
+
+			lxi h, hero_health
+			mov a, m
+			sub c
+
+			; clamp to 0
+			jnc @no_clamp
+			A_TO_ZERO(NULL_BYTE)
+@no_clamp:
+			mov m, a
+			jnz @not_dead
+			; dead
+			mvi a, HERO_STATUS_DEATH_FADE_INIT_GB
+			sta hero_status
+@not_dead:
+			jmp game_ui_draw_health
+
 
 ; uses:
 ; hl, de, a
@@ -414,45 +460,3 @@ hero_impacted_start:
 			lxi h, 0
 			shld hero_speed_y
 			ret
-
-
-hero_impacted_update:
-			lxi h, hero_status_timer
-			dcr m
-			jz hero_invincible_start
-			; move the hero
-			jmp hero_update_temp_pos
-
-
-; handle the damage
-; in:
-; c - damage (positive number)
-; uses:
-; a, hl, de
-hero_impacted:
-			lda hero_status
-			cpi HERO_STATUS_INVINCIBLE
-			rz
-			cpi HERO_STATUS_IMPACTED
-			rz
-
-			lxi h, __sfx_bomb_attack
-			CALL_RAM_DISK_FUNC(__sfx_play, __RAM_DISK_M_SOUND | RAM_DISK_M_8F)
-
-			call hero_impacted_start
-
-			lxi h, hero_health
-			mov a, m
-			sub c
-
-			; clamp to 0
-			jnc @no_clamp
-			A_TO_ZERO(NULL_BYTE)
-@no_clamp:
-			mov m, a
-			jnz @not_dead
-			; dead
-			mvi a, HERO_STATUS_DEATH_FADE_INIT_GB
-			sta hero_status
-@not_dead:
-			jmp game_ui_draw_health

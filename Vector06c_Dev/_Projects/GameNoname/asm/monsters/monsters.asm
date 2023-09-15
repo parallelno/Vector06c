@@ -41,7 +41,7 @@ monsters_init:
 monster_init:
 			lxi h, 0
 			dad	sp
-			shld restore_sp + 1
+			shld @restore_sp + 1
 			xchg
 			sphl
 
@@ -164,9 +164,12 @@ monster_init:
 			inx h
 			mov m, a
 @ret:
+@restore_sp:
+			lxi sp, TEMP_ADDR
+			RAM_DISK_OFF()
 			; return TILEDATA_RESTORE_TILE to make the tile where a monster spawned walkable and restorable
-			mvi a, TILEDATA_RESTORE_TILE
-			jmp restore_sp
+			mvi a, TILEDATA_RESTORE_TILE		
+			ret
 
 
 ; in:
