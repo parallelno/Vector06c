@@ -53,7 +53,7 @@ monster_init:
 			lxi h, monster_update_ptr+1
 			mvi e, MONSTER_RUNTIME_DATA_LEN
 			call actor_get_empty_data_ptr
-			jnz restore_sp ; return because too many objects
+			jnz @restore_sp ; return because too many objects
 
 			mov a, c
 			; a - tile_idx in the room_tiledata array

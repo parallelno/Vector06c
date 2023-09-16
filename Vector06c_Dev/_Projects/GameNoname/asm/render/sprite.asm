@@ -231,6 +231,7 @@ sprite_copy_to_scr_v:
 ;		11 - 32pxs
 ; l - height
 
+; TODO: giant size. the size of this func is 1219 bytes. think of a better solution
 sprite_copy_to_back_buff_v:
 			; Y -= 1 because we start copying bytes with dec Y
 			inr e
@@ -367,4 +368,3 @@ sprite_copy_to_back_buff_v:
 			jp @next_column
 			jmp restore_sp
 .endmacro
-

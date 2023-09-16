@@ -15,7 +15,6 @@ ram_disk_mode:
 game_update_counter:
 			.byte TEMP_BYTE
 
-; TODO: move to buffers.asm
 ; used for the movement
 char_temp_x:	.word 0 ; temporal X
 char_temp_y:	.word 0 ; temporal Y

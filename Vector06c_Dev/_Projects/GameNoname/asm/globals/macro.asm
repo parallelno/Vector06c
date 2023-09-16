@@ -280,6 +280,7 @@
 .endmacro
 ; mount the ram-disk
 ; a - ram disk activation command
+; 28
 .macro RAM_DISK_ON_BANK()
 			sta ram_disk_mode
 			out $10
@@ -291,6 +292,7 @@
 
 ; dismount the ram-disk
 ; has to be in the main program only and be placed after lxi sp, ADDR or sphl
+; cc 32
 .macro RAM_DISK_OFF(useXRA = true)
 			A_TO_ZERO(RAM_DISK_OFF_CMD, useXRA)
 			sta ram_disk_mode			

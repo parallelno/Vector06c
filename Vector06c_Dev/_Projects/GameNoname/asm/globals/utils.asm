@@ -3,7 +3,7 @@
 
 ; sharetable chunk of code to restore SP
 ; and dismount the ram-disk
-; TODO: remove RAM_DISK_OFF() to make it be called via CALL_RAM_DISK_FUNC
+; cc = 56
 restore_sp:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
@@ -74,7 +74,6 @@ copy_mem:
 ; use:
 ; hl
 
-; TODO: optimize. make it works without stopping (di/ei) interruptions.
 .macro CLEAR_MEM_SP(disable_int)
 		.if disable_int
 			di
@@ -120,7 +119,7 @@ fill_mem_sp:
 			lxi h, 0
 			shld clear_mem_sp_filler + 1
 			ret
-			
+/*		
 ; clear a memory buffer using stack operations
 ; can be used to clear ram-disk memory as well
 ; input:
@@ -155,7 +154,7 @@ clear_ram_disk:
 			mvi a, RAM_DISK_S3
 			CLEAR_MEM_SP(false)
 			ret
-
+*/
 ; erase a block in the screen buff
 ; in:
 ; hl - scr_addr
@@ -272,23 +271,37 @@ set_palette_from_ram_disk:
 ; de - data addr in the ram-disk
 ; a - ram-disk activation command
 ; use:
-; hl
+; hl, de, a
 ; out:
 ; bc - data
-; TODO: optimize. make a special version of that func for accessing $8000 and higher with a direct access
+; cc = 148
 get_word_from_ram_disk:
+			RAM_DISK_ON_BANK()
 			; store sp
 			lxi h, $0000
 			dad sp
-			shld restore_sp+1
+			shld @restore_sp+1
 			; copy unpacked data into the ram_disk
 			xchg
-			RAM_DISK_ON_BANK()
 			sphl
 			pop b ; bc has to be used when interruptions is on
-			jmp restore_sp
-			
+@restore_sp:
+			lxi sp, TEMP_ADDR
+			RAM_DISK_OFF()
+			ret
 
+/*
+; a special version of a func above for accessing addr $8000 and higher
+; cc = 100
+get_word_from_scr_ram_disk:
+			RAM_DISK_ON_BANK()
+			xchg
+			mov c, m
+			inx h
+			mov b, m
+			RAM_DISK_OFF()
+			ret
+*/
 ;========================================
 ; copy a buffer into the ram-disk.
 ; if interruptions are ON, it corrupts a pair of bytes at target addr-2 !!!
@@ -372,7 +385,6 @@ copy_to_ram_disk32:
 ; de - data addr in the ram-disk
 ; bc - destination addr
 
-
 ; this macro is for checking if the length fits the range 1-510
 .macro COPY_FROM_RAM_DISK(length)
 		.if length > 255*2
@@ -384,8 +396,13 @@ copy_to_ram_disk32:
 		.endif
 .endmacro
 
-; TODO: optimize. check if it is more efficient to copy a data stored
-; in $8000 and higher with a direct access like mov
+; ? check if it is more efficient to copy a data stored
+; in $8000 and higher with a direct access via mov
+; research:
+; using stack ops to copy data adds 128 cc overhead
+; replacing pop with mov_(2), inx_(2), adds 8 cc per byte overhead
+; that said, copying with pop becomes efficient if a copy len > 16
+; it is very often case. No need a direct access via mov 
 copy_from_ram_disk:
 			; store sp
 			push h
@@ -401,7 +418,7 @@ copy_from_ram_disk:
 			mov l, c
 			mov h, b
 @loop:
-			pop b ; bc has to be used when interruptions is on
+			pop b
 			mov m, c
 			inx h
 			mov m, b

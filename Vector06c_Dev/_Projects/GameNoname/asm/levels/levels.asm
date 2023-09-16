@@ -51,7 +51,7 @@ level_init:
 
 ; TODO: look up bullet_runtime_data_sorted
 ; it seems bullets_runtime_data and possible others like monster_runtime_data_sorted
-; got creared twice. once here, and once in their init funcs
+; got created twice. once here, and once in their init funcs
 			; erase bullets buffs
 			lxi h, bullet_runtime_data_sorted
 			mvi a, <bullets_runtime_data_end

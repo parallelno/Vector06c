@@ -40,7 +40,6 @@ room_unpack:
 			; load a pointer to a room gfx tile_idx buffer
 			xchg
 			lda level_ram_disk_s_data
-			; TODO: why is it called without CALL_RAM_DISK_FUNC??? FIX IT
 			call get_word_from_ram_disk
 			mov d, b
 			mov e, c
