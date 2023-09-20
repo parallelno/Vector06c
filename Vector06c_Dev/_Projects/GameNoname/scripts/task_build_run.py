@@ -1,23 +1,23 @@
 import os
-import export_ram_disk_data
+import export_data
 import build  
 import common
 
-
+ 
 build.set_assembler_path("..\\..\\retroassembler\\retroassembler.exe -C=8080 -c")
 build.set_assembler_labels_cmd(" -x")
 build.set_packer(build.PACKER_ZX0_SALVADORE)
 build.set_emulator_path("..\\..\\Emu80\\Emu80qt.exe")
 
-source_path = "asm\\main.asm"
+source_path = "asm\\main.asm" 
 rom_dir = "rom\\"
 
-ram_disk_data_path = "source\\code\\ram_disk_data.json"
+data_path = "source\\data\\data.json"
 
-print(f"ram-disk data export: {ram_disk_data_path}")
-export_ram_disk_data.export(ram_disk_data_path)
- 
-print("")
+print(f"ram-disk data export: {data_path}")
+export_data.export(data_path)
+
+print("") 
 ######################################################################################
 print("build a rom file:")
 

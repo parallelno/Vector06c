@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import struct
 import sys
 import os
@@ -6,8 +5,7 @@ from pathlib import Path
 import common
 import build
 
-#from utils import *
-import lhafile      # pip3 install lhafile
+import lhafile_old
 import io
 
 
@@ -24,11 +22,11 @@ def drop_comment(f):
 		comment = comment + chr(b[0])
 		print(chr(b[0]), end='')
 	print()
-	return comment
+	return comment 
 
 def readym(filename):
 	try:
-		lf = lhafile.Lhafile(filename)
+		lf = lhafile_old.Lhafile(filename)
 		data = lf.read(lf.namelist()[0])
 		f = io.BytesIO(data)
 	except:

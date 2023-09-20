@@ -1,4 +1,3 @@
-__chunk_start_bank1_addr8000_0     = $8000
 __hero_sword_sprites_rd_data_start = $8000
 __RAM_DISK_S_HERO_SWORD            = $14
 __RAM_DISK_M_HERO_SWORD            = $01
@@ -44,4 +43,3 @@ __hero_sword_sword_l1_5            = $995e
 __hero_sword_sword_l1_6            = $9a72
 __hero_sword_sword_l1_7            = $9b86
 __hero_sword_sprites_rd_data_end   = $9c3e
-__chunk_end_bank1_addr8000_0       = $9c3e

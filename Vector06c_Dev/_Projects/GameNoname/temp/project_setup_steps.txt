@@ -1,0 +1,21 @@
+create git acc
+create git repo
+install git
+clone repo
+git status
+git add *
+git status
+git commit -m "comment"
+git push
+
+install python
+install vs code
+install python vs code support package
+system env var to python/scripts/script 
+
+pip install Pillow
+
+install tiled
+associate a file extension with tiled
+
+

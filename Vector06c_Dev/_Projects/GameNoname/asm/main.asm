@@ -41,5 +41,6 @@ code_seg_end:
 ; the ram disk data below will be moved into the ram-disk before the game starts. 
 ; that means if it is stored at the end of the program, everything that goes
 ; to the ram-disk can overlap the screen addrs.
+.include "generated\\code\\ram_data.asm"
 .include "generated\\code\\ram_disk_data.asm"
 .end

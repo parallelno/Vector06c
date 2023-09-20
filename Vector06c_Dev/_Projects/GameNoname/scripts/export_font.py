@@ -4,7 +4,7 @@ from PIL import Image
 import json
 import common
 import build
-
+ 
 def gfx_to_asm(label_prefix, source_j, image):
 	gfx_ptrs = {}
 	gfx_j = source_j["gfx"]

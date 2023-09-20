@@ -1,4 +1,3 @@
-__chunk_start_bank2_addr8000_0        = $8000
 __sound_rd_rd_data_start              = $8000
 __gigachad_buffers                    = $f102
 __RAM_DISK_S_GCPLAYER                 = $18
@@ -25,7 +24,6 @@ __RAM_DISK_S_SOUND                    = $18
 __RAM_DISK_M_SOUND                    = $02
 __sound_init                          = $830b
 __sound_update                        = $8312
-__sound_rd_rd_data_end                = $8319
-__song01_rd_data_start                = $8319
-__song01_rd_data_end                  = $a498
-__chunk_end_bank2_addr8000_0          = $a498
+__sound_rd_rd_data_end                = $831a
+__song01_rd_data_start                = $831a
+__song01_rd_data_end                  = $a49a
