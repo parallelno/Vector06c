@@ -1,5 +1,5 @@
 # Vector06c / Вектор 06Ц
-Vector06c (КР580ВМ80 / i8080 ) simple dev env, and code snippets. TASM + Visual Studio Code + Emu80
+Vector06c (КР580ВМ80 / i8080 ) simple dev environment and code examples.
 
 To get a complete setup you want to install TASM_Assembler extantion for Visual Studio Code:
 1. Run VS Code
