@@ -3,9 +3,9 @@ import json
 import common
 import build
 
-def export(source_j, generated_code_dir, generated_bin_dir, segments_info):
-
-	# generate and save ram_data.asm
+def export(source_j, source_j_path, generated_code_dir, generated_bin_dir, segments_info):
+	
+	# generate and save ram_disk_data_labels.asm
 	asm = "; ram-disk data labels\n"
 
 	for seg_info in segments_info:
@@ -13,6 +13,23 @@ def export(source_j, generated_code_dir, generated_bin_dir, segments_info):
 		asm += f'.include "{common.double_slashes(labels_path)}"\n'
 	asm += "\n"
 
+	# save ram_disk_data_labels.asm
+	path = f"{generated_code_dir}ram_disk_data_labels{build.EXT_ASM}"
+	with open(path, "w") as file:
+		file.write(asm)
+
+
+
+	# generate and save ram_data.asm
+	asm = ""
+	'''
+	bank_id_backbuffer, bank_id_backbuffer2 = build.find_backbuffers_bank_ids(source_j, source_j_path)	
+	asm += f'__RAM_DISK_S_BACKBUFF = RAM_DISK_S{bank_id_backbuffer}\n'
+	asm += f'__RAM_DISK_M_BACKBUFF = RAM_DISK_M{bank_id_backbuffer}\n'
+	asm += f'__RAM_DISK_S_BACKBUFF2 = RAM_DISK_S{bank_id_backbuffer2}\n'
+	asm += f'__RAM_DISK_M_BACKBUFF2 = RAM_DISK_M{bank_id_backbuffer2}\n'
+	asm +="\n"
+'''
 	asm += "; ram_data:\n"
 	for seg_info in segments_info:
 		ram_data_paths = seg_info["ram_include_paths"]

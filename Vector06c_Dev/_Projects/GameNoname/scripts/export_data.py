@@ -1,5 +1,7 @@
+import os
 import json
 import build
+import common
 import export_segment
 import export_data_asm
 import export_data_init
@@ -47,8 +49,47 @@ def export(source_j_path):
 			ram_disk_data_asm_force_export |= exported
 			segments_info.append(segment_info)
  
-	# generate ram_disk_data.asm. it includes the ram-disk data
-	# generate ram_disk_init.asm. it copies and preprocess the ram-disk data
 	if ram_disk_data_asm_force_export:
-		export_data_asm.export(source_j, generated_code_dir, generated_bin_dir, segments_info)
-		export_data_init.export(source_j, generated_code_dir, source_j_path, segments_info)
+		# generate ram_disk_data.asm. it includes the ram-disk data		
+		export_data_asm.export(source_j, source_j_path, generated_code_dir, generated_bin_dir, segments_info)
+		# generate ram_disk_init.asm. it copies and preprocess the ram-disk data
+		export_data_init.export(source_j, source_j_path, generated_code_dir, segments_info)
+
+	# export main.asm
+	source_path = source_j["main_asm_path"]
+
+	rom_name = "main_asm"
+	bin_path = generated_bin_dir + rom_name + build.EXT_BIN
+	common.delete_file(bin_path)
+
+	common.run_command(f"{build.assembler_path} {source_path} {bin_path}", "", source_path)
+	
+	if not os.path.exists(bin_path):
+		print(f'ERROR: compilation error, path: {source_path}')
+		print("Stop export")
+		exit(1)	
+
+	zx0_path = bin_path + build.packer_ext
+	common.delete_file(zx0_path)
+	common.run_command(f"{build.packer_path} {bin_path} {zx0_path}")
+
+	# export unpacker.asm
+	source_path = source_j["unpacker_path"]
+	rom_dir = "rom\\"
+	
+	rom_name = os.path.basename(os.getcwd())
+	bin_path = rom_dir + rom_name + build.EXT_BIN
+	rom_path = rom_dir + rom_name + build.EXT_ROM	
+
+	common.delete_file(bin_path)
+	common.delete_file(rom_path) 
+
+	common.run_command(f"{build.assembler_path} {source_path} {bin_path}", "", source_path)
+	
+	if not os.path.exists(bin_path):
+		print(f'ERROR: compilation error, path: {source_path}')
+		print("Stop export")
+		exit(1)
+	
+	common.run_command(f"ren {bin_path} {rom_name + build.EXT_ROM}")    
+	common.run_command(f"{build.emulator_path} {rom_path}", "", rom_path)	

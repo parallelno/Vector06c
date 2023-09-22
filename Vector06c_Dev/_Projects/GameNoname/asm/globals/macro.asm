@@ -260,15 +260,14 @@
 .endmacro
 
 ;================================== ALL RAM_DISK_* macros has to be placed BEFORE lxi sp, *, and sphl! ;==================================
-; has to be placed right BEFORE lxi sp, addr, and sphl
-; mount the ram-disk w/o storing mode
-.macro RAM_DISK_ON_NO_RESTORE(command)
-			mvi a, <command
-			out $10
-.endmacro
 ; restore the ram-disk mode
 .macro RAM_DISK_RESTORE()
 			lda ram_disk_mode
+			out $10
+.endmacro
+; mount the ram-disk w/o storing mode
+.macro RAM_DISK_ON_NO_RESTORE(command)
+			mvi a, <command
 			out $10
 .endmacro
 ; mount the ram-disk

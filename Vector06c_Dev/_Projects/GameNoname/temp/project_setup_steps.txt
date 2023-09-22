@@ -1,21 +1,29 @@
+install python
+add system env var to python/scripts/script/
+
+install vs code
+
 create git acc
 create git repo
+
 install git
-clone repo
+git config --global user.name "New Name"
+git config --global user.email "newemail@example.com"
+git clone 
+make a test update
 git status
 git add *
 git status
 git commit -m "comment"
 git push
 
-install python
-install vs code
-install python vs code support package
-system env var to python/scripts/script 
+run vs code
+1 install python vs code support package
+2 pip install Pillow
+3  
 
-pip install Pillow
 
-install tiled
+
 associate a file extension with tiled
-
+install tiled
 

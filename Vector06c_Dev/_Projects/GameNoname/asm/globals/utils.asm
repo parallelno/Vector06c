@@ -1,5 +1,5 @@
 .include "asm\\globals\\rnd.asm"
-.include "asm\\globals\\zx0.asm"
+.include "asm\\globals\\utils_unpacker.asm"
 
 ; sharetable chunk of code to restore SP
 ; and dismount the ram-disk
@@ -302,48 +302,6 @@ get_word_from_scr_ram_disk:
 			RAM_DISK_OFF()
 			ret
 */
-;========================================
-; copy a buffer into the ram-disk.
-; if interruptions are ON, it corrupts a pair of bytes at target addr-2 !!!
-; input:
-; de - source addr + data length
-; hl - target addr + data length
-; bc - buffer length / 2
-; a - ram-disk activation command
-; use:
-; all
-copy_to_ram_disk:
-			shld @restoreTargetAddr+1
-			; store sp
-			lxi h, $0000
-			dad sp
-			shld @restore_sp+1
-			RAM_DISK_ON_BANK()
-@restoreTargetAddr:
-			lxi h, TEMP_WORD
-			sphl
-			xchg
-@loop:
-			COPY_TO_RAM_DISK(1)
-			dcx b
-			mov a, b
-			ora c
-			jnz @loop
-
-@restore_sp:
-			lxi sp, TEMP_ADDR
-			RAM_DISK_OFF()
-			ret
-
-.macro COPY_TO_RAM_DISK(count)
-		.loop count
-			dcx h
-			mov d, m
-			dcx h
-			mov e, m
-			push d
-		.endloop
-.endmacro
 
 ;========================================
 ; fast copy a buffer into the ram-disk.

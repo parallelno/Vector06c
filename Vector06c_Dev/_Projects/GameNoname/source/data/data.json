@@ -43,6 +43,8 @@
 			"asm\\globals\\global_bufffers.asm"
 		]
 	},
+	"main_asm_path" : "asm\\main.asm",
+	"unpacker_path" : "asm\\unpacker.asm",
 	"banks" :
 	[
 		{

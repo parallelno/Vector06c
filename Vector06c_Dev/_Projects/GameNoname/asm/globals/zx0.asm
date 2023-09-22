@@ -1,25 +1,14 @@
 ; -----------------------------------------------------------------------------
 ; ZX0 8080 decoder by Ivan Gorodetsky - OLD FILE FORMAT v1
 ; Based on ZX0 z80 decoder by Einar Saukas
-; v1 (2021-02-15) - 103 bytes forward / 100 bytes backward
-; v2 (2021-02-17) - 101 bytes forward / 100 bytes backward
-; v3 (2021-02-22) - 99 bytes forward / 98 bytes backward
-; v4 (2021-02-23) - 98 bytes forward / 97 bytes backward
-; v5 (2021-08-16) - 94 bytes forward and backward (slightly faster)
-; v6 (2021-08-17) - 92 bytes forward / 94 bytes backward (forward version slightly faster)
-; v7 (2022-04-30) - 92 bytes forward / 94 bytes backward (source address now in DE, slightly faster)
 ; -----------------------------------------------------------------------------
-; Parameters (forward):
-;   DE: source address (compressed data)
-;   BC: destination address (decompressing)
-; -----------------------------------------------------------------------------
-; compress forward with <-c> option (<-classic> for salvador)
-;
-; compress backward with <-b -c> options (<-b -classic> for salvador)
-;
-; Compile with The Telemark Assembler (TASM) 3.2
+; compress forward with -c option (-c option for salvador)
+; compress backward with -b -c options (-b -classic option for salvador)
 ; -----------------------------------------------------------------------------
 
+; in:
+; de - source address (compressed data)
+; bc - destination address (decompressing)
 dzx0:
 			lxi h, $0FFFF
 			push h

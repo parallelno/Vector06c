@@ -3,15 +3,23 @@
 .include "asm\\globals\\macro.asm"
 .include "asm\\globals\\global_consts.asm"
 ; main_init must be the first code inclusion
+
 .include "asm\\globals\\main_init.asm"
 .include "asm\\globals\\global_vars.asm"
 
 .include "asm\\levels\\room_consts.asm" ; moved from a game.asm over here because of sone compilers issues. it was not able to find some consts
 
+; TODO: move this labels to a propriate place
+__RAM_DISK_S_BACKBUFF = RAM_DISK_S3
+__RAM_DISK_M_BACKBUFF = RAM_DISK_M3
+__RAM_DISK_S_BACKBUFF2 = RAM_DISK_S1
+__RAM_DISK_M_BACKBUFF2 = RAM_DISK_M1
+; TODO: end
+
 .include "asm\\globals\\utils.asm"
 .include "asm\\globals\\controls.asm"
 .include "asm\\globals\\interruptions.asm"
-.include "generated\\code\\ram_disk_init.asm"
+;.include "generated\\code\\ram_disk_init.asm"
 .include "asm\\game_utils.asm"
 .include "asm\\screens\\screen_utils.asm"
 .include "asm\\screens\\main_menu.asm"
@@ -38,9 +46,6 @@ main_start:
 			pchl
 
 code_seg_end:
-; the ram disk data below will be moved into the ram-disk before the game starts. 
-; that means if it is stored at the end of the program, everything that goes
-; to the ram-disk can overlap the screen addrs.
+.include "generated\\code\\ram_disk_data_labels.asm"
 .include "generated\\code\\ram_data.asm"
-.include "generated\\code\\ram_disk_data.asm"
 .end

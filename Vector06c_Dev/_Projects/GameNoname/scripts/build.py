@@ -218,3 +218,34 @@ def get_chunk_start_label_name(bank_id, addr_s_wo_hex_sym, chunk_id):
 def get_chunk_end_label_name(bank_id, addr_s_wo_hex_sym, chunk_id):
 	return f'__chunk_end_bank{bank_id}_addr{addr_s_wo_hex_sym}_{chunk_id}'
 '''
+
+def find_backbuffers_bank_ids(source_j, source_j_path):
+
+	# find bank_id_backbuffer and bank_id_backbuffer2
+	bank_id_backbuffer = -1
+	bank_id_backbuffer2 = -1	
+	for bank_id, bank_j in enumerate(source_j["banks"]):
+		for segment_j in bank_j["segments"]:
+			for asset in segment_j["assets"]:
+				if "reserved" in asset and asset["reserved"]:
+					if asset["asset_type"] == "backbuffer":
+						if bank_id_backbuffer >= 0:
+							print(f"export_ram_disk_init ERROR: more than one chunk is reserved for bank_id_backbuffer. path: {source_j_path}\n")
+							exit(1)
+						bank_id_backbuffer = bank_id
+
+					elif asset["asset_type"] == "backbuffer2":
+						if bank_id_backbuffer2 >= 0:
+							print(f"export_ram_disk_init ERROR: more than one chunk is reserved for bank_id_backbuffer2. path: {source_j_path}\n")
+							exit(1)						
+						bank_id_backbuffer2 = bank_id
+					continue
+
+	if bank_id_backbuffer < 0:
+		print(f"export_ram_disk_init ERROR: no chunk is reserved for bank_id_backbuffer. path: {source_j_path}\n")
+		exit(1)
+	if bank_id_backbuffer2 < 0:
+		print(f"export_ram_disk_init ERROR: no chunk is reserved for bank_id_backbuffer2. path: {source_j_path}\n")
+		exit(1)
+		
+	return bank_id_backbuffer, bank_id_backbuffer2

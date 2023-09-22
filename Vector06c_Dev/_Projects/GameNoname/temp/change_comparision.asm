@@ -5,8 +5,7 @@ after adding auto chunk splitting
 Success. Size: 53790 bytes ($d21e) in 1.373s
 
 after changes
-
-
+Success. Size: 46582 bytes ($b5f6) in 0.351s
 
 
 
