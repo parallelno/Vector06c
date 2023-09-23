@@ -1,10 +1,10 @@
-before chanhes
+before changes
 Success. Size: 53963 bytes ($d2cb) in 1.105s
 
 after adding auto chunk splitting
 Success. Size: 53790 bytes ($d21e) in 1.373s
 
-after changes
+after compression the main programm, but the animation is duplicated
 Success. Size: 46582 bytes ($b5f6) in 0.351s
 
 

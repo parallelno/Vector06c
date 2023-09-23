@@ -6,20 +6,13 @@
 
 .include "asm\\globals\\main_init.asm"
 .include "asm\\globals\\global_vars.asm"
+.include "generated\\code\\ram_disk_consts.asm"
 
 .include "asm\\levels\\room_consts.asm" ; moved from a game.asm over here because of sone compilers issues. it was not able to find some consts
-
-; TODO: move this labels to a propriate place
-__RAM_DISK_S_BACKBUFF = RAM_DISK_S3
-__RAM_DISK_M_BACKBUFF = RAM_DISK_M3
-__RAM_DISK_S_BACKBUFF2 = RAM_DISK_S1
-__RAM_DISK_M_BACKBUFF2 = RAM_DISK_M1
-; TODO: end
 
 .include "asm\\globals\\utils.asm"
 .include "asm\\globals\\controls.asm"
 .include "asm\\globals\\interruptions.asm"
-;.include "generated\\code\\ram_disk_init.asm"
 .include "asm\\game_utils.asm"
 .include "asm\\screens\\screen_utils.asm"
 .include "asm\\screens\\main_menu.asm"

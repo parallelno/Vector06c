@@ -1,9 +1,6 @@
-import os
 import export_data
-import build  
-import common
+import build
 
- 
 build.set_assembler_path("..\\..\\retroassembler\\retroassembler.exe -C=8080 -c")
 build.set_assembler_labels_cmd(" -x")
 build.set_packer(build.PACKER_ZX0_SALVADORE)

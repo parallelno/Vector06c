@@ -18,18 +18,23 @@ def export(source_j, source_j_path, generated_code_dir, generated_bin_dir, segme
 	with open(path, "w") as file:
 		file.write(asm)
 
-
-
-	# generate and save ram_data.asm
+    # generate ram_disk_consts.asm
 	asm = ""
-	'''
 	bank_id_backbuffer, bank_id_backbuffer2 = build.find_backbuffers_bank_ids(source_j, source_j_path)	
 	asm += f'__RAM_DISK_S_BACKBUFF = RAM_DISK_S{bank_id_backbuffer}\n'
 	asm += f'__RAM_DISK_M_BACKBUFF = RAM_DISK_M{bank_id_backbuffer}\n'
 	asm += f'__RAM_DISK_S_BACKBUFF2 = RAM_DISK_S{bank_id_backbuffer2}\n'
 	asm += f'__RAM_DISK_M_BACKBUFF2 = RAM_DISK_M{bank_id_backbuffer2}\n'
 	asm +="\n"
-'''
+	
+	path = f"{generated_code_dir}ram_disk_consts{build.EXT_ASM}"
+	with open(path, "w") as file:
+		file.write(asm)
+
+
+	# generate and save ram_data.asm
+	asm = ""
+
 	asm += "; ram_data:\n"
 	for seg_info in segments_info:
 		ram_data_paths = seg_info["ram_include_paths"]
@@ -45,12 +50,6 @@ def export(source_j, source_j_path, generated_code_dir, generated_bin_dir, segme
 
 	# generate and save ram_disk_data.asm
 	asm = ""
-	''' temporaly excluded
-	# add required includes
-	for include in source_j["includes"]["data_init"]:
-		asm += f'.include "{common.double_slashes(include)}"\n'
-	asm += "\n"
-	'''
 	# sort segments by the unpack priority
 	segs_sorted = sorted(segments_info, key=lambda dictionary: dictionary.get('unpack_priority', 0))
 
@@ -88,7 +87,7 @@ def export(source_j, source_j_path, generated_code_dir, generated_bin_dir, segme
 		asm += f"; bank{seg_info['bank_id']} addr{addr_s_aligned} [{segment_free_space_s_aligned} free] description: {seg_info['description']}\n"
 		
 		if len(assets_s) == 0:
-			assets_s = ["empty"]
+			assets_s = "empty"
 		asm += ";                             " + assets_s + "\n"
 
 		total_free_size += seg_free_size

@@ -8,9 +8,6 @@ scr_offset_y:
 game_updates_counter:
 			.byte TEMP_BYTE
 
-ram_disk_mode:
-			.byte TEMP_BYTE
-
 ; a lopped counter increased every game update
 game_update_counter:
 			.byte TEMP_BYTE

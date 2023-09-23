@@ -1,8 +1,3 @@
-__RAM_DISK_S_BACKBUFF = RAM_DISK_S3
-__RAM_DISK_M_BACKBUFF = RAM_DISK_M3
-__RAM_DISK_S_BACKBUFF2 = RAM_DISK_S1
-__RAM_DISK_M_BACKBUFF2 = RAM_DISK_M1
-
 ram_disk_init:
 			;call clear_ram_disk
 	;===============================================

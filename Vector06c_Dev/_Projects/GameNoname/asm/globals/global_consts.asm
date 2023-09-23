@@ -85,8 +85,11 @@ SPRITE_COPY_TO_SCR_H_MAX = 20
 SPRITE_W_PACKED_MIN		= SPRITE_COPY_TO_SCR_W_PACKED_MIN
 SPRITE_H_MIN			= SPRITE_COPY_TO_SCR_H_MIN
 
+; data unpacker
+COPY_MEM_FUNC_ADDR	= $80
 
 ; ram-disk
+ram_disk_mode = $7f ; to signal the int func what bank is on
 RAM_DISK_OFF_CMD = 0
 RAM_DISK_S0 = %00010000
 RAM_DISK_S1 = %00010100

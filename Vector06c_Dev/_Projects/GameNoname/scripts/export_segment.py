@@ -26,7 +26,7 @@ def check_segment_size(path, segment_addr):
 			print("Stop export")
 			exit(1)
  
-def export_chunks(segment_path, segment_labels_path):
+def export_chunks(segment_path, segment_labels_path, force_export):
 
 	with open(segment_labels_path, "rb") as file:
 		labels = file.readlines()
@@ -92,23 +92,23 @@ def export_chunks(segment_path, segment_labels_path):
 	# split up a segment into chunks
 	with open(segment_path, "rb") as file:
 		for i, chunk in enumerate(chunks):
- 
-			# split a chunk
-			data = file.read(chunk["size"])
+				
 			chunk_dir = os.path.dirname(segment_path) + "\\"
 			segment_basename = common.path_to_basename(segment_path)
 			segment_idx = segment_basename.find("_")
 			chunk_name = "chunk" + segment_basename[segment_idx:]
 			chunk_path = chunk_dir + chunk_name + "_" + str(i) + build.EXT_BIN
-
-			with open(chunk_path, "wb") as fw:
-				fw.write(data)
-
-			# pack a chunk
 			zx0_chunk_path = chunk_path + build.packer_ext
 
-			common.delete_file(zx0_chunk_path)
-			common.run_command(f"{build.packer_path} {chunk_path} {zx0_chunk_path}")
+			if force_export:
+				# split a chunk
+				data = file.read(chunk["size"])
+				with open(chunk_path, "wb") as fw:
+					fw.write(data)
+
+				# pack a chunk
+				common.delete_file(zx0_chunk_path)
+				common.run_command(f"{build.packer_path} {chunk_path} {zx0_chunk_path}")
 
 			chunk["path_compressed"] = zx0_chunk_path
 			chunk["size_compressed"] = os.path.getsize(zx0_chunk_path)
@@ -140,13 +140,13 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 
 		build.export_labels(labels_path, externals_only)
 
-		chunks = export_chunks(segment_bin_path, labels_path)
+	chunks = export_chunks(segment_bin_path, labels_path, force_export)
 
+	if force_export:
 		print(f"segment: {source_name} got exported.")
-
 		return True, export_paths | {"chunks" : chunks}
 	else:
-		return False, export_paths | {"chunks" : []}
+		return False, export_paths | {"chunks" : chunks}
 
 #=========================================================================================
 def export(bank_id, seg_id, segment_j, includes,

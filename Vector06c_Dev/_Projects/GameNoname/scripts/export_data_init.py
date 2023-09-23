@@ -18,11 +18,13 @@ def export(source_j, source_j_path, generated_code_dir, segments_info):
 
 
 	asm = ""
+	"""
 	asm += f'__RAM_DISK_S_BACKBUFF = RAM_DISK_S{bank_id_backbuffer}\n'
 	asm += f'__RAM_DISK_M_BACKBUFF = RAM_DISK_M{bank_id_backbuffer}\n'
 	asm += f'__RAM_DISK_S_BACKBUFF2 = RAM_DISK_S{bank_id_backbuffer2}\n'
 	asm += f'__RAM_DISK_M_BACKBUFF2 = RAM_DISK_M{bank_id_backbuffer2}\n'
 	asm +="\n"
+	"""
 
 	asm += "ram_disk_init:\n"
 	asm += "			;call clear_ram_disk\n"

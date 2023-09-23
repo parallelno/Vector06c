@@ -30,7 +30,7 @@ ASSET_TYPE_DECAL		= "decal"
 ASSET_TYPE_IMAGE		= "image"
 ASSET_TYPE_MUSIC		= "music"
 ASSET_TYPE_CODE			= "code"
-ASSET_TYPE_RAM_DISK_DATA = "ram_disk_data"
+ASSET_TYPE_DATA 		= "data"
 
 LABEL_POSTFIX_ASSET_START	= "_rd_data_start"
 LABEL_POSTFIX_ASSET_END		= "_rd_data_end"
@@ -187,19 +187,7 @@ def export_labels(path, externals_only = False):
 
 	with open(path, "w") as file:
 		file.write(labels)
-'''
-def get_segment_addr(_addr_s):
-	addr_s_wo_prefix = common.get_addr_wo_prefix(_addr_s)
-	addr = int(addr_s_wo_prefix, 16)
 
-	if addr == SEGMENT_0000_7F00_ADDR:
-		return SEGMENT_0000_7F00_ADDR
-	if addr == SEGMENT_8000_0000_ADDR:
-		return SEGMENT_8000_0000_ADDR
-
-	print(f"get_segment_addr ERROR: addr: {_addr_s} is not supported.")
-	exit(1)
-'''
 def get_segment_size_max(segment_addr):
 	if segment_addr == SEGMENT_0000_7F00_ADDR:
 		return SEGMENT_0000_7F00_SIZE_MAX
@@ -211,13 +199,6 @@ def get_segment_name(bank_id, addr_s_wo_hex_sym):
 
 def get_chunk_name(bank_id, addr_s_wo_hex_sym, chunk_id):
 	return f'chunk_bank{bank_id}_addr{addr_s_wo_hex_sym}' + "_" + str(chunk_id)
-'''
-def get_chunk_start_label_name(bank_id, addr_s_wo_hex_sym, chunk_id):
-	return f'__chunk_start_bank{bank_id}_addr{addr_s_wo_hex_sym}_{chunk_id}'
-
-def get_chunk_end_label_name(bank_id, addr_s_wo_hex_sym, chunk_id):
-	return f'__chunk_end_bank{bank_id}_addr{addr_s_wo_hex_sym}_{chunk_id}'
-'''
 
 def find_backbuffers_bank_ids(source_j, source_j_path):
 

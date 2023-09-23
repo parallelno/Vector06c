@@ -1,11 +1,13 @@
 			.org	$100
 main_init:
+			/* done in the unpacker
 			di
 			RAM_DISK_OFF()
-
 			mvi a, OPCODE_JMP
 			sta RESTART_ADDR
 			sta INT_ADDR
+			*/
+
 			lxi h, main_start
 			shld RESTART_ADDR + 1
 			lxi h, interruption

@@ -3,10 +3,10 @@
 
 .include "asm\\globals\\macro.asm"
 .include "asm\\globals\\global_consts.asm"
-; main_init must be the first code inclusion
-;.include "asm\\globals\\main_init.asm"
+.include "generated\\code\\ram_disk_consts.asm"
+
 			di
-			RAM_DISK_OFF_NO_RESTORE()
+			RAM_DISK_OFF()
 			mvi a, OPCODE_JMP
 			sta RESTART_ADDR
 			sta INT_ADDR
@@ -15,33 +15,6 @@
 			lxi sp, STACK_TMP_MAIN_PROGRAM_ADDR			
 			jmp main_start
 
-; TODO: split it to no used game data
-//.include "asm\\globals\\global_vars.asm"
-/*
-.include "asm\\levels\\room_consts.asm" ; moved from a game.asm over here because of sone compilers issues. it was not able to find some consts
-
-
-.include "asm\\globals\\controls.asm"
-.include "asm\\globals\\interruptions.asm"
-*/
-; TODO: split it to no using palette
-.include "asm\\globals\\utils_unpacker.asm"	; TODO: think of not including that codeagain in the main programm
-.include "generated\\code\\ram_disk_init.asm"
-
-//	.include "asm\\globals\\buffers.asm"
-/*
-.include "asm\\game_utils.asm"
-.include "asm\\screens\\screen_utils.asm"
-.include "asm\\screens\\main_menu.asm"
-.include "asm\\screens\\credits.asm"
-.include "asm\\screens\\scores.asm"
-.include "asm\\screens\\settings.asm"
-.include "asm\\screens\\stats.asm"
-.include "asm\\game.asm"
-.include "asm\\main_data.asm"
-*/
-
-COPY_MEM_FUNC_ADDR	= $80
 MAIN_START		= $100
 MAIN_LEN_MAX	= 32 * 1024
 
@@ -71,7 +44,6 @@ main_start:
 			lxi b, MAIN_LEN_MAX
 			call COPY_MEM_FUNC_ADDR
 			
-
 ; copy a memory buffer
 ; input:
 ; hl - source
@@ -95,11 +67,13 @@ copy_mem_ret:
 			.word MAIN_START
 copy_mem_end:
 
+.include "asm\\globals\\utils_unpacker.asm"	; TODO: think of not including that codeagain in the main programm
+.include "generated\\code\\ram_disk_init.asm"
+
 main_asm:
 .incbin "generated\\bin\\main_asm.bin.zx0"
 
-; TODO: remove that fake link
-ram_disk_mode:
+; TODO: revise thw code for removing that fake labels
 sprite_get_scr_addr8:
 sprite_get_scr_addr4:
 

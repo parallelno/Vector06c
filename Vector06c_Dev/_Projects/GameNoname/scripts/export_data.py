@@ -10,8 +10,8 @@ def export(source_j_path):
 	with open(source_j_path, "rb") as file:
 		source_j = json.load(file)
 
-	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_RAM_DISK_DATA :
-		print(f'export_back ERROR: asset_type != "{build.ASSET_TYPE_BACK}", path: {source_j_path}')
+	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_DATA :
+		print(f'export_back ERROR: asset_type != "{build.ASSET_TYPE_DATA}", path: {source_j_path}')
 		print("Stop export")
 		exit(1)
 
@@ -52,6 +52,7 @@ def export(source_j_path):
 	if ram_disk_data_asm_force_export:
 		# generate ram_disk_data.asm. it includes the ram-disk data		
 		export_data_asm.export(source_j, source_j_path, generated_code_dir, generated_bin_dir, segments_info)
+		
 		# generate ram_disk_init.asm. it copies and preprocess the ram-disk data
 		export_data_init.export(source_j, source_j_path, generated_code_dir, segments_info)
 
