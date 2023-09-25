@@ -221,6 +221,7 @@ copy_to_ram_disk $0234
 @restoreTargetAddr $0240
 @loop $0245
 @restore_sp $0250
+ram_disk_init_ $0257
 ram_disk_init $0257
 LXI_H_TO_DIFF.offset_addr $a000
 LXI_H_TO_DIFF_2.offset_addr $a000

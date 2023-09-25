@@ -3,9 +3,7 @@ import json
 import common
 import build
 
-def export(source_j, source_j_path, generated_code_dir, generated_bin_dir, segments_info):
-	
-	# generate and save ram_disk_data_labels.asm
+def export_ram_disk_data_labels(generated_code_dir, segments_info):
 	asm = "; ram-disk data labels\n"
 
 	for seg_info in segments_info:
@@ -13,11 +11,11 @@ def export(source_j, source_j_path, generated_code_dir, generated_bin_dir, segme
 		asm += f'.include "{common.double_slashes(labels_path)}"\n'
 	asm += "\n"
 
-	# save ram_disk_data_labels.asm
 	path = f"{generated_code_dir}ram_disk_data_labels{build.EXT_ASM}"
 	with open(path, "w") as file:
 		file.write(asm)
 
+def export_ram_disk_consts(source_j, source_j_path, generated_code_dir):
     # generate ram_disk_consts.asm
 	asm = ""
 	bank_id_backbuffer, bank_id_backbuffer2 = build.find_backbuffers_bank_ids(source_j, source_j_path)	
@@ -31,24 +29,21 @@ def export(source_j, source_j_path, generated_code_dir, generated_bin_dir, segme
 	with open(path, "w") as file:
 		file.write(asm)
 
+def export_ram_data(generated_code_dir, segments_info):
+	asm = "; ram_data:\n"
 
-	# generate and save ram_data.asm
-	asm = ""
-
-	asm += "; ram_data:\n"
 	for seg_info in segments_info:
-		ram_data_paths = seg_info["ram_include_paths"]
+		ram_data_paths = seg_info["ram_include_paths"] 
 		for ram_data_path in ram_data_paths:
 			if len(ram_data_path) != 0:
 				asm += f'.include "{common.double_slashes(ram_data_path)}"\n'
 	asm += "\n" 
- 
-	# save ram_data.asm
+
 	path = f"{generated_code_dir}ram_data{build.EXT_ASM}"
 	with open(path, "w") as file:
-		file.write(asm)
+		file.write(asm) 
 
-	# generate and save ram_disk_data.asm
+def	export_ram_disk_data(generated_code_dir, generated_bin_dir, segments_info):
 	asm = ""
 	# sort segments by the unpack priority
 	segs_sorted = sorted(segments_info, key=lambda dictionary: dictionary.get('unpack_priority', 0))
@@ -99,3 +94,17 @@ def export(source_j, source_j_path, generated_code_dir, generated_bin_dir, segme
 	path = f"{generated_code_dir}ram_disk_data{build.EXT_ASM}"
 	with open(path, "w") as file:
 		file.write(asm)
+
+def export(source_j, source_j_path, generated_code_dir, generated_bin_dir, segments_info):
+	
+	# generate and save ram_disk_data_labels.asm
+	export_ram_disk_data_labels(generated_code_dir, segments_info)
+
+	# generate ram_disk_consts.asm
+	export_ram_disk_consts(source_j, source_j_path, generated_code_dir)
+
+	# generate and save ram_data.asm
+	export_ram_data(generated_code_dir, segments_info)
+
+	# generate and save ram_disk_data.asm
+	export_ram_disk_data(generated_code_dir, generated_bin_dir, segments_info)

@@ -1,4 +1,4 @@
-.setting "Debug", true
+;.setting "Debug", true
 
 .include "asm\\globals\\macro.asm"
 .include "asm\\globals\\global_consts.asm"

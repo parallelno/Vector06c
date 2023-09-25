@@ -35,7 +35,9 @@ ASSET_TYPE_DATA 		= "data"
 LABEL_POSTFIX_ASSET_START	= "_rd_data_start"
 LABEL_POSTFIX_ASSET_END		= "_rd_data_end"
 
+DEBUG_FILE_NAME	= "debug.txt"
 
+EXT_TXT			= ".txt"
 EXT_ASM			= ".asm"
 EXT_BIN			= ".bin"
 EXT_ZX0			= ".zx0"
@@ -112,13 +114,13 @@ def is_asm_updated(asm_path):
 		lines = file.readlines()
 
 	includes = []
-	for line in lines:
-		line_str = line.decode('ascii')
+	for line_b in lines:
+		line = line_b.decode('ascii')
 		inc_str = ".include "
-		inc_idx = line_str.find(inc_str)
+		inc_idx = line.find(inc_str)
 
-		if inc_idx != -1 and line_str[0] != ";":
-			path = line_str[inc_idx + len(inc_str)+1:]
+		if inc_idx != -1 and line[0] != ";":
+			path = line[inc_idx + len(inc_str)+1:]
 			path = common.remove_double_slashes(path)
 			path_end_q1 = path.find('"')
 			path_end_q2 = path.find("'")
@@ -169,24 +171,44 @@ def is_file_updated(path):
 	con.close()
 	return modified
 
-def export_labels(path, externals_only = False):
+def export_labels(path, externals_only = False, save_output = True):
 	with open(path, "rb") as file:
 		lines = file.readlines()
 
 	get_all_next_lines = False
 	labels = ""
-	for line in lines:
-		line_str = line.decode('ascii')
+	label_pairs = {}
+	for line_b in lines:
+		line = line_b.decode('ascii')
 		if get_all_next_lines:
-			if not externals_only or (externals_only and line_str[0:2] == "__"):
-				labels += line_str
+			if (not externals_only or line[0:2] == "__") and line.find("=") != -1:
+				labels += line
+
+				label_name_end = line.find(" ")
+				label_name = line[:label_name_end]
+
+				second_addr_end = line.find(")")
+				if second_addr_end == -1:
+					addr_start = line.find("$") + 1
+					addr_end = len(line)
+					
+				else:
+					addr_start = line.find("(") + 2
+					addr_end = second_addr_end
+
+				addr_s = line[addr_start : addr_end]
+				addr = int(addr_s, 16)
+				label_pairs[label_name] = addr
+
 			continue
 
-		if line_str.find("Segment: Code") != -1:
+		if line.find("Segment: Code") != -1:
 			get_all_next_lines = True
-
-	with open(path, "w") as file:
-		file.write(labels)
+	if save_output:
+		with open(path, "w") as file:
+			file.write(labels)
+	
+	return label_pairs
 
 def get_segment_size_max(segment_addr):
 	if segment_addr == SEGMENT_0000_7F00_ADDR:
@@ -230,3 +252,29 @@ def find_backbuffers_bank_ids(source_j, source_j_path):
 		exit(1)
 		
 	return bank_id_backbuffer, bank_id_backbuffer2
+
+
+def compile_asm(source_path, bin_path, labels_path = ""):
+	print("===========================================")
+	print(f"build: Compilation {source_path} to {bin_path}")
+
+	if len(labels_path) > 0:
+		common.run_command(f"{assembler_path} {assembler_labels_cmd} {source_path} {bin_path} >{labels_path}")	
+
+		if not os.path.exists(bin_path):
+			print(f'ERROR: compilation error, path: {source_path}')
+			print("Stop export")
+			with open(labels_path, "r") as file:
+				print(file.read()) 
+			exit(1)
+		else:
+			size = os.path.getsize(bin_path)
+			print(f"Success. Size: {size} bytes (${size:X})")
+			print("\n")
+
+	else:
+		common.run_command(f"{assembler_path} {source_path} {bin_path}")
+		if not os.path.exists(bin_path):
+			print(f'ERROR: compilation error, path: {source_path}')
+			print("Stop export")
+			exit(1)

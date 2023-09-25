@@ -107,8 +107,7 @@ def export_chunks(segment_path, segment_labels_path, force_export):
 					fw.write(data)
 
 				# pack a chunk
-				common.delete_file(zx0_chunk_path)
-				common.run_command(f"{build.packer_path} {chunk_path} {zx0_chunk_path}")
+				common.compress(chunk_path, zx0_chunk_path)
 
 			chunk["path_compressed"] = zx0_chunk_path
 			chunk["size_compressed"] = os.path.getsize(zx0_chunk_path)
@@ -128,13 +127,7 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 	}
 
 	if force_export:
-		common.run_command(f"{build.assembler_path} {build.assembler_labels_cmd} {source_path} "
-				f" {segment_bin_path} >{labels_path}")
-
-		if not os.path.exists(segment_bin_path):
-			print(f'export_segment ERROR: compilation error, path: {source_path}')
-			print("Stop export")
-			exit(1)
+		build.compile_asm(source_path, segment_bin_path, labels_path)		
 
 		check_segment_size(segment_bin_path, segment_addr)
 

@@ -5,6 +5,22 @@ import common
 import export_segment
 import export_data_asm
 import export_data_init
+import export_sprite
+
+def export_ram_data_labels(generated_code_dir, segments_info, main_asm_labels):
+	# use the main programm labels to find preshift anim labels and their addrs
+	asm = "; ram_data_labels:\n"
+
+	for seg_info in segments_info:
+		ram_data_paths = seg_info["ram_include_paths"]
+		for ram_data_path in ram_data_paths:
+			if len(ram_data_path) != 0:
+				asm += export_sprite.get_anim_labels(ram_data_path, main_asm_labels)
+	asm += "\n"
+
+	path = f"{generated_code_dir}ram_data_labels{build.EXT_ASM}"
+	with open(path, "w") as file:
+		file.write(asm)
 
 def export(source_j_path):
 	with open(source_j_path, "rb") as file:
@@ -19,7 +35,7 @@ def export(source_j_path):
 	build.build_db_init(source_j["build_db_path"])
 
 	# check dependencies
-	dependency_paths_j = source_j["dependencies"]
+	dependency_paths_j = source_j["dependencies"] 
 	global_force_export = False
 	for path in dependency_paths_j["global"]:
 		global_force_export |= build.is_file_updated(path)
@@ -63,16 +79,14 @@ def export(source_j_path):
 	bin_path = generated_bin_dir + rom_name + build.EXT_BIN
 	common.delete_file(bin_path)
 
-	common.run_command(f"{build.assembler_path} {source_path} {bin_path}", "", source_path)
-	
-	if not os.path.exists(bin_path):
-		print(f'ERROR: compilation error, path: {source_path}')
-		print("Stop export")
-		exit(1)	
+	# compile the main.asm
+	labels_path = generated_bin_dir + build.DEBUG_FILE_NAME
+	build.compile_asm(source_path, bin_path, labels_path)
+
+	main_asm_labels = build.export_labels(labels_path, False, False)
 
 	zx0_path = bin_path + build.packer_ext
-	common.delete_file(zx0_path)
-	common.run_command(f"{build.packer_path} {bin_path} {zx0_path}")
+	common.compress(bin_path, zx0_path)
 
 	# export unpacker.asm
 	source_path = source_j["unpacker_path"]
@@ -81,16 +95,15 @@ def export(source_j_path):
 	rom_name = os.path.basename(os.getcwd())
 	bin_path = rom_dir + rom_name + build.EXT_BIN
 	rom_path = rom_dir + rom_name + build.EXT_ROM	
-
-	common.delete_file(bin_path)
-	common.delete_file(rom_path) 
-
-	common.run_command(f"{build.assembler_path} {source_path} {bin_path}", "", source_path)
 	
-	if not os.path.exists(bin_path):
-		print(f'ERROR: compilation error, path: {source_path}')
-		print("Stop export")
-		exit(1)
+	common.delete_file(bin_path)
+	common.delete_file(rom_path)
+
+	# export ram_data_labels.asm
+	export_ram_data_labels(generated_code_dir, segments_info, main_asm_labels)
+
+	labels_path = rom_dir + build.DEBUG_FILE_NAME
+	build.compile_asm(source_path, bin_path)
 	
 	common.run_command(f"ren {bin_path} {rom_name + build.EXT_ROM}")    
-	common.run_command(f"{build.emulator_path} {rom_path}", "", rom_path)	
+	common.run_command(f"{build.emulator_path} {rom_path}", "", rom_path)	 

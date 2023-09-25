@@ -139,6 +139,10 @@ def get_label_addr(path, _label):
 
 	return -1
 
+def compress(source_path, path_compressed):
+	delete_file(path_compressed)
+	run_command(f"{build.packer_path} {source_path} {path_compressed}")
+	
 def asm_compress_to_asm(asm, path_tmp = "temp\\", delete_tmp_asm = True, delete_tmp_bin = True, delete_tmp_packed = True):
 	asm = ".org 0 \n" + asm
 

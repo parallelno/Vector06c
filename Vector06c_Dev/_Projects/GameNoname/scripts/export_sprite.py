@@ -50,6 +50,26 @@ def sprite_data(bytes1, bytes2, bytes3, w, h, mask_bytes = None):
 
 	return [data]
 
+def get_anim_labels(path, main_ram_labels_addrs):
+	with open(path, "r") as file:
+		lines = file.readlines()
+
+	anim_j_path = lines[0][2:]
+	sprite_name = common.path_to_basename(anim_j_path)
+
+	anim_labels = ""
+	
+	for i, line in enumerate(lines):
+		if line.find(sprite_name) == 0 and line.find(':') != -1:
+			label_name_end = line.find(":")
+			label_name = line[:label_name_end]
+			addr = main_ram_labels_addrs[label_name]
+			anim_labels += f"{label_name} = ${addr:X}\n"
+							
+	return 	anim_labels
+
+	
+
 def anims_to_asm(label_prefix, source_j, source_j_path):
 	asm = ""
 	preshifted_sprites = source_j.get("preshifted_sprites", 1)

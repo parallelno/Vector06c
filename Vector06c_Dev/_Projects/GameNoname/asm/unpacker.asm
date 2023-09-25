@@ -68,14 +68,17 @@ copy_mem_ret:
 copy_mem_end:
 
 .include "asm\\globals\\utils_unpacker.asm"	; TODO: think of not including that codeagain in the main programm
+ram_disk_init_:
 .include "generated\\code\\ram_disk_init.asm"
 
 main_asm:
 .incbin "generated\\bin\\main_asm.bin.zx0"
 
-; TODO: revise thw code for removing that fake labels
+; TODO: try to remove these fake labels
 sprite_get_scr_addr8:
 sprite_get_scr_addr4:
+; TODO end
+
 
 ; the ram disk data below will be moved into the ram-disk before the game starts. 
 ; that means if it is stored at the end of the program, everything that goes
