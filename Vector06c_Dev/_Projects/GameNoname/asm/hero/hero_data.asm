@@ -4,7 +4,6 @@ hero_update_ptr:			.word hero_update
 hero_draw_ptr:				.word hero_draw
 hero_impacted_ptr:			.word hero_impacted ; called by a monster's bullet, a monster, etc. to affect a hero
 hero_type:					.byte MONSTER_TYPE_ALLY
-hero_health:				.byte HERO_HEALTH_MAX
 hero_status:				.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
 hero_status_timer:			.byte 0	; a duration of the status. ticks every update
 hero_anim_timer:			.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
@@ -18,7 +17,6 @@ hero_pos_x:					.word TEMP_WORD ; first byte is a sub-pixel coord
 hero_pos_y:					.word TEMP_WORD ; first byte is a sub-pixel coord
 hero_speed_x:				.word TEMP_WORD ; first byte is a sub-pixel coord speed
 hero_speed_y:				.word TEMP_WORD ; first byte is a sub-pixel coord speed
-hero_weapon:				.byte TEMP_WORD ; STTN_MMMM: S - sword, T - TNT, I - invis, M - mana
 hero_data_prev_pptr:		.word DRAW_LIST_FIRST_DATA_MARKER
 hero_data_next_pptr:		.word monster_data_next_pptr
 ;

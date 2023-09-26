@@ -171,6 +171,14 @@ def is_file_updated(path):
 	con.close()
 	return modified
 
+def store_labels(labels, path):
+	labels_txt = ""
+	for label_name in labels:
+		labels_txt += f"{label_name} ${labels[label_name]:X}\n"
+
+	with open(path, "w") as file:
+		file.write(labels_txt)
+
 def export_labels(path, externals_only = False, save_output = True):
 	with open(path, "rb") as file:
 		lines = file.readlines()

@@ -493,10 +493,10 @@ __tiled_images_tile69:
 
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_tile70:
-			.byte 0,0,0,183,1,1,1,1,
-			.byte 0,0,0,0,0,0,0,0,
-			.byte 0,0,0,0,0,0,0,0,
-			.byte 0,0,0,0,0,0,0,0,
+			.byte 0,255,0,0,0,34,20,136,
+			.byte 0,128,0,0,0,0,255,255,
+			.byte 255,255,0,0,128,0,34,20,
+			.byte 227,201,221,127,255,0,0,0,
 
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_tile71:
@@ -1438,155 +1438,316 @@ __tiled_images_tile204:
 
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_tile205:
-			.byte 219,233,125,56,0,0,255,0,
-			.byte 255,255,0,0,2,60,121,122,
-			.byte 1,4,2,2,0,0,255,255,
-			.byte 0,255,0,255,199,188,123,95,
-
-			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile206:
-			.byte 148,162,0,0,0,0,255,0,
-			.byte 255,255,0,0,0,0,0,0,
-			.byte 8,20,34,0,0,0,255,255,
-			.byte 0,255,0,255,255,221,73,99,
-
-			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile207:
 			.byte 0,0,0,0,0,0,255,0,
 			.byte 255,255,0,0,1,2,2,1,
 			.byte 1,2,2,1,0,0,255,255,
 			.byte 0,255,0,255,254,252,253,252,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile208:
+__tiled_images_tile206:
 			.byte 0,0,0,0,0,0,255,0,
 			.byte 255,255,0,0,198,9,8,200,
 			.byte 200,8,9,198,0,0,255,255,
 			.byte 0,255,0,255,57,48,246,55,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile209:
+__tiled_images_tile207:
 			.byte 0,0,0,0,0,0,255,0,
 			.byte 255,255,0,0,51,74,74,75,
 			.byte 75,74,74,51,0,0,255,255,
 			.byte 0,255,0,255,204,132,181,180,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile210:
+__tiled_images_tile208:
 			.byte 0,0,0,0,0,0,255,0,
 			.byte 255,255,0,0,158,80,80,152,
 			.byte 152,80,80,158,0,0,255,255,
 			.byte 0,255,0,255,97,33,175,39,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile211:
+__tiled_images_tile209:
 			.byte 0,0,0,0,0,0,255,0,
 			.byte 255,255,0,0,247,132,132,199,
 			.byte 199,132,132,247,0,0,255,255,
 			.byte 0,255,0,255,8,8,123,56,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile212:
+__tiled_images_tile210:
 			.byte 0,0,0,0,0,0,255,0,
 			.byte 255,255,0,0,28,160,160,28,
 			.byte 28,160,160,28,0,0,255,255,
 			.byte 0,255,0,255,227,67,95,195,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile213:
+__tiled_images_tile211:
 			.byte 0,0,0,0,2,2,252,0,
 			.byte 252,254,3,2,1,1,1,1,
 			.byte 1,1,1,1,3,3,254,252,
 			.byte 3,253,2,252,252,252,252,252,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile214:
+__tiled_images_tile212:
 			.byte 0,63,96,64,64,64,64,64,
 			.byte 192,192,64,64,64,96,63,15,
 			.byte 63,127,224,192,192,192,192,192,
 			.byte 71,95,95,95,31,0,128,192,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile215:
+__tiled_images_tile213:
 			.byte 0,255,0,0,8,20,34,65,
 			.byte 62,28,8,0,0,0,255,255,
 			.byte 255,255,0,0,0,8,28,62,
 			.byte 190,221,235,247,255,0,0,0,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile216:
+__tiled_images_tile214:
 			.byte 0,255,0,0,0,34,20,8,
 			.byte 0,0,0,0,0,0,255,255,
 			.byte 255,255,0,0,0,0,34,20,
 			.byte 227,201,221,255,255,0,0,0,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile217:
+__tiled_images_tile215:
 			.byte 0,255,0,0,0,0,0,0,
 			.byte 0,0,0,0,0,0,255,255,
 			.byte 255,255,0,0,0,0,0,0,
 			.byte 255,255,255,255,255,0,0,0,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile218:
-			.byte 0,255,0,0,62,125,254,223,
-			.byte 126,126,32,0,0,0,255,255,
-			.byte 255,255,0,0,0,30,1,1,
-			.byte 95,126,188,193,255,0,0,0,
-
-			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile219:
-			.byte 0,255,0,0,0,34,148,136,
-			.byte 0,0,0,0,0,0,255,255,
-			.byte 255,255,0,0,0,0,34,20,
-			.byte 99,73,221,255,255,0,0,0,
-
-			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile220:
+__tiled_images_tile216:
 			.byte 0,255,0,0,0,0,0,0,
 			.byte 0,0,3,0,0,0,255,255,
 			.byte 255,255,0,0,0,3,0,0,
 			.byte 254,255,252,252,255,0,0,0,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile221:
+__tiled_images_tile217:
 			.byte 0,255,0,0,0,0,0,0,
 			.byte 40,41,198,0,0,0,255,255,
 			.byte 255,255,0,0,0,198,41,40,
 			.byte 23,214,16,57,255,0,0,0,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile222:
+__tiled_images_tile218:
 			.byte 0,255,0,0,0,0,0,0,
 			.byte 74,74,50,0,0,0,255,255,
 			.byte 255,255,0,0,0,50,74,74,
 			.byte 180,181,133,205,255,0,0,0,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile223:
+__tiled_images_tile219:
 			.byte 0,255,0,0,0,0,0,0,
 			.byte 144,80,94,0,0,0,255,255,
 			.byte 255,255,0,0,0,94,80,144,
 			.byte 103,47,161,161,255,0,0,0,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile224:
+__tiled_images_tile220:
 			.byte 0,255,0,0,0,0,0,0,
 			.byte 132,132,132,0,0,0,255,255,
 			.byte 255,255,0,0,0,132,132,132,
 			.byte 56,123,123,123,255,0,0,0,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile225:
+__tiled_images_tile221:
 			.byte 0,255,0,0,0,0,0,0,
 			.byte 2,2,60,0,0,0,255,255,
 			.byte 255,255,0,0,0,60,2,2,
 			.byte 225,253,193,195,255,0,0,0,
 
 			.word 0 ; safety pair of bytes for reading by POP B
-__tiled_images_tile226:
+__tiled_images_tile222:
 			.byte 16,232,0,2,1,0,0,0,
 			.byte 1,4,0,61,66,6,252,240,
 			.byte 240,254,22,82,63,9,5,1,
 			.byte 240,240,196,128,1,1,0,8,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile223:
+			.byte 2,4,8,112,0,0,255,0,
+			.byte 255,255,0,0,112,56,60,31,
+			.byte 60,120,112,0,0,0,255,255,
+			.byte 0,255,0,255,143,135,131,192,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile224:
+			.byte 20,34,0,0,0,0,255,0,
+			.byte 255,255,0,0,0,0,0,0,
+			.byte 8,20,34,0,0,0,255,255,
+			.byte 0,255,0,255,255,221,201,227,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile225:
+			.byte 0,255,0,0,0,0,0,0,
+			.byte 14,5,11,1,0,0,255,255,
+			.byte 255,255,0,0,0,0,10,28,
+			.byte 225,240,244,254,255,0,0,0,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile226:
+			.byte 0,255,0,0,0,34,20,8,
+			.byte 0,0,128,0,0,0,255,255,
+			.byte 255,255,0,0,0,0,34,20,
+			.byte 227,201,93,255,255,0,0,0,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile227:
+			.byte 0,65,0,0,0,0,255,0,
+			.byte 255,255,0,0,24,60,127,127,
+			.byte 0,0,0,0,0,0,255,255,
+			.byte 0,255,0,255,239,223,207,129,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile228:
+			.byte 148,34,0,0,0,0,255,0,
+			.byte 255,255,0,0,0,0,0,128,
+			.byte 8,20,34,0,0,0,255,255,
+			.byte 0,255,0,255,255,221,201,227,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile229:
+			.byte 0,255,0,0,34,81,32,0,
+			.byte 79,67,103,62,0,0,255,255,
+			.byte 255,255,0,0,0,24,60,48,
+			.byte 128,160,241,243,255,0,0,0,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile230:
+			.byte 0,255,0,0,0,34,148,136,
+			.byte 128,128,0,0,0,0,255,255,
+			.byte 255,255,0,0,0,0,34,20,
+			.byte 227,201,221,255,255,0,0,0,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile231:
+			.byte 63,62,16,24,0,0,255,0,
+			.byte 255,255,0,0,30,12,18,37,
+			.byte 26,12,0,0,0,0,255,255,
+			.byte 0,255,0,255,231,239,193,192,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile232:
+			.byte 20,34,0,0,0,0,255,0,
+			.byte 255,255,0,0,0,0,0,0,
+			.byte 8,20,34,0,0,0,255,255,
+			.byte 0,255,0,255,255,221,201,227,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile233:
+			.byte 0,255,0,0,96,224,192,66,
+			.byte 127,127,127,63,0,0,255,255,
+			.byte 255,255,0,0,0,30,63,61,
+			.byte 189,63,31,159,255,0,0,0,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile234:
+			.byte 0,255,0,0,128,34,20,136,
+			.byte 128,128,128,0,0,0,255,255,
+			.byte 255,255,0,0,0,0,34,20,
+			.byte 99,201,221,127,255,0,0,0,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile235:
+			.byte 63,62,16,24,0,0,255,0,
+			.byte 255,255,0,0,30,12,30,63,
+			.byte 0,0,0,0,0,0,255,255,
+			.byte 0,255,0,255,231,239,205,218,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile236:
+			.byte 20,34,0,0,0,0,255,0,
+			.byte 255,255,0,0,0,0,0,0,
+			.byte 8,20,34,0,0,0,255,255,
+			.byte 0,255,0,255,255,221,201,227,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile237:
+			.byte 0,255,0,0,96,254,255,127,
+			.byte 66,64,97,63,0,0,255,255,
+			.byte 255,255,0,0,0,0,0,0,
+			.byte 189,63,31,159,255,0,0,0,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile238:
+			.byte 0,255,0,0,128,34,20,136,
+			.byte 128,128,128,0,0,0,255,255,
+			.byte 255,255,0,0,0,0,34,20,
+			.byte 99,201,221,127,255,0,0,0,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile239:
+			.byte 1,1,1,0,0,0,255,0,
+			.byte 255,255,0,0,247,254,126,126,
+			.byte 126,126,246,0,0,0,255,255,
+			.byte 0,255,0,255,8,143,129,129,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile240:
+			.byte 148,162,128,0,0,0,255,0,
+			.byte 255,255,0,0,128,0,0,0,
+			.byte 8,20,34,0,0,0,255,255,
+			.byte 0,255,0,255,127,221,201,227,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile241:
+			.byte 0,255,0,0,0,0,0,1,
+			.byte 110,97,0,0,0,0,255,255,
+			.byte 255,255,0,0,111,0,96,110,
+			.byte 145,255,255,144,255,0,0,0,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile242:
+			.byte 167,69,98,28,0,0,255,0,
+			.byte 255,255,0,0,28,99,87,231,
+			.byte 191,237,118,60,0,0,255,255,
+			.byte 0,255,0,255,227,29,186,88,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile243:
+			.byte 148,162,0,0,0,0,255,0,
+			.byte 255,255,0,0,0,0,128,128,
+			.byte 136,148,34,0,0,0,255,255,
+			.byte 0,255,0,255,255,221,73,99,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile244:
+			.byte 0,255,0,0,0,8,119,132,
+			.byte 135,119,8,0,0,0,255,255,
+			.byte 255,255,0,0,28,47,119,220,
+			.byte 123,8,183,221,255,0,0,0,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile245:
+			.byte 0,255,0,0,0,34,20,136,
+			.byte 128,0,0,0,0,0,255,255,
+			.byte 255,255,0,0,0,0,34,148,
+			.byte 99,201,221,255,255,0,0,0,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile246:
+			.byte 183,211,121,56,0,0,255,0,
+			.byte 255,255,0,2,0,56,115,247,
+			.byte 0,8,4,2,2,0,255,255,
+			.byte 0,255,0,255,197,186,119,191,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile247:
+			.byte 148,162,0,0,0,0,255,0,
+			.byte 255,255,0,0,0,0,0,0,
+			.byte 8,20,34,0,0,0,255,255,
+			.byte 0,255,0,255,255,221,73,99,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile248:
+			.byte 0,255,0,0,62,127,255,191,
+			.byte 255,126,60,0,0,0,255,255,
+			.byte 255,255,0,0,14,3,1,0,
+			.byte 191,127,191,207,255,0,0,0,
+
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_tile249:
+			.byte 0,255,0,0,0,34,148,136,
+			.byte 0,0,0,0,0,0,255,255,
+			.byte 255,255,0,0,0,0,162,148,
+			.byte 227,201,221,255,255,0,0,0,
 

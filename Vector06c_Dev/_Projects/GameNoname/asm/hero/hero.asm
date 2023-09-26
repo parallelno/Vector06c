@@ -6,10 +6,13 @@
 
 
 hero_game_init:
-			A_TO_ZERO(HERO_WEAPON_NONE)
-			sta hero_weapon
+			; erase hero resources buffs
+			lxi h, hero_resources
+			mvi a, <hero_resources_end
+			call clear_mem_short
+
 			mvi a, HERO_HEALTH_MAX
-			sta hero_health			
+			sta hero_res_health
 			ret
 
 hero_init:

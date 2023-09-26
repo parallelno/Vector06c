@@ -28,8 +28,6 @@
 
 main_game:
 			call game_init
-			call level_init
-			
 			call reset_game_updates_counter
 @loop:
 			call game_update
@@ -37,10 +35,11 @@ main_game:
 			jmp	@loop
 
 game_init:
-			CALL_RAM_DISK_FUNC(__game_score_init, __RAM_DISK_S_SCORE)
+			CALL_RAM_DISK_FUNC(__game_stats_init, __RAM_DISK_S_SCORE)
+			call hero_game_init			
 			call levels_init
 			call dialogs_init
-			call hero_game_init
+			call game_ui_draw
 			ret
 
 game_update:

@@ -45,6 +45,7 @@ MONSTERS_RUNTIME_DATA_LEN = monsters_runtime_data_end - monster_runtime_data_sor
 ;=============================================================================
 ; tiled image indices buffer
 tiled_img_idxs:	= $7714
+; TODO: consider increasing this buffer and combine title1, title2, main_menu_back1, and main_menu_back2 into one image
 TILED_IMG_IDXS_LEN = $100
 
 ;=============================================================================
@@ -144,18 +145,24 @@ rooms_spawn_rate_breakables:	= rooms_spawn_rate_monsters + ROOMS_MAX ; 0 means 1
 rooms_spawn_rates_end:			= rooms_spawn_rate_breakables + ROOMS_MAX ; $7b80
 
 ;=============================================================================
-; hero resources
-; TODO: update RESOURCES_LEN when resources are finilized
-HERO_RESOURCES_LEN	= 5
+; hero global statuses
+; >0 - will NOT be rendered, copied to the screen, and erased in the back buffer
+; 0 - the opposite
+; TODO: use only a bit, then combine it with other hero global statuses.
+hero_global_status_no_render = $7b80 ; byte
 
-hero_resources:		= $7b80
-hero_res_ammo:		= hero_resources + 0
-hero_res_mana:		= hero_resources + 1
-; TODO: there are 3 bytes free
-hero_res_clothes:	= hero_resources + 2
-hero_res_cabbage:	= hero_resources + 3 ; it is a quest resource
-; hero_res_??		= hero_resources + 4
-hero_resources_end:	= hero_resources + HERO_RESOURCES_LEN
+;=============================================================================
+; a current command that is handled by the level update func
+global_request:			= $7b81				; .byte
+; the current level idx
+level_idx:				= $7b82				; .byte
+; the current room idx of the current level
+room_id:   				= $7b83				; .byte TEMP_BYTE ; in the range [0, ROOMS_MAX-1]
+
+;=============================================================================
+;
+;	free space = $7b84 - $7b84
+;
 
 ;=============================================================================
 ; a list of back runtime data structs.
@@ -164,7 +171,7 @@ back_anim_ptr:			= backs_runtime_data 			;.word TEMP_ADDR ; also (back_anim_ptr+
 back_scr_addr:			= back_anim_ptr + ADDR_LEN		;.word TEMP_WORD
 back_anim_timer:		= back_scr_addr + WORD_LEN		;.byte TEMP_BYTE
 back_anim_timer_speed:	= back_anim_timer + BYTE_LEN	;.byte TEMP_BYTE
-back_runtime_data_end: = back_anim_timer_speed + BYTE_LEN
+back_runtime_data_end:	= back_anim_timer_speed + BYTE_LEN
 
 BACK_RUNTIME_DATA_LEN = back_runtime_data_end - backs_runtime_data
 
@@ -174,52 +181,53 @@ backs_runtime_data_end:			= backs_runtime_data_end_marker + WORD_LEN
 BACKS_RUNTIME_DATA_LEN = backs_runtime_data_end - backs_runtime_data
 
 ;=============================================================================
-; a current command that is handled by the level update func
-global_request:			= $7bc3				; .byte
-; the current level idx
-level_idx:				= $7bc4				; .byte
-; the current room idx of the current level
-room_id:   				= $7bc5				; .byte TEMP_BYTE ; in the range [0, ROOMS_MAX-1]
-
-;=============================================================================
 ; level init data ptr and ram-disk access commands
-level_init_tbl:						= $7bc6
-level_ram_disk_s_data:				= $7bc6 ; .byte __RAM_DISK_S_LEVEL00_DATA
-level_ram_disk_m_data: 				= $7bc7 ; .byte __RAM_DISK_M_LEVEL00_DATA
-level_ram_disk_s_gfx:				= $7bc8 ; .byte __RAM_DISK_S_LEVEL00_GFX
-level_ram_disk_m_gfx:				= $7bc9 ; .byte __RAM_DISK_M_LEVEL00_GFX
-level_palette_ptr:					= $7bca ; .word __level00_palette
-level_resources_inst_data_pptr:		= $7bcc ; .word __level00_resources_inst_data_ptrs
-level_containers_inst_data_pptr:	= $7bce ; .word __level00_containers_inst_data_ptrs
-level_start_pos_ptr:				= $7bd0 ; .word __level00_start_pos
-level_rooms_pptr:					= $7bd2 ; .word __level00_rooms_addr
-level_tiles_pptr:					= $7bd4 ; .word __level00_tiles_addr
-level_init_tbl_end:					= $7bd6
+level_init_tbl:						= $7bc3
+level_ram_disk_s_data:				= level_init_tbl		; .byte __RAM_DISK_S_LEVEL00_DATA
+level_ram_disk_m_data: 				= level_init_tbl + 1	; .byte __RAM_DISK_M_LEVEL00_DATA
+level_ram_disk_s_gfx:				= level_init_tbl + 2	; .byte __RAM_DISK_S_LEVEL00_GFX
+level_ram_disk_m_gfx:				= level_init_tbl + 3	; .byte __RAM_DISK_M_LEVEL00_GFX
+level_palette_ptr:					= level_init_tbl + 4	; .word __level00_palette
+level_resources_inst_data_pptr:		= level_init_tbl + 6	; .word __level00_resources_inst_data_ptrs
+level_containers_inst_data_pptr:	= level_init_tbl + 8	; .word __level00_containers_inst_data_ptrs
+level_start_pos_ptr:				= level_init_tbl + 10	; .word __level00_start_pos
+level_rooms_pptr:					= level_init_tbl + 12	; .word __level00_rooms_addr
+level_tiles_pptr:					= level_init_tbl + 14	; .word __level00_tiles_addr
+level_init_tbl_end:					= level_init_tbl + 16	
 LEVEL_INIT_TBL_LEN = level_init_tbl_end - level_init_tbl
 ;=============================================================================
 ;
-game_score = $7bd6 ; word
-;==================================
 ; palette
-palette = $7bd8 ; 16 bytes
-
-;=============================================================================
-; hero global statuses
-; >0 - will NOT be rendered, copied to the screen, and erased in the back buffer
-; 0 - the opposite
-; TODO: use only a bit, then combine it with other hero global statuses.
-hero_global_status_no_render = $7be8 ; byte
+palette = $7bd3 ; 16 bytes
 
 ;=============================================================================
 ;
-; settings
+;	free space = $7be3 - $7bff
 ;
-
 
 ;=============================================================================
 ;
-;	free space = $7be9 - $7c10
+; hero resources = $7c00
 ;
+hero_resources:			= $7c00
+hero_res_score:			= hero_resources + 0 ; WORD_LEN
+hero_res_health:		= hero_resources + 2 ; +2 because hero_res_score = WORD_LEN
+hero_res_mana:			= hero_resources + 3
+hero_res_sword:			= hero_resources + 4
+hero_res_potion_health:	= hero_resources + 5
+hero_res_potion_mana:	= hero_resources + 6
+hero_res_clothes:		= hero_resources + 7 ; it is a quest resource
+hero_res_cabbage:		= hero_resources + 8 ; it is a quest resource
+hero_res_not_used_01:	= hero_resources + 9
+hero_res_not_used_02:	= hero_resources + 10
+hero_res_not_used_03:	= hero_resources + 11
+hero_res_not_used_04:	= hero_resources + 12
+hero_res_not_used_05:	= hero_resources + 13
+hero_res_not_used_06:	= hero_resources + 14
+hero_res_not_used_07:	= hero_resources + 15
+hero_res_not_used_08:	= hero_resources + 16
+hero_resources_end:		= hero_resources + 17
+
 
 ;=============================================================================
 ; contains global item statuses.

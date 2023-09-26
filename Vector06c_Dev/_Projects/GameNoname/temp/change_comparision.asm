@@ -7,9 +7,15 @@ Success. Size: 53790 bytes ($d21e) in 1.373s
 after compression the main programm, but the animation is duplicated
 Success. Size: 46582 bytes ($b5f6) in 0.351s
 
-after compression the main programm. animation data is compressed together with the main programm
-Success. Size: 44953 bytes ($AF99)
+; not solved yet
+;after compression the main programm. animation data is compressed together with the main programm
+;Success. Size: 44953 bytes ($AF99)
 
+after sme changes:
+Success. Size: 46571 bytes ($B5EB)
+
+after adding new resources icons
+Success. Size: 46891 bytes ($B72B)
 
 ; ram-disk data layout
 ; bank0 addr0    [ 4336 free] description: 

@@ -8,7 +8,9 @@ levels_init:
 			; erase global item statuses
 			lxi h, global_items
 			mvi a, <global_items_end
-			jmp clear_mem_short
+			call clear_mem_short
+
+			jmp level_init
 
 ;================================================================
 ;	level data initialization every level start
@@ -26,22 +28,16 @@ level_init:
 			; copy a level init data
 			lxi d, level_init_tbl
 			lxi b, LEVEL_INIT_TBL_LEN
-			call copy_mem 
+			call copy_mem
 
 			; copy a palette from the ram-disk, then request for using it
 			call level_init_palette
-
 			mvi a, 1
 			sta border_color_idx
 
 			; erase rooms spawn data
 			lxi h, rooms_spawn_rates
 			mvi a, <rooms_spawn_rates_end
-			call clear_mem_short
-
-			; erase resources buffs
-			lxi h, hero_resources
-			mvi a, <hero_resources_end
 			call clear_mem_short
 
 			; erase backs buffs
@@ -84,15 +80,13 @@ level_init:
 
 			call room_init
 
-			; setup a hero pos	
+			; setup a hero pos
 			lhld level_start_pos_ptr
 			xchg
 			lda level_ram_disk_s_data
 			call get_word_from_ram_disk
 			call hero_set_pos
 			call hero_init
-
-			call game_ui_draw
 
 			; reset level command
 			A_TO_ZERO(GLOBAL_REQ_NONE)
@@ -135,4 +129,5 @@ level_update:
 			call reset_game_updates_counter
 			ret
 @level_load:
-			jmp level_init
+			call level_init
+			jmp game_ui_draw

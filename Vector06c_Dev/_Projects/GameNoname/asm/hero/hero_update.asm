@@ -398,7 +398,7 @@ hero_impacted:
 
 			call hero_impacted_start
 
-			lxi h, hero_health
+			lxi h, hero_res_health
 			mov a, m
 			sub c
 

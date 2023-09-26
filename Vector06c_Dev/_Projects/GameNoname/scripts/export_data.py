@@ -82,7 +82,6 @@ def export(source_j_path):
 	# compile the main.asm
 	labels_path = generated_bin_dir + build.DEBUG_FILE_NAME
 	build.compile_asm(source_path, bin_path, labels_path)
-
 	main_asm_labels = build.export_labels(labels_path, False, False)
 
 	zx0_path = bin_path + build.packer_ext
@@ -100,10 +99,13 @@ def export(source_j_path):
 	common.delete_file(rom_path)
 
 	# export ram_data_labels.asm
-	export_ram_data_labels(generated_code_dir, segments_info, main_asm_labels)
+	# export_ram_data_labels(generated_code_dir, segments_info, main_asm_labels)
 
 	labels_path = rom_dir + build.DEBUG_FILE_NAME
-	build.compile_asm(source_path, bin_path)
+	build.compile_asm(source_path, bin_path, labels_path)
+	labels = build.export_labels(labels_path, False, False) 
+	labels.update(main_asm_labels)
+	build.store_labels(labels, labels_path)
 	
 	common.run_command(f"ren {bin_path} {rom_name + build.EXT_ROM}")    
 	common.run_command(f"{build.emulator_path} {rom_path}", "", rom_path)	 

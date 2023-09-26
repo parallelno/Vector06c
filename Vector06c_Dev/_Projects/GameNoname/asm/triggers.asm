@@ -18,7 +18,7 @@ trigger_hero_no_health:
 			sta global_request
 			; restore a hero health
 			mvi a, HERO_HEALTH_MAX
-			sta hero_health
+			sta hero_res_health
 			ret
 
 ;===========================================================================

@@ -76,7 +76,7 @@ int8_to_ascii_dec_decr:
 ; A - fps
 ; uses:
 ; BC, DE, HL
-FPS_SCR_ADDR = $bdfb
+FPS_SCR_ADDR = $bcfb
 draw_fps:
 			lhld DrawText_restoreSP+1
 			shld @tmp_restore_sp
@@ -87,7 +87,7 @@ draw_fps:
 			lxi d, @fps_text_hi
 			call int8_to_ascii_dec	
 
-			lxi h, @fps_text
+			lxi h, @fps_text_hi
 			lxi b, FPS_SCR_ADDR
 			call draw_text
 			lhld @tmp_restore_sp

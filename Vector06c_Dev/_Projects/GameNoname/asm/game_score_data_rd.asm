@@ -84,7 +84,7 @@ __game_stats:
 			.word 0			; breakables
 __game_stats_end:
 
-; add score points to game_score
+; add score points to hero_res_score
 ; call ex. CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 ; in:
 ; c - func_id
@@ -96,9 +96,10 @@ __game_score_add:
 			cpi TILEDATA_FUNC_ID_RESOURCES
 			jnz @count_entity
 			; we're processing a resource.
-			; we have space to count the first three resources indivisually
+			; we have capacity to count the first three resources individually
 			; clamp the entity_id to 0-2
 			mov a, e
+			; TODO: replace a scalar constant "2" with a meaningful label
 			CLAMP_A(2)
 			add c
 
@@ -128,18 +129,15 @@ __game_score_add:
 			mov e, m
 			inx h
 			mov d, m
-			; add it to game_score
-			lhld game_score
+			; add it to hero_res_score
+			lhld hero_res_score
 			dad d
-			shld game_score
+			shld hero_res_score
 			ret
 
 ; init for in-game score data
-; call ex. CALL_RAM_DISK_FUNC(__game_score_init, __RAM_DISK_S_SCORE)
-__game_score_init:
-			lxi h, 0
-			shld game_score
-			
+; call ex. CALL_RAM_DISK_FUNC(__game_stats_init, __RAM_DISK_S_SCORE)
+__game_stats_init:
 			lxi h, __game_stats
 			mvi a, <__game_stats_end
 			;call clear_mem

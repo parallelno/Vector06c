@@ -246,7 +246,7 @@ hero_res_func_potion_red:
 ; in:
 ; a - health increase
 hero_health_increase:
-			lxi h, hero_health
+			lxi h, hero_res_health
 			add m
 			CLAMP_A(HERO_HEALTH_MAX)
 			mov m, a
@@ -260,9 +260,8 @@ hero_res_func_clothes:
 hero_cont_func_chest_sword:
             ; acquire a sword
 			mvi a, HERO_WEAPON_SWORD
-			lxi h, hero_weapon
-			ora m
-			mov m, a
+			sta hero_res_sword
+
 			; init a dialog
 			mvi a, GAME_REQ_PAUSE
 			lxi h, dialog_callback_room_redraw

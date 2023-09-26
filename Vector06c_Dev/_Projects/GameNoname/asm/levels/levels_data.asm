@@ -40,7 +40,19 @@
 ;		resource_id == 0 - a coin (tiledata = 7*16+0 = 160)
 ;		resource_id == 1 - a potion blue
 ;		resource_id == 2 - a potion red
-		RES_ID_CLOTHES	= 3	; clothes
+;		resource_id == 3 - clothes ; it is a quest resource
+;		resource_id == 4 - cabbage ; it is a quest resource
+;		resource_id == 5 - tnt
+
+;		test a new layout of resources including health, (tiledata = 7*16+0 = 160)
+;		resource_id == 0 - a coin (increases the game score when picked up)
+;		resource_id == 1 - a health crystal (increases health immedietly when picked up)
+;		resource_id == 1 - a mana crystal (increases mana immedietly when picked up)
+;		resource_id == 2 - a sword (the main weapon)
+;		resource_id == 3 - a potion health (increases health when used)
+;		resource_id == 4 - a potion mana (increases mana when used)
+;		resource_id == 5 - clothes ; it is a quest resource
+;		resource_id == 6 - cabbage ; it is a quest resource
 
 ; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable (a hero and monsters can't step on that tile)
 
@@ -50,11 +62,11 @@
 ;		trigger_id == 0 - when he hits his house door
 
 ; ffff == 11, collidable containers that leave rewards on the floor when a hero hits it. container_id = d
-;		container_id == 0 - a small chest. small money reward
+;		container_id == 0 - a chest with a sword
 ;		container_id == 1 - a big chest. big money reward
-;		container_id == 2 - a chest with a weapon 1
-;		container_id == 3 - a chest with a weapon 2
-;		container_id == 4 - a chest with a weapon 3
+;		container_id == 2 - a chest ???
+;		container_id == 3 - a chest ???
+;		container_id == 4 - a chest ???
 ;		container_id == 5 - a monster spawner chest. it spawns a chest monster when opened
 ;		container_id == 6 - a crate with a teleport under it to a unique location
 

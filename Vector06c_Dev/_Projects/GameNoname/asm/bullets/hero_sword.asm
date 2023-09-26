@@ -39,10 +39,10 @@ hero_sword_tile_func_tbl:
 			RET_4()								; func_id == 15 ; collision
 
 hero_sword_init:
-			; check if a sword is available
-			lda hero_weapon
-			rlc
-			jnc @no_sord
+			; prevent a sword from spawning if it's not available
+			lda hero_res_sword
+			CPI_WITH_ZERO(0)
+			jnc @no_sword
 
 			lxi h, bullet_update_ptr+1
 			mvi e, BULLET_RUNTIME_DATA_LEN
@@ -119,7 +119,7 @@ hero_sword_init:
 			; c = pos_y
 			mov m, c
 			ret
-@no_sord:
+@no_sword:
 			; get a hero pos
 			lxi h, hero_pos_x+1
 			mov d, m
@@ -463,9 +463,9 @@ hero_sword_func_door:
 hero_sword_func_breakable:
 			mov e, a
 			; check if a sword is available
-			lda hero_weapon
-			rlc
-			rnc ; return if no sword
+			lda hero_res_sword
+			CPI_WITH_ZERO(0)
+			rz ; return if no sword
 
 			; if breakable_id == BREAKABLE_ID_CABBAGE, spawn a fart bullet
 			; e - breakable_id

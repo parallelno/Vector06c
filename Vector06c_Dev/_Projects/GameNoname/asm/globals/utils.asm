@@ -360,7 +360,7 @@ copy_to_ram_disk32:
 ; using stack ops to copy data adds 128 cc overhead
 ; replacing pop with mov_(2), inx_(2), adds 8 cc per byte overhead
 ; that said, copying with pop becomes efficient if a copy len > 16
-; it is very often case. No need a direct access via mov 
+; it is very often case. No need a direct access via mov
 copy_from_ram_disk:
 			; store sp
 			push h
