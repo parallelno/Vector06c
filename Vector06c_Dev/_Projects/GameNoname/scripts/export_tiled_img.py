@@ -149,7 +149,8 @@ def tile_idxs_to_asm(idxs_unpacked, pos_x, pos_y, tiles_w, tiles_h, label_name):
 	asm = "" 
 	# idxs_data_copy_len represents how many pairs of bytes have to be copied by copy_from_ram_disk asm func, 
 	# it equals "data_len // 2 + data_len % 2"
-	idxs_data_copy_len = len(idxs) // 2 + len(idxs) % 2 + META_DATA_LEN
+	data_len = len(idxs) + META_DATA_LEN
+	idxs_data_copy_len = data_len // 2 + data_len % 2
 	asm += f"{label_name.upper()}_COPY_LEN = {idxs_data_copy_len}\n"
 
 	#asm += f"{label_name.upper()}_SCR_ADDR = SCR_BUFF0_ADDR + ({pos_x}<<8 | {pos_y})\n"
@@ -160,7 +161,7 @@ def tile_idxs_to_asm(idxs_unpacked, pos_x, pos_y, tiles_w, tiles_h, label_name):
 	asm += f"			.word SCR_BUFF0_ADDR + ({pos_x + tiles_w}<<8 | {(pos_y + tiles_h * 8) % 256})	; scr addr end\n"
 	asm += common.bytes_to_asm(idxs, tiles_w, True)
 
-	return asm, len(idxs) + META_DATA_LEN
+	return asm, data_len
 
 #=====================================================
 def export_data_if_updated(source_path, generated_dir, force_export):
