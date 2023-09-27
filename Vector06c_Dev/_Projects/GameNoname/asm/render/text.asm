@@ -68,39 +68,6 @@ int8_to_ascii_dec_decr:
 			inx	d
 			ret
 
-
-; draw an FPS counter every second on the screen at FPS_SCR_ADDR addr
-; works only in the interruption func and in the
-; main program when the ram-disk is dismount
-; in:
-; A - fps
-; uses:
-; BC, DE, HL
-FPS_SCR_ADDR = $bcfb
-draw_fps:
-			lhld DrawText_restoreSP+1
-			shld @tmp_restore_sp
-			;lxi h, @fps_text
-			;call int_to_ascii_hex
-			mov l, a
-			mvi h, 0
-			lxi d, @fps_text_hi
-			call int8_to_ascii_dec	
-
-			lxi h, @fps_text_hi
-			lxi b, FPS_SCR_ADDR
-			call draw_text
-			lhld @tmp_restore_sp
-			shld DrawText_restoreSP+1
-			ret
-
-@fps_text_hi:
-			.byte $30
-@fps_text:
-			.byte $30, $30, 0
-@tmp_restore_sp:
-            .word TEMP_ADDR
-
 ; input:
 ; hl - text addr
 ; bc - screen addr
@@ -180,160 +147,160 @@ test_font:
 			.byte 0,0,0,0
 			.byte 0,0,0,0
 			; A ($01)
-			.byte %00011100
-			.byte %00100010
-			.byte %01000001
-			.byte %01111111
-			.byte %01000001
-			.byte %01000001
-			.byte %01000001
+			.byte %0011100
+			.byte %0100010
+			.byte %1000001
+			.byte %1111111
+			.byte %1000001
+			.byte %1000001
+			.byte %1000001
 			.byte 0
 			; B ($02)
-			.byte %01111110
-			.byte %01000001
-			.byte %01000001
-			.byte %01111111
-			.byte %01000001
-			.byte %01000001
-			.byte %01111110
+			.byte %1111110
+			.byte %1000001
+			.byte %1000001
+			.byte %1111111
+			.byte %1000001
+			.byte %1000001
+			.byte %1111110
 			.byte 0
 			; C ($03)
-			.byte %00011110
-			.byte %00100001
-			.byte %01000000
-			.byte %01000000
-			.byte %01000000
-			.byte %01000001
-			.byte %00111110
+			.byte %0011110
+			.byte %0100001
+			.byte %1000000
+			.byte %1000000
+			.byte %1000000
+			.byte %1000001
+			.byte %0111110
 			.byte 0	
 			; D ($04)
-			.byte %01111110
-			.byte %01000001
-			.byte %01000001
-			.byte %01000001
-			.byte %01000001
-			.byte %01000001
-			.byte %01111110
+			.byte %1111110
+			.byte %1000001
+			.byte %1000001
+			.byte %1000001
+			.byte %1000001
+			.byte %1000001
+			.byte %1111110
 			.byte 0	
 			; E ($05)
-			.byte %01111110
-			.byte %01000001
-			.byte %01000000
-			.byte %01111100
-			.byte %01000000
-			.byte %01000001
-			.byte %01111110
+			.byte %1111110
+			.byte %1000001
+			.byte %1000000
+			.byte %1111100
+			.byte %1000000
+			.byte %1000001
+			.byte %1111110
 			.byte 0	
 			; F ($06)
-			.byte %01111110
-			.byte %01000001
-			.byte %01000000
-			.byte %01111100
-			.byte %01000000
-			.byte %01000000
-			.byte %01000000
+			.byte %1111110
+			.byte %1000001
+			.byte %1000000
+			.byte %1111100
+			.byte %1000000
+			.byte %1000000
+			.byte %1000000
 			.byte 0	
 			; rest of the alphabet
 			.storage 8*$29, 0
 */
 			; 0 ($30)
-			.byte %00111110
-			.byte %01000011
-			.byte %01000101
-			.byte %01001001
-			.byte %01010001
-			.byte %01100001
-			.byte %00111110
+			.byte %01111100
+			.byte %10000110
+			.byte %10001010
+			.byte %10010010
+			.byte %10100010
+			.byte %11000010
+			.byte %01111100
 			.byte 0	
 			; 1 ($31)
-			.byte %00001100
-			.byte %00010100
-			.byte %00100100
-			.byte %00000100
-			.byte %00000100
-			.byte %00000100
-			.byte %00001110
+			.byte %00011000
+			.byte %00101000
+			.byte %01001000
+			.byte %00001000
+			.byte %00001000
+			.byte %00001000
+			.byte %00011100
 			.byte 0	
 			; 2 ($32)
-			.byte %00111110
-			.byte %01000001
-			.byte %00000110
-			.byte %00111000
-			.byte %01000000
-			.byte %01000000
-			.byte %01111111
+			.byte %01111100
+			.byte %10000010
+			.byte %00001100
+			.byte %01110000
+			.byte %10000000
+			.byte %10000000
+			.byte %11111110
 			.byte 0	
 			; 3 ($33)
-			.byte %00111110
-			.byte %01000001
-			.byte %00000001
-			.byte %00000110
-			.byte %00000001
-			.byte %01000001
-			.byte %00111110
-			.byte 0	
+			.byte %01111100
+			.byte %10000010
+			.byte %00000010
+			.byte %00001100
+			.byte %00000010
+			.byte %10000010
+			.byte %01111100
+			.byte 0
 			; 4 ($34)
-			.byte %00001110
-			.byte %00010010
-			.byte %00100010
-			.byte %01000010
-			.byte %01111111
-			.byte %00000010
-			.byte %00000010
-			.byte 0	
+			.byte %00011100
+			.byte %00100100
+			.byte %01000100
+			.byte %10000100
+			.byte %11111110
+			.byte %00000100
+			.byte %00000100
+			.byte 0
 			; 5 ($35)
-			.byte %01111111
-			.byte %01000000
-			.byte %01000000
-			.byte %01111110
-			.byte %00000001
-			.byte %01000001
-			.byte %00111110
+			.byte %11111110
+			.byte %10000000
+			.byte %10000000
+			.byte %11111100
+			.byte %00000010
+			.byte %10000010
+			.byte %01111100
 			.byte 0	
 			; 6 ($36)
-			.byte %00111110
-			.byte %01000001
-			.byte %01000000
-			.byte %01111110
-			.byte %01000001
-			.byte %01000001
-			.byte %00111110
+			.byte %01111100
+			.byte %10000010
+			.byte %10000000
+			.byte %11111100
+			.byte %10000010
+			.byte %10000010
+			.byte %01111100
 			.byte 0	
 			; 7 ($37)
-			.byte %00111111
-			.byte %01000001
-			.byte %00000010
+			.byte %01111110
+			.byte %10000010
 			.byte %00000100
 			.byte %00001000
 			.byte %00010000
-			.byte %00010000
+			.byte %00100000
+			.byte %00100000
 			.byte 0	
 			; 8 ($38)
-			.byte %00111110
-			.byte %01000001
-			.byte %01000001
-			.byte %00111110
-			.byte %01000001
-			.byte %01000001
-			.byte %00111110
+			.byte %01111100
+			.byte %10000010
+			.byte %10000010
+			.byte %01111100
+			.byte %10000010
+			.byte %10000010
+			.byte %01111100
 			.byte 0	
 			; 9 ($39)
-			.byte %00111110
-			.byte %01000001
-			.byte %01000001
-			.byte %01111111
-			.byte %00000010
+			.byte %01111100
+			.byte %10000010
+			.byte %10000010
+			.byte %11111110
 			.byte %00000100
-			.byte %00111000
+			.byte %00001000
+			.byte %01110000
 			.byte 0	
 /*
 			; heart ($3A)
-			.byte %00110110
-			.byte %01111101
-			.byte %01111101
-			.byte %01111111
-			.byte %00111110
-			.byte %00011100
-			.byte %00001000
+			.byte %0110110
+			.byte %1111101
+			.byte %1111101
+			.byte %1111111
+			.byte %0111110
+			.byte %0011100
+			.byte %0001000
 			.byte 0				
 */

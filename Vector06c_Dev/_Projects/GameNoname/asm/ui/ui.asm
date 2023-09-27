@@ -17,12 +17,26 @@ game_ui_draw_panel:
 			ret
 
 ; draw resources on the game top panel
+; TODO: replace 8 with a meaningful label
+GAME_UI_RES_ICON_IMG_LEN = 8 ; __TILED_IMAGES_RES_SWORD_COPY_LEN
 game_ui_draw_resources:
-			; 
+			; check if mana is ITEM_ID_MANA is acquired
+			lxi d, global_items + ITEM_ID_MANA - 1	; because the first item_id = 1
+			ldax d
+			cpi ITEM_STATUS_ACQUIRED
+			;jnz @draw_res
+			lxi d, __tiled_images_res_mana
+			call @draw_icon
+@draw_res:
 			; copy a tiled image
+			lxi d, __tiled_images_res_sword
 
+
+			/*
+			.macro DRAW_TILED_IMG(ram_disk_s_tiled_img_gfx, ram_disk_s_tiled_img_data, idxs_data_addr, idxs_data_len, tile_gfx_addr)
 			; draw an image
 			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_res_sword, __TILED_IMAGES_RES_SWORD_COPY_LEN, __tiled_images_tile1)			
+			*/
 			ret
 @res_tiled_img_ptrs:
 			.word __tiled_images_res_sword
@@ -32,6 +46,13 @@ game_ui_draw_resources:
 			.word __tiled_images_res_clothes
 			.word __tiled_images_res_cabbage
 			.word __tiled_images_res_tnt
+@draw_icon:
+			; de - ptr to an img
+			lxi h, __tiled_images_tile1 - TILE_IMG_TILE_LEN ; because there is no tile_gfx associated with idx = 0
+			shld draw_tiled_img_gfx_addr
+			mvi a, <__RAM_DISK_S_TILED_IMAGES_GFX
+			lxi h, __RAM_DISK_S_TILED_IMAGES_DATA << 8 | GAME_UI_RES_ICON_IMG_LEN ; it is assuming that copy_len is equal for every the res icon
+			jmp draw_tiled_img
 
 
 ; use:
@@ -53,7 +74,7 @@ game_ui_draw_health:
 @text:
 			.byte $31,$30,0
 
-HERO_SCORE_SCR_ADDR = $b3fb
+HERO_SCORE_SCR_ADDR = $b9fb
 game_ui_draw_score:
 			lhld hero_res_score
 
@@ -86,3 +107,36 @@ game_ui_draw_bomb:
 			.byte $30
 @bomb_text:
 			.byte $30, $30, 0
+
+
+; draw an FPS counter every second on the screen at FPS_SCR_ADDR addr
+; works only in the interruption func and in the
+; main program when the ram-disk is dismount
+; in:
+; A - fps
+; uses:
+; BC, DE, HL
+FPS_SCR_ADDR = $bdfb - 16
+draw_fps:
+			lhld DrawText_restoreSP+1
+			shld @tmp_restore_sp
+			;lxi h, @fps_text
+			;call int_to_ascii_hex
+			mov l, a
+			mvi h, 0
+			lxi d, @fps_text_hi
+			call int8_to_ascii_dec	
+
+			lxi h, @fps_text_hi
+			lxi b, FPS_SCR_ADDR
+			call draw_text
+			lhld @tmp_restore_sp
+			shld DrawText_restoreSP+1
+			ret
+
+@fps_text_hi:
+			.byte $30
+@fps_text:
+			.byte $30, $30, 0
+@tmp_restore_sp:
+            .word TEMP_ADDR

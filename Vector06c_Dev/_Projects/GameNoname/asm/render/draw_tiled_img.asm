@@ -9,6 +9,8 @@
 ; DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_top, __TILED_IMAGES_FRAME_INGAME_TOP_COPY_LEN, __tiled_images_tile1)
 
 .macro DRAW_TILED_IMG(ram_disk_s_tiled_img_gfx, ram_disk_s_tiled_img_data, idxs_data_addr, idxs_data_len, tile_gfx_addr)
+; TODO: think of store draw_tiled_img_gfx_addr, ram_disk_s_tiled_img_gfx, tile_gfx_addr - TILE_IMG_TILE_LEN in _data
+; that wll make code of calling that func smaller and reusable because we do not need a macro
 			lxi h, tile_gfx_addr - TILE_IMG_TILE_LEN ; because there is no tile_gfx associated with idx = 0
 			shld draw_tiled_img_gfx_addr
 			mvi a, <ram_disk_s_tiled_img_gfx			

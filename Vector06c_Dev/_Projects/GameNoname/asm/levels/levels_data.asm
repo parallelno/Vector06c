@@ -32,27 +32,20 @@
 ;		item_id = 4 - key 3
 ;		item_id = 5 - key 4
 ;		item_id = 6 - key 5
-; 		TODO: there should be invisible items like ones below
+; 		TODO: make the items with item_id > ITEM_ID_UI invisible for the user
+		ITEM_ID_MANA			= 13	; reserved for a quest to accquire a mana scystal or use a mana potion
 		ITEM_ID_FART			= 14	; reserved for a quest to scare away knight_quest
 		ITEM_ID_BURNER_QUEST	= 15	; reserved for burner_quest
 
 ; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. resource_id = d. see buffers.asm->resources_inst_data for details
-;		resource_id == 0 - a coin (tiledata = 7*16+0 = 160)
-;		resource_id == 1 - a potion blue
-;		resource_id == 2 - a potion red
-;		resource_id == 3 - clothes ; it is a quest resource
-;		resource_id == 4 - cabbage ; it is a quest resource
-;		resource_id == 5 - tnt
-
-;		test a new layout of resources including health, (tiledata = 7*16+0 = 160)
-;		resource_id == 0 - a coin (increases the game score when picked up)
+;		resource_id == 0 - a coin (increases the game score when picked up) ; (tiledata = 7*16+0 = 160)
 ;		resource_id == 1 - a health crystal (increases health immedietly when picked up)
-;		resource_id == 1 - a mana crystal (increases mana immedietly when picked up)
-;		resource_id == 2 - a sword (the main weapon)
-;		resource_id == 3 - a potion health (increases health when used)
-;		resource_id == 4 - a potion mana (increases mana when used)
-;		resource_id == 5 - clothes ; it is a quest resource
-;		resource_id == 6 - cabbage ; it is a quest resource
+;		resource_id == 2 - a mana crystal (increases mana immedietly when picked up)
+;		resource_id == 3 - a sword (the main weapon)
+;		resource_id == 4 - a potion health (increases health when used)
+;		resource_id == 5 - a potion mana (increases mana when used)
+;		resource_id == 6 - clothes ; it is a quest resource
+;		resource_id == 7 - cabbage ; it is a quest resource
 
 ; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable (a hero and monsters can't step on that tile)
 

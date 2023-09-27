@@ -140,7 +140,7 @@ fart_update:
 			call actor_anim_update
 			ret
 @die:
-			; if a RES
+			; time is over, destroy fart vfx, if the fart hasn't been used yet (acquired), make it not_acquired
 			lxi d, global_items + ITEM_ID_FART - 1	; because the first item_id = 1
 			ldax d
 			cpi ITEM_STATUS_USED

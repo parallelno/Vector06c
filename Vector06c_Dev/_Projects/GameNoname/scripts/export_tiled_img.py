@@ -347,11 +347,15 @@ def is_source_updated(source_j_path):
 	
 	source_dir = str(Path(source_j_path).parent) + "\\"
 	path_png = source_dir + source_j["path_png"]
+	path_tmj = source_dir + source_j["path"]
 
 	tiled_file_path = source_dir + source_j["path"]
 	tiled_file_updated = build.is_file_updated(tiled_file_path)
 
-	if build.is_file_updated(source_j_path) | build.is_file_updated(path_png) | tiled_file_updated:
+	if (build.is_file_updated(source_j_path) | 
+	 		build.is_file_updated(path_tmj) | 
+	 		build.is_file_updated(path_png) | 
+			tiled_file_updated):
 		return True
 	return False
 
