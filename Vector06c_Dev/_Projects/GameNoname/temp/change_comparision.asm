@@ -17,6 +17,11 @@ Success. Size: 46571 bytes ($B5EB)
 after adding new resources icons
 Success. Size: 46891 bytes ($B72B)
 
+after adding resource and key ui icons, and removing some floor tiles from the tiled image
+Success. Size: 46829 bytes ($B6ED)
+
+
+
 ; ram-disk data layout
 ; bank0 addr0    [ 4336 free] description: 
 ;                             hero_r_sprites [13818], skeleton_sprites [10140], scythe_sprites [1626], bomb_sprites [960], font_gfx [1632], 

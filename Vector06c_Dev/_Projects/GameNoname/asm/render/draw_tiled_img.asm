@@ -1,20 +1,13 @@
 ;----------------------------------------------------------------
 ; draw a tiled image (8x8 tiles)
 ; input:
-; a - gfx_data ram-disk activation command
-; h - idx_data ram-disk activation command
-; l - idx_data len (comes from a exported file)
+; a - idx_data ram-disk activation command
 ; de - idx_data addr
 ; ex.: 
-; DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_top, __TILED_IMAGES_FRAME_INGAME_TOP_COPY_LEN, __tiled_images_tile1)
+; DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_top)
 
-.macro DRAW_TILED_IMG(ram_disk_s_tiled_img_gfx, ram_disk_s_tiled_img_data, idxs_data_addr, idxs_data_len, tile_gfx_addr)
-; TODO: think of store draw_tiled_img_gfx_addr, ram_disk_s_tiled_img_gfx, tile_gfx_addr - TILE_IMG_TILE_LEN in _data
-; that wll make code of calling that func smaller and reusable because we do not need a macro
-			lxi h, tile_gfx_addr - TILE_IMG_TILE_LEN ; because there is no tile_gfx associated with idx = 0
-			shld draw_tiled_img_gfx_addr
-			mvi a, <ram_disk_s_tiled_img_gfx			
-			lxi h, ram_disk_s_tiled_img_data << 8 | idxs_data_len
+.macro DRAW_TILED_IMG(ram_disk_s_tiled_img_data, idxs_data_addr)
+			mvi a, <ram_disk_s_tiled_img_data
 			lxi d, idxs_data_addr
 			call draw_tiled_img
 .endmacro
@@ -26,8 +19,26 @@ TILE_IMG_TILE_LEN = TILED_IMG_TILE_H * TILED_IMG_SCR_BUFFS + 2 ; 8*4 bytes + a c
 REPEATER_CODE = $ff
 
 draw_tiled_img:
-			sta @gfx_data_access + 1
-			
+			; de - data addr in the ram-disk
+			; a - ram-disk activation command
+			push d
+			sta @ram_disk_access_data + 1
+			call get_word_from_ram_disk
+			; hl = idxs_data_addr
+			; c = idxs_data_len
+			; b = ram_disk_s_tiled_img_gfx
+			mov a, b
+			sta @gfx_data_access + 1			
+@ram_disk_access_data:
+			mvi h, TEMP_BYTE
+			mov l, c
+			pop d
+			; de - idxs_data_addr
+
+			; h - ram-disk activation command
+			; l - data length / 2
+			; de - data addr in the ram-disk
+			; bc - destination addr
 			; copy an image indices into a temp buffer
 			lxi b, tiled_img_idxs
 			call copy_from_ram_disk
@@ -37,7 +48,16 @@ draw_tiled_img:
 			RAM_DISK_ON_BANK()
 
 @draw:
-			lxi h, tiled_img_idxs
+			lxi h, tiled_img_idxs + 2 ; because the two bytes are __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			; get gfx addr
+			mov e, m
+			inx h
+			mov d, m
+			inx h
+			xchg
+			shld @gfx_addr + 1
+			xchg
+
 			; get scr addr
 			mov e, m
 			inx h
@@ -189,8 +209,6 @@ draw_tiled_img:
 @restore_sp:
 			lxi sp, TEMP_ADDR
 			ret
-
-draw_tiled_img_gfx_addr = @gfx_addr + 1
 
 .macro TILED_IMG_DRAWTILE()
 		; scr0 draw up

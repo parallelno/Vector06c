@@ -1,9 +1,15 @@
 __RAM_DISK_S_TILED_IMAGES_DATA = RAM_DISK_S
 __RAM_DISK_M_TILED_IMAGES_DATA = RAM_DISK_M
 
+TILED_IMG_SCR_BUFFS = 4
+TILED_IMG_TILE_H = 8
+TILE_IMG_TILE_LEN = TILED_IMG_TILE_H * TILED_IMG_SCR_BUFFS + 2 ; 8*4 bytes + a couple of safety bytes
+
 __TILED_IMAGES_FRAME_INGAME_DIALOG_COPY_LEN = 22
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_frame_ingame_dialog:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (0<<8 | 0)	; scr addr
 			.word SCR_BUFF0_ADDR + (32<<8 | 64)	; scr addr end
 			.byte 8,255,9,30,10,7,255,5,30,6,4,255,5,30,6,4,255,5,30,6,4,255,5,30,6,4,255,5,30,6,4,255,
@@ -12,6 +18,8 @@ __tiled_images_frame_ingame_dialog:
 __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN = 99
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_main_menu_back2:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (0<<8 | 0)	; scr addr
 			.word SCR_BUFF0_ADDR + (32<<8 | 136)	; scr addr end
 			.byte 31,32,33,34,35,36,37,35,36,33,34,36,37,35,36,33,34,35,36,38,37,35,36,33,34,35,36,34,35,36,39,31,
@@ -25,6 +33,8 @@ __tiled_images_main_menu_back2:
 __TILED_IMAGES_MAIN_MENU_BACK1_COPY_LEN = 80
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_main_menu_back1:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (0<<8 | 136)	; scr addr
 			.word SCR_BUFF0_ADDR + (32<<8 | 0)	; scr addr end
 			.byte 11,15,255,0,28,16,30,30,12,255,0,28,13,23,18,15,255,0,28,16,14,11,12,255,0,28,13,14,11,15,255,0,
@@ -36,6 +46,8 @@ __tiled_images_main_menu_back1:
 __TILED_IMAGES_TITLE1_COPY_LEN = 93
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_title1:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (4<<8 | 160)	; scr addr
 			.word SCR_BUFF0_ADDR + (27<<8 | 232)	; scr addr end
 			.byte 166,167,168,169,170,255,171,15,172,0,0,151,152,153,154,155,156,157,158,159,160,159,161,
@@ -50,6 +62,8 @@ __tiled_images_title1:
 __TILED_IMAGES_FRAME_MAIN_MENU_COPY_LEN = 54
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_frame_main_menu:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (9<<8 | 56)	; scr addr
 			.word SCR_BUFF0_ADDR + (23<<8 | 160)	; scr addr end
 			.byte 41,42,41,42,42,41,42,41,42,41,42,41,42,0,
@@ -64,6 +78,8 @@ __tiled_images_frame_main_menu:
 __TILED_IMAGES_FRAME_INGAME_TOP_COPY_LEN = 16
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_frame_ingame_top:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (0<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (32<<8 | 0)	; scr addr end
 			.byte 183,184,185,255,186,18,187,188,189,190,255,186,6,191,174,175,176,255,177,18,178,179,180,181,255,177,6,182,
@@ -71,6 +87,8 @@ __tiled_images_frame_ingame_top:
 __TILED_IMAGES_RES_MANA_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_res_mana:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (6<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (10<<8 | 0)	; scr addr end
 			.byte 194,195,186,186,
@@ -79,6 +97,8 @@ __tiled_images_res_mana:
 __TILED_IMAGES_RES_SWORD_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_res_sword:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (11<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (13<<8 | 0)	; scr addr end
 			.byte 198,199,
@@ -87,6 +107,8 @@ __tiled_images_res_sword:
 __TILED_IMAGES_RES_POTION_HEALTH_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_res_potion_health:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (14<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (18<<8 | 0)	; scr addr end
 			.byte 201,202,186,186,
@@ -95,6 +117,8 @@ __tiled_images_res_potion_health:
 __TILED_IMAGES_RES_POTION_MANA_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_res_potion_mana:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (14<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (18<<8 | 0)	; scr addr end
 			.byte 205,206,186,186,
@@ -103,6 +127,8 @@ __tiled_images_res_potion_mana:
 __TILED_IMAGES_RES_CLOTHES_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_res_clothes:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (14<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (18<<8 | 0)	; scr addr end
 			.byte 209,210,186,186,
@@ -111,6 +137,8 @@ __tiled_images_res_clothes:
 __TILED_IMAGES_RES_CABBAGE_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_res_cabbage:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (14<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (18<<8 | 0)	; scr addr end
 			.byte 213,214,186,186,
@@ -119,6 +147,8 @@ __tiled_images_res_cabbage:
 __TILED_IMAGES_RES_TNT_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_res_tnt:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (14<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (18<<8 | 0)	; scr addr end
 			.byte 217,218,186,186,
@@ -127,6 +157,8 @@ __tiled_images_res_tnt:
 __TILED_IMAGES_ITEM_KEY_0_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_item_key_0:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (18<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (20<<8 | 0)	; scr addr end
 			.byte 221,222,
@@ -135,6 +167,8 @@ __tiled_images_item_key_0:
 __TILED_IMAGES_ITEM_KEY_1_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_item_key_1:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (18<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (20<<8 | 0)	; scr addr end
 			.byte 225,226,
@@ -143,6 +177,8 @@ __tiled_images_item_key_1:
 __TILED_IMAGES_ITEM_KEY_2_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_item_key_2:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (18<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (20<<8 | 0)	; scr addr end
 			.byte 229,230,
@@ -151,6 +187,8 @@ __tiled_images_item_key_2:
 __TILED_IMAGES_ITEM_KEY_3_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_item_key_3:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (18<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (20<<8 | 0)	; scr addr end
 			.byte 233,234,
@@ -159,6 +197,8 @@ __tiled_images_item_key_3:
 __TILED_IMAGES_RES_EMPTY_MANA_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_res_empty_mana:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (6<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (10<<8 | 0)	; scr addr end
 			.byte 237,238,186,186,
@@ -167,6 +207,8 @@ __tiled_images_res_empty_mana:
 __TILED_IMAGES_RES_EMPTY_SWORD_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_res_empty_sword:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (11<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (13<<8 | 0)	; scr addr end
 			.byte 237,238,
@@ -175,6 +217,8 @@ __tiled_images_res_empty_sword:
 __TILED_IMAGES_RES_EMPTY_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_res_empty:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (14<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (18<<8 | 0)	; scr addr end
 			.byte 237,238,186,186,
@@ -183,6 +227,8 @@ __tiled_images_res_empty:
 __TILED_IMAGES_ITEM_KEY_EMPTY_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_item_key_empty:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (18<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (20<<8 | 0)	; scr addr end
 			.byte 237,238,

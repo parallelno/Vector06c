@@ -271,9 +271,10 @@ set_palette_from_ram_disk:
 ; de - data addr in the ram-disk
 ; a - ram-disk activation command
 ; use:
-; hl, de, a
+; de, a
 ; out:
 ; bc - data
+; hl - data addr in the ram-disk
 ; cc = 148
 get_word_from_ram_disk:
 			RAM_DISK_ON_BANK()
@@ -337,12 +338,6 @@ copy_to_ram_disk32:
 			ret
 
 ; Copy data (max 510) from the ram-disk to ram w/o blocking interruptions
-; input:
-; h - ram-disk activation command
-; l - data length / 2
-; de - data addr in the ram-disk
-; bc - destination addr
-
 ; this macro is for checking if the length fits the range 1-510
 .macro COPY_FROM_RAM_DISK(length)
 		.if length > 255*2
@@ -353,6 +348,13 @@ copy_to_ram_disk32:
 			call copy_from_ram_disk
 		.endif
 .endmacro
+
+; Copy data (max 510) from the ram-disk to ram w/o blocking interruptions
+; input:
+; h - ram-disk activation command
+; l - data length / 2
+; de - data addr in the ram-disk
+; bc - destination addr
 
 ; ? check if it is more efficient to copy a data stored
 ; in $8000 and higher with a direct access via mov

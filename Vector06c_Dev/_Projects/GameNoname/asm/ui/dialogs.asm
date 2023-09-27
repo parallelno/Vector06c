@@ -58,7 +58,7 @@ dialog_draw_frame_text:
 			; mark erased the runtime back data
 			call backs_init
 			; draw a frame
-			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_dialog, __TILED_IMAGES_FRAME_INGAME_DIALOG_COPY_LEN, __tiled_images_tile1)
+			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_dialog)
 			; draw an animated spacebar
 			; dialog_press_key (tiledata = 162)
 			mvi b, 162

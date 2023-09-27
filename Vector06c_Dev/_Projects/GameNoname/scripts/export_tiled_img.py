@@ -42,8 +42,6 @@ def get_tiledata(bytes0, bytes1, bytes2, bytes3, use_mask):
 	return data, mask
 
 def gfx_to_asm(image, remap_idxs, label_prefix):
-	#asm = "; " + path + "\n"
-	#asm += label_prefix + "_tiles:\n"
 	asm = "\n"
 	
 	# extract tile images and convert them into asm
@@ -143,20 +141,22 @@ def pack_idxs(idxs_unpacked, tiles_w, tiles_h):
 		idxs.extend(idxs_line)
 	return idxs
 
-def tile_idxs_to_asm(idxs_unpacked, pos_x, pos_y, tiles_w, tiles_h, label_name):
+def tile_idxs_to_asm(source_name, idxs_unpacked, pos_x, pos_y, tiles_w, tiles_h, label_name, label_prefix):
 	idxs = pack_idxs(idxs_unpacked, tiles_w, tiles_h)
 
 	asm = "" 
+
 	# idxs_data_copy_len represents how many pairs of bytes have to be copied by copy_from_ram_disk asm func, 
 	# it equals "data_len // 2 + data_len % 2"
 	data_len = len(idxs) + META_DATA_LEN
 	idxs_data_copy_len = data_len // 2 + data_len % 2
 	asm += f"{label_name.upper()}_COPY_LEN = {idxs_data_copy_len}\n"
 
-	#asm += f"{label_name.upper()}_SCR_ADDR = SCR_BUFF0_ADDR + ({pos_x}<<8 | {pos_y})\n"
-	#asm += f"{label_name.upper()}_SCR_ADDR_END = SCR_BUFF0_ADDR + ({pos_x + tiles_w}<<8 | {pos_y + tiles_h * 8})\n"
 	asm += "			.word 0 ; safety pair of bytes for reading by POP B\n"
 	asm += label_name + ":\n"
+	asm += f"			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_{source_name.upper()}_DATA\n"
+	asm += f"			.word {label_prefix}_tile1 - TILE_IMG_TILE_LEN\n"
+
 	asm += f"			.word SCR_BUFF0_ADDR + ({pos_x}<<8 | {pos_y})	; scr addr\n"
 	asm += f"			.word SCR_BUFF0_ADDR + ({pos_x + tiles_w}<<8 | {(pos_y + tiles_h * 8) % 256})	; scr addr end\n"
 	asm += common.bytes_to_asm(idxs, tiles_w, True)
@@ -260,11 +260,20 @@ def export_data(source_j_path, export_data_path):
 		print("Stop export")
 		exit(1)
 
+	# list of tiles addreses
+	path_png = source_dir + source_j["path_png"]	
+	png_name = common.path_to_basename(path_png)
+
 	source_name = common.path_to_basename(source_j_path)
 	asm = ""
 
 	asm = f"__RAM_DISK_S_{source_name.upper()}_DATA = RAM_DISK_S\n"
 	asm += f"__RAM_DISK_M_{source_name.upper()}_DATA = RAM_DISK_M\n"
+	asm += "\n"
+
+	asm += "TILED_IMG_SCR_BUFFS = 4\n"
+	asm += "TILED_IMG_TILE_H = 8\n"
+	asm += "TILE_IMG_TILE_LEN = TILED_IMG_TILE_H * TILED_IMG_SCR_BUFFS + 2 ; 8*4 bytes + a couple of safety bytes\n"
 	asm += "\n"
 
 	tiled_file_path = source_dir + source_j['path']
@@ -329,7 +338,7 @@ def export_data(source_j_path, export_data_path):
 		tiles_w = tile_last_x - tile_first_x + 1   
 		tiles_h = tile_last_y - tile_first_y + 1 
 
-		tiled_img_asm, tiled_img_len = tile_idxs_to_asm(idxs, pos_x, pos_y, tiles_w, tiles_h, label_name)
+		tiled_img_asm, tiled_img_len = tile_idxs_to_asm(source_name, idxs, pos_x, pos_y, tiles_w, tiles_h, label_name, "__" + png_name)
 		asm += tiled_img_asm
 
 		# check if the length of the image fits the requirements

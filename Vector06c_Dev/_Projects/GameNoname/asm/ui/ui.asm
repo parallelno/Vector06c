@@ -13,7 +13,7 @@ game_ui_update:
 			jmp dialog_update
 
 game_ui_draw_panel:
-			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_top, __TILED_IMAGES_FRAME_INGAME_TOP_COPY_LEN, __tiled_images_tile1)
+			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_top)
 			ret
 
 ; draw resources on the game top panel
@@ -31,12 +31,6 @@ game_ui_draw_resources:
 			; copy a tiled image
 			lxi d, __tiled_images_res_sword
 
-
-			/*
-			.macro DRAW_TILED_IMG(ram_disk_s_tiled_img_gfx, ram_disk_s_tiled_img_data, idxs_data_addr, idxs_data_len, tile_gfx_addr)
-			; draw an image
-			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_GFX, __RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_res_sword, __TILED_IMAGES_RES_SWORD_COPY_LEN, __tiled_images_tile1)			
-			*/
 			ret
 @res_tiled_img_ptrs:
 			.word __tiled_images_res_sword
@@ -48,12 +42,8 @@ game_ui_draw_resources:
 			.word __tiled_images_res_tnt
 @draw_icon:
 			; de - ptr to an img
-			lxi h, __tiled_images_tile1 - TILE_IMG_TILE_LEN ; because there is no tile_gfx associated with idx = 0
-			shld draw_tiled_img_gfx_addr
-			mvi a, <__RAM_DISK_S_TILED_IMAGES_GFX
-			lxi h, __RAM_DISK_S_TILED_IMAGES_DATA << 8 | GAME_UI_RES_ICON_IMG_LEN ; it is assuming that copy_len is equal for every the res icon
+			mvi a, <__RAM_DISK_S_TILED_IMAGES_DATA
 			jmp draw_tiled_img
-
 
 ; use:
 ; all
