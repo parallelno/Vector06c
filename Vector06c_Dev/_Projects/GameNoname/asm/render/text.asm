@@ -35,7 +35,8 @@ int_to_ascii_hex:
 ; in: 
 ; hl - number to convert
 ; de - location of ASCII string (3 bytes buffer)
-
+; use:
+; bc, a
 int16_to_ascii_dec:
 			LXI_B( -10000)
 			call int8_to_ascii_dec_decr
@@ -50,24 +51,60 @@ int8_to_ascii_dec:
 			call int8_to_ascii_dec_decr
 			lxi b, 100
 			dad b
-
 			LXI_B( -10)
 			call int8_to_ascii_dec_decr
 			mvi a, 10 + $30; '0';
 			add l
 			stax d
 			ret
-			
 int8_to_ascii_dec_decr:
 			mvi	a, $30 - 1; '0'-1
 @loop:		inr	a
 			dad	b
 			jc @loop
-
 			stax d
 			inx	d
 			ret
 
+
+; draw int8 as an acii text
+; in:
+; bc - scr addr
+; hl - int8 ptr
+draw_text_int8_ptr:
+			mov l, m
+; in:
+; l - int8
+draw_text_int8:	
+			mvi h, 0
+			lxi d, draw_text_buff_3
+			push b
+			call int8_to_ascii_dec
+			pop b
+			; bc - text scr addr
+			lxi h, draw_text_buff_2
+			jmp draw_text
+
+; draw int8 as an acii text
+; in:
+; bc - scr addr
+; hl - int16
+draw_text_int16:
+			lxi d, draw_text_buff_5
+			push b
+			call int16_to_ascii_dec
+			pop b
+			; bc - text scr addr
+			lxi h, draw_text_buff_5
+			jmp draw_text
+
+; asci text buffer with a nul terminator
+draw_text_buff_5:
+			.byte $30, $30
+draw_text_buff_3:
+			.byte $30,
+draw_text_buff_2:
+			.byte $30, $30, 0
 ; input:
 ; hl - text addr
 ; bc - screen addr
@@ -96,7 +133,7 @@ draw_text:
 			; store SP
 			lxi h, 0
 			dad sp
-			shld DrawText_restoreSP + 1
+			shld draw_text_restore_sp + 1
 			; HL - char gfx addr
 			xchg
 			; DE - scr addr
@@ -109,9 +146,8 @@ draw_text:
 			inx h
 			sphl
 			xchg
-
 			DRAW_CHAR()
-DrawText_restoreSP:
+draw_text_restore_sp:
 			lxi sp, TEMP_ADDR
 			; move XY to the next char pos
 			lxi b, $0106
@@ -121,8 +157,6 @@ DrawText_restoreSP:
 
 			pop h
 			jmp draw_text
-			
-			
 
 .macro DRAW_CHAR()
 	line .var 0

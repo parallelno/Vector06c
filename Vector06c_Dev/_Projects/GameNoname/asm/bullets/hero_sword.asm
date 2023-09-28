@@ -352,7 +352,7 @@ hero_sword_func_container:
 			; e - container_id
 			mvi c, TILEDATA_FUNC_ID_CONTAINERS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE | __RAM_DISK_M_TEXT_EX)
-			call game_ui_draw_score
+			call game_ui_draw_score_text
 			pop h
 			; hl - a container handler func ptr
 			pchl ; run a container handler
@@ -389,7 +389,7 @@ hero_sword_func_door:
 			mov e, b
 			mvi c, TILEDATA_FUNC_ID_DOORS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
-			call game_ui_draw_score
+			call game_ui_draw_score_text
 			pop b
 
 			; erase breakable_id from tiledata
@@ -507,7 +507,7 @@ hero_sword_func_breakable:
 			push b
 			mvi c, TILEDATA_FUNC_ID_BREAKABLES
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
-			call game_ui_draw_score
+			call game_ui_draw_score_text
 			pop b
 
 			; erase breakable_id from tiledata

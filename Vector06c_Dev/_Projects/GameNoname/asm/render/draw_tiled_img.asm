@@ -1,15 +1,17 @@
 ;----------------------------------------------------------------
 ; draw a tiled image (8x8 tiles)
-; input:
-; a - idx_data ram-disk activation command
-; de - idx_data addr
 ; ex.: 
 ; DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_top)
 
-.macro DRAW_TILED_IMG(ram_disk_s_tiled_img_data, idxs_data_addr)
+.macro DRAW_TILED_IMG(ram_disk_s_tiled_img_data, idxs_data_addr, _jmp = false)
 			mvi a, <ram_disk_s_tiled_img_data
 			lxi d, idxs_data_addr
+		.if _jmp == false			
 			call draw_tiled_img
+		.endif
+		.if _jmp
+			jmp draw_tiled_img
+		.endif
 .endmacro
 
 TILED_IMG_SCR_BUFFS = 4
@@ -17,6 +19,14 @@ TILED_IMG_TILE_H = 8
 TILE_IMG_TILE_LEN = TILED_IMG_TILE_H * TILED_IMG_SCR_BUFFS + 2 ; 8*4 bytes + a couple of safety bytes
 
 REPEATER_CODE = $ff
+
+;----------------------------------------------------------------
+; draw a tiled image (8x8 tiles)
+; input:
+; a - idx_data ram-disk activation command
+; de - idx_data addr
+; ex.: 
+; DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_top)
 
 draw_tiled_img:
 			; de - data addr in the ram-disk

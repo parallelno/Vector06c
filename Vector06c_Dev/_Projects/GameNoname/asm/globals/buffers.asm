@@ -152,17 +152,19 @@ rooms_spawn_rates_end:			= rooms_spawn_rate_breakables + ROOMS_MAX ; $7b80
 hero_global_status_no_render = $7b80 ; byte
 
 ;=============================================================================
+;
+; global states
+;
+
 ; a current command that is handled by the level update func
 global_request:			= $7b81				; .byte
 ; the current level idx
 level_idx:				= $7b82				; .byte
 ; the current room idx of the current level
 room_id:   				= $7b83				; .byte TEMP_BYTE ; in the range [0, ROOMS_MAX-1]
+; selected ui resource
+game_ui_res_id_selected:	= $7b84			; .byte
 
-;=============================================================================
-;
-;	free space = $7b84 - $7b84
-;
 
 ;=============================================================================
 ; a list of back runtime data structs.

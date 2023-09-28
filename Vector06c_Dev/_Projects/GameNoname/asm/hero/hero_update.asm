@@ -412,7 +412,7 @@ hero_impacted:
 			mvi a, HERO_STATUS_DEATH_FADE_INIT_GB
 			sta hero_status
 @not_dead:
-			jmp game_ui_draw_health
+			jmp game_ui_draw_health_text
 
 
 ; uses:

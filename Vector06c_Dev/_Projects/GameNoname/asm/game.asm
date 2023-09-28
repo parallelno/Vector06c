@@ -39,7 +39,7 @@ game_init:
 			call hero_game_init			
 			call levels_init
 			call dialogs_init
-			call game_ui_draw
+			call game_ui_init
 			ret
 
 game_update:

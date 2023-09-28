@@ -75,14 +75,15 @@ __tiled_images_frame_main_menu:
 			.byte 173,42,41,42,41,42,41,41,42,41,42,6,15,1,
 			.byte 255,2,11,3,12,
 
-__TILED_IMAGES_FRAME_INGAME_TOP_COPY_LEN = 16
+__TILED_IMAGES_FRAME_INGAME_TOP_COPY_LEN = 31
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_frame_ingame_top:
 			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (0<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (32<<8 | 0)	; scr addr end
-			.byte 183,184,185,255,186,18,187,188,189,190,255,186,6,191,174,175,176,255,177,18,178,179,180,181,255,177,6,182,
+			.byte 185,186,187,188,188,188,189,190,188,188,188,189,190,188,189,190,188,188,189,190,188,191,192,193,194,255,188,6,195,174,175,176,
+			.byte 177,177,177,178,179,177,177,177,178,179,177,178,179,177,177,178,179,177,180,181,182,183,255,177,6,184,
 
 __TILED_IMAGES_RES_MANA_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -91,8 +92,8 @@ __tiled_images_res_mana:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (6<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (10<<8 | 0)	; scr addr end
-			.byte 194,195,186,186,
-			.byte 192,193,177,177,
+			.byte 198,199,188,188,
+			.byte 196,197,177,177,
 
 __TILED_IMAGES_RES_SWORD_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -101,8 +102,8 @@ __tiled_images_res_sword:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (11<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (13<<8 | 0)	; scr addr end
-			.byte 198,199,
-			.byte 196,197,
+			.byte 202,203,
+			.byte 200,201,
 
 __TILED_IMAGES_RES_POTION_HEALTH_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -111,8 +112,8 @@ __tiled_images_res_potion_health:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (14<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (18<<8 | 0)	; scr addr end
-			.byte 201,202,186,186,
-			.byte 200,193,177,177,
+			.byte 205,206,188,188,
+			.byte 204,197,177,177,
 
 __TILED_IMAGES_RES_POTION_MANA_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -121,8 +122,8 @@ __tiled_images_res_potion_mana:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (14<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (18<<8 | 0)	; scr addr end
-			.byte 205,206,186,186,
-			.byte 203,204,177,177,
+			.byte 209,210,188,188,
+			.byte 207,208,177,177,
 
 __TILED_IMAGES_RES_CLOTHES_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -131,8 +132,8 @@ __tiled_images_res_clothes:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (14<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (18<<8 | 0)	; scr addr end
-			.byte 209,210,186,186,
-			.byte 207,208,177,177,
+			.byte 213,214,188,188,
+			.byte 211,212,177,177,
 
 __TILED_IMAGES_RES_CABBAGE_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -141,8 +142,8 @@ __tiled_images_res_cabbage:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (14<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (18<<8 | 0)	; scr addr end
-			.byte 213,214,186,186,
-			.byte 211,212,177,177,
+			.byte 217,218,188,188,
+			.byte 215,216,177,177,
 
 __TILED_IMAGES_RES_TNT_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -151,8 +152,8 @@ __tiled_images_res_tnt:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (14<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (18<<8 | 0)	; scr addr end
-			.byte 217,218,186,186,
-			.byte 215,216,177,177,
+			.byte 221,222,188,188,
+			.byte 219,220,177,177,
 
 __TILED_IMAGES_ITEM_KEY_0_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -161,8 +162,8 @@ __tiled_images_item_key_0:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (18<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (20<<8 | 0)	; scr addr end
-			.byte 221,222,
-			.byte 219,220,
+			.byte 225,226,
+			.byte 223,224,
 
 __TILED_IMAGES_ITEM_KEY_1_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -171,8 +172,8 @@ __tiled_images_item_key_1:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (18<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (20<<8 | 0)	; scr addr end
-			.byte 225,226,
-			.byte 223,224,
+			.byte 229,230,
+			.byte 227,228,
 
 __TILED_IMAGES_ITEM_KEY_2_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -181,8 +182,8 @@ __tiled_images_item_key_2:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (18<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (20<<8 | 0)	; scr addr end
-			.byte 229,230,
-			.byte 227,228,
+			.byte 233,234,
+			.byte 231,232,
 
 __TILED_IMAGES_ITEM_KEY_3_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -191,8 +192,8 @@ __tiled_images_item_key_3:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (18<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (20<<8 | 0)	; scr addr end
-			.byte 233,234,
-			.byte 231,232,
+			.byte 237,238,
+			.byte 235,236,
 
 __TILED_IMAGES_RES_EMPTY_MANA_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -201,8 +202,8 @@ __tiled_images_res_empty_mana:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (6<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (10<<8 | 0)	; scr addr end
-			.byte 237,238,186,186,
-			.byte 235,236,177,177,
+			.byte 189,190,188,188,
+			.byte 178,179,177,177,
 
 __TILED_IMAGES_RES_EMPTY_SWORD_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -211,8 +212,8 @@ __tiled_images_res_empty_sword:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (11<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (13<<8 | 0)	; scr addr end
-			.byte 237,238,
-			.byte 235,236,
+			.byte 189,190,
+			.byte 178,179,
 
 __TILED_IMAGES_RES_EMPTY_COPY_LEN = 6
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -221,8 +222,8 @@ __tiled_images_res_empty:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (14<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (18<<8 | 0)	; scr addr end
-			.byte 237,238,186,186,
-			.byte 235,236,177,177,
+			.byte 189,190,188,188,
+			.byte 178,179,177,177,
 
 __TILED_IMAGES_ITEM_KEY_EMPTY_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -231,6 +232,6 @@ __tiled_images_item_key_empty:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (18<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (20<<8 | 0)	; scr addr end
-			.byte 237,238,
-			.byte 235,236,
+			.byte 189,190,
+			.byte 178,179,
 

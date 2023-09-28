@@ -34,85 +34,53 @@ stats_screen_text_draw:
 			CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 			xchg
 			; hl - stats
-			lxi d, @text_stats
-			push d
-			call int16_to_ascii_dec
-			pop h
-			; hl = game_ui_score
 			lxi b, STATS_MONSTERS_SCR_ADDR
-			call draw_text
+			call draw_text_int16
 
 			; draw items stats 
 			mvi c, TILEDATA_FUNC_ID_ITEMS
 			CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 			xchg
 			; hl - stats
-			lxi d, @text_stats
-			push d
-			call int16_to_ascii_dec
-			pop h
-			; hl = game_ui_score
 			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 1
-			call draw_text
+			call draw_text_int16
 
 			; draw coins stats 
 			mvi c, TILEDATA_FUNC_ID_RESOURCES
 			CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 			xchg
 			; hl - stats
-			lxi d, @text_stats
-			push d
-			call int16_to_ascii_dec
-			pop h
-			; hl = game_ui_score
 			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 2
-			call draw_text
+			call draw_text_int16
 
 			; draw containers stats 
 			mvi c, TILEDATA_FUNC_ID_CONTAINERS
 			CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 			xchg
 			; hl - stats
-			lxi d, @text_stats
-			push d
-			call int16_to_ascii_dec
-			pop h
-			; hl = game_ui_score
 			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 3
-			call draw_text			
+			call draw_text_int16
 
 			; draw doors stats 
 			mvi c, TILEDATA_FUNC_ID_DOORS
 			CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 			xchg
 			; hl - stats
-			lxi d, @text_stats
-			push d
-			call int16_to_ascii_dec
-			pop h
-			; hl = game_ui_score
 			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 4
-			call draw_text		
+			call draw_text_int16
 
 			; draw breakables stats 
 			mvi c, TILEDATA_FUNC_ID_BREAKABLES
 			CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 			xchg
 			; hl - stats
-			lxi d, @text_stats
-			push d
-			call int16_to_ascii_dec
-			pop h
-			; hl = game_ui_score
 			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 5
-			call draw_text
+			call draw_text_int16
 
-			; draw total stats 
-			lxi h, game_ui_score
+			; draw total stats
+			lxi h, game_ui_score_txt
 			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 6
 			jmp draw_text
-@text_stats:
-			.byte $30, $30, $30, $30, $30, 0
 
 stats_screen_init:
 			call screen_simple_init

@@ -33,7 +33,7 @@ hero_tile_func_item:
 			push b
 			mvi c, TILEDATA_FUNC_ID_ITEMS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
-			call game_ui_draw_score
+			call game_ui_draw_score_text
 			pop b
 
 			; calc tile gfx ptr
@@ -176,7 +176,7 @@ hero_tile_func_resource:
 			mov e, a
 			mvi c, TILEDATA_FUNC_ID_RESOURCES
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
-			call game_ui_draw_score
+			call game_ui_draw_score_text
 			pop psw
 
 			HL_TO_AX4_PLUS_INT16(hero_res_func_tbl)
@@ -250,7 +250,7 @@ hero_health_increase:
 			add m
 			CLAMP_A(HERO_HEALTH_MAX)
 			mov m, a
-			jmp game_ui_draw_health
+			jmp game_ui_draw_health_text
 
 hero_res_func_clothes:
 			lxi h, hero_res_clothes
@@ -261,6 +261,8 @@ hero_cont_func_chest_sword:
             ; acquire a sword
 			mvi a, HERO_WEAPON_SWORD
 			sta hero_res_sword
+
+			call game_ui_draw_icon_sword
 
 			; init a dialog
 			mvi a, GAME_REQ_PAUSE
