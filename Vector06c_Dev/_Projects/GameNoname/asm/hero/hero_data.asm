@@ -60,21 +60,21 @@ hero_tile_func_tbl:
 
 ; funcs to handle the resource pick up process. more info is in level_data.asm->room_tiledata
 hero_res_func_tbl:
-			RET_4()								; resource_id == 1
-			JMP_4( hero_res_func_potion_blue)	; resource_id == 2
-			JMP_4( hero_res_func_potion_red)	; resource_id == 3
-			JMP_4( hero_res_func_clothes)		; resource_id == 4
-			RET_4()								; resource_id == 5
-			RET_4()								; resource_id == 6
-			RET_4()								; resource_id == 7
-			RET_4()								; resource_id == 8
-			RET_4()								; resource_id == 9
-			RET_4()								; resource_id == 10
-			RET_4()								; resource_id == 11
-			RET_4()								; resource_id == 12
-			RET_4()								; resource_id == 13
-			RET_4()								; resource_id == 14
-			RET_4()								; resource_id == 15
+			RET_4()								; res_id == 1
+			JMP_4( hero_res_func_potion_blue)	; res_id == 2
+			JMP_4( hero_res_func_potion_red)	; res_id == 3
+			JMP_4( hero_res_func_clothes)		; res_id == 4
+			RET_4()								; res_id == 5
+			RET_4()								; res_id == 6
+			RET_4()								; res_id == 7
+			RET_4()								; res_id == 8
+			RET_4()								; res_id == 9
+			RET_4()								; res_id == 10
+			RET_4()								; res_id == 11
+			RET_4()								; res_id == 12
+			RET_4()								; res_id == 13
+			RET_4()								; res_id == 14
+			RET_4()								; res_id == 15
 
 ; funcs to handle the container pick up process. more info is in level_data.asm->room_tiledata
 hero_cont_func_tbl:

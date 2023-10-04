@@ -82,7 +82,7 @@
 ; if no success, it jumps to
 ; in:
 ; d - room_id
-; l - resource_id
+; l - res_id
 ; c - tile_idx
 ; uses:
 ; hl, de, a

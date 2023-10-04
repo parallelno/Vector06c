@@ -3,7 +3,7 @@
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
 ; TODO: try to convert it into a function
-.macro BULLET_DRAW(sprite_get_scr_addr_bullet, __RAM_DISK_S_BULLET, check_invis = true)
+.macro BULLET_DRAW(sprite_get_scr_addr_bullet, __ram_disk_s, check_invis = true)
         .if check_invis
 			; advance to bullet_status
 			LXI_H_TO_DIFF(bullet_status, bullet_draw_ptr)
@@ -35,7 +35,7 @@
 			; c - preshifted sprite idx*2 offset
 			call sprite_get_addr
 			
-			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_BULLET | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
+			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __ram_disk_s | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			pop h
 			inx h
 			; hl - ptr to bullet_erase_scr_addr

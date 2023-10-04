@@ -2,14 +2,20 @@
 .include "dialogs.asm"
 
 game_ui_init:
-			A_TO_ZERO(0)
-			sta game_ui_res_id_selected
+			A_TO_ZERO( RES_SELECTABLE_AVAILABLE_NONE)
+			sta game_ui_res_selected_id
 			jmp game_ui_draw
 
 game_ui_draw:
 			call game_ui_draw_panel
 			call game_ui_draw_health_text
 			call game_ui_draw_score_text
+
+			mvi a, 10
+			sta hero_res_clothes
+			mvi c, RES_SELECTABLE_ID_CLOTHES
+			call game_ui_res_select_and_draw
+
 			ret
 
 game_ui_update:
@@ -37,7 +43,7 @@ game_ui_score_txt:
 			.byte $30, $30, $30, $30, $30, $30, 0
 
 TEXT_MANA_SCR_ADDR = $a8fb
-game_ui_draw_res_mana_text:
+game_ui_draw_mana_text:
 			lxi h, hero_res_mana
 			lxi b, TEXT_MANA_SCR_ADDR
 			jmp draw_text_int8_ptr
@@ -76,33 +82,188 @@ game_ui_draw_panel:
 			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_top, true)
 game_ui_draw_icon_mana:
 			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_res_mana, true)
-game_ui_draw_icon_sword:
-			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_res_sword, true)
 
+; when a player hits action_1
+; it decrement the selected resource amount (except a sword because it's unlimited)
+; it selects the first non-empty resource
+game_ui_res_use:
+			lda game_ui_res_selected_id
+			CPI_WITH_ZERO(RES_SELECTABLE_AVAILABLE_NONE)
+			rz
 
-; draw resources (except health, mana, score) on the game top panel
-game_ui_draw_resources:
-			; check if mana is ITEM_ID_MANA is acquired
-			lxi d, global_items + ITEM_ID_MANA - 1	; because the first item_id = 1
-			ldax d
-			cpi ITEM_STATUS_ACQUIRED
-			;jnz @draw_res
-			;call @draw_icon
-@draw_res:
-			; copy a tiled image
-			lxi d, __tiled_images_res_sword
+			; if a sword is selected, return because it's unlimited
+			rrc
+			rnc
+
+			; use selected (non-sword) resource
+			; a - res_selectable_id
+			adi <hero_res_sword
+			mov l, a
+			mvi h, >hero_res_sword
+			dcr m ; use a resource
+game_ui_select_first_available_if_empty:
+			jp @select_first_available
+			; if a value == -1, clamp to zero
+			mov c, m
+			inr c
+			jnz @select_first_available ; if it's not -1
+			mov m, c ; clamp the resouce to 0
+@select_first_available:
+			call game_ui_res_get_first_available
+			; c - res_selected_id
+			; c = 0 if all resources are empty (except a sword)
+
+			; check if a sword is available
+			lda hero_res_sword
+			rrc ; to make the sword_selected bit
+			mov a, c
+			ral ; set the sword_selected bit
+			sta game_ui_res_selected_id
 			ret
 
+
+; find the first selectable non-empty resource except a sword
+; out:
+; hl - ptr to non-empty resource if any available
+; c - res_selected_id
+; c = 0 if all resources are empty (except a sword)
+; use:
+; hl, a, c
+game_ui_res_get_first_available:
+			lxi h, hero_res_sword + 1
+			A_TO_ZERO(0)
+			mvi c, RES_SELECTABLE_MAX - 1
+@next_res:
+			cmp m
+			jnz @reverse_counter
+			inx h			
+			dcr c
+			jnz @next_res
+			; no non-empty resources
+			; c = RES_SELECTABLE_AVAILABLE_NONE
+			ret
+@reverse_counter:
+			mvi a, RES_SELECTABLE_MAX
+			sub c
+			mov c, a
+			ret
+
+
+; when a player hits action_2
+; it selects the next non-empty resource
+; it returns a selected res_id
+game_ui_res_select_next:
+			ret
+
+; in:
+; c - res_selectable_id
+game_ui_res_select_and_draw:
+			; check if a resource is not empty
+			push b
+			mvi a, <hero_res_sword
+			add c
+			mov l, a
+			mvi h, >hero_res_sword
+			mov a, m
+			CPI_WITH_ZERO(0)
+			pop b
+			jnz @select_res
+			call game_ui_select_first_available_if_empty
+			jmp @draw_icon
+@select_res:
+			lxi h, game_ui_res_selected_id
+			mov a, m
+			ani ~RES_SELECTABLE_MASK
+			rrc
+			ora c
+			rlc
+			mov m, a
+@draw_icon:
+			lda hero_res_sword
+			CPI_WITH_ZERO(HERO_WEAPON_NONE)
+			jnz game_ui_res_select_sword_and_draw
+			jmp game_ui_draw_res
+
+game_ui_res_select_sword_and_draw:
+			lxi h, game_ui_res_selected_id
+			mov a, m
+			ori RES_SELECTABLE_AVAILABLE_SWORD
+			mov m, a
+			jmp game_ui_draw_res
+
+; if a sword is available, then it draws a sword icon 
+; if not all resources empty, then it draws a first non-empty resource icon, else it draws an empty res slot
+; it draws a selection frame on a sword or on a resource icon depending on what is selected
+; health, mana, and the score have their own dedicated draw functions
+TEXT_RES_SCR_ADDR = $b0fb
+game_ui_draw_res:
+			; if a sword is available, draw it
+			lda hero_res_sword
+			CPI_WITH_ZERO(0)
+			cnz @draw_sword
+
+			; check if a resource's available
+			lda game_ui_res_selected_id
+			ani RES_SELECTABLE_MASK
+			rrc
+			; a - res_selected_id
+			; a = 0 if all resource are empty
+			jnz @draw_res
+			; draw an empty res icon
+			lxi d, __tiled_images_res_empty
+			call @draw_icon
+			jmp @draw_selection
+
+@draw_res:
+			; a - res_selected_id
+			; a reg's min value is 1
+			HL_TO_AX2_PLUS_INT16(@res_tiled_img_ptrs - WORD_LEN) ; - WORD_LEN because a reg's min value is 1
+			mov e, m
+			inx h
+			mov d, m
+			; de - tiled image data ptr
+			call @draw_icon
+
+@draw_res_text:
+			lda game_ui_res_selected_id
+			ani RES_SELECTABLE_MASK
+			rrc
+			; a - res_selectable_id
+			adi <hero_res_sword
+			mov l, a
+			mvi h, >hero_res_sword
+			lxi b, TEXT_RES_SCR_ADDR
+			call draw_text_int8_ptr
+
+@draw_selection:
+			lda game_ui_res_selected_id
+			CPI_WITH_ZERO(0)
+			rz ; return if no
+			rrc
+			jc @draw_sword_selection
+			; draw selection frame on a resouce
+
+			lxi b, __vfx_selection_0
+			lxi d, $a000 + (14<<8) | 30*8
+			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_VFX | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_89)
+			ret
+@draw_sword_selection:
+			; draw selection frame on a sword
+			lxi b, __vfx_selection_0
+			lxi d, $a000 + (11<<8) | 30*8
+			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_VFX | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_89)
+			ret
+			
+@draw_sword:
+			lxi d, __tiled_images_res_sword
 @draw_icon:
 			; de - ptr to an img
 			mvi a, <__RAM_DISK_S_TILED_IMAGES_DATA
-			jmp draw_tiled_img			
+			jmp draw_tiled_img
 
 @res_tiled_img_ptrs:
-			.word __tiled_images_res_sword
-			.word __tiled_images_res_mana
 			.word __tiled_images_res_potion_health
 			.word __tiled_images_res_potion_mana
+			.word __tiled_images_res_tnt			
 			.word __tiled_images_res_clothes
 			.word __tiled_images_res_cabbage
-			.word __tiled_images_res_tnt

@@ -9,20 +9,20 @@
 ;			decal_walkable_id == 3 - a skull (tiledata = 2)
 
 ; ffff == 1, spawn a monster, monster_id = d
-;		monster_id == 0 - skeleton (tiledata = 1*16+0=16)
-;		monster_id == 1 - vampire (tiledata = 17)
-;		monster_id == 2 - burner (tiledata = 18)
-;		monster_id == 3 - knight horizontal walk (tiledata = 19)
-;		monster_id == 4 - knight vertical walk (tiledata = 20)
-;		monster_id == 5 - burner quest that runs to the right
-;		monster_id == 6 - burner quest that runs to up
-;		monster_id == 6 - knight quest horizontal walk
-;		monster_id == 7 - monster chest (tiledata = 21)
+;		monster_id = 0 - skeleton (tiledata = 1*16+0=16)
+;		monster_id = 1 - vampire (tiledata = 17)
+;		monster_id = 2 - burner (tiledata = 18)
+;		monster_id = 3 - knight horizontal walk (tiledata = 19)
+;		monster_id = 4 - knight vertical walk (tiledata = 20)
+;		monster_id = 5 - burner quest that runs to the right
+;		monster_id = 6 - burner quest that runs to up
+;		monster_id = 6 - knight quest horizontal walk
+;		monster_id = 7 - monster chest (tiledata = 21)
 
-; ffff == 2, teleport to 0-15 room_id, room_id = d
-; ffff == 3, teleport to 16-31 room_id, room_id = d+16
-; ffff == 4, teleport to 32-47 room_id, room_id = d+32
-; ffff == 5, teleport to 48-63 room_id, room_id = d+48
+; ffff = 2, teleport to 0-15 room_id, room_id = d
+; ffff = 3, teleport to 16-31 room_id, room_id = d+16
+; ffff = 4, teleport to 32-47 room_id, room_id = d+32
+; ffff = 5, teleport to 48-63 room_id, room_id = d+48
 
 ; ffff == 6, a global item. a hero interacts with it when he steps on it. item_id = d. see buffers.asm->global_items for details
 ;		item_id = 0 - storytelling - an invisible tiledata to open a dialog window
@@ -33,19 +33,19 @@
 ;		item_id = 5 - key 4
 ;		item_id = 6 - key 5
 ; 		TODO: make the items with item_id > ITEM_ID_UI invisible for the user
-		ITEM_ID_MANA			= 13	; reserved for a quest to accquire a mana scystal or use a mana potion
+		ITEM_ID_MANA			= 13	; reserved for a quest to accquire a mana crystal or use a mana potion
 		ITEM_ID_FART			= 14	; reserved for a quest to scare away knight_quest
 		ITEM_ID_BURNER_QUEST	= 15	; reserved for burner_quest
 
-; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. resource_id = d. see buffers.asm->resources_inst_data for details
-;		resource_id == 0 - a coin (increases the game score when picked up) ; (tiledata = 7*16+0 = 160)
-;		resource_id == 1 - a health crystal (increases health immedietly when picked up)
-;		resource_id == 2 - a mana crystal (increases mana immedietly when picked up)
-;		resource_id == 3 - a sword (the main weapon)
-;		resource_id == 4 - a potion health (increases health when used)
-;		resource_id == 5 - a potion mana (increases mana when used)
-;		resource_id == 6 - clothes ; it is a quest resource
-;		resource_id == 7 - cabbage ; it is a quest resource
+; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. res_id = d. see buffers.asm->resources_inst_data for details
+;		res_id 	= 0 - a coin (increases the game score when picked up) ; (tiledata = 7*16+0 = 160)
+;		res_id 	= 1 - a health crystal (increases health immedietly when picked up)
+;		res_id 	= 2 - a mana crystal (increases mana immedietly when picked up)
+		RES_ID_SWORD	= 3 ; a sword (the main weapon)
+;		res_id 	= 4 - a potion health (increases health when used)
+;		res_id 	= 5 - a potion mana (increases mana when used)
+;		res_id 	= 6 - clothes ; it is a quest resource
+;		res_id 	= 7 - cabbage ; it is a quest resource
 
 ; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable (a hero and monsters can't step on that tile)
 
@@ -55,23 +55,23 @@
 ;		trigger_id == 0 - when he hits his house door
 
 ; ffff == 11, collidable containers that leave rewards on the floor when a hero hits it. container_id = d
-;		container_id == 0 - a chest with a sword
-;		container_id == 1 - a big chest. big money reward
-;		container_id == 2 - a chest ???
-;		container_id == 3 - a chest ???
-;		container_id == 4 - a chest ???
-;		container_id == 5 - a monster spawner chest. it spawns a chest monster when opened
-;		container_id == 6 - a crate with a teleport under it to a unique location
+;		container_id = 0 - a chest with a sword
+;		container_id = 1 - a big chest. big money reward
+;		container_id = 2 - a chest ???
+;		container_id = 3 - a chest ???
+;		container_id = 4 - a chest ???
+;		container_id = 5 - a monster spawner chest. it spawns a chest monster when opened
+;		container_id = 6 - a crate with a teleport under it to a unique location
 
 ; ffff == 12, doors. a hero interacts with it only when he hits it with a weapon. door_id = d
-;		door_id == 0 - a door 1a
-;		door_id == 1 - a door 1b
-;		door_id == 2 - a door 2a
-;		door_id == 3 - a door 2b
-;		door_id == 4 - a door 3a
-;		door_id == 5 - a door 3b
-;		door_id == 6 - a door 4a
-;		door_id == 7 - a door 4b
+;		door_id = 0 - a door 1a
+;		door_id = 1 - a door 1b
+;		door_id = 2 - a door 2a
+;		door_id = 3 - a door 2b
+;		door_id = 4 - a door 3a
+;		door_id = 5 - a door 3b
+;		door_id = 6 - a door 4a
+;		door_id = 7 - a door 4b
 
 ; ffff == 13, breakable items, a hero can only break it with a hit and get a random reward. a room tracks how many it was broken to manage a reward and a spawn rate. breakable_id = d
 ;		breakable_id == 0 - a barrel (tiledata = 13*16+0 = 208, $d0)
@@ -82,11 +82,11 @@
 ;		decal_collidable_id == 0 - a spider web
 
 ; ffff == 15,
-;		d == %1111 - collision (tiledata = TILEDATA_COLLISION)
+;		d = %1111 - collision (tiledata = TILEDATA_COLLISION)
 ;		d <  %1111 - collision + animated background, back_id = d
-;	 		back_id == 0 - torch front (tiledata = 15*16+0=241)
-;   	    back_id == 1 - flag front (tiledata = 161)
-;   	    back_id == 2 - dialog_press_key (tiledata = 162)
+;	 		back_id = 0 - torch front (tiledata = 15*16+0=241)
+;   	    back_id = 1 - flag front (tiledata = 161)
+;   	    back_id = 2 - dialog_press_key (tiledata = 162)
 
 ; if tiledata > 0 then a tile is restored on the screen when a hero, a monster, or a bullet on it
 

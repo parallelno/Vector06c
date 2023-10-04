@@ -288,7 +288,7 @@ room_tiledata_item_spawn:
 ; input:
 ; b - tiledata
 ; c - tile_idx in the room_tiledata array.
-; a - resource_id
+; a - res_id
 ; out:
 ; a - tiledata that will be saved back into room_tiledata
 room_tiledata_resource_spawn:
@@ -299,12 +299,12 @@ room_tiledata_resource_spawn:
 			mov d, m
 
 			mov l, a
-			ADD_A(2) ; resource_id to JMP_4 ptr
+			ADD_A(2) ; res_id to JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 
 			; find a resource
 			; d - room_id
-			; l - resource_id
+			; l - res_id
 			; c - tile_idx
 			FIND_INSTANCE(@picked_up, resources_inst_data_ptrs)
 			; resource is found, means it is not picked up

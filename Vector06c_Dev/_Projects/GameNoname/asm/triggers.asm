@@ -76,12 +76,18 @@ trigger_hero_knocks_his_friend_door:
 			; remove the clothes item
 			; a = 0
 			mov m, a
+
+			mvi c, RES_SELECTABLE_ID_CLOTHES
+			call game_ui_res_select_and_draw
+
 			; TODO: add score points
+
 			; init a dialog
 			mvi a, GAME_REQ_PAUSE
 			lxi h, dialog_callback_room_redraw
 			lxi d, __text_knocked_his_friend_door_clothes_returns
 			jmp dialog_init
+			
 
 
 

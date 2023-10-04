@@ -143,6 +143,18 @@
 			"offset_y": 3,
 			"mask_alpha" : 0,
 			"mask_color" : 1
+		},
+		{
+			"name" : "selection",
+			"x" : 0,
+			"y"	: 160,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 0,
+			"mask_y" : 176, 			
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1
 		}	
 	]
 }

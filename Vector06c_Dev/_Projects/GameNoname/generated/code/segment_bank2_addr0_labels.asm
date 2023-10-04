@@ -113,4 +113,5 @@ __vfx_reward0_0                 = $57a4
 __vfx_reward1_0                 = $585e
 __vfx_reward2_0                 = $5924
 __vfx_reward3_0                 = $59c6
-__vfx_sprites_rd_data_end       = $5a36
+__vfx_selection_0               = $5a38
+__vfx_sprites_rd_data_end       = $5afc

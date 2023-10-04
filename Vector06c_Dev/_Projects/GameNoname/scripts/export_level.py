@@ -328,9 +328,9 @@ def export_data(source_j_path, export_data_path):
 		asm += "			.byte "
 
 		# add resource tiledata which is not present in the level to make resources_inst_data_ptrs array contain contiguous data
-		# for example: all the rooms contain only resource_id=1 and resource_id=3
-		# to make a proper data we need to add null_ptrs for resource_id=0 and resource_id=2
-		# to let the asm code look up it by the resource_id
+		# for example: all the rooms contain only res_id=1 and res_id=3
+		# to make a proper data we need to add null_ptrs for res_id=0 and res_id=2
+		# to let the asm code look up it by the res_id
 		for tiledata in range(TILEDATA_RESOURCE, resource_max_tiledata + 1):
 			if tiledata not in resources:
 				resources[tiledata] = []

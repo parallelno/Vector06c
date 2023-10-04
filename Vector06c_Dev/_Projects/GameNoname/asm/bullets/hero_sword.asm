@@ -41,8 +41,8 @@ hero_sword_tile_func_tbl:
 hero_sword_init:
 			; prevent a sword from spawning if it's not available
 			lda hero_res_sword
-			CPI_WITH_ZERO(0)
-			jnc @no_sword
+			CPI_WITH_ZERO(HERO_WEAPON_NONE)
+			jz @no_sword
 
 			lxi h, bullet_update_ptr+1
 			mvi e, BULLET_RUNTIME_DATA_LEN
@@ -464,7 +464,7 @@ hero_sword_func_breakable:
 			mov e, a
 			; check if a sword is available
 			lda hero_res_sword
-			CPI_WITH_ZERO(0)
+			CPI_WITH_ZERO(HERO_WEAPON_NONE)
 			rz ; return if no sword
 
 			; if breakable_id == BREAKABLE_ID_CABBAGE, spawn a fart bullet

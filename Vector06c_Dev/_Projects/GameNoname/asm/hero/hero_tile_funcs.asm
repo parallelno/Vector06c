@@ -93,10 +93,10 @@ hero_tile_func_item:
 
 ; handler func for resources
 ; in:
-; a - resource_id
+; a - res_id
 ; c - tile_idx
 hero_tile_func_resource:
-			sta @restore_resource_id+1
+			sta @restore_res_id+1
 			; find a resource
 			lxi h, room_id
 			mov d, m
@@ -168,7 +168,7 @@ hero_tile_func_resource:
 			call vfx_init
 
 			; update a hero resource
-@restore_resource_id:
+@restore_res_id:
 			mvi a, TEMP_BYTE
 
 			; add score points
@@ -255,14 +255,14 @@ hero_health_increase:
 hero_res_func_clothes:
 			lxi h, hero_res_clothes
 			inr m
-			ret
+			mvi c, RES_SELECTABLE_ID_CLOTHES
+			jmp game_ui_res_select_and_draw
 
 hero_cont_func_chest_sword:
             ; acquire a sword
 			mvi a, HERO_WEAPON_SWORD
 			sta hero_res_sword
-
-			call game_ui_draw_icon_sword
+			call game_ui_res_select_sword_and_draw
 
 			; init a dialog
 			mvi a, GAME_REQ_PAUSE
