@@ -32,7 +32,7 @@
 ;		item_id = 4 - key 3
 ;		item_id = 5 - key 4
 ;		item_id = 6 - key 5
-; 		TODO: make the items with item_id > ITEM_ID_UI invisible for the user
+		ITEM_ID_UI_MAX	= 8 ; items with item_id > ITEM_ID_UI_MAX do not show up on the ui panel
 		ITEM_ID_MANA			= 13	; reserved for a quest to accquire a mana crystal or use a mana potion
 		ITEM_ID_FART			= 14	; reserved for a quest to scare away knight_quest
 		ITEM_ID_BURNER_QUEST	= 15	; reserved for burner_quest

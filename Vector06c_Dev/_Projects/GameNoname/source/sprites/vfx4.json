@@ -33,7 +33,7 @@
 		"spark"	: {
 			"frames" : ["hit0", "hit1", "hit2", "hit3"],
 			"loop" : true
-		}		
+		}	
 	},
 	"sprites" : [ 
 		{

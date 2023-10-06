@@ -157,16 +157,14 @@ hero_global_status_no_render = $7b80 ; byte
 ;
 
 ; a current command that is handled by the level update func
-global_request:			= $7b81				; .byte
+global_request:	= $7b81			; .byte
 ; the current level idx
-level_idx:				= $7b82				; .byte
+level_idx:		= $7b82			; .byte
 ; the current room idx of the current level
-room_id:   				= $7b83				; .byte TEMP_BYTE ; in the range [0, ROOMS_MAX-1]
+room_id:   		= $7b83				; .byte TEMP_BYTE ; in the range [0, ROOMS_MAX-1]
 
-;=============================================================================
-;
-;	free space = $7b84 - $7b84
-;
+ITEM_VISIBLE_NONE			= 0
+game_ui_item_visible_addr:	= $7b84		; .byte TEMP_BYTE ; currently shown item on the panel. range [0, ITEMS_MAX-1]
 
 ;=============================================================================
 ; a list of back runtime data structs.
@@ -202,7 +200,7 @@ LEVEL_INIT_TBL_LEN = level_init_tbl_end - level_init_tbl
 ;=============================================================================
 ;
 ; palette
-palette = $7bd3 ; 16 bytes
+palette: = $7bd3 ; 16 bytes
 
 ;=============================================================================
 ;

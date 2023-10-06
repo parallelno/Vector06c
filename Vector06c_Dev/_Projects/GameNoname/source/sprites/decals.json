@@ -25,8 +25,8 @@
 		"items" : ["key_0", "key_1", "key_1", "key_2", "key_3"],
 		"resources" : ["coin", "potion_blue", "potion_red", "dry_clothes"],
 		"breakable" : ["barrel", "crate", "cabbage"],
-		"doors" : ["door_0_l", "door_0_r", "door_1_l", "door_1_r", "door_1_l", "door_1_r", "door_0_l", "door_0_r", "door_4_l", "door_4_r"],
-		"doors_opened" : ["door_0_open_l", "door_0_open_r", "door_1_open_l", "door_1_open_r", "door_1_open_l", "door_1_open_r", "door_0_open_l", "door_0_open_r", "door_1_open_l", "door_1_open_r"],
+		"doors" : ["door_0_l", "door_0_r", "door_1_l", "door_1_r", "door_1_l", "door_1_r", "door_0_l", "door_0_r", "door_4_l", "door_4_r", "boulder"],
+		"doors_opened" : ["door_0_open_l", "door_0_open_r", "door_1_open_l", "door_1_open_r", "door_1_open_l", "door_1_open_r", "door_0_open_l", "door_0_open_r", "door_1_open_l", "door_1_open_r", "boulder_cracked"],
 		"containers" : ["chest_small", "chest_big", "chest_weapon0"],
 		"containers_opened" : ["chest_small_opened", "chest_big_opened", "chest_weapon0_opened"]
 	},
@@ -258,7 +258,7 @@
 			"mask_y" : 177, 
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		},	
+		},
 		{
 			"name" : "door_4_r",
 			"x" : 80,
@@ -268,6 +268,30 @@
 			"offset_y" : 0,
 			"mask_x" : 80,
 			"mask_y" : 177, 
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "boulder",
+			"x" : 96,
+			"y"	: 161,
+			"width" : 16,
+			"height" : 15,
+			"offset_y" : 0,
+			"mask_x" : 96,
+			"mask_y" : 177,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "boulder_cracked",
+			"x" : 96,
+			"y"	: 225,
+			"width" : 16,
+			"height" : 15,
+			"offset_y" : 0,
+			"mask_x" : 96,
+			"mask_y" : 241,
 			"mask_alpha" : 0,
 			"mask_color" : 1
 		},

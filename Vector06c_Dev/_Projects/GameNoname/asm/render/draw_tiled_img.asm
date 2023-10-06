@@ -184,6 +184,7 @@ draw_tiled_img:
 			jnz @loop
 
 			RAM_DISK_OFF()
+@returnnn:
 			ret
 @repeating_counter:
 			.byte 1

@@ -4,21 +4,18 @@
 game_ui_init:
 			A_TO_ZERO( RES_SELECTABLE_AVAILABLE_NONE)
 			sta game_ui_res_selected_id
+			mvi a, <global_items
+			sta game_ui_item_visible_addr
 			jmp game_ui_draw
 
 game_ui_draw:
 			call game_ui_draw_panel
 			call game_ui_draw_health_text
 			call game_ui_draw_score_text
-
-			mvi a, 10
-			sta hero_res_clothes
-			mvi c, RES_SELECTABLE_ID_CLOTHES
-			call game_ui_res_select_and_draw
-
 			ret
 
 game_ui_update:
+			call game_ui_draw_items
 			jmp dialog_update
 
 
@@ -64,7 +61,7 @@ draw_fps:
 			mov l, a
 			mvi h, 0
 			lxi d, @fps_text_hi
-			call int8_to_ascii_dec	
+			call int8_to_ascii_dec
 
 			lxi h, @fps_text_hi
 			lxi b, FPS_SCR_ADDR
@@ -131,12 +128,12 @@ game_ui_select_first_available_if_empty:
 ; hl, a, c
 game_ui_res_get_first_available:
 			lxi h, hero_res_sword + 1
-			A_TO_ZERO(0)
 			mvi c, RES_SELECTABLE_MAX - 1
+			A_TO_ZERO(0)
 @next_res:
 			cmp m
 			jnz @reverse_counter
-			inx h			
+			inx h
 			dcr c
 			jnz @next_res
 			; no non-empty resources
@@ -191,7 +188,7 @@ game_ui_res_select_sword_and_draw:
 			mov m, a
 			jmp game_ui_draw_res
 
-; if a sword is available, then it draws a sword icon 
+; if a sword is available, then it draws a sword icon
 ; if not all resources empty, then it draws a first non-empty resource icon, else it draws an empty res slot
 ; it draws a selection frame on a sword or on a resource icon depending on what is selected
 ; health, mana, and the score have their own dedicated draw functions
@@ -217,7 +214,7 @@ game_ui_draw_res:
 @draw_res:
 			; a - res_selected_id
 			; a reg's min value is 1
-			HL_TO_AX2_PLUS_INT16(@res_tiled_img_ptrs - WORD_LEN) ; - WORD_LEN because a reg's min value is 1
+			HL_TO_AX2_PLUS_INT16(@tiled_img_ptrs - WORD_LEN) ; - WORD_LEN because a reg's min value is 1
 			mov e, m
 			inx h
 			mov d, m
@@ -253,7 +250,7 @@ game_ui_draw_res:
 			lxi d, $a000 + (11<<8) | 30*8
 			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_VFX | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_89)
 			ret
-			
+
 @draw_sword:
 			lxi d, __tiled_images_res_sword
 @draw_icon:
@@ -261,9 +258,69 @@ game_ui_draw_res:
 			mvi a, <__RAM_DISK_S_TILED_IMAGES_DATA
 			jmp draw_tiled_img
 
-@res_tiled_img_ptrs:
+@tiled_img_ptrs:
 			.word __tiled_images_res_potion_health
 			.word __tiled_images_res_potion_mana
-			.word __tiled_images_res_tnt			
+			.word __tiled_images_res_tnt
 			.word __tiled_images_res_clothes
 			.word __tiled_images_res_cabbage
+
+
+; draws an available item.
+; it shows the next available item every game_update_time * GAME_UI_ITEM_UPDATE_DELAY time
+GAME_UI_ITEM_UPDATE_DELAY = 80
+game_ui_draw_items:
+			lxi h, @delay
+			dcr m
+			rnz
+			mvi m, GAME_UI_ITEM_UPDATE_DELAY
+
+			lxi h, game_ui_item_visible_addr
+			mov e, m
+			mvi d, >global_items
+			mvi c, <global_items + ITEM_ID_UI_MAX
+			mvi b, ITEM_ID_UI_MAX
+			; de - addr to the currently shown item on the ui panel
+@loop:
+			inx d
+			; check if addr in the range
+			mov a, e
+			cmp c
+			jc @check_amount
+			; clamp the ptr to the ITEM_ID_UI_MAX range
+			mvi e, <global_items
+@check_amount:
+			; check if available
+			ldax d
+			cpi ITEM_STATUS_ACQUIRED
+			jz @draw
+			dcr b
+			jnz @loop
+			; no available items
+			lxi d, __tiled_images_item_key_empty
+			jmp @draw_icon
+@draw:
+			mov m, e
+			; de - ptr to the item amount
+			; make item_id
+			mov a, e
+			sui <global_items
+
+			; a - item_id
+			HL_TO_AX2_PLUS_INT16(@tiled_img_ptrs)
+			mov e, m
+			inx h
+			mov d, m
+@draw_icon:
+			; de - ptr to an img
+			mvi a, <__RAM_DISK_S_TILED_IMAGES_DATA
+			jmp draw_tiled_img
+
+@delay:		.byte TEMP_WORD
+
+@tiled_img_ptrs:
+			.word __tiled_images_item_key_0
+			.word __tiled_images_item_key_1
+			.word __tiled_images_item_key_1
+			.word __tiled_images_item_key_2
+			.word __tiled_images_item_key_3

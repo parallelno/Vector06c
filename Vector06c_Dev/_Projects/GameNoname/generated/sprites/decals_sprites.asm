@@ -18,10 +18,10 @@ __resources_gfx_ptrs: .word __decals_coin, 0, __decals_potion_blue, 0, __decals_
 __breakable_gfx_ptrs: .word __decals_barrel, 0, __decals_crate, 0, __decals_cabbage, 
 
 			.word 0  ; safety pair of bytes for reading by POP B
-__doors_gfx_ptrs: .word __decals_door_0_l, 0, __decals_door_0_r, 0, __decals_door_1_l, 0, __decals_door_1_r, 0, __decals_door_1_l, 0, __decals_door_1_r, 0, __decals_door_0_l, 0, __decals_door_0_r, 0, __decals_door_4_l, 0, __decals_door_4_r, 
+__doors_gfx_ptrs: .word __decals_door_0_l, 0, __decals_door_0_r, 0, __decals_door_1_l, 0, __decals_door_1_r, 0, __decals_door_1_l, 0, __decals_door_1_r, 0, __decals_door_0_l, 0, __decals_door_0_r, 0, __decals_door_4_l, 0, __decals_door_4_r, 0, __decals_boulder, 
 
 			.word 0  ; safety pair of bytes for reading by POP B
-__doors_opened_gfx_ptrs: .word __decals_door_0_open_l, 0, __decals_door_0_open_r, 0, __decals_door_1_open_l, 0, __decals_door_1_open_r, 0, __decals_door_1_open_l, 0, __decals_door_1_open_r, 0, __decals_door_0_open_l, 0, __decals_door_0_open_r, 0, __decals_door_1_open_l, 0, __decals_door_1_open_r, 
+__doors_opened_gfx_ptrs: .word __decals_door_0_open_l, 0, __decals_door_0_open_r, 0, __decals_door_1_open_l, 0, __decals_door_1_open_r, 0, __decals_door_1_open_l, 0, __decals_door_1_open_r, 0, __decals_door_0_open_l, 0, __decals_door_0_open_r, 0, __decals_door_1_open_l, 0, __decals_door_1_open_r, 0, __decals_boulder_cracked, 
 
 			.word 0  ; safety pair of bytes for reading by POP B
 __containers_gfx_ptrs: .word __decals_chest_small, 0, __decals_chest_big, 0, __decals_chest_weapon0, 
@@ -48,7 +48,7 @@ __decals_skull:
 __decals_web1:
 			.byte 0, 0; offset_y, offset_x
 			.byte 14, 1; height, width
-			.byte 247,255,0,0,0,0,0,0,0,8,227,255,20,0,0,0,0,8,0,0,199,159,0,0,0,16,0,0,96,40,193,15,38,144,0,0,96,24,64,8,128,31,6,0,128,38,0,0,96,89,136,63,86,64,0,0,128,33,0,32,141,15,50,0,64,50,0,0,176,64,0,7,177,8,0,0,240,78,96,78,16,15,66,0,0,75,0,0,240,164,0,255,171,0,0,0,0,84,0,80,3,255,40,0,0,40,0,0,0,212,7,255,168,0,0,0,0,80,0,80,15,255,96,0,0,96,0,0,0,144,31,255,160,0,0,0,0,64,0,64,
+			.byte 247,255,0,0,0,0,0,0,0,8,227,255,20,0,0,8,0,0,0,0,199,159,0,0,0,0,0,16,96,40,193,15,38,144,64,24,32,0,0,0,128,31,0,0,128,32,0,6,96,89,136,63,86,64,128,32,0,1,0,0,141,15,0,0,64,18,0,32,176,64,0,7,177,8,112,66,128,12,0,0,16,15,0,0,0,9,0,66,240,164,0,255,171,0,0,64,0,20,0,0,3,255,0,0,0,0,0,40,0,212,7,255,168,0,0,64,0,16,0,0,15,255,0,0,0,32,0,64,0,144,31,255,160,0,0,64,0,0,0,0,
 
 
 			.word 0  ; safety pair of bytes for reading by POP B
@@ -168,6 +168,20 @@ __decals_door_4_r:
 			.byte 0, 0; offset_y, offset_x
 			.byte 15, 1; height, width
 			.byte 239,191,16,64,0,0,64,16,64,16,199,30,56,225,161,40,0,0,161,40,128,4,87,90,0,0,90,87,187,111,0,4,127,187,64,128,0,0,64,0,0,0,124,64,0,128,90,255,165,128,0,4,127,187,64,128,0,0,64,128,199,30,16,64,0,0,64,16,161,40,0,4,111,251,0,144,0,0,0,16,0,0,85,224,2,130,248,215,5,168,0,4,111,251,0,144,0,0,0,144,199,30,16,64,0,0,64,16,161,40,199,31,56,224,64,16,0,0,64,16,130,15,0,0,224,56,224,56,240,125,199,31,40,160,64,16,64,16,0,0,239,191,0,0,0,0,0,0,64,16,
+
+
+			.word 0  ; safety pair of bytes for reading by POP B
+__decals_boulder:
+			.byte 0, 0; offset_y, offset_x
+			.byte 15, 1; height, width
+			.byte 224,11,12,128,128,12,148,12,116,19,128,0,55,252,3,72,3,72,3,72,0,0,227,129,1,224,1,224,126,28,0,0,55,225,2,208,2,192,30,200,0,0,120,136,6,64,0,64,113,135,0,0,142,120,0,32,7,32,128,113,0,0,67,192,51,0,0,0,12,188,0,0,188,5,0,0,250,0,0,67,0,1,78,0,240,1,0,0,14,176,128,3,68,52,8,0,200,1,0,58,128,7,20,0,48,40,48,0,200,67,192,9,50,54,70,0,192,13,0,0,224,59,0,0,0,0,4,0,196,31,255,247,0,8,8,0,0,0,0,0,223,255,0,0,0,0,0,32,0,32,
+
+
+			.word 0  ; safety pair of bytes for reading by POP B
+__decals_boulder_cracked:
+			.byte 0, 0; offset_y, offset_x
+			.byte 15, 1; height, width
+			.byte 243,107,12,128,128,12,148,12,20,0,55,60,8,192,3,200,3,192,3,192,12,32,224,129,1,224,1,224,94,19,128,32,124,69,2,0,10,0,146,3,0,67,249,32,0,192,0,192,156,6,0,67,123,32,156,132,156,132,156,132,64,63,157,0,0,131,0,129,192,32,195,67,60,172,0,0,16,0,0,0,253,207,2,0,0,2,0,2,48,0,255,255,0,0,0,0,0,0,0,0,255,255,0,0,0,0,0,0,0,0,255,249,0,6,6,0,0,0,0,0,255,251,0,0,0,0,4,0,4,0,255,247,0,8,8,0,0,0,0,0,223,255,0,0,0,0,0,32,0,32,
 
 
 			.word 0  ; safety pair of bytes for reading by POP B
