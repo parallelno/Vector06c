@@ -44,8 +44,9 @@
 		RES_ID_SWORD	= 3 ; a sword (the main weapon)
 ;		res_id 	= 4 - a potion health (increases health when used)
 ;		res_id 	= 5 - a potion mana (increases mana when used)
-;		res_id 	= 6 - clothes ; it is a quest resource
-;		res_id 	= 7 - cabbage ; it is a quest resource
+;		res_id 	= 6 - tnt (spawns a bullet called tnt)
+;		res_id 	= 7 - clothes ; it is a quest resource
+;		res_id 	= 8 - cabbage ; it is a quest resource
 
 ; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable (a hero and monsters can't step on that tile)
 

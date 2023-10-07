@@ -2,8 +2,8 @@
 ; This is a quest bullet
 ; init: it gives a hero ITEM_ID_FART
 ; it lasts some certain time, then destroys itself
-; when dies: it makes ITEM_ID_FART used
-; when it is alive, it constantly spawns puff vfx 
+; when dies: it sets its status ITEM_STATUS_USED
+; when it's alive, it constantly spawns puff vfx
 ; the quest to scary away knight_quest monster
 ;=========================================================
 
