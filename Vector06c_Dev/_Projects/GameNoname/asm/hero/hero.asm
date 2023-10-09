@@ -11,7 +11,7 @@ hero_game_init:
 			mvi a, <hero_resources_end
 			call clear_mem_short
 
-			mvi a, HERO_HEALTH_MAX
+			mvi a, RES_HEALTH_MAX
 			sta hero_res_health
 			ret
 

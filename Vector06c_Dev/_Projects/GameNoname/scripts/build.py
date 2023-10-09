@@ -263,7 +263,7 @@ def find_backbuffers_bank_ids(source_j, source_j_path):
 
 
 def compile_asm(source_path, bin_path, labels_path = ""):
-	print("===========================================")
+	print(f"\n;===========================================================================")
 	print(f"build: Compilation {source_path} to {bin_path}")
 
 	if len(labels_path) > 0:

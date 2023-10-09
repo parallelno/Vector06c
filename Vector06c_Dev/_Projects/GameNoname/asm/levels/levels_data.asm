@@ -38,15 +38,15 @@
 		ITEM_ID_BURNER_QUEST	= 15	; reserved for burner_quest
 
 ; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. res_id = d. see buffers.asm->resources_inst_data for details
-;		res_id 	= 0 - a coin (increases the game score when picked up) ; (tiledata = 7*16+0 = 160)
-;		res_id 	= 1 - a health crystal (increases health immedietly when picked up)
-;		res_id 	= 2 - a mana crystal (increases mana immedietly when picked up)
-		RES_ID_SWORD	= 3 ; a sword (the main weapon)
-;		res_id 	= 4 - a potion health (increases health when used)
-;		res_id 	= 5 - a potion mana (increases mana when used)
-;		res_id 	= 6 - tnt (spawns a bullet called tnt)
-;		res_id 	= 7 - clothes ; it is a quest resource
-;		res_id 	= 8 - cabbage ; it is a quest resource
+;		res_id 				= 0 ; a coin (increases the game score when picked up) ; (tiledata = 7*16+0 = 160)
+;		res_id 				= 1 ; a health crystal (increases health immedietly when picked up)
+		RES_ID_SWORD		= 3 ; a sword (the main weapon)
+		RES_ID_SNOWFLAKE	= 4 ; a snowflakes (increases mana immedietly when picked up)		
+;		res_id 				= 5 ; tnt (spawns a bullet called tnt)
+;		res_id 				= 6 ; a potion health (gives several health points when used)
+		RES_ID_PIE 			= 7 ; a popsicle pie (gives several snowflakes when used)
+		RES_ID_CLOTHES 		= 8 ; clothes ; it is a quest resource
+		RES_ID_CABBAGE		= 9 ; cabbage ; it is a quest resource
 
 ; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable (a hero and monsters can't step on that tile)
 

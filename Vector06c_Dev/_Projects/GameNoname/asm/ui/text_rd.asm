@@ -83,8 +83,7 @@ __text_credits:
 			TEXT("working hard to make it a reality!", PARAG_BREAK)
 			TEXT("Special thanks to zx-pk.ru community", LINE_BREAK)
 			TEXT("and especially to ivagor, nzeemin, svofski,", LINE_BREAK)
-			TEXT("and jerry for their contribution and", LINE_BREAK)
-			TEXT("help!")
+			TEXT("and jerry for their contribution and help!")
 
 ;===================================================================================
 ; stats
@@ -100,9 +99,9 @@ __text_game_stats:
 			TEXT("Containers opened:", LINE_BREAK)
 			TEXT("Doors unlocked:", LINE_BREAK)
 			TEXT("Breakables broken:", LINE_BREAK)
+			TEXT("Secret rooms entered:", LINE_BREAK)
 			TEXT("Total score:", PARAG_BREAK)
 
-			TEXT("You've left an indelible mark on this world.", LINE_BREAK)
 			TEXT("Keep your sword sharp and your heart brim-", LINE_BREAK)
 			TEXT("ming with courage, for new quests!")
 

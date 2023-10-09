@@ -1,4 +1,5 @@
 ;.setting "Debug", true
+.setting "ShowLocalLabelsAfterCompiling", true
 
 .include "asm\\globals\\macro.asm"
 .include "asm\\globals\\global_consts.asm"

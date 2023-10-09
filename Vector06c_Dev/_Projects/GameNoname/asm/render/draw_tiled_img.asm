@@ -28,7 +28,16 @@ REPEATER_CODE = $ff
 ; ex.: 
 ; DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_top)
 
-draw_tiled_img:
+; if called draw_tiled_img_pos_offset
+; in: 
+; hl - scr_addr_offset
+; a - idx_data ram-disk activation command
+; de - idx_data addr
+
+draw_tiled_img:			
+			lxi h, 0
+draw_tiled_img_pos_offset:
+			shld @scr_addr_offset + 1
 			; de - data addr in the ram-disk
 			; a - ram-disk activation command
 			push d
@@ -57,7 +66,6 @@ draw_tiled_img:
 			mvi a, TEMP_BYTE
 			RAM_DISK_ON_BANK()
 
-@draw:
 			lxi h, tiled_img_idxs + 2 ; because the two bytes are __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
 			; get gfx addr
 			mov e, m
@@ -69,21 +77,31 @@ draw_tiled_img:
 			xchg
 
 			; get scr addr
+			; add scr addr offset	
+@scr_addr_offset:
+			lxi b, TEMP_WORD
 			mov e, m
 			inx h
 			mov d, m
 			inx h
+			xchg
+			dad b
+			xchg
+
 			; store scr_x for restoration every new line
 			mov a, d
 			sta @restore_scr_x + 1
 
+			; bc - scr addr offset
 			; store scr_y_end for checking the end of drawing
 			mov a, m
+			add c
 			inx h
 			sta @check_end + 1
 
 			; store scr_x_end for checking the end of the line
 			mov a, m
+			add b
 			inx h
 			sta @check_end_line + 1
 			; de - scr addr

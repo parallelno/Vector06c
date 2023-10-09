@@ -213,25 +213,21 @@ palette: = $7bd3 ; 16 bytes
 ;
 
 ; selected ui resource
-; 000R_RRRS
-;	S - sword_selected bit
-;	RRRR - any resources except a sword
-;		0 - no available resources
-;		1 - the first resource after a sword
+; 0000_RRRR
+;	RRRR - res_id
+;	0 - no resources
 game_ui_res_selected_id:	= $7bff			; .byte
 
 hero_resources:			= $7c00
 hero_res_score:			= hero_resources + 0 ; WORD_LEN
 hero_res_health:		= hero_resources + 2 ; +2 because hero_res_score = WORD_LEN
-hero_res_mana:			= hero_resources + 3
-hero_res_sword:			= hero_resources + 4 ; the first selectable resource
-RES_SELECTABLE_FIRST = hero_res_sword
-hero_res_potion_health:	= hero_resources + 5
-hero_res_potion_mana:	= hero_resources + 6
-hero_res_tnt:			= hero_resources + 7
+hero_res_sword:			= hero_resources + 3 ; the first selectable resource
+hero_res_snowflakes:	= hero_resources + 4
+hero_res_tnt:			= hero_resources + 5
+hero_res_potion_health:	= hero_resources + 6
+hero_res_popsicle_pie:	= hero_resources + 7
 hero_res_clothes:		= hero_resources + 8 ; it is a quest resource
 hero_res_cabbage:		= hero_resources + 9 ; it is a quest resource
-RES_SELECTABLE_LAST = hero_res_cabbage
 hero_res_not_used_01:	= hero_resources + 10
 hero_res_not_used_02:	= hero_resources + 11
 hero_res_not_used_03:	= hero_resources + 12
@@ -239,14 +235,13 @@ hero_res_not_used_04:	= hero_resources + 13
 hero_res_not_used_05:	= hero_resources + 14
 hero_res_not_used_06:	= hero_resources + 15
 hero_res_not_used_07:	= hero_resources + 16
-RES_SELECTABLE_MAX = RES_SELECTABLE_LAST - RES_SELECTABLE_FIRST + 1
 hero_resources_end:		= hero_resources + 17
 
 RES_SELECTABLE_AVAILABLE_NONE	= 0
-RES_SELECTABLE_AVAILABLE_SWORD	= 1
-RES_SELECTABLE_MASK			= %0001_1110
-RES_SELECTABLE_ID_SWORD		= 0
 RES_SELECTABLE_ID_CLOTHES	= 4
+RES_SELECTABLE_FIRST	= hero_res_sword
+RES_SELECTABLE_LAST		= hero_res_cabbage
+RES_SELECTABLE_MAX		= RES_SELECTABLE_LAST - RES_SELECTABLE_FIRST + 1
 
 ;=============================================================================
 ; contains global item statuses.

@@ -24,7 +24,7 @@ hero_update:
 			cz hero_impacted_update
 			cpi HERO_STATUS_INVINCIBLE
 			cz hero_invincible_update
-			ani ACTOR_STATUS_BIT_NON_GAMEPLAY ; A reg has a broken status value now
+			ani ACTOR_STATUS_BIT_NON_GAMEPLAY ; TODO: bug???->> A reg has a broken status value now
 			jnz hero_dead
 
 			; check if an attack key is pressed
@@ -300,6 +300,57 @@ hero_attack_start:
 			lxi h, 0
 			shld hero_speed_x
 			shld hero_speed_y
+
+			lda game_ui_res_selected_id
+			cpi RES_ID_SWORD
+			jz @use_sword
+			cpi RES_ID_SNOWFLAKE
+			jz @use_snowflake
+			cpi RES_ID_PIE
+			jz @use_popsicle_pie
+			cpi RES_ID_CABBAGE
+			jz @use_cabbage
+			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a cabbage to handle triggers
+
+@use_snowflake:
+			lxi h, hero_res_cabbage
+			mov a, m
+			CPI_WITH_ZERO(0)
+			rz
+			dcr m
+		spawn a snowflake
+			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a cabbage to handle triggers
+
+@use_cabbage:
+			lxi h, hero_res_cabbage
+			mov a, m
+			CPI_WITH_ZERO(0)
+			rz
+			dcr m
+			lxi h, hero_res_health
+			mov a, m
+			adi RES_CABBAGE_HEALTH_VAL
+			CLAMP_A(RES_HEALTH_MAX)
+			mov m, a
+			lxi h, hero_res_sword
+			call game_ui_res_select_and_draw
+			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a cabbage to handle triggers
+
+@use_popsicle_pie:
+			lxi h, hero_res_popsicle_pie
+			mov a, m
+			CPI_WITH_ZERO(0)
+			rz
+			dcr m
+			lxi h, hero_res_snowflakes
+			mov a, m
+			adi RES_POPSICLE_PIE_VAL
+			CLAMP_A(RES_SNOWFLAKES_MAX)
+			mov m, a
+			lxi h, hero_res_sword
+			call game_ui_res_select_and_draw
+			; TODO: revise that logic: ; use a sword after using a popsicle to handle triggers
+@use_sword:
 			; set direction
 			lda hero_dir_x
 			rrc

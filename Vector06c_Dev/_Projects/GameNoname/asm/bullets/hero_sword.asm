@@ -473,10 +473,6 @@ hero_sword_func_breakable:
 			cmp e
 			jnz @no_fart
 @cabbage:
-			mvi a, CABBAGE_HEALH_VAL
-			push b
-			call hero_health_increase
-			pop b
 			; add the cabbage resource
 			lxi h, hero_res_cabbage
 			inr m
@@ -567,8 +563,9 @@ hero_sword_func_breakable:
 			lxi d, vfx_puff
 			call vfx_init
 
+			lxi h, hero_res_sword
+			jmp game_ui_res_select_and_draw
 			ret
-			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_breakables, BREAKABLE_SPAWN_RATE_DELTA, BREAKABLE_SPAWN_RATE_MAX)
 
 ; in:
 ; a - trigger_id

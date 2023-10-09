@@ -17,7 +17,7 @@ trigger_hero_no_health:
 			mvi a, GAME_REQ_LEVEL_INIT
 			sta global_request
 			; restore a hero health
-			mvi a, HERO_HEALTH_MAX
+			mvi a, RES_HEALTH_MAX
 			sta hero_res_health
 			ret
 
@@ -37,7 +37,7 @@ trigger_hero_knocks_his_home_door:
 
 ;===========================================================================
 ; when the hero knocks his friend door
-; A hero gets a key 0 to open he backyard
+; A hero gets a key 0 to open the backyard
 trigger_hero_knocks_his_friend_door:
 			; fix for multiple calls this function when a hero hits several trigger tiledatas
 			call dialog_is_inited
@@ -51,6 +51,12 @@ trigger_hero_knocks_his_friend_door:
 
 			; if a key_0 isn't acquired, set key_0 status = ITEM_STATUS_ACQUIRED
 			mvi m, ITEM_STATUS_ACQUIRED
+			
+			mvi c, TILEDATA_FUNC_ID_ITEMS
+			mvi e, ITEM_ID_KEY_0
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
+			call game_ui_draw_score_text
+
 			; init a dialog
 			mvi a, GAME_REQ_PAUSE
 			lxi h, dialog_callback_room_redraw
@@ -76,11 +82,14 @@ trigger_hero_knocks_his_friend_door:
 			; remove the clothes item
 			; a = 0
 			mov m, a
-
-			mvi c, RES_SELECTABLE_ID_CLOTHES
+			lxi h, hero_res_popsicle_pie
+			inr m
 			call game_ui_res_select_and_draw
 
-			; TODO: add score points
+			mvi c, TILEDATA_FUNC_ID_RESOURCES
+			mvi e, RES_ID_PIE
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
+			call game_ui_draw_score_text
 
 			; init a dialog
 			mvi a, GAME_REQ_PAUSE

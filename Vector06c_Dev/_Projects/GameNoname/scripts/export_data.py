@@ -108,4 +108,9 @@ def export(source_j_path):
 	build.store_labels(labels, labels_path)
 	
 	common.run_command(f"ren {bin_path} {rom_name + build.EXT_ROM}")    
+
+	print(f"\n;===========================================================================")
+	print(f"ram-disk data export: Success.")
+	print(f"start the game: {rom_path}")
+
 	common.run_command(f"{build.emulator_path} {rom_path}", "", rom_path)	 

@@ -11,21 +11,27 @@ game_score_monsters:
 
 ; func_id = 6
 game_score_items:
-			.word 30	; entity_id = 0 - storytelling - an invisible tiledata to open a dialog window
-			.word 100	; entity_id = 1 - key blue
-			.word 200	; entity_id = 2 - key red
-			.word 300	; entity_id = 3 - key green
-			.word 500	; entity_id = 4 - key magma
+			.word 0		; entity_id = 0 - storytelling - an invisible tiledata to open a dialog window
+			.word 30	; entity_id = 1 - key 0
+			.word 100	; entity_id = 2 - key 1
+			.word 200	; entity_id = 3 - key 2
+			.word 300	; entity_id = 4 - key 3
 
 ; func_id = 7
 game_score_resources:
 			.word 1		; entity_id == 0 - a coin (tiledata = 7*16+0 = 160)
-			.word 6		; entity_id == 1 - a potion blue
-			.word 9		; entity_id == 2 - a potion red
+			.word 3		; entity_id == 1 - a health crystal
+			.word 50	; entity_id == 2 - a potion sword
+			.word 5		; entity_id == 1 - a mana crystal
+			.word 15	; entity_id == 2 - a tnt
+			.word 10	; entity_id == 1 - a potion health
+			.word 15	; entity_id == 2 - a popsicle pie
+			.word 2		; entity_id == 2 - a clothes
+			.word 1		; entity_id == 2 - a cabbage
 
 ; func_id = 10
 __game_score_secrets:
-			.word 2000	; entity_id == 0 - a home door trigger
+			.word 1000	; entity_id == 0 - a home door trigger
 
 ; func_id = 11
 __game_score_containers:
@@ -45,8 +51,8 @@ game_score_doors:
 			.word 3		; entity_id == 3 - a door 2b
 			.word 5		; entity_id == 4 - a door 3a
 			.word 5		; entity_id == 5 - a door 3b
-			.word 10	; entity_id == 6 - a door 4a
-			.word 10	; entity_id == 7 - a door 4b
+			.word 5		; entity_id == 6 - a door 4a
+			.word 5		; entity_id == 7 - a door 4b
 
 ; func_id = 13
 game_score_breakables:

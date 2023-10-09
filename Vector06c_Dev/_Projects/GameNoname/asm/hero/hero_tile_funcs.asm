@@ -233,36 +233,37 @@ hero_tile_func_teleport:
 			sta hero_pos_y+1
 			ret
 
-hero_res_func_potion_blue:
-			lxi h, hero_res_mana
-			mov a, m
-			adi RESOURCE_POTION_BLUE_VAL
-			CLAMP_A()
-			mov m, a
-			ret
+hero_res_func_potion_mana:
+			lxi h, hero_res_popsicle_pie
+			inr m
+			CLAMP_M(RES_POPSICLE_PIE_MAX)
+			jmp game_ui_res_select_and_draw
 
-hero_res_func_potion_red:
-			mvi a, RESOURCE_POTION_RED_VAL
-; in:
-; a - health increase
-hero_health_increase:
+hero_res_func_potion_health:
+			lxi h, hero_res_potion_health
+			inr m
+			CLAMP_M(RES_POTION_HEALTH_MAX)
+			jmp game_ui_res_select_and_draw
+
+/*
+hero_res_func_health:
 			lxi h, hero_res_health
 			add m
-			CLAMP_A(HERO_HEALTH_MAX)
+			CLAMP_A(RES_HEALTH_MAX)
 			mov m, a
 			jmp game_ui_draw_health_text
-
+*/
 hero_res_func_clothes:
 			lxi h, hero_res_clothes
 			inr m
-			mvi c, RES_SELECTABLE_ID_CLOTHES
+			CLAMP_M(RES_CLOTHS_MAX)
 			jmp game_ui_res_select_and_draw
 
 hero_cont_func_chest_sword:
             ; acquire a sword
-			mvi a, HERO_WEAPON_SWORD
-			sta hero_res_sword
-			call game_ui_res_select_sword_and_draw
+			lxi h, hero_res_sword
+			mvi m, HERO_WEAPON_SWORD
+			call game_ui_res_select_and_draw
 
 			; init a dialog
 			mvi a, GAME_REQ_PAUSE

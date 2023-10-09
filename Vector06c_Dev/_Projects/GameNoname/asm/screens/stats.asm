@@ -2,7 +2,7 @@ END_GAME_TEXT_POS		= $12e0
 END_GAME_LINE_SPACING	= 12
 END_GAME_PARAG_SPACING	= 24
 
-STATS_MONSTERS_SCR_ADDR = $aeaa
+STATS_MONSTERS_SCR_ADDR = $b0aa
 
 stats_screen:
 			lda global_request
@@ -77,9 +77,11 @@ stats_screen_text_draw:
 			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 5
 			call draw_text_int16
 
+			; TODO: add stats of secret rooms entered
+
 			; draw total stats
 			lxi h, game_ui_score_txt
-			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 6
+			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 7
 			jmp draw_text
 
 stats_screen_init:

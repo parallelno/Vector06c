@@ -211,6 +211,16 @@
 			mov h, a
 .endmacro
 
+; bc = a + int16_const
+; 36 cpuc
+.macro BC_TO_A_PLUS_INT16(int16_const)
+			adi <int16_const
+			mov c, a
+			aci >int16_const
+			sub c
+			mov b, a
+.endmacro
+
 ; bc = a * 2 + int16_const
 ; cpuc = 40
 .macro BC_TO_AX2_PLUS_INT16(int16_const)
@@ -376,9 +386,17 @@
 @no_clamp:
 .endmacro
 
-.macro CLAMP_HL()
+.macro CLAMP_M(val_max = $ff)
+			mov a, m
+			cpi val_max
+			jc @no_clamp
+			mvi m, val_max
+@no_clamp:
+.endmacro
+
+.macro CLAMP_HL(val_max = $ffff)
 			jnc @no_clamp
-			lxi h, $ffff
+			lxi h, val_max
 @no_clamp:
 .endmacro
 
