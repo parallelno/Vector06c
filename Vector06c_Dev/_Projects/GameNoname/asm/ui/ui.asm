@@ -96,15 +96,13 @@ game_ui_res_select_next:
 ; select the resource and draw resources
 ; if a resource is empty, select the first available
 ; in:
-; hl - ptr to a resource ( ex. lxi h, hero_res_snowflakes )
+; hl - ptr to a resource ( ex. lxi h, hero_res_snowflake )
 game_ui_res_select_and_draw:
 			; check if a resource is not empty
 			mov a, m
 			CPI_WITH_ZERO(0)
 			jnz @select_res
-
 			call @get_first_available
-			jmp game_ui_draw_res
 @select_res:
 			; hl - ptr to a resource
 			; res_ptr to res_id
@@ -120,7 +118,7 @@ game_ui_res_select_and_draw:
 			A_TO_ZERO(0)
 @next_res:
 			cmp m
-			rz
+			rnz
 			inx h
 			dcr c
 			jnz @next_res

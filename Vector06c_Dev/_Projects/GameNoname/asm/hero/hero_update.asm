@@ -313,12 +313,15 @@ hero_attack_start:
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a cabbage to handle triggers
 
 @use_snowflake:
-			lxi h, hero_res_cabbage
+			lxi h, hero_res_snowflake
 			mov a, m
 			CPI_WITH_ZERO(0)
 			rz
 			dcr m
-		spawn a snowflake
+			lxi h, hero_res_sword
+			call game_ui_res_select_and_draw
+						
+			call snowflake_init
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a cabbage to handle triggers
 
 @use_cabbage:
@@ -342,7 +345,7 @@ hero_attack_start:
 			CPI_WITH_ZERO(0)
 			rz
 			dcr m
-			lxi h, hero_res_snowflakes
+			lxi h, hero_res_snowflake
 			mov a, m
 			adi RES_POPSICLE_PIE_VAL
 			CLAMP_A(RES_SNOWFLAKES_MAX)
@@ -354,15 +357,15 @@ hero_attack_start:
 			; set direction
 			lda hero_dir_x
 			rrc
-			jnc @setAnimAttkL
+			jnc @set_anim_attk_l
 
 			lxi h, hero_r_attk
 			shld hero_anim_addr
-			jmp  hero_sword_init
-@setAnimAttkL:
+			jmp sword_init
+@set_anim_attk_l:
 			lxi h, hero_l_attk
 			shld hero_anim_addr
-			jmp hero_sword_init
+			jmp sword_init
 
 hero_attack_update:
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_ATTACK)

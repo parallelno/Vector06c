@@ -1,6 +1,7 @@
 .include "asm\\bullets\\bullets_macro.asm"
 .include "asm\\bullets\\vfx_consts.asm"
-.include "asm\\bullets\\hero_sword.asm"
+.include "asm\\bullets\\sword.asm"
+.include "asm\\bullets\\snowflake.asm"
 .include "asm\\bullets\\scythe.asm"
 .include "asm\\bullets\\bomb.asm"
 .include "asm\\bullets\\sparker.asm"

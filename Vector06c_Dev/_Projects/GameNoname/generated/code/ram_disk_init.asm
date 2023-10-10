@@ -71,7 +71,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 0, addr $0, chunk_id 1
 	;===============================================
-			; ['scythe_sprites', 'bomb_sprites', 'font_gfx']
+			; ['scythe_sprites', 'bomb_sprites', 'snowflake_sprites', 'font_gfx']
 			; unpack the chunk into the ram-disk back buffer
 			lxi d, chunk_bank0_addr0_1
 			lxi b, BACK_BUFF_ADDR
@@ -88,6 +88,13 @@ ram_disk_init:
 			; preshift bomb_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, bomb_preshifted_sprites
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __scythe_sprites_rd_data_start)
+			call __sprite_dup_preshift
+			RAM_DISK_OFF_NO_RESTORE()
+
+			; preshift snowflake_sprites
+			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
+			lxi d, snowflake_preshifted_sprites
 			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __scythe_sprites_rd_data_start)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
@@ -174,24 +181,24 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 1, addr $8000, chunk_id 0
 	;===============================================
-			; ['hero_sword_sprites']
+			; ['sword_sprites']
 			; unpack the chunk into the ram-disk back buffer
 			lxi d, chunk_bank1_addr8000_0
 			lxi b, BACK_BUFF_ADDR
 			mvi a, __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F
 			call dzx0_rd
 
-			; preshift hero_sword_sprites
+			; preshift sword_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
-			lxi d, hero_sword_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __hero_sword_sprites_rd_data_start)
+			lxi d, sword_preshifted_sprites
+			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __sword_sprites_rd_data_start)
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
 
 			; copy the chunk into the ram-disk
-			lxi d, BACK_BUFF_ADDR + (__hero_sword_sprites_rd_data_end - __hero_sword_sprites_rd_data_start)
-			lxi h, __hero_sword_sprites_rd_data_end
-			lxi b, (__hero_sword_sprites_rd_data_end - __hero_sword_sprites_rd_data_start) / 2
+			lxi d, BACK_BUFF_ADDR + (__sword_sprites_rd_data_end - __sword_sprites_rd_data_start)
+			lxi h, __sword_sprites_rd_data_end
+			lxi b, (__sword_sprites_rd_data_end - __sword_sprites_rd_data_start) / 2
 			mvi a, RAM_DISK_S1 | __RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F
 			call copy_to_ram_disk
 

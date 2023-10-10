@@ -19,6 +19,10 @@ __bomb_sprites_rd_data_start:
 .include "generated\\sprites\\bomb_sprites.asm"
 .align 2
 __bomb_sprites_rd_data_end:
+__snowflake_sprites_rd_data_start:
+.include "generated\\sprites\\snowflake_sprites.asm"
+.align 2
+__snowflake_sprites_rd_data_end:
 __font_gfx_rd_data_start:
 .include "generated\\sprites\\font_gfx.asm"
 .align 2

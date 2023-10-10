@@ -222,7 +222,7 @@ hero_resources:			= $7c00
 hero_res_score:			= hero_resources + 0 ; WORD_LEN
 hero_res_health:		= hero_resources + 2 ; +2 because hero_res_score = WORD_LEN
 hero_res_sword:			= hero_resources + 3 ; the first selectable resource
-hero_res_snowflakes:	= hero_resources + 4
+hero_res_snowflake:		= hero_resources + 4
 hero_res_tnt:			= hero_resources + 5
 hero_res_potion_health:	= hero_resources + 6
 hero_res_popsicle_pie:	= hero_resources + 7

@@ -1,0 +1,71 @@
+{
+	"palette" :	[
+		{"x": 0,	"y" : 0},
+		{"x": 16,	"y" : 0},
+		{"x": 32,	"y" : 0},
+		{"x": 48,	"y" : 0},
+		{"x": 64,	"y" : 0},
+		{"x": 80,	"y" : 0},
+		{"x": 96,	"y" : 0},
+		{"x": 112,	"y" : 0},
+		{"x": 128,	"y" : 0},
+		{"x": 144,	"y" : 0},
+		{"x": 160,	"y" : 0},
+		{"x": 176,	"y" : 0},
+		{"x": 192,	"y" : 0},
+		{"x": 208,	"y" : 0},
+		{"x": 224,	"y" : 0},
+		{"x": 240,	"y" : 0}
+	],
+	"asset_type" : "sprite",	
+	"path_png" : "art\\sprites_projectiles.png",
+	"preshifted_sprites" : 4,
+	"mask" : true,
+	"anims" : {
+		"run"	: {
+			"frames" : ["run0", "run1", "run2", "run1"],
+			"loop" : true
+		}
+	},
+	"sprites" : [
+		{
+			"name" : "run0",
+			"x" : 0,
+			"y"	: 134,
+			"width" : 16,
+			"height" : 10,
+			"offset_x" : 0,
+			"offset_y" : 2,
+			"mask_x" : 16,
+			"mask_y" : 150,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run1",
+			"x" : 16,
+			"y"	: 134,
+			"width" : 8,
+			"height" : 10,
+			"offset_x" : 0,
+			"offset_y" : 2,
+			"mask_x" : 16,
+			"mask_y" : 150,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "run2",
+			"x" : 32,
+			"y"	: 134,
+			"width" : 8,
+			"height" : 10,
+			"offset_x" : 0,
+			"offset_y" : 2,
+			"mask_x" : 32,
+			"mask_y" : 150,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		}		
+	]
+}

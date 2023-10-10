@@ -1,27 +1,27 @@
 ; statuses.
 ; a status describes what set of animations and behavior is active
 ; for ex. HERO_STATUS_ATTACK plays hero_attk_r or hero_attk_l depending on the direction and it spawns a weapon trail
-HERO_SWORD_STATUS_ATTACK = 0
+SWORD_STATUS_ATTACK = 0
 
 ; duration of statuses (in update_durations)
-HERO_SWORD_STATUS_INVIS_DURATION	= 6
-HERO_SWORD_STATUS_ATTACK_DURATION	= 6
+SWORD_STATUS_INVIS_TIME	= 6
+SWORD_STATUS_ATTACK_TIME	= 6
 
 ; animation speed (the less the slower, 0-255, 255 means next frame every update)
-HERO_SWORD_ANIM_SPEED_ATTACK	= 150
+SWORD_ANIM_SPEED_ATTACK	= 150
 
 ; gameplay
-HERO_SWORD_DAMAGE = 1
-HERO_SWORD_COLLISION_WIDTH	= 15
-HERO_SWORD_COLLISION_HEIGHT	= 25
-HERO_SWORD_COLLISION_OFFSET_X_R = 8
-HERO_SWORD_COLLISION_OFFSET_Y_R = <(-4)
+SWORD_DAMAGE = 1
+SWORD_COLLISION_WIDTH	= 15
+SWORD_COLLISION_HEIGHT	= 25
+SWORD_COLLISION_OFFSET_X_R = 8
+SWORD_COLLISION_OFFSET_Y_R = <(-4)
 
-HERO_SWORD_COLLISION_OFFSET_X_L = <(-7)
-HERO_SWORD_COLLISION_OFFSET_Y_L = <(-4)
+SWORD_COLLISION_OFFSET_X_L = <(-7)
+SWORD_COLLISION_OFFSET_Y_L = <(-4)
 
 ; funcs to handle the tiledata. tiledata format is in level_data.asm->room_tiledata
-hero_sword_tile_func_tbl:
+sword_tile_func_tbl:
 			RET_4()								; func_id == 1 ; spawn a monster
 			RET_4()								; func_id == 2 ; teleport
 			RET_4()								; func_id == 3 ; teleport
@@ -31,14 +31,14 @@ hero_sword_tile_func_tbl:
 			RET_4()								; func_id == 7
 			RET_4()								; func_id == 8
 			RET_4()								; func_id == 9
-			JMP_4( hero_sword_func_triggers)	; func_id == 10
-			JMP_4( hero_sword_func_container)	; func_id == 11
-			JMP_4( hero_sword_func_door)		; func_id == 12
-			JMP_4( hero_sword_func_breakable)	; func_id == 13 ; breakable
+			JMP_4( sword_func_triggers)	; func_id == 10
+			JMP_4( sword_func_container)	; func_id == 11
+			JMP_4( sword_func_door)		; func_id == 12
+			JMP_4( sword_func_breakable)	; func_id == 13 ; breakable
 			RET_4()								; func_id == 14
 			RET_4()								; func_id == 15 ; collision
 
-hero_sword_init:
+sword_init:
 			; prevent a sword from spawning if it's not available
 			lda hero_res_sword
 			CPI_WITH_ZERO(HERO_WEAPON_NONE)
@@ -52,13 +52,13 @@ hero_sword_init:
 			; hl - ptr to bullet_update_ptr+1
 
 			dcx h
-			mvi m, <hero_sword_update
+			mvi m, <sword_update
 			inx h
-			mvi m, >hero_sword_update
+			mvi m, >sword_update
 			inx h
-			mvi m, <hero_sword_draw
+			mvi m, <sword_draw
 			inx h
-			mvi m, >hero_sword_draw
+			mvi m, >sword_draw
 
 			; advance hl to bullet_id
 			inx h
@@ -72,7 +72,7 @@ hero_sword_init:
 			mvi m, ACTOR_STATUS_BIT_INVIS
 			; advance and set bullet_status_timer
 			inx h
-			mvi m, HERO_SWORD_STATUS_INVIS_DURATION
+			mvi m, SWORD_STATUS_INVIS_TIME
 
 			; tmp b = 0
 			mvi b, 0
@@ -129,22 +129,22 @@ hero_sword_init:
 			; check direction
 			lda hero_dir_x
 			rrc
-			lxi h, HERO_SWORD_COLLISION_OFFSET_X_L<<8 | HERO_SWORD_COLLISION_OFFSET_Y_L
+			lxi h, SWORD_COLLISION_OFFSET_X_L<<8 | SWORD_COLLISION_OFFSET_Y_L
 			jnc @left
 @right:
-			lxi h, HERO_SWORD_COLLISION_OFFSET_X_R<<8 | HERO_SWORD_COLLISION_OFFSET_Y_R
+			lxi h, SWORD_COLLISION_OFFSET_X_R<<8 | SWORD_COLLISION_OFFSET_Y_R
 @left:
 			dad d
 			xchg
 			; de - pos_xy
-			TILEDATA_HANDLING(HERO_SWORD_COLLISION_WIDTH, HERO_SWORD_COLLISION_HEIGHT, hero_sword_tile_func_tbl)
+			TILEDATA_HANDLING(SWORD_COLLISION_WIDTH, SWORD_COLLISION_HEIGHT, sword_tile_func_tbl)
 			ret
 
 
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to bullet_update_ptr in the runtime data
-hero_sword_update:
+sword_update:
 			; advance to bullet_status
 			LXI_H_TO_DIFF(bullet_status, bullet_update_ptr)
 			dad d
@@ -163,7 +163,7 @@ hero_sword_update:
 @attkAnimUpdate:
 			; advance to bullet_anim_timer
 			inx h
-			mvi a, HERO_SWORD_ANIM_SPEED_ATTACK
+			mvi a, SWORD_ANIM_SPEED_ATTACK
 			jmp actor_anim_update
 
 @destroy:
@@ -180,10 +180,10 @@ hero_sword_update:
 
 			; hl - ptr to bulletStatusDuration
 			; set the attack
-			mvi m, HERO_SWORD_STATUS_ATTACK_DURATION
+			mvi m, SWORD_STATUS_ATTACK_TIME
 			; advance and set bullet_status
 			dcx h
-			mvi m, HERO_SWORD_STATUS_ATTACK
+			mvi m, SWORD_STATUS_ATTACK
 
 			; advance and reset bullet_anim_timer
 			INX_H(2)
@@ -194,9 +194,9 @@ hero_sword_update:
 			rrc
 			jnc @attkL
 @attkR:
-			mvi m, < hero_sword_attk_r
+			mvi m, < sword_attk_r
 			inx h
-			mvi m, > hero_sword_attk_r
+			mvi m, > sword_attk_r
 
 			; check enemies-attk01 sprite collision
 			; hl - ptr to bullet_anim_ptr+1
@@ -206,13 +206,13 @@ hero_sword_update:
 			mov d, m
 			INX_H(2)
 			mov e, m
-			lxi h, HERO_SWORD_COLLISION_OFFSET_X_R<<8 | HERO_SWORD_COLLISION_OFFSET_Y_R
+			lxi h, SWORD_COLLISION_OFFSET_X_R<<8 | SWORD_COLLISION_OFFSET_Y_R
 			dad d
 			jmp @check_monster_collision
 @attkL:
-			mvi m, < hero_sword_attk_l
+			mvi m, < sword_attk_l
 			inx h
-			mvi m, > hero_sword_attk_l
+			mvi m, > sword_attk_l
 
 			; check enemies-attk01 sprite collision
 			; hl - ptr to bullet_anim_ptr+1
@@ -222,15 +222,15 @@ hero_sword_update:
 			mov d, m
 			INX_H(2)
 			mov e, m
-			lxi h, HERO_SWORD_COLLISION_OFFSET_X_L<<8 | HERO_SWORD_COLLISION_OFFSET_Y_L
+			lxi h, SWORD_COLLISION_OFFSET_X_L<<8 | SWORD_COLLISION_OFFSET_Y_L
 			dad d
 
 @check_monster_collision:
 			; store pos_xy
 			push h
 			; check if a bullet collides with a monster
-			mvi a, HERO_SWORD_COLLISION_WIDTH-1
-			mvi c, HERO_SWORD_COLLISION_HEIGHT-1
+			mvi a, SWORD_COLLISION_WIDTH-1
+			mvi c, SWORD_COLLISION_HEIGHT-1
 			call monsters_get_first_collided
 
 			; hl - ptr to a collided monster_update_ptr+1
@@ -251,13 +251,13 @@ hero_sword_update:
 			pchl
 @check_tiledata:
 			; de - pos_xy
-			TILEDATA_HANDLING(HERO_SWORD_COLLISION_WIDTH, HERO_SWORD_COLLISION_HEIGHT, hero_sword_tile_func_tbl)
+			TILEDATA_HANDLING(SWORD_COLLISION_WIDTH, SWORD_COLLISION_HEIGHT, sword_tile_func_tbl)
 			ret
 
 ; in:
 ; a - container_id
 ; c - tile_idx
-hero_sword_func_container:
+sword_func_container:
 			; store tile_idx
 			lxi h, @tile_idx + 1
 			mov m, c
@@ -360,7 +360,7 @@ hero_sword_func_container:
 ; in:
 ; a - door_id
 ; c - tile_idx
-hero_sword_func_door:
+sword_func_door:
 			; store tile_idx
 			lxi h, @tile_idx + 1
 			mov m, c
@@ -460,7 +460,7 @@ hero_sword_func_door:
 ; in:
 ; a - breakable_id
 ; c - tile_idx
-hero_sword_func_breakable:
+sword_func_breakable:
 			mov e, a
 			; check if a sword is available
 			lda hero_res_sword
@@ -570,7 +570,7 @@ hero_sword_func_breakable:
 ; in:
 ; a - trigger_id
 ; c - tile_idx
-hero_sword_func_triggers:
+sword_func_triggers:
 			push psw
 			mvi c, TILEDATA_FUNC_ID_TRIGGERS
 			mov e, a
@@ -591,5 +591,5 @@ hero_sword_func_triggers:
 ; draw a sprite into a backbuffer
 ; in:
 ; de - ptr to bullet_draw_ptr in the runtime data
-hero_sword_draw:
-			BULLET_DRAW(sprite_get_scr_addr_hero_sword, __RAM_DISK_S_HERO_SWORD)
+sword_draw:
+			BULLET_DRAW(sprite_get_scr_addr_sword, __RAM_DISK_S_SWORD)
