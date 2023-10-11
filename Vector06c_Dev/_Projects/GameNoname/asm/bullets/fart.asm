@@ -38,7 +38,7 @@ fart_init:
 			mvi m, >vfx_draw
 
 			; advance hl to bullet_status_timer
-			MVI_A_TO_DIFF(bullet_status_timer, bullet_draw_ptr + 1)
+			MVI_A_TO_DIFF(bullet_draw_ptr + 1, bullet_status_timer)
 			add l
 			mov l, a
 
@@ -101,7 +101,7 @@ fart_init:
 ; de - ptr to bullet_update_ptr in the runtime data
 fart_update:
 			; advance to bullet_status_timer
-			MVI_A_TO_DIFF(bullet_status_timer, bullet_update_ptr)
+			MVI_A_TO_DIFF(bullet_update_ptr, bullet_status_timer)
 			add e
 			mov e, a
 			xchg
@@ -118,7 +118,7 @@ fart_update:
 @update_movement:
 			; hl - ptr to bullet_status_timer
 			; advance hl to bullet_speed_y + 1
-			MVI_A_TO_DIFF(bullet_pos_x + 1, bullet_status_timer)
+			MVI_A_TO_DIFF(bullet_status_timer, bullet_pos_x + 1)
 			add l
 			mov l, a
 
@@ -132,7 +132,7 @@ fart_update:
 			INX_H(2)
 			mov m, e
 
-			MVI_A_TO_DIFF(bullet_anim_timer, bullet_pos_y + 1)
+			MVI_A_TO_DIFF(bullet_pos_y + 1, bullet_anim_timer)
 			add l
 			mov l, a
 			; update_anim
@@ -152,7 +152,7 @@ fart_update:
 @actor_destroy:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr + 1
-			MVI_A_TO_DIFF(bullet_update_ptr + 1, bullet_status_timer)
+			MVI_A_TO_DIFF(bullet_status_timer, bullet_update_ptr + 1)
 			add l
 			mov l, a
 

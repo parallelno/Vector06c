@@ -25,7 +25,7 @@ vfx_init4:
 			mvi m, >vfx_draw4
 
 			; advance hl to bullet_anim_ptr
-			MVI_A_TO_DIFF(bullet_anim_ptr, bullet_draw_ptr + 1)
+			MVI_A_TO_DIFF(bullet_draw_ptr + 1, bullet_anim_ptr)
 			add l
 			mov l, a
 			
@@ -113,7 +113,7 @@ vfx_init:
 			mvi m, VFX_STATUS_DEFAULT
 
 			; advance hl to bullet_anim_ptr
-			MVI_A_TO_DIFF(bullet_anim_ptr, bullet_status)
+			MVI_A_TO_DIFF(bullet_status, bullet_anim_ptr)
 			add l
 			mov l, a
 			

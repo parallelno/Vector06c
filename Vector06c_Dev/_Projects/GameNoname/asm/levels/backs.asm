@@ -110,7 +110,7 @@ back_runtime_data_ptr_update: = backs_update+1
 
 @update_anim:
 			; advance hl to back_anim_timer_speed
-			MVI_A_TO_DIFF(back_anim_timer_speed, back_anim_ptr+1)
+			MVI_A_TO_DIFF(back_anim_ptr+1, back_anim_timer_speed)
 			add l
 			mov l, a
 
@@ -124,7 +124,7 @@ back_runtime_data_ptr_update: = backs_update+1
 			
 @set_draw_ptr:
 			; back_anim_timer got overloaded, so it needs to be drawn			
-			MVI_A_TO_DIFF(back_anim_ptr + 1, back_anim_timer)
+			MVI_A_TO_DIFF(back_anim_timer, back_anim_ptr + 1)
 			add l
 			mov l, a
 
@@ -154,14 +154,14 @@ back_runtime_data_ptr_update: = backs_update+1
 			; advance hl to back_anim_ptr + 1
 			inx h
 			mov m, d
-			MVI_A_TO_DIFF(back_anim_ptr + 1 + BACK_RUNTIME_DATA_LEN, back_anim_ptr+1)
+			MVI_A_TO_DIFF(back_anim_ptr+1, back_anim_ptr + 1 + BACK_RUNTIME_DATA_LEN)
 			jmp @advance_and_save_ptr
 @set_first_back:
 			mvi a, <backs_runtime_data + 1
 			jmp @save_ptr
 @set_next_back:
 			; back_anim_timer is not overloaded, set the next back for the next update
-			MVI_A_TO_DIFF(back_anim_ptr + 1 + BACK_RUNTIME_DATA_LEN, back_anim_timer)
+			MVI_A_TO_DIFF(back_anim_timer, back_anim_ptr + 1 + BACK_RUNTIME_DATA_LEN)
 @advance_and_save_ptr:
 			add l
 			mov l, a			
