@@ -1,10 +1,10 @@
-; hl points to actor_status_timer
+; hl - ptr to actor_status_timer
 ; out:
-; hl points to actor_pos_x+1
-.macro ACTOR_UPDATE_MOVEMENT(actor_status_timer, actorSpeedY)
+; hl - ptr to actor_pos_x+1
+.macro ACTOR_UPDATE_MOVEMENT(actor_status_timer, actor_speed_y)
  			; hl - ptr to actor_status_timer
-			; advance hl to actorSpeedY+1
-			HL_ADVANCE_BY_DIFF_BC(actorSpeedY+1, actor_status_timer)
+			; advance hl to actor_speed_y+1
+			HL_ADVANCE_BY_DIFF_BC(actor_speed_y+1, actor_status_timer)
 			; bc <- speed_y
 			mov b, m
 			dcx h
@@ -90,7 +90,6 @@
 			; de - points to speed_y+1
 
 			; check the collision tiles
-			
 			mov d, a
 			mov e, h
 			; check if X<TILE_WIDTH or > ROOM_WIDTH * TILE_WIDTH - TILE_WIDTH

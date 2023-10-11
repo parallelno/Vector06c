@@ -515,13 +515,13 @@ burner_update_dash_prep:
 			ora l 
 			mov l, a
 			xchg
-			; advance hl to speedX
+			; advance hl to speed_x
 			inx h 
-			pop b ; speedX
+			pop b ; speed_x
 			mov m, c 
 			inx h 
 			mov m, b
-			; advance hl to speedY
+			; advance hl to speed_y
 			inx h
 			mov m, e
 			inx h 
@@ -536,6 +536,7 @@ burner_update_dash:
 			jm @set_move_init
 @apply_movement:
 			ACTOR_UPDATE_MOVEMENT(monster_status_timer, monster_speed_y)
+			; hl - ptr to monster_pos_x+1
 			; advance hl to monster_anim_timer
 			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_x+1)
 			mvi a, BURNER_ANIM_SPEED_DASH

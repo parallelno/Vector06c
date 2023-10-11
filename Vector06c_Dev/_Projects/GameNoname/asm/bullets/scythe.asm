@@ -200,22 +200,21 @@ scythe_update:
 			; advance to bullet_status_timer
 			LXI_H_TO_DIFF(bullet_status_timer, bullet_update_ptr)
 			dad d
-@update_move:
 			dcr m
 			jz @die
 @update_movement:
-			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bullet_status_timer, bullet_pos_x, SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, @setBounceAfterTileCollision) 
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bullet_status_timer, bullet_pos_x, SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, @set_bounce_after_tile_collision) 
 			
 			; hl points to bullet_pos_y+1
 			; advance hl to bullet_anim_timer
 			HL_ADVANCE_BY_DIFF_BC(bullet_anim_timer, bullet_pos_y+1)
 			mvi a, SCYTHE_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, SCYTHE_DAMAGE)	
-@dieAfterDamage:
+@die_after_damage:
 			; advance hl to bullet_update_ptr+1
 			HL_ADVANCE_BY_DIFF_BC(bullet_update_ptr+1, bullet_pos_y+1)
 			jmp actor_destroy
-@setBounceAfterTileCollision:
+@set_bounce_after_tile_collision:
 			pop h
 			; hl points to pos_x
 			; advance hl to bullet_status_timer
@@ -230,30 +229,30 @@ scythe_update:
 			mov a, m
 			inx h
 			ora m
-			jz @setMoveVert
-			jp @setMoveLeft
-@setMoveRight:
+			jz @set_move_vert
+			jp @set_move_left
+@set_move_right:
 			mvi m, >SCYTHE_MOVE_SPEED
 			dcx h
 			mvi m, <SCYTHE_MOVE_SPEED
 			ret
-@setMoveLeft:
+@set_move_left:
 			mvi m, >SCYTHE_MOVE_SPEED_NEG
 			dcx h
 			mvi m, <SCYTHE_MOVE_SPEED_NEG
 			ret
-@setMoveVert:		
+@set_move_vert:		
 			; advance hl to bullet_speed_y+1
 			INX_H(2)
 			mov a, m
 			ora a
-			jp @setMoveDown
-@setMoveUp:			
+			jp @set_move_down
+@set_move_up:			
 			mvi m, >SCYTHE_MOVE_SPEED
 			dcx h
 			mvi m, <SCYTHE_MOVE_SPEED
 			ret
-@setMoveDown:			
+@set_move_down:			
 			mvi m, >SCYTHE_MOVE_SPEED_NEG
 			dcx h
 			mvi m, <SCYTHE_MOVE_SPEED_NEG

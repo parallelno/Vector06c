@@ -347,7 +347,7 @@ hero_attack_start:
 			dcr m
 			lxi h, hero_res_snowflake
 			mov a, m
-			adi RES_POPSICLE_PIE_VAL
+			adi RES_POPSICLE_PIE_MANA_VAL
 			CLAMP_A(RES_SNOWFLAKES_MAX)
 			mov m, a
 			lxi h, hero_res_sword

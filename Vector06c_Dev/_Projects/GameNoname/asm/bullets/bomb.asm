@@ -173,13 +173,13 @@ bomb_init:
 			ora l 
 			mov l, a
 			xchg
-			; advance hl to speedX
+			; advance hl to speed_x
 			inx h 
-			pop b ; speedX
+			pop b ; speed_x
 			mov m, c 
 			inx h 
 			mov m, b
-			; advance hl to speedY
+			; advance hl to speed_y
 			inx h
 			mov m, e
 			inx h 
@@ -193,57 +193,16 @@ bomb_update:
 			; advance to bullet_status_timer
 			LXI_H_TO_DIFF(bullet_status_timer, bullet_update_ptr)
 			dad d
-@update_move:
 			dcr m
 			jz @die
 @update_movement:
-			; hl - ptr to bullet_status_timer
-			; advance hl to bullet_speed_y+1
-			HL_ADVANCE_BY_DIFF_BC(bullet_speed_y+1, bullet_status_timer)
-			; bc <- speedY
-			mov b, m
-			dcx h
-			mov c, m
-			dcx h
-			; stack <- speedX
-			mov d, m
-			dcx h
-			mov e, m
-			dcx h
-			push d
-			; de <- pos_y
-			mov d, m
-			dcx h
-			mov e, m
-			; (pos_y) <- pos_y + speedY
-			xchg
-			dad b
-			xchg
-			; pos = hero_pos-pos/8
-			mov m, e
-			inx h 
-			mov m, d
-			DCX_H(2)
-			; hl points to speedX+1
-			; de <- pos_x
-			mov d, m
-			dcx h
-			mov e, m
-			; (pos_x) <- pos_x + speedX
-			xchg
-			pop b
-			dad b
-			xchg
-			mov m, e
-			inx h 
-			mov m, d
-			
-			; hl points to bullet_pos_x+1
+			ACTOR_UPDATE_MOVEMENT(bullet_status_timer, bullet_speed_y)
+			; hl - ptr to bullet_pos_x+1
 			; advance hl to bullet_anim_timer
 			HL_ADVANCE_BY_DIFF_BC(bullet_anim_timer, bullet_pos_x+1)
 			mvi a, BOMB_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_COLLISION_WIDTH, BOMB_COLLISION_HEIGHT, BOMB_DAMAGE)	
-@dieAfterDamage:
+@die_after_damage:
 			; advance hl to bullet_update_ptr+1
 			HL_ADVANCE_BY_DIFF_BC(bullet_update_ptr+1, bullet_pos_y+1)
 			jmp actor_destroy

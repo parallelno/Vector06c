@@ -12,13 +12,11 @@ SNOWFLAKE_ANIM_SPEED_ATTACK	= 90
 
 ; gameplay
 SNOWFLAKE_DAMAGE = 1
-SNOWFLAKE_COLLISION_WIDTH	= 15
-SNOWFLAKE_COLLISION_HEIGHT	= 25
-SNOWFLAKE_COLLISION_OFFSET_X_R = 8
-SNOWFLAKE_COLLISION_OFFSET_Y_R = <(-4)
+SNOWFLAKE_COLLISION_WIDTH	= 12
+SNOWFLAKE_COLLISION_HEIGHT	= 12
 
-SNOWFLAKE_COLLISION_OFFSET_X_L = <(-7)
-SNOWFLAKE_COLLISION_OFFSET_Y_L = <(-4)
+SNOWFLAKE_COLLISION_OFFSET_X = <(-3)
+SNOWFLAKE_COLLISION_OFFSET_Y = <(0)
 
 ; funcs to handle the tiledata. tiledata format is in level_data.asm->room_tiledata
 snowflake_tile_func_tbl:
@@ -31,10 +29,10 @@ snowflake_tile_func_tbl:
 			RET_4()								; func_id == 7
 			RET_4()								; func_id == 8
 			RET_4()								; func_id == 9
-			JMP_4( snowflake_func_triggers)	; func_id == 10
-			JMP_4( snowflake_func_container)	; func_id == 11
-			JMP_4( snowflake_func_door)		; func_id == 12
-			JMP_4( snowflake_func_breakable)	; func_id == 13 ; breakable
+			JMP_4( sword_func_triggers)		; func_id == 10
+			JMP_4( sword_func_container)	; func_id == 11
+			JMP_4( sword_func_door)			; func_id == 12
+			JMP_4( sword_func_breakable)	; func_id == 13 ; breakable
 			RET_4()								; func_id == 14
 			RET_4()								; func_id == 15 ; collision
 
@@ -126,21 +124,23 @@ snowflake_update:
 			ani ACTOR_STATUS_BIT_INVIS
 			jnz @delay_update
 
-@attk_update:
 			; hl - ptr to bullet_status
 			; advance and decr bullet_status_timer
 			inx h
 			; check if it's time to die
 			dcr m
-			jz @destroy
+			jz @die
 
-@attkAnimUpdate:
+@update_movement:
+			
+
+@attk_anim_update:
 			; advance to bullet_anim_timer
 			inx h
 			mvi a, SNOWFLAKE_ANIM_SPEED_ATTACK
 			jmp actor_anim_update
 
-@destroy:
+@die:
 			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
 			dad d
 			jmp actor_destroy
@@ -152,7 +152,7 @@ snowflake_update:
 			dcr m
 			rnz
 
-			; hl - ptr to bulletStatusDuration
+			; hl - ptr to bullet_status_duration
 			; set the attack
 			mvi m, SNOWFLAKE_STATUS_ATTACK_TIME
 			; advance and set bullet_status
@@ -168,7 +168,9 @@ snowflake_update:
 			inx h
 			mvi m, >snowflake_run
 
-			; check enemies-attk01 sprite collision
+/*
+@check_monster_collision:
+			; check sprite collision
 			; hl - ptr to bullet_anim_ptr+1
 			; advance hl to bullet_pos_x+1
 			HL_ADVANCE_BY_DIFF_BC(bullet_pos_x+1, bullet_anim_ptr+1)
@@ -176,10 +178,9 @@ snowflake_update:
 			mov d, m
 			INX_H(2)
 			mov e, m
-			lxi h, SNOWFLAKE_COLLISION_OFFSET_X_L<<8 | SNOWFLAKE_COLLISION_OFFSET_Y_L
+			lxi h, SNOWFLAKE_COLLISION_OFFSET_X<<8 | SNOWFLAKE_COLLISION_OFFSET_Y
 			dad d
 
-@check_monster_collision:
 			; store pos_xy
 			push h
 			; check if a bullet collides with a monster
@@ -206,341 +207,8 @@ snowflake_update:
 @check_tiledata:
 			; de - pos_xy
 			TILEDATA_HANDLING(SNOWFLAKE_COLLISION_WIDTH, SNOWFLAKE_COLLISION_HEIGHT, snowflake_tile_func_tbl)
+			*/
 			ret
-
-; in:
-; a - container_id
-; c - tile_idx
-snowflake_func_container:
-			; store tile_idx
-			lxi h, @tile_idx + 1
-			mov m, c
-
-			sta @restore_container_id+1
-			; find a container
-			lxi h, room_id
-			mov d, m
-			mov l, a
-			FIND_INSTANCE(@no_container_found, containers_inst_data_ptrs)
-			; c = tile_idx
-			; hl ptr to tile_idx
-			; remove this container from containers_inst_data
-			inx h
-			mvi m, <CONTAINERS_STATUS_ACQUIRED
-
-@no_container_found:
-			; erase container_id from tiledata
-			mvi b, >room_tiledata
-			mvi a, TILEDATA_RESTORE_TILE
-			stax b
-			; calc tile gfx ptr
-			mov l, c
-			mvi h, 0
-			lxi d, room_tiles_gfx_ptrs
-			dad h
-			dad d
-			mov d, c
-			; d - tile_idx
-			; read a tile gfx ptr
-			mov c, m
-			inx h
-			mov b, m
-
-			; calc tile scr addr
-			; d - tile_idx
-			mvi a, %11110000
-			ana d
-			mov e, a
-			; e - scr Y
-			mvi a, %00001111
-			ana d
-			rlc
-			adi >SCR_BUFF0_ADDR
-			mov d, a
-
-			; bc - a tile gfx ptr
-			; de - screen addr
-			push d ; for vfx
-
-			push b
-			push d
-			; draw a tile on the screen
-			lda level_ram_disk_s_gfx
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-			push b
-			push d
-			; draw a tile in the back buffer
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-			; draw a tile in the back buffer2
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-@tile_idx:
-			mvi c, TEMP_BYTE
-			; c - tile_idx in the room_tiledata array
-			lda @restore_container_id+1
-			ADD_A(2) ; container_id to JMP_4 ptr
-			sta room_decal_draw_ptr_offset+1
-			ROOM_DECAL_DRAW(__containers_opened_gfx_ptrs, true)
-
-			; draw vfx
-			pop b
-			lxi d, vfx_reward
-			call vfx_init
-
-			; update a hero container
-			lxi h, hero_cont_func_tbl
-@restore_container_id:
-			mvi a, TEMP_BYTE
-			mov e, a ; temp
-			HL_TO_AX4_PLUS_INT16(hero_cont_func_tbl)
-			push h
-
-			; add score points
-			; e - container_id
-			mvi c, TILEDATA_FUNC_ID_CONTAINERS
-			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE | __RAM_DISK_M_TEXT_EX)
-			call game_ui_draw_score_text
-			pop h
-			; hl - a container handler func ptr
-			pchl ; run a container handler
-
-; in:
-; a - door_id
-; c - tile_idx
-snowflake_func_door:
-			; store tile_idx
-			lxi h, @tile_idx + 1
-			mov m, c
-
-			mov b, a ; temp b = door_id
-			; check global item status
-			ani %00001110
-			rrc
-
-			adi <global_items
-			mov l, a
-			mvi h, >global_items
-			mov a, m
-			cpi <ITEM_STATUS_NOT_ACQUIRED
-			rz	; if status == ITEM_STATUS_NOT_ACQUIRED, means a hero does't have a proper key to open the door
-
-			mov a, b
-			ADD_A(2) ; to make a JMP_4 ptr
-			sta room_decal_draw_ptr_offset+1 ; store door_id in case we need to draw an opened version of it
-
-			; update the key status
-			mvi m, <ITEM_STATUS_USED
-
-			; add score points
-			push b
-			mov e, b
-			mvi c, TILEDATA_FUNC_ID_DOORS
-			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
-			call game_ui_draw_score_text
-			pop b
-
-			; erase breakable_id from tiledata
-			mvi b, >room_tiledata
-			mvi a, TILEDATA_RESTORE_TILE
-			stax b
-			; calc tile gfx ptr
-			mov l, c
-			mvi h, 0
-			lxi d, room_tiles_gfx_ptrs
-			dad h
-			dad d
-			mov d, c
-			; d - tile_idx
-			; read a tile gfx ptr
-			mov c, m
-			inx h
-			mov b, m
-
-			; calc tile scr addr
-			; d - tile_idx
-			mvi a, %11110000
-			ana d
-			mov e, a
-			; e - scr Y
-			mvi a, %00001111
-			ana d
-			rlc
-			adi >SCR_BUFF0_ADDR
-			mov d, a
-
-			; bc - a tile gfx ptr
-			; de - screen addr
-			push d ; for vfx
-
-			push b
-			push d
-			; draw a tile on the screen
-			lda level_ram_disk_s_gfx
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-
-			push b
-			push d
-			; draw a tile in the back buffer
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-
-			; draw a tile in the back buffer2
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16, )
-
-@tile_idx:
-			mvi c, TEMP_BYTE
-			; c - tile_idx in the room_tiledata array
-			ROOM_DECAL_DRAW(__doors_opened_gfx_ptrs, true)
-
-			; draw vfx
-			pop b
-			lxi d, vfx_puff
-			jmp vfx_init
-
-; in:
-; a - breakable_id
-; c - tile_idx
-snowflake_func_breakable:
-			mov e, a
-			; check if a snowflake is available
-			lda hero_res_snowflake
-			CPI_WITH_ZERO(HERO_WEAPON_NONE)
-			rz ; return if no snowflake
-
-			; if breakable_id == BREAKABLE_ID_CABBAGE, spawn a fart bullet
-			; e - breakable_id
-			mvi a, BREAKABLE_ID_CABBAGE
-			cmp e
-			jnz @no_fart
-@cabbage:
-			; add the cabbage resource
-			lxi h, hero_res_cabbage
-			inr m
-			mvi a, CABBAGE_MAX
-			cmp m
-			jnz @no_fart
-			mvi m, 0
-			; a hero got fart
-			lxi h, global_items + ITEM_ID_FART - 1	; because the first item_id = 1
-			mov a, m
-			CPI_WITH_ZERO(ITEM_STATUS_NOT_ACQUIRED)
-			jnz @no_new_fart
-			mvi m, ITEM_STATUS_ACQUIRED
-@no_new_fart:
-
-			push b ; store tile_idx
-			; spawn the fart actor
-			lxi h, hero_erase_scr_addr
-			mov c, m
-			inx h
-			mov b, m
-			lxi d, vfx_puff_loop
-			call fart_init
-			pop b ; restore tile_idx
-
-@no_fart:
-			; add score points
-			push b
-			mvi c, TILEDATA_FUNC_ID_BREAKABLES
-			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
-			call game_ui_draw_score_text
-			pop b
-
-			; erase breakable_id from tiledata
-			mvi b, >room_tiledata
-			mvi a, TILEDATA_RESTORE_TILE
-			stax b
-			; calc tile gfx ptr
-			mov l, c
-			mvi h, 0
-			lxi d, room_tiles_gfx_ptrs
-			dad h
-			dad d
-			mov d, c
-			; d - tile_idx
-			; read a tile gfx ptr
-			mov c, m
-			inx h
-			mov b, m
-
-			; calc tile scr addr
-			; d - tile_idx
-			mvi a, %11110000
-			ana d
-			mov e, a
-			; e - scr Y
-			mvi a, %00001111
-			ana d
-			rlc
-			adi >SCR_BUFF0_ADDR
-			mov d, a
-
-			; bc - a tile gfx ptr
-			; de - screen addr
-			push b
-			push d
-			; draw a tile on the screen
-			lda level_ram_disk_s_gfx
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-			push b
-			push d
-			; draw a tile in the back buffer
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-			push d
-			; draw a tile in the back buffer2
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-
-			; draw vfx
-			pop b
-			lxi d, vfx_puff
-			call vfx_init
-
-			lxi h, hero_res_snowflake
-			jmp game_ui_res_select_and_draw
-			ret
-
-; in:
-; a - trigger_id
-; c - tile_idx
-snowflake_func_triggers:
-			push psw
-			mvi c, TILEDATA_FUNC_ID_TRIGGERS
-			mov e, a
-			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
-			pop psw
-			cpi TIMEDATA_TRIGGER_HOME_DOOR
-			jz @game_over
-			cpi TIMEDATA_TRIGGER_FRIEND_DOOR
-			jz @friends_home_door
-			ret
-@game_over:
-			; init a dialog
-			jmp trigger_hero_knocks_his_home_door
-
-@friends_home_door:
-			jmp trigger_hero_knocks_his_friend_door
 
 ; draw a sprite into a backbuffer
 ; in:
