@@ -58,7 +58,7 @@ cursor_init:
 			inx h 
 			mvi m, >bomb_draw
 
-			LXI_D_TO_DIFF(bullet_anim_ptr, bullet_draw_ptr+1)
+			LXI_D_TO_DIFF(bullet_draw_ptr+1, bullet_anim_ptr)
 			dad d
 
 			mvi m, <bomb_run

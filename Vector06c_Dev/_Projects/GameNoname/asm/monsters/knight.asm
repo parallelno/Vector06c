@@ -401,8 +401,8 @@ knight_update_move_init:
 			mvi m, KNIGHT_STATUS_MOVE
 			; advance hl to monster_status_timer
 
-			; advance hl to monster_speed_x
-			LXI_D_TO_DIFF(monster_id, monster_status)
+			; advance hl to monster_id
+			LXI_D_TO_DIFF(monster_status, monster_id)
 			dad d
 			mov a, m
 			cpi KNIGHT_VERT_ID

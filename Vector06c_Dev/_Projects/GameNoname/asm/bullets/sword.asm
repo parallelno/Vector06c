@@ -79,7 +79,7 @@ sword_init:
 			; tmp b = 0
 			mvi b, 0
 			; advance hl to bullet_pos_y+1
-			LXI_D_TO_DIFF(bullet_pos_y+1, bullet_status_timer)
+			LXI_D_TO_DIFF(bullet_status_timer, bullet_pos_y+1)
 			dad d
 			; set pos_y
 			lda hero_pos_y+1
@@ -108,7 +108,7 @@ sword_init:
 			; set the mimimum supported height
 			mvi m, SPRITE_COPY_TO_SCR_H_MIN
 			; advance hl to bullet_erase_scr_addr_old+1
-			LXI_D_TO_DIFF(bullet_erase_scr_addr_old+1, bullet_erase_wh_old)
+			LXI_D_TO_DIFF(bullet_erase_wh_old, bullet_erase_scr_addr_old+1)
 			dad d
 			; a - pos_x
 			; scr_x = pos_x/8 + $a0
@@ -169,7 +169,7 @@ sword_update:
 			jmp actor_anim_update
 
 @die:
-			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_status_timer)
+			LXI_D_TO_DIFF(bullet_status_timer, bullet_update_ptr+1)
 			dad d
 			jmp actor_destroy
 

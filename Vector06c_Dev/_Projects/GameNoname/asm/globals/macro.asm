@@ -143,7 +143,7 @@
 		.endif
 .endmacro
 
-.macro LXI_B_TO_DIFF(offset_to, offset_from)
+.macro LXI_B_TO_DIFF(offset_from, offset_to)
 		offset_addr = offset_to - offset_from
 		.if offset_addr > 0
 			lxi b, offset_addr
@@ -153,7 +153,7 @@
 		.endif
 .endmacro
 
-.macro LXI_D_TO_DIFF(offset_to, offset_from)
+.macro LXI_D_TO_DIFF(offset_from, offset_to)
 		offset_addr = offset_to - offset_from
 		.if offset_addr > 0
 			lxi d, offset_addr
@@ -174,12 +174,12 @@
 .endmacro
 
 .macro HL_ADVANCE_BY_DIFF_BC(offset_to, offset_from)
-		LXI_B_TO_DIFF(offset_to, offset_from)
+		LXI_B_TO_DIFF(offset_from, offset_to)
 		dad b
 .endmacro
 
 .macro HL_ADVANCE_BY_DIFF_DE(offset_to, offset_from)
-		LXI_D_TO_DIFF(offset_to, offset_from)
+		LXI_D_TO_DIFF(offset_from, offset_to)
 		dad d
 .endmacro
 

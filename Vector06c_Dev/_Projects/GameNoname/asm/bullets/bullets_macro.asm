@@ -12,7 +12,7 @@
 			ani ACTOR_STATUS_BIT_INVIS
 			rnz
 
-			LXI_D_TO_DIFF(bullet_pos_x+1, bullet_status)
+			LXI_D_TO_DIFF(bullet_status, bullet_pos_x+1)
 		.endif 
 		.if check_invis == false
 			LXI_H_TO_DIFF(bullet_pos_x+1, bullet_draw_ptr)

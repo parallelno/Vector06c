@@ -352,7 +352,7 @@ skeleton_update_shoot:
 @shoot_left:
 			mvi a, BULLET_DIR_L
 @shoot_right:
-			LXI_B_TO_DIFF(monster_pos_x+1, monster_speed_x+1)
+			LXI_B_TO_DIFF(monster_speed_x+1, monster_pos_x+1)
 			jmp @set_bullet_pos
 @shoot_vert:
 			; advance hl to monster_speed_y+1
@@ -364,7 +364,7 @@ skeleton_update_shoot:
 @shoot_down:
 			mvi a, BULLET_DIR_D
 @shoot_up:
-			LXI_B_TO_DIFF(monster_pos_x+1, monster_speed_y+1)
+			LXI_B_TO_DIFF(monster_speed_y+1, monster_pos_x+1)
 @set_bullet_pos:
 			dad b
 			mov b, m

@@ -179,7 +179,7 @@ vfx_update:
 @die:
 			; hl points to bullet_anim_ptr
 			; advance hl to bullet_update_ptr+1
-			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_anim_ptr)
+			LXI_D_TO_DIFF(bullet_anim_ptr, bullet_update_ptr+1)
 			dad d
 			jmp actor_destroy
 

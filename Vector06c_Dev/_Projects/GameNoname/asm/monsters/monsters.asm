@@ -100,7 +100,7 @@ monster_init:
 			mov m, b
 			
 			; advance hl to monster_anim_ptr
-			LXI_D_TO_DIFF(monster_anim_ptr, monster_status)
+			LXI_D_TO_DIFF(monster_status, monster_anim_ptr)
 			dad d
 
 			mov e, a
@@ -337,7 +337,7 @@ monsters_erase:
 ; hl - ptr to monster_update_ptr+1 in the runtime data
 monster_copy_to_scr:
 			; advance to monster_status
-			LXI_D_TO_DIFF(monster_status, monster_update_ptr+1)
+			LXI_D_TO_DIFF(monster_update_ptr+1, monster_status)
 			dad d
 			; if it is invisible, return
 			mov a, m
@@ -441,7 +441,7 @@ monster_erase:
 			jz actor_set_empty
 
 			; advance to monster_status
-			LXI_D_TO_DIFF(monster_status, monster_update_ptr+1)
+			LXI_D_TO_DIFF(monster_update_ptr+1, monster_status)
 			dad d
 			; if it is invisible, return
 			mov a, m
@@ -449,7 +449,7 @@ monster_erase:
 			rnz
 
 			; advance to monster_erase_scr_addr
-			LXI_D_TO_DIFF(monster_erase_scr_addr, monster_status)
+			LXI_D_TO_DIFF(monster_status, monster_erase_scr_addr)
 			dad d
 			mov e, m
 			inx h
@@ -505,13 +505,13 @@ monster_impacted:
 			pop h
 
 			; recrease monster's health
-			LXI_D_TO_DIFF(monster_health, monster_pos_y+1)
+			LXI_D_TO_DIFF(monster_pos_y+1, monster_health)
 			dad d
 			dcr m
 			rnz
 
 			; mark this monster dead
 			; advance hl to monster_update_ptr+1
-			LXI_D_TO_DIFF(monster_update_ptr+1, monster_health)
+			LXI_D_TO_DIFF(monster_health, monster_update_ptr+1)
 			dad d
 			jmp actor_destroy
