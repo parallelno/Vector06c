@@ -124,7 +124,7 @@ knight_quest_update:
 			; check hero to monster distance
 @check_mob_hero_distance:
 			; advance hl to monster_pos_x+1
-			LXI_H_TO_DIFF(monster_pos_x+1, monster_update_ptr)
+			LXI_H_TO_DIFF(monster_update_ptr, monster_pos_x+1)
 			dad d
 			; check hero-monster pos_x diff
 			lda hero_pos_x+1
@@ -166,7 +166,7 @@ knight_quest_update:
 			push d
 			; this monster goes up to the edge of the screen, then dies
 			; advance hl to monster_speed_y + 1
-			LXI_H_TO_DIFF(monster_pos_y + 1, monster_update_ptr)
+			LXI_H_TO_DIFF(monster_update_ptr, monster_pos_y + 1)
 			dad d
 
 			; hl - ptr to monster_pos_y + 1
@@ -200,7 +200,7 @@ knight_quest_update:
 ; de - ptr to monster_update_ptr in the runtime data
 knight_update:
 			; advance hl to monster_status
-			LXI_H_TO_DIFF(monster_status, monster_update_ptr)
+			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
 			dad d
 			mov a, m
 			; TODO: optimization. think of using a call table
@@ -415,7 +415,7 @@ knight_update_move_init:
 			ani %01111111 ; to clear the last bit
 			ora b
 			; advance hl to monster_speed_x
-			LXI_H_TO_DIFF(monster_speed_x, monster_id)
+			LXI_H_TO_DIFF(monster_id, monster_speed_x)
 			dad d
 
 			cpi $40

@@ -69,7 +69,7 @@ def export(source_j, source_j_path, generated_code_dir, segments_info):
 							asm +=f"			; preshift {asset_name}\n"
 							asm +=f"			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)\n"
 							asm +=f"			lxi d, {name}_preshifted_sprites\n"
-							asm +=f"			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - {chunk_label_start})\n"
+							asm +=f"			lxi h, SCR_BUFF1_ADDR - {chunk_label_start}\n"
 							asm +=f"			call __sprite_dup_preshift\n"
 							asm +=f"			RAM_DISK_OFF_NO_RESTORE()\n"
 							asm +="\n"

@@ -195,17 +195,6 @@ dzx0_rd $199
 copy_to_ram_disk $21A
 ram_disk_init_ $257
 ram_disk_init $257
-LXI_H_TO_DIFF.offset_addr $9
-LXI_H_TO_DIFF_2.offset_addr $11
-LXI_H_TO_DIFF_3.offset_addr $15
-LXI_H_TO_DIFF_4.offset_addr $9
-LXI_H_TO_DIFF_5.offset_addr $11
-LXI_H_TO_DIFF_6.offset_addr $15
-LXI_H_TO_DIFF_7.offset_addr $6
-LXI_H_TO_DIFF_8.offset_addr $9
-LXI_H_TO_DIFF_9.offset_addr $11
-LXI_H_TO_DIFF_10.offset_addr $15
-LXI_H_TO_DIFF_11.offset_addr $17
 main_asm $3E6
 sprite_get_scr_addr8 $E2C
 sprite_get_scr_addr4 $E40
@@ -1479,17 +1468,17 @@ vfx_anims $49B3
 vfx_puff $49BB
 vfx_puff_loop $49CF
 vfx_reward $49EF
-ram_disk_data $2EEB
-chunk_bank0_addr0_0 $2EEB
-chunk_bank0_addr0_1 $34C0
-chunk_bank0_addr8000_0 $3918
-chunk_bank1_addr0_0 $69FE
-chunk_bank1_addr0_1 $6FC7
-chunk_bank1_addr8000_0 $73BE
-chunk_bank2_addr0_0 $75C2
-chunk_bank3_addr0_0 $7E89
-chunk_bank2_addr8000_0 $983B
-chunk_bank3_addr8000_0 $AF00
+ram_disk_data $2EEC
+chunk_bank0_addr0_0 $2EEC
+chunk_bank0_addr0_1 $34C1
+chunk_bank0_addr8000_0 $3919
+chunk_bank1_addr0_0 $69FF
+chunk_bank1_addr0_1 $6FC8
+chunk_bank1_addr8000_0 $73BF
+chunk_bank2_addr0_0 $75C3
+chunk_bank3_addr0_0 $7E8A
+chunk_bank2_addr8000_0 $983C
+chunk_bank3_addr8000_0 $AF01
 main_init $100
 border_color_idx $120
 scr_offset_y $121
@@ -1803,7 +1792,6 @@ BREAKABLE_SPAWN_RATE_MAX $FF
 BREAKABLE_SPAWN_RATE_DELTA $20
 MONSTER_SPAWN_RATE_MAX $FA
 MONSTER_SPAWN_RATE_DELTA $10
-RES_COIN_VAL $5
 RES_POTION_HEALTH_VAL $5
 RES_POPSICLE_PIE_MANA_VAL $19
 RES_CABBAGE_HEALTH_VAL $1
@@ -2383,6 +2371,7 @@ SKELETON_DETECT_HERO_DISTANCE $3C
 skeleton_init $2164
 MONSTER_INIT.@init_data $216E
 skeleton_update $2178
+LXI_H_TO_DIFF.offset_addr $9
 skeleton_update_detect_hero_init $21A1
 LXI_B_TO_DIFF.offset_addr $2
 skeleton_update_detect_hero $21B0
@@ -2400,6 +2389,7 @@ LXI_B_TO_DIFF_5.offset_addr $F4
 LXI_B_TO_DIFF_6.offset_addr $F2
 @set_move_init $220E
 skeleton_update_move_init $2214
+LXI_H_TO_DIFF_2.offset_addr $11
 @speed_y_negative $222F
 @speed_y_positive $223B
 @speed_x_negative $2247
@@ -2438,6 +2428,7 @@ skeleton_update_anim_check_collision_hero $233B
 LXI_B_TO_DIFF_16.offset_addr $B
 MONSTER_CHECK_COLLISION_HERO.@collides_hero $2360
 skeleton_draw $2365
+LXI_H_TO_DIFF_3.offset_addr $15
 LXI_B_TO_DIFF_17.offset_addr $F3
 LXI_B_TO_DIFF_18.offset_addr $3
 VAMPIRE_STATUS_DETECT_HERO_INIT $0
@@ -2465,6 +2456,7 @@ VAMPIRE_DETECT_HERO_DISTANCE $5A
 vampire_init $2397
 MONSTER_INIT_2.@init_data $23A1
 vampire_update $23AB
+LXI_H_TO_DIFF_4.offset_addr $9
 vampire_update_detect_hero_init $23D4
 LXI_B_TO_DIFF_19.offset_addr $2
 vampire_update_detect_hero $23E3
@@ -2482,6 +2474,7 @@ LXI_B_TO_DIFF_23.offset_addr $F4
 LXI_B_TO_DIFF_24.offset_addr $F2
 @set_move_init_4 $2441
 vampire_update_move_init $2447
+LXI_H_TO_DIFF_5.offset_addr $11
 @speed_y_negative_2 $2462
 @speed_y_positive_2 $246E
 @speed_x_negative_2 $247A
@@ -2512,6 +2505,7 @@ vampire_update_anim_check_collision_hero $255D
 LXI_B_TO_DIFF_32.offset_addr $B
 MONSTER_CHECK_COLLISION_HERO_2.@collides_hero $2582
 vampire_draw $2587
+LXI_H_TO_DIFF_6.offset_addr $15
 LXI_B_TO_DIFF_33.offset_addr $F3
 LXI_B_TO_DIFF_34.offset_addr $3
 BURNER_STATUS_DETECT_HERO_INIT $0
@@ -2555,6 +2549,7 @@ LXI_B_TO_DIFF_36.offset_addr $F3
 @init_3 $25F0
 MONSTER_INIT_3.@init_data $25FA
 burner_quest_update $2604
+LXI_H_TO_DIFF_7.offset_addr $6
 @burner_up $260F
 LXI_B_TO_DIFF_37.offset_addr $13
 @burner_right $2620
@@ -2563,6 +2558,7 @@ LXI_B_TO_DIFF_38.offset_addr $11
 LXI_B_TO_DIFF_39.offset_addr $B
 @death $2637
 burner_update $263B
+LXI_H_TO_DIFF_8.offset_addr $9
 burner_update_detect_hero_init $2664
 LXI_B_TO_DIFF_40.offset_addr $2
 burner_update_detect_hero $2673
@@ -2580,6 +2576,7 @@ LXI_B_TO_DIFF_44.offset_addr $F4
 LXI_B_TO_DIFF_45.offset_addr $F2
 @set_move_init_7 $26D1
 burner_update_move_init $26D7
+LXI_H_TO_DIFF_9.offset_addr $11
 @speed_y_negative_3 $26F2
 @speed_y_positive_3 $26FE
 @speed_x_negative_3 $270A
@@ -2614,6 +2611,7 @@ burner_update_anim_check_collision_hero $283B
 LXI_B_TO_DIFF_55.offset_addr $B
 MONSTER_CHECK_COLLISION_HERO_3.@collides_hero $2860
 burner_draw $2865
+LXI_H_TO_DIFF_10.offset_addr $15
 LXI_B_TO_DIFF_56.offset_addr $F3
 LXI_B_TO_DIFF_57.offset_addr $3
 KNIGHT_STATUS_DETECT_HERO_INIT $0
@@ -2646,6 +2644,7 @@ MONSTER_INIT_4.@init_data $28A7
 MONSTER_INIT_5.@init_data $28C3
 knight_quest_update $28CD
 @check_mob_hero_distance_4 $28D9
+LXI_H_TO_DIFF_11.offset_addr $17
 @check_neg_pos_x_diff_4 $28EC
 @check_pos_y_diff_4 $28F4
 @check_neg_pos_y_diff_4 $2905
@@ -2773,7 +2772,7 @@ LXI_D_TO_DIFF_5.offset_addr $5
 LXI_B_TO_DIFF_83.offset_addr $3
 monster_impacted $2DA0
 ROOM_SPAWN_RATE_UPDATE.@next $2DB1
-LXI_H_TO_DIFF_16.offset_addr $1
+LXI_H_TO_DIFF_16.offset_addr $FF
 LXI_H_TO_DIFF_17.offset_addr $12
 LXI_D_TO_DIFF_6.offset_addr $EF
 LXI_D_TO_DIFF_7.offset_addr $F9
@@ -2853,7 +2852,7 @@ LXI_D_TO_DIFF_12.offset_addr $F
 LXI_D_TO_DIFF_13.offset_addr $FD
 snowflake_update $3248
 LXI_H_TO_DIFF_20.offset_addr $5
-@update_move $3257
+@update_movement_6 $3257
 @attk_anim_update_2 $3257
 @die_2 $325D
 LXI_D_TO_DIFF_14.offset_addr $FB
@@ -2880,8 +2879,7 @@ scythe_init $32B1
 @move_right $332B
 scythe_update $3335
 LXI_H_TO_DIFF_22.offset_addr $6
-@update_move_2 $3339
-@update_movement_6 $333D
+@update_movement_7 $333D
 LXI_B_TO_DIFF_91.offset_addr $C
 ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION_6.@apply_new_pos $3381
 ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION_6.@new_pos_x $3382
@@ -2923,8 +2921,7 @@ bomb_init $343D
 @eraseScrAddr $3473
 bomb_update $34C6
 LXI_H_TO_DIFF_24.offset_addr $6
-@update_move_3 $34CA
-@update_movement_7 $34CE
+@update_movement_8 $34CE
 LXI_B_TO_DIFF_100.offset_addr $13
 LXI_B_TO_DIFF_101.offset_addr $F4
 BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO_2.@checkCollisionHero $34F9
@@ -2948,8 +2945,7 @@ VFX_SPAWN_RATE $5
 sparker_init $356A
 sparker_update $35DE
 LXI_H_TO_DIFF_26.offset_addr $6
-@update_move_4 $35E2
-@update_movement_8 $35E6
+@update_movement_9 $35E6
 LXI_B_TO_DIFF_107.offset_addr $13
 LXI_B_TO_DIFF_108.offset_addr $F4
 @sparker_pos_ptr $361B
@@ -2967,7 +2963,7 @@ MVI_A_TO_DIFF.offset_addr $3
 fart_update $36C2
 MVI_A_TO_DIFF_2.offset_addr $6
 @fraction_timer $36C7
-@update_movement_9 $36D4
+@update_movement_10 $36D4
 MVI_A_TO_DIFF_3.offset_addr $D
 MVI_A_TO_DIFF_4.offset_addr $F2
 @die_6 $36EB

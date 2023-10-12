@@ -118,7 +118,7 @@ snowflake_init:
 ; de - ptr to bullet_update_ptr in the runtime data
 snowflake_update:
 			; advance to bullet_status
-			LXI_H_TO_DIFF(bullet_status, bullet_update_ptr)
+			LXI_H_TO_DIFF(bullet_update_ptr, bullet_status)
 			dad d
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS

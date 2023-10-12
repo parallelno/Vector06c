@@ -171,7 +171,7 @@ vfx_init:
 ; in:
 ; de - ptr to bullet_update_ptr in the runtime data
 vfx_update:
-			LXI_H_TO_DIFF(bullet_anim_timer, bullet_update_ptr)
+			LXI_H_TO_DIFF(bullet_update_ptr, bullet_anim_timer)
 			dad d
 			mvi a, VFX_ANIM_SPEED
 			call actor_anim_update

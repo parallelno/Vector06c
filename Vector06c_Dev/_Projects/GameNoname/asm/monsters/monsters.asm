@@ -493,7 +493,7 @@ monster_impacted:
 
 			; play a hit vfx
 			; advance hl to monster_pos_x+1
-			LXI_H_TO_DIFF(monster_pos_x+1, monster_impacted_ptr+1)
+			LXI_H_TO_DIFF(monster_impacted_ptr+1, monster_pos_x+1)
 			dad d
 			mov b, m
 			; advance hl to monster_pos_y+1

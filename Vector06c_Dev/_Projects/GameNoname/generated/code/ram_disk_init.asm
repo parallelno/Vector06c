@@ -50,14 +50,14 @@ ram_disk_init:
 			; preshift hero_r_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, hero_r_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __hero_r_sprites_rd_data_start)
+			lxi h, SCR_BUFF1_ADDR - __hero_r_sprites_rd_data_start
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
 
 			; preshift skeleton_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, skeleton_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __hero_r_sprites_rd_data_start)
+			lxi h, SCR_BUFF1_ADDR - __hero_r_sprites_rd_data_start
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
 
@@ -81,21 +81,21 @@ ram_disk_init:
 			; preshift scythe_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, scythe_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __scythe_sprites_rd_data_start)
+			lxi h, SCR_BUFF1_ADDR - __scythe_sprites_rd_data_start
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
 
 			; preshift bomb_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, bomb_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __scythe_sprites_rd_data_start)
+			lxi h, SCR_BUFF1_ADDR - __scythe_sprites_rd_data_start
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
 
 			; preshift snowflake_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, snowflake_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __scythe_sprites_rd_data_start)
+			lxi h, SCR_BUFF1_ADDR - __scythe_sprites_rd_data_start
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
 
@@ -119,7 +119,7 @@ ram_disk_init:
 			; preshift vfx4_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, vfx4_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __level00_data_rd_data_start)
+			lxi h, SCR_BUFF1_ADDR - __level00_data_rd_data_start
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
 
@@ -143,7 +143,7 @@ ram_disk_init:
 			; preshift knight_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, knight_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __knight_sprites_rd_data_start)
+			lxi h, SCR_BUFF1_ADDR - __knight_sprites_rd_data_start
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
 
@@ -167,7 +167,7 @@ ram_disk_init:
 			; preshift burner_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, burner_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __burner_sprites_rd_data_start)
+			lxi h, SCR_BUFF1_ADDR - __burner_sprites_rd_data_start
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
 
@@ -191,7 +191,7 @@ ram_disk_init:
 			; preshift sword_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, sword_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __sword_sprites_rd_data_start)
+			lxi h, SCR_BUFF1_ADDR - __sword_sprites_rd_data_start
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
 
@@ -215,14 +215,14 @@ ram_disk_init:
 			; preshift hero_l_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, hero_l_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __hero_l_sprites_rd_data_start)
+			lxi h, SCR_BUFF1_ADDR - __hero_l_sprites_rd_data_start
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
 
 			; preshift vampire_sprites
 			RAM_DISK_ON_NO_RESTORE(__RAM_DISK_M_BACKBUFF | RAM_DISK_M_8F)
 			lxi d, vampire_preshifted_sprites
-			LXI_H_TO_DIFF(SCR_BUFF1_ADDR - __hero_l_sprites_rd_data_start)
+			lxi h, SCR_BUFF1_ADDR - __hero_l_sprites_rd_data_start
 			call __sprite_dup_preshift
 			RAM_DISK_OFF_NO_RESTORE()
 

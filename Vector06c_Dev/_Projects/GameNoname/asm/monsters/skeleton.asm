@@ -101,7 +101,7 @@ skeleton_init:
 ; de - ptr to monster_update_ptr in the runtime data
 skeleton_update:
 			; advance hl to monster_status
-			LXI_H_TO_DIFF(monster_status, monster_update_ptr)
+			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
 			dad d
 			mov a, m
 			; TODO: optimization. think of using a call table
@@ -204,7 +204,7 @@ skeleton_update_move_init:
 			xchg
 			call random
 			; advance hl to monster_speed_x
-			LXI_H_TO_DIFF(monster_speed_x, monster_status)
+			LXI_H_TO_DIFF(monster_status, monster_speed_x)
 			dad d
 
 			mvi c, 0 ; tmp c=0

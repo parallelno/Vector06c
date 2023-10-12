@@ -6,7 +6,7 @@
 .macro BULLET_DRAW(sprite_get_scr_addr_bullet, __ram_disk_s, check_invis = true)
         .if check_invis
 			; advance to bullet_status
-			LXI_H_TO_DIFF(bullet_status, bullet_draw_ptr)
+			LXI_H_TO_DIFF(bullet_draw_ptr, bullet_status)
 			dad d
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
@@ -15,7 +15,7 @@
 			LXI_D_TO_DIFF(bullet_status, bullet_pos_x+1)
 		.endif 
 		.if check_invis == false
-			LXI_H_TO_DIFF(bullet_pos_x+1, bullet_draw_ptr)
+			LXI_H_TO_DIFF(bullet_draw_ptr, bullet_pos_x+1)
 		.endif
 			dad d
 			call sprite_get_scr_addr_bullet

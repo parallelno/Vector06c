@@ -163,7 +163,7 @@
 		.endif
 .endmacro
 
-.macro LXI_H_TO_DIFF(offset_to, offset_from)
+.macro LXI_H_TO_DIFF(offset_from, offset_to)
 		offset_addr = offset_to - offset_from
 		.if offset_addr > 0
 			lxi h, offset_addr

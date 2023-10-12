@@ -191,7 +191,7 @@ bomb_init:
 ; de - ptr to bullet_update_ptr in the runtime data
 bomb_update:
 			; advance to bullet_status_timer
-			LXI_H_TO_DIFF(bullet_status_timer, bullet_update_ptr)
+			LXI_H_TO_DIFF(bullet_update_ptr, bullet_status_timer)
 			dad d
 			dcr m
 			jz @die

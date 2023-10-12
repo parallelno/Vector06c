@@ -116,7 +116,7 @@ cursor_init:
 cursor_update:
 			; de - ptr to bullet_update_ptr
 			; advance hl to bullet_pos_y+1
-			LXI_H_TO_DIFF(bullet_pos_y+1, bullet_update_ptr)
+			LXI_H_TO_DIFF(bullet_update_ptr, bullet_pos_y+1)
 			dad d
 			; calc a bullet velocity which is = (hero_pos_y - bullet_pos_y) / 4
 			lda hero_pos_y+1

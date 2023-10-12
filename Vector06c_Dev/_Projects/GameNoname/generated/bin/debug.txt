@@ -1,7 +1,7 @@
 Retro Assembler V2022.1 -- Crafted by Peter Tihanyi with 8-Bit Love
 (C) 2017-2023 Engine Designs in West Virginia, USA
 
-Pre-processing the source code file... 9085 lines of code loaded.
+Pre-processing the source code file... 9081 lines of code loaded.
 Compiling, 1st pass... (Processing)
 Compiling, 2nd pass... (Finalizing)
 Success. Size: 18699 bytes ($490b) in 1.082s
@@ -512,9 +512,8 @@ BREAKABLE_SPAWN_RATE_MAX                       = $ff
 BREAKABLE_SPAWN_RATE_DELTA                     = $20
 MONSTER_SPAWN_RATE_MAX                         = $fa
 MONSTER_SPAWN_RATE_DELTA                       = $10
-RES_COIN_VAL                                   = $05
 RES_POTION_HEALTH_VAL                          = $05
-RES_POPSICLE_PIE_MANA_VAL                           = $19
+RES_POPSICLE_PIE_MANA_VAL                      = $19
 RES_CABBAGE_HEALTH_VAL                         = $01
 RES_HEALTH_MAX                                 = $01
 RES_SNOWFLAKES_MAX                             = $50
@@ -1495,7 +1494,7 @@ LXI_D_TO_DIFF_5.offset_addr                    = $05
 LXI_B_TO_DIFF_83.offset_addr                   = $03
 monster_impacted                               = $2da0
 ROOM_SPAWN_RATE_UPDATE.@next                   = $2db1
-LXI_H_TO_DIFF_16.offset_addr                   = $01
+LXI_H_TO_DIFF_16.offset_addr                   = -$01 ($ff)
 LXI_H_TO_DIFF_17.offset_addr                   = $12
 LXI_D_TO_DIFF_6.offset_addr                    = -$11 ($ef)
 LXI_D_TO_DIFF_7.offset_addr                    = -$07 ($f9)
@@ -1575,7 +1574,7 @@ LXI_D_TO_DIFF_12.offset_addr                   = $0f
 LXI_D_TO_DIFF_13.offset_addr                   = -$03 ($fd)
 snowflake_update                               = $3248
 LXI_H_TO_DIFF_20.offset_addr                   = $05
-@update_move                                   = $3257
+@update_movement_6                             = $3257
 @attk_anim_update_2                            = $3257
 @die_2                                         = $325d
 LXI_D_TO_DIFF_14.offset_addr                   = -$05 ($fb)
@@ -1602,8 +1601,7 @@ scythe_init                                    = $32b1
 @move_right                                    = $332b
 scythe_update                                  = $3335
 LXI_H_TO_DIFF_22.offset_addr                   = $06
-@update_move_2                                 = $3339
-@update_movement_6                             = $333d
+@update_movement_7                             = $333d
 LXI_B_TO_DIFF_91.offset_addr                   = $0c
 ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION_6.@apply_new_pos = $3381
 ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION_6.@new_pos_x = $3382
@@ -1645,8 +1643,7 @@ bomb_init                                      = $343d
 @eraseScrAddr                                  = $3473
 bomb_update                                    = $34c6
 LXI_H_TO_DIFF_24.offset_addr                   = $06
-@update_move_3                                 = $34ca
-@update_movement_7                             = $34ce
+@update_movement_8                             = $34ce
 LXI_B_TO_DIFF_100.offset_addr                  = $13
 LXI_B_TO_DIFF_101.offset_addr                  = -$0c ($f4)
 BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO_2.@checkCollisionHero = $34f9
@@ -1670,8 +1667,7 @@ VFX_SPAWN_RATE                                 = $05
 sparker_init                                   = $356a
 sparker_update                                 = $35de
 LXI_H_TO_DIFF_26.offset_addr                   = $06
-@update_move_4                                 = $35e2
-@update_movement_8                             = $35e6
+@update_movement_9                             = $35e6
 LXI_B_TO_DIFF_107.offset_addr                  = $13
 LXI_B_TO_DIFF_108.offset_addr                  = -$0c ($f4)
 @sparker_pos_ptr                               = $361b
@@ -1689,7 +1685,7 @@ MVI_A_TO_DIFF.offset_addr                      = $03
 fart_update                                    = $36c2
 MVI_A_TO_DIFF_2.offset_addr                    = $06
 @fraction_timer                                = $36c7
-@update_movement_9                             = $36d4
+@update_movement_10                            = $36d4
 MVI_A_TO_DIFF_3.offset_addr                    = $0d
 MVI_A_TO_DIFF_4.offset_addr                    = -$0e ($f2)
 @die_6                                         = $36eb
