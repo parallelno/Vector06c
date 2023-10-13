@@ -178,7 +178,7 @@
 		dad b
 .endmacro
 
-.macro HL_ADVANCE_BY_DIFF_DE(offset_to, offset_from)
+.macro HL_ADVANCE_BY_DIFF_DE(offset_from, offset_to)
 		LXI_D_TO_DIFF(offset_from, offset_to)
 		dad d
 .endmacro
