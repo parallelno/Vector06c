@@ -13,7 +13,7 @@
 			mov a, c
 
 			; advance hl to monster_anim_ptr
-			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_y+1, monster_anim_ptr)
 			mov b, m
 			inx h
 			push h
@@ -33,7 +33,7 @@
 			inx h
 			mov m, b
 			; advance hl to monster_erase_wh
-			HL_ADVANCE_BY_DIFF_BC(monster_erase_wh, monster_erase_scr_addr+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_erase_scr_addr+1, monster_erase_wh)
 			; store a width and a height into monster_erase_wh
 			mov m, e
 			inx h
@@ -52,7 +52,7 @@
 .macro MONSTER_CHECK_COLLISION_HERO(MONSTER_COLLISION_WIDTH, MONSTER_COLLISION_HEIGHT, MONSTER_DAMAGE)
 			; hl points to monster_anim_ptr
 			; advance hl to monster_pos_x
-			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_anim_ptr)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_pos_x+1)
 			; horizontal check
 			mov c, m ; pos_x
 			lda hero_pos_x+1

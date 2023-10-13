@@ -183,7 +183,7 @@ knight_quest_update:
 			jnc @death
 			; hl points to monster_update_ptr
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_update_ptr)
+			HL_ADVANCE_BY_DIFF_BC(monster_update_ptr, monster_anim_timer)
 
 			mvi a, BURNER_ANIM_SPEED_MOVE
 			jmp knight_update_anim_check_collision_hero
@@ -223,7 +223,7 @@ knight_update_detect_hero_init:
 			mvi m, KNIGHT_STATUS_DETECT_HERO
 			inx h
 			mvi m, KNIGHT_STATUS_DETECT_HERO_TIME
-			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_status_timer, monster_anim_ptr)
 			mvi m, <knight_idle
 			inx h
 			mvi m, >knight_idle
@@ -237,7 +237,7 @@ knight_update_detect_hero:
 			jz @set_move_init
 @check_mob_hero_distance:
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_status_timer, monster_pos_x+1)
 			; check hero-monster pos_x diff
 			lda hero_pos_x+1
 			sub m
@@ -266,18 +266,18 @@ knight_update_detect_hero:
 @hero_detected:
 			; hl = monster_pos_y+1
 			; advance hl to monster_status
-			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_y+1, monster_status)
 			mvi m, KNIGHT_STATUS_DEFENCE_INIT
 			ret
 
 @update_anim_hero_detect_x:
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_x+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_anim_timer)
 			mvi a, KNIGHT_ANIM_SPEED_DETECT_HERO
 			jmp knight_update_anim_check_collision_hero
 @update_anim_hero_detect_y:
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_y+1, monster_anim_timer)
 			mvi a, KNIGHT_ANIM_SPEED_DETECT_HERO
 			jmp knight_update_anim_check_collision_hero
 
@@ -298,7 +298,7 @@ knight_update_defence_init:
 @check_anim_dir:
 			; aim the monster to the hero dir
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(monster_status_timer, monster_pos_x+1)
 			lda hero_pos_x+1
 			cmp m
 			lxi d, knight_defence_l
@@ -307,20 +307,20 @@ knight_update_defence_init:
 			lxi d, knight_defence_r
 @dir_x_neg:
 			; advance hl to monster_anim_ptr
-			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_pos_x+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_anim_ptr)
 			mov m, e
 			inx h
 			mov m, d
 
 			; set the speed according to a monster_id (KNIGHT_HORIZ_ID / KNIGHT_VERT_ID)
 			; advance hl to monster_id
-			HL_ADVANCE_BY_DIFF_BC(monster_id, monster_anim_ptr+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr+1, monster_id)
 			mov a, m
 			cpi KNIGHT_VERT_ID
 			jz @speed_vert
 @speed_horiz:
 			; advance hl to monster_speed_x
-			HL_ADVANCE_BY_DIFF_BC(monster_speed_x, monster_id)
+			HL_ADVANCE_BY_DIFF_BC(monster_id, monster_speed_x)
 			; dir positive if e == knight_defence_r and vise versa
 			mvi a, <knight_defence_r
 			cmp e
@@ -341,7 +341,7 @@ knight_update_defence_init:
 			ret
 @speed_vert:
 			; advance hl to monster_pos_y+1
-			HL_ADVANCE_BY_DIFF_BC(monster_pos_y+1, monster_id)
+			HL_ADVANCE_BY_DIFF_BC(monster_id, monster_pos_y+1)
 			lda hero_pos_y+1
 			cmp m
 			lxi d, KNIGHT_DEFENCE_SPEED_NEG
@@ -380,7 +380,7 @@ knight_update_defence:
 
 			; hl points to monster_pos_y+1
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_y+1, monster_anim_timer)
 			mvi a, KNIGHT_ANIM_SPEED_DEFENCE
 			jmp knight_update_anim_check_collision_hero
 
@@ -388,11 +388,11 @@ knight_update_defence:
 			pop h
 			; hl points to monster_pos_x
 			; advance hl to monster_status
-			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_pos_x)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x, monster_status)
 			mvi m, KNIGHT_STATUS_DEFENCE_INIT
 			; hl points to monster_status
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_status)
+			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_anim_timer)
 			mvi a, KNIGHT_ANIM_SPEED_DEFENCE
 			jmp knight_update_anim_check_collision_hero			
 
@@ -460,7 +460,7 @@ knight_update_move_init:
 			inx h
 			mov m, c
 @set_anim:
-			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr, monster_speed_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_speed_y+1, monster_anim_ptr)
 			; a = rnd
 			;ora a
 			adi $40
@@ -488,7 +488,7 @@ knight_update_move:
 
 			; hl points to monster_pos_y+1
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_BC(monster_anim_timer, monster_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_y+1, monster_anim_timer)
 			mvi a, KNIGHT_ANIM_SPEED_MOVE
 			jmp knight_update_anim_check_collision_hero
 
@@ -496,7 +496,7 @@ knight_update_move:
 			pop h
 			; hl points to monster_pos_x
 			; advance hl to monster_status
-			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_pos_x)
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x, monster_status)
 			mvi m, KNIGHT_STATUS_MOVE_INIT
 			ret
 @set_detect_hero_init:

@@ -199,17 +199,17 @@ bomb_update:
 			ACTOR_UPDATE_MOVEMENT(bullet_status_timer, bullet_speed_y)
 			; hl - ptr to bullet_pos_x+1
 			; advance hl to bullet_anim_timer
-			HL_ADVANCE_BY_DIFF_BC(bullet_anim_timer, bullet_pos_x+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_pos_x+1, bullet_anim_timer)
 			mvi a, BOMB_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_COLLISION_WIDTH, BOMB_COLLISION_HEIGHT, BOMB_DAMAGE)	
 @die_after_damage:
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE_BY_DIFF_BC(bullet_update_ptr+1, bullet_pos_y+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_pos_y+1, bullet_update_ptr+1)
 			jmp actor_destroy
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE_BY_DIFF_BC(bullet_update_ptr+1, bullet_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(bullet_status_timer, bullet_update_ptr+1)
 			jmp actor_destroy
 
 ; draw a sprite into a backbuffer

@@ -4,7 +4,7 @@ Retro Assembler V2022.1 -- Crafted by Peter Tihanyi with 8-Bit Love
 Pre-processing the source code file... 9081 lines of code loaded.
 Compiling, 1st pass... (Processing)
 Compiling, 2nd pass... (Finalizing)
-Success. Size: 18699 bytes ($490b) in 1.088s
+Success. Size: 18699 bytes ($490b) in 1.242s
 
 *******************
 * Labels & Values *

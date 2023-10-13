@@ -173,7 +173,7 @@
 		.endif
 .endmacro
 
-.macro HL_ADVANCE_BY_DIFF_BC(offset_to, offset_from)
+.macro HL_ADVANCE_BY_DIFF_BC(offset_from, offset_to)
 		LXI_B_TO_DIFF(offset_from, offset_to)
 		dad b
 .endmacro

@@ -4,7 +4,7 @@
 .macro ACTOR_UPDATE_MOVEMENT(actor_status_timer, actor_speed_y)
  			; hl - ptr to actor_status_timer
 			; advance hl to actor_speed_y+1
-			HL_ADVANCE_BY_DIFF_BC(actor_speed_y+1, actor_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(actor_status_timer, actor_speed_y+1)
 			; bc <- speed_y
 			mov b, m
 			dcx h
@@ -51,7 +51,7 @@
 ; bc, de, hl, a
 ; TODO: think of converting it into func. it saves > 492 bytes
 .macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actor_status_timer, actor_pos_x, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, collision_handler) 
-			HL_ADVANCE_BY_DIFF_BC(actor_pos_x, actor_status_timer)
+			HL_ADVANCE_BY_DIFF_BC(actor_status_timer, actor_pos_x)
 			push h ; (stack) <- pos_x ptr, to restore it in @apply_new_pos
 			; bc <- pos_x
 			mov c, m

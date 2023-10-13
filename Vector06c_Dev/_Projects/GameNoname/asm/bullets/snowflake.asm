@@ -172,7 +172,7 @@ snowflake_update:
 			; check sprite collision
 			; hl - ptr to bullet_anim_ptr+1
 			; advance hl to bullet_pos_x+1
-			HL_ADVANCE_BY_DIFF_BC(bullet_pos_x+1, bullet_anim_ptr+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_anim_ptr+1, bullet_pos_x+1)
 			; add a collision offset
 			mov d, m
 			INX_H(2)
@@ -196,7 +196,7 @@ snowflake_update:
 			jnc @check_tiledata
 
 			; advance hl to monster_impacted_ptr
-			HL_ADVANCE_BY_DIFF_BC(monster_impacted_ptr, monster_update_ptr+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_update_ptr+1, monster_impacted_ptr)
 			mov e, m
 			inx h
 			mov d, m

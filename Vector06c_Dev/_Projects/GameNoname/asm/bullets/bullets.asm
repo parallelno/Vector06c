@@ -121,7 +121,7 @@ bullet_copy_to_scr:
 			rnz
 
 			; advance to bullet_erase_scr_addr
-			HL_ADVANCE_BY_DIFF_BC(bullet_erase_scr_addr, bullet_status)			
+			HL_ADVANCE_BY_DIFF_BC(bullet_status, bullet_erase_scr_addr)			
 			; read bullet_erase_scr_addr
 			mov c, m
 			inx h
@@ -231,7 +231,7 @@ bullet_erase:
 			inx h
 			mov d, m
 
-			HL_ADVANCE_BY_DIFF_BC(bullet_erase_wh, bullet_erase_scr_addr+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_erase_scr_addr+1, bullet_erase_wh)
 			mov a, m
 			inx h
 			mov h, m			

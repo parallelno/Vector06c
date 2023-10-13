@@ -201,13 +201,13 @@ monsters_get_first_collided:
 @check_collision:
 			push h
 			; advance hl to monster_type
-			HL_ADVANCE_BY_DIFF_BC(monster_type, monster_update_ptr+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_update_ptr+1, monster_type)
 			mov a, m
 			cpi MONSTER_TYPE_ALLY
 			jz @no_collision
 
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_type)
+			HL_ADVANCE_BY_DIFF_BC(monster_type, monster_pos_x+1)
 			; horizontal check
 			mov c, m 	; monster pos_x
 @collider_pos_x:
@@ -345,7 +345,7 @@ monster_copy_to_scr:
 			rnz
 
 			; advance to monster_erase_scr_addr
-			HL_ADVANCE_BY_DIFF_BC(monster_erase_scr_addr, monster_status)
+			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_erase_scr_addr)
 			; read monster_erase_scr_addr
 			mov c, m
 			inx h
@@ -455,7 +455,7 @@ monster_erase:
 			inx h
 			mov d, m
 
-			HL_ADVANCE_BY_DIFF_BC(monster_erase_wh, monster_erase_scr_addr+1)
+			HL_ADVANCE_BY_DIFF_BC(monster_erase_scr_addr+1, monster_erase_wh)
 			mov a, m
 			inx h
 			mov h, m
