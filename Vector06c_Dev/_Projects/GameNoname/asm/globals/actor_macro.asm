@@ -46,70 +46,81 @@
 ; in:
 ; hl points to actor_status_timer
 ; out:
-; hl points to actor_pos_y+1
+; if no collision: hl points to actor_pos_y+1 
+; if a collision: hl points to actor_pos_x 
 ; uses:
 ; bc, de, hl, a
-; TODO: think of converting it into func. it saves > 492 bytes
+; TODO: think of converting it into a func. each macro takes 492 bytes
 .macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actor_status_timer, actor_pos_x, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, collision_handler) 
 			HL_ADVANCE_BY_DIFF_BC(actor_status_timer, actor_pos_x)
 			push h ; (stack) <- pos_x ptr, to restore it in @apply_new_pos
-			; bc <- pos_x
 			mov c, m
 			inx h
 			mov b, m
 			inx h
-			; stack <- pos_y
+			; bc = pos_x
 			mov e, m
 			inx h
 			mov d, m
 			inx h
 			push d
-			; de <- speed_x
+			; stack <- pos_y			
 			mov e, m
 			inx h
 			mov d, m
 			inx h
-			; (new_pos_x) <- pos_x + speed_x
+			; de = speed_x
 			xchg
 			dad b
-			shld @new_pos_x + 1
-			mov a, h ; pos_x + speed_x for checking a collision
+			shld @new_pos_x + 1 ; temp store new_pos_x
+			mov a, h 
+			; a - >new_pos_x for checking a collision
 			xchg
 			; hl points to speed_y
-			; de <- speed_y
 			mov e, m
 			inx h
 			mov d, m
-			; (new_pos_y) <- pos_y + speed_y
+			; de <- speed_y			
 			xchg
 			pop b
+			; bc - pos_y
 			dad b
-			shld @new_pos_y + 1
-			; a - pos_x + speed_x
-			; hl - pos_y + speed_y
-			; de - points to speed_y+1
+			shld @new_pos_y + 1 ; temp store new_pos_y
+			; a - >new_pos_x for checking a collision
+			; hl - new_pos_y
+			; de - ptr to speed_y+1
 
 			; check the collision tiles
 			mov d, a
 			mov e, h
+			; a - >new_pos_x
+			; d - >new_pos_x
+			; e - >new_pos_y
+
+			; check the collision with a border of the screen
 			; check if X<TILE_WIDTH or > ROOM_WIDTH * TILE_WIDTH - TILE_WIDTH
 			cpi TILE_WIDTH
-			jc collision_handler
+			jc @collided
 			cpi ROOM_WIDTH * TILE_WIDTH - TILE_WIDTH
-			jnc collision_handler
+			jnc @collided
 			; check if Y<TILE_HEIGHT or > ROOM_HEIGHT * TILE_HEIGHT - TILE_HEIGHT
 			mov a, e
 			cpi TILE_HEIGHT
-			jc collision_handler
+			jc @collided
 			cpi ROOM_HEIGHT * TILE_HEIGHT - TILE_HEIGHT
-			jnc collision_handler
+			jnc @collided
 
+
+			; check the collision with a collidable tiles
 			lxi b, (ACTOR_COLLISION_WIDTH-1)<<8 | ACTOR_COLLISION_HEIGHT-1
 			; de - pos_xy
 			; bc - width, height
 			call room_get_collision_tiledata
 			ani TILEDATA_COLLIDABLE
-			jnz collision_handler
+			jz @apply_new_pos
+
+@collided:	pop h
+			jmp collision_handler
 
 @apply_new_pos:
 			pop h

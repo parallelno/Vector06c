@@ -21,6 +21,7 @@ after adding resource and key ui icons, and removing some floor tiles from the t
 Success. Size: 46829 bytes ($B6ED)
 
 
+Success. Size: 47951 bytes ($BB4F)
 
 ; ram-disk data layout
 ; bank0 addr0    [ 4336 free] description: 

@@ -29,10 +29,10 @@ snowflake_tile_func_tbl:
 			RET_4()								; func_id == 7
 			RET_4()								; func_id == 8
 			RET_4()								; func_id == 9
-			JMP_4( sword_func_triggers)		; func_id == 10
-			JMP_4( sword_func_container)	; func_id == 11
-			JMP_4( sword_func_door)			; func_id == 12
-			JMP_4( sword_func_breakable)	; func_id == 13 ; breakable
+			JMP_4( sword_func_triggers)			; func_id == 10
+			JMP_4( sword_func_container)		; func_id == 11
+			JMP_4( sword_func_door)				; func_id == 12
+			JMP_4( sword_func_breakable)		; func_id == 13 ; breakable
 			RET_4()								; func_id == 14
 			RET_4()								; func_id == 15 ; collision
 
@@ -66,12 +66,21 @@ snowflake_init:
 			; advance and set bullet_status_timer
 			inx h
 			mvi m, SNOWFLAKE_STATUS_INVIS_TIME
+			
+			; advance and reset bullet_anim_timer
+			inx h
+			mvi m, 0
+			; advance and set bullet_anim_ptr
+			inx h
+			mvi m, <snowflake_run
+			inx h
+			mvi m, >snowflake_run
 
 			; tmp b = 0
 			mvi b, 0
 			; advance hl to bullet_pos_y+1
-			LXI_D_TO_DIFF(bullet_status_timer, bullet_pos_y+1)
-			dad d
+			HL_ADVANCE_BY_DIFF_DE(bullet_anim_ptr+1, bullet_pos_y+1)
+
 			; set pos_y
 			lda hero_pos_y+1
 			; tmp c = pos_y
@@ -84,7 +93,6 @@ snowflake_init:
 			dcx h
 			; set pos_x
 			lda hero_pos_x+1
-
 			mov m, a
 			dcx h
 			mov m, b
@@ -99,8 +107,7 @@ snowflake_init:
 			; set the mimimum supported height
 			mvi m, SPRITE_COPY_TO_SCR_H_MIN
 			; advance hl to bullet_erase_scr_addr_old+1
-			LXI_D_TO_DIFF(bullet_erase_wh_old, bullet_erase_scr_addr_old+1)
-			dad d
+			HL_ADVANCE_BY_DIFF_DE(bullet_erase_wh_old, bullet_erase_scr_addr_old+1)
 			; a - pos_x
 			; scr_x = pos_x/8 + $a0
 			RRC_(3)
@@ -132,16 +139,15 @@ snowflake_update:
 			jz @die
 
 @update_movement:
+			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bullet_status_timer, bullet_pos_x, SNOWFLAKE_COLLISION_WIDTH, SNOWFLAKE_COLLISION_HEIGHT, @die) 
 
-@attk_anim_update:
-			; advance to bullet_anim_timer
-			inx h
+			; hl points to bullet_pos_y+1
+			; advance hl to bullet_anim_timer
+			HL_ADVANCE_BY_DIFF_BC(bullet_pos_y+1, bullet_anim_timer)
 			mvi a, SNOWFLAKE_ANIM_SPEED_ATTACK
 			jmp actor_anim_update
-
 @die:
-			LXI_D_TO_DIFF(bullet_status_timer, bullet_update_ptr+1)
-			dad d
+			HL_ADVANCE_BY_DIFF_DE(bullet_status_timer, bullet_update_ptr+1)
 			jmp actor_destroy
 
 @delay_update:
@@ -158,14 +164,7 @@ snowflake_update:
 			dcx h
 			mvi m, SNOWFLAKE_STATUS_ATTACK
 
-			; advance and reset bullet_anim_timer
-			INX_H(2)
-			mvi m, 0
-			; advance and set bullet_anim_ptr
-			inx h
-			mvi m, <snowflake_run
-			inx h
-			mvi m, >snowflake_run
+			
 
 /*
 @check_monster_collision:

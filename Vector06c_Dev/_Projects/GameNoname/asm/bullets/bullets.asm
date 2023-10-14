@@ -113,8 +113,7 @@ bullets_erase:
 ; hl - ptr to bullet_update_ptr+1 in the runtime data
 bullet_copy_to_scr:
 			; advance to bullet_status
-			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_status)
-			dad d
+			HL_ADVANCE_BY_DIFF_DE(bullet_update_ptr+1, bullet_status)
 			; if it is invisible, return
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
@@ -217,16 +216,14 @@ bullet_erase:
 			jz actor_set_empty
 
 			; advance to bullet_status
-			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_status)
-			dad d
+			HL_ADVANCE_BY_DIFF_DE(bullet_update_ptr+1, bullet_status)
 			; if it is invisible, return
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
 			rnz
 
 			; advance to bullet_erase_scr_addr
-			LXI_D_TO_DIFF(bullet_status, bullet_erase_scr_addr)
-			dad d
+			HL_ADVANCE_BY_DIFF_DE(bullet_status, bullet_erase_scr_addr)
 			mov e, m
 			inx h
 			mov d, m

@@ -385,7 +385,6 @@ knight_update_defence:
 			jmp knight_update_anim_check_collision_hero
 
 @collided_with_tiles:
-			pop h
 			; hl points to monster_pos_x
 			; advance hl to monster_status
 			HL_ADVANCE_BY_DIFF_BC(monster_pos_x, monster_status)
@@ -402,8 +401,7 @@ knight_update_move_init:
 			; advance hl to monster_status_timer
 
 			; advance hl to monster_id
-			LXI_D_TO_DIFF(monster_status, monster_id)
-			dad d
+			HL_ADVANCE_BY_DIFF_DE(monster_status, monster_id)
 			mov a, m
 			cpi KNIGHT_VERT_ID
 			lxi b, (%10000000)<<8 ; tmp c = 0 
@@ -493,7 +491,6 @@ knight_update_move:
 			jmp knight_update_anim_check_collision_hero
 
 @set_move_init:
-			pop h
 			; hl points to monster_pos_x
 			; advance hl to monster_status
 			HL_ADVANCE_BY_DIFF_BC(monster_pos_x, monster_status)

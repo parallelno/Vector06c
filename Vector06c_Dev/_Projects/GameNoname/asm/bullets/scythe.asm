@@ -215,7 +215,6 @@ scythe_update:
 			HL_ADVANCE_BY_DIFF_BC(bullet_pos_y+1, bullet_update_ptr+1)
 			jmp actor_destroy
 @set_bounce_after_tile_collision:
-			pop h
 			; hl points to pos_x
 			; advance hl to bullet_status_timer
 			HL_ADVANCE_BY_DIFF_BC(bullet_pos_x, bullet_status_timer)

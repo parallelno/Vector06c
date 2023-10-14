@@ -283,7 +283,6 @@ vampire_update_move:
 			jmp vampire_update_anim_check_collision_hero
 
 @set_move_init:
-			pop h
 			; hl points to monster_pos_x
 			; advance hl to monster_status
 			HL_ADVANCE_BY_DIFF_BC(monster_pos_x, monster_status)
