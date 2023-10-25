@@ -44,7 +44,9 @@ MONSTERS_RUNTIME_DATA_LEN = monsters_runtime_data_end - monster_runtime_data_sor
 
 ;=============================================================================
 ; tiled image indices buffer
+; a temporal buffer to unpack data
 tiled_img_idxs:	= $7714
+
 ; TODO: consider increasing this buffer and combine title1, title2, main_menu_back1, and main_menu_back2 into one image
 TILED_IMG_IDXS_LEN = $100
 

@@ -107,7 +107,7 @@ knight_init:
 			rz
 			
 			mov a, b
-			MONSTER_INIT(knight_quest_update, knight_draw, func_ret, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
+			MONSTER_INIT(knight_quest_update, knight_draw, empty_func, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 
 ; update for BURNER_QUEST_ID
 ; anim and a gameplay logic update

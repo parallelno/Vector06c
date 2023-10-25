@@ -59,93 +59,19 @@ SCYTHE_COLLISION_HEIGHT	= 12
 
 ; in:
 ; bc - caster pos
-; a - direction
+; a - direction (BULLET_DIR_*) ; TODO: move dir calc over this func. use A reg for a bullet_id
 scythe_init:
-			sta @dir+1 ; direction (BULLET_DIR_*) ; TODO: move dir calc over this func. use A reg for a bullet_id
-			
-			lxi h, bullet_update_ptr+1
-			mvi e, BULLET_RUNTIME_DATA_LEN
-			call actor_get_empty_data_ptr
-			rnz ; return because too many objects
+			sta scythe_init_speed + 1 ; 
+			BULLET_INIT(scythe_update, scythe_draw, SCYTHE_STATUS_MOVE_THROW, SCYTHE_STATUS_MOVE_TIME, scythe_run, scythe_init_speed)
 
-			; hl - ptr to bullet_update_ptr+1
-			; advance hl to bullet_update_ptr
-			dcx h
-			mvi m, <scythe_update
-			inx h 
-			mvi m, >scythe_update
-			; advance hl to bullet_draw_ptr
-			inx h 
-			mvi m, <scythe_draw
-			inx h 
-			mvi m, >scythe_draw
-			
-			; advance hl to bullet_id
-			inx h
-			; do not set bullet_id because it is unnecessary for this weapon
-;@bullet_id:
-			;mvi a, TEMP_BYTE
-			;mov m, a
-
-			; advance hl to bullet_status
-			inx h
-			mvi m, SCYTHE_STATUS_MOVE_THROW
-			; advance and set bullet_status_timer
-			inx h
-			mvi m, SCYTHE_STATUS_MOVE_TIME
-			; advance hl to bullet_anim_ptr
-			INX_H(2)
-			mvi m, <scythe_run
-			inx h
-			mvi m, >scythe_run
-
-			mov a, b
-			; a - pos_x
-			; scr_x = pos_x/8 + $a0
-			RRC_(3)
-			ani %00011111
-			adi SPRITE_X_SCR_ADDR
-			mvi e, 0
-			; a = scr_x
-			; b = pos_x
-			; c = pos_y			
-			; e = 0 and SPRITE_W_PACKED_MIN
-			; hl - ptr to bullet_erase_scr_addr_old			
-			
-			; advance hl to bullet_erase_scr_addr
-			inx h
-			mov m, c
-			inx h
-			mov m, a
-			; advance hl to bullet_erase_scr_addr_old
-			inx h
-			mov m, c
-			inx h
-			mov m, a
-			; advance hl to bullet_erase_wh
-			inx h
-			mvi m, SPRITE_H_MIN
-			inx h
-			mov m, e
-			; advance hl to bullet_erase_wh_old
-			inx h
-			mvi m, SPRITE_H_MIN
-			inx h
-			mov m, e
-			; advance hl to bullet_pos_x
-			inx h
-			mov m, e
-			inx h
-			mov m, b
-			; advance hl to bullet_pos_y
-			inx h
-			mov m, e
-			inx h
-			mov m, c
-			; advance hl to bullet_speed_x
-			inx h
-@dir:
+; in:
+; de - ptr to bullet_speed_x
+scythe_init_speed:
 			mvi a, TEMP_BYTE ; direction (BULLET_DIR_*)
+			xchg
+			mvi e, 0
+			; hl - ptr to bullet_speed_x
+
 			cpi BULLET_DIR_R
 			jz @move_right
 			cpi BULLET_DIR_L

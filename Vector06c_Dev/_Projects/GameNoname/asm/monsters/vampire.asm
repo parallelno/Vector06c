@@ -347,8 +347,7 @@ vampire_update_shoot:
 			mov b, m
 			INX_H(2)
 			mov c, m
-			mvi a, BOMB_DMG_ID
-			jmp bomb_init
+			jmp bomb_dmg_init
 
 ; in:
 ; hl - monster_anim_timer

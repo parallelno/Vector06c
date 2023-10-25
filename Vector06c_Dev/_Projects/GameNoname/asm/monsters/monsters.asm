@@ -23,19 +23,19 @@ monsters_init:
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
 ;ex. MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
-.macro MONSTER_INIT(MONSTER_UPDATE, MONSTER_DRAW, MONSTER_IMPACT, MONSTER_HEALTH, MONSTER_STATUS, MONSTER_ANIM)
+.macro MONSTER_INIT(MONSTER_UPDATE_PTR, MONSTER_DRAW_PTR, MONSTER_IMPACT_PTR, MONSTER_HEALTH, MONSTER_STATUS, MONSTER_ANIM_PTR)
 			lxi d, @init_data
 			jmp monster_init
 
 			.word TEMP_WORD  ; safety word because "call actor_get_empty_data_ptr"
 			.word TEMP_WORD  ; safety word because an interruption can call
 @init_data:
-			.word MONSTER_UPDATE, MONSTER_DRAW, MONSTER_IMPACT, MONSTER_STATUS<<8 | MONSTER_HEALTH, MONSTER_ANIM
+			.word MONSTER_UPDATE_PTR, MONSTER_DRAW_PTR, MONSTER_IMPACT_PTR, MONSTER_STATUS<<8 | MONSTER_HEALTH, MONSTER_ANIM_PTR
 .endmacro
 
 ; monster initialization
 ; in:
-; de - ptr to monster_data: .word MONSTER_ANIM, MONSTER_STATUS | MONSTER_HEALTH<<8, MONSTER_IMPACT, MONSTER_DRAW, MONSTER_UPDATE
+; de - ptr to monster_data: .word MONSTER_UPDATE_PTR, MONSTER_DRAW_PTR, MONSTER_IMPACT_PTR, MONSTER_STATUS<<8 | MONSTER_HEALTH, MONSTER_ANIM_PTR
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
 monster_init:
@@ -48,20 +48,20 @@ monster_init:
 			RRC_(2) ; to get monster_id
 			sta @monster_id+1
 
-			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_monsters, @ret)
+			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_monsters, @restore_sp)
 
 			lxi h, monster_update_ptr+1
 			mvi e, MONSTER_RUNTIME_DATA_LEN
 			call actor_get_empty_data_ptr
-			jnz @restore_sp ; return because too many objects
+			jnz @restore_sp ; return when it's too many objects
 
 			mov a, c
 			; a - tile_idx in the room_tiledata array
-			; hl - ptr to monster_update_ptr+1			
-			
+			; hl - ptr to monster_update_ptr+1
+
 			; advance hl to monster_update_ptr
 			dcx h
-			pop b ; use bc to read from the stack is requirenment
+			pop b ; using bc to read from the stack is requirenment
 			; bc - ptr to monster_update_ptr
 			mov m, c
 			inx h
@@ -98,13 +98,13 @@ monster_init:
 			; advance hl to monster_status
 			inx h
 			mov m, b
-			
+
 			; advance hl to monster_anim_ptr
 			HL_ADVANCE_BY_DIFF_DE(monster_status, monster_anim_ptr)
 
 			mov e, a
 			; e - tile_idx
-			
+
 			pop b
 			; bc - monster_anim_ptr
 			mov m, c
@@ -154,19 +154,19 @@ monster_init:
 			inx h
 			mov m, e
 			inx h
-@pos_x:			
+@pos_x:
 			mvi m, TEMP_BYTE ; pos_x
 			; advance hl to monster_pos_y
 			inx h
 			mov m, e
 			inx h
 			mov m, a
-@ret:
+
 @restore_sp:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
 			; return TILEDATA_RESTORE_TILE to make the tile where a monster spawned walkable and restorable
-			mvi a, TILEDATA_RESTORE_TILE		
+			mvi a, TILEDATA_RESTORE_TILE
 			ret
 
 

@@ -238,7 +238,6 @@ sword_func_breakable:
 			mov c, m
 			inx h
 			mov b, m
-			lxi d, vfx_puff_loop
 			call fart_init
 			pop b ; restore tile_idx
 

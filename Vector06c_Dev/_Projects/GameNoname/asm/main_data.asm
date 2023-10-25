@@ -1,5 +1,5 @@
 main_screens_call_ptrs:
-			.word func_ret			; GLOBAL_REQ_NONE		= 0
+			.word empty_func			; GLOBAL_REQ_NONE		= 0
 			.word main_menu			; GLOBAL_REQ_MAIN_MENU	= 1
 			.word main_game			; GLOBAL_REQ_GAME		= 2
 			.word settings_screen	; GLOBAL_REQ_OPTIONS	= 3

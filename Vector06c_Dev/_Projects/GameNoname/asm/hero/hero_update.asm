@@ -72,7 +72,7 @@ hero_update:
 			lxi h, 0
 			shld hero_speed_y
 
-			lxi h, hero_dir_x
+			lxi h, hero_dir
 			mov a, m
 			ani HERO_DIR_HORIZ_RESET
 			ori HERO_DIR_RIGHT
@@ -91,7 +91,7 @@ hero_update:
 			shld hero_speed_y
 
 			mvi a, HERO_DIR_RIGHT | HERO_DIR_UP
-			sta hero_dir_x
+			sta hero_dir
 			lxi h, hero_r_run
 			shld hero_anim_addr
 			jmp hero_update_temp_pos
@@ -106,7 +106,7 @@ hero_update:
 			shld hero_speed_y
 
 			mvi a, HERO_DIR_RIGHT | HERO_DIR_DOWN
-			sta hero_dir_x
+			sta hero_dir
 			lxi h, hero_r_run
 			shld hero_anim_addr
 			jmp hero_update_temp_pos
@@ -120,7 +120,7 @@ hero_update:
 			lxi h, 0
 			shld hero_speed_y
 
-			lxi h, hero_dir_x
+			lxi h, hero_dir
 			mov a, m
 			ani HERO_DIR_HORIZ_RESET
 			ori HERO_DIR_LEFT
@@ -140,7 +140,7 @@ hero_update:
 			shld hero_speed_y
 
 			mvi a, HERO_DIR_LEFT | HERO_DIR_UP
-			sta hero_dir_x
+			sta hero_dir
 			lxi h, hero_l_run
 			shld hero_anim_addr
 			jmp hero_update_temp_pos
@@ -154,7 +154,7 @@ hero_update:
 			shld hero_speed_y
 
 			mvi a, HERO_DIR_LEFT | HERO_DIR_DOWN
-			sta hero_dir_x
+			sta hero_dir
 			lxi h, hero_l_run
 			shld hero_anim_addr
 			jmp hero_update_temp_pos
@@ -168,7 +168,7 @@ hero_update:
 			lxi h, HERO_RUN_SPEED
 			shld hero_speed_y
 
-			lxi h, hero_dir_x
+			lxi h, hero_dir
 			mov a, m
 			ani HERO_DIR_VERT_RESET
 			ori HERO_DIR_UP
@@ -192,7 +192,7 @@ hero_update:
 			LXI_H_NEG(HERO_RUN_SPEED)
 			shld hero_speed_y
 
-			lxi h, hero_dir_x
+			lxi h, hero_dir
 			mov a, m
 			ani HERO_DIR_VERT_RESET
 			ori HERO_DIR_DOWN
@@ -355,7 +355,7 @@ hero_attack_start:
 			; TODO: revise that logic: ; use a sword after using a popsicle to handle triggers
 @use_sword:
 			; set direction
-			lda hero_dir_x
+			lda hero_dir
 			rrc
 			jnc @set_anim_attk_l
 
@@ -388,7 +388,7 @@ hero_idle_start:
 			shld hero_speed_x
 			shld hero_speed_y
 			; set direction
-			lda hero_dir_x
+			lda hero_dir
 			rrc
 			jnc @setAnimIdleL
 
@@ -481,16 +481,15 @@ hero_impacted_start:
 
 			; set backward speed
 			; check hero's horizontal direction
-			lxi d, hero_dir_x
+			lxi d, hero_dir
 			ldax d
 			ani HERO_DIR_HORIZ_MASK
 			jz @no_horiz_move
 			rrc
 			lxi h, HERO_RUN_SPEED_IMPACTED_N
-			jc @set_speed_x_n
-@set_speed_x_p:
+			jc @set_speed_x
 			lxi h, HERO_RUN_SPEED_IMPACTED
-@set_speed_x_n:
+@set_speed_x:
 			shld hero_speed_x
 
 			; check hero's vertical direction
@@ -500,17 +499,14 @@ hero_impacted_start:
 			jz @no_vert_move
 			RRC_(3)
 			lxi h, HERO_RUN_SPEED_IMPACTED_N
-			jc @set_speed_y_n
-@set_speed_y_p:
+			jc @set_speed_y
 			lxi h, HERO_RUN_SPEED_IMPACTED
-@set_speed_y_n:
+@set_speed_y:
 			shld hero_speed_y
 			ret
 @no_horiz_move:
 			lxi h, 0
-			shld hero_speed_x
-			jmp @check_dir_vert
+			jmp @set_speed_x
 @no_vert_move:
 			lxi h, 0
-			shld hero_speed_y
-			ret
+			jmp @set_speed_y

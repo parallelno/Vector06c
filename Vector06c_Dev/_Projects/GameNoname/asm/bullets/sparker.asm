@@ -43,86 +43,21 @@ VFX_SPAWN_RATE = 5
 
 ; in:
 ; bc - caster pos
-; movement speed based on the hero pos. it goes to that direction.
 sparker_init:
-			lxi h, bullet_update_ptr+1
-			mvi e, BULLET_RUNTIME_DATA_LEN
-			call actor_get_empty_data_ptr
-			rnz ; return because too many objects
+			mov l, c
+			mov h, b
+			shld sparker_init_speed + 1
+			BULLET_INIT(sparker_update, vfx_draw4, SPARKER_STATUS_MOVE, SPARKER_STATUS_MOVE_TIME, vfx4_spark, sparker_init_speed)
 
-			; hl - ptr to bullet_update_ptr+1
-			; advance hl to bullet_update_ptr
-			dcx h
-			mvi m, <sparker_update
-			inx h 
-			mvi m, >sparker_update
-			; advance hl to bullet_draw_ptr
-			inx h 
-			mvi m, <sparker_draw
-			inx h 
-			mvi m, >sparker_draw
-
-			; advance hl to bullet_id
-			inx h
-			; advance hl to bullet_status
-			inx h
-			mvi m, SPARKER_STATUS_MOVE
-			; advance and set bullet_status_timer
-			inx h
-			mvi m, SPARKER_STATUS_MOVE_TIME
-			; advance hl to bullet_anim_ptr
-			INX_H(2)
-			
-			mvi m, <vfx4_spark
-			inx h
-			mvi m, >vfx4_spark
-
-			mov a, b
-			; a - pos_x
-			; scr_x = pos_x/8 + $a0
-			RRC_(3)
-			ani %00011111
-			adi SPRITE_X_SCR_ADDR
-			mvi e, 0
-			; a = scr_x
+; bullet_speed_x and bullet_speed_y are aimed toward the hero pos.
+; in:
+; de - ptr to bullet_speed_x
+sparker_init_speed:
+			lxi b, TEMP_WORD
+			xchg
 			; b = pos_x
-			; c = pos_y			
-			; e = 0 and SPRITE_W_PACKED_MIN
-			; hl - ptr to bullet_erase_scr_addr_old			
-			
-			; advance hl to bullet_erase_scr_addr
-			inx h
-			mov m, c
-			inx h
-			mov m, a
-			; advance hl to bullet_erase_scr_addr_old
-			inx h
-			mov m, c
-			inx h
-			mov m, a
-			; advance hl to bullet_erase_wh
-			inx h
-			mvi m, SPRITE_H_MIN
-			inx h
-			mov m, e
-			; advance hl to bullet_erase_wh_old
-			inx h
-			mvi m, SPRITE_H_MIN
-			inx h
-			mov m, e
-			; advance hl to bullet_pos_x
-			inx h
-			mov m, e
-			inx h
-			mov m, b
-			; advance hl to bullet_pos_y
-			inx h
-			mov m, e
-			inx h
-			mov m, c
-			
-			; b = pos_x
-			; c = pos_y	
+			; c = pos_y
+			; hl - ptr to bullet_speed_x
 			; set a projectile speed towards the hero
 			; pos_diff =  hero_pos - burnerPosX
 			; speed = pos_diff / VAMPIRE_STATUS_DASH_TIME			
@@ -164,8 +99,6 @@ sparker_init:
 			ora l
 			mov l, a
 			xchg
-			; advance hl to speed_x
-			inx h 
 			pop b ; speed_x
 			mov m, c 
 			inx h 
@@ -236,9 +169,3 @@ sparker_update:
 			jmp actor_destroy
 @vfx_spawn_rate:
 			.byte VFX_SPAWN_RATE
-
-; draw a sprite into a backbuffer
-; in:
-; de - ptr to bullet_draw_ptr in the runtime data
-sparker_draw:
-			BULLET_DRAW(sprite_get_scr_addr_vfx4, __RAM_DISK_S_VFX4)

@@ -1,37 +1,12 @@
 ;=========================================================
-; This is non-gameplay bullet
+; This is a non-gameplay bullet object
 ; It is used in the main menu as a cursor to select the option
 ;=========================================================
+CURSOR_STATUS_IDLE		= 0
+CURSOR_STATUS_IDLE_TIME	= 0
 
-; bullet AI:
-; init:
-;	status = move_forward
-;	status_timer = moveForwardTimer
-;	speed = caster dir
-; move_forward:
-;	decr status_timer
-;	if status_timer = 0
-;		death
-;	else:
-;		try to move a bullet
-;		if bullet collides with tiles:
-;			death
-;		else:
-;			accept new pos
-;			update_anim
-;			check bullet-hero collision, 
-;			if bullet collides with hero:
-;				impact hero
-;				death
 
 CURSOR_MOVE_SPEED_MAX		= 14
-
-; statuses.
-;CURSOR_STATUS_MOVE = 0
-
-; status duration in updates. can be 2,4,8,16,32, etc
-; when updated do not forget update the code below (posDiffX / CURSOR_STATUS_MOVE_TIME) to match the new value
-;CURSOR_STATUS_MOVE_TIME	= 64
 
 ; animation speed (the less the slower, 0-255, 255 means the next frame is almost every update)
 CURSOR_ANIM_SPEED_MOVE	= 30
@@ -41,73 +16,7 @@ CURSOR_ANIM_SPEED_MOVE	= 30
 ; bc - pos
 ; movement speed based on the hero pos. it goes to that direction.
 cursor_init:
-			lxi h, bullet_update_ptr+1
-			mvi e, BULLET_RUNTIME_DATA_LEN
-			call actor_get_empty_data_ptr
-			rnz ; return because too many objects
-
-			; hl - ptr to bullet_update_ptr+1
-			; advance hl to bullet_update_ptr
-			dcx h
-			mvi m, <cursor_update
-			inx h 
-			mvi m, >cursor_update
-			; advance hl to bullet_draw_ptr
-			inx h 
-			mvi m, <bomb_draw
-			inx h 
-			mvi m, >bomb_draw
-
-			HL_ADVANCE_BY_DIFF_DE(bullet_draw_ptr+1, bullet_anim_ptr)
-
-			mvi m, <bomb_run
-			inx h
-			mvi m, >bomb_run
-
-			mov a, b
-			; a - pos_x
-			; scr_x = pos_x/8 + $a0
-			RRC_(3)
-			ani %00011111
-			adi SPRITE_X_SCR_ADDR
-			mvi e, 0
-			; a = scr_x
-			; b = pos_x
-			; c = pos_y			
-			; e = 0 and SPRITE_W_PACKED_MIN
-			; hl - ptr to bullet_erase_scr_addr_old			
-			
-			; advance hl to bullet_erase_scr_addr
-			inx h
-			mov m, c
-			inx h
-			mov m, a
-			; advance hl to bullet_erase_scr_addr_old
-			inx h
-			mov m, c
-			inx h
-			mov m, a
-			; advance hl to bullet_erase_wh
-			inx h
-			mvi m, SPRITE_H_MIN
-			inx h
-			mov m, e
-			; advance hl to bullet_erase_wh_old
-			inx h
-			mvi m, SPRITE_H_MIN
-			inx h
-			mov m, e
-			; advance hl to bullet_pos_x
-			inx h
-			mov m, e
-			inx h
-			mov m, b
-			; advance hl to bullet_pos_y
-			inx h
-			mov m, e
-			inx h
-			mov m, c
-			ret
+			BULLET_INIT(cursor_update, bomb_draw, CURSOR_STATUS_IDLE, CURSOR_STATUS_IDLE_TIME, bomb_run, empty_func)
 			
 ; anim and a gameplay logic update
 ; in:

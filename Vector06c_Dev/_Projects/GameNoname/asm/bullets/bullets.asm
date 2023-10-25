@@ -9,7 +9,7 @@
 .include "asm\\bullets\\vfx.asm"
 .include "asm\\bullets\\cursor.asm"
 
-; mark erased the runtime bullet data 
+; mark erased the runtime bullet data
 bullets_init:
 			mvi a, <bullets_runtime_data
 			sta bullet_runtime_data_sorted
@@ -20,6 +20,141 @@ bullets_init:
 			lxi h, bullet_update_ptr + 1
 			jmp actor_erase_runtime_data
 
+
+; bullet initialization
+; in:
+; bc - caster pos
+; ex. TODO: add an example
+.macro BULLET_INIT(BULLET_UPDATE_PTR, BULLET_DRAW_PTR, BULLET_STATUS, BULLET_STATUS_TIMER, BULLET_ANIM_PTR, BULLET_SPEED_INIT)
+			lxi d, @init_data
+			jmp bullet_init
+
+			.word TEMP_WORD  ; safety word because "call actor_get_empty_data_ptr"
+			.word TEMP_WORD  ; safety word because an interruption can call
+@init_data:
+			.word BULLET_UPDATE_PTR, BULLET_DRAW_PTR, BULLET_STATUS | BULLET_STATUS_TIMER<<8, BULLET_ANIM_PTR, BULLET_SPEED_INIT
+.endmacro
+
+; bullet initialization
+; this func calls bullet_speed_init code to define a unique bullet behavior. in for this code
+; in:
+; de - ptr to bullet_data: .word BULLET_UPDATE_PTR, BULLET_DRAW_PTR, BULLET_STATUS | BULLET_STATUS_TIMER<<8, BULLET_ANIM_PTR, BULLET_SPEED_INIT
+; bc - caster pos
+; when it calls BULLET_SPEED_INIT code
+; in:
+; de - ptr to bullet_speed_x
+bullet_init:
+			lxi h, 0
+			dad	sp
+			shld @restore_sp + 1
+			xchg
+			sphl
+
+			mov l, c
+			mov h, b
+			shld @caster_pos + 1
+
+			lxi h, bullet_update_ptr+1
+			mvi e, BULLET_RUNTIME_DATA_LEN
+			call actor_get_empty_data_ptr
+			rnz ; return when it's too many objects
+
+			; hl - ptr to bullet_update_ptr+1
+			; advance hl to bullet_update_ptr
+			dcx h
+			pop b ; using bc to read from the stack is requirenment
+			mov m, c
+			inx h
+			mov m, b
+			; advance hl to bullet_draw_ptr
+			inx h
+			pop b
+			mov m, c
+			inx h
+			mov m, b
+			; advance hl to bullet_id
+			inx h ; TODO: think of excluding bullet_id from the bullet_data
+			; advance hl to bullet_status
+			inx h
+			pop b
+			mov m, c
+			; advance hl to bullet_status_timer
+			inx h
+			mov m, b
+			; advance hl to bullet_anim_timer
+			inx h
+			mvi m, 0
+			; advance hl to bullet_anim_ptr
+			inx h
+			pop b
+			mov m, c
+			inx h
+			mov m, b
+@caster_pos:
+			lxi b, TEMP_WORD
+			; bc - scr pos
+			mov a, b
+			; a - pos_x
+			; scr_x = pos_x/8 + SPRITE_X_SCR_ADDR
+			RRC_(3)
+			ani %00011111
+			adi SPRITE_X_SCR_ADDR
+			mvi e, 0
+			; a = scr_x
+			; b = pos_x
+			; c = pos_y
+			; e = 0 and SPRITE_W_PACKED_MIN
+
+			; advance hl to bullet_erase_scr_addr
+			inx h
+			mov m, c
+			inx h
+			mov m, a
+			; advance hl to bullet_erase_scr_addr_old
+			inx h
+			mov m, c
+			inx h
+			mov m, a
+			; advance hl to bullet_erase_wh
+			inx h
+			mvi m, SPRITE_H_MIN
+			inx h
+			mov m, e
+			; advance hl to bullet_erase_wh_old
+			inx h
+			mvi m, SPRITE_H_MIN
+			inx h
+			mov m, e
+			; advance hl to bullet_pos_x
+			inx h
+			mov m, e
+			inx h
+			mov m, b
+			; advance hl to bullet_pos_y
+			inx h
+			mov m, e
+			inx h
+			mov m, c
+			; advance hl to bullet_speed_x
+			inx h
+
+			pop b
+			; bc - ptr to init_speed func
+@restore_sp:
+			lxi sp, TEMP_ADDR
+			RAM_DISK_OFF()
+
+			xchg
+			; de - ptr to bullet_speed_x
+			lxi h, @ret
+			push h
+			mov l, c
+			mov h, b
+			pchl
+@ret:
+			; return TILEDATA_RESTORE_TILE to make the tile where a monster spawned walkable and restorable
+			mvi a, TILEDATA_RESTORE_TILE
+			ret
 
 ; call all active bullets' Update/Draw func
 ; a func will get DE pointing to a func ptr (ex.:bullet_update_ptr or bullet_draw_ptr) in the runtime data
@@ -49,9 +184,9 @@ bullets_data_func_caller:
 			; TODO: replace dad PR with add R, because the data is $100 byte aligned in buffers.asm
 			dad d
 			; read the func addr
-			mov d, m 
+			mov d, m
 			dcx h
-			mov e, m 
+			mov e, m
 			xchg
 			; call a func
 			pchl
@@ -61,8 +196,8 @@ bullets_data_func_caller:
 			lxi d, BULLET_RUNTIME_DATA_LEN
 			dad d
 			jmp @loop
-			ret			
-			
+			ret
+
 
 ; call a provided func (bullet_copy_to_scr, bullet_erase) if a bullet is alive
 ; a func will get HL pointing to a bullet_update_ptr+1 in the runtime data, and A holding a BULLET_RUNTIME_DATA_* status
@@ -80,7 +215,7 @@ bullets_common_func_caller:
 			jz @next_data
 			; it is the last or the end, so return
 			ret
-@call_func:			
+@call_func:
 			push h
 @func_ptr:
 			call TEMP_ADDR
@@ -90,8 +225,8 @@ bullets_common_func_caller:
 			dad d
 			jmp @loop
 			ret
-			
-			
+
+
 bullets_update:
 			lxi h, 0
 			jmp bullets_data_func_caller
@@ -120,7 +255,7 @@ bullet_copy_to_scr:
 			rnz
 
 			; advance to bullet_erase_scr_addr
-			HL_ADVANCE_BY_DIFF_BC(bullet_status, bullet_erase_scr_addr)			
+			HL_ADVANCE_BY_DIFF_BC(bullet_status, bullet_erase_scr_addr)
 			; read bullet_erase_scr_addr
 			mov c, m
 			inx h
@@ -149,7 +284,7 @@ bullet_copy_to_scr:
 @keep_old_x:
 			mov a, e
 			cmp c
-			jc @keep_old_y 
+			jc @keep_old_y
 			mov e, c
 @keep_old_y:
 			; tmp store a scr addr to copy
@@ -190,7 +325,7 @@ bullet_copy_to_scr:
 @keep_old_tr_x:
 			mov a, l
 			cmp e
-			jnc @keep_old_tr_y 
+			jnc @keep_old_tr_y
 			mov l, e
 @keep_old_tr_y:
 			; hl - top-right corner scr addr to copy
@@ -199,10 +334,10 @@ bullet_copy_to_scr:
 			; calc bc (width, height)
 			mov a, h
 			sub d
-			mov b, a 
+			mov b, a
 			mov a, l
 			sub e
-			mov c, a 
+			mov c, a
 			jmp sprite_copy_to_scr_v
 
 
@@ -231,7 +366,7 @@ bullet_erase:
 			HL_ADVANCE_BY_DIFF_BC(bullet_erase_scr_addr+1, bullet_erase_wh)
 			mov a, m
 			inx h
-			mov h, m			
+			mov h, m
 			mov l, a
 			; hl - bullet_erase_wh
 			; de - bullet_erase_scr_addr

@@ -8,7 +8,7 @@ hero_status:				.byte HERO_STATUS_IDLE ; a status describes what set of animatio
 hero_status_timer:			.byte 0	; a duration of the status. ticks every update
 hero_anim_timer:			.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
 hero_anim_addr:				.word TEMP_ADDR ; holds the current frame ptr
-hero_dir_x:					.byte 1 		; 1-right, 0-left
+hero_dir:					.byte 1 		; VDHD, V: vertical dir, H: horiz dir, D: 0 - neg dir, 1 - positive dir
 hero_erase_scr_addr:		.word TEMP_ADDR	; screen addr for erasing
 hero_erase_scr_addr_old:	.word TEMP_ADDR	; screen addr for erasing last frame 
 hero_erase_wh:				.word TEMP_WORD	; width, height

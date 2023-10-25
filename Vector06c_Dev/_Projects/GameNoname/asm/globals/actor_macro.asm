@@ -98,16 +98,16 @@
 			; e - >new_pos_y
 
 			; check the collision with a border of the screen
-			; check if X<TILE_WIDTH or > ROOM_WIDTH * TILE_WIDTH - TILE_WIDTH
+			; check the X coord
 			cpi TILE_WIDTH
 			jc @collided
-			cpi ROOM_WIDTH * TILE_WIDTH - TILE_WIDTH
+			cpi ROOM_WIDTH * TILE_WIDTH - TILE_WIDTH - ACTOR_COLLISION_WIDTH
 			jnc @collided
-			; check if Y<TILE_HEIGHT or > ROOM_HEIGHT * TILE_HEIGHT - TILE_HEIGHT
+			; check if the Y coord
 			mov a, e
 			cpi TILE_HEIGHT
 			jc @collided
-			cpi ROOM_HEIGHT * TILE_HEIGHT - TILE_HEIGHT
+			cpi ROOM_HEIGHT * TILE_HEIGHT - TILE_HEIGHT - ACTOR_COLLISION_HEIGHT
 			jnc @collided
 
 
@@ -120,6 +120,7 @@
 			jz @apply_new_pos
 
 @collided:	pop h
+			; hl points to pos_x
 			jmp collision_handler
 
 @apply_new_pos:

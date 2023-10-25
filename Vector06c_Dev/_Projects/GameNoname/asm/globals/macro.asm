@@ -188,6 +188,10 @@
 		lxi h, $ffff - val + 1
 .endmacro
 
+.macro LXI_D_NEG(val)
+		lxi d, $ffff - val + 1
+.endmacro
+
 ; to replace xra a with a meaningful macro
 .macro A_TO_ZERO(int8_const, useXRA = true)
 		.if int8_const != 0

@@ -8,94 +8,34 @@
 ;=========================================================
 
 ; statuses.
+FART_STATUS_LIFE		= 0
 FART_STATUS_LIFE_TIME	= 10
 
-fart_init:
 ; Init for non-preshifted VFX (x coord aligned to 8 pixels )
 ; in:
 ; bc - vfx screen addr
-; de - anim_ptr (ex. vfx_puff)
-; it utilizes bullet runtime data
-;vfx_init:
-			push d ; store vfx_anim_ptrs
+fart_init:
+			BULLET_INIT(fart_update, vfx_draw, FART_STATUS_LIFE, FART_STATUS_LIFE_TIME, vfx_puff_loop, fart_init_pos)
 
-			lxi h, bullet_update_ptr+1
-			mvi e, BULLET_RUNTIME_DATA_LEN
-			call actor_get_empty_data_ptr
-			pop d ; d - vfx_anim_ptr
-			rnz ; return because too many objects
-
-			; hl - ptr to bullet_update_ptr+1
-			; advance hl to bullet_update_ptr
-			dcx h
-			mvi m, <fart_update
-			inx h 
-			mvi m, >fart_update
-			; advance hl to bullet_draw_ptr
-			inx h 
-			mvi m, <vfx_draw
-			inx h 
-			mvi m, >vfx_draw
-
-			; advance hl to bullet_status_timer
-			MVI_A_TO_DIFF(bullet_draw_ptr + 1, bullet_status_timer)
-			add l
-			mov l, a
-
-			mvi m, FART_STATUS_LIFE_TIME
-
-			; advance hl to bullet_anim_ptr
-			INX_H(2)
-			
-			; de - vfx_anim_ptr
-			mov m, e
-			inx h			
-			mov m, d
-
-			; make a proper scr addr
-			mvi a, %00011111
-			ana b
+; vfx_draw func used for this fart bullet requires a specific pos_y and pos_x format
+; this function provides it
+; in:
+; de - ptr to bullet_speed_x
+fart_init_pos:
+			LXI_H_TO_DIFF(bullet_speed_x, bullet_pos_x + 1)
+			dad d
+			; hl - ptr to bullet_pos_x + 1
+			mov a, m
+			; a - pos_x
+			; make a scr addr
+			ani %00011111
 			ori SPRITE_X_SCR_ADDR
-			mov b, a
-
-			mvi d, 2
-			mvi e, 0
-			; bc - screen addr
-			; d = 2, anim ptr offset. used in a draw func
-			; e = 0 and SPRITE_W_PACKED_MIN
-			; hl - ptr to bullet_erase_scr_addr_old			
-			
-			; advance hl to bullet_erase_scr_addr
-			inx h
-			mov m, c
-			inx h
-			mov m, b
-			; advance hl to bullet_erase_scr_addr_old
-			inx h
-			mov m, c
-			inx h
-			mov m, b
-			; advance hl to bullet_erase_wh
-			inx h
-			mvi m, SPRITE_H_MIN
-			inx h
-			mov m, e
-			; advance hl to bullet_erase_wh_old
-			inx h
-			mvi m, SPRITE_H_MIN
-			inx h
-			mov m, e
-			; advance hl to bullet_pos_x
-			inx h
-			inx h
-			mov m, b
+			mov m, a
 			; advance hl to bullet_pos_y
 			inx h
-			mov m, d
-			inx h
-			mov m, c
+			mvi m, 2 ; anim ptr offset. used in the vfx_draw func
 			ret
-			
+
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to bullet_update_ptr in the runtime data

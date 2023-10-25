@@ -388,4 +388,5 @@ copy_from_ram_disk:
 			jmp restore_sp
 
 ; empty func
-func_ret:	ret
+empty_func:
+			ret

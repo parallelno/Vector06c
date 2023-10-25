@@ -5,7 +5,7 @@ hero_draw:
 			lhld hero_anim_addr
 			call sprite_get_addr
 
-			lda hero_dir_x
+			lda hero_dir
 			rrc
 			mvi l, <(__RAM_DISK_S_HERO_R | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			jc @spriteR

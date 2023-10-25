@@ -20,8 +20,22 @@ Success. Size: 46891 bytes ($B72B)
 after adding resource and key ui icons, and removing some floor tiles from the tiled image
 Success. Size: 46829 bytes ($B6ED)
 
-
+before replacing bullets init funcs with the BULLET_INIT macro
+build: Compilation asm\main.asm to generated\bin\main_asm.bin
+Success. Size: 18864 bytes ($49B0)
+total
 Success. Size: 47951 bytes ($BB4F)
+
+after replacing bullets init funcs with the BULLET_INIT macro
+build: Compilation asm\main.asm to generated\bin\main_asm.bin
+Success. Size: 18572 bytes ($488C)
+total
+Success. Size: 47989 bytes ($BB75)
+
+
+bug
+sp 7ff6
+
 
 ; ram-disk data layout
 ; bank0 addr0    [ 4336 free] description: 

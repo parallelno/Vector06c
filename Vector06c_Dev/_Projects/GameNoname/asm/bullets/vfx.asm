@@ -4,6 +4,7 @@
 ; de - vfx_anim_ptr (ex. vfx_puff)
 ; it utilizes bullet runtime data
 vfx_init4:
+; TODO: think of using BULLET_INIT instead of the code below
 			xchg
 			shld @anim_ptr + 1
 
@@ -86,6 +87,7 @@ vfx_init4:
 ; de - vfx_anim_ptr (ex. vfx_puff)
 ; it utilizes bullet runtime data
 vfx_init:
+; TODO: think of using BULLET_INIT instead of the code below
 			xchg
 			shld @anim_ptr + 1
 
@@ -162,7 +164,7 @@ vfx_init:
 			mov m, b
 			; advance hl to bullet_pos_y
 			inx h
-			mov m, d
+			mov m, d ; anim ptr offset
 			inx h
 			mov m, c
 			ret

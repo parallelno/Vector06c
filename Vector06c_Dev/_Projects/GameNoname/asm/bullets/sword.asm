@@ -46,80 +46,17 @@ sword_init:
 			CPI_WITH_ZERO(HERO_WEAPON_NONE)
 			jz @no_sword
 
-			lxi h, bullet_update_ptr+1
-			mvi e, BULLET_RUNTIME_DATA_LEN
-			call actor_get_empty_data_ptr
-			rnz ; return because too many objects
-
-			; hl - ptr to bullet_update_ptr+1
-
-			dcx h
-			mvi m, <sword_update
-			inx h
-			mvi m, >sword_update
-			inx h
-			mvi m, <sword_draw
-			inx h
-			mvi m, >sword_draw
-
-			; advance hl to bullet_id
-			inx h
-			; do not set bullet_id because it is unnecessary for this weapon
-;@bullet_id:
-			;mvi a, TEMP_BYTE
-			;mov m, a
-
-			; advance hl to bullet_status
-			inx h
-			mvi m, ACTOR_STATUS_BIT_INVIS
-			; advance and set bullet_status_timer
-			inx h
-			mvi m, SWORD_STATUS_INVIS_TIME
-
-			; tmp b = 0
-			mvi b, 0
-			; advance hl to bullet_pos_y+1
-			HL_ADVANCE_BY_DIFF_DE(bullet_status_timer, bullet_pos_y+1)
-			; set pos_y
-			lda hero_pos_y+1
-			; tmp c = pos_y
-			mov c, a
-			; set pos_y
-			mov m, a
-			dcx h
-			mov m, b
 			; advance hl to bullet_pos_x+1
-			dcx h
-			; set pos_x
-			lda hero_pos_x+1
+			lxi h, hero_pos_x+1
+			mov b, m
+			; advance hl to bullet_pos_y+1
+			INX_H(2)
+			mov c, m
+			; bc - hero_pos
+			BULLET_INIT(sword_update, sword_draw, ACTOR_STATUS_BIT_INVIS, SWORD_STATUS_INVIS_TIME, NULL_BYTE, empty_func)
 
-			mov m, a
-			dcx h
-			mov m, b
-
-			; advance hl to bullet_erase_wh_old+1
-			dcx h
-			; set the mimimum supported width
-			;mvi m, 1 ; width = 8
-			mov m, b ; width = 8
-			; advance hl to bullet_erase_wh_old
-			dcx h
-			; set the mimimum supported height
-			mvi m, SPRITE_COPY_TO_SCR_H_MIN
-			; advance hl to bullet_erase_scr_addr_old+1
-			HL_ADVANCE_BY_DIFF_DE(bullet_erase_wh_old, bullet_erase_scr_addr_old+1)
-			; a - pos_x
-			; scr_x = pos_x/8 + $a0
-			RRC_(3)
-			ani %00011111
-			adi SPRITE_X_SCR_ADDR
-			mov m, a
-			; advance hl to bullet_erase_scr_addr_old
-			dcx h
-			; c = pos_y
-			mov m, c
-			ret
 @no_sword:
+			; if no sword, do not init a sword, check and handle the collision
 			; get a hero pos
 			lxi h, hero_pos_x+1
 			mov d, m
@@ -127,7 +64,7 @@ sword_init:
 			mov e, m
 
 			; check direction
-			lda hero_dir_x
+			lda hero_dir
 			rrc
 			lxi h, SWORD_COLLISION_OFFSET_X_L<<8 | SWORD_COLLISION_OFFSET_Y_L
 			jnc @left
@@ -189,7 +126,7 @@ sword_update:
 			mvi m, 0
 			; advance and set bullet_anim_ptr
 			inx h
-			lda hero_dir_x
+			lda hero_dir
 			rrc
 			jnc @attkL
 @attkR:

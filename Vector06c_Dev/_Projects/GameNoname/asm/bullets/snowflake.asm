@@ -18,107 +18,74 @@ SNOWFLAKE_COLLISION_HEIGHT	= 12
 SNOWFLAKE_COLLISION_OFFSET_X = <(-3)
 SNOWFLAKE_COLLISION_OFFSET_Y = <(0)
 
+SNOWFLAKE_SPEED		= $200
+
 ; funcs to handle the tiledata. tiledata format is in level_data.asm->room_tiledata
 snowflake_tile_func_tbl:
-			RET_4()								; func_id == 1 ; spawn a monster
-			RET_4()								; func_id == 2 ; teleport
-			RET_4()								; func_id == 3 ; teleport
-			RET_4()								; func_id == 4 ; teleport
-			RET_4()								; func_id == 5 ; teleport
-			RET_4()								; func_id == 6
-			RET_4()								; func_id == 7
-			RET_4()								; func_id == 8
-			RET_4()								; func_id == 9
-			JMP_4( sword_func_triggers)			; func_id == 10
-			JMP_4( sword_func_container)		; func_id == 11
-			JMP_4( sword_func_door)				; func_id == 12
-			JMP_4( sword_func_breakable)		; func_id == 13 ; breakable
-			RET_4()								; func_id == 14
-			RET_4()								; func_id == 15 ; collision
+			RET_4()							; func_id == 1 ; spawn a monster
+			RET_4()							; func_id == 2 ; teleport
+			RET_4()							; func_id == 3 ; teleport
+			RET_4()							; func_id == 4 ; teleport
+			RET_4()							; func_id == 5 ; teleport
+			RET_4()							; func_id == 6
+			RET_4()							; func_id == 7
+			RET_4()							; func_id == 8
+			RET_4()							; func_id == 9
+			JMP_4( sword_func_triggers)		; func_id == 10
+			JMP_4( sword_func_container)	; func_id == 11
+			JMP_4( sword_func_door)			; func_id == 12
+			JMP_4( sword_func_breakable)	; func_id == 13 ; breakable
+			RET_4()							; func_id == 14
+			RET_4()							; func_id == 15 ; collision
 
 snowflake_init:
-			lxi h, bullet_update_ptr+1
-			mvi e, BULLET_RUNTIME_DATA_LEN
-			call actor_get_empty_data_ptr
-			rnz ; return because too many objects
-
-			; hl - ptr to bullet_update_ptr+1
-
-			dcx h
-			mvi m, <snowflake_update
-			inx h
-			mvi m, >snowflake_update
-			inx h
-			mvi m, <snowflake_draw
-			inx h
-			mvi m, >snowflake_draw
-
-			; advance hl to bullet_id
-			inx h
-			; do not set bullet_id because it is unnecessary for this weapon
-;@bullet_id:
-			;mvi a, TEMP_BYTE
-			;mov m, a
-
-			; advance hl to bullet_status
-			inx h
-			mvi m, ACTOR_STATUS_BIT_INVIS
-			; advance and set bullet_status_timer
-			inx h
-			mvi m, SNOWFLAKE_STATUS_INVIS_TIME
-			
-			; advance and reset bullet_anim_timer
-			inx h
-			mvi m, 0
-			; advance and set bullet_anim_ptr
-			inx h
-			mvi m, <snowflake_run
-			inx h
-			mvi m, >snowflake_run
-
-			; tmp b = 0
-			mvi b, 0
-			; advance hl to bullet_pos_y+1
-			HL_ADVANCE_BY_DIFF_DE(bullet_anim_ptr+1, bullet_pos_y+1)
-
-			; set pos_y
-			lda hero_pos_y+1
-			; tmp c = pos_y
-			mov c, a
-			; set pos_y
-			mov m, a
-			dcx h
-			mov m, b
 			; advance hl to bullet_pos_x+1
-			dcx h
-			; set pos_x
-			lda hero_pos_x+1
-			mov m, a
-			dcx h
-			mov m, b
+			lxi h, hero_pos_x+1
+			mov b, m
+			; advance hl to bullet_pos_y+1
+			INX_H(2)
+			mov c, m
+			; bc - hero_pos
+			BULLET_INIT(snowflake_update, snowflake_draw, ACTOR_STATUS_BIT_INVIS, SNOWFLAKE_STATUS_INVIS_TIME, snowflake_run, snowflake_init_speed)
+; the move dir along with the hero dir
+; in:
+; de - ptr to bullet_speed_x	
+snowflake_init_speed:
+			xchg
+			; hl - ptr to bullet_speed_x
+			; check hero's horizontal direction
+			lxi b, hero_dir
+			ldax b
+			ani HERO_DIR_HORIZ_MASK
+			jz @no_horiz_move
+			rrc
+			LXI_D_NEG(SNOWFLAKE_SPEED)
+			jnc @set_speed_x
+			lxi d, SNOWFLAKE_SPEED
+@set_speed_x:
+			call @set_speed
 
-			; advance hl to bullet_erase_wh_old+1
-			dcx h
-			; set the mimimum supported width
-			;mvi m, 1 ; width = 8
-			mov m, b ; width = 8
-			; advance hl to bullet_erase_wh_old
-			dcx h
-			; set the mimimum supported height
-			mvi m, SPRITE_COPY_TO_SCR_H_MIN
-			; advance hl to bullet_erase_scr_addr_old+1
-			HL_ADVANCE_BY_DIFF_DE(bullet_erase_wh_old, bullet_erase_scr_addr_old+1)
-			; a - pos_x
-			; scr_x = pos_x/8 + $a0
+			; check hero's vertical direction
+@check_dir_vert:
+			ldax b
+			ani HERO_DIR_VERT_MASK
+			jz @no_vert_move
 			RRC_(3)
-			ani %00011111
-			adi SPRITE_X_SCR_ADDR
-			mov m, a
-			; advance hl to bullet_erase_scr_addr_old
-			dcx h
-			; c = pos_y
-			mov m, c
+			LXI_D_NEG(SNOWFLAKE_SPEED)
+			jnc @set_speed
+			lxi d, SNOWFLAKE_SPEED
+@set_speed:
+			mov m, e
+			inx h
+			mov m, d
+			inx h
 			ret
+@no_horiz_move:
+			lxi d, 0
+			jmp @set_speed_x
+@no_vert_move:
+			lxi d, 0
+			jmp @set_speed
 
 ; anim and a gameplay logic update
 ; in:
@@ -132,11 +99,13 @@ snowflake_update:
 			jnz @delay_update
 
 			; hl - ptr to bullet_status
-			; advance and decr bullet_status_timer
+			; advance hl and decr bullet_status_timer
 			inx h
 			; check if it's time to die
 			dcr m
-			jz @die
+			jnz @update_movement
+			HL_ADVANCE_BY_DIFF_DE(bullet_status_timer, bullet_update_ptr+1)
+			jmp actor_destroy
 
 @update_movement:
 			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bullet_status_timer, bullet_pos_x, SNOWFLAKE_COLLISION_WIDTH, SNOWFLAKE_COLLISION_HEIGHT, @die) 
@@ -147,7 +116,8 @@ snowflake_update:
 			mvi a, SNOWFLAKE_ANIM_SPEED_ATTACK
 			jmp actor_anim_update
 @die:
-			HL_ADVANCE_BY_DIFF_DE(bullet_status_timer, bullet_update_ptr+1)
+			; hl - ptr to bullet_pos_x
+			HL_ADVANCE_BY_DIFF_DE(bullet_pos_x, bullet_update_ptr+1)
 			jmp actor_destroy
 
 @delay_update:
@@ -163,7 +133,6 @@ snowflake_update:
 			; advance and set bullet_status
 			dcx h
 			mvi m, SNOWFLAKE_STATUS_ATTACK
-
 			
 
 /*
