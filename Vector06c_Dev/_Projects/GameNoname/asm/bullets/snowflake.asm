@@ -57,10 +57,11 @@ snowflake_init_speed:
 			lxi b, hero_dir
 			ldax b
 			ani HERO_DIR_HORIZ_MASK
-			jz @no_horiz_move
-			rrc
+			cpi HERO_DIR_LEFT ; check the dir_h bit. if it is disabled, no horiz move.
+			lxi d, 0
+			jc @set_speed_x
 			LXI_D_NEG(SNOWFLAKE_SPEED)
-			jnc @set_speed_x
+			jz @set_speed_x
 			lxi d, SNOWFLAKE_SPEED
 @set_speed_x:
 			call @set_speed
@@ -69,10 +70,11 @@ snowflake_init_speed:
 @check_dir_vert:
 			ldax b
 			ani HERO_DIR_VERT_MASK
-			jz @no_vert_move
-			RRC_(3)
+			cpi HERO_DIR_DOWN ; check the dir_v bit. if it is disabled, no vert move.
+			lxi d, 0
+			jc @set_speed
 			LXI_D_NEG(SNOWFLAKE_SPEED)
-			jnc @set_speed
+			jz @set_speed
 			lxi d, SNOWFLAKE_SPEED
 @set_speed:
 			mov m, e
@@ -80,12 +82,6 @@ snowflake_init_speed:
 			mov m, d
 			inx h
 			ret
-@no_horiz_move:
-			lxi d, 0
-			jmp @set_speed_x
-@no_vert_move:
-			lxi d, 0
-			jmp @set_speed
 
 ; anim and a gameplay logic update
 ; in:
@@ -114,33 +110,13 @@ snowflake_update:
 			; advance hl to bullet_anim_timer
 			HL_ADVANCE_BY_DIFF_BC(bullet_pos_y+1, bullet_anim_timer)
 			mvi a, SNOWFLAKE_ANIM_SPEED_ATTACK
-			jmp actor_anim_update
-@die:
-			; hl - ptr to bullet_pos_x
-			HL_ADVANCE_BY_DIFF_DE(bullet_pos_x, bullet_update_ptr+1)
-			jmp actor_destroy
-
-@delay_update:
-			; hl - ptr to bullet_status
-			; advance and decr bullet_status_timer
-			inx h
-			dcr m
-			rnz
-
-			; hl - ptr to bullet_status_duration
-			; set the attack
-			mvi m, SNOWFLAKE_STATUS_ATTACK_TIME
-			; advance and set bullet_status
-			dcx h
-			mvi m, SNOWFLAKE_STATUS_ATTACK
-			
-
-/*
+			call actor_anim_update
+			; hl points to *_anim_ptr
 @check_monster_collision:
 			; check sprite collision
-			; hl - ptr to bullet_anim_ptr+1
+			; hl - ptr to bullet_anim_ptr
 			; advance hl to bullet_pos_x+1
-			HL_ADVANCE_BY_DIFF_BC(bullet_anim_ptr+1, bullet_pos_x+1)
+			HL_ADVANCE_BY_DIFF_BC(bullet_anim_ptr, bullet_pos_x+1)
 			; add a collision offset
 			mov d, m
 			INX_H(2)
@@ -173,9 +149,29 @@ snowflake_update:
 			pchl
 @check_tiledata:
 			; de - pos_xy
-			TILEDATA_HANDLING(SNOWFLAKE_COLLISION_WIDTH, SNOWFLAKE_COLLISION_HEIGHT, snowflake_tile_func_tbl)
-			*/
+			TILEDATA_HANDLING(SNOWFLAKE_COLLISION_WIDTH, SNOWFLAKE_COLLISION_HEIGHT, snowflake_tile_func_tbl)			
 			ret
+
+@die:
+			; hl - ptr to bullet_pos_x
+			HL_ADVANCE_BY_DIFF_DE(bullet_pos_x, bullet_update_ptr+1)
+			jmp actor_destroy
+
+@delay_update:
+			; hl - ptr to bullet_status
+			; advance and decr bullet_status_timer
+			inx h
+			dcr m
+			rnz
+
+			; hl - ptr to bullet_status_duration
+			; set the attack
+			mvi m, SNOWFLAKE_STATUS_ATTACK_TIME
+			; advance and set bullet_status
+			dcx h
+			mvi m, SNOWFLAKE_STATUS_ATTACK
+			ret	
+
 
 ; draw a sprite into a backbuffer
 ; in:
