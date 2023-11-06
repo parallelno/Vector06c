@@ -183,6 +183,7 @@ sword_update:
 			inx h
 			mov d, m
 			xchg
+			mvi c, HERO_WEAPON_SWORD
 			; call a monster_impact func
 			pchl
 @check_tiledata:

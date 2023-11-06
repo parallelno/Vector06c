@@ -249,6 +249,14 @@ burner_update:
 			jz burner_update_move_init
 			cpi BURNER_STATUS_DETECT_HERO_INIT
 			jz burner_update_detect_hero_init
+			cpi MONSTER_STATUS_FREEZE
+			jz burner_update_freeze
+			ret
+
+; burner is immune to freeze
+burner_update_freeze:
+			; hl = monster_status
+			mvi m, MONSTER_STATUS_INIT
 			ret
 
 burner_update_detect_hero_init:

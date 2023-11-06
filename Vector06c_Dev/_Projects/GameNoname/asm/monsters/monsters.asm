@@ -4,6 +4,7 @@
 .include "asm\\monsters\\vampire.asm"
 .include "asm\\monsters\\burner.asm"
 .include "asm\\monsters\\knight.asm"
+.include "asm\\monsters\\firepool.asm"
 
 monsters_init:
 			lxi h, monsters_runtime_data
@@ -472,7 +473,12 @@ monster_erase:
 
 ; in:
 ; de - ptr to monster_impacted_ptr + 1
+; c - hero_weapon_id
 monster_impacted:
+			; check the weapon_id
+			mvi a, HERO_WEAPON_SNOWFLAKE
+			cmp c
+			jz @set_state_freeze
 			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_monsters, MONSTER_SPAWN_RATE_DELTA, MONSTER_SPAWN_RATE_MAX)
 			; de - ptr to monster_impacted_ptr+1
 
@@ -509,3 +515,30 @@ monster_impacted:
 			; advance hl to monster_update_ptr+1
 			HL_ADVANCE_BY_DIFF_DE(monster_health, monster_update_ptr+1)
 			jmp actor_destroy
+
+@set_state_freeze:
+			; de - ptr to monster_impacted_ptr+1
+			; advance hl to monster_pos_x+1
+			LXI_H_TO_DIFF(monster_impacted_ptr+1, monster_status)
+			dad d
+			mvi m, MONSTER_STATUS_FREEZE
+			; advance hl to monster_status_timer
+			inx h
+			mvi m, MONSTER_STATUS_FREEZE_TIME
+			ret
+
+; common freeze update func.
+; it does nothing except counting down the status time
+; in: 
+; hl = monster_status
+monster_update_freeze:
+			; hl = monster_status
+			; advance hl to monster_status_timer
+			inx h
+			dcr m
+			rnz
+			; advance hl to monster_status
+			dcx h
+			mvi m, MONSTER_STATUS_INIT
+			ret
+			

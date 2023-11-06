@@ -19,7 +19,7 @@ SNOWFLAKE_COLLISION_OFFSET_X = <(-3)
 SNOWFLAKE_COLLISION_OFFSET_Y = <(0)
 
 SNOWFLAKE_SPEED		= $200
-
+/*
 ; funcs to handle the tiledata. tiledata format is in level_data.asm->room_tiledata
 snowflake_tile_func_tbl:
 			RET_4()							; func_id == 1 ; spawn a monster
@@ -37,7 +37,7 @@ snowflake_tile_func_tbl:
 			JMP_4( sword_func_breakable)	; func_id == 13 ; breakable
 			RET_4()							; func_id == 14
 			RET_4()							; func_id == 15 ; collision
-
+*/
 snowflake_init:
 			; advance hl to bullet_pos_x+1
 			lxi h, hero_pos_x+1
@@ -97,12 +97,10 @@ snowflake_update:
 			; hl - ptr to bullet_status
 			; advance hl and decr bullet_status_timer
 			inx h
+			shld @die_after_monster_collides+1			
 			; check if it's time to die
 			dcr m
-			jnz @update_movement
-			HL_ADVANCE_BY_DIFF_DE(bullet_status_timer, bullet_update_ptr+1)
-			jmp actor_destroy
-
+			jz @die_over_time
 @update_movement:
 			ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(bullet_status_timer, bullet_pos_x, SNOWFLAKE_COLLISION_WIDTH, SNOWFLAKE_COLLISION_HEIGHT, @die) 
 
@@ -111,7 +109,7 @@ snowflake_update:
 			HL_ADVANCE_BY_DIFF_BC(bullet_pos_y+1, bullet_anim_timer)
 			mvi a, SNOWFLAKE_ANIM_SPEED_ATTACK
 			call actor_anim_update
-			; hl points to *_anim_ptr
+			; hl points to bullet_anim_ptr
 @check_monster_collision:
 			; check sprite collision
 			; hl - ptr to bullet_anim_ptr
@@ -136,8 +134,8 @@ snowflake_update:
 			cpi ACTOR_RUNTIME_DATA_DESTR
 			pop d
 			; de - pos_xy
-			; if a monster's alive, check the tile it is on.
-			jnc @check_tiledata
+			; if a monster's not alive or no monster, return
+			rnc
 
 			; advance hl to monster_impacted_ptr
 			HL_ADVANCE_BY_DIFF_BC(monster_update_ptr+1, monster_impacted_ptr)
@@ -146,12 +144,17 @@ snowflake_update:
 			mov d, m
 			xchg
 			; call a monster_impact func
+			lxi b, @die_after_monster_collides
+			push b
+			mvi c, HERO_WEAPON_SNOWFLAKE
 			pchl
-@check_tiledata:
-			; de - pos_xy
-			TILEDATA_HANDLING(SNOWFLAKE_COLLISION_WIDTH, SNOWFLAKE_COLLISION_HEIGHT, snowflake_tile_func_tbl)			
-			ret
-
+@die_after_monster_collides:
+			; hl - ptr to bullet_status_timer
+			lxi h, TEMP_ADDR
+@die_over_time:
+			; hl - ptr to bullet_status_timer
+			HL_ADVANCE_BY_DIFF_DE(bullet_status_timer, bullet_update_ptr+1)
+			jmp actor_destroy
 @die:
 			; hl - ptr to bullet_pos_x
 			HL_ADVANCE_BY_DIFF_DE(bullet_pos_x, bullet_update_ptr+1)

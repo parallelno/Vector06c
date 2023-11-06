@@ -12,6 +12,7 @@ sprite_get_addr:
 			mov b, m
 			ret
 
+; getting scr addr of sprites preshifted for each pixel
 ; in:
 ; hl - ptr to pos_x+1 (high byte in 16-bit pos)
 ; out:
@@ -37,6 +38,7 @@ sprite_get_scr_addr8:
 			; de - sprite screen addr			
 			ret
 
+; getting scr addr of sprites preshifted for each second pixel
 ; in:
 ; hl - ptr to pos_x+1 (high byte in 16-bit pos)
 ; out:
@@ -59,6 +61,28 @@ sprite_get_scr_addr4:
 			mov e, m
 			mov	d, a
 			; de - sprite screen addr			
+			ret
+
+; getting scr addr of non-preshifted sprites. alligned by 8 pixels horizontally
+; in:
+; hl - ptr to pos_x+1 (high byte in 16-bit pos)
+; out:
+; de - sprite screen addr
+; c - preshifted sprite idx*2 offset based on pos_x then +2
+; hl - ptr to pos_y+1
+; use: a
+sprite_get_scr_addr1:
+			; calc preshifted sprite idx*2 offset
+			mvi	c, 2
+			; calc screen addr X
+			mov	a, m
+			RRC_(3)
+			ani %00011111
+			adi SPRITE_X_SCR_ADDR
+			INX_H(2)
+			mov e, m
+			mov	d, a
+			; de - sprite screen addr
 			ret
 			
 

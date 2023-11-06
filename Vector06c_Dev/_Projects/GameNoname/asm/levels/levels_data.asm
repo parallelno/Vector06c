@@ -17,7 +17,7 @@
 ;		monster_id = 5 - burner quest that runs to the right
 ;		monster_id = 6 - burner quest that runs to up
 ;		monster_id = 6 - knight quest horizontal walk
-;		monster_id = 7 - monster chest (tiledata = 21)
+;		monster_id = 7 - firepool
 
 ; ffff = 2, teleport to 0-15 room_id, room_id = d
 ; ffff = 3, teleport to 16-31 room_id, room_id = d+16
@@ -48,7 +48,7 @@
 		RES_ID_CLOTHES 		= 8 ; clothes ; it is a quest resource
 		RES_ID_CABBAGE		= 9 ; cabbage ; it is a quest resource
 
-; every tiledata >= TILEDATA_COLLIDABLE is considered to be colladable (a hero and monsters can't step on that tile)
+; every tiledata >= TILEDATA_COLLIDABLE is collidable (a hero and monsters can't step on that tile)
 
 ; ffff == 8, ???
 ; ffff == 9, ???

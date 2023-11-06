@@ -48,7 +48,7 @@
 ;			check mod-hero collision, impact if collides
 
 ; statuses.
-KNIGHT_STATUS_DETECT_HERO_INIT	= 0
+KNIGHT_STATUS_DETECT_HERO_INIT	= MONSTER_STATUS_INIT
 KNIGHT_STATUS_DETECT_HERO		= 1
 KNIGHT_STATUS_DEFENCE_INIT		= 2
 KNIGHT_STATUS_DEFENCE			= 3
@@ -216,6 +216,8 @@ knight_update:
 			jz knight_update_defence_init
 			cpi KNIGHT_STATUS_DETECT_HERO_INIT
 			jz knight_update_detect_hero_init
+			cpi MONSTER_STATUS_FREEZE
+			jz monster_update_freeze
 			ret
 
 knight_update_detect_hero_init:

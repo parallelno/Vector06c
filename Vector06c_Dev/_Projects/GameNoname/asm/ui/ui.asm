@@ -83,15 +83,47 @@ game_ui_draw_icon_mana:
 
 ;==================================================================================================
 ;
-;	resouce related routines
+;	resource related routines
 ;
 ;==================================================================================================
 
 ; when a player hits action_2
 ; it selects the next non-empty resource
-; it returns a selected res_id
 game_ui_res_select_next:
-			ret
+			lxi h, game_ui_res_select_next_cooldown
+			dcr m
+			rnz
+			inr m
+
+			lxi h, game_ui_res_selected_id
+			mov l, m
+			mvi c, RES_SELECTABLE_MAX
+			A_TO_ZERO(0)
+			cmp l
+			rz ; return if no available
+
+			mvi h, >hero_resources
+			; find the next available
+@next_res:
+			; check if the res_id is not out of range
+			inr l
+			mvi a, <RES_SELECTABLE_LAST + 1
+			cmp l
+			jnz @in_range
+			mvi l, <RES_SELECTABLE_FIRST
+@in_range:
+			A_TO_ZERO(0)
+			cmp m
+			jnz @select_and_draw
+			dcr c
+			jnz @next_res
+@select_and_draw:
+			mvi a, RES_SELECT_NEXT_COOLDOWN
+			sta game_ui_res_select_next_cooldown
+			jmp game_ui_res_select
+
+game_ui_res_select_next_cooldown:
+			.byte 1
 
 ; select the resource and draw resources
 ; if a resource is empty, select the first available
@@ -125,11 +157,12 @@ game_ui_res_select_and_draw:
 			; all res are empty
 			mvi l, 0
 			ret
+game_ui_res_select: = @select_res
 
 ; draws available resource icons and a selection frame
 ; health and the score resources have their own dedicated draw functions
 game_ui_draw_res:
-			; chack if no available res
+			; check if no available res
 			lxi h, game_ui_res_selected_id
 			mov l, m
 			A_TO_ZERO(0)
@@ -182,7 +215,7 @@ game_ui_draw_res:
 
 @draw_loop_next:
 			inr b
-			; check if it's not the last selectable res
+			; check if the res_id is not out of range
 			mov a, b
 			cpi <RES_SELECTABLE_LAST + 1
 			jnz @draw_loop

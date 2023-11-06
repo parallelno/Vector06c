@@ -54,7 +54,7 @@
 ;			check mod-hero collision, impact if collides
 
 ; statuses.
-SKELETON_STATUS_DETECT_HERO_INIT	= 0
+SKELETON_STATUS_DETECT_HERO_INIT	= MONSTER_STATUS_INIT
 SKELETON_STATUS_DETECT_HERO			= 1
 SKELETON_STATUS_SHOOT_PREP			= 2
 SKELETON_STATUS_SHOOT				= 3
@@ -119,6 +119,8 @@ skeleton_update:
 			jz skeleton_update_detect_hero_init
 			cpi SKELETON_STATUS_SHOOT
 			jz skeleton_update_shoot
+			cpi MONSTER_STATUS_FREEZE
+			jz monster_update_freeze			
 			ret
 
 skeleton_update_detect_hero_init:

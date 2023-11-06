@@ -9,6 +9,7 @@ monsters_inits:
 			JMP_4( burner_init)
 			JMP_4( burner_init)
 			JMP_4( knight_init)
+			JMP_4( firepool_init)
 
 SKELETON_ID		= 0
 VAMPIRE_ID		= 1
@@ -18,5 +19,6 @@ KNIGHT_VERT_ID	= 4
 BURNER_RIGHT_ID	= 5
 BURNER_UP_ID	= 6
 KNIGHT_QUEST_ID = 7
+LAVLAPOOL_ID 	= 8
 
 ; runtime data moved over buffers.asm

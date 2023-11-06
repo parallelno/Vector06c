@@ -2,7 +2,7 @@
 ; tiledata should be in the format: ffffDDDD
 ;		ffff is a func_id of a func handler in the func_table
 ;		DDDD is a func argument
-; call a handler func with func_id=ffff, A = DDDD, C=tile_idx
+; call a handler func with func_id=ffff, A=DDDD, C=tile_idx
 ; in:
 ; de - pos_xy
 .macro TILEDATA_HANDLING(width, height, actor_tile_func_table)

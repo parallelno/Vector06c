@@ -36,6 +36,10 @@ hero_update:
 			ana l
 			jnz hero_attack_start
 
+			mvi a, CONTROL_CODE_FIRE2
+			ana l
+			jnz game_ui_res_select_next
+
 			; if no arrow key is pressed, do IDLE
 			mvi a, CONTROL_CODE_LEFT | CONTROL_CODE_RIGHT | CONTROL_CODE_UP | CONTROL_CODE_DOWN
 			ana l
@@ -53,7 +57,7 @@ hero_update:
 			;ani CONTROL_CODE_LEFT | CONTROL_CODE_RIGHT | CONTROL_CODE_UP | CONTROL_CODE_DOWN
 			cmp h
 			jnz @check_move_keys
-			
+
 			; continue the same direction
 			HERO_UPDATE_ANIM(HERO_ANIM_SPEED_MOVE)
 			jmp hero_update_temp_pos
@@ -320,7 +324,7 @@ hero_attack_start:
 			dcr m
 			lxi h, hero_res_sword
 			call game_ui_res_select_and_draw
-						
+
 			call snowflake_init
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a cabbage to handle triggers
 

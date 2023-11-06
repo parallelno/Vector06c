@@ -33,9 +33,13 @@
 		"reward"	: {
 			"frames" : ["reward0", "reward1", "reward3", "reward2", "reward3", "reward0", "reward3"],
 			"loop" : false
+		},
+		"firepool"	: {
+			"frames" : ["firepool0", "firepool1", "firepool2"],
+			"loop" : true
 		}
 	},
-	"sprites" : [ 
+	"sprites" : [
 		{
 			"name" : "invis",
 			"x" : 0,
@@ -47,7 +51,7 @@
 			"offset_y": 0,
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		},		
+		},
 		{
 			"name" : "puff0",
 			"x" : 0,
@@ -55,7 +59,7 @@
 			"width" : 16,
 			"height" : 11,
 			"mask_x" : 0,
-			"mask_y" : 51, 			
+			"mask_y" : 51,
 			"offset_y": 2,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -67,10 +71,10 @@
 			"width" : 16,
 			"height" : 15,
 			"mask_x" : 0,
-			"mask_y" : 49, 						
+			"mask_y" : 49,
 			"offset_y": 0,
 			"mask_alpha" : 0,
-			"mask_color" : 1			
+			"mask_color" : 1
 		},
 		{
 			"name" : "puff2",
@@ -79,7 +83,7 @@
 			"width" : 16,
 			"height" : 15,
 			"mask_x" : 0,
-			"mask_y" : 49, 			
+			"mask_y" : 49,
 			"offset_y": 0,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -91,10 +95,10 @@
 			"width" : 16,
 			"height" : 15,
 			"mask_x" : 0,
-			"mask_y" : 49, 			
+			"mask_y" : 49,
 			"offset_y": 0,
 			"mask_alpha" : 0,
-			"mask_color" : 1			
+			"mask_color" : 1
 		},
 		{
 			"name" : "reward0",
@@ -103,7 +107,7 @@
 			"width" : 16,
 			"height" : 15,
 			"mask_x" : 0,
-			"mask_y" : 81, 			
+			"mask_y" : 81,
 			"offset_y": 0,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -115,7 +119,7 @@
 			"width" : 16,
 			"height" : 16,
 			"mask_x" : 16,
-			"mask_y" : 80, 			
+			"mask_y" : 80,
 			"offset_y": 0,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -127,7 +131,7 @@
 			"width" : 16,
 			"height" : 13,
 			"mask_x" : 32,
-			"mask_y" : 82, 			
+			"mask_y" : 82,
 			"offset_y": 1,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -139,7 +143,7 @@
 			"width" : 16,
 			"height" : 9,
 			"mask_x" : 48,
-			"mask_y" : 84, 			
+			"mask_y" : 84,
 			"offset_y": 3,
 			"mask_alpha" : 0,
 			"mask_color" : 1
@@ -151,10 +155,46 @@
 			"width" : 16,
 			"height" : 16,
 			"mask_x" : 0,
-			"mask_y" : 176, 			
+			"mask_y" : 176,
 			"offset_y": 0,
 			"mask_alpha" : 0,
 			"mask_color" : 1
-		}	
+		},
+		{
+			"name" : "firepool0",
+			"x" : 112,
+			"y"	: 16,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 112,
+			"mask_y" : 32,
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "firepool1",
+			"x" : 128,
+			"y"	: 16,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 128,
+			"mask_y" : 32,
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		},
+		{
+			"name" : "firepool2",
+			"x" : 144,
+			"y"	: 16,
+			"width" : 16,
+			"height" : 16,
+			"mask_x" : 144,
+			"mask_y" : 32,
+			"offset_y": 0,
+			"mask_alpha" : 0,
+			"mask_color" : 1
+		}
 	]
 }
