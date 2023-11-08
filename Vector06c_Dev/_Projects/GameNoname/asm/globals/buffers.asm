@@ -211,14 +211,8 @@ palette: = $7bd3 ; 16 bytes
 
 ;=============================================================================
 ;
-; hero resources = $7bff
-;
-
-; selected ui resource
-; 0000_RRRR
-;	RRRR - res_id
-;	0 - no resources
-game_ui_res_selected_id:	= $7bff			; .byte
+; hero resources
+; 15 resources max
 
 hero_resources:			= $7c00
 hero_res_score:			= hero_resources + 0 ; WORD_LEN
@@ -236,11 +230,16 @@ hero_res_not_used_03:	= hero_resources + 12
 hero_res_not_used_04:	= hero_resources + 13
 hero_res_not_used_05:	= hero_resources + 14
 hero_res_not_used_06:	= hero_resources + 15
-hero_res_not_used_07:	= hero_resources + 16
-hero_resources_end:		= hero_resources + 17
+
+; selected ui resource
+; 0000_RRRR
+;	RRRR - res_id, it is not equal to the tiledata because hero_res_score takes two bytes
+;	0 - no resources
+game_ui_res_selected_id:	= hero_resources + 16	; .byte
+hero_resources_end:			= hero_resources + 17
 
 RES_SELECTABLE_AVAILABLE_NONE	= 0
-RES_SELECTABLE_ID_CLOTHES	= 4
+RES_SELECTABLE_ID_CLOTHES		= 4
 RES_SELECTABLE_FIRST	= hero_res_sword
 RES_SELECTABLE_LAST		= hero_res_spoon
 RES_SELECTABLE_MAX		= RES_SELECTABLE_LAST - RES_SELECTABLE_FIRST + 1

@@ -309,15 +309,15 @@ hero_attack_start:
 			shld hero_speed_y
 
 			lda game_ui_res_selected_id
-			cpi RES_ID_SWORD
+			cpi <hero_res_sword
 			jz @use_sword
-			cpi RES_ID_SNOWFLAKE
+			cpi <hero_res_snowflake
 			jz @use_snowflake
-			cpi RES_ID_PIE
+			cpi <hero_res_popsicle_pie
 			jz @use_popsicle_pie
-			cpi RES_ID_CABBAGE
+			cpi <hero_res_cabbage
 			jz @use_cabbage
-			cpi RES_ID_SPOON
+			cpi <hero_res_spoon
 			jz @use_spoon
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a cabbage to handle triggers
 

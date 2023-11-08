@@ -98,7 +98,6 @@ game_ui_res_select_next:
 			cmp l
 			rz ; return if no available
 
-			mvi h, >hero_resources
 			; find the next available
 @next_res:
 			; check if the res_id is not out of range
@@ -162,7 +161,6 @@ game_ui_draw_res:
 
 			; find the first displayed res
 			mvi c, RES_DISPLAYED_MAX
-			mvi h, >hero_resources
 			; l - selected res_id
 @loop:
 			mov a, m
@@ -218,7 +216,7 @@ game_ui_draw_res:
 			; c - displayed res counter
 			mov a, b
 			; res_id to tiled graphics data ptr
-			HL_TO_AX2_PLUS_INT16(@tiled_img_ptrs - RES_ID_SWORD * WORD_LEN) ; "- RES_ID_SWORD * WORD_LEN" because min value is RES_ID_SWORD
+			HL_TO_AX2_PLUS_INT16(@tiled_img_ptrs - (<hero_res_sword) * WORD_LEN) ; "- (<hero_res_sword) * WORD_LEN" because min value is RES_ID_SWORD
 
 			mov e, m
 			inx h
