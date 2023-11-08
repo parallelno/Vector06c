@@ -43,7 +43,7 @@ sword_tile_func_tbl:
 sword_init:
 			; prevent a sword from spawning if it's not available
 			lda hero_res_sword
-			CPI_WITH_ZERO(HERO_WEAPON_NONE)
+			CPI_WITH_ZERO(RES_EMPTY)
 			jz @no_sword
 
 			; advance hl to bullet_pos_x+1
@@ -183,7 +183,7 @@ sword_update:
 			inx h
 			mov d, m
 			xchg
-			mvi c, HERO_WEAPON_SWORD
+			mvi c, HERO_WEAPON_ID_SWORD
 			; call a monster_impact func
 			pchl
 @check_tiledata:

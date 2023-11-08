@@ -230,7 +230,7 @@ hero_res_potion_health:	= hero_resources + 6
 hero_res_popsicle_pie:	= hero_resources + 7
 hero_res_clothes:		= hero_resources + 8 ; it is a quest resource
 hero_res_cabbage:		= hero_resources + 9 ; it is a quest resource
-hero_res_not_used_01:	= hero_resources + 10
+hero_res_spoon:			= hero_resources + 10
 hero_res_not_used_02:	= hero_resources + 11
 hero_res_not_used_03:	= hero_resources + 12
 hero_res_not_used_04:	= hero_resources + 13
@@ -242,7 +242,7 @@ hero_resources_end:		= hero_resources + 17
 RES_SELECTABLE_AVAILABLE_NONE	= 0
 RES_SELECTABLE_ID_CLOTHES	= 4
 RES_SELECTABLE_FIRST	= hero_res_sword
-RES_SELECTABLE_LAST		= hero_res_cabbage
+RES_SELECTABLE_LAST		= hero_res_spoon
 RES_SELECTABLE_MAX		= RES_SELECTABLE_LAST - RES_SELECTABLE_FIRST + 1
 
 ;=============================================================================

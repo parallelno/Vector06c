@@ -155,6 +155,16 @@ __tiled_images_res_cabbage:
 			.byte 219,220,186,186,
 			.byte 217,218,176,176,
 
+__TILED_IMAGES_RES_SPOON_COPY_LEN = 4
+			.word 0 ; safety pair of bytes for reading by POP B
+__tiled_images_res_spoon:
+			.byte __TILED_IMAGES_MAIN_MENU_BACK2_COPY_LEN, __RAM_DISK_S_TILED_IMAGES_DATA
+			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
+			.word SCR_BUFF0_ADDR + (6<<8 | 240)	; scr addr
+			.word SCR_BUFF0_ADDR + (8<<8 | 0)	; scr addr end
+			.byte 223,224,
+			.byte 221,222,
+
 __TILED_IMAGES_ITEM_KEY_0_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
 __tiled_images_item_key_0:
@@ -162,8 +172,8 @@ __tiled_images_item_key_0:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (19<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (21<<8 | 0)	; scr addr end
-			.byte 223,224,
-			.byte 221,222,
+			.byte 227,228,
+			.byte 225,226,
 
 __TILED_IMAGES_ITEM_KEY_1_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -172,8 +182,8 @@ __tiled_images_item_key_1:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (19<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (21<<8 | 0)	; scr addr end
-			.byte 227,228,
-			.byte 225,226,
+			.byte 231,232,
+			.byte 229,230,
 
 __TILED_IMAGES_ITEM_KEY_2_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -182,8 +192,8 @@ __tiled_images_item_key_2:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (19<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (21<<8 | 0)	; scr addr end
-			.byte 231,232,
-			.byte 229,230,
+			.byte 235,236,
+			.byte 233,234,
 
 __TILED_IMAGES_ITEM_KEY_3_COPY_LEN = 4
 			.word 0 ; safety pair of bytes for reading by POP B
@@ -192,8 +202,8 @@ __tiled_images_item_key_3:
 			.word __tiled_images_tile1 - TILE_IMG_TILE_LEN
 			.word SCR_BUFF0_ADDR + (19<<8 | 240)	; scr addr
 			.word SCR_BUFF0_ADDR + (21<<8 | 0)	; scr addr end
-			.byte 235,236,
-			.byte 233,234,
+			.byte 239,240,
+			.byte 237,238,
 
 __TILED_IMAGES_RES_EMPTY_COPY_LEN = 5
 			.word 0 ; safety pair of bytes for reading by POP B

@@ -97,7 +97,19 @@ trigger_hero_knocks_his_friend_door:
 			lxi d, __text_knocked_his_friend_door_clothes_returns
 			jmp dialog_init
 			
+;===========================================================================
+; when the hero knocks a dungeon entrance
+; The game ends after showing the dialog
+trigger_hero_knocks_dungeon_entrance:
+			mvi a, GAME_REQ_PAUSE
+			lxi h, @callback
+			lxi d, __text_knocked_dungeon_entrance
+			jmp dialog_init
 
+@callback:
+			mvi a, GAME_REQ_END_HOME
+			sta global_request
+			ret
 
 
 

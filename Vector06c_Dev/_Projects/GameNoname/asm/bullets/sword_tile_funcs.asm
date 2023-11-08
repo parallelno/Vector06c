@@ -208,7 +208,7 @@ sword_func_breakable:
 			mov e, a
 			; check if a sword is available
 			lda hero_res_sword
-			CPI_WITH_ZERO(HERO_WEAPON_NONE)
+			CPI_WITH_ZERO(RES_EMPTY)
 			rz ; return if no sword
 
 			; if breakable_id == BREAKABLE_ID_CABBAGE, spawn a fart bullet
@@ -320,13 +320,9 @@ sword_func_triggers:
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			pop psw
 			cpi TIMEDATA_TRIGGER_HOME_DOOR
-			jz @game_over
+			jz trigger_hero_knocks_his_home_door
 			cpi TIMEDATA_TRIGGER_FRIEND_DOOR
-			jz @friends_home_door
+			jz trigger_hero_knocks_his_friend_door
+			cpi TIMEDATA_TRIGGER_DUNGEON_ENTRANCE
+			jz trigger_hero_knocks_dungeon_entrance
 			ret
-@game_over:
-			; init a dialog
-			jmp trigger_hero_knocks_his_home_door
-
-@friends_home_door:
-			jmp trigger_hero_knocks_his_friend_door

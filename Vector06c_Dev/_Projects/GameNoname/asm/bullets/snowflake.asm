@@ -19,25 +19,7 @@ SNOWFLAKE_COLLISION_OFFSET_X = <(-3)
 SNOWFLAKE_COLLISION_OFFSET_Y = <(0)
 
 SNOWFLAKE_SPEED		= $200
-/*
-; funcs to handle the tiledata. tiledata format is in level_data.asm->room_tiledata
-snowflake_tile_func_tbl:
-			RET_4()							; func_id == 1 ; spawn a monster
-			RET_4()							; func_id == 2 ; teleport
-			RET_4()							; func_id == 3 ; teleport
-			RET_4()							; func_id == 4 ; teleport
-			RET_4()							; func_id == 5 ; teleport
-			RET_4()							; func_id == 6
-			RET_4()							; func_id == 7
-			RET_4()							; func_id == 8
-			RET_4()							; func_id == 9
-			JMP_4( sword_func_triggers)		; func_id == 10
-			JMP_4( sword_func_container)	; func_id == 11
-			JMP_4( sword_func_door)			; func_id == 12
-			JMP_4( sword_func_breakable)	; func_id == 13 ; breakable
-			RET_4()							; func_id == 14
-			RET_4()							; func_id == 15 ; collision
-*/
+
 snowflake_init:
 			; advance hl to bullet_pos_x+1
 			lxi h, hero_pos_x+1
@@ -146,7 +128,7 @@ snowflake_update:
 			; call a monster_impact func
 			lxi b, @die_after_monster_collides
 			push b
-			mvi c, HERO_WEAPON_SNOWFLAKE
+			mvi c, HERO_WEAPON_ID_SNOWFLAKE
 			pchl
 @die_after_monster_collides:
 			; hl - ptr to bullet_status_timer

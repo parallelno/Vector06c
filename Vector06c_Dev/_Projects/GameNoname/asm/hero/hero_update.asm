@@ -38,8 +38,11 @@ hero_update:
 
 			mvi a, CONTROL_CODE_FIRE2
 			ana l
-			jnz game_ui_res_select_next
-
+			jz @no_fire2
+			; a = CONTROL_CODE_FIRE2
+			ana h
+			jz game_ui_res_select_next ; call only if CONTROL_CODE_FIRE2 was pressed the last time
+@no_fire2:
 			; if no arrow key is pressed, do IDLE
 			mvi a, CONTROL_CODE_LEFT | CONTROL_CODE_RIGHT | CONTROL_CODE_UP | CONTROL_CODE_DOWN
 			ana l
@@ -314,6 +317,8 @@ hero_attack_start:
 			jz @use_popsicle_pie
 			cpi RES_ID_CABBAGE
 			jz @use_cabbage
+			cpi RES_ID_SPOON
+			jz @use_spoon
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a cabbage to handle triggers
 
 @use_snowflake:
@@ -341,9 +346,27 @@ hero_attack_start:
 			mov m, a
 			lxi h, hero_res_sword
 			call game_ui_res_select_and_draw
+			call game_ui_draw_health_text
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a cabbage to handle triggers
 
 @use_popsicle_pie:
+/*
+			lxi h, hero_res_popsicle_pie
+			mov a, m
+			CPI_WITH_ZERO(0)
+			rz
+			dcr m
+			lxi h, hero_res_snowflake
+			mov a, m
+			adi RES_POPSICLE_PIE_MANA_VAL
+			CLAMP_A(RES_SNOWFLAKES_MAX)
+			mov m, a
+			*/
+			lxi h, hero_res_sword
+			call game_ui_res_select_and_draw
+			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a popsicle to handle triggers
+
+@use_spoon:
 			lxi h, hero_res_popsicle_pie
 			mov a, m
 			CPI_WITH_ZERO(0)

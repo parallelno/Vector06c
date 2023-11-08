@@ -21,7 +21,8 @@ game_ui_init:
 game_ui_draw:
 			call game_ui_draw_panel
 			call game_ui_draw_health_text
-			jmp game_ui_draw_score_text
+			call game_ui_draw_score_text
+			jmp game_ui_draw_res
 
 game_ui_update:
 			call game_ui_draw_items
@@ -89,12 +90,7 @@ game_ui_draw_icon_mana:
 
 ; when a player hits action_2
 ; it selects the next non-empty resource
-game_ui_res_select_next:
-			lxi h, game_ui_res_select_next_cooldown
-			dcr m
-			rnz
-			inr m
-
+game_ui_res_select_next:			
 			lxi h, game_ui_res_selected_id
 			mov l, m
 			mvi c, RES_SELECTABLE_MAX
@@ -114,16 +110,11 @@ game_ui_res_select_next:
 @in_range:
 			A_TO_ZERO(0)
 			cmp m
-			jnz @select_and_draw
+			jnz game_ui_res_select
 			dcr c
 			jnz @next_res
-@select_and_draw:
-			mvi a, RES_SELECT_NEXT_COOLDOWN
-			sta game_ui_res_select_next_cooldown
-			jmp game_ui_res_select
-
-game_ui_res_select_next_cooldown:
-			.byte 1
+			; selected the same resource, no need to redraw
+			ret
 
 ; select the resource and draw resources
 ; if a resource is empty, select the first available
@@ -307,6 +298,7 @@ game_ui_draw_res:
 			.word __tiled_images_res_potion_mana
 			.word __tiled_images_res_clothes
 			.word __tiled_images_res_cabbage
+			.word __tiled_images_res_spoon
 
 ;==================================================================================================
 ;
@@ -364,8 +356,9 @@ game_ui_draw_items:
 @delay:		.byte TEMP_WORD
 
 @tiled_img_ptrs:
-			.word __tiled_images_item_key_0
-			.word __tiled_images_item_key_1
-			.word __tiled_images_item_key_1
-			.word __tiled_images_item_key_2
-			.word __tiled_images_item_key_3
+			.word __tiled_images_item_key_0	; item_id = 1
+			.word __tiled_images_item_key_1	; item_id = 2
+			.word __tiled_images_item_key_1	; item_id = 3
+			.word __tiled_images_item_key_2	; item_id = 4
+			.word __tiled_images_item_key_3	; item_id = 5
+			.word __tiled_images_item_key_0 ; tmp ; id = 6

@@ -260,9 +260,9 @@ hero_res_func_clothes:
 			jmp game_ui_res_select_and_draw
 
 hero_cont_func_chest_sword:
-            ; acquire a sword
+            ; acquiring a sword
 			lxi h, hero_res_sword
-			mvi m, HERO_WEAPON_SWORD
+			mvi m, RES_SWORD_MAX
 			call game_ui_res_select_and_draw
 
 			; init a dialog
@@ -271,6 +271,41 @@ hero_cont_func_chest_sword:
 			lxi d, __text_hero_gets_sword
 			jmp dialog_init
 
-hero_cont_func_chest_big:
+hero_cont_func_chest_spoon:
+	        ; acquiring a spoon
+			lxi h, hero_res_spoon
+			mvi m, RES_SPOON_MAX
+			call game_ui_res_select_and_draw
+	
+			mvi c, TILEDATA_FUNC_ID_RESOURCES
+			mvi e, RES_ID_SPOON
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
+			call game_ui_draw_score_text
+
+			; init a dialog
+			mvi a, GAME_REQ_PAUSE
+			lxi h, @callback
+			lxi d, __text_hero_gets_spoon
+			jmp dialog_init
+@callback:
+			call dialog_callback_room_redraw
+			@tile_x1 = 6
+			@tile_y1 = 9
+			mvi c, @tile_x1 + @tile_y1*16	; tile_idx in the room_tiledata array.
+			mvi a, SKELETON_ID * 4 		; monster_id = 0 - skeleton (tiledata = 1*16+0=16)			
+			call skeleton_init
+
+			@tile_x2 = 7
+			@tile_y2 = 7
+			mvi c, @tile_x2 + @tile_y2*16	; tile_idx in the room_tiledata array.
+			mvi a, SKELETON_ID * 4 		; monster_id = 0 - skeleton (tiledata = 1*16+0=16)			
+			call skeleton_init	
+
+			@tile_x3 = 12
+			@tile_y3 = 7
+			mvi c, @tile_x3 + @tile_y3*16	; tile_idx in the room_tiledata array.
+			mvi a, SKELETON_ID * 4 		; monster_id = 0 - skeleton (tiledata = 1*16+0=16)			
+			jmp skeleton_init					
+
 hero_cont_func_chest_weapon0:
 			ret

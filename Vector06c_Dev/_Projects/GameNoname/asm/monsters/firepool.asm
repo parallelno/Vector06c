@@ -48,6 +48,18 @@ firepool_update:
 			call actor_anim_update
 			MONSTER_CHECK_COLLISION_HERO(FIREPOOL_COLLISION_WIDTH, FIREPOOL_COLLISION_HEIGHT, FIREPOOL_DAMAGE)
 @die:
+			push h
+			; play a hit vfx
+			; advance hl to monster_pos_x+1
+			HL_ADVANCE_BY_DIFF_DE(monster_status, monster_pos_x+1)
+			mov b, m
+			; advance hl to monster_pos_y+1
+			INX_H(2)
+			mov c, m
+			lxi d, vfx4_hit
+			call vfx_init4
+			pop h
+
 			; mark this monster dead
 			; advance hl to monster_update_ptr+1
 			HL_ADVANCE_BY_DIFF_DE(monster_status, monster_update_ptr+1)

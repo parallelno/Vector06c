@@ -1,6 +1,7 @@
 .include "asm\\monsters\\monsters_data.asm"
 .include "asm\\monsters\\monster_macro.asm"
 .include "asm\\monsters\\skeleton.asm"
+.include "asm\\monsters\\skeleton_quest.asm"
 .include "asm\\monsters\\vampire.asm"
 .include "asm\\monsters\\burner.asm"
 .include "asm\\monsters\\knight.asm"
@@ -476,22 +477,11 @@ monster_erase:
 ; c - hero_weapon_id
 monster_impacted:
 			; check the weapon_id
-			mvi a, HERO_WEAPON_SNOWFLAKE
+			mvi a, HERO_WEAPON_ID_SNOWFLAKE
 			cmp c
 			jz @set_state_freeze
 			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_monsters, MONSTER_SPAWN_RATE_DELTA, MONSTER_SPAWN_RATE_MAX)
 			; de - ptr to monster_impacted_ptr+1
-
-			push d
-			; advance hl to monster_id
-			LXI_H_TO_DIFF(monster_id, monster_impacted_ptr+1)
-			dad d
-			; add score points
-			mov e, m
-			mvi c, TILEDATA_FUNC_ID_MONSTERS
-			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
-			call game_ui_draw_score_text
-			pop d
 
 			; play a hit vfx
 			; advance hl to monster_pos_x+1
@@ -506,10 +496,21 @@ monster_impacted:
 			call vfx_init4
 			pop h
 
-			; recrease monster's health
+			; decrease monster's health
 			HL_ADVANCE_BY_DIFF_DE(monster_pos_y+1, monster_health)
 			dcr m
 			rnz
+
+			; add score points
+			push h
+			; advance hl to monster_impacted_ptr+1
+			HL_ADVANCE_BY_DIFF_DE(monster_pos_y+1, monster_impacted_ptr+1)
+			dad d
+			mov e, m
+			mvi c, TILEDATA_FUNC_ID_MONSTERS
+			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
+			call game_ui_draw_score_text
+			pop h
 
 			; mark this monster dead
 			; advance hl to monster_update_ptr+1

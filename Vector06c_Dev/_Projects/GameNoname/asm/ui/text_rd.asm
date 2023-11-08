@@ -109,34 +109,50 @@ __text_game_stats:
 ; dialogs
 ;===================================================================================
 __text_no_health:
-			TEXT("The cold and the darkness of corridors rev-", LINE_BREAK)
-			TEXT("ealed a mysterious figure. Two strong hands", LINE_BREAK)
-			TEXT("lifted up the unconscious body and carried", LINE_BREAK)
-			TEXT("him out of the dungeon into the fresh air.")
+			TEXT("Oh, not this! ..must save.. friend - said the", LINE_BREAK)
+			TEXT("hero and fell into the deep, chilling darkness.", LINE_BREAK)
+			TEXT("Seemed as if all hope was lost. But then,", LINE_BREAK)
+			TEXT("miraculously, his eyes fluttered open.")
 
-__text_knocked_his_home_door:		
+__text_knocked_his_home_door:
 			TEXT("Oh, that was super freshy outside for a walk", LINE_BREAK)
 			TEXT("today! Next time, my buddy Natias has to", LINE_BREAK)
 			TEXT("come along, no question. Gotta swing by and", LINE_BREAK)
 			TEXT("hit him up tomorrow for sure!")
 
 __text_knocked_his_friend_door:		
-			TEXT("Natias ain't here now. He's left home since the", LINE_BREAK)
-			TEXT("crack of dawn. Be a sweetie and fetch dried", LINE_BREAK)
-			TEXT("clothes from the backyard, and I'll give you", LINE_BREAK)
-			TEXT("a freshly baked popsicle pie, deal?")
+			TEXT("Friend's mom: Natias ain't here now. He's left", LINE_BREAK)
+			TEXT("early. Be a sweetie and fetch dried clothes", LINE_BREAK)
+			TEXT("from the backyard, and I'll give you a", LINE_BREAK)
+			TEXT("freshly baked popsicle pie, deal?")
+
 __text_knocked_his_friend_door_no_clothes:		
-			TEXT("Oh, sugar, no clothes means no pie, remember?", LINE_BREAK)
-			TEXT("We had a straight-up deal.")
+			TEXT("Friend's mom: Oh, sugar, no clothes means", LINE_BREAK)
+			TEXT("no pie, remember? We had a straight-up deal.")
+
 __text_knocked_his_friend_door_clothes_returns:		
-			TEXT("Sweetie, you're the best helper in the world!", LINE_BREAK)
-			TEXT("Here's a fresh-baked popsicle pie, piping chill.", LINE_BREAK)
-			TEXT("Hurry and take it home before it warms up!")			
+			TEXT("Friend's mom: Sweetie, you're the best", LINE_BREAK)
+			TEXT("helper in the world! Here's a fresh-baked", LINE_BREAK)
+			TEXT("popsicle pie, piping chill. Hurry and take", LINE_BREAK)
+			TEXT("it home before it warms up!")
+
 __text_hero_gets_sword:
 			TEXT("I don't believe my eyes, It is a legendary", LINE_BREAK)
 			TEXT("sword, no doubt about it! Who would have", LINE_BREAK)
 			TEXT("imagined my friend left it for me? This sharpy", LINE_BREAK)
 			TEXT("little boy will free my friend in no time!")
+
+__text_knocked_dungeon_entrance:		
+			TEXT("Oh no! Is it only a demo? So unfair! But", LINE_BREAK)
+			TEXT("this is not the end! I can hardly wait to", LINE_BREAK)
+			TEXT("recount the entire story once it's complete!")
+
+__text_hero_gets_spoon:
+			TEXT("A spoon??! No, the spoon! The most iconic", LINE_BREAK)
+			TEXT("and ancient spoon ever designed, a masterpiece!", LINE_BREAK)
+			TEXT("It was the only crafted for one purpose...", LINE_BREAK)
+			TEXT("Oh no... it's cursed!")
+
 ;===================================================================================
 ; storytelling
 ;===================================================================================
