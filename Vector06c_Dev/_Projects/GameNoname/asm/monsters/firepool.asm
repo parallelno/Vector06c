@@ -27,31 +27,37 @@ FIREPOOL_COLLISION_HEIGHT	= 16
 ; out:
 ; a = 0
 firepool_init:
-			MONSTER_INIT(firepool_update, firepool_draw, monster_impacted, FIREPOOL_HEALTH, FIREPOOL_STATUS_IDLE, vfx_firepool)
+			MONSTER_INIT(firepool_update, firepool_draw, firepool_impacted, FIREPOOL_HEALTH, FIREPOOL_STATUS_IDLE, vfx_firepool)
 
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data
 firepool_update:
-			; advance hl to monster_status
-			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
-			dad d
-			mov a, m
-			cpi MONSTER_STATUS_FREEZE
-			jz @die
-
 			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_DE(monster_status, monster_anim_timer)
+			LXI_H_TO_DIFF(monster_update_ptr, monster_anim_timer)
+			dad d
 			mvi a, FIREPOOL_ANIM_SPEED_IDLE
 			; hl - monster_anim_timer
 			; a - anim speed
 			call actor_anim_update
 			MONSTER_CHECK_COLLISION_HERO(FIREPOOL_COLLISION_WIDTH, FIREPOOL_COLLISION_HEIGHT, FIREPOOL_DAMAGE)
-@die:
+
+; in:
+; de - ptr to monster_impacted_ptr + 1
+; c - hero_weapon_id
+firepool_impacted:
+			; check the weapon_id
+			mvi a, HERO_WEAPON_ID_SNOWFLAKE
+			cmp c
+			rnz
+			; de - ptr to monster_impacted_ptr+1
+
+			; die
+			; advance hl to monster_pos_x+1			
+			LXI_H_TO_DIFF(monster_impacted_ptr+1, monster_pos_x+1)
+			dad d
 			push h
 			; play a hit vfx
-			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_DE(monster_status, monster_pos_x+1)
 			mov b, m
 			; advance hl to monster_pos_y+1
 			INX_H(2)
@@ -59,10 +65,11 @@ firepool_update:
 			lxi d, vfx4_hit
 			call vfx_init4
 			pop h
+			; hl - ptr to monster_pos_x+1
 
 			; mark this monster dead
 			; advance hl to monster_update_ptr+1
-			HL_ADVANCE_BY_DIFF_DE(monster_status, monster_update_ptr+1)
+			HL_ADVANCE_BY_DIFF_DE(monster_pos_x+1, monster_update_ptr+1)
 			jmp actor_destroy
 
 ; draw a sprite into a backbuffer

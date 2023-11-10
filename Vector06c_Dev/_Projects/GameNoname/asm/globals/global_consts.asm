@@ -209,7 +209,6 @@ SCORES_MAX	= 10
 SECRET_ENDING_HOME	= 1
 SECRETS_MAX = 16
 
-CABBAGE_MAX = 10 ; it is a max for a quest resource hero_res_cabbage
 ;===========================================================================
 ; text
 LINE_BREAK	= $6a ;'\n'

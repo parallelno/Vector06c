@@ -10,6 +10,11 @@ levels_init:
 			mvi a, <global_items_end
 			call clear_mem_short
 
+			; erase game statuses
+			lxi h, game_status
+			mvi a, <game_status_end
+			call clear_mem_short			
+
 			jmp level_init
 
 ;================================================================

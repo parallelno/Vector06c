@@ -215,33 +215,12 @@ sword_func_breakable:
 			; e - breakable_id
 			mvi a, BREAKABLE_ID_CABBAGE
 			cmp e
-			jnz @no_fart
+			jnz @not_cabbage
 @cabbage:
 			; add the cabbage resource
 			lxi h, hero_res_cabbage
-			inr m
-			mvi a, CABBAGE_MAX
-			cmp m
-			jnz @no_fart
-			mvi m, 0
-			; a hero got fart
-			lxi h, global_items + ITEM_ID_FART - 1	; because the first item_id = 1
-			mov a, m
-			CPI_WITH_ZERO(ITEM_STATUS_NOT_ACQUIRED)
-			jnz @no_new_fart
-			mvi m, ITEM_STATUS_ACQUIRED
-@no_new_fart:
-
-			push b ; store tile_idx
-			; spawn the fart actor
-			lxi h, hero_erase_scr_addr
-			mov c, m
-			inx h
-			mov b, m
-			call fart_init
-			pop b ; restore tile_idx
-
-@no_fart:
+			INR_CLAMP_M(RES_CABBAGE_MAX)
+@not_cabbage:
 			; add score points
 			push b
 			mvi c, TILEDATA_FUNC_ID_BREAKABLES

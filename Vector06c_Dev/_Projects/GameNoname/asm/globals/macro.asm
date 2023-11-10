@@ -384,7 +384,7 @@
 .endmacro
 
 .macro CLAMP_A(val_max = $ff)
-			cpi val_max
+			cpi val_max + 1
 			jc @no_clamp
 			mvi a, val_max
 @no_clamp:
@@ -392,16 +392,30 @@
 
 .macro CLAMP_M(val_max = $ff)
 			mov a, m
-			cpi val_max
+			cpi val_max + 1
 			jc @no_clamp
 			mvi m, val_max
 @no_clamp:
 .endmacro
 
-.macro CLAMP_HL(val_max = $ffff)
-			jnc @no_clamp
-			lxi h, val_max
-@no_clamp:
+; cc often 40
+; cc rare 28
+.macro INR_CLAMP_M(val_max = $ff)
+			mov a, m
+			cpi val_max
+			jz @clamp
+			inr m
+@clamp:
+.endmacro
+
+; cc often 48
+; cc rare 40
+.macro INR_WRAP_M(val_max = $ff, no_wrap)
+			inr m
+			mvi a, val_max
+			sub m
+			jnz no_wrap
+			mov m, a
 .endmacro
 
 .macro CHECK_GAME_UPDATE_COUNTER(@game_updates_counter)

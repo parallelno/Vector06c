@@ -17,7 +17,7 @@ trigger_hero_no_health:
 			mvi a, GAME_REQ_LEVEL_INIT
 			sta global_request
 			; restore a hero health
-			mvi a, RES_HEALTH_MAX
+			mvi a, RES_HEALTH_INIT
 			sta hero_res_health
 			ret
 

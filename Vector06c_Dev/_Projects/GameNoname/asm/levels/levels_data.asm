@@ -33,26 +33,22 @@
 ;		item_id = 4 - key 3
 ;		item_id = 5 - key 4
 ;		item_id = 6 - key 5
+; TODO: think of moving quest items into the game status table
 		ITEM_ID_UI_MAX	= 8 ; items with item_id >= ITEM_ID_UI_MAX do not show up on the ui panel
-		ITEM_ID_MANA			= 13	; reserved for a quest to accquire a mana crystal or use a mana potion
 		ITEM_ID_FART			= 14	; reserved for a quest to scare away knight_quest
 		ITEM_ID_BURNER_QUEST	= 15	; reserved for burner_quest
 
 ; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. res_id = d. see buffers.asm->resources_inst_data for details
-; TODO: this IDs do not match the real resource tiledata
-; TODO: that was made for a little optimization to match hero_resources structure.
-; TODO: think of revise these IDs to be consistent with tiledata
-
 ;		res_id 				= 0 ; a coin (increases the game score when picked up) ; (tiledata = 7*16+0 = 160)
 ;		res_id 				= 1 ; a health crystal (increases health immedietly when picked up)
-		RES_ID_SWORD		= 3 ; a sword (the main weapon)
-		RES_ID_SNOWFLAKE	= 4 ; a snowflakes (increases mana immedietly when picked up)		
-;		res_id 				= 5 ; tnt (spawns a bullet called tnt)
-;		res_id 				= 6 ; a potion health (gives several health points when used)
-		RES_ID_PIE 			= 7 ; a popsicle pie (gives several snowflakes when RES_ID_SPOON is used)
-		RES_ID_CLOTHES 		= 8 ; clothes ; it is a quest resource
-		RES_ID_CABBAGE		= 9 ; cabbage ; it is a quest resource
-		RES_ID_SPOON		= 10; use it to convert hero_res_popsicle_pie into hero_res_snowflake
+		RES_ID_SWORD		= 2 ; a sword (the main weapon)
+		RES_ID_SNOWFLAKE	= 3 ; a snowflakes (increases mana immedietly when picked up)		
+;		res_id 				= 4 ; tnt (spawns a bullet called tnt)
+;		res_id 				= 5 ; a potion health (gives several health points when used)
+		RES_ID_PIE 			= 6 ; a popsicle pie (gives several snowflakes when RES_ID_SPOON is used)
+		RES_ID_CLOTHES 		= 7 ; clothes ; it is a quest resource
+		RES_ID_CABBAGE		= 8 ; cabbage ; it is a quest resource
+		RES_ID_SPOON		= 9	; use it to convert hero_res_popsicle_pie into hero_res_snowflake
 
 ; every tiledata >= TILEDATA_COLLIDABLE is collidable (a hero and monsters can't step on that tile)
 

@@ -153,6 +153,15 @@ __text_hero_gets_spoon:
 			TEXT("It was the only crafted for one purpose...", LINE_BREAK)
 			TEXT("Oh no... it's cursed!")
 
+__text_hero_use_pie:
+			TEXT("This popsicle pie is so delicious! I wish I had", LINE_BREAK)
+			TEXT("my mouth big enough to swallow it all at", LINE_BREAK)
+			TEXT("once. Until then, I definitely need a spoon.")
+
+__text_hero_use_clothes:
+			TEXT("Deal's a deal! Promised to fetch and bring", LINE_BREAK)
+			TEXT(" the dry clothes, so get to it!")
+
 ;===================================================================================
 ; storytelling
 ;===================================================================================

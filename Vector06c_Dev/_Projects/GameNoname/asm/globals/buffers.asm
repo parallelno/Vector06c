@@ -151,7 +151,7 @@ rooms_spawn_rates_end:			= rooms_spawn_rate_breakables + ROOMS_MAX ; $7b80
 ; >0 - will NOT be rendered, copied to the screen, and erased in the back buffer
 ; 0 - the opposite
 ; TODO: use only a bit, then combine it with other hero global statuses.
-hero_global_status_no_render = $7b80 ; byte
+hero_global_status_no_render: = $7b80 ; byte
 
 ;=============================================================================
 ;
@@ -163,7 +163,7 @@ global_request:	= $7b81			; .byte
 ; the current level idx
 level_idx:		= $7b82			; .byte
 ; the current room idx of the current level
-room_id:   		= $7b83				; .byte TEMP_BYTE ; in the range [0, ROOMS_MAX-1]
+room_id:   		= $7b83			; .byte TEMP_BYTE ; in the range [0, ROOMS_MAX-1]
 
 ITEM_VISIBLE_NONE			= 0
 game_ui_item_visible_addr:	= $7b84		; .byte TEMP_BYTE ; currently shown item on the panel. range [0, ITEMS_MAX-1]
@@ -197,8 +197,8 @@ level_containers_inst_data_pptr:	= level_init_tbl + 8	; .word __level00_containe
 level_start_pos_ptr:				= level_init_tbl + 10	; .word __level00_start_pos
 level_rooms_pptr:					= level_init_tbl + 12	; .word __level00_rooms_addr
 level_tiles_pptr:					= level_init_tbl + 14	; .word __level00_tiles_addr
-level_init_tbl_end:					= level_init_tbl + 16	
-LEVEL_INIT_TBL_LEN = level_init_tbl_end - level_init_tbl
+@end:					= level_init_tbl + 16	
+LEVEL_INIT_TBL_LEN = @end - level_init_tbl
 ;=============================================================================
 ;
 ; palette
@@ -206,7 +206,14 @@ palette: = $7bd3 ; 16 bytes
 
 ;=============================================================================
 ;
-;	free space = $7be3 - $7bfe
+; game statuses
+game_status:				= $7be3
+game_status_cabbage_eaten:	= game_status		; contains how many cabbage were eaten
+game_status_end:			= game_status + 1
+
+;=============================================================================
+;
+;	free space = $7be4 - $7bfe
 ;
 
 ;=============================================================================
@@ -225,10 +232,10 @@ hero_res_popsicle_pie:	= hero_resources + 7
 hero_res_clothes:		= hero_resources + 8 ; it is a quest resource
 hero_res_cabbage:		= hero_resources + 9 ; it is a quest resource
 hero_res_spoon:			= hero_resources + 10
-hero_res_not_used_02:	= hero_resources + 11
-hero_res_not_used_03:	= hero_resources + 12
-hero_res_not_used_04:	= hero_resources + 13
-hero_res_not_used_05:	= hero_resources + 14
+hero_res_not_used_01:	= hero_resources + 11 ; it is a quest resource
+hero_res_not_used_02:	= hero_resources + 12
+hero_res_not_used_03:	= hero_resources + 13
+hero_res_not_used_04:	= hero_resources + 14
 hero_res_not_used_06:	= hero_resources + 15
 
 ; selected ui resource

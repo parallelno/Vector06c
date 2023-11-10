@@ -319,6 +319,8 @@ hero_attack_start:
 			jz @use_cabbage
 			cpi <hero_res_spoon
 			jz @use_spoon
+			cpi <hero_res_clothes
+			jz @use_clothes	
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a cabbage to handle triggers
 
 @use_snowflake:
@@ -339,11 +341,28 @@ hero_attack_start:
 			CPI_WITH_ZERO(0)
 			rz
 			dcr m
+
+			; count how many cabbages were eaten
+			lxi h, game_status_cabbage_eaten
+			INR_WRAP_M(RES_CABBAGE_FART, @no_fart)
+
+			; a hero got fart
+			mvi a, ITEM_STATUS_ACQUIRED
+			sta global_items + ITEM_ID_FART - 1	; because the first item_id = 1
+			; spawn the fart actor
+			lxi h, hero_erase_scr_addr 
+			mov c, m
+			inx h
+			mov b, m
+			call fart_init			
+@no_fart:	
+
 			lxi h, hero_res_health
 			mov a, m
 			adi RES_CABBAGE_HEALTH_VAL
 			CLAMP_A(RES_HEALTH_MAX)
 			mov m, a
+
 			lxi h, hero_res_sword
 			call game_ui_res_select_and_draw
 			call game_ui_draw_health_text
@@ -351,17 +370,28 @@ hero_attack_start:
 
 @use_popsicle_pie:
 /*
-			lxi h, hero_res_popsicle_pie
-			mov a, m
-			CPI_WITH_ZERO(0)
-			rz
-			dcr m
-			lxi h, hero_res_snowflake
-			mov a, m
-			adi RES_POPSICLE_PIE_MANA_VAL
-			CLAMP_A(RES_SNOWFLAKES_MAX)
-			mov m, a
-			*/
+TODO: make that dialog do not respawn breakables, then uncomment the code below
+TODO: using this item prevents using triggers, for example knoking the friends house door
+			; init a dialog
+			mvi a, GAME_REQ_PAUSE
+			lxi h, dialog_callback_room_redraw
+			lxi d, __text_hero_use_pie
+			call dialog_init
+*/
+			lxi h, hero_res_sword
+			call game_ui_res_select_and_draw
+			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a popsicle to handle triggers
+
+@use_clothes:
+/*
+TODO: make that dialog do not respawn breakables, then uncomment the code below
+TODO: using this item prevents using triggers, for example knoking the friends house door
+			; init a dialog
+			mvi a, GAME_REQ_PAUSE
+			lxi h, dialog_callback_room_redraw
+			lxi d, __text_hero_use_clothes
+			call dialog_init
+*/
 			lxi h, hero_res_sword
 			call game_ui_res_select_and_draw
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a popsicle to handle triggers

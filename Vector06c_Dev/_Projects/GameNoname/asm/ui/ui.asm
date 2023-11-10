@@ -216,7 +216,7 @@ game_ui_draw_res:
 			; c - displayed res counter
 			mov a, b
 			; res_id to tiled graphics data ptr
-			HL_TO_AX2_PLUS_INT16(@tiled_img_ptrs - (<hero_res_sword) * WORD_LEN) ; "- (<hero_res_sword) * WORD_LEN" because min value is RES_ID_SWORD
+			HL_TO_AX2_PLUS_INT16(@tiled_img_ptrs - (<hero_res_sword) * WORD_LEN) ; "- (<hero_res_sword) * WORD_LEN" because the first available ptr is for a sword
 
 			mov e, m
 			inx h
