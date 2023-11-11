@@ -1,9 +1,9 @@
 ; this mob is absolutly the same as a skeleton.asm
-; but it is spawns only if the her has a res_spoon
+; but it spawns only if the hero has the res_spoon
 
 
 ;========================================================
-; called to spawn this monster
+; spawn and init a monster
 ; in:
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4

@@ -208,12 +208,13 @@ palette: = $7bd3 ; 16 bytes
 ;
 ; game statuses
 game_status:				= $7be3
-game_status_cabbage_eaten:	= game_status		; contains how many cabbage were eaten
-game_status_end:			= game_status + 1
+game_status_cabbage_eaten:		= game_status		; contains how many cabbage were eaten
+game_status_fire_extinguished:	= game_status + 1		; contains how many cabbage were eaten
+game_status_end:				= game_status + 2
 
 ;=============================================================================
 ;
-;	free space = $7be4 - $7bfe
+;	free space = $7be5 - $7bfe
 ;
 
 ;=============================================================================

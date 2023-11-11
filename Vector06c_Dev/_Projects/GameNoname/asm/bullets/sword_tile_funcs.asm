@@ -284,10 +284,7 @@ sword_func_breakable:
 			pop b
 			lxi d, vfx_puff
 			call vfx_init
-
-			lxi h, hero_res_sword
-			jmp game_ui_res_select_and_draw
-			ret
+			jmp game_ui_draw_res
 
 ; in:
 ; a - trigger_id

@@ -9,7 +9,7 @@
 
 ; statuses.
 FART_STATUS_LIFE		= 0
-FART_STATUS_LIFE_TIME	= 10
+FART_STATUS_LIFE_TIME	= 20
 
 ; Init for non-preshifted VFX (x coord aligned to 8 pixels )
 ; in:

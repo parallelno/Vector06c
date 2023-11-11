@@ -8,6 +8,6 @@ monsters_inits:
 			JMP_4( knight_init)
 			JMP_4( burner_init)
 			JMP_4( burner_init)
-			JMP_4( knight_init)
+			JMP_4( knight_quest_init)
 			JMP_4( firepool_init)
 			JMP_4( skeleton_quest_init)

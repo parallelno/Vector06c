@@ -289,6 +289,15 @@ hero_cont_func_chest_spoon:
 			jmp dialog_init
 @callback:
 			call dialog_callback_room_redraw
+			
+			; reset the room spawn rate
+			lda room_id
+			adi <rooms_spawn_rate_monsters
+			mov l, a
+			mvi h, >rooms_spawn_rate_monsters
+			mvi m, 0
+
+			; spawn skeletons
 			@tile_x1 = 6
 			@tile_y1 = 9
 			mvi c, @tile_x1 + @tile_y1*16	; tile_idx in the room_tiledata array.

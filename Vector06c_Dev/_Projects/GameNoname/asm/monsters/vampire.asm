@@ -88,7 +88,7 @@ VAMPIRE_MOVE_SPEED_NEG	= $ffff - $c0 + 1
 VAMPIRE_DETECT_HERO_DISTANCE = 90
 
 ;========================================================
-; called to spawn this monster
+; spawn and init a monster
 ; in:
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
@@ -97,6 +97,7 @@ VAMPIRE_DETECT_HERO_DISTANCE = 90
 vampire_init:
 			MONSTER_INIT(vampire_update, vampire_draw, monster_impacted, VAMPIRE_HEALTH, VAMPIRE_STATUS_DETECT_HERO_INIT, vampire_idle)
 
+;========================================================
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data

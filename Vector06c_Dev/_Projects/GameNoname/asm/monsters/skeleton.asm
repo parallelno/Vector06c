@@ -87,7 +87,7 @@ SKELETON_MOVE_SPEED_NEG	= $ffff - $100 + 1
 SKELETON_DETECT_HERO_DISTANCE = 60
 
 ;========================================================
-; called to spawn this monster
+; spawn and init a monster
 ; in:
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
@@ -96,6 +96,7 @@ SKELETON_DETECT_HERO_DISTANCE = 60
 skeleton_init:
 			MONSTER_INIT(skeleton_update, skeleton_draw, monster_impacted, SKELETON_HEALTH, SKELETON_STATUS_DETECT_HERO_INIT, skeleton_idle)
 
+;========================================================
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data

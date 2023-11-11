@@ -20,15 +20,22 @@ FIREPOOL_COLLISION_WIDTH	= 16
 FIREPOOL_COLLISION_HEIGHT	= 16
 
 ;========================================================
-; called to spawn this monster
+; spawn and init a monster
 ; in:
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
 ; out:
 ; a = 0
 firepool_init:
-			MONSTER_INIT(firepool_update, firepool_draw, firepool_impacted, FIREPOOL_HEALTH, FIREPOOL_STATUS_IDLE, vfx_firepool)
+			mov b, a ; tmp
+			lda game_status_fire_extinguished
+			CPI_WITH_ZERO(False)
+			rnz
+			mov a, b
 
+			MONSTER_INIT(firepool_update, firepool_draw, firepool_impacted, FIREPOOL_HEALTH, FIREPOOL_STATUS_IDLE, vfx_firepool, False)
+
+;========================================================
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data
@@ -51,6 +58,10 @@ firepool_impacted:
 			cmp c
 			rnz
 			; de - ptr to monster_impacted_ptr+1
+
+			mvi a, True
+			sta game_status_fire_extinguished
+
 
 			; die
 			; advance hl to monster_pos_x+1			

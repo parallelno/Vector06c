@@ -113,7 +113,7 @@ burner_quest_room_ids_len: = burner_quest_room_ids_end - burner_quest_room_ids
 BURNER_DETECT_HERO_DISTANCE = 60
 
 ;========================================================
-; called to spawn this monster
+; spawn and init a monster
 ; in:
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
@@ -166,7 +166,7 @@ burner_init:
 @init:
 			MONSTER_INIT(burner_update, burner_draw, monster_impacted, BURNER_HEALTH, BURNER_STATUS_DETECT_HERO_INIT, burner_idle)
 
-; update for BURNER_RIGHT_ID or BURNER_UP_ID
+;========================================================
 ; anim and a gameplay logic update
 ; in:
 ; de - ptr to monster_update_ptr in the runtime data

@@ -150,7 +150,7 @@ __text_knocked_dungeon_entrance:
 __text_hero_gets_spoon:
 			TEXT("A spoon??! No, the spoon! The most iconic", LINE_BREAK)
 			TEXT("and ancient spoon ever designed, a masterpiece!", LINE_BREAK)
-			TEXT("It was the only crafted for one purpose...", LINE_BREAK)
+			TEXT("Popsicle pie missed you sooo much...", LINE_BREAK)
 			TEXT("Oh no... it's cursed!")
 
 __text_hero_use_pie:

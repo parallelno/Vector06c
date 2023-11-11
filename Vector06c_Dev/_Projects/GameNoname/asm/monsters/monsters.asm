@@ -5,6 +5,7 @@
 .include "asm\\monsters\\vampire.asm"
 .include "asm\\monsters\\burner.asm"
 .include "asm\\monsters\\knight.asm"
+.include "asm\\monsters\\knight_quest.asm"
 .include "asm\\monsters\\firepool.asm"
 
 monsters_init:
@@ -25,7 +26,14 @@ monsters_init:
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
 ;ex. MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
-.macro MONSTER_INIT(MONSTER_UPDATE_PTR, MONSTER_DRAW_PTR, MONSTER_IMPACT_PTR, MONSTER_HEALTH, MONSTER_STATUS, MONSTER_ANIM_PTR)
+.macro MONSTER_INIT(MONSTER_UPDATE_PTR, MONSTER_DRAW_PTR, MONSTER_IMPACT_PTR, MONSTER_HEALTH, MONSTER_STATUS, MONSTER_ANIM_PTR, spawn_rate_check = True)
+		.if spawn_rate_check
+			mvi b, 1
+		.endif
+		.if spawn_rate_check == False
+			mvi b, 0
+		.endif
+
 			lxi d, @init_data
 			jmp monster_init
 
@@ -39,6 +47,9 @@ monsters_init:
 ; in:
 ; de - ptr to monster_data: .word MONSTER_UPDATE_PTR, MONSTER_DRAW_PTR, MONSTER_IMPACT_PTR, MONSTER_STATUS<<8 | MONSTER_HEALTH, MONSTER_ANIM_PTR
 ; c - tile_idx in the room_tiledata array.
+; b - spawn_rate_check
+;		1 - yes
+;		0 - no
 ; a - monster_id * 4
 monster_init:
 			lxi h, 0
@@ -50,7 +61,12 @@ monster_init:
 			RRC_(2) ; to get monster_id
 			sta @monster_id+1
 
+			A_TO_ZERO(0)
+			cmp b
+			jz @no_spawn_rate_check
+
 			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_monsters, @restore_sp)
+@no_spawn_rate_check:
 
 			lxi h, monster_update_ptr+1
 			mvi e, MONSTER_RUNTIME_DATA_LEN
@@ -170,7 +186,6 @@ monster_init:
 			; return TILEDATA_RESTORE_TILE to make the tile where a monster spawned walkable and restorable
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
-
 
 ; in:
 ; hl - 	pos_x, pos_y
