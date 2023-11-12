@@ -8,7 +8,7 @@ import export_decal
 import export_level
 import export_music
 import export_font
-import export_image
+#import export_image
 import export_tiled_img
 import copy
 
@@ -207,12 +207,7 @@ def export(bank_id, seg_id, segment_j, includes,
 			if asset_j["asset_type"] == build.ASSET_TYPE_FONT:
 				ram_include_paths.append(export_paths["ram"])
 			segment_include_path = export_paths["ram_disk"]
-
-		elif asset_j["asset_type"] == build.ASSET_TYPE_IMAGE:
-			exported, export_paths = export_image.export_if_updated(asset_j["path"], asset_j["export_dir"], asset_types_force_export["image"])
-			segment_force_export |= exported
-			segment_include_path = export_paths["ram_disk"]
-
+	
 		elif asset_j["asset_type"] == build.ASSET_TYPE_DECAL:
 			exported, export_paths = export_decal.export_if_updated(asset_j["path"], asset_j["export_dir"], asset_types_force_export["decal"])
 			segment_force_export |= exported
@@ -247,6 +242,11 @@ def export(bank_id, seg_id, segment_j, includes,
 			segment_include_path = asset_j["path"]
 			segment_force_export |= build.is_asm_updated(segment_include_path)
 
+		'''elif asset_j["asset_type"] == build.ASSET_TYPE_IMAGE:
+			exported, export_paths = export_image.export_if_updated(asset_j["path"], asset_j["export_dir"], asset_types_force_export["image"])
+			segment_force_export |= exported
+			segment_include_path = export_paths["ram_disk"]'''
+		
 		if segment_include_path == "":
 			continue
 

@@ -24,9 +24,11 @@ git push
 
 run vs code:
 install python vs code support package
+if you have python installed, check the pip upgrade: python -m pip intall --upgrade pip
+install packages:
 pip install Pillow
 pip install numpy
-pip install kmeans
+???pip install kmeans
 pip install lhafile
 
 install retroassembler VS Code extention:

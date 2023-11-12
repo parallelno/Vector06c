@@ -4,8 +4,7 @@ import os
 from pathlib import Path
 import common
 import build
-
-import lhafile_old
+import lhafile
 import io
 
 
@@ -26,7 +25,7 @@ def drop_comment(f):
 
 def readym(filename):
 	try:
-		lf = lhafile_old.Lhafile(filename)
+		lf = lhafile.Lhafile(filename)
 		data = lf.read(lf.namelist()[0])
 		f = io.BytesIO(data)
 	except:
