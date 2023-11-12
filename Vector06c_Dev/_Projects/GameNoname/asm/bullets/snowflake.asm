@@ -5,7 +5,7 @@ SNOWFLAKE_STATUS_ATTACK = 0
 
 ; duration of statuses (in update_durations)
 SNOWFLAKE_STATUS_INVIS_TIME		= 6
-SNOWFLAKE_STATUS_ATTACK_TIME	= 25
+SNOWFLAKE_STATUS_ATTACK_TIME	= 30
 
 ; animation speed (the less the slower, 0-255, 255 means next frame every update)
 SNOWFLAKE_ANIM_SPEED_ATTACK	= 90
@@ -17,7 +17,7 @@ SNOWFLAKE_COLLISION_HEIGHT	= 12
 SNOWFLAKE_COLLISION_OFFSET_X = <(-3)
 SNOWFLAKE_COLLISION_OFFSET_Y = <(0)
 
-SNOWFLAKE_SPEED		= $250
+SNOWFLAKE_SPEED		= $300
 
 snowflake_init:
 			; advance hl to bullet_pos_x+1

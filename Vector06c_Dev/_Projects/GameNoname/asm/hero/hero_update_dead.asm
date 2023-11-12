@@ -164,4 +164,3 @@ hero_dead_wait_sparker:
 			dcr m
 			rnz
 			jmp trigger_hero_no_health
-			ret
