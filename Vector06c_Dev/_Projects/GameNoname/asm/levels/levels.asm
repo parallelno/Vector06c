@@ -2,7 +2,7 @@
 ;	levels data initialization every game start
 ;
 levels_init:
-			mvi a, LEVEL_FIRST
+			A_TO_ZERO(LEVEL_FIRST)
 			sta level_idx
 
 			; erase global item statuses
@@ -51,7 +51,7 @@ level_init:
 			call clear_mem_short
 
 ; TODO: look up bullet_runtime_data_sorted
-; it seems bullets_runtime_data and possible others like monster_runtime_data_sorted
+; it seems bullets_runtime_data and possibly others like monster_runtime_data_sorted
 ; got created twice. once here, and once in their init funcs
 			; erase bullets buffs
 			lxi h, bullet_runtime_data_sorted
@@ -80,18 +80,20 @@ level_init:
 			COPY_FROM_RAM_DISK(CONTAINERS_LEN)
 
 			; reset room_id
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(ROOM_ID_0)
 			sta room_id
-
 			call room_init
-
+/*
 			; setup a hero pos
 			lhld level_start_pos_ptr
 			xchg
 			lda level_ram_disk_s_data
 			call get_word_from_ram_disk
 			call hero_set_pos
-			call hero_init
+			call hero_room_init			
+			*/
+			call hero_respawn
+			call hero_room_init
 
 			; reset level command
 			A_TO_ZERO(GLOBAL_REQ_NONE)
@@ -117,22 +119,35 @@ level_update:
 			jz @level_load
 			cpi GAME_REQ_ROOM_DRAW
 			jz @room_draw
+			cpi GAME_REQ_RESPAWN
+			jz @respawn
 			ret
 @room_load_draw:
-			call hero_init
+			call hero_room_init
 			; load a new room
 			call room_init
 			; reset level command
 			A_TO_ZERO(GLOBAL_REQ_NONE)
 			sta global_request
-			call reset_game_updates_counter
-			ret
+			jmp reset_game_updates_counter
 @room_draw:
 			call room_redraw
 			A_TO_ZERO(GLOBAL_REQ_NONE)
 			sta global_request
-			call reset_game_updates_counter
-			ret
+			jmp reset_game_updates_counter
 @level_load:
 			call level_init
 			jmp game_ui_draw
+@respawn:
+			; teleport the hero to the home room
+			A_TO_ZERO( LEVEL_FIRST)
+			sta level_idx
+			A_TO_ZERO( ROOM_ID_0)
+			sta level_idx
+			sta room_id
+			
+			call game_ui_draw
+
+			call hero_respawn
+			jmp @room_load_draw
+

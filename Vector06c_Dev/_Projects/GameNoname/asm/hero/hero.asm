@@ -9,16 +9,30 @@ hero_game_init:
 			; erase hero resources buffs
 			lxi h, hero_resources
 			mvi a, <hero_resources_end
-			call clear_mem_short
+			jmp clear_mem_short
 
+hero_respawn:
 			mvi a, RES_HEALTH_INIT
 			sta hero_res_health
-			ret
 
-hero_init:
+			; setup a hero pos
+			lhld level_start_pos_ptr
+			xchg
+			lda level_ram_disk_s_data
+			call get_word_from_ram_disk
+			; set pos
+			; b - pos_x
+			; c - pos_y		
+			mov a, b
+			sta hero_pos_x+1
+			mov a, c
+			sta hero_pos_y+1
+			jmp hero_room_init
+
+hero_room_init:
 			call hero_idle_start
 			
-			; reset key data			
+			; reset key data
 			A_TO_ZERO(CONTROL_CODE_NO)
 			sta action_code
 
@@ -31,16 +45,4 @@ hero_init:
 			shld hero_erase_wh_old
 			A_TO_ZERO(HERO_RENDER_STATUS_TRUE)
 			sta hero_global_status_no_render
-			ret
-
-; input:
-; b - pos_x
-; c - pos_y
-; use:
-; a
-hero_set_pos:
-			mov a, b
-			sta hero_pos_x+1
-			mov a, c
-			sta hero_pos_y+1
 			ret

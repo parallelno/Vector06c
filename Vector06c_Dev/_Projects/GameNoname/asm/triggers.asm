@@ -12,9 +12,7 @@ trigger_hero_no_health:
 
 @callback:
 			; requesting a level loading
-			A_TO_ZERO(LEVEL_FIRST)
-			sta level_idx
-			mvi a, GAME_REQ_LEVEL_INIT
+			mvi a, GAME_REQ_RESPAWN
 			sta global_request
 			; restore a hero health
 			mvi a, RES_HEALTH_INIT
