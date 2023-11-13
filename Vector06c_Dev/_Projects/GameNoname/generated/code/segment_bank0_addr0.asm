@@ -23,7 +23,7 @@ __snowflake_sprites_rd_data_start:
 .include "generated\\sprites\\snowflake_sprites.asm"
 .align 2
 __snowflake_sprites_rd_data_end:
-__font_gfx_rd_data_start:
-.include "generated\\sprites\\font_gfx.asm"
+__font_rus_gfx_rd_data_start:
+.include "generated\\sprites\\font_rus_gfx.asm"
 .align 2
-__font_gfx_rd_data_end:
+__font_rus_gfx_rd_data_end:

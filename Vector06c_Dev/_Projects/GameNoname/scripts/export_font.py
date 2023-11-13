@@ -42,7 +42,8 @@ def gfx_to_asm(label_prefix, source_j, image):
 
 		asm += "\n"
 		asm += f"			.word 0 ; safety pair of bytes for reading by POP B\n"
-		asm += f"{label_prefix}_{char_name}:\n"
+		adjusted_char = get_char_name(char_name)
+		asm += f"{label_prefix}_{adjusted_char}:\n"
 
 		if offset_y < 0:
 			offset_x -= 1
@@ -57,6 +58,17 @@ def gfx_to_asm(label_prefix, source_j, image):
 
 	return asm, gfx_ptrs
  
+def get_char_name(char_name):
+	eng_alphabet_len = 26
+
+	adjusted_char = char_name
+	unicode_code_point = ord(char_name[0])
+	if unicode_code_point > 0x100:
+		adjusted_code_point = (unicode_code_point - 0x430) % eng_alphabet_len + 0x61
+		offset = (unicode_code_point - 0x430) // eng_alphabet_len
+		adjusted_char = f"{chr(adjusted_code_point)}{offset}"
+	return adjusted_char
+
 def gfx_ptrs_to_asm(label_prefix, source_j, font_gfx_ptrs_rd = False, gfx_ptrs = None):
 	asm = ""
 	if font_gfx_ptrs_rd:
@@ -66,9 +78,10 @@ def gfx_ptrs_to_asm(label_prefix, source_j, font_gfx_ptrs_rd = False, gfx_ptrs =
 
 	# if font_gfx_ptrs_rd == True, then add list of labels with relatives addresses
 	if font_gfx_ptrs_rd:
-		asm += "; relative label addresses. to global addr add __font_gfx\n"
+		asm += "; relative label addresses. to global addr add __font_rus_gfx\n"
 		for char_name in gfx_ptrs:
-			asm += f"{label_prefix}_{char_name} = {gfx_ptrs[char_name]}\n"
+			adjusted_char = get_char_name(char_name)
+			asm += f"{label_prefix}_{adjusted_char} = {gfx_ptrs[char_name]}\n"
 
 	asm += f"{label_prefix}_gfx_ptrs:\n"
 
@@ -81,7 +94,8 @@ def gfx_ptrs_to_asm(label_prefix, source_j, font_gfx_ptrs_rd = False, gfx_ptrs =
 			if i != 0:
 				asm += "\n"
 			asm += "			.word "
-		asm += f"{label_access_prefix}{label_prefix}_{char_name}, "
+		adjusted_char = get_char_name(char_name)
+		asm += f"{label_access_prefix}{label_prefix}_{adjusted_char}, "
 
 	asm +="\n"
 

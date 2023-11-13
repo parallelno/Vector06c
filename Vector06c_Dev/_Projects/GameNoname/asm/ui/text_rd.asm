@@ -2,14 +2,20 @@
 ; main menu
 ;===================================================================================
 __text_main_menu_settings:
+			/*
 			TEXT("START GAME", LINE_BREAK)
 			TEXT("OPTIONS", LINE_BREAK)
 			TEXT("SCORES", LINE_BREAK)
 			TEXT("CREDITS")
+			*/
+			TEXT("0", LINE_BREAK)
+			TEXT("1", LINE_BREAK)
+			TEXT("2", LINE_BREAK)
+			TEXT("3")			
 
 __text_license:
-			TEXT("2023. Developed by Fedotovskikh family")
-
+			;TEXT("2023. Developed by Fedotovskikh family")
+			TEXT("abcdefghijklmnopqrstuvwxyz")
 ;===================================================================================
 ; scores screen
 ;===================================================================================

@@ -69,11 +69,11 @@ dialog_draw_frame_text:
 			; c - tile_idx in the room_tiledata array.			
 			call backs_spawn
 
-			CALL_RAM_DISK_FUNC(__text_ex_rd_reset_spacing, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_reset_spacing, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
 			lxi b, $102d	; text pos
 			pop h
 			; hl - text ptr
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr3, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr3, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
 
 			; pause to prevent closing a dialog right after opening
 			PAUSE(65000, true)

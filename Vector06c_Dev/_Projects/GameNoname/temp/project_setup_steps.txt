@@ -28,8 +28,15 @@ if you have python installed, check the pip upgrade: python -m pip intall --upgr
 install packages:
 pip install Pillow
 pip install numpy
-???pip install kmeans
+
+install visual studio build tool: 
+https://visualstudio.microsoft.com/visual-cpp-build-tools/
+select Desktop dev with C++
+
 pip install lhafile
+
+install .NET 6.0
+https://dotnet.microsoft.com/en-us/download
 
 install retroassembler VS Code extention:
 click on the Extensions icon on the left side, or choose View -> Extensions. Enter Retro Assembler into the search field and install the extension from the marketplace. Choose one of the offered color themes for the assembler.
@@ -38,6 +45,5 @@ retroassembler settings
 On the retroassembler extension page click on the gear icon to open the extention settings
 Specify the full path to the retrassembler stored in the repo. In my case it is in the dir "C:\Work\Programming\_Dev\Vector06c_Dev\retroassembler\retroassembler.exe".
 
-associate a file extension with tiled
 install tiled
-
+associate the ROM file extension with v06x emulator

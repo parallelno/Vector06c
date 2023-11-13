@@ -82,7 +82,7 @@
 						},
 						{
 							"asset_type" : "font_rd",
-							"path" : "source\\sprites\\font.json",
+							"path" : "source\\sprites\\font_rus.json",
 							"export_dir" : "generated\\sprites\\"
 						}
 					]

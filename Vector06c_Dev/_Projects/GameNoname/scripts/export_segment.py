@@ -4,11 +4,17 @@ import common
 import build
 import export_sprite
 import export_back
+
+# TODO: repaint GFX on the fly. erase or set bits
 import export_decal
+# TODO: repaint GFX on the fly. erase or set bits
 import export_level
 import export_music
 import export_font
+
+# TODO: fix the image exporter
 #import export_image
+
 import export_tiled_img
 import copy
 
@@ -242,7 +248,8 @@ def export(bank_id, seg_id, segment_j, includes,
 			segment_include_path = asset_j["path"]
 			segment_force_export |= build.is_asm_updated(segment_include_path)
 
-		'''elif asset_j["asset_type"] == build.ASSET_TYPE_IMAGE:
+		'''
+		elif asset_j["asset_type"] == build.ASSET_TYPE_IMAGE:
 			exported, export_paths = export_image.export_if_updated(asset_j["path"], asset_j["export_dir"], asset_types_force_export["image"])
 			segment_force_export |= exported
 			segment_include_path = export_paths["ram_disk"]'''
