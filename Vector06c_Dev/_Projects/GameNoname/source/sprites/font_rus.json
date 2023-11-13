@@ -365,10 +365,10 @@
 			"name" : "л",
 			"x" : 197,
 			"y"	: 218,
-			"width" : 5,
+			"width" : 4,
 			"height" : 8,
-			"offset_x": -1,
-			"offset_y": -3
+			"offset_x": -3,
+			"offset_y": -2
 		},
 		{
 			"name" : "м",

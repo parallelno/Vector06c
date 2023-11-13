@@ -245,9 +245,9 @@ __font_rus_k0:
 
 			.word 0 ; safety pair of bytes for reading by POP B
 __font_rus_l0:
-			.byte -3, -2 ; offset_y, offset_x
-			.word 240,16,10,10,10,10,10,30,
-			.byte 0, 6 ; next_char_offset
+			.byte -2, -4 ; offset_y, offset_x
+			.word 224,16,18,10,10,10,10,30,
+			.byte 0, 5 ; next_char_offset
 
 			.word 0 ; safety pair of bytes for reading by POP B
 __font_rus_m0:
