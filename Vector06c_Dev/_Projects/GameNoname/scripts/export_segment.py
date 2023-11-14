@@ -11,6 +11,7 @@ import export_decal
 import export_level
 import export_music
 import export_font
+import export_text
 
 # TODO: fix the image exporter
 #import export_image
@@ -241,6 +242,11 @@ def export(bank_id, seg_id, segment_j, includes,
 
 		elif asset_j["asset_type"] == build.ASSET_TYPE_MUSIC:
 			exported, export_paths = export_music.export_if_updated(asset_j["path"], asset_j["export_dir"], asset_types_force_export["music"])
+			segment_force_export |= exported
+			segment_include_path = export_paths["ram_disk"]
+
+		elif asset_j["asset_type"] == build.ASSET_TYPE_TEXT:
+			exported, export_paths = export_text.export_if_updated(asset_j["path"], asset_j["export_dir"], asset_types_force_export["text"])
 			segment_force_export |= exported
 			segment_include_path = export_paths["ram_disk"]
 

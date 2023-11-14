@@ -13,7 +13,8 @@
 			"font_rd" : "scripts\\export_font.py",
 			"image" : "scripts\\export_image.py",
 			"tiled_img_data" : "scripts\\export_tiled_img.py",
-			"tiled_img_gfx" : "scripts\\export_tiled_img.py"
+			"tiled_img_gfx" : "scripts\\export_tiled_img.py",
+			"text" : "scripts\\export_text.py"
 		},
 		"global" : [
 			"source\\data\\data.json",
