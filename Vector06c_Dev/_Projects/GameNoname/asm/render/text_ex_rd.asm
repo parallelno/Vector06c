@@ -1,10 +1,7 @@
-.include "asm\\build_consts.asm"
-
 ; TODO: make it to include automatically
-.if LENG__ == LENG_RUS
 .include "generated\\sprites\\font_rus_gfx_ptrs.asm"
 font_gfx_ptrs = font_rus_gfx_ptrs
-.endif	
+
 
 
 __RAM_DISK_M_TEXT_EX = RAM_DISK_M | RAM_DISK_M_89
@@ -55,7 +52,7 @@ __text_ex_rd_set_spacing:
 
 ; draw a text with kerning. blend func - OR
 ; char_id = 0 is EOD
-; char_id = LINE_BREAK is a new line
+; char_id = _LINE_BREAK_ is a new line
 ; in:
 ; hl - text addr
 ; bc - pos_xy
@@ -85,10 +82,10 @@ text_ex_rd_draw:
 			inx h
 			; a - char_code
 			; check if it is the end of the line
-			cpi <LINE_BREAK
+			cpi <_LINE_BREAK_
 			jz text_ex_rd_line_spacing
 			; check if it is the end of the line
-			cpi <PARAG_BREAK
+			cpi <_PARAG_BREAK_
 			jz text_ex_rd_parag_spacing
 
 			mvi d, 0

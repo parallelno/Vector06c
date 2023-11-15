@@ -36,6 +36,6 @@ chunk_bank3_addr8000_0:
 ; bank3 addr0    [19996 free] description: 
 ;                             level00_gfx [5722], level01_gfx [6794], 
 ; bank3 addr8000 [  804 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering)  
-;                             global_consts_rd [0], sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [88], sprite_preshift_rd [1542], text_ex_rd [320], text_rd [4356], game_score_data_rd [226], 
-; [138920 total/36539 compressed][69211 total free]
+;                             global_consts_rd [0], sprite_rd [172], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [88], sprite_preshift_rd [1542], text_rd_data [4356], text_ex_rd [320], game_score_data_rd [226], 
+; [138920 total/36555 compressed][69211 total free]
 

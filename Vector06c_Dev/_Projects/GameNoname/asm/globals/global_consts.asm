@@ -211,9 +211,9 @@ SECRETS_MAX = 16
 
 ;===========================================================================
 ; text
-LINE_BREAK	= $6a ;'\n'
-PARAG_BREAK	= $ff
-EOD			= 0
+_LINE_BREAK_	= $6a ;'\n'
+_PARAG_BREAK_	= $ff
+_EOD_			= 0
 
 ; opcodes
 OPCODE_NOP  = 0

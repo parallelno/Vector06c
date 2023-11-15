@@ -19,7 +19,7 @@
 	],
 	"asset_type" : "font",
 	"path_png" : "art\\font.png",
-	"comment" : "gfx_ptrs uses commodore 64 charset https://s3.amazonaws.com/com.c64os.resources/weblog/characteranimation/charset.jpg",
+	"comment" : "gfx_ptrs uses commodore 64 charset https://s3.amazonaws.com/com.c64os.resources/weblog/characteranimation/charset.jpg with skipped '@' char at the start",
 	"gfx_ptrs" : [
 		"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
 		"space", "space", "space", "space", "space",

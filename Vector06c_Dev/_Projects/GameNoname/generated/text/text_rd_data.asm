@@ -1,26 +1,24 @@
+__RAM_DISK_S_TEXT_RD = RAM_DISK_S
+__RAM_DISK_M_TEXT_RD = RAM_DISK_M
+
 ;===================================================================================
 ; main menu
 ;===================================================================================
 __text_main_menu_settings:
-			/*
-			TEXT("START GAME", _LINE_BREAK_)
-			TEXT("OPTIONS", _LINE_BREAK_)
-			TEXT("SCORES", _LINE_BREAK_)
-			TEXT("CREDITS")
-			*/
 			TEXT("0", _LINE_BREAK_)
 			TEXT("1", _LINE_BREAK_)
 			TEXT("2", _LINE_BREAK_)
-			TEXT("3")			
+			TEXT("3")
 
 __text_license:
-			;TEXT("2023. Developed by Fedotovskikh family")
 			TEXT("abcdefghijklmnopqrstuvwxyz")
+
 ;===================================================================================
 ; scores screen
 ;===================================================================================
 __text_score_title:
 			TEXT("SCORE BOARD")
+
 __text_buff:
 			TEXT("TEMPNAME .................. 65535")
 
@@ -29,13 +27,17 @@ __text_buff:
 ;===================================================================================
 __text_setting_on:
 			TEXT("ON")
+
 __text_setting_off:
 			TEXT("OFF")
+
 __text_settings:
-			TEXT("Settings:")
+			TEXT("Settings")
+
 __text_settings_names:
 			TEXT("Music", _LINE_BREAK_)
 			TEXT("SFX", _PARAG_BREAK_)
+
 			TEXT("Control Preset .........", _LINE_BREAK_)
 			TEXT(" UP ..............................", _LINE_BREAK_)
 			TEXT(" DOWN ......................", _LINE_BREAK_)
@@ -44,15 +46,19 @@ __text_settings_names:
 			TEXT(" FIRE ..........................", _LINE_BREAK_)
 			TEXT(" SELECT ..................", _LINE_BREAK_)
 			TEXT(" RETURN ................", _PARAG_BREAK_)
-__text_return:		
+
+__text_return:
 			TEXT("Return to the Main Menu")
+
 __text_dots:
 			TEXT("........................................")
-__text_change_settings:			
+
+__text_change_settings:
 			TEXT("Change settings")
 
 __text_control_preset_key:
 			TEXT("Keys")
+
 __text_control_preset_joy:
 			TEXT("JoyP1")
 
@@ -64,6 +70,7 @@ __text_controls_keyboard:
 			TEXT("K SPACE", _LINE_BREAK_)
 			TEXT("K PS", _LINE_BREAK_)
 			TEXT("K TAB")
+
 __text_controls_joystic:
 			TEXT("J UP", _LINE_BREAK_)
 			TEXT("J DOWN", _LINE_BREAK_)
@@ -71,7 +78,7 @@ __text_controls_joystic:
 			TEXT("J RIGHT", _LINE_BREAK_)
 			TEXT("J FIRE1", _LINE_BREAK_)
 			TEXT("J FIRE2", _LINE_BREAK_)
-			TEXT("K TAB")
+			TEXT("J TAB")
 
 ;===================================================================================
 ; credits screen
@@ -80,6 +87,7 @@ __text_credits:
 			TEXT("    This game was created because I truly", _LINE_BREAK_)
 			TEXT("believe in the awesomeness of the Soviet", _LINE_BREAK_)
 			TEXT("PC Vector 06c that shaped my life.", _PARAG_BREAK_)
+
 			TEXT("Code: Alex Fedotovskikh", _LINE_BREAK_)
 			TEXT("Story and inspiration: Petr Fedotovskikh", _LINE_BREAK_)
 			TEXT("Game mechanics: Ilia Fedotovskikh", _LINE_BREAK_)
@@ -87,12 +95,14 @@ __text_credits:
 			TEXT("Level design: the whole family!", _LINE_BREAK_)
 			TEXT("Big thanks to my amazing family for", _LINE_BREAK_)
 			TEXT("working hard to make it a reality!", _PARAG_BREAK_)
+
 			TEXT("Special thanks to zx-pk.ru community", _LINE_BREAK_)
 			TEXT("and especially to ivagor, nzeemin, svofski,", _LINE_BREAK_)
 			TEXT("and jerry for their contribution and help!")
 
 ;===================================================================================
 ; stats
+;===================================================================================
 __text_game_stats:
 			TEXT("    Congratulations, hero! You were really", _LINE_BREAK_)
 			TEXT("good in this epic quest! Time to celebrate", _LINE_BREAK_)
@@ -126,17 +136,17 @@ __text_knocked_his_home_door:
 			TEXT("come along, no question. Gotta swing by and", _LINE_BREAK_)
 			TEXT("hit him up tomorrow for sure!")
 
-__text_knocked_his_friend_door:		
+__text_knocked_his_friend_door:
 			TEXT("Friend's mom: Natias ain't here now. He's left", _LINE_BREAK_)
 			TEXT("early. Be a sweetie and fetch dried clothes", _LINE_BREAK_)
 			TEXT("from the backyard, and I'll give you a", _LINE_BREAK_)
 			TEXT("freshly baked popsicle pie, deal?")
 
-__text_knocked_his_friend_door_no_clothes:		
+__text_knocked_his_friend_door_no_clothes:
 			TEXT("Friend's mom: Oh, sugar, no clothes means", _LINE_BREAK_)
 			TEXT("no pie, remember? We had a straight-up deal.")
 
-__text_knocked_his_friend_door_clothes_returns:		
+__text_knocked_his_friend_door_clothes_returns:
 			TEXT("Friend's mom: Sweetie, you're the best", _LINE_BREAK_)
 			TEXT("helper in the world! Here's a fresh-baked", _LINE_BREAK_)
 			TEXT("popsicle pie, piping chill. Hurry and take", _LINE_BREAK_)
@@ -148,7 +158,7 @@ __text_hero_gets_sword:
 			TEXT("imagined my friend left it for me? This sharpy", _LINE_BREAK_)
 			TEXT("little boy will free my friend in no time!")
 
-__text_knocked_dungeon_entrance:		
+__text_knocked_dungeon_entrance:
 			TEXT("Oh no! Is it only a demo? So unfair! But", _LINE_BREAK_)
 			TEXT("this is not the end! I can hardly wait to", _LINE_BREAK_)
 			TEXT("recount the entire story once it's complete!")
@@ -232,3 +242,4 @@ __text_storytelling_farm_storage:
 			TEXT("Not cool with his mega-spooky vibe, for sure.", _LINE_BREAK_)
 			TEXT("Lucky for us, he's shieldless. Time to school", _LINE_BREAK_)
 			TEXT("that goofball in some true hero moves!")
+

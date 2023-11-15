@@ -1,8 +1,6 @@
 ;.setting "Debug", true
 .setting "ShowLocalLabelsAfterCompiling", true
 
-.include "asm\\build_consts.asm"
-
 .include "asm\\globals\\macro.asm"
 .include "asm\\globals\\global_consts.asm"
 ; main_init must be the first code inclusion

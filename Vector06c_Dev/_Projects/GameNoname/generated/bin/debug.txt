@@ -1,18 +1,15 @@
 Retro Assembler V2022.1 -- Crafted by Peter Tihanyi with 8-Bit Love
 (C) 2017-2023 Engine Designs in West Virginia, USA
 
-Pre-processing the source code file... 9049 lines of code loaded.
+Pre-processing the source code file... 9048 lines of code loaded.
 Compiling, 1st pass... (Processing)
 Compiling, 2nd pass... (Finalizing)
-Success. Size: 19018 bytes ($4a4a) in 1.124s
+Success. Size: 19018 bytes ($4a4a) in 1.188s
 
 *******************
 * Labels & Values *
 *******************
 Segment: Code
-LENG_ENG                                       = $00
-LENG_RUS                                       = $01
-LENG__                                         = $01
 SHOW_CPU_HIGHLOAD_ON_BORDER                    = $00
 INTS_PER_SEC                                   = $32
 PORT0_OUT_OUT                                  = $88
@@ -170,9 +167,9 @@ ROOM_ID_63                                     = $3f
 SCORES_MAX                                     = $0a
 SECRET_ENDING_HOME                             = $01
 SECRETS_MAX                                    = $10
-LINE_BREAK                                     = $6a
-PARAG_BREAK                                    = $ff
-EOD                                            = $00
+_LINE_BREAK_                                   = $6a
+_PARAG_BREAK_                                  = $ff
+_EOD_                                          = $00
 OPCODE_NOP                                     = $00
 OPCODE_XCHG                                    = $eb
 OPCODE_RET                                     = $c9
@@ -3146,55 +3143,57 @@ __sprite_preshift_rd_rd_data_start             = $83b0
 __sprite_dup_preshift                          = $83b0
 __sprite_tmp_buff                              = $8895
 __sprite_preshift_rd_rd_data_end               = $89b6
-__text_ex_rd_rd_data_start                     = $89b6
+__text_rd_data_rd_data_start                   = $89b6
+__RAM_DISK_S_TEXT_RD                           = $1c
+__RAM_DISK_M_TEXT_RD                           = $03
+__text_main_menu_settings                      = $89b6
+__text_license                                 = $89be
+__text_score_title                             = $89d9
+__text_buff                                    = $89e5
+__text_setting_on                              = $8a07
+__text_setting_off                             = $8a0a
+__text_settings                                = $8a0e
+__text_settings_names                          = $8a17
+__text_return                                  = $8b0b
+__text_dots                                    = $8b23
+__text_change_settings                         = $8b4c
+__text_control_preset_key                      = $8b5c
+__text_control_preset_joy                      = $8b61
+__text_controls_keyboard                       = $8b67
+__text_controls_joystic                        = $8b95
+__text_credits                                 = $8bc6
+__text_game_stats                              = $8da8
+__text_no_health                               = $8f28
+__text_knocked_his_home_door                   = $8fd7
+__text_knocked_his_friend_door                 = $9077
+__text_knocked_his_friend_door_no_clothes      = $911b
+__text_knocked_his_friend_door_clothes_returns = $9172
+__text_hero_gets_sword                         = $920a
+__text_knocked_dungeon_entrance                = $92b8
+__text_hero_gets_spoon                         = $9338
+__text_hero_use_pie                            = $93cd
+__text_hero_use_clothes                        = $9453
+__text_storytelling_home                       = $949e
+__text_storytelling_farm_fence                 = $9519
+__text_storytelling_road_to_friends_home       = $95ba
+__text_storytelling_friends_home               = $9642
+__text_storytelling_friends_backyard           = $96ad
+__text_storytelling_friends_secret_place       = $9740
+__text_storytelling_crossroad                  = $97d1
+__text_storytelling_loop                       = $987a
+__text_storytelling_lost_coins                 = $98d2
+__text_storytelling_farm_entrance              = $997e
+__text_storytelling_farm_storage               = $9a1a
+__text_rd_data_rd_data_end                     = $9aba
+__text_ex_rd_rd_data_start                     = $9aba
 __RAM_DISK_M_TEXT_EX                           = $43
-__text_ex_rd_init                              = $8a24
-__text_ex_rd_reset_spacing                     = $8a39
-__text_ex_rd_set_spacing                       = $8a44
-__text_ex_rd_scr3                              = $8a4d
-__text_ex_rd_scr2                              = $8a52
-__text_ex_rd_scr1                              = $8a57
-__text_ex_rd_rd_data_end                       = $8af6
-__text_rd_rd_data_start                        = $8af6
-__text_main_menu_settings                      = $8af6
-__text_license                                 = $8afe
-__text_score_title                             = $8b19
-__text_buff                                    = $8b25
-__text_setting_on                              = $8b47
-__text_setting_off                             = $8b4a
-__text_settings                                = $8b4e
-__text_settings_names                          = $8b58
-__text_return                                  = $8c4c
-__text_dots                                    = $8c64
-__text_change_settings                         = $8c8d
-__text_control_preset_key                      = $8c9d
-__text_control_preset_joy                      = $8ca2
-__text_controls_keyboard                       = $8ca8
-__text_controls_joystic                        = $8cd6
-__text_credits                                 = $8d07
-__text_game_stats                              = $8ee9
-__text_no_health                               = $9069
-__text_knocked_his_home_door                   = $9118
-__text_knocked_his_friend_door                 = $91b8
-__text_knocked_his_friend_door_no_clothes      = $925c
-__text_knocked_his_friend_door_clothes_returns = $92b3
-__text_hero_gets_sword                         = $934b
-__text_knocked_dungeon_entrance                = $93f9
-__text_hero_gets_spoon                         = $9479
-__text_hero_use_pie                            = $950e
-__text_hero_use_clothes                        = $9594
-__text_storytelling_home                       = $95df
-__text_storytelling_farm_fence                 = $965a
-__text_storytelling_road_to_friends_home       = $96fb
-__text_storytelling_friends_home               = $9783
-__text_storytelling_friends_backyard           = $97ee
-__text_storytelling_friends_secret_place       = $9881
-__text_storytelling_crossroad                  = $9912
-__text_storytelling_loop                       = $99bb
-__text_storytelling_lost_coins                 = $9a13
-__text_storytelling_farm_entrance              = $9abf
-__text_storytelling_farm_storage               = $9b5b
-__text_rd_rd_data_end                          = $9bfa
+__text_ex_rd_init                              = $9b28
+__text_ex_rd_reset_spacing                     = $9b3d
+__text_ex_rd_set_spacing                       = $9b48
+__text_ex_rd_scr3                              = $9b51
+__text_ex_rd_scr2                              = $9b56
+__text_ex_rd_scr1                              = $9b5b
+__text_ex_rd_rd_data_end                       = $9bfa
 __game_score_data_rd_rd_data_start             = $9bfa
 __RAM_DISK_S_SCORE                             = $43
 __game_score_secrets                           = $9c2e

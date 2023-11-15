@@ -427,7 +427,7 @@
 			dcr m
 .endmacro
 
-.macro TEXT(string, end_code = EOD)
+.macro TEXT(string, end_code = _EOD_)
 .encoding "screencode", "mixed"
 			.text string
 			.byte end_code

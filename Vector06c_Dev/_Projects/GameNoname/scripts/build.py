@@ -52,6 +52,13 @@ PACKER_ZX0				= 0
 PACKER_ZX0_SALVADORE	= 1
 PACKER_UPKR				= 2
 
+LOCAL_ENG	= "LOCAL_ENG"
+LOCAL_RUS	= "LOCAL_RUS"
+
+_LINE_BREAK_	= "_LINE_BREAK_"
+_PARAG_BREAK_	= "_PARAG_BREAK_"
+EOD			= "_EOD_"
+
 # global vars
 build_db_path = "generated\\build.db"
 assembler_path = "..\\..\\retroassembler\\retroassembler.exe -C=8080 -c"

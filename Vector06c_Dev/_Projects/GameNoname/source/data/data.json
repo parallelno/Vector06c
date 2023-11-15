@@ -276,13 +276,14 @@
 							"path" : "asm\\render\\sprite_preshift_rd.asm"
 						},
 						{
-							"asset_type" : "code",
-							"path" : "asm\\render\\text_ex_rd.asm"
+							"asset_type" : "text",
+							"path" : "source\\text\\text_rd.json",
+							"export_dir" : "generated\\text\\"
 						},
 						{
 							"asset_type" : "code",
-							"path" : "asm\\ui\\text_rd.asm"
-						},
+							"path" : "asm\\render\\text_ex_rd.asm"
+						},						
 						{
 							"asset_type" : "code",
 							"path" : "asm\\game_score_data_rd.asm"

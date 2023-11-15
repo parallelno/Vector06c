@@ -19,7 +19,7 @@
 	],
 	"asset_type" : "font",
 	"path_png" : "art\\font.png",
-	"comment" : "rus font uses a custom charset ",
+	"comment" : "rus font uses a custom charset below",
 	"gfx_ptrs" : [
 		"а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", "о",
 		"п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э",  "ю", "я",
