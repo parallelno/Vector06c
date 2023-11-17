@@ -22,9 +22,12 @@
 	"comment" : "rus font uses a custom charset below",
 	"gfx_ptrs" : [
 		"а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", "о",
-		"п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э",  "ю", "я",
-		"space", "exclamation", "quote", "ampersand", "quote", "parent_r", "comma", "dash", "period",
-		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "colon", "multidot", "question"
+		"п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я",
+		"А", "Б", "В", "Г", "Д", "Е", "Е", "Ж", "З", "И", "И", "К", "Л", "М", "Н", "О",
+		"П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я",
+		"0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+		"period", "comma", "colon", "parent_r",
+		"parent_l", "quote", "exclamation", "question", "dash", "ampersand", "space"
 	],
 	"backgrount_color_pos" : [0, 0],
 	"spacing" : 1,
@@ -126,51 +129,11 @@
 			"offset_y": 0
 		},
 		{
-			"name" : "d_quote",
-			"x" : 24,
-			"y"	: 234,
-			"width" : 4,
-			"height" : 1,
-			"offset_y": 0
-		},
-		{
 			"name" : "ampersand",
 			"x" : 168,
 			"y"	: 55,
 			"width" : 8,
 			"height" : 9,
-			"offset_y": 0
-		},
-		{
-			"name" : "hash",
-			"x" : 24,
-			"y"	: 234,
-			"width" : 4,
-			"height" : 1,
-			"offset_y": 0
-		},
-		{
-			"name" : "dollar",
-			"x" : 24,
-			"y"	: 234,
-			"width" : 4,
-			"height" : 1,
-			"offset_y": 0
-		},
-		{
-			"name" : "percent",
-			"x" : 24,
-			"y"	: 234,
-			"width" : 4,
-			"height" : 1,
-			"offset_y": 0
-		},
-		{
-			"name" : "ampercent",
-			"x" : 24,
-			"y"	: 234,
-			"width" : 4,
-			"height" : 1,
 			"offset_y": 0
 		},
 		{
@@ -228,22 +191,6 @@
 			"width" : 1,
 			"height" : 4,
 			"offset_y": 1
-		},
-		{
-			"name" : "multidot",
-			"x" : 56,
-			"y"	: 63,
-			"width" : 5,
-			"height" : 1,
-			"offset_y": 0
-		},
-		{
-			"name" : "equal",
-			"x" : 24,
-			"y"	: 234,
-			"width" : 4,
-			"height" : 1,
-			"offset_y": 0
 		},
 		{
 			"name" : "question",
@@ -526,7 +473,7 @@
 		{
 			"name" : "э",
 			"x" : 8,
-			"y"	: 150,
+			"y"	: 250,
 			"width" : 4,
 			"height" : 6,
 			"offset_y": 0
@@ -534,7 +481,7 @@
 		{
 			"name" : "ю",
 			"x" : 24,
-			"y"	: 150,
+			"y"	: 250,
 			"width" : 6,
 			"height" : 6,
 			"offset_x": 0,
@@ -543,9 +490,287 @@
 		{
 			"name" : "я",
 			"x" : 39,
-			"y"	: 150,
+			"y"	: 250,
 			"width" : 4,
-			"height" : 6,
+			"height" : 8,
+			"offset_x": -1,
+			"offset_y": -2
+		},	
+		{
+			"name" : "А",
+			"x" : 8,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Б",
+			"x" : 24,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": -1,
+			"offset_y": 0
+		},
+		{
+			"name" : "В",
+			"x" : 40,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": -1,
+			"offset_y": 0
+		},
+		{
+			"name" : "Г",
+			"x" : 56,
+			"y"	: 167,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Д",
+			"x" : 71,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 10,
+			"offset_x": 0,
+			"offset_y": -1
+		},
+		{
+			"name" : "Е",
+			"x" : 88,
+			"y"	: 167,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Ж",
+			"x" : 120,
+			"y"	: 167,
+			"width" : 7,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "З",
+			"x" : 135,
+			"y"	: 167,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "И",
+			"x" : 152,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "К",
+			"x" : 184,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Л",
+			"x" : 197,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 11,
+			"offset_x": -2,
+			"offset_y": -2
+		},
+		{
+			"name" : "М",
+			"x" : 216,
+			"y"	: 166,
+			"width" : 8,
+			"height" : 10,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Н",
+			"x" : 232,
+			"y"	: 167,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "О",
+			"x" : 248,
+			"y"	: 167,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},				
+		{
+			"name" : "П",
+			"x" : 8,
+			"y"	: 183,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Р",
+			"x" : 23,
+			"y"	: 183,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "С",
+			"x" : 40,
+			"y"	: 183,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Т",
+			"x" : 56,
+			"y"	: 183,
+			"width" : 7,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "У",
+			"x" : 71,
+			"y"	: 183,
+			"width" : 7,
+			"height" : 11,
+			"offset_x": -1,
+			"offset_y": -2
+		},
+		{
+			"name" : "Ф",
+			"x" : 88,
+			"y"	: 182,
+			"width" : 7,
+			"height" : 11,
+			"offset_x": 0,
+			"offset_y": -1
+		},
+		{
+			"name" : "Х",
+			"x" : 104,
+			"y"	: 183,
+			"width" : 6,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Ц",
+			"x" : 120,
+			"y"	: 183,
+			"width" : 7,
+			"height" : 11,
+			"offset_x": 0,
+			"offset_y": -2
+		},
+		{
+			"name" : "Ч",
+			"x" : 136,
+			"y"	: 183,
+			"width" : 7,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Ш",
+			"x" : 152,
+			"y"	: 183,
+			"width" : 8,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Щ",
+			"x" : 168,
+			"y"	: 183,
+			"width" : 7,
+			"height" : 11,
+			"offset_x": 0,
+			"offset_y": -2
+		},
+		{
+			"name" : "Ъ",
+			"x" : 183,
+			"y"	: 183,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": -1,
+			"offset_y": 0
+		},
+		{
+			"name" : "Ы",
+			"x" : 200,
+			"y"	: 183,
+			"width" : 8,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Ь",
+			"x" : 216,
+			"y"	: 183,
+			"width" : 5,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},				
+		{
+			"name" : "Э",
+			"x" : 8,
+			"y"	: 199,
+			"width" : 5,
+			"height" : 9,
+			"offset_y": 0
+		},
+		{
+			"name" : "Ю",
+			"x" : 24,
+			"y"	: 199,
+			"width" : 8,
+			"height" : 9,
+			"offset_x": 0,
+			"offset_y": 0
+		},
+		{
+			"name" : "Я",
+			"x" : 39,
+			"y"	: 199,
+			"width" : 5,
+			"height" : 11,
 			"offset_x": -2,
 			"offset_y": -2
 		}

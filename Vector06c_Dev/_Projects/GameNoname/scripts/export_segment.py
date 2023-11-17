@@ -150,7 +150,8 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 
 #=========================================================================================
 def export(bank_id, seg_id, segment_j, includes,
-			force_export, asset_types_force_export, generated_code_dir, generated_bin_dir):
+			force_export, asset_types_force_export, generated_code_dir, generated_bin_dir,
+			localization = build.LOCAL_ENG):
  
 	seg_addr = segment_j["seg_addr"]
 	if seg_addr == "SEGMENT_0000_7F00_ADDR":
@@ -246,7 +247,7 @@ def export(bank_id, seg_id, segment_j, includes,
 			segment_include_path = export_paths["ram_disk"]
 
 		elif asset_j["asset_type"] == build.ASSET_TYPE_TEXT:
-			exported, export_paths = export_text.export_if_updated(asset_j["path"], asset_j["export_dir"], asset_types_force_export["text"])
+			exported, export_paths = export_text.export_if_updated(asset_j["path"], asset_j["export_dir"], asset_types_force_export["text"], localization)
 			segment_force_export |= exported
 			segment_include_path = export_paths["ram_disk"]
 

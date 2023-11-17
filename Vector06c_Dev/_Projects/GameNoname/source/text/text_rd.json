@@ -4,24 +4,24 @@
 		"main menu" : {
 			"__text_main_menu_settings" : {
 				"LOCAL_ENG" : [
-					"0",
-					"1",
-					"2",
-					"3"					
-				],
-				"LOCAL_RUS" : [
 					"START GAME",
 					"OPTIONS",
 					"SCORES",
-					"CREDITS"
+					"CREDITS"					
+				],
+				"LOCAL_RUS" : [
+					"СТАРТ",
+					"НАСТРОЙКИ",
+					"РЕКОРДЫ",
+					"ОБ ИГРЕ"
 				]
 			},
 			"__text_license" : {
 				"LOCAL_ENG" :[
-					"abcdefghijklmnopqrstuvwxyz"
+					"2023. Developed by Fedotovskikh family"
 				],
 				"LOCAL_RUS" : [
-					"2023. Developed by Fedotovskikh family"
+					"2023. Сделано семьей Федотовских"
 				]
 			}
 		},
@@ -29,11 +29,17 @@
 			"__text_score_title" : {
 				"LOCAL_ENG" :[
 					"SCORE BOARD"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_buff" : {
 				"LOCAL_ENG" :[
 					"TEMPNAME .................. 65535"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			}
 		},
@@ -41,16 +47,25 @@
 			"__text_setting_on" : {
 				"LOCAL_ENG" :[
 					"ON"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_setting_off" : {
 				"LOCAL_ENG" :[
 					"OFF"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_settings" : {
 				"LOCAL_ENG" :[
 					"Settings"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_settings_names" : {
@@ -66,31 +81,49 @@
 					" FIRE ..........................",
 					" SELECT ..................",
 					" RETURN ................_PARAG_BREAK_"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_return" : {
 				"LOCAL_ENG" :[
 					"Return to the Main Menu"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_dots" : {
 				"LOCAL_ENG" :[
 					"........................................"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_change_settings" : {
 				"LOCAL_ENG" :[
 					"Change settings"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_control_preset_key" : {
 				"LOCAL_ENG" :[
 					"Keys"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_control_preset_joy" : {
 				"LOCAL_ENG" :[
 					"JoyP1"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_controls_keyboard" : {
@@ -102,6 +135,9 @@
 					"K SPACE",
 					"K PS",
 					"K TAB"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_controls_joystic" : {
@@ -113,6 +149,9 @@
 					"J FIRE1",
 					"J FIRE2",
 					"J TAB"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			}
 		},
@@ -134,6 +173,9 @@
 					"Special thanks to zx-pk.ru community",
 					"and especially to ivagor, nzeemin, svofski,",
 					"and jerry for their contribution and help!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			}
 		},
@@ -156,6 +198,9 @@
 
 					"Keep your sword sharp and your heart brim-",
 					"ming with courage, for new quests!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			}
 		},
@@ -166,6 +211,9 @@
 					"hero and fell into the deep, chilling darkness.",
 					"Seemed as if all hope was lost. But then,",
 					"miraculously, his eyes fluttered open."
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_knocked_his_home_door" : {
@@ -174,6 +222,9 @@
 					"today! Next time, my buddy Natias has to",
 					"come along, no question. Gotta swing by and",
 					"hit him up tomorrow for sure!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_knocked_his_friend_door" : {
@@ -182,12 +233,18 @@
 					"early. Be a sweetie and fetch dried clothes",
 					"from the backyard, and I'll give you a",
 					"freshly baked popsicle pie, deal?"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_knocked_his_friend_door_no_clothes" : {
 				"LOCAL_ENG" :[
 					"Friend's mom: Oh, sugar, no clothes means",
 					"no pie, remember? We had a straight-up deal."
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_knocked_his_friend_door_clothes_returns" : {
@@ -196,6 +253,9 @@
 					"helper in the world! Here's a fresh-baked",
 					"popsicle pie, piping chill. Hurry and take",
 					"it home before it warms up!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_hero_gets_sword" : {
@@ -204,6 +264,9 @@
 					"sword, no doubt about it! Who would have",
 					"imagined my friend left it for me? This sharpy",
 					"little boy will free my friend in no time!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_knocked_dungeon_entrance" : {
@@ -211,6 +274,9 @@
 					"Oh no! Is it only a demo? So unfair! But",
 					"this is not the end! I can hardly wait to",
 					"recount the entire story once it's complete!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_hero_gets_spoon" : {
@@ -219,6 +285,9 @@
 					"and ancient spoon ever designed, a masterpiece!",
 					"Popsicle pie missed you sooo much...",
 					"Oh no... it's cursed!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_hero_use_pie" : {
@@ -226,12 +295,18 @@
 					"This popsicle pie is so delicious! I wish I had",
 					"my mouth big enough to swallow it all at",
 					"once. Until then, I definitely need a spoon."
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_hero_use_clothes" : {
 				"LOCAL_ENG" :[
 					"Deal's a deal! Promised to fetch and bring",
 					" the dry clothes, so get to it!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			}
 		},
@@ -241,6 +316,9 @@
 					"Rad day for my morning jog! Legs are ready",
 					"for some serious adventuring action.",
 					"If it's all about collecting, count me in!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_storytelling_farm_fence" : {
@@ -249,6 +327,9 @@
 					"quest, and you know what they say - no",
 					"cabbage left behind! Gonna scoop up those",
 					"leafy greens like a true adventurer!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_storytelling_road_to_friends_home" : {
@@ -257,6 +338,9 @@
 					"cluttering up the road? Gotta snag a hero",
 					"thingamajig to clear the path for some",
 					"righteous heroing!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_storytelling_friends_home" : {
@@ -264,6 +348,9 @@
 					"Check it, my buddy's cave! He said he'd",
 					"be around today. Gotta jog his memory",
 					"'bout that promise, ya know?"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_storytelling_friends_backyard" : {
@@ -272,6 +359,9 @@
 					"the bushes! I'm gonna investigate my",
 					"friend's secret spot. Those bones at the",
 					"entrance are a spooky clue!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_storytelling_friends_secret_place" : {
@@ -280,6 +370,9 @@
 					"the place! I worry my friend can be in a real",
 					"danger! I gonna find and rescue him no matter",
 					"the cost!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_storytelling_crossroad" : {
@@ -288,12 +381,18 @@
 					"of our beloved villagers! It's clear who the",
 					"culprit is here! You better be trembling!",
 					"I'm going to teach you a lesson!!!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_storytelling_loop" : {
 				"LOCAL_ENG" :[
 					"You better watch out, little rolling furry",
 					"burner, because there's no escaping from me!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_storytelling_lost_coins" : {
@@ -302,6 +401,9 @@
 					"I just knew there had to be treasures on this",
 					"heroic journey! Everyone, look at my pockets,",
 					"coins are about to overflow them!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_storytelling_farm_entrance" : {
@@ -310,6 +412,9 @@
 					"hungry up in here. But you gotta watch out,",
 					"'cause if you munch too much, your tummy",
 					"might throw a grumble fit!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			},
 			"__text_storytelling_farm_storage" : {
@@ -318,6 +423,9 @@
 					"Not cool with his mega-spooky vibe, for sure.",
 					"Lucky for us, he's shieldless. Time to school",
 					"that goofball in some true hero moves!"
+				],
+				"LOCAL_RUS" : [
+					"абв"
 				]
 			}
 		}

@@ -9,4 +9,4 @@ build.set_emulator_path("..\\..\\Emu80\\Emu80qt.exe")
 data_path = "source\\data\\data.json"
 
 print(f"ram-disk data export: {data_path}")
-export_data.export(data_path)
+export_data.export(data_path, build.LOCAL_RUS)

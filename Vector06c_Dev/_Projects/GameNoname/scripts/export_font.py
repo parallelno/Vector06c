@@ -42,7 +42,7 @@ def gfx_to_asm(label_prefix, source_j, image):
 
 		asm += "\n"
 		asm += f"			.word 0 ; safety pair of bytes for reading by POP B\n"
-		adjusted_char = get_char_name(char_name)
+		adjusted_char = get_char_label_postfix(char_name)
 		asm += f"{label_prefix}_{adjusted_char}:\n"
 
 		if offset_y < 0:
@@ -58,14 +58,14 @@ def gfx_to_asm(label_prefix, source_j, image):
 
 	return asm, gfx_ptrs
  
-def get_char_name(char_name):
+def get_char_label_postfix(char_name):
 	eng_alphabet_len = 26
 
 	adjusted_char = char_name
 	unicode_code_point = ord(char_name[0])
 	if unicode_code_point > 0x100:
-		adjusted_code_point = (unicode_code_point - 0x430) % eng_alphabet_len + 0x61
-		offset = (unicode_code_point - 0x430) // eng_alphabet_len
+		adjusted_code_point = (unicode_code_point - 0x100) % eng_alphabet_len + 0x61
+		offset = (unicode_code_point - 0x100) // eng_alphabet_len
 		adjusted_char = f"{chr(adjusted_code_point)}{offset}"
 	return adjusted_char
 
@@ -80,7 +80,7 @@ def gfx_ptrs_to_asm(label_prefix, source_j, font_gfx_ptrs_rd = False, gfx_ptrs =
 	if font_gfx_ptrs_rd:
 		asm += "; relative label addresses. to global addr add __font_rus_gfx\n"
 		for char_name in gfx_ptrs:
-			adjusted_char = get_char_name(char_name)
+			adjusted_char = get_char_label_postfix(char_name) 
 			asm += f"{label_prefix}_{adjusted_char} = {gfx_ptrs[char_name]}\n"
 
 	asm += f"{label_prefix}_gfx_ptrs:\n"
@@ -88,13 +88,13 @@ def gfx_ptrs_to_asm(label_prefix, source_j, font_gfx_ptrs_rd = False, gfx_ptrs =
 	gfx_ptrs_len = len(source_j["gfx_ptrs"])
 	asm += f"GFX_PTRS_LEN = {gfx_ptrs_len}\n"
 	
-	numbers_in_line = 16
+	numbers_in_line = 16 
 	for i, char_name in enumerate(source_j["gfx_ptrs"]):
 		if i % numbers_in_line == 0:
 			if i != 0:
 				asm += "\n"
 			asm += "			.word "
-		adjusted_char = get_char_name(char_name)
+		adjusted_char = get_char_label_postfix(char_name)
 		asm += f"{label_access_prefix}{label_prefix}_{adjusted_char}, "
 
 	asm +="\n"

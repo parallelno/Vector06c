@@ -22,7 +22,7 @@ def export_ram_data_labels(generated_code_dir, segments_info, main_asm_labels):
 	with open(path, "w") as file:
 		file.write(asm)
 
-def export(source_j_path):
+def export(source_j_path, localization = build.LOCAL_ENG):
 	with open(source_j_path, "rb") as file:
 		source_j = json.load(file)
 
@@ -60,7 +60,7 @@ def export(source_j_path):
 			exported, segment_info = export_segment.export(
 				bank_id, seg_id, segment_j, source_j["includes"]["segment"],
 				global_force_export, asset_types_force_export,
-				generated_code_dir, generated_bin_dir)
+				generated_code_dir, generated_bin_dir, localization)
 
 			ram_disk_data_asm_force_export |= exported
 			segments_info.append(segment_info)

@@ -57,7 +57,7 @@ LOCAL_RUS	= "LOCAL_RUS"
 
 _LINE_BREAK_	= "_LINE_BREAK_"
 _PARAG_BREAK_	= "_PARAG_BREAK_"
-EOD			= "_EOD_"
+_EOD_			= "_EOD_"
 
 # global vars
 build_db_path = "generated\\build.db"
