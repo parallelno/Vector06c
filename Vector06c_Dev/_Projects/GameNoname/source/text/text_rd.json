@@ -3,13 +3,13 @@
 	"text" : {
 		"main menu" : {
 			"__text_main_menu_settings" : {
-				"LOCAL_ENG" : [
+				"0" : [
 					"START GAME",
 					"OPTIONS",
 					"SCORES",
 					"CREDITS"					
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"СТАРТ",
 					"НАСТРОЙКИ",
 					"РЕКОРДЫ",
@@ -17,59 +17,59 @@
 				]
 			},
 			"__text_license" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"2023. Developed by Fedotovskikh family"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"2023. Сделано семьей Федотовских"
 				]
 			}
 		},
 		"scores screen" : {
 			"__text_score_title" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"SCORE BOARD"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_buff" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"TEMPNAME .................. 65535"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			}
 		},
 		"options screen" : {
 			"__text_setting_on" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"ON"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_setting_off" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"OFF"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_settings" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Settings"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_settings_names" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Music",
 					"SFX_PARAG_BREAK_",
 
@@ -82,52 +82,52 @@
 					" SELECT ..................",
 					" RETURN ................_PARAG_BREAK_"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_return" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Return to the Main Menu"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_dots" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"........................................"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_change_settings" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Change settings"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_control_preset_key" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Keys"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_control_preset_joy" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"JoyP1"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_controls_keyboard" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"K UP",
 					"K DOWN",
 					"K LEFT",
@@ -136,12 +136,12 @@
 					"K PS",
 					"K TAB"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_controls_joystic" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"J UP",
 					"J DOWN",
 					"J LEFT",
@@ -150,14 +150,14 @@
 					"J FIRE2",
 					"J TAB"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			}
 		},
 		"credits screen" : {
 			"__text_credits" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"    This game was created because I truly",
 					"believe in the awesomeness of the Soviet",
 					"PC Vector 06c that shaped my life._PARAG_BREAK_",
@@ -174,14 +174,14 @@
 					"and especially to ivagor, nzeemin, svofski,",
 					"and jerry for their contribution and help!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			}
 		},
 		"stats" : {
 			"__text_game_stats" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"    Congratulations, hero! You were really",
 					"good in this epic quest! Time to celebrate",
 					"with a royal feast of popsicles watching a",
@@ -199,232 +199,232 @@
 					"Keep your sword sharp and your heart brim-",
 					"ming with courage, for new quests!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			}
 		},
 		"dialogs" : {
 			"__text_no_health" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Oh, not this! ..must save.. friend - said the",
 					"hero and fell into the deep, chilling darkness.",
 					"Seemed as if all hope was lost. But then,",
 					"miraculously, his eyes fluttered open."
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_knocked_his_home_door" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Oh, that was super freshy outside for a walk",
 					"today! Next time, my buddy Natias has to",
 					"come along, no question. Gotta swing by and",
 					"hit him up tomorrow for sure!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_knocked_his_friend_door" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Friend's mom: Natias ain't here now. He's left",
 					"early. Be a sweetie and fetch dried clothes",
 					"from the backyard, and I'll give you a",
 					"freshly baked popsicle pie, deal?"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_knocked_his_friend_door_no_clothes" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Friend's mom: Oh, sugar, no clothes means",
 					"no pie, remember? We had a straight-up deal."
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_knocked_his_friend_door_clothes_returns" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Friend's mom: Sweetie, you're the best",
 					"helper in the world! Here's a fresh-baked",
 					"popsicle pie, piping chill. Hurry and take",
 					"it home before it warms up!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_hero_gets_sword" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"I don't believe my eyes, It is a legendary",
 					"sword, no doubt about it! Who would have",
 					"imagined my friend left it for me? This sharpy",
 					"little boy will free my friend in no time!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_knocked_dungeon_entrance" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Oh no! Is it only a demo? So unfair! But",
 					"this is not the end! I can hardly wait to",
 					"recount the entire story once it's complete!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_hero_gets_spoon" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"A spoon??! No, the spoon! The most iconic",
 					"and ancient spoon ever designed, a masterpiece!",
 					"Popsicle pie missed you sooo much...",
 					"Oh no... it's cursed!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_hero_use_pie" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"This popsicle pie is so delicious! I wish I had",
 					"my mouth big enough to swallow it all at",
 					"once. Until then, I definitely need a spoon."
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_hero_use_clothes" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Deal's a deal! Promised to fetch and bring",
 					" the dry clothes, so get to it!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			}
 		},
 		"storytelling" : {
 			"__text_storytelling_home" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Rad day for my morning jog! Legs are ready",
 					"for some serious adventuring action.",
 					"If it's all about collecting, count me in!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_storytelling_farm_fence" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Oh my glob, guess what? Mom's on a cabbage",
 					"quest, and you know what they say - no",
 					"cabbage left behind! Gonna scoop up those",
 					"leafy greens like a true adventurer!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_storytelling_road_to_friends_home" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Wait a minute! Who's the cheeky one",
 					"cluttering up the road? Gotta snag a hero",
 					"thingamajig to clear the path for some",
 					"righteous heroing!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_storytelling_friends_home" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Check it, my buddy's cave! He said he'd",
 					"be around today. Gotta jog his memory",
 					"'bout that promise, ya know?"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_storytelling_friends_backyard" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Really??? It looks like a hidden lair in",
 					"the bushes! I'm gonna investigate my",
 					"friend's secret spot. Those bones at the",
 					"entrance are a spooky clue!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_storytelling_friends_secret_place" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Oh no, there are bones and skulls all over",
 					"the place! I worry my friend can be in a real",
 					"danger! I gonna find and rescue him no matter",
 					"the cost!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_storytelling_crossroad" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"I'm shaken! A terrible monster and the corpses",
 					"of our beloved villagers! It's clear who the",
 					"culprit is here! You better be trembling!",
 					"I'm going to teach you a lesson!!!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_storytelling_loop" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"You better watch out, little rolling furry",
 					"burner, because there's no escaping from me!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_storytelling_lost_coins" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Wow, wow, wow!!! My intuition never fails me!",
 					"I just knew there had to be treasures on this",
 					"heroic journey! Everyone, look at my pockets,",
 					"coins are about to overflow them!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_storytelling_farm_entrance" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Every time I lay eyes on cabbage, I get all",
 					"hungry up in here. But you gotta watch out,",
 					"'cause if you munch too much, your tummy",
 					"might throw a grumble fit!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			},
 			"__text_storytelling_farm_storage" : {
-				"LOCAL_ENG" :[
+				"0" :[
 					"Who's that dude on my road?",
 					"Not cool with his mega-spooky vibe, for sure.",
 					"Lucky for us, he's shieldless. Time to school",
 					"that goofball in some true hero moves!"
 				],
-				"LOCAL_RUS" : [
+				"1" : [
 					"абв"
 				]
 			}

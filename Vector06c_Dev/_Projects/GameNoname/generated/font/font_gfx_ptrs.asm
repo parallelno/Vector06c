@@ -1,0 +1,94 @@
+; relative label addresses. to global addr add __font_rus_gfx
+font_0 = 2
+font_1 = 26
+font_2 = 50
+font_3 = 74
+font_4 = 98
+font_5 = 122
+font_6 = 146
+font_7 = 170
+font_8 = 194
+font_9 = 218
+font_space = 242
+font_exclamation = 250
+font_ampersand = 276
+font_quote = 300
+font_parent_l = 310
+font_parent_r = 332
+font_comma = 354
+font_dash = 364
+font_period = 372
+font_colon = 380
+font_question = 394
+font_k31 = 420
+font_l31 = 438
+font_m31 = 460
+font_n31 = 482
+font_o31 = 500
+font_p31 = 520
+font_r32 = 538
+font_q31 = 560
+font_r31 = 578
+font_s31 = 600
+font_t31 = 618
+font_u31 = 640
+font_v31 = 658
+font_w31 = 680
+font_x31 = 698
+font_y31 = 716
+font_z31 = 734
+font_a32 = 752
+font_b32 = 778
+font_c32 = 796
+font_d32 = 814
+font_e32 = 836
+font_f32 = 860
+font_g32 = 878
+font_h32 = 900
+font_i32 = 922
+font_j32 = 940
+font_k32 = 962
+font_l32 = 980
+font_m32 = 998
+font_n32 = 1016
+font_o32 = 1034
+font_p32 = 1052
+font_e30 = 1074
+font_f30 = 1098
+font_g30 = 1122
+font_h30 = 1146
+font_i30 = 1170
+font_j30 = 1196
+font_k30 = 1220
+font_l30 = 1244
+font_m30 = 1268
+font_o30 = 1292
+font_p30 = 1316
+font_q30 = 1344
+font_r30 = 1370
+font_s30 = 1394
+font_t30 = 1418
+font_u30 = 1442
+font_v30 = 1466
+font_w30 = 1490
+font_x30 = 1514
+font_y30 = 1542
+font_z30 = 1570
+font_a31 = 1594
+font_b31 = 1622
+font_c31 = 1646
+font_d31 = 1670
+font_e31 = 1698
+font_f31 = 1722
+font_g31 = 1746
+font_h31 = 1770
+font_i31 = 1794
+font_j31 = 1818
+font_gfx_ptrs:
+GFX_PTRS_LEN = 87
+			.word font_k31, font_l31, font_m31, font_n31, font_o31, font_p31, font_r32, font_q31, font_r31, font_s31, font_t31, font_u31, font_v31, font_w31, font_x31, font_y31, 
+			.word font_z31, font_a32, font_b32, font_c32, font_d32, font_e32, font_f32, font_g32, font_h32, font_i32, font_j32, font_k32, font_l32, font_m32, font_n32, font_o32, 
+			.word font_p32, font_e30, font_f30, font_g30, font_h30, font_i30, font_j30, font_j30, font_k30, font_l30, font_m30, font_m30, font_o30, font_p30, font_q30, font_r30, 
+			.word font_s30, font_t30, font_u30, font_v30, font_w30, font_x30, font_y30, font_z30, font_a31, font_b31, font_c31, font_d31, font_e31, font_f31, font_g31, font_h31, 
+			.word font_i31, font_j31, font_0, font_1, font_2, font_3, font_4, font_5, font_6, font_7, font_8, font_9, font_period, font_comma, font_colon, font_parent_r, 
+			.word font_parent_l, font_quote, font_exclamation, font_question, font_dash, font_ampersand, font_space, 

@@ -1,15 +1,13 @@
-; TODO: make it to include automatically
-.include "generated\\sprites\\font_rus_gfx_ptrs.asm"
-font_gfx_ptrs = font_rus_gfx_ptrs
-
-
+;.include "generated\\code\\localization_inc.asm"
+;.include "generated\\code\\localization_consts.asm"
+.include "generated\\font\\font_gfx_ptrs.asm"
 
 __RAM_DISK_M_TEXT_EX = RAM_DISK_M | RAM_DISK_M_89
 LINE_SPACING_DEFAULT = -12
 PARAG_SPACING_DEFAULT = -24
 
 ; convert local labels into global
-; call ex. CALL_RAM_DISK_FUNC(__text_ex_rd_init, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+; call ex. CALL_RAM_DISK_FUNC(__text_ex_rd_init, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 ; in:
 ; bc - __font_rus_gfx addr
 __text_ex_rd_init:
@@ -56,7 +54,7 @@ __text_ex_rd_set_spacing:
 ; in:
 ; hl - text addr
 ; bc - pos_xy
-; call ex. CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+; call ex. CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 __text_ex_rd_scr3:
 			mvi a, >SCR_BUFF3_ADDR
 			jmp text_ex_rd_draw

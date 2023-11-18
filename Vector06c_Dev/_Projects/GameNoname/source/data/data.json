@@ -34,7 +34,6 @@
 		"generated_bin" : "generated\\bin\\"
 	},
 	"build_db_path" : "generated\\build.db",
-	"chunk_size_limit_rule" : "if a chunk contains sprites, its size has to be < $6000",
 	"includes" : {
 		"segment" : [
 			"asm\\globals\\global_consts.asm"
@@ -46,6 +45,10 @@
 	},
 	"main_asm_path" : "asm\\main.asm",
 	"unpacker_path" : "asm\\unpacker.asm",
+
+	"localization" : {
+		"id" : "1"
+	},
 	"banks" :
 	[
 		{
@@ -83,8 +86,13 @@
 						},
 						{
 							"asset_type" : "font_rd",
-							"path" : "source\\sprites\\font_rus.json",
-							"export_dir" : "generated\\sprites\\"
+							"path" : "source\\font\\eng\\font.json",
+							"export_dir" : "generated\\font\\",
+							"localization" : {
+								"1" : {
+									"path" : "source\\font\\rus\\font.json"
+								}
+							}
 						}
 					]
 				},
@@ -250,7 +258,7 @@
 						{
 							"asset_type" : "code",
 							"path" : "asm\\globals\\global_consts_rd.asm"
-						},
+						},					
 						{
 							"asset_type" : "code",
 							"path" : "asm\\render\\sprite_rd.asm"

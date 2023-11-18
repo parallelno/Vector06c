@@ -151,7 +151,7 @@ def compile_and_compress(source_path, generated_bin_dir, segment_addr, force_exp
 #=========================================================================================
 def export(bank_id, seg_id, segment_j, includes,
 			force_export, asset_types_force_export, generated_code_dir, generated_bin_dir,
-			localization = build.LOCAL_ENG):
+			localization_id = build.LOCAL_ENG):
  
 	seg_addr = segment_j["seg_addr"]
 	if seg_addr == "SEGMENT_0000_7F00_ADDR":
@@ -184,6 +184,13 @@ def export(bank_id, seg_id, segment_j, includes,
 
 	# export the segment data
 	for asset_j in segment_j["assets"]:
+
+		# override data with localized version if defined
+		if "localization" in asset_j and localization_id in asset_j["localization"]:
+			overrides = asset_j["localization"][localization_id]
+			for override in overrides:
+				asset_j[override] = overrides[override]
+
 
 		if 'description' in asset_j:
 			description += f"{asset_j['description']} "
@@ -247,7 +254,7 @@ def export(bank_id, seg_id, segment_j, includes,
 			segment_include_path = export_paths["ram_disk"]
 
 		elif asset_j["asset_type"] == build.ASSET_TYPE_TEXT:
-			exported, export_paths = export_text.export_if_updated(asset_j["path"], asset_j["export_dir"], asset_types_force_export["text"], localization)
+			exported, export_paths = export_text.export_if_updated(asset_j["path"], asset_j["export_dir"], asset_types_force_export["text"], localization_id)
 			segment_force_export |= exported
 			segment_include_path = export_paths["ram_disk"]
 

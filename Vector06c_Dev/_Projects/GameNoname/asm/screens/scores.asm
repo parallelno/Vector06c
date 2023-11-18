@@ -24,7 +24,7 @@ scores_screen:
 scores_screen_text_draw:
 			lxi b, SCORES_TITLE_POS
 			lxi h, __text_score_title
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			mvi e, SCORES_MAX
 			lxi b, SCORES_POS
@@ -32,7 +32,7 @@ scores_screen_text_draw:
 			push b
 			push d
 			lxi h, __text_buff
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			pop d
 			pop b
 

@@ -109,7 +109,7 @@ screen_draw_return_text_button:
 ; bc - text_addr
 
 screen_draw_return_button_custom_text:
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			; braw a button
 			@pos_tiles_y = 1

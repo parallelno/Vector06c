@@ -22,7 +22,7 @@ def export_ram_data_labels(generated_code_dir, segments_info, main_asm_labels):
 	with open(path, "w") as file:
 		file.write(asm)
 
-def export(source_j_path, localization = build.LOCAL_ENG):
+def export(source_j_path):
 	with open(source_j_path, "rb") as file:
 		source_j = json.load(file)
 
@@ -51,6 +51,10 @@ def export(source_j_path, localization = build.LOCAL_ENG):
 	segments_info = []
 	ram_disk_data_asm_force_export = global_force_export
 
+	localization_id = source_j["localization"]["id"]
+	if "overrides" in source_j["localization"] and localization_id in source_j["localization"]["overrides"]:
+		export_localization_symbol(source_j["localization"]["overrides"][localization_id])
+
 	# export all segments into bin files, then zip them, then split them into chunks (files <= 24KB)
 	for bank_j in source_j["banks"]:
 		seg_id = -1
@@ -60,7 +64,7 @@ def export(source_j_path, localization = build.LOCAL_ENG):
 			exported, segment_info = export_segment.export(
 				bank_id, seg_id, segment_j, source_j["includes"]["segment"],
 				global_force_export, asset_types_force_export,
-				generated_code_dir, generated_bin_dir, localization)
+				generated_code_dir, generated_bin_dir, localization_id)
 
 			ram_disk_data_asm_force_export |= exported
 			segments_info.append(segment_info)
@@ -113,4 +117,19 @@ def export(source_j_path, localization = build.LOCAL_ENG):
 	print(f"ram-disk data export: Success.")
 	print(f"start the game: {rom_path}")
 
-	common.run_command(f"{build.emulator_path} {rom_path}", "", rom_path)	 
+	common.run_command(f"{build.emulator_path} {rom_path}", "", rom_path)
+
+def export_localization_symbol(override_j):
+
+	for file_data in override_j:
+		path = file_data["path"]
+		content = ""
+		for line in file_data["content"]:
+			content += f"{line}\n"
+
+		dir = os.path.dirname(path)
+		if not os.path.exists(dir):
+			os.makedirs(dir)
+
+		with open(path, "w") as file:
+			file.write(content)

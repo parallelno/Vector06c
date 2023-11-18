@@ -78,19 +78,19 @@ settings_screen_init:
 
 settings_screen_text_draw:
 			lxi b, (<SETTINGS_PARAG_SPACING)<<8 | <SETTINGS_LINE_SPACING
-			CALL_RAM_DISK_FUNC(__text_ex_rd_set_spacing, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_set_spacing, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 @text_pos		.var  SETTINGS_POS
 			; SETTINGS TITLE
 			lxi b, SETTINGS_SETTING_TITLE_POS_X<<8 | <@text_pos
 			lxi h, __text_settings
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			; MUSIC & SFX & Controls
 			@text_pos = @text_pos + SETTINGS_LINE_SPACING
 			lxi b, @text_pos
 			lxi h, __text_settings_names
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			call settings_val_draw
 			ret
@@ -138,7 +138,7 @@ setting_music_val_draw:
 @music_on:
 			; draw a setting value
 			lxi b, <@text_pos | SETTINGS_SETTING_VAL_POS_X<<8
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 
 setting_sfx_val_draw:
@@ -160,7 +160,7 @@ setting_sfx_val_draw:
 @sfx_on:
 			; draw a setting value
 			lxi b, SETTINGS_SETTING_VAL_POS_X<<8 | <@text_pos
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 
 setting_controls_val_draw:
@@ -185,23 +185,23 @@ setting_controls_val_draw:
 			; draw a preset name
 			lxi h, __text_control_preset_joy
 			lxi b, SETTINGS_SETTING_VAL_POS_X<<8 | <@text_pos
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			; draw controls
 			lxi h, __text_controls_joystic
 			lxi b, SETTINGS_SUB_SETTING_VAL_POS_X<<8 | <@text_pos + SETTINGS_LINE_SPACING
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 @control_preset_keyboard:
 			; draw a preset name
 			lxi h, __text_control_preset_key
 			lxi b, SETTINGS_SETTING_VAL_POS_X<<8 | <@text_pos
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)			
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)			
 			
 			; draw controls
 			lxi h, __text_controls_keyboard
 			lxi b, SETTINGS_SUB_SETTING_VAL_POS_X<<8 | <@text_pos + SETTINGS_LINE_SPACING
-			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+			CALL_RAM_DISK_FUNC(__text_ex_rd_scr1, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 			ret
 
 

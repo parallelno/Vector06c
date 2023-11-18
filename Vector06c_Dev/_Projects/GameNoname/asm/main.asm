@@ -27,8 +27,8 @@
 
 main_start:
 			CALL_RAM_DISK_FUNC(__sound_init, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
-			lxi b, __font_rus_gfx
-			CALL_RAM_DISK_FUNC(__text_ex_rd_init, __RAM_DISK_S_FONT_RUS | __RAM_DISK_M_TEXT_EX)
+			lxi b, __font_gfx
+			CALL_RAM_DISK_FUNC(__text_ex_rd_init, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 @loop:
 			lda global_request
 			HL_TO_AX2_PLUS_INT16(main_screens_call_ptrs) ; because GLOBAL_REQ_NONE is excluded from main_screens_call_ptrs

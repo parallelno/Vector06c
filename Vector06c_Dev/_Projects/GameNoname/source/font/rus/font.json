@@ -241,9 +241,9 @@
 			"x" : 71,
 			"y"	: 218,
 			"width" : 4,
-			"height" : 6,
+			"height" : 7,
 			"offset_x": -1,
-			"offset_y": 0
+			"offset_y": -1
 		},
 		{
 			"name" : "е",

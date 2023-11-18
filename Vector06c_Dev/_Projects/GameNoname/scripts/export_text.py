@@ -121,20 +121,20 @@ def bytes_to_asm(data, command):
 	return asm
 
 #=====================================================
-def export_if_updated(source_path, generated_dir, force_export, localization = build.LOCAL_ENG):
+def export_if_updated(source_path, generated_dir, force_export, localization_id = build.LOCAL_ENG):
 	source_name = common.path_to_basename(source_path)
 
 	export_paths = {"ram_disk" : generated_dir + source_name + "_data" + build.EXT_ASM }
 
 	if force_export or is_source_updated(source_path):
-		export_data( source_path, export_paths["ram_disk"], localization)
+		export_data( source_path, export_paths["ram_disk"], localization_id)
 			
 		print(f"export_level: {source_path} got exported.")		
 		return True, export_paths
 	else:
 		return False, export_paths
 	
-def export_data(source_j_path, export_path, localization = build.LOCAL_ENG):
+def export_data(source_j_path, export_path, localization_id = build.LOCAL_ENG):
 
 	with open(source_j_path, "rb") as file:
 		source_j = json.load(file)
@@ -166,13 +166,12 @@ def export_data(source_j_path, export_path, localization = build.LOCAL_ENG):
 		for label in labels_text: 
 			
 			asm += f"{label}:\n"
-			
-			if localization not in labels_text[label]:
-				print(f'export_text ERROR: label {label} does not contain localization for {localization}.", path: {source_j_path}')
+			if localization_id not in labels_text[label]:
+				print(f'export_text ERROR: label {label} does not contain localization_id = {localization_id}.", path: {source_j_path}')
 				print("Stop export")
 				exit(1)
 
-			text_lines = labels_text[label][localization]
+			text_lines = labels_text[label][localization_id]
 			
 			lines = len(text_lines)
 			for i, text_raw in enumerate(text_lines):
@@ -196,7 +195,7 @@ def export_data(source_j_path, export_path, localization = build.LOCAL_ENG):
 					if line_break >= 0:
 						text = text_raw[:line_break]					
 				
-				if localization == build.LOCAL_RUS:
+				if localization_id == build.LOCAL_RUS:
 					rus_text_data = rus_text_to_data(text, source_j)
 					asm += bytes_to_asm(rus_text_data, command_rus) 
 				else:
