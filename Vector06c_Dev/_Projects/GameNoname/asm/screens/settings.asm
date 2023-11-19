@@ -1,7 +1,13 @@
 ; text
-SETTINGS_TEXT_SETTINGS_W	= 112 ; a width of a setting text column
+.if LOCALIZATION == 0
+	SETTINGS_TEXT_SETTINGS_W	= 112 ; a width of a setting text column
+.endif
+.if LOCALIZATION == 1
+	SETTINGS_TEXT_SETTINGS_W	= 116 ; a width of a setting text column
+.endif
+
 SETTINGS_SETTING_VAL_W = 12
-SETTINGS_SUB_SETTING_VAL_W = 24
+SETTINGS_SUB_SETTING_VAL_W = 12
 SETTINGS_TEXT_TITLE_W = 30
 SETTINGS_SETTING_PREDEF_VAL_W = 12
 
@@ -25,7 +31,7 @@ SETTINGS_CURSOR_POS_Y_OFFSET1	= - SETTINGS_PARAG_SPACING + SETTINGS_LINE_SPACING
 SETTINGS_CURSOR_POS_Y_OFFSET2	= SETTINGS_CURSOR_POS_Y_OFFSET1 - SETTINGS_PARAG_SPACING - SETTINGS_LINE_SPACING * 6	; when it is in the return section
 ;========================================
 ; no need to adjust
-SETTINGS_HALF_SCR		= 128
+SETTINGS_HALF_SCR		= 120
 
 SETTINGS_POS_X						= SETTINGS_HALF_SCR - (SETTINGS_TEXT_SETTINGS_W/2)
 SETTINGS_POS							= SETTINGS_POS_X<<8 | SETTINGS_POS_Y_MAX
@@ -35,7 +41,7 @@ SETTINGS_SETTING_PREDEF_VAL_POS_X 	= SETTINGS_HALF_SCR + SETTINGS_TEXT_SETTINGS_
 SETTINGS_SETTING_TITLE_POS_X			= SETTINGS_HALF_SCR - SETTINGS_TEXT_TITLE_W/2
 
 ; cursor
-SETTINGS_CURSOR_POS_X		= SETTINGS_POS_X - 8
+SETTINGS_CURSOR_POS_X		= SETTINGS_POS_X - 12
 SETTINGS_CURSOR_POS_Y_MAX	= SETTINGS_POS_Y_MAX - 16
 
 ; no need to adjust - end
@@ -66,7 +72,7 @@ settings_screen_init:
 			call screen_palette_and_frame
 
 			lxi h, __text_change_settings
-			@text_change_settings_pos = $8a19
+			@text_change_settings_pos = $7019
 			lxi b, @text_change_settings_pos
 			call screen_draw_return_button_custom_text
 
@@ -125,7 +131,7 @@ setting_music_val_draw:
 
 			; erase a setting value
 			@scr_addr_x_offset = (SETTINGS_SETTING_VAL_POS_X/8)<<8
-			lxi b, 2<<8 | 9
+			lxi b, 3<<8 | 9
 			lxi d, SCR_BUFF1_ADDR + <@text_pos | @scr_addr_x_offset
 			call sprite_copy_to_scr_v
 			; get a setting value
@@ -147,7 +153,7 @@ setting_sfx_val_draw:
 
 			; erase a setting value
 			@scr_addr_x_offset = (SETTINGS_SETTING_VAL_POS_X/8)<<8
-			lxi b, 2<<8 | 9
+			lxi b, 3<<8 | 9
 			lxi d, SCR_BUFF1_ADDR + <@text_pos | @scr_addr_x_offset
 			call sprite_copy_to_scr_v
 			; get a setting value
@@ -168,12 +174,12 @@ setting_controls_val_draw:
 			@text_pos = @text_pos + SETTINGS_LINE_SPACING * 2 + SETTINGS_PARAG_SPACING
 			
 			; erase a CONTROL PRESET settings value
-			lxi b, 4<<8 | 9
+			lxi b, 8<<8 | 14
 			lxi h, SCR_BUFF1_ADDR + <@text_pos | (SETTINGS_SETTING_VAL_POS_X/8)<<8
 			call erase_screen_block
 
 			; erase a Controls settings value
-			lxi b, 6<<8 | 95
+			lxi b, 7<<8 | 95
 			lxi h, SCR_BUFF1_ADDR + <@text_pos + SETTINGS_LINE_SPACING * 7 | (SETTINGS_SUB_SETTING_VAL_POS_X/8)<<8
 			call erase_screen_block
 

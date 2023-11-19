@@ -196,7 +196,7 @@ def export_data(source_j_path, export_path, localization_id = build.LOCAL_ENG):
 						text = text_raw[:line_break]					
 				
 				if localization_id == build.LOCAL_RUS:
-					rus_text_data = rus_text_to_data(text, source_j)
+					rus_text_data = rus_text_to_data(text, source_j_path)
 					asm += bytes_to_asm(rus_text_data, command_rus) 
 				else:
 					asm += f'			TEXT("{text}", {command_eng})\n'

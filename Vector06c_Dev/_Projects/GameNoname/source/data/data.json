@@ -47,7 +47,25 @@
 	"unpacker_path" : "asm\\unpacker.asm",
 
 	"localization" : {
-		"id" : "1"
+		"id" : "1",
+		"overrides" : {
+			"0" : [
+				{
+					"path" : "generated\\code\\localization.asm",
+					"content" : [
+						"LOCALIZATION = 0"
+					]
+				}
+			],
+			"1" : [
+				{
+					"path" : "generated\\code\\localization.asm",
+					"content" : [
+						"LOCALIZATION = 1"
+					]
+				}
+			]			
+		}
 	},
 	"banks" :
 	[

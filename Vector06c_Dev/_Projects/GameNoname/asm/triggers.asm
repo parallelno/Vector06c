@@ -23,14 +23,19 @@ trigger_hero_no_health:
 ; when the hero knocks his home door.
 ; The game ends after showing the dialog
 trigger_hero_knocks_his_home_door:
+			; check if the hero has a popsicle pie
+			lda hero_res_popsicle_pie
+			CPI_WITH_ZERO(0)
+			rz
+			; take all his pies if so
+			A_TO_ZERO(0)
+			sta hero_res_popsicle_pie
+
+			; init a dialog
 			mvi a, GAME_REQ_PAUSE
-			lxi h, @callback
+			lxi h, dialog_callback_room_redraw
 			lxi d, __text_knocked_his_home_door
 			jmp dialog_init
-
-@callback:
-			mvi a, GAME_REQ_END_HOME
-			sta global_request
 			ret
 
 ;===========================================================================

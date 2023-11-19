@@ -122,7 +122,7 @@ def export(source_j_path):
 def export_localization_symbol(override_j):
 
 	for file_data in override_j:
-		path = file_data["path"]
+		path = file_data["path"] 
 		content = ""
 		for line in file_data["content"]:
 			content += f"{line}\n"

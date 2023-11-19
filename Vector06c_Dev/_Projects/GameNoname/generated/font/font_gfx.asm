@@ -299,9 +299,9 @@ __font_k32:
 
 			.word 0 ; safety pair of bytes for reading by POP B
 __font_l32:
-			.byte 0, 0 ; offset_y, offset_x
+			.byte 0, -1 ; offset_y, offset_x
 			.word 119,74,74,114,66,199,
-			.byte 0, 9 ; next_char_offset
+			.byte 0, 8 ; next_char_offset
 
 			.word 0 ; safety pair of bytes for reading by POP B
 __font_m32:
@@ -343,7 +343,7 @@ __font_f30:
 __font_g30:
 			.byte 0, -1 ; offset_y, offset_x
 			.word 248,68,68,68,72,112,72,72,240,
-			.byte 0, 7 ; next_char_offset
+			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety pair of bytes for reading by POP B
 __font_h30:
@@ -373,7 +373,7 @@ __font_k30:
 __font_l30:
 			.byte 0, 0 ; offset_y, offset_x
 			.word 48,72,4,4,4,24,68,68,56,
-			.byte 0, 6 ; next_char_offset
+			.byte 0, 7 ; next_char_offset
 
 			.word 0 ; safety pair of bytes for reading by POP B
 __font_m30:
@@ -420,7 +420,7 @@ __font_t30:
 			.word 0 ; safety pair of bytes for reading by POP B
 __font_u30:
 			.byte 0, 0 ; offset_y, offset_x
-			.word 112,32,32,32,56,36,36,36,120,
+			.word 224,64,64,64,112,72,72,72,240,
 			.byte 0, 6 ; next_char_offset
 
 			.word 0 ; safety pair of bytes for reading by POP B

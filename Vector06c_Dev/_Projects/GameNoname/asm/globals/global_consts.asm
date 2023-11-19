@@ -1,4 +1,6 @@
 	; this line for VSCode proper formating
+
+.include "generated\\code\\localization.asm"
 ; prefixes
 ; ADDR - address
 ; BUF - buffer

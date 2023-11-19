@@ -456,9 +456,9 @@
 			"name" : "ы",
 			"x" : 200,
 			"y"	: 234,
-			"width" : 8,
+			"width" : 7,
 			"height" : 6,
-			"offset_x": 0,
+			"offset_x": -1,
 			"offset_y": 0
 		},
 		{
@@ -518,7 +518,7 @@
 			"name" : "В",
 			"x" : 40,
 			"y"	: 167,
-			"width" : 6,
+			"width" : 5,
 			"height" : 9,
 			"offset_x": -1,
 			"offset_y": 0
@@ -563,7 +563,7 @@
 			"name" : "З",
 			"x" : 135,
 			"y"	: 167,
-			"width" : 5,
+			"width" : 6,
 			"height" : 9,
 			"offset_x": 0,
 			"offset_y": 0
@@ -633,7 +633,7 @@
 		},
 		{
 			"name" : "Р",
-			"x" : 23,
+			"x" : 24,
 			"y"	: 183,
 			"width" : 5,
 			"height" : 9,
