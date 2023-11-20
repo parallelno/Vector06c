@@ -31,7 +31,7 @@ knight_quest_update:
 			; check if the hero has ITEM_ID_FART
 			lda global_items + ITEM_ID_FART - 1	; because the first item_id = 1
 			cpi ITEM_STATUS_ACQUIRED
-			jc knight_update ; ITEM_ID_FART is not acquired
+			jc knight_quest_update_statuses ; ITEM_ID_FART is not acquired
 			jnz @run_up ; ITEM_ID_FART is used
 
 			push d
@@ -73,7 +73,7 @@ knight_quest_update:
 @hero_no_detected:
 			pop d
 			; d - monster_update_ptr
-			jmp knight_update
+			jmp knight_quest_update_statuses
 
 @run_up:
 			; de - ptr to monster_update_ptr
@@ -107,3 +107,98 @@ knight_quest_update:
 			inx h
 			; mark this monster dead death
 			jmp actor_destroy
+
+knight_quest_update_statuses:
+			; advance hl to monster_status
+			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
+			dad d
+			mov a, m
+			; TODO: optimization. think of using a call table
+			cpi KNIGHT_STATUS_MOVE
+			jz knight_update_move
+			cpi KNIGHT_STATUS_DETECT_HERO
+			jz knight_update_detect_hero
+			cpi KNIGHT_STATUS_DEFENCE
+			jz knight_update_speedup
+			cpi KNIGHT_STATUS_MOVE_INIT
+			jz knight_update_move_init
+			cpi KNIGHT_STATUS_DEFENCE_INIT
+			jz knight_quest_update_defence_init
+			cpi KNIGHT_STATUS_DETECT_HERO_INIT
+			jz knight_update_detect_hero_init
+			cpi MONSTER_STATUS_FREEZE
+			jz monster_update_freeze
+			ret
+
+knight_quest_update_defence_init:
+			; hl - ptr to monster_status
+			mvi m, KNIGHT_STATUS_DEFENCE
+			; advance hl to monster_status_timer
+			inx h
+			mvi m, KNIGHT_STATUS_DEFENCE_TIME
+@check_anim_dir:
+			; aim the monster to the hero dir
+			; advance hl to monster_pos_x+1
+			HL_ADVANCE_BY_DIFF_BC(monster_status_timer, monster_pos_x+1)
+			lda hero_pos_x+1
+			cmp m
+			lxi d, knight_defence_l
+			jc @dir_x_neg
+@dir_x_positive:
+			lxi d, knight_defence_r
+@dir_x_neg:
+			; advance hl to monster_anim_ptr
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_anim_ptr)
+			mov m, e
+			inx h
+			mov m, d
+
+			; set the speed according to a monster_id (KNIGHT_HORIZ_ID / KNIGHT_VERT_ID)
+			; advance hl to monster_id
+			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr+1, monster_id)
+			mov a, m
+			cpi KNIGHT_VERT_ID
+			jz @speed_vert
+@speed_horiz:
+			; advance hl to monster_speed_x
+			HL_ADVANCE_BY_DIFF_BC(monster_id, monster_speed_x)
+			; dir positive if e == knight_defence_r and vise versa
+			mvi a, <knight_defence_r
+			cmp e
+			lxi d, KNIGHT_DEFENCE_SPEED_NEG
+			jnz @speed_x_neg
+@speed_x_positive:
+			lxi d, KNIGHT_DEFENCE_SPEED
+@speed_x_neg:
+			mov m, e
+			inx h
+			mov m, d
+			; advance hl to monster_speed_y
+			inx h
+			A_TO_ZERO(NULL_BYTE)
+			mov m, a
+			inx h
+			mov m, a
+			ret
+@speed_vert:
+			; advance hl to monster_pos_y+1
+			HL_ADVANCE_BY_DIFF_BC(monster_id, monster_pos_y+1)
+			lda hero_pos_y+1
+			cmp m
+			lxi d, KNIGHT_DEFENCE_SPEED_NEG
+			jc @speed_y_neg
+@speed_y_positive:
+			lxi d, KNIGHT_DEFENCE_SPEED
+@speed_y_neg:
+			; advance hl to monster_speed_x
+			inx h
+			A_TO_ZERO(NULL_BYTE)
+			mov m, a
+			inx h
+			mov m, a
+			; advance hl to monster_speed_y
+			inx h
+			mov m, e
+			inx h
+			mov m, d
+			ret

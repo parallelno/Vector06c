@@ -4,6 +4,7 @@
 .include "asm\\monsters\\skeleton_quest.asm"
 .include "asm\\monsters\\vampire.asm"
 .include "asm\\monsters\\burner.asm"
+.include "asm\\monsters\\burner_quest.asm"
 .include "asm\\monsters\\knight.asm"
 .include "asm\\monsters\\knight_quest.asm"
 .include "asm\\monsters\\firepool.asm"
@@ -541,7 +542,19 @@ monster_impacted:
 			; advance hl to monster_status_timer
 			inx h
 			mvi m, MONSTER_STATUS_FREEZE_TIME
-			ret
+
+			; check if a hero uses a snowflake the first time
+			lda game_status_first_freeze
+			CPI_WITH_ZERO(0)
+			rnz
+			inr a
+			sta game_status_first_freeze
+			; init a dialog
+			mvi a, GAME_REQ_PAUSE
+			lxi h, dialog_callback_room_redraw
+			lxi d, __text_hero_freeze_monster
+			jmp dialog_init
+
 
 ; common freeze update func.
 ; it does nothing except counting down the status time

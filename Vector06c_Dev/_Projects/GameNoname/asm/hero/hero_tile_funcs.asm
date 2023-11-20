@@ -211,7 +211,21 @@ hero_tile_func_teleport:
 			jnc @teleportTopToBottom
 			cpi TILE_HEIGHT
 			jc @teleportBottomToTop
+			
 			; teleport keeping the same pos
+			; align the hero pos to the nearest tile
+			; a = hero pos x
+			adi TILE_HEIGHT / 2
+			ani %1111_0000
+			mov h, a
+			mvi l, 0
+			shld hero_pos_y
+			lda hero_pos_x+1
+			adi TILE_WIDTH / 2
+			ani %1111_0000
+			mov h, a
+			mvi l, 0
+			shld hero_pos_x
 			ret
 
 @teleportRightToLeft:

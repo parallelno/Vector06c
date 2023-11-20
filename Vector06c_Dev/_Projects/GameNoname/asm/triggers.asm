@@ -30,13 +30,14 @@ trigger_hero_knocks_his_home_door:
 			; take all his pies if so
 			A_TO_ZERO(0)
 			sta hero_res_popsicle_pie
+			lxi h, hero_res_sword
+			call game_ui_res_select_and_draw			
 
 			; init a dialog
 			mvi a, GAME_REQ_PAUSE
 			lxi h, dialog_callback_room_redraw
 			lxi d, __text_knocked_his_home_door
 			jmp dialog_init
-			ret
 
 ;===========================================================================
 ; when the hero knocks his friend door
@@ -87,6 +88,7 @@ trigger_hero_knocks_his_friend_door:
 			mov m, a
 			lxi h, hero_res_popsicle_pie
 			inr m
+			lxi h, hero_res_sword
 			call game_ui_res_select_and_draw
 
 			mvi c, TILEDATA_FUNC_ID_RESOURCES

@@ -72,7 +72,12 @@ settings_screen_init:
 			call screen_palette_and_frame
 
 			lxi h, __text_change_settings
+.if LOCALIZATION == 0
+			@text_change_settings_pos = $8a19
+.endif
+.if LOCALIZATION == 1			
 			@text_change_settings_pos = $7019
+.endif
 			lxi b, @text_change_settings_pos
 			call screen_draw_return_button_custom_text
 

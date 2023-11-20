@@ -210,7 +210,12 @@ palette: = $7bd3 ; 16 bytes
 game_status:				= $7be3
 game_status_cabbage_eaten:		= game_status		; contains how many cabbage were eaten
 game_status_fire_extinguished:	= game_status + 1		; contains how many cabbage were eaten
-game_status_end:				= game_status + 2
+game_status_cabbage_healing:	= game_status + 2		; show dialog when the hero used cabbage the first time
+game_status_use_pie:			= game_status + 3		; show dialog when the hero used a pie the first time
+game_status_use_clothes:		= game_status + 4		; show dialog when the hero used a clothes the first time
+game_status_use_spoon:			= game_status + 5		; show dialog when the hero used a spoon the first time
+game_status_first_freeze:		= game_status + 6		; show dialog when the hero freeze the monster the first time
+game_status_end:				= game_status + 7
 
 ;=============================================================================
 ;

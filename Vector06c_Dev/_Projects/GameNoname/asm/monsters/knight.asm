@@ -67,7 +67,7 @@ KNIGHT_ANIM_SPEED_MOVE			= 50
 
 ; gameplay
 KNIGHT_DAMAGE = 3
-KNIGHT_HEALTH = 255
+KNIGHT_HEALTH = 10
 
 KNIGHT_COLLISION_WIDTH	= 15
 KNIGHT_COLLISION_HEIGHT	= 10
@@ -105,11 +105,11 @@ knight_update:
 			cpi KNIGHT_STATUS_DETECT_HERO
 			jz knight_update_detect_hero
 			cpi KNIGHT_STATUS_DEFENCE
-			jz knight_update_defence
+			jz knight_update_speedup
 			cpi KNIGHT_STATUS_MOVE_INIT
 			jz knight_update_move_init
 			cpi KNIGHT_STATUS_DEFENCE_INIT
-			jz knight_update_defence_init
+			jz knight_update_speedup_init
 			cpi KNIGHT_STATUS_DETECT_HERO_INIT
 			jz knight_update_detect_hero_init
 			cpi MONSTER_STATUS_FREEZE
@@ -187,7 +187,7 @@ knight_update_detect_hero:
 			mvi m, KNIGHT_STATUS_MOVE_INIT
 			ret
 
-knight_update_defence_init:
+knight_update_speedup_init:
 			; hl - ptr to monster_status
 			mvi m, KNIGHT_STATUS_DEFENCE
 			; advance hl to monster_status_timer
@@ -199,10 +199,10 @@ knight_update_defence_init:
 			HL_ADVANCE_BY_DIFF_BC(monster_status_timer, monster_pos_x+1)
 			lda hero_pos_x+1
 			cmp m
-			lxi d, knight_defence_l
+			lxi d, knight_run_l
 			jc @dir_x_neg
 @dir_x_positive:
-			lxi d, knight_defence_r
+			lxi d, knight_run_r
 @dir_x_neg:
 			; advance hl to monster_anim_ptr
 			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_anim_ptr)
@@ -219,8 +219,8 @@ knight_update_defence_init:
 @speed_horiz:
 			; advance hl to monster_speed_x
 			HL_ADVANCE_BY_DIFF_BC(monster_id, monster_speed_x)
-			; dir positive if e == knight_defence_r and vise versa
-			mvi a, <knight_defence_r
+			; dir positive if e == knight_run_r and vise versa
+			mvi a, <knight_run_r
 			cmp e
 			lxi d, KNIGHT_DEFENCE_SPEED_NEG
 			jnz @speed_x_neg
@@ -260,7 +260,7 @@ knight_update_defence_init:
 			mov m, d
 			ret
 
-knight_update_defence:
+knight_update_speedup:
 			; hl = monster_status
 			; advance hl to monster_status_timer
 			inx h

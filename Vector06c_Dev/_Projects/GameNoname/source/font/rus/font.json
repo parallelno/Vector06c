@@ -421,9 +421,9 @@
 			"x" : 136,
 			"y"	: 234,
 			"width" : 5,
-			"height" : 8,
+			"height" : 6,
 			"offset_x": 0,
-			"offset_y": -2
+			"offset_y": 0
 		},
 		{
 			"name" : "ш",
@@ -509,7 +509,7 @@
 			"name" : "Б",
 			"x" : 24,
 			"y"	: 167,
-			"width" : 6,
+			"width" : 5,
 			"height" : 9,
 			"offset_x": -1,
 			"offset_y": 0

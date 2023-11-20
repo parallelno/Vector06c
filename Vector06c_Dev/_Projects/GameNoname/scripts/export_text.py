@@ -104,7 +104,7 @@ def rus_text_to_data(text, source_j_path):
 	result = []
 	for char_ in text:
 		if char_ not in rus_charset:
-			print(f'export_text ERROR: unsupported char: "{char_}", path: {source_j_path}')
+			print(f'export_text ERROR: unsupported char: "{char_}" в тексте: "{text}", path: {source_j_path}')
 			print("Stop export")
 			exit(1)
 

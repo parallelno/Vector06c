@@ -111,6 +111,7 @@ dialog_storytelling_texts_ptrs:
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_12, __text_storytelling_lost_coins)
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_7, __text_storytelling_farm_entrance)
 			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_8, __text_storytelling_farm_storage)
+			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_10, __text_storytelling_dugeon_entrance)
 @end_data:
 STORYTELLING_TEXT_COUNT = (@end_data - dialog_storytelling_texts_ptrs) / STORYTELLING_TEXT_ENTITY_LEN
 
@@ -173,6 +174,9 @@ dialog_callback_room_redraw:
 			mvi a, GAME_REQ_ROOM_DRAW
 			sta global_request
 			; TODO: restore breakables the same configuraton they were created
+			; reset key data
+			lxi h, CONTROL_CODE_NO
+			shld action_code
 			ret
 
 

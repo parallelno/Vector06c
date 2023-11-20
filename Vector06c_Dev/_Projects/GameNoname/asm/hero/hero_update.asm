@@ -357,11 +357,38 @@ hero_attack_start:
 			call fart_init			
 @no_fart:	
 
+			; check if a hero uses cabbage the first time
+			lda game_status_cabbage_healing
+			CPI_WITH_ZERO(0)
+			jnz @no_cabbage_healing_dialog
+			inr a
+			sta game_status_cabbage_healing
+			; init a dialog
+			mvi a, GAME_REQ_PAUSE
+			lxi h, @cabbage_callback
+			lxi d, __text_hero_use_cabbage
+			jmp dialog_init
+@cabbage_callback:
+			call dialog_callback_room_redraw
+
+@no_cabbage_healing_dialog:
 			lxi h, hero_res_health
 			mov a, m
 			adi RES_CABBAGE_HEALTH_VAL
 			CLAMP_A(RES_HEALTH_MAX)
 			mov m, a
+
+			; play vfx if a health is mot max
+			; a - hero health
+			cpi RES_HEALTH_MAX
+			jz @no_vfx
+			lxi h, hero_erase_scr_addr 
+			mov c, m
+			inx h
+			mov b, m
+			lxi d, vfx_reward
+			call vfx_init
+@no_vfx:
 
 			lxi h, hero_res_sword
 			call game_ui_res_select_and_draw
@@ -369,29 +396,43 @@ hero_attack_start:
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a cabbage to handle triggers
 
 @use_popsicle_pie:
-/*
-TODO: make that dialog do not respawn breakables, then uncomment the code below
-TODO: using this item prevents using triggers, for example knoking the friends house door
+;TODO: make that dialog do not respawn breakables, then uncomment the code below
+			; check if a hero uses a popsicle pie the first time
+			lda game_status_use_pie
+			CPI_WITH_ZERO(0)
+			jnz @no_hero_use_pie_dialog
+			inr a
+			sta game_status_use_pie
 			; init a dialog
 			mvi a, GAME_REQ_PAUSE
-			lxi h, dialog_callback_room_redraw
+			lxi h, @pie_callback
 			lxi d, __text_hero_use_pie
-			call dialog_init
-*/
+			jmp dialog_init
+@pie_callback:
+			call dialog_callback_room_redraw			
+@no_hero_use_pie_dialog:
+
 			lxi h, hero_res_sword
 			call game_ui_res_select_and_draw
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a popsicle to handle triggers
 
 @use_clothes:
-/*
-TODO: make that dialog do not respawn breakables, then uncomment the code below
-TODO: using this item prevents using triggers, for example knoking the friends house door
+;TODO: make that dialog do not respawn breakables, then uncomment the code below
+			; check if a hero uses clothes the first time
+			lda game_status_use_clothes
+			CPI_WITH_ZERO(0)
+			jnz @no_hero_use_clothes_dialog
+			inr a
+			sta game_status_use_clothes
 			; init a dialog
 			mvi a, GAME_REQ_PAUSE
-			lxi h, dialog_callback_room_redraw
+			lxi h, @clothes_callback
 			lxi d, __text_hero_use_clothes
-			call dialog_init
-*/
+			jmp dialog_init
+@clothes_callback:
+			call dialog_callback_room_redraw				
+@no_hero_use_clothes_dialog:
+
 			lxi h, hero_res_sword
 			call game_ui_res_select_and_draw
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a popsicle to handle triggers
@@ -400,13 +441,30 @@ TODO: using this item prevents using triggers, for example knoking the friends h
 			lxi h, hero_res_popsicle_pie
 			mov a, m
 			CPI_WITH_ZERO(0)
-			rz
+			rz ; return if no pie
 			dcr m
 			lxi h, hero_res_snowflake
 			mov a, m
 			adi RES_POPSICLE_PIE_MANA_VAL
 			CLAMP_A(RES_SNOWFLAKES_MAX)
 			mov m, a
+
+;TODO: make that dialog do not respawn breakables, then uncomment the code below
+			; check if a hero uses a spoon the first time
+			lda game_status_use_spoon
+			CPI_WITH_ZERO(0)
+			jnz @no_hero_use_spoon_dialog
+			inr a
+			sta game_status_use_spoon
+			; init a dialog
+			mvi a, GAME_REQ_PAUSE
+			lxi h, @spoon_callback
+			lxi d, __text_hero_use_spoon
+			jmp dialog_init
+@spoon_callback:
+			call dialog_callback_room_redraw				
+@no_hero_use_spoon_dialog:
+
 			lxi h, hero_res_sword
 			call game_ui_res_select_and_draw
 			; TODO: revise that logic: ; use a sword after using a popsicle to handle triggers
@@ -472,7 +530,7 @@ hero_invincible_start:
 			;advance hl to hero_status_timer
 			inx h
 			mvi m, HERO_STATUS_INVINCIBLE_DURATION
-			; turn off reversed speed
+			; reset key data
 			A_TO_ZERO(CONTROL_CODE_NO)
 			sta action_code
 			ret

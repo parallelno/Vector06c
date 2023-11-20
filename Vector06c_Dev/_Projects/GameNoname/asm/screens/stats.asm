@@ -2,7 +2,13 @@ END_GAME_TEXT_POS		= $12e0
 END_GAME_LINE_SPACING	= 12
 END_GAME_PARAG_SPACING	= 24
 
-STATS_MONSTERS_SCR_ADDR = $b0aa
+.if LOCALIZATION == 0
+	STATS_NUMBERS_SCR_ADDR = $b0aa
+.endif
+.if LOCALIZATION == 1
+	STATS_NUMBERS_SCR_ADDR = $b2aa
+.endif
+
 
 stats_screen:
 			lda global_request
@@ -34,7 +40,7 @@ stats_screen_text_draw:
 			CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 			xchg
 			; hl - stats
-			lxi b, STATS_MONSTERS_SCR_ADDR
+			lxi b, STATS_NUMBERS_SCR_ADDR
 			call draw_text_int16
 
 			; draw items stats 
@@ -42,7 +48,7 @@ stats_screen_text_draw:
 			CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 			xchg
 			; hl - stats
-			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 1
+			lxi b, STATS_NUMBERS_SCR_ADDR - END_GAME_LINE_SPACING * 1
 			call draw_text_int16
 
 			; draw coins stats 
@@ -50,7 +56,7 @@ stats_screen_text_draw:
 			CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 			xchg
 			; hl - stats
-			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 2
+			lxi b, STATS_NUMBERS_SCR_ADDR - END_GAME_LINE_SPACING * 2
 			call draw_text_int16
 
 			; draw containers stats 
@@ -58,7 +64,7 @@ stats_screen_text_draw:
 			CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 			xchg
 			; hl - stats
-			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 3
+			lxi b, STATS_NUMBERS_SCR_ADDR - END_GAME_LINE_SPACING * 3
 			call draw_text_int16
 
 			; draw doors stats 
@@ -66,7 +72,7 @@ stats_screen_text_draw:
 			CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 			xchg
 			; hl - stats
-			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 4
+			lxi b, STATS_NUMBERS_SCR_ADDR - END_GAME_LINE_SPACING * 4
 			call draw_text_int16
 
 			; draw breakables stats 
@@ -74,14 +80,14 @@ stats_screen_text_draw:
 			CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 			xchg
 			; hl - stats
-			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 5
+			lxi b, STATS_NUMBERS_SCR_ADDR - END_GAME_LINE_SPACING * 5
 			call draw_text_int16
 
 			; TODO: add stats of secret rooms entered
 
 			; draw total stats
 			lxi h, game_ui_score_txt
-			lxi b, STATS_MONSTERS_SCR_ADDR - END_GAME_LINE_SPACING * 7
+			lxi b, STATS_NUMBERS_SCR_ADDR - END_GAME_LINE_SPACING * 7
 			jmp draw_text
 
 stats_screen_init:

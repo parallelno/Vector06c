@@ -8,8 +8,8 @@
 .include "generated\\sprites\\vfx4_anim.asm"
 .include "generated\\sprites\\knight_anim.asm"
 .include "generated\\sprites\\burner_anim.asm"
-.include "generated\\sprites\\sword_anim.asm"
-.include "generated\\sprites\\hero_l_anim.asm"
 .include "generated\\sprites\\vampire_anim.asm"
+.include "generated\\sprites\\hero_l_anim.asm"
+.include "generated\\sprites\\sword_anim.asm"
 .include "generated\\sprites\\vfx_anim.asm"
 

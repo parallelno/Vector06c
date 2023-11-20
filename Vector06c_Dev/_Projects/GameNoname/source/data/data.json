@@ -184,9 +184,9 @@
 					[
 						{
 							"asset_type" : "sprite",
-							"path" : "source\\sprites\\sword.json",
+							"path" : "source\\sprites\\vampire.json",
 							"export_dir" : "generated\\sprites\\"
-						},
+						},						
 						{
 							"asset_type" : "backbuffer2",
 							"reserved" : true,
@@ -212,7 +212,7 @@
 						},
 						{
 							"asset_type" : "sprite",
-							"path" : "source\\sprites\\vampire.json",
+							"path" : "source\\sprites\\sword.json",
 							"export_dir" : "generated\\sprites\\"
 						},
 						{
