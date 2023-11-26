@@ -9,7 +9,7 @@
 ; use:
 ; hl
 __RAM_DISK_M_CLEAR_MEM = RAM_DISK_M
-
+/*
 __clear_mem_sp:
 			; store SP
 			lxi h, 0
@@ -27,3 +27,4 @@ __clear_mem_sp:
 			cmp d
 			jnz @loop
 			jmp ret_ram_disk__
+*/

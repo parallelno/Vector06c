@@ -1,5 +1,3 @@
-;.include "generated\\code\\localization_inc.asm"
-;.include "generated\\code\\localization_consts.asm"
 .include "generated\\font\\font_gfx_ptrs.asm"
 
 __RAM_DISK_M_TEXT_EX = RAM_DISK_M | RAM_DISK_M_89
@@ -188,12 +186,13 @@ text_ex_rd_draw:
 			dad b
 			mov b, h
 			mov c, l
-			pop h ; retore text addr
+			pop h ; retore text addr 
 			jmp @next_char
 @skip_dad_ptrs:
 			.word @shift0, @shift1,	@shift2, @shift3, @shift4, @shift5, @shift6, @shift7
 
 text_ex_rd_next_char: = @next_char
+__text_ex_rd_draw_end:
 
 ; move a position to the next paragraph
 text_ex_rd_parag_spacing:

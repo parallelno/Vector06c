@@ -140,6 +140,8 @@ sword_func_door:
 			mvi b, >room_tiledata
 			mvi a, TILEDATA_RESTORE_TILE
 			stax b
+
+			; c - tile_idx
 			; calc tile gfx ptr
 			mov l, c
 			mvi h, 0
@@ -166,7 +168,7 @@ sword_func_door:
 			mov d, a
 
 			; bc - a tile gfx ptr
-			; de - screen addr
+			; de - tile screen addr
 			push d ; for vfx
 
 			push b
@@ -189,7 +191,7 @@ sword_func_door:
 			; draw a tile in the back buffer2
 			lda level_ram_disk_s_gfx
 			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16, )
+			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
 
 @tile_idx:
 			mvi c, TEMP_BYTE
@@ -200,6 +202,7 @@ sword_func_door:
 			pop b
 			lxi d, vfx_puff
 			jmp vfx_init
+
 
 ; in:
 ; a - breakable_id

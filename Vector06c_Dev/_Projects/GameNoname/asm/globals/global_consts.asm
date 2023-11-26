@@ -31,7 +31,7 @@ BORDER_COLOT_IDX		= 1
 RESTART_ADDR 			= $0000
 INT_ADDR	 			= $0038
 STACK_MIN_ADDR			= $7f00
-STACK_MAIN_PROGRAM_ADDR	= $8000-2 ; because erase funcs can let interruption func erases $7ffe, @7fff bytes.
+STACK_MAIN_PROGRAM_ADDR	= $8000-2 ; because erase funcs can let the interruption call corrupt $7ffe, @7fff bytes.
 STACK_INTERRUPTION_ADDR	= $7F80 ; it is used for iterruption2 func
 STACK_TMP_MAIN_PROGRAM_ADDR = $100
 

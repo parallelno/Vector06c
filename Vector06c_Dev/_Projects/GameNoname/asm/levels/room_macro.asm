@@ -84,6 +84,10 @@
 ; d - room_id
 ; l - res_id
 ; c - tile_idx
+; out:
+; if success:
+; c = tile_idx
+; hl ptr to tile_idx in instances_ptrs
 ; uses:
 ; hl, de, a
 .macro FIND_INSTANCE(picked_up, instances_ptrs)

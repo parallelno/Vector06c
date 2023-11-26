@@ -4,18 +4,30 @@ room_draw:
 			call bullets_init
 			call backs_init
 			call room_unpack
+			call backup_tiledata
 			call room_init_tiles_gfx
 			call room_draw_tiles
 			call room_handle_room_tiledata
 			call room_copy_scr_to_backbuffs
 			ret
 
+; redraw room after dialog shown
+; it uses data inited in the room_draw
 ROOM_TILEDATA_HANDLING_ALL			= OPCODE_JMP
 ROOM_TILEDATA_HANDLING_NO_MONSTERS	= OPCODE_JNZ
+ROOM_DIALOG_HEIGHT = 4
 room_redraw:
 			mvi a, ROOM_TILEDATA_HANDLING_NO_MONSTERS
 			sta room_handle_room_tiledata_check
-			call room_draw
+
+			call bullets_init
+			call backs_init
+			call restore_doors_containers_tiledata
+			mvi a, ROOM_DIALOG_HEIGHT * TILE_HEIGHT
+			call room_draw_tiles_ex
+			call room_handle_room_tiledata
+			;call room_copy_scr_to_backbuffs
+
 			mvi a, ROOM_TILEDATA_HANDLING_ALL
 			sta room_handle_room_tiledata_check
 			ret
@@ -50,6 +62,37 @@ room_unpack:
 			lda level_ram_disk_m_data
 			ori RAM_DISK_M_8F
 			CALL_RAM_DISK_FUNC_BANK(dzx0)
+			ret
+
+; it copies the room tiledata into room_tiledata_backup
+; for room_redraw and storing states of breakable objects
+backup_tiledata:
+			lxi d, room_tiledata + ROOM_TILEDATA_BACKUP_LEN
+			lxi h, room_tiledata_backup + ROOM_TILEDATA_BACKUP_LEN
+			lxi b, ROOM_TILEDATA_BACKUP_LEN / 32
+			jmp copy_to_ram_disk32
+
+; copies door and containr tiledata from room_tiledata_backup to room_tiledata
+restore_doors_containers_tiledata:
+			lxi h, room_tiledata_backup
+			lxi b, TILEDATA_FUNC_MASK<<8 | ROOM_TILEDATA_LEN
+			lxi d, (TILEDATA_FUNC_ID_DOORS<<4)<<8 | TILEDATA_FUNC_ID_CONTAINERS<<4
+@loop:
+			mov a, m
+			ana b
+			cmp e
+			jz @copy_tiledata
+			cmp d
+			jnz @next
+@copy_tiledata:
+			mov a, m
+			mvi h, >room_tiledata
+			mov m, a
+			mvi h, >room_tiledata_backup
+@next:
+			inx h
+			dcr c
+			jnz @loop
 			ret
 
 ; convert room gfx tile_idxs into room gfx tile ptrs
@@ -102,8 +145,8 @@ room_init_tiles_gfx:
 			dcr a
 			jnz @loop
 			ret
-			
-; calls the tiledata handler func to spawn a back, brealabkes, monster, etc
+
+; calls the tiledata handler func to spawn a back, breakable, monster, etc
 room_handle_room_tiledata:
 			; handle the tiledata calling tiledata funcs
 			lxi h, room_tiledata
@@ -116,13 +159,13 @@ room_handle_room_tiledata:
 			; extract a function
 			mvi a, TILEDATA_FUNC_MASK
 			ana b
-			
+
 			; check if this func skippable
 			cpi TILEDATA_FUNC_ID_MONSTERS<<4
-@check:			
+@check:
 			jmp @no_skip
-			A_TO_ZERO(TILEDATA_NO_COLLISION)
-			jmp @funcReturnAddr
+			mvi a, TILEDATA_RESTORE_TILE
+			jmp @func_ret_addr
 
 @no_skip:
 			RRC_(2) ; to make a jmp table ptr with a 4 byte allignment
@@ -130,10 +173,10 @@ room_handle_room_tiledata:
 			; extract a func argument
 			mvi a, TILEDATA_ARG_MASK
 			ana b
-			lxi d, @funcReturnAddr
+			lxi d, @func_ret_addr
 			push d
 			pchl
-@funcReturnAddr:
+@func_ret_addr:
 			pop h
 			pop b
 			mov m, a ; save tiledata returned by indivisual handle func (ex. backs_spawn) back into room_tiledata.
@@ -339,12 +382,14 @@ room_tiledata_container_spawn:
 			; find a container
 			FIND_INSTANCE(@opened, containers_inst_data_ptrs)
 
-			ROOM_DECAL_DRAW(__containers_gfx_ptrs, true)
+			; c - tile_idx in the room_tiledata array
+			ROOM_DECAL_DRAW(__containers_gfx_ptrs)
 @tiledata:	mvi a, TEMP_BYTE
 			ret
 @opened:
 			; draw an opened container
-			ROOM_DECAL_DRAW(__containers_opened_gfx_ptrs, true)
+			; c - tile_idx in the room_tiledata array			
+			ROOM_DECAL_DRAW(__containers_opened_gfx_ptrs)
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
 
@@ -359,6 +404,7 @@ room_tiledata_door_spawn:
 			lxi h, @tiledata + 1
 			mov m, b
 
+			; requirement for ROOM_DECAL_DRAW
 			ADD_A(2) ; to make a JMP_4 ptr
 			sta room_decal_draw_ptr_offset + 1
 
@@ -366,7 +412,6 @@ room_tiledata_door_spawn:
 			mvi a, %00001110
 			ana b
 			rrc
-
 			adi <global_items ; because the first door_id = 0
 			mov l, a
 			mvi h, >global_items
@@ -374,13 +419,18 @@ room_tiledata_door_spawn:
 			cpi <ITEM_STATUS_USED
 			jz @opened	; status == ITEM_STATUS_USED means a door is opened
 
-			ROOM_DECAL_DRAW(__doors_gfx_ptrs, true)
+			; c - tile_idx in the room_tiledata array
+			ROOM_DECAL_DRAW(__doors_gfx_ptrs)
 @tiledata:
 			mvi a, TEMP_BYTE
 			ret
 @opened:
 			; draw an opened door
-			ROOM_DECAL_DRAW(__doors_opened_gfx_ptrs, true)
+			; c - tile_idx in the room_tiledata array
+			push b
+			ROOM_DECAL_DRAW(__doors_opened_gfx_ptrs)
+			pop b
+			call draw_tile_16x16_buffs
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
 
@@ -402,7 +452,7 @@ room_copy_scr_to_backbuffs:
 
 ;=========================================================
 ; draw a decal onto the screen, and backbuffers
-; requires: store item_id*4 into room_decal_draw_ptr_offset+1 addr prior calling this
+; requires: store entity_id*4 into room_decal_draw_ptr_offset+1 addr prior calling this
 ; in:
 ; c - tile_idx in the room_tiledata array.
 ; use:
@@ -473,6 +523,12 @@ room_decal_draw_backbuffers:
 ; draw a room tiles. It might be a main screen, or a back buffer
 ; call ex. call room_draw_tiles
 room_draw_tiles:
+			mvi a, ROOM_HEIGHT * TILE_HEIGHT
+; in:
+; a - amount of tiles to draw starting from tile_id = 0
+room_draw_tiles_ex:
+			sta @last_tile_id+1
+
 			lda level_ram_disk_s_gfx
 			RAM_DISK_ON_BANK()
 
@@ -507,7 +563,8 @@ room_draw_tiles:
 			mvi a, TILE_HEIGHT
 			add e
 			mov e, a
-			cpi ROOM_HEIGHT * TILE_HEIGHT
+@last_tile_id:			
+			cpi TEMP_BYTE
 			jc @new_line
 			RAM_DISK_OFF()
 			ret

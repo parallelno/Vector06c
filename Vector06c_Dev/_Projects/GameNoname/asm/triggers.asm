@@ -5,6 +5,7 @@ trigger_hero_no_health:
 			mvi a, ACTOR_STATUS_NO_UPDATE
 			sta hero_status
 
+			; init a dialog
 			lxi h, @callback
 			lxi d, __text_no_health
 			A_TO_ZERO(GLOBAL_REQ_NONE)

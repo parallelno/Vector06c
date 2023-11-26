@@ -128,3 +128,4 @@ draw_back_v:
 @restore_sp:		
 			lxi sp, TEMP_ADDR
 			ret
+draw_back_v_end:

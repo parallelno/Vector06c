@@ -57,6 +57,7 @@ draw_tile_16x16:
 @restore_sp:		
 			lxi sp, TEMP_ADDR
 			ret
+draw_tile_16x16_end:
 			
 			
 .macro DRAWTILE16x16_DRAW_BUF()
@@ -182,3 +183,64 @@ draw_tile_16x16_back_buff:
 		.endloop
 .endmacro
 */
+
+; draws a tile into the screen, a backbuffer, a backbuffer2
+; in:
+; c - tile_idx
+; out:
+; de - tile screen addr
+
+use this func for every CALL_RAM_DISK_FUNC_BANK(...)
+measure mem savings
+
+draw_tile_16x16_buffs:
+			; calc tile gfx ptr
+			mov l, c
+			mvi h, 0
+			lxi d, room_tiles_gfx_ptrs
+			dad h
+			dad d
+			mov d, c
+			; d - tile_idx
+			; read a tile gfx ptr
+			mov c, m
+			inx h
+			mov b, m
+
+			; calc tile scr addr
+			; d - tile_idx
+			mvi a, %11110000
+			ana d
+			mov e, a
+			; e - scr Y
+			mvi a, %00001111
+			ana d
+			rlc
+			adi >SCR_BUFF0_ADDR
+			mov d, a
+
+			; bc - a tile gfx ptr
+			; de - a tile screen addr
+			push b
+			push d
+			; draw a tile on the screen
+			lda level_ram_disk_s_gfx
+			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
+			pop d
+			pop b
+			push b
+			push d
+			; draw a tile in the back buffer
+			lda level_ram_disk_s_gfx
+			ori __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF
+			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
+			pop d
+			pop b
+			push d
+			; draw a tile in the back buffer2
+			lda level_ram_disk_s_gfx
+			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
+			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
+
+			pop b
+			ret

@@ -14,7 +14,7 @@ __draw_sprite_invis_vm:
 			; store SP
 			lxi h, 0
 			dad sp
-			shld drawSpriteRestoreSP_ramDisk__ + 1
+			shld draw_sprite_restore_sp_ram_disk__ + 1
 			; sp = BC
 			mov	h, b
 			mov	l, c
@@ -33,5 +33,5 @@ __draw_sprite_invis_vm:
 			mov d, b
 			mov e, c
 			xchg
-			shld drawSpriteWidthHeight_ramDisk__+1
-			jmp DrawSpriteRet_ramDisk__
+			shld draw_sprite_width_height_ram_disk__+1
+			jmp draw_sprite_ret_ram_disk__

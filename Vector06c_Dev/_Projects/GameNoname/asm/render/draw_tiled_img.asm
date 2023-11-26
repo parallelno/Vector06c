@@ -202,8 +202,8 @@ draw_tiled_img_pos_offset:
 			jnz @loop
 
 			RAM_DISK_OFF()
-@returnnn:
 			ret
+
 @repeating_counter:
 			.byte 1
 ; draw a tile (8x8 pixels)
@@ -238,6 +238,7 @@ draw_tiled_img_pos_offset:
 @restore_sp:
 			lxi sp, TEMP_ADDR
 			ret
+draw_tiled_img_end:
 
 .macro TILED_IMG_DRAWTILE()
 		; scr0 draw up

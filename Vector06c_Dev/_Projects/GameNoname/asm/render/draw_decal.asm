@@ -148,3 +148,4 @@ draw_decal_v:
 @restore_sp:
 			lxi sp, TEMP_ADDR
 			ret
+draw_decal_v_end:

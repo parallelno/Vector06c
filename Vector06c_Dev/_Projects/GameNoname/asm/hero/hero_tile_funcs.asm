@@ -103,7 +103,8 @@ hero_tile_func_resource:
 			mov l, a
 			FIND_INSTANCE(@no_resource_found, resources_inst_data_ptrs)
 			; c = tile_idx
-			; hl ptr to tile_idx
+			; hl ptr to tile_idx in resources_inst_data_ptrs
+			
 			; remove this resource from resources_inst_data
 			inx h
 			mvi m, <RESOURCES_STATUS_ACQUIRED

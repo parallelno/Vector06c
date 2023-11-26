@@ -267,6 +267,8 @@ set_palette_from_ram_disk:
 */
 
 ; Read a word from the ram-disk w/o blocking interruptions
+; keep two two reserved bytes prior the addr stores in de reg pair
+; because this func can corrupt it
 ; input:
 ; de - data addr in the ram-disk
 ; a - ram-disk activation command
@@ -290,6 +292,7 @@ get_word_from_ram_disk:
 			lxi sp, TEMP_ADDR
 			RAM_DISK_OFF()
 			ret
+get_word_from_ram_disk_end:
 
 /*
 ; a special version of a func above for accessing addr $8000 and higher
@@ -348,6 +351,7 @@ copy_to_ram_disk32:
 			call copy_from_ram_disk
 		.endif
 .endmacro
+copy_to_ram_disk32_end:
 
 ; Copy data (max 510) from the ram-disk to ram w/o blocking interruptions
 ; input:

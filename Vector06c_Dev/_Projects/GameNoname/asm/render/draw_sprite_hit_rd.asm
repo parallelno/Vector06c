@@ -52,7 +52,7 @@ __draw_sprite_hit_vm:
 			; store SP
 			lxi h, 0
 			dad sp
-			shld drawSpriteRestoreSP_ramDisk__ + 1
+			shld draw_sprite_restore_sp_ram_disk__ + 1
 			; sp = BC
 			mov	h, b
 			mov	l, c
@@ -71,7 +71,7 @@ __draw_sprite_hit_vm:
 			mov d, b
 			mov e, c
 			xchg
-			shld drawSpriteWidthHeight_ramDisk__+1
+			shld draw_sprite_width_height_ram_disk__+1
 			xchg
 			mov a, b
 			rrc
@@ -108,7 +108,7 @@ __draw_sprite_hit_vm:
 			DRAW_SPRITE_V_HIT_M()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk__
+			jz draw_sprite_ret_ram_disk__
 
 @w16oddScr3:
 			DRAW_SPRITE_V_HIT_M()
@@ -127,7 +127,7 @@ __draw_sprite_hit_vm:
 			inr l
 			dcr e
 			jnz @w16evenScr1
-			jmp DrawSpriteRet_ramDisk__
+			jmp draw_sprite_ret_ram_disk__
 ;-------------------------------------------------
 @width24:
 			; save the high screen byte to restore X
@@ -163,7 +163,7 @@ __draw_sprite_hit_vm:
 			DRAW_SPRITE_V_HIT_M()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk__
+			jz draw_sprite_ret_ram_disk__
 
 @w24oddScr3:
 			DRAW_SPRITE_V_HIT_M()
@@ -188,7 +188,7 @@ __draw_sprite_hit_vm:
 			inr l
 			dcr e
 			jnz @w24evenScr1
-			jmp DrawSpriteRet_ramDisk__
+			jmp draw_sprite_ret_ram_disk__
 ;------------------------------------------------------
 @width8:
 			; save the high screen byte to restore X
@@ -209,7 +209,7 @@ __draw_sprite_hit_vm:
 			DRAW_SPRITE_V_HIT_M()
 			inr l
 			dcr e
-			jz DrawSpriteRet_ramDisk__
+			jz draw_sprite_ret_ram_disk__
 @w8oddScr3:
 			DRAW_SPRITE_V_HIT_M()
 @w8oddScr2:
@@ -221,5 +221,5 @@ __draw_sprite_hit_vm:
 			inr l
 			dcr e
 			jnz @w8evenScr1
-			jmp DrawSpriteRet_ramDisk__
+			jmp draw_sprite_ret_ram_disk__
 			

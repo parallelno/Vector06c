@@ -1,11 +1,10 @@
-
-; common chunk of code to restore SP and 
-; return a couple of parameters within HL, C
+/*
+; common chunk of the code to restore SP
 ret_ram_disk__:
 restore_sp_ram_disk__:
 			lxi sp, TEMP_ADDR
 			ret
-			
+*/
 
 ; clear a N*16 pxs square on the screen,
 ; it clears 3 screen buffers from de addr and further
@@ -37,7 +36,7 @@ __erase_sprite:
 			; store SP
 			mov l, h
 			dad sp
-			shld restore_sp_ram_disk__ + 1
+			shld @restore_sp + 1
 
 			xchg
 			; hl - scr addr
@@ -62,15 +61,17 @@ __erase_sprite:
 			ERASE_SPRITE_SP_COL()
 @width8:
 			ERASE_SPRITE_SP_COL(false)
-			jmp ret_ram_disk__
-			
+@restore_sp:
+			lxi sp, TEMP_ADDR
+			ret			
+__erase_sprite_end:	
 
 .macro ERASE_SPRITE_SP_COL(next_column = true)
 
 	; TODO: issue. there is an problem with this macro
 	; when it erases the last two bytes with PUSH B
 	; an interruption call erases two more bytes below it.
-	; there is one solution balow, but it costly
+	; there is one solution below, but it costly
 	; think of a better solution.
 	col .var 0
 	.loop 3
