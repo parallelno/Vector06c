@@ -193,7 +193,7 @@ draw_tile_16x16_back_buff:
 use this func for every CALL_RAM_DISK_FUNC_BANK(...)
 measure mem savings
 
-draw_tile_16x16_buffs:
+draw_tile_16x16_buffs: 
 			; calc tile gfx ptr
 			mov l, c
 			mvi h, 0
