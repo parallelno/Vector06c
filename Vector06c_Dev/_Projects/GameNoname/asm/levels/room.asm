@@ -15,19 +15,17 @@ room_draw:
 ; it uses data inited in the room_draw
 ROOM_TILEDATA_HANDLING_ALL			= OPCODE_JMP
 ROOM_TILEDATA_HANDLING_NO_MONSTERS	= OPCODE_JNZ
-ROOM_DIALOG_HEIGHT = 4
+ROOM_DIALOG_TILE_HEIGHT = 4
 room_redraw:
-			mvi a, ROOM_TILEDATA_HANDLING_NO_MONSTERS
-			sta room_handle_room_tiledata_check
-
-			call bullets_init
 			call backs_init
 			call restore_doors_containers_tiledata
-			mvi a, ROOM_DIALOG_HEIGHT * TILE_HEIGHT
+			mvi a, ROOM_DIALOG_TILE_HEIGHT * TILE_HEIGHT
 			call room_draw_tiles_ex
-			call room_handle_room_tiledata
-			;call room_copy_scr_to_backbuffs
 
+			mvi a, ROOM_TILEDATA_HANDLING_NO_MONSTERS
+			sta room_handle_room_tiledata_check
+			mvi a, ROOM_WIDTH * ROOM_DIALOG_TILE_HEIGHT
+			call room_handle_room_tiledata_ex
 			mvi a, ROOM_TILEDATA_HANDLING_ALL
 			sta room_handle_room_tiledata_check
 			ret
@@ -67,10 +65,16 @@ room_unpack:
 ; it copies the room tiledata into room_tiledata_backup
 ; for room_redraw and storing states of breakable objects
 backup_tiledata:
+/*
 			lxi d, room_tiledata + ROOM_TILEDATA_BACKUP_LEN
 			lxi h, room_tiledata_backup + ROOM_TILEDATA_BACKUP_LEN
 			lxi b, ROOM_TILEDATA_BACKUP_LEN / 32
 			jmp copy_to_ram_disk32
+*/
+			lxi h, room_tiledata
+			lxi d, room_tiledata_backup
+			lxi b, ROOM_WIDTH * ROOM_HEIGHT
+			jmp copy_mem
 
 ; copies door and containr tiledata from room_tiledata_backup to room_tiledata
 restore_doors_containers_tiledata:
@@ -148,6 +152,12 @@ room_init_tiles_gfx:
 
 ; calls the tiledata handler func to spawn a back, breakable, monster, etc
 room_handle_room_tiledata:
+			mvi a, ROOM_WIDTH * ROOM_HEIGHT
+; in:
+; a = the tile_id to stop handling
+room_handle_room_tiledata_ex:
+			sta @last_tile_id+1
+
 			; handle the tiledata calling tiledata funcs
 			lxi h, room_tiledata
 			mvi c, 0
@@ -179,10 +189,11 @@ room_handle_room_tiledata:
 @func_ret_addr:
 			pop h
 			pop b
-			mov m, a ; save tiledata returned by indivisual handle func (ex. backs_spawn) back into room_tiledata.
+			mov m, a ; save tiledata returned by individual handle func (ex. backs_spawn) back into room_tiledata.
 			inx h
 			inr c
-			mvi a, ROOM_WIDTH * ROOM_HEIGHT
+@last_tile_id:
+			mvi a, TEMP_BYTE
 			cmp c
 			jnz @loop
 			ret
@@ -306,7 +317,7 @@ room_tiledata_item_spawn:
 			lxi h, @restore_tiledata+1
 			mov m, b
 			; check if it's storytelling dialog tiledata
-			ora a ; TILEDATA_STORYTELLING = 0
+			CPI_WITH_ZERO(TILEDATA_STORYTELLING)
 			jz @restore_tiledata
 
 			ADD_A(2) ; to make a JMP_4 ptr
@@ -318,7 +329,7 @@ room_tiledata_item_spawn:
 			adi <global_items - 1 ; because the first item_id = 1
 			mov l, a
 			mov a, m
-			ora a
+			CPI_WITH_ZERO(ITEM_STATUS_NOT_ACQUIRED)
 			mvi a, TILEDATA_RESTORE_TILE
 			rnz ; status != 0 means this item was picked up
 
@@ -458,7 +469,7 @@ room_copy_scr_to_backbuffs:
 ; use:
 ; hl - ptr to the graphics, ex. __doors_gfx_ptrs
 ; backbuffers = true means draw onto backbuffers as well
-.macro ROOM_DECAL_DRAW(gfx_ptrs, backbuffers = false)
+.macro ROOM_DECAL_DRAW(gfx_ptrs, backbuffers = false, _jmp = false)
 			lxi h, gfx_ptrs
 		.if backbuffers
 			A_TO_ZERO(OPCODE_NOP)
@@ -468,7 +479,12 @@ room_copy_scr_to_backbuffs:
 			mvi a, OPCODE_RET
 			sta room_decal_draw_backbuffers
 		.endif
+		.if _jmp == false
 			call room_decal_draw
+		.endif
+		.if _jmp
+			jmp room_decal_draw
+		.endif		
 .endmacro
 
 ; draw a decal onto the screen, and backbuffers
@@ -525,7 +541,7 @@ room_decal_draw_backbuffers:
 room_draw_tiles:
 			mvi a, ROOM_HEIGHT * TILE_HEIGHT
 ; in:
-; a - amount of tiles to draw starting from tile_id = 0
+; a - tile pos_y to stop drawing
 room_draw_tiles_ex:
 			sta @last_tile_id+1
 
@@ -602,7 +618,7 @@ room_check_tiledata_restorable:
 			ora b
 			mov e, a
 			ldax d
-			ora a
+			CPI_WITH_ZERO(TILEDATA_NO_COLLISION)
 			rnz			; 124 cc if returns
 
 			; get x+dx in tiles
@@ -616,7 +632,7 @@ room_check_tiledata_restorable:
 			ora c
 			mov e, a
 			ldax d
-			ora a
+			CPI_WITH_ZERO(TILEDATA_NO_COLLISION)
 			rnz		; 180 cc if returns
 
 			; get y+dy in tiles
@@ -630,7 +646,7 @@ room_check_tiledata_restorable:
 			ora h
 			mov e, a
 			ldax d
-			ora a
+			CPI_WITH_ZERO(TILEDATA_NO_COLLISION)
 			rnz		; 240 cc if returns
 
 			; check top-left corner
@@ -638,7 +654,7 @@ room_check_tiledata_restorable:
 			ora l
 			mov e, a
 			ldax d
-			ora a
+			CPI_WITH_ZERO(TILEDATA_NO_COLLISION)
 			ret		; 280 cc
 
 ; collects tiledata of tiles that intersect with a sprite

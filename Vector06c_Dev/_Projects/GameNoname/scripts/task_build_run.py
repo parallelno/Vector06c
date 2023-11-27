@@ -9,4 +9,4 @@ build.set_packer(build.PACKER_ZX0_SALVADORE)
 build.set_emulator_path("..\\..\\Emu80\\Emu80qt.exe")
 
 print(f"ram-disk data export: {data_path}")
-export_data.export(data_path) 
+export_data.export(data_path)

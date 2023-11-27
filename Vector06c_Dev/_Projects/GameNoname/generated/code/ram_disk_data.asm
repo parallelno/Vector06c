@@ -35,9 +35,9 @@ chunk_bank3_addr8000_0:
 ;                             hero_l_sprites [13818], sword_sprites [9522], vfx_sprites [2184], 
 ; bank2 addr8000 [19561 free] description: sound and music must be at >= $8000 addr. $F102-$FFFF music player runtime buffers 
 ;                             sound_rd [794], song01 [8576], 
-; bank3 addr0    [19996 free] description: 
-;                             level00_gfx [5722], level01_gfx [6794], 
+; bank3 addr0    [20204 free] description: 
+;                             level00_gfx [5722], level01_gfx [6586], 
 ; bank3 addr8000 [  306 free] description: $8000-$9FFF code library. $A000-$FFFF backbuffer (to avoid sprite flickering)  
 ;                             global_consts_rd [0], sprite_rd [168], draw_sprite_rd [340], draw_sprite_hit_rd [318], draw_sprite_invis_rd [26], utils_rd [0], sprite_preshift_rd [1542], text_rd_data [4882], text_ex_rd [384], game_score_data_rd [226], 
-; [142164 total/37177 compressed][65967 total free]
+; [141956 total/37093 compressed][66175 total free]
 

@@ -6,7 +6,8 @@
 ;	it's used in room_redraw and storing states of breakable objects
 room_tiledata_backup_safty_bytes:	= $73fe
 room_tiledata_backup:				= $7400
-ROOM_TILEDATA_BACKUP_LEN:			= ROOM_WIDTH * ROOM_HEIGHT + 16 ; added 16 to make the buffer suitable for copy_to_ram_disk32
+room_tiledata_backup_reserved:		= $74f0 ; adds 16 bytes to make the room_tiledata_backup buffer suitable for copy_to_ram_disk32
+ROOM_TILEDATA_BACKUP_LEN:			= ROOM_WIDTH * ROOM_HEIGHT + 16
 ;=============================================================================
 ;
 ;	free space [$7500 - $7511]
