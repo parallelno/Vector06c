@@ -52,12 +52,21 @@ reset_game_updates_counter:
 
 ; pause the main programm
 ; in:
-; hl - delay
+; hl - delay. 1000 is roughly 1 sec
 ; uses:
 ; hl, a
 pause:
+@loop:
+			mvi a, 138
+@loop_small:
+			dcr a
+			jnz @loop_small
+			; a = 0
+			nop
+			nop
+			nop
 			dcx h
-			mov a, h
 			ora l
-			jnz pause
+			ora h
+			jnz @loop
 			ret
