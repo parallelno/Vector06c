@@ -35,61 +35,13 @@ hero_tile_func_item:
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score_text
 			pop b
-
-			; calc tile gfx ptr
-			mov l, c
-			mvi h, 0
-			lxi d, room_tiles_gfx_ptrs
-			dad h
-			dad d
-			mov d, c
-			; d - tile_idx
-			; read a tile gfx ptr
-			mov c, m
-			inx h
-			mov b, m
-
-			; calc tile scr addr
-			; d - tile_idx
-			mvi a, %11110000
-			ana d
-			mov e, a
-			; e - scr Y
-			mvi a, %00001111
-			ana d
-			rlc
-			adi >SCR_BUFF0_ADDR
-			mov d, a
-
-			; bc - a tile gfx ptr
-			; de - screen addr
-			push d	; for vfx
-
-			push b
-			push d
-			; draw a tile on the screen
-			lda level_ram_disk_s_gfx
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)			
-			pop d
-			pop b
-			push b
-			push d
-			; draw a tile in the back buffer
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-			; draw a tile in the back buffer2
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-
+			
+			; c - tile_idx
+			call draw_tile_16x16_buffs
 			; draw vfx
-			pop b
+			; bc - tile screen addr			
 			lxi d, vfx_reward
-			call vfx_init
-			ret
+			jmp vfx_init
 
 ; handler func for resources
 ; in:
@@ -114,57 +66,11 @@ hero_tile_func_resource:
 			mvi b, >room_tiledata
 			mvi a, TILEDATA_RESTORE_TILE
 			stax b
-			; calc tile gfx ptr
-			mov l, c
-			mvi h, 0
-			lxi d, room_tiles_gfx_ptrs
-			dad h
-			dad d
-			mov d, c
-			; d - tile_idx
-			; read a tile gfx ptr
-			mov c, m
-			inx h
-			mov b, m
-
-			; calc tile scr addr
-			; d - tile_idx
-			mvi a, %11110000
-			ana d
-			mov e, a
-			; e - scr Y
-			mvi a, %00001111
-			ana d
-			rlc
-			adi >SCR_BUFF0_ADDR
-			mov d, a
-
-			; bc - a tile gfx ptr
-			; de - screen addr
-			push d ; for vfx
-
-			push b
-			push d
-			; draw a tile on the screen
-			lda level_ram_disk_s_gfx
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-			push b
-			push d
-			; draw a tile in the back buffer
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-			; draw a tile in the back buffer2
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
 			
+			; c - tile_idx
+			call draw_tile_16x16_buffs
 			; draw vfx
-			pop b
+			; bc - tile screen addr			
 			lxi d, vfx_reward
 			call vfx_init
 

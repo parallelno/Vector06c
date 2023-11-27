@@ -1,6 +1,7 @@
 ; tiledata format:
 ; it's stored in room_tiledata
 ; %ffffDDDD, ffff - func_id, dddd - a func argument
+
 ; ffff == 0, walkable tile
 ;		d == 0 - walkable tile, no back restoration, no decal
 ;		d == 1 - walkable tile, restore back, no decal

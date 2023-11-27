@@ -2,11 +2,10 @@
 ; a - container_id
 ; c - tile_idx
 sword_func_container:
-			; store tile_idx
-			lxi h, @tile_idx + 1
+			sta @restore_container_id+1
+			push b ; store tile_idx
 			mov m, c
 
-			sta @restore_container_id+1
 			; find a container
 			lxi h, room_id
 			mov d, m
@@ -23,72 +22,25 @@ sword_func_container:
 			mvi b, >room_tiledata
 			mvi a, TILEDATA_RESTORE_TILE
 			stax b
-			; calc tile gfx ptr
-			mov l, c
-			mvi h, 0
-			lxi d, room_tiles_gfx_ptrs
-			dad h
-			dad d
-			mov d, c
-			; d - tile_idx
-			; read a tile gfx ptr
-			mov c, m
-			inx h
-			mov b, m
 
-			; calc tile scr addr
-			; d - tile_idx
-			mvi a, %11110000
-			ana d
-			mov e, a
-			; e - scr Y
-			mvi a, %00001111
-			ana d
-			rlc
-			adi >SCR_BUFF0_ADDR
-			mov d, a
+			call draw_tile_16x16_buffs
+			; draw vfx
+			; bc - tile screen addr
+			lxi d, vfx_reward
+			call vfx_init
 
-			; bc - a tile gfx ptr
-			; de - screen addr
-			push d ; for vfx
-
-			push b
-			push d
-			; draw a tile on the screen
-			lda level_ram_disk_s_gfx
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
 			pop b
-			push b
-			push d
-			; draw a tile in the back buffer
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-			; draw a tile in the back buffer2
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-@tile_idx:
-			mvi c, TEMP_BYTE
 			; c - tile_idx in the room_tiledata array
-			lda @restore_container_id+1
+@restore_container_id:
+			mvi a, TEMP_BYTE			
 			ADD_A(2) ; container_id to JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 			ROOM_DECAL_DRAW(__containers_opened_gfx_ptrs, true)
 
-			; draw vfx
-			pop b
-			lxi d, vfx_reward
-			call vfx_init
-
 			; update a hero container
 			lxi h, hero_cont_func_tbl
-@restore_container_id:
-			mvi a, TEMP_BYTE
-			mov e, a ; temp
+			lda @restore_container_id+1
+			mov e, a
 			HL_TO_AX4_PLUS_INT16(hero_cont_func_tbl)
 			push h
 
@@ -142,66 +94,16 @@ sword_func_door:
 			stax b
 
 			; c - tile_idx
-			; calc tile gfx ptr
-			mov l, c
-			mvi h, 0
-			lxi d, room_tiles_gfx_ptrs
-			dad h
-			dad d
-			mov d, c
-			; d - tile_idx
-			; read a tile gfx ptr
-			mov c, m
-			inx h
-			mov b, m
-
-			; calc tile scr addr
-			; d - tile_idx
-			mvi a, %11110000
-			ana d
-			mov e, a
-			; e - scr Y
-			mvi a, %00001111
-			ana d
-			rlc
-			adi >SCR_BUFF0_ADDR
-			mov d, a
-
-			; bc - a tile gfx ptr
-			; de - tile screen addr
-			push d ; for vfx
-
-			push b
-			push d
-			; draw a tile on the screen
-			lda level_ram_disk_s_gfx
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-
-			push b
-			push d
-			; draw a tile in the back buffer
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-
-			; draw a tile in the back buffer2
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
+			call draw_tile_16x16_buffs
+			; draw vfx
+			; bc - tile screen addr
+			lxi d, vfx_puff
+			call vfx_init
 
 @tile_idx:
 			mvi c, TEMP_BYTE
 			; c - tile_idx in the room_tiledata array
-			ROOM_DECAL_DRAW(__doors_opened_gfx_ptrs, true)
-
-			; draw vfx
-			pop b
-			lxi d, vfx_puff
-			jmp vfx_init
+			ROOM_DECAL_DRAW(__doors_opened_gfx_ptrs, true, true)
 
 
 ; in:
@@ -235,56 +137,11 @@ sword_func_breakable:
 			mvi b, >room_tiledata
 			mvi a, TILEDATA_RESTORE_TILE
 			stax b
-			; calc tile gfx ptr
-			mov l, c
-			mvi h, 0
-			lxi d, room_tiles_gfx_ptrs
-			dad h
-			dad d
-			mov d, c
-			; d - tile_idx
-			; read a tile gfx ptr
-			mov c, m
-			inx h
-			mov b, m
-
-			; calc tile scr addr
-			; d - tile_idx
-			mvi a, %11110000
-			ana d
-			mov e, a
-			; e - scr Y
-			mvi a, %00001111
-			ana d
-			rlc
-			adi >SCR_BUFF0_ADDR
-			mov d, a
-
-			; bc - a tile gfx ptr
-			; de - screen addr
-			push b
-			push d
-			; draw a tile on the screen
-			lda level_ram_disk_s_gfx
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-			push b
-			push d
-			; draw a tile in the back buffer
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-			pop d
-			pop b
-			push d
-			; draw a tile in the back buffer2
-			lda level_ram_disk_s_gfx
-			ori __RAM_DISK_M_BACKBUFF2 | RAM_DISK_M_AF
-			CALL_RAM_DISK_FUNC_BANK(draw_tile_16x16)
-
+			
+			; c - tile_idx
+			call draw_tile_16x16_buffs
 			; draw vfx
-			pop b
+			; bc - tile screen addr			
 			lxi d, vfx_puff
 			call vfx_init
 			jmp game_ui_draw_res

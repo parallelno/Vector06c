@@ -188,11 +188,7 @@ draw_tile_16x16_back_buff:
 ; in:
 ; c - tile_idx
 ; out:
-; de - tile screen addr
-
-use this func for every CALL_RAM_DISK_FUNC_BANK(...)
-measure mem savings
-
+; bc - tile screen addr
 draw_tile_16x16_buffs: 
 			; calc tile gfx ptr
 			mov l, c
@@ -218,7 +214,6 @@ draw_tile_16x16_buffs:
 			rlc
 			adi >SCR_BUFF0_ADDR
 			mov d, a
-
 			; bc - a tile gfx ptr
 			; de - a tile screen addr
 			push b
