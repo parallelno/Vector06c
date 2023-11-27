@@ -92,7 +92,7 @@ SKELETON_DETECT_HERO_DISTANCE = 60
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
 ; out:
-; a = 0
+; a = TILEDATA_RESTORE_TILE
 skeleton_init:
 			MONSTER_INIT(skeleton_update, skeleton_draw, monster_impacted, SKELETON_HEALTH, SKELETON_STATUS_DETECT_HERO_INIT, skeleton_idle)
 

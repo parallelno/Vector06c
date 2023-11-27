@@ -102,7 +102,7 @@ BURNER_DETECT_HERO_DISTANCE = 60
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
 ; out:
-; a = 0
+; a = TILEDATA_RESTORE_TILE
 burner_init:
 			MONSTER_INIT(burner_update, burner_draw, monster_impacted, BURNER_HEALTH, BURNER_STATUS_DETECT_HERO_INIT, burner_idle)
 

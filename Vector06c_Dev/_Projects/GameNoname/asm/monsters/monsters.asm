@@ -26,6 +26,8 @@ monsters_init:
 ; in:
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
+; out:
+; a - TILEDATA_RESTORE_TILE
 ;ex. MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 .macro MONSTER_INIT(MONSTER_UPDATE_PTR, MONSTER_DRAW_PTR, MONSTER_IMPACT_PTR, MONSTER_HEALTH, MONSTER_STATUS, MONSTER_ANIM_PTR, spawn_rate_check = True)
 		.if spawn_rate_check
@@ -52,6 +54,8 @@ monsters_init:
 ;		1 - yes
 ;		0 - no
 ; a - monster_id * 4
+; out:
+; a - TILEDATA_RESTORE_TILE
 monster_init:
 			lxi h, 0
 			dad	sp

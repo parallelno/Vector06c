@@ -25,7 +25,7 @@ burner_quest_room_ids_len: = burner_quest_room_ids_end - burner_quest_room_ids
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
 ; out:
-; a = 0
+; a = TILEDATA_RESTORE_TILE
 burner_quest_init:
 			mov b, a ; temp
 
@@ -36,7 +36,7 @@ burner_quest_init:
 			HL_TO_A_PLUS_INT16(burner_quest_room_ids)
 			lda room_id
 			cmp m
-			rnz ; if it is not dedicated room for a burner_quest
+			jnz @return; if it is not dedicated room for a burner_quest
 
 			; it is a dedicated room,
 			; advance the index to the next dedicated room in a sequence
@@ -44,33 +44,10 @@ burner_quest_init:
 			inr m
 
 			mov a, b
-			; a - monster_id * 4
-/*
-			call @init
-
-			; hl - ptr to monster_pos_y + 1
-			; advance hl to monster_anim_ptr
-			; set run_r anim
-			HL_ADVANCE_BY_DIFF_BC(monster_pos_y + 1, monster_anim_ptr)
-			mvi m, <burner_dash
-			inx h
-			mvi m, >burner_dash
-
-			; advance hl to monster_update_ptr
-			HL_ADVANCE_BY_DIFF_BC(monster_anim_ptr + 1, monster_update_ptr)
-			mvi m, <burner_quest_update
-			inx h
-			mvi m, >burner_quest_update	
-
-			; return TILEDATA_NO_COLLISION to make the tile walkable where a monster spawned
-			A_TO_ZERO(TILEDATA_RESTORE_TILE)
-	
-			ret
-@init:
-*/
-
 			MONSTER_INIT(burner_quest_update, burner_draw, empty_func, BURNER_HEALTH, BURNER_STATUS_DETECT_HERO_INIT, burner_dash)
-
+@return:
+			mvi a, TILEDATA_RESTORE_TILE
+			ret
 ;========================================================
 ; anim and a gameplay logic update
 ; in:

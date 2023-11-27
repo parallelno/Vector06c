@@ -86,7 +86,7 @@ KNIGHT_DETECT_HERO_DISTANCE = 60
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
 ; out:
-; a = 0
+; a = TILEDATA_RESTORE_TILE
 knight_init:
 			MONSTER_INIT(knight_update, knight_draw, monster_impacted, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle)
 

@@ -25,15 +25,17 @@ FIREPOOL_COLLISION_HEIGHT	= 16
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
 ; out:
-; a = 0
+; a = TILEDATA_RESTORE_TILE
 firepool_init:
 			mov b, a ; tmp
 			lda game_status_fire_extinguished
 			CPI_WITH_ZERO(False)
-			rnz
+			jnz @return
 			mov a, b
-
 			MONSTER_INIT(firepool_update, firepool_draw, firepool_impacted, FIREPOOL_HEALTH, FIREPOOL_STATUS_IDLE, vfx_firepool, False)
+@return:
+			mvi a, TILEDATA_RESTORE_TILE
+			ret			
 
 ;========================================================
 ; anim and a gameplay logic update

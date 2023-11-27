@@ -12,16 +12,19 @@ KNIGHT_QUEST_MAX_POS_Y				= 255 - 16 - 14
 ; c - tile_idx in the room_tiledata array.
 ; a - monster_id * 4
 ; out:
-; a = 0
+; a = TILEDATA_RESTORE_TILE
 knight_quest_init:
 			mov b, a ; temp
 			; if ITEM_ID_FART is used, do not create a monster
 			lda global_items + ITEM_ID_FART - 1	; because the first item_id = 1
 			cpi ITEM_STATUS_USED
-			rz
+			jz @return
 
 			mov a, b
 			MONSTER_INIT(knight_quest_update, knight_draw, empty_func, KNIGHT_HEALTH, KNIGHT_STATUS_DETECT_HERO_INIT, knight_idle, False)
+@return:
+			mvi a, TILEDATA_RESTORE_TILE
+			ret			
 
 ;========================================================
 ; anim and a gameplay logic update
