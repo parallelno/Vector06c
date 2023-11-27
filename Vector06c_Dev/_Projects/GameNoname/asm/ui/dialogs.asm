@@ -77,7 +77,7 @@ dialog_draw_frame_text:
 			CALL_RAM_DISK_FUNC(__text_ex_rd_scr3, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			; pause to prevent closing a dialog right after opening
-			lxi h, 65000
+			lxi h, 500
 			jmp pause
 
 
