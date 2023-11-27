@@ -379,7 +379,7 @@ __gcplayer_mute:
 @send_data:
 			mov a, e
 			out AY_PORT_REG
-			xra a
+			A_TO_ZERO(0)
 			out AY_PORT_DATA
 			dcr e
 			jp @send_data

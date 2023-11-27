@@ -70,7 +70,7 @@ __sprite_dup_preshift:
 			; check if a frame is already preshifted
 			dcx h
 			mov a, m
-			ora a
+			CPI_WITH_ZERO(0)
 			jz @next_frame_addr
 			; mark a first sprite of this frame being preshifted
 			dcr m
@@ -126,7 +126,7 @@ __sprite_dup_preshift:
 			lxi h, TEMP_ADDR
 @check_last_frame:
 			mvi a, TEMP_BYTE
-			ora a
+			CPI_WITH_ZERO(0)
 			jz @get_next_frame_offset
 
 			pop h
@@ -438,7 +438,7 @@ sprite_buff_preshift:
 			; advance to gfx data
 			INX_H(2)
 			; check a mask_flag
-			ora a
+			CPI_WITH_ZERO(0)
 			lxi h, __sprite_tmp_buff
 			jz @color
 

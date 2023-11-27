@@ -170,7 +170,7 @@ scythe_update:
 			; advance hl to bullet_speed_y+1
 			INX_H(2)
 			mov a, m
-			ora a
+			CPI_WITH_ZERO(0)
 			jp @set_move_down
 @set_move_up:			
 			mvi m, >SCYTHE_MOVE_SPEED

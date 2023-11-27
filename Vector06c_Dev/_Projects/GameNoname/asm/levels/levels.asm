@@ -111,7 +111,7 @@ level_init_palette:
 
 level_update:
 			lda global_request
-			ora a
+			CPI_WITH_ZERO(GLOBAL_REQ_NONE)
 			rz
 			cpi GAME_REQ_ROOM_INIT
 			jz @room_load_draw

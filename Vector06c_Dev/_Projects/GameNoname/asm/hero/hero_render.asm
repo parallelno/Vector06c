@@ -47,7 +47,7 @@ hero_draw:
 
 hero_copy_to_scr:
 			lda hero_global_status_no_render
-			ora a
+			CPI_WITH_ZERO(HERO_RENDER_STATUS_TRUE)
 			rnz
 
 			; get min(h, d), min(e,l)

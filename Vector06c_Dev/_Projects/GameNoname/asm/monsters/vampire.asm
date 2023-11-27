@@ -256,7 +256,7 @@ vampire_update_move_init:
 @set_anim:
 			HL_ADVANCE_BY_DIFF_BC(monster_speed_y+1, monster_anim_ptr)
 			; a = rnd
-			ora a
+			CPI_WITH_ZERO(0)
 			; if rnd is positive (up or right movement), then play vampire_run_r anim
 			jp @set_anim_run_r
 @set_anim_run_l:

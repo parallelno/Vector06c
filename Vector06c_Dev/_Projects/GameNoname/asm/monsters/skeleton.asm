@@ -255,7 +255,7 @@ skeleton_update_move_init:
 @set_anim:
 			HL_ADVANCE_BY_DIFF_BC(monster_speed_y+1, monster_anim_ptr)
 			; a = rnd
-			ora a
+			CPI_WITH_ZERO(0)
 			; if rnd is positive (up or right movement), then play skeleton_run_r anim
 			jp @set_anim_run_r
 @set_anim_run_l:
@@ -348,7 +348,7 @@ skeleton_update_shoot:
 			ora m
 			jz @shoot_vert
 			mov a, m
-			ora a
+			CPI_WITH_ZERO(0)
 			mvi a, BULLET_DIR_R
 			jp @shoot_right
 @shoot_left:
@@ -360,7 +360,7 @@ skeleton_update_shoot:
 			; advance hl to monster_speed_y+1
 			INX_H(2)
 			mov a, m
-			ora a
+			CPI_WITH_ZERO(0)
 			mvi a, BULLET_DIR_U
 			jp @shoot_up
 @shoot_down:
