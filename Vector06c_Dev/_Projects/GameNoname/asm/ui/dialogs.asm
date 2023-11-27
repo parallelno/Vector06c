@@ -27,7 +27,7 @@ dialog_init:
 ; z flag = 1 if a dialog is already initiated
 dialog_is_inited:
 			lda dialog_update
-			ora a ; check if it is NOP
+			CPI_WITH_ZERO(OPCODE_NOP)
 			ret
 
 ; invoke a dialog callback func
@@ -39,7 +39,7 @@ dialog_update:
 			lda action_code
 			ani CONTROL_CODE_FIRE1 | CONTROL_CODE_KEY_SPACE
 			rz
-			xra a
+			A_TO_ZERO(CONTROL_CODE_NO)
 			sta action_code
 
 			; dialog_update_stop
@@ -56,6 +56,7 @@ dialog_update_callback:
 dialog_draw_frame_text:
 			push h
 			; mark erased the runtime back data
+; TODO: fix. it deletes all backs when a dialog starts
 			call backs_init
 			; draw a frame
 			DRAW_TILED_IMG(__RAM_DISK_S_TILED_IMAGES_DATA, __tiled_images_frame_ingame_dialog)
@@ -76,7 +77,8 @@ dialog_draw_frame_text:
 			CALL_RAM_DISK_FUNC(__text_ex_rd_scr3, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 
 			; pause to prevent closing a dialog right after opening
-			PAUSE(65000, true)
+			lxi h, 65000
+			jmp pause
 
 
 ;===========================================================================

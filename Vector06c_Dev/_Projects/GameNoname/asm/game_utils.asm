@@ -50,19 +50,14 @@ reset_game_updates_counter:
 			sta game_updates_counter
 			ret
 
-.macro PAUSE(time, no_ret = false)
-			lxi h, time
-		.if no_ret
-			jmp pause
-		.endif
-		.if no_ret == false
-			call pause
-		.endif
-.endmacro
+; pause the main programm
+; in:
+; hl - delay
+; uses:
+; hl, a
 pause:
-			A_TO_ZERO(0)
-			lxi h, 65000
-@loop:		dcx h
-			cmp h
-			jnz @loop
+			dcx h
+			mov a, h
+			ora l
+			jnz pause
 			ret
