@@ -18,7 +18,8 @@ ROOM_TILEDATA_HANDLING_NO_MONSTERS	= OPCODE_JNZ
 ROOM_DIALOG_TILE_HEIGHT = 4
 room_redraw:
 			call backs_init
-			call restore_doors_containers_tiledata
+			mvi c, ROOM_WIDTH * ROOM_DIALOG_TILE_HEIGHT
+			call restore_doors_containers_tiledata_ex
 			mvi a, ROOM_DIALOG_TILE_HEIGHT * TILE_HEIGHT
 			call room_draw_tiles_ex
 
@@ -78,8 +79,10 @@ backup_tiledata:
 
 ; copies door and containr tiledata from room_tiledata_backup to room_tiledata
 restore_doors_containers_tiledata:
+			mvi c, ROOM_TILEDATA_LEN
+restore_doors_containers_tiledata_ex:
 			lxi h, room_tiledata_backup
-			lxi b, TILEDATA_FUNC_MASK<<8 | ROOM_TILEDATA_LEN
+			mvi b, TILEDATA_FUNC_MASK
 			lxi d, (TILEDATA_FUNC_ID_DOORS<<4)<<8 | TILEDATA_FUNC_ID_CONTAINERS<<4
 @loop:
 			mov a, m
