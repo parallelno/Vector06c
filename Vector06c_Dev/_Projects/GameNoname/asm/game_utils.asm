@@ -62,11 +62,9 @@ pause:
 			dcr a
 			jnz @loop_small
 			; a = 0
-			nop
-			nop
-			nop
+			mov a, a ; 8cc delay
 			dcx h
-			ora l
+			mov a, l ; ora l replaced with mov a, l to get 4cc delay
 			ora h
 			jnz @loop
 			ret
