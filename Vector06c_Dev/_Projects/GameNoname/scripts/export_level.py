@@ -6,6 +6,21 @@ import common
 import common_gfx
 import build
 
+# TODO: get this from asm file
+TILEDATA_RESOURCE	= 7*16
+RESOURCES_UNIQUE_MAX = 16
+RESOURCES_LEN	= 0x100		
+# collect container data
+TILEDATA_CONTAINER	= 11*16 
+CONTAINERS_UNIQUE_MAX = 16
+CONTAINERS_LEN	= 0x100
+TILEDATA_BREAKABLES	= 13*16
+BREAKABLES_UNIQUE_MAX = 16
+BREAKABLES_MAX = 1016
+
+WORD_LEN			= 2
+NULL_PTR			= "NULL_PTR"
+
 def get_room_data_label(room_path, source_dir = ""):
 	asm = ""
 	if source_dir != "": 
@@ -271,6 +286,7 @@ def export_data(source_j_path, export_data_path):
 	# data for rooms_containers_tbl and rooms_containers
 	containers = {}
 	container_max_tiledata = 0
+	breakables_count = 0
 	# per room data
 	for room_id, room_j in enumerate(rooms_j):
 		room_path = room_paths[room_id]['path']
@@ -290,18 +306,6 @@ def export_data(source_j_path, export_data_path):
 		asm += common.asm_compress_to_asm(asm_room_data)
 
 		# collect resource data
-		# TODO: get this from asm file
-		TILEDATA_RESOURCE	= 7*16
-		RESOURCES_UNIQUE_MAX = 16
-		RESOURCES_LEN	= 0x100		
-		# collect container data
-		TILEDATA_CONTAINER	= 11*16 
-		CONTAINERS_UNIQUE_MAX = 16
-		# TODO: get this from asm file
-		CONTAINERS_LEN	= 0x100
-
-		WORD_LEN			= 2
-		NULL_PTR			= "NULL_PTR"
 
 		for i, tiledata in enumerate(tiledatas):
 			width = room_j["width"]
@@ -321,6 +325,14 @@ def export_data(source_j_path, export_data_path):
 				containers[tiledata].append((room_id, tile_idx))		
 				if container_max_tiledata < tiledata:
 					container_max_tiledata = tiledata
+
+			if TILEDATA_BREAKABLES <= tiledata < TILEDATA_BREAKABLES + BREAKABLES_UNIQUE_MAX:
+				breakables_count += 1	
+				if breakables_count > BREAKABLES_MAX:
+					print(f"ERROR: {source_j_path} has breakables amount > {BREAKABLES_MAX}")
+					print("Stop export")
+					exit(1)
+		
 				
 	# make resources_inst_data_ptrs data
 	asm += f"\n__{source_name}_resources_inst_data_ptrs:\n"

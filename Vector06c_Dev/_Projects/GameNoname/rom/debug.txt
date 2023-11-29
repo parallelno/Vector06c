@@ -1938,6 +1938,7 @@ BULLET_DIR_R $0
 BULLET_DIR_L $1
 BULLET_DIR_U $2
 BULLET_DIR_D $3
+BREAKABLES_MAX $3F8
 breakables_status_buffer_available_ptr $7300
 breakables_status_buffer_ptrs $7301
 breakables_status_buffers $7381

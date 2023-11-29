@@ -1,10 +1,10 @@
 Retro Assembler V2022.1 -- Crafted by Peter Tihanyi with 8-Bit Love
 (C) 2017-2023 Engine Designs in West Virginia, USA
 
-Pre-processing the source code file... 9310 lines of code loaded.
+Pre-processing the source code file... 9311 lines of code loaded.
 Compiling, 1st pass... (Processing)
 Compiling, 2nd pass... (Finalizing)
-Success. Size: 19211 bytes ($4b0b) in 1.215s
+Success. Size: 19211 bytes ($4b0b) in 1.180s
 
 *******************
 * Labels & Values *
@@ -634,6 +634,7 @@ BULLET_DIR_R                                   = $00
 BULLET_DIR_L                                   = $01
 BULLET_DIR_U                                   = $02
 BULLET_DIR_D                                   = $03
+BREAKABLES_MAX                                 = $03f8
 breakables_status_buffer_available_ptr         = $7300
 breakables_status_buffer_ptrs                  = $7301
 breakables_status_buffers                      = $7381

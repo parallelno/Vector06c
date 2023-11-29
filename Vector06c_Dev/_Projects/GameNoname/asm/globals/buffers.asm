@@ -3,7 +3,7 @@
 ; TODO: rename buffers.asm to vars.asm
 ;=============================================================================
 ; contains statuss of breakables. should be reseted every game start and after hero respawns
-; this structure can contain statuses for 127*8-1=1016 breakables across off levels
+; this structure can contain statuses for 1016 breakables across off levels
 ; each room can contain variable amount of breakables
 ; TOD: cupports only level 0 and level 1 now
 ; data format:
@@ -24,6 +24,7 @@
 ;			.byte XPOKJCBA
 ;			.byte 0000000Z
 ;	.endloop
+BREAKABLES_MAX							= 1016 ; (256-1-128)*8
 breakables_status_buffer_available_ptr:	= $7300 ; contains the pointer
 breakables_status_buffer_ptrs:			= $7301
 breakables_status_buffers:				= breakables_status_buffer_ptrs + ROOMS_MAX * LEVELS_MAX
