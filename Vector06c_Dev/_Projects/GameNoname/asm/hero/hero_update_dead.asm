@@ -8,8 +8,6 @@ hero_dead:
 			jz hero_dead_fade_r
 			cpi HERO_STATUS_DEATH_WAIT_SPARKER
 			jz hero_dead_wait_sparker
-			;cpi ACTOR_STATUS_NO_UPDATE
-			;rz
 			ret
 
 hero_dead_fade_init_gb:

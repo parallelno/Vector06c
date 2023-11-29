@@ -2,15 +2,43 @@
 ; TODO: move all global vars here
 ; TODO: rename buffers.asm to vars.asm
 ;=============================================================================
+; contains statuss of breakables. should be reseted every game start and after hero respawns
+; this structure can contain statuses for 127*8-1=1016 breakables across off levels
+; each room can contain variable amount of breakables
+; TOD: cupports only level 0 and level 1 now
+; data format:
+; breakables_status_buffer_ptrs:
+;	 .byte a low byte pointer to a breakables statuses in breakables_status_buffers for a room_id_0 in level_id_0
+;	 .byte a low byte pointer to a breakables statuses in breakables_status_buffers for a room_id_1 in level_id_0
+;	... similar for the rest rooms, ROOMS_MAX total
+;	 .byte a low byte pointer to a breakables statuses in breakables_status_buffers for a room_id_0 in level_id_1
+;	 .byte a low byte pointer to a breakables statuses in breakables_status_buffers for a room_id_1 in level_id_1
+;	... similar for the rest rooms, ROOMS_MAX total
+;
+; breakables_status_buffers:
+;	.loop as many, as many rooms contain breakables and visited by player
+;		Set of bytes where every byte contains statuses of 8 breakables in the room starting from the tile_id=0
+;			Bit = 0 means a breakable is not broken, and vise versa
+;			Example: if the room contains nine breakables with tile_id=A, tile_id=B, tile_id=C, tile_id=J, tile_id=K, tile_id=O, tile_id=P, tile_id=X, tile_id=Z
+;			their statuses will be packed into two bytes:
+;			.byte XPOKJCBA
+;			.byte 0000000Z
+;	.endloop
+breakables_status_buffer_available_ptr:	= $7300 ; contains the pointer
+breakables_status_buffer_ptrs:			= $7301
+breakables_status_buffers:				= breakables_status_buffer_ptrs + ROOMS_MAX * LEVELS_MAX
+breakables_statuses_end:				= breakables_status_buffer_available_ptr + $100
+
+;=============================================================================
 ;	it's a copy of the room tiledata stored by room_draw
-;	it's used in room_redraw and storing states of breakable objects
-room_tiledata_backup_safty_bytes:	= $73fe
+;	it's used in room_redraw for storing states of breakable objects, and restoring states of doors and containers
+ROOM_TILEDATA_BACKUP_LEN			= ROOM_WIDTH * ROOM_HEIGHT
 room_tiledata_backup:				= $7400
-room_tiledata_backup_reserved:		= $74f0 ; adds 16 bytes to make the room_tiledata_backup buffer suitable for copy_to_ram_disk32
-ROOM_TILEDATA_BACKUP_LEN:			= ROOM_WIDTH * ROOM_HEIGHT + 16
+room_tiledata_backup_end:			= $7400 + ROOM_TILEDATA_BACKUP_LEN
+
 ;=============================================================================
 ;
-;	free space [$7500 - $7511]
+;	free space [$74f0 - $7511]
 ;	
 
 ;=============================================================================
@@ -156,8 +184,7 @@ resources_inst_data_ptrs:	= $7a00
 
 rooms_spawn_rates:				= $7b00
 rooms_spawn_rate_monsters:		= rooms_spawn_rates 					; 0 means 100% chance to spawn a monster. 255 means no spawn
-rooms_spawn_rate_breakables:	= rooms_spawn_rate_monsters + ROOMS_MAX ; 0 means 100% chance to spawn a breakable item. 255 means no spawn
-rooms_spawn_rates_end:			= rooms_spawn_rate_breakables + ROOMS_MAX ; $7b80
+rooms_spawn_rates_end:			= rooms_spawn_rate_monsters + ROOMS_MAX ; $7b80
 
 ;=============================================================================
 ; hero global statuses
@@ -173,10 +200,11 @@ hero_global_status_no_render: = $7b80 ; byte
 
 ; a current command that is handled by the level update func
 global_request:	= $7b81			; .byte
-; the current level idx
-level_idx:		= $7b82			; .byte
+
 ; the current room idx of the current level
-room_id:   		= $7b83			; .byte TEMP_BYTE ; in the range [0, ROOMS_MAX-1]
+room_id:		= $7b82			; .byte ; in the range [0, ROOMS_MAX-1]
+; the current level idx
+level_id:   	= room_id + 1	; .byte
 
 ITEM_VISIBLE_NONE			= 0
 game_ui_item_visible_addr:	= $7b84		; .byte TEMP_BYTE ; currently shown item on the panel. range [0, ITEMS_MAX-1]
@@ -287,7 +315,6 @@ global_items_end:	= global_items + ITEMS_MAX
 
 ;=============================================================================
 ; tile graphics pointer table.
-ROOM_TILES_GFX_PTRS_LEN	= ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
 
 ; data format:
 ; .loop ROOM_HEIGHT
@@ -296,12 +323,12 @@ ROOM_TILES_GFX_PTRS_LEN	= ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
 ;	.endloop
 ; .endloop
 
+ROOM_TILES_GFX_PTRS_LEN	= ROOM_WIDTH * ROOM_HEIGHT * ADDR_LEN
 room_tiles_gfx_ptrs:		= $7c20
 room_tiles_gfx_ptrs_end:	= room_tiles_gfx_ptrs + ROOM_TILES_GFX_PTRS_LEN
 
 ;=============================================================================
 ; tiledata buffer has to follow room_tiles_gfx_ptrs because they are unpacked altogether. see level_data.asm for tiledata format
-ROOM_TILEDATA_LEN	= ROOM_WIDTH * ROOM_HEIGHT
 
 ; data format:
 ; .loop ROOM_HEIGHT
@@ -310,6 +337,7 @@ ROOM_TILEDATA_LEN	= ROOM_WIDTH * ROOM_HEIGHT
 ;	.endloop
 ; .endloop
 
+ROOM_TILEDATA_LEN	= ROOM_WIDTH * ROOM_HEIGHT
 room_tiledata:		= $7e00
 room_tiledata_end:	= room_tiledata + ROOM_TILEDATA_LEN
 

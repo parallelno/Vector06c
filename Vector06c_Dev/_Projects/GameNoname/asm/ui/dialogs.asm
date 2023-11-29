@@ -86,7 +86,7 @@ dialog_draw_frame_text:
 ; it proceeds only if the dialog wasn't shown before
 ; it pauses everything except backs and ui, it erases backs
 ; when this dialog closes, the game redraws the room, then continues
-; the limitations: LEVEL_IDX_0 in a range of 0-3
+; the limitations: LEVEL_ID_0 in a range of 0-3
 ; one dialog per room
 STORYTELLING_TEXT_STATUS_NEW = 0
 STORYTELLING_TEXT_STATUS_OLD = 1
@@ -94,7 +94,7 @@ STORYTELLING_TEXT_ENTITY_LEN = 4
 .macro STORYTELLING_TEXT_ENTITY(level_id = TEMP_BYTE, room_id = TEMP_BYTE, text_ptr = NULL_PTR)
 			; RRRR_RRLL
 			; 	RRRRRR - room_id, 
-			;	LL - level_idx
+			;	LL - level_id
 			.byte room_id<<2 | level_id
 			.byte STORYTELLING_TEXT_STATUS_NEW
 			.word text_ptr
@@ -102,18 +102,18 @@ STORYTELLING_TEXT_ENTITY_LEN = 4
 
 ; this array contains all dialogs statues (shown, not shown) and text ptrs
 dialog_storytelling_texts_ptrs:
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_0, __text_storytelling_home)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_1, __text_storytelling_farm_fence)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_2, __text_storytelling_road_to_friends_home)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_3, __text_storytelling_friends_home)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_4, __text_storytelling_friends_backyard)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_5, __text_storytelling_friends_secret_place)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_6, __text_storytelling_crossroad)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_9, __text_storytelling_loop)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_12, __text_storytelling_lost_coins)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_7, __text_storytelling_farm_entrance)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_8, __text_storytelling_farm_storage)
-			STORYTELLING_TEXT_ENTITY(LEVEL_IDX_0, ROOM_ID_10, __text_storytelling_dugeon_entrance)
+			STORYTELLING_TEXT_ENTITY(LEVEL_ID_0, ROOM_ID_0, __text_storytelling_home)
+			STORYTELLING_TEXT_ENTITY(LEVEL_ID_0, ROOM_ID_1, __text_storytelling_farm_fence)
+			STORYTELLING_TEXT_ENTITY(LEVEL_ID_0, ROOM_ID_2, __text_storytelling_road_to_friends_home)
+			STORYTELLING_TEXT_ENTITY(LEVEL_ID_0, ROOM_ID_3, __text_storytelling_friends_home)
+			STORYTELLING_TEXT_ENTITY(LEVEL_ID_0, ROOM_ID_4, __text_storytelling_friends_backyard)
+			STORYTELLING_TEXT_ENTITY(LEVEL_ID_0, ROOM_ID_5, __text_storytelling_friends_secret_place)
+			STORYTELLING_TEXT_ENTITY(LEVEL_ID_0, ROOM_ID_6, __text_storytelling_crossroad)
+			STORYTELLING_TEXT_ENTITY(LEVEL_ID_0, ROOM_ID_9, __text_storytelling_loop)
+			STORYTELLING_TEXT_ENTITY(LEVEL_ID_0, ROOM_ID_12, __text_storytelling_lost_coins)
+			STORYTELLING_TEXT_ENTITY(LEVEL_ID_0, ROOM_ID_7, __text_storytelling_farm_entrance)
+			STORYTELLING_TEXT_ENTITY(LEVEL_ID_0, ROOM_ID_8, __text_storytelling_farm_storage)
+			STORYTELLING_TEXT_ENTITY(LEVEL_ID_0, ROOM_ID_10, __text_storytelling_dugeon_entrance)
 @end_data:
 STORYTELLING_TEXT_COUNT = (@end_data - dialog_storytelling_texts_ptrs) / STORYTELLING_TEXT_ENTITY_LEN
 
@@ -132,20 +132,21 @@ dialog_storytelling_init:
 ; called to handle TILEDATA_STORYTELLING
 ; level_id and room_id define what dialog to show
 dialog_storytelling:
-			; get the text ptr based on the level_idx and room_id
-			lxi h, level_idx
-			lda room_id
-			; look up the dialog
+			; get the text ptr based on the level_id and room_id
+			lhld room_id
+			; h - level_id
+			; l - room_id
+			mov a, l
 			RLC_(2)
-			ora m
+			ora h
 			mov b, a
-			; b - RRRR_RRLL: RRRRR - room_id, L - level_idx
+			; b - RRRR_RRLL: RRRRR - room_id, L - level_id
 			lxi h, dialog_storytelling_texts_ptrs
 			lxi d, STORYTELLING_TEXT_ENTITY_LEN
 			mvi c, STORYTELLING_TEXT_COUNT
 @loop:
 			mov a, m
-			; a - RRRR_RRLL: RRRRRR - room_id, LL - level_idx
+			; a - RRRR_RRLL: RRRRRR - room_id, LL - level_id
 			cmp b
 			jz @check_status
 			dad d

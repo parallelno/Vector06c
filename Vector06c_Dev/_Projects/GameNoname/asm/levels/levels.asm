@@ -3,17 +3,18 @@
 ;
 levels_init:
 			A_TO_ZERO(LEVEL_FIRST)
-			sta level_idx
+			sta level_id
 
 			; erase global item statuses
 			lxi h, global_items
 			mvi a, <global_items_end
 			call clear_mem_short
-
 			; erase game statuses
 			lxi h, game_status
 			mvi a, <game_status_end
-			call clear_mem_short			
+			call clear_mem_short
+
+			call breakables_init
 
 			jmp level_init
 
@@ -22,7 +23,7 @@ levels_init:
 ;
 level_init:
 			; get the level init data ptr of the current level
-			lda level_idx
+			lda level_id
 			HL_TO_AX2_PLUS_INT16(levels_init_tbls_ptrs)
 
 			mov e, m
@@ -80,25 +81,14 @@ level_init:
 			COPY_FROM_RAM_DISK(CONTAINERS_LEN)
 
 			; reset room_id
-			A_TO_ZERO(ROOM_ID_0)
-			sta room_id
+			lhld room_id
+			mvi l, ROOM_ID_0
+			mvi a, GLOBAL_REQ_NONE
+			call room_teleport
+			
 			call room_init
-/*
-			; setup a hero pos
-			lhld level_start_pos_ptr
-			xchg
-			lda level_ram_disk_s_data
-			call get_word_from_ram_disk
-			call hero_set_pos
-			call hero_room_init			
-			*/
 			call hero_respawn
-			call hero_room_init
-
-			; reset level command
-			A_TO_ZERO(GLOBAL_REQ_NONE)
-			sta global_request
-			ret
+			jmp hero_room_init
 
 ; copy a palette from the ram-disk, then request for using it
 level_init_palette:
@@ -106,8 +96,7 @@ level_init_palette:
 			xchg
 			lxi h, level_ram_disk_s_gfx
 			mov h, m
-			call copy_palette_request_update
-			ret
+			jmp copy_palette_request_update
 
 level_update:
 			lda global_request
@@ -140,14 +129,12 @@ level_update:
 			jmp game_ui_draw
 @respawn:
 			; teleport the hero to the home room
-			A_TO_ZERO( LEVEL_FIRST)
-			sta level_idx
-			A_TO_ZERO( ROOM_ID_0)
-			sta level_idx
-			sta room_id
-			
-			call game_ui_draw
+			lxi h, LEVEL_FIRST<<8 | ROOM_ID_0
+			A_TO_ZERO(GLOBAL_REQ_NONE)
+			call room_teleport
 
+			call breakables_init
+			call game_ui_draw
 			call hero_respawn
 			jmp @room_load_draw
 

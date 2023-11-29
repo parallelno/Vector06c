@@ -20,6 +20,7 @@
 .include "asm\\hero\\hero.asm"
 .include "asm\\monsters\\monsters.asm"
 .include "asm\\bullets\\bullets.asm"
+.include "asm\\levels\\breakables.asm"
 .include "asm\\levels\\levels.asm"
 .include "asm\\levels\\room.asm"
 .include "asm\\levels\\backs.asm"
@@ -36,7 +37,7 @@ main_game:
 
 game_init:
 			CALL_RAM_DISK_FUNC(__game_stats_init, __RAM_DISK_S_SCORE)
-			call hero_game_init			
+			call hero_game_init
 			call levels_init
 			call dialogs_init
 			call game_ui_init

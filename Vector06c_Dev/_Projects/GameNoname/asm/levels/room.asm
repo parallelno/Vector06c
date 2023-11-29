@@ -1,14 +1,26 @@
 room_init:
 			call monsters_init
-room_draw:
 			call bullets_init
 			call backs_init
 			call room_unpack
 			call backup_tiledata
+			call breakables_room_status_init
 			call room_init_tiles_gfx
 			call room_draw_tiles
 			call room_handle_room_tiledata
 			call room_copy_scr_to_backbuffs
+			ret
+
+; must be called for teleporting into the other room
+; h - level_id
+; l - room_id
+; a - global request
+room_teleport:
+			sta global_request
+			push h
+			call breakables_room_status_store
+			pop h
+			shld room_id
 			ret
 
 ; redraw room after dialog shown
@@ -66,15 +78,9 @@ room_unpack:
 ; it copies the room tiledata into room_tiledata_backup
 ; for room_redraw and storing states of breakable objects
 backup_tiledata:
-/*
-			lxi d, room_tiledata + ROOM_TILEDATA_BACKUP_LEN
-			lxi h, room_tiledata_backup + ROOM_TILEDATA_BACKUP_LEN
-			lxi b, ROOM_TILEDATA_BACKUP_LEN / 32
-			jmp copy_to_ram_disk32
-*/
 			lxi h, room_tiledata
 			lxi d, room_tiledata_backup
-			lxi b, ROOM_WIDTH * ROOM_HEIGHT
+			lxi b, ROOM_TILEDATA_BACKUP_LEN
 			jmp copy_mem
 
 ; copies door and containr tiledata from room_tiledata_backup to room_tiledata
@@ -112,8 +118,8 @@ room_init_tiles_gfx:
 			lxi h, room_tiles_gfx_ptrs + ROOM_TILES_GFX_PTRS_LEN / 2
 			lxi b, room_tiles_gfx_ptrs
 			mvi a, ROOM_WIDTH * ROOM_HEIGHT
-			; hl - current room tile indexes
-			; bc - current room tile graphics table
+			; hl - current room gfx tile_idxs
+			; bc - current room gfx tile ptrs
 			; a - counter
 @loop:
 			; de gets the tile index
@@ -155,7 +161,7 @@ room_init_tiles_gfx:
 
 ; calls the tiledata handler func to spawn a back, breakable, monster, etc
 room_handle_room_tiledata:
-			mvi a, ROOM_WIDTH * ROOM_HEIGHT
+			mvi a, ROOM_TILEDATA_LEN
 ; in:
 ; a = the tile_id to stop handling
 room_handle_room_tiledata_ex:
@@ -300,7 +306,7 @@ room_tiledata_breakable_spawn:
 			ADD_A(2) ; to make a JMP_4 ptr
 			sta room_decal_draw_ptr_offset+1
 
-			ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_breakables, @no_spawn)
+			;ROOM_SPAWN_RATE_CHECK(rooms_spawn_rate_breakables, @no_spawn)
 			ROOM_DECAL_DRAW(__breakable_gfx_ptrs)
 @restore_tiledata:
 			mvi a, TEMP_BYTE

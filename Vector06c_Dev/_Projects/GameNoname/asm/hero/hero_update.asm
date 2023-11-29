@@ -573,7 +573,7 @@ hero_impacted:
 
 			; clamp to 0
 			jnc @no_clamp
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(0)
 @no_clamp:
 			mov m, a
 			jnz @not_dead

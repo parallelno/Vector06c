@@ -66,7 +66,7 @@ hero_tile_func_resource:
 			mvi b, >room_tiledata
 			mvi a, TILEDATA_RESTORE_TILE
 			stax b
-			
+
 			; c - tile_idx
 			call draw_tile_16x16_buffs
 			; draw vfx
@@ -101,10 +101,11 @@ hero_tile_func_teleport:
 			pop h
 
 			; update a room_id to teleport there
-			sta room_id
-			; requesting room loading
+			; a - room_id
+			lhld room_id
+			mov l, a
 			mvi a, GAME_REQ_ROOM_INIT
-			sta global_request
+			call room_teleport
 
 			; check if the teleport on the left or right side
 			lda hero_pos_x+1
