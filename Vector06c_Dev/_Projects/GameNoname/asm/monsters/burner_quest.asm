@@ -106,4 +106,5 @@ burner_quest_update:
 			; advance hl to monster_update_ptr + 1
 			inx h
 			; mark this monster dead death
-			jmp actor_destroy
+			ACTOR_DESTROY()
+			ret

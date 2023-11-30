@@ -110,26 +110,30 @@ actor_get_empty_data_ptr:
 			dad d
 			jmp @loop
 
-; TODO: convert small funcs below to macros
-actor_erase_runtime_data:
+; replaces the actor runtime data with a marker 
+; indicating that there is no actor runtime data here and beyond
+; used mostly for erasing all runtime data
+.macro ACTOR_ERASE_RUNTIME_DATA(actor_update_ptr)
+			lxi h, actor_update_ptr + 1
 			mvi m, ACTOR_RUNTIME_DATA_LAST
-			ret
+.endmacro
 
-; mark the actor's runtime data as it's going to be destroyed
+; marks the actor's runtime data as it's going to be destroyed
 ; in:
 ; hl - update_ptr+1 ptr
 ; TODO: optimize. fill up lastRemovedBulletRuntimeDataPtr
-actor_destroy:
+.macro ACTOR_DESTROY()
 			mvi m, ACTOR_RUNTIME_DATA_DESTR
-			ret
+.endmacro
 
-; mark the actor's runtime data as empty
+
+; marks the actor runtime data as empty
 ; in:
 ; hl - update_ptr+1 ptr
 ; TODO: optimize. fiil up lastRemovedBulletRuntimeDataPtr
-actor_set_empty:
+.macro ACTOR_EMPTY()
 			mvi m, ACTOR_RUNTIME_DATA_EMPTY
-			ret
+.endmacro
 
 ; calls a provided func for each actor with a status ACTOR_RUNTIME_DATA_ALIVE
 ; a ptr of a provided func has to be stored in the runtime data

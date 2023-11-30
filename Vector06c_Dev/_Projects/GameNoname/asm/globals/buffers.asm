@@ -120,7 +120,7 @@ BULLET_RUNTIME_DATA_LEN = @data_end - bullets_runtime_data ; $1a; bullet_runtime
 ; the same structs for the rest of the bullets
 bullets_runtime_data_end_marker: = bullets_runtime_data + BULLET_RUNTIME_DATA_LEN * BULLETS_MAX ; $78ff ; :		.word ACTOR_RUNTIME_DATA_END << 8
 bullets_runtime_data_end: = bullets_runtime_data_end_marker + WORD_LEN
-bullets_runtime_data_len: = bullets_runtime_data_end - bullets_runtime_data
+BULLETS_RUNTIME_DATA_LEN = bullets_runtime_data_end - bullets_runtime_data
 ;=============================================================================
 ; statuses of container instances.
 ; this data is aligned to $100, the length is <= $100

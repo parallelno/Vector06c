@@ -166,6 +166,7 @@ sparker_update:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
 			HL_ADVANCE_BY_DIFF_BC(bullet_status_timer, bullet_update_ptr+1)
-			jmp actor_destroy
+			ACTOR_DESTROY()
+			ret
 @vfx_spawn_rate:
 			.byte VFX_SPAWN_RATE

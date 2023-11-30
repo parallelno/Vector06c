@@ -305,5 +305,5 @@ bullet_erase:
 			ret
 @set_empty:
 			; hl - ptr to bullet_update_ptr+1 in the runtime data
-			ACTOR_SET_EMPTY()
+			ACTOR_EMPTY()
 			ret

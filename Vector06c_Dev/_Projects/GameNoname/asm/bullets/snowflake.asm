@@ -135,11 +135,13 @@ snowflake_update:
 @die_over_time:
 			; hl - ptr to bullet_status_timer
 			HL_ADVANCE_BY_DIFF_DE(bullet_status_timer, bullet_update_ptr+1)
-			jmp actor_destroy
+			ACTOR_DESTROY()
+			ret
 @die:
 			; hl - ptr to bullet_pos_x
 			HL_ADVANCE_BY_DIFF_DE(bullet_pos_x, bullet_update_ptr+1)
-			jmp actor_destroy
+			ACTOR_DESTROY()
+			ret
 
 @delay_update:
 			; hl - ptr to bullet_status

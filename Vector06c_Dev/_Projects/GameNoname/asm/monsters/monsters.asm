@@ -17,8 +17,7 @@ monsters_init:
 			mvi a, ACTOR_RUNTIME_DATA_END
 			sta monsters_runtime_data_end_marker + 1
 			; erase runtime_data
-			lxi h, monster_update_ptr + 1
-			call actor_erase_runtime_data
+			ACTOR_ERASE_RUNTIME_DATA(monster_update_ptr)
 			ret
 
 
@@ -377,6 +376,7 @@ monster_copy_to_scr:
 			jmp sprite_copy_to_scr_v
 
 
+; TODO: think of using one instead of monster_erase and bullet_erase
 ; erase a sprite or restore the background behind a sprite
 ; in:
 ; hl - ptr to monster_update_ptr+1 in the runtime data
@@ -384,7 +384,7 @@ monster_copy_to_scr:
 monster_erase:
 			; if a monster is destroyed mark its data as empty
 			cpi ACTOR_RUNTIME_DATA_DESTR
-			jz actor_set_empty
+			jz @set_empty
 
 			; advance to monster_status
 			HL_ADVANCE_BY_DIFF_DE(monster_update_ptr+1, monster_status)
@@ -416,6 +416,10 @@ monster_erase:
 
 			jnz sprite_copy_to_back_buff_v ; restore a background
 			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
+			ret
+@set_empty:
+			; hl - ptr to monster_update_ptr+1 in the runtime data
+			ACTOR_EMPTY()
 			ret
 
 ; in:
@@ -461,7 +465,8 @@ monster_impacted:
 			; mark this monster dead
 			; advance hl to monster_update_ptr+1
 			HL_ADVANCE_BY_DIFF_DE(monster_health, monster_update_ptr+1)
-			jmp actor_destroy
+			ACTOR_DESTROY()
+			ret
 
 @set_state_freeze:
 			; de - ptr to monster_impacted_ptr+1

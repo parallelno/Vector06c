@@ -109,7 +109,8 @@ knight_quest_update:
 			; advance hl to monster_update_ptr + 1
 			inx h
 			; mark this monster dead death
-			jmp actor_destroy
+			ACTOR_DESTROY()
+			ret
 
 knight_quest_update_statuses:
 			; advance hl to monster_status

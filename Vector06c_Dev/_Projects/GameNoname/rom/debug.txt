@@ -1994,7 +1994,7 @@ bullet_speed_y $782C
 BULLET_RUNTIME_DATA_LEN $19
 bullets_runtime_data_end_marker $78F6
 bullets_runtime_data_end $78F8
-bullets_runtime_data_len $E3
+BULLETS_RUNTIME_DATA_LEN $E3
 CONTAINERS_UNIQUE_MAX $10
 CONTAINERS_LEN $100
 CONTAINERS_STATUS_ACQUIRED $FF

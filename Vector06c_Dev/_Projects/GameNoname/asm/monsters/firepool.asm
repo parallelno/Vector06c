@@ -83,7 +83,8 @@ firepool_impacted:
 			; mark this monster dead
 			; advance hl to monster_update_ptr+1
 			HL_ADVANCE_BY_DIFF_DE(monster_pos_x+1, monster_update_ptr+1)
-			jmp actor_destroy
+			ACTOR_DESTROY()
+			ret
 
 ; draw a sprite into a backbuffer
 ; in:
