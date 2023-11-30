@@ -1,4 +1,4 @@
-; mark all actors killed to let 
+; mark all actors killed to let
 ; them wipe out from the screen
 ; in:
 ; hl - monster_update_ptr+1 or bullet_update_ptr+1
@@ -28,7 +28,7 @@ actor_kill_all:
 			lxi h, bullet_update_ptr+1
 			lxi b, BULLET_RUNTIME_DATA_LEN
 			call actor_kill_all
-.endmacro			
+.endmacro
 
 ; in:
 ; hl - ptr to anim_timer (monster_anim_timer or bullet_anim_timer)
@@ -89,7 +89,7 @@ actor_get_empty_data_ptr:
 			; hl points to a vacant monster_data
 
 			; if (hl + monster_data_len) points to ACTOR_RUNTIME_DATA_END, just return hl
-			; in other case store ACTOR_RUNTIME_DATA_LAST marker to (hl + monster_data_len) 
+			; in other case store ACTOR_RUNTIME_DATA_LAST marker to (hl + monster_data_len)
 			; to mark this monster data the last element in monste runtime data array
 
 			xchg
@@ -129,4 +129,104 @@ actor_destroy:
 ; TODO: optimize. fiil up lastRemovedBulletRuntimeDataPtr
 actor_set_empty:
 			mvi m, ACTOR_RUNTIME_DATA_EMPTY
+			ret
+
+; calls a provided func for each actor with a status ACTOR_RUNTIME_DATA_ALIVE
+; a ptr of a provided func has to be stored in the runtime data
+; an invoked func will get DE pointing to a func ptr in the runtime data (monster_update_ptr or bullet_draw_ptr, etc)
+; ex. ACTORS_INVOKE_IF_ALIVE(bullet_update_ptr, bullet_update_ptr, BULLET_RUNTIME_DATA_LEN, true)
+; in:
+; a - an offset from actor_update_ptr to func_ptr
+; de - actor_update_ptr + 1
+; hl - runtime data len
+; use:
+; hl, de, a
+.macro ACTORS_INVOKE_IF_ALIVE(actor_calling_func_ptr, update_func_ptr, runtime_data_len, _jmp = false)
+			mvi a, <(actor_calling_func_ptr - update_func_ptr)
+			lxi d, update_func_ptr + 1
+			lxi h, runtime_data_len
+		.if _jmp == false
+			call actors_invoke_if_alive
+		.endif
+		.if _jmp
+			jmp actors_invoke_if_alive
+		.endif
+.endmacro
+
+actors_invoke_if_alive:
+			sta @func_ptr_offset+1
+			shld @data_len+1
+			xchg
+@loop:
+			mov a, m
+			cpi ACTOR_RUNTIME_DATA_DESTR
+			jc @call_func ; call if it's ACTOR_RUNTIME_DATA_ALIVE
+			cpi ACTOR_RUNTIME_DATA_LAST
+			jc @next_data ; skip if it's ACTOR_RUNTIME_DATA_DESTR or ACTOR_RUNTIME_DATA_EMPTY
+			ret ; no more actors to process
+@call_func:
+			push h
+			lxi d, @return
+			push d
+@func_ptr_offset:
+			lxi d, TEMP_ADDR
+			; advance to a func ptr
+			dad d
+			; read the func addr
+			mov d, m
+			dcx h
+			mov e, m
+			xchg
+			; call a func
+			pchl
+@return:
+			pop h
+@next_data:
+@data_len:
+			lxi d, TEMP_WORD
+			dad d
+			jmp @loop
+			ret
+
+; calls any provided func for each actor with a status ACTOR_RUNTIME_DATA_ALIVE or ACTOR_RUNTIME_DATA_DESTR
+; a called func will get HL pointing to a monster_update_ptr+1 in the runtime data, and A holding an actor status
+; ex. ACTORS_CALL_IF_ALIVE(monster_copy_to_scr, monster_update_ptr, MONSTER_RUNTIME_DATA_LEN, true)
+; in:
+; hl - a func addr
+; de - actor_update_ptr+1
+; a - runtime data len
+; use:
+; de, a
+.macro ACTORS_CALL_IF_ALIVE(calling_func_ptr, update_func_ptr, runtime_data_len, _jmp = false)
+			lxi h, calling_func_ptr
+			lxi d, update_func_ptr + 1
+			mvi a, runtime_data_len
+		.if _jmp == false
+			call actors_call_if_alive
+		.endif
+		.if _jmp
+			jmp actors_call_if_alive
+		.endif
+.endmacro
+actors_call_if_alive:
+			sta @data_len+1
+			shld @func_ptr+1
+			xchg
+@loop:
+			mov a, m
+			cpi ACTOR_RUNTIME_DATA_EMPTY
+			jc @call_func
+			jz @next_data
+			; it is the last or the end, so return
+			ret
+@call_func:
+			push h
+@func_ptr:
+			call TEMP_ADDR
+			pop h
+@next_data:
+@data_len:
+			lxi d, TEMP_WORD
+			dad d
+			jmp @loop
 			ret

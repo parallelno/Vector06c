@@ -154,92 +154,17 @@ bullet_init:
 			mvi a, TILEDATA_RESTORE_TILE
 			ret
 
-; call all active bullets' Update/Draw func
-; a func will get DE pointing to a func ptr (ex.:bullet_update_ptr or bullet_draw_ptr) in the runtime data
-; in:
-; hl - an offset to a func ptr relative to bullet_update_ptr in the runtime data
-; 		ex.: the offset to bullet_update_ptr is zero
-; use:
-; de, a
-bullets_data_func_caller:
-			shld @func_ptr_offset+1
-			lxi h, bullet_update_ptr+1
-@loop:
-			mov a, m
-			cpi ACTOR_RUNTIME_DATA_DESTR
-			jc @call_func
-			cpi ACTOR_RUNTIME_DATA_LAST
-			jc @next_data
-			; it is the last or the end, so return
-			ret
-@call_func:
-			push h
-			lxi d, @return
-			push d
-@func_ptr_offset:
-			lxi d, TEMP_ADDR
-			; advance to a func ptr
-			; TODO: replace dad PR with add R, because the data is $100 byte aligned in buffers.asm
-			dad d
-			; read the func addr
-			mov d, m
-			dcx h
-			mov e, m
-			xchg
-			; call a func
-			pchl
-@return:
-			pop h
-@next_data:
-			lxi d, BULLET_RUNTIME_DATA_LEN
-			dad d
-			jmp @loop
-			ret
-
-
-; call a provided func (bullet_copy_to_scr, bullet_erase) if a bullet is alive
-; a func will get HL pointing to a bullet_update_ptr+1 in the runtime data, and A holding a BULLET_RUNTIME_DATA_* status
-; in:
-; hl - a func addr
-; use:
-; de, a
-bullets_common_func_caller:
-			shld @func_ptr+1
-			lxi h, bullet_update_ptr+1
-@loop:
-			mov a, m
-			cpi ACTOR_RUNTIME_DATA_EMPTY
-			jc @call_func
-			jz @next_data
-			; it is the last or the end, so return
-			ret
-@call_func:
-			push h
-@func_ptr:
-			call TEMP_ADDR
-			pop h
-@next_data:
-			lxi d, BULLET_RUNTIME_DATA_LEN
-			dad d
-			jmp @loop
-			ret
-
-
 bullets_update:
-			lxi h, 0
-			jmp bullets_data_func_caller
+			ACTORS_INVOKE_IF_ALIVE(bullet_update_ptr, bullet_update_ptr, BULLET_RUNTIME_DATA_LEN, true)
 
 bullets_draw:
-			lxi h, bullet_draw_ptr - bullet_update_ptr
-			jmp bullets_data_func_caller
+			ACTORS_INVOKE_IF_ALIVE(bullet_draw_ptr, bullet_update_ptr, BULLET_RUNTIME_DATA_LEN, true)
 
 bullets_copy_to_scr:
-			lxi h, bullet_copy_to_scr
-			jmp bullets_common_func_caller
+			ACTORS_CALL_IF_ALIVE(bullet_copy_to_scr, bullet_update_ptr, BULLET_RUNTIME_DATA_LEN, true)
 
 bullets_erase:
-			lxi h, bullet_erase
-			jmp bullets_common_func_caller
+			ACTORS_CALL_IF_ALIVE(bullet_erase, bullet_update_ptr, BULLET_RUNTIME_DATA_LEN, true)
 
 ; copy sprites from a backbuffer to a scr
 ; in:

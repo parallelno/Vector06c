@@ -267,91 +267,17 @@ monsters_get_first_collided:
 			dad b
 			jmp @loop
 
-
-; call all active monsters' Update/Draw func
-; a func will get DE pointing to a func ptr (ex.:monster_update_ptr or monster_draw_ptr) in the runtime data
-; in:
-; hl - an offset to a func ptr relative to monster_update_ptr in the runtime data
-; 		ex.: the offset to monster_update_ptr is zero
-; use:
-; de, a
-monsters_data_func_caller:
-			shld @func_ptr_offset+1
-			lxi h, monster_update_ptr+1
-@loop:
-			mov a, m
-			cpi ACTOR_RUNTIME_DATA_DESTR
-			jc @call_func
-			cpi ACTOR_RUNTIME_DATA_LAST
-			jc @next_data
-			; it is the last or the end, so return
-			ret
-@call_func:
-			push h
-			lxi d, @return
-			push d
-@func_ptr_offset:
-			lxi d, TEMP_ADDR
-			; advance to a func ptr
-			dad d
-			; read the func addr
-			mov d, m
-			dcx h
-			mov e, m
-			xchg
-			; call a func
-			pchl
-@return:
-			pop h
-@next_data:
-			lxi d, MONSTER_RUNTIME_DATA_LEN
-			dad d
-			jmp @loop
-			ret
-
-
-; call a provided func (monster_copy_to_scr, monster_erase) if a monster is alive
-; a func will get HL pointing to a monster_update_ptr+1 in the runtime data, and A holding a MONSTER_RUNTIME_DATA_* status
-; in:
-; hl - a func addr
-; use:
-; de, a
-monsters_common_func_caller:
-			shld @func_ptr+1
-			lxi h, monster_update_ptr+1
-@loop:
-			mov a, m
-			cpi ACTOR_RUNTIME_DATA_EMPTY
-			jc @call_func
-			jz @next_data
-			; it is the last or the end, so return
-			ret
-@call_func:
-			push h
-@func_ptr:
-			call TEMP_ADDR
-			pop h
-@next_data:
-			lxi d, MONSTER_RUNTIME_DATA_LEN
-			dad d
-			jmp @loop
-			ret
-
 monsters_update:
-			lxi h, 0
-			jmp monsters_data_func_caller
+			ACTORS_INVOKE_IF_ALIVE(monster_update_ptr, monster_update_ptr, MONSTER_RUNTIME_DATA_LEN, true)
 
 monsters_draw:
-			lxi h, monster_draw_ptr - monster_update_ptr
-			jmp monsters_data_func_caller
+			ACTORS_INVOKE_IF_ALIVE(monster_draw_ptr, monster_update_ptr, MONSTER_RUNTIME_DATA_LEN, true)
 
 monsters_copy_to_scr:
-			lxi h, monster_copy_to_scr
-			jmp monsters_common_func_caller
+			ACTORS_CALL_IF_ALIVE(monster_copy_to_scr, monster_update_ptr, MONSTER_RUNTIME_DATA_LEN, true)
 
 monsters_erase:
-			lxi h, monster_erase
-			jmp monsters_common_func_caller
+			ACTORS_CALL_IF_ALIVE(monster_erase, monster_update_ptr, MONSTER_RUNTIME_DATA_LEN, true)
 
 ; copy sprites from a backbuffer to a scr
 ; in:

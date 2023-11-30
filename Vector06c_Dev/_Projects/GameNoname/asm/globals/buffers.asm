@@ -94,7 +94,7 @@ TILED_IMG_IDXS_LEN = $100
 ;=============================================================================
 ; ptr to the first bullet data in the sorted list
 
-; TODO: think of removing it if it's still unusable
+; TODO: implement or remove it
 bullet_runtime_data_sorted:	= $7814 ; .byte <bullet_update_ptr
 
 ; a list of bullet runtime data structs.
@@ -124,9 +124,6 @@ bullets_runtime_data_len: = bullets_runtime_data_end - bullets_runtime_data
 ;=============================================================================
 ; statuses of container instances.
 ; this data is aligned to $100, the length is <= $100
-CONTAINERS_UNIQUE_MAX		= 16
-CONTAINERS_LEN				= $100
-CONTAINERS_STATUS_ACQUIRED	= $ff
 
 ; data format:
 ; containers_inst_data_ptrs:
@@ -142,6 +139,9 @@ CONTAINERS_STATUS_ACQUIRED	= $ff
 ;		.byte - room_id where this container is placed. 
 ;				if room_id == CONTAINERS_STATUS_ACQUIRED, a container is acquired
 ; .endloop
+CONTAINERS_UNIQUE_MAX		= 16
+CONTAINERS_LEN				= $100
+CONTAINERS_STATUS_ACQUIRED	= $ff
 
 containers_inst_data_ptrs:	= $7900
 ;containers_inst_data:		= containers_inst_data_ptrs + used_unique_containers (can vary) + 1
@@ -149,9 +149,6 @@ containers_inst_data_ptrs:	= $7900
 ;=============================================================================
 ; statuses of resource instances placed in rooms. 
 ; this data is aligned to $100, the length is <= $100
-RESOURCES_UNIQUE_MAX		= 16
-RESOURCES_LEN				= $100
-RESOURCES_STATUS_ACQUIRED	= $ff
 
 ; data format:
 ; resources_inst_data_ptrs:
@@ -167,6 +164,9 @@ RESOURCES_STATUS_ACQUIRED	= $ff
 ;		.byte - room_id where this resource is placed. 
 ;				if room_id == RESOURCES_STATUS_ACQUIRED, a resource is acquired
 ; .endloop
+RESOURCES_UNIQUE_MAX		= 16
+RESOURCES_LEN				= $100
+RESOURCES_STATUS_ACQUIRED	= $ff
 
 resources_inst_data_ptrs:	= $7a00
 ;resources_inst_data:		= resources_inst_data_ptrs + used_unique_resources (can vary) + 1
