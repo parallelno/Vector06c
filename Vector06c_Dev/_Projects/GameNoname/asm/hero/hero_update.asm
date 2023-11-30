@@ -346,15 +346,7 @@ hero_attack_start:
 			lxi h, game_status_cabbage_eaten
 			INR_WRAP_M(RES_CABBAGE_FART, @no_fart)
 
-			; a hero got fart
-			mvi a, ITEM_STATUS_ACQUIRED
-			sta global_items + ITEM_ID_FART - 1	; because the first item_id = 1
-			; spawn the fart actor
-			lxi h, hero_erase_scr_addr 
-			mov c, m
-			inx h
-			mov b, m
-			call fart_init			
+			call fart_init
 @no_fart:	
 
 			; check if a hero uses cabbage the first time

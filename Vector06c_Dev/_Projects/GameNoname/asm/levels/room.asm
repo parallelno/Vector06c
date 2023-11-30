@@ -9,6 +9,7 @@ room_init:
 			call room_draw_tiles
 			call room_handle_room_tiledata
 			call room_copy_scr_to_backbuffs
+			call room_init_statuses
 			ret
 
 ; must be called for teleporting into the other room
@@ -21,6 +22,13 @@ room_teleport:
 			call breakables_room_status_store
 			pop h
 			shld room_id
+			ret
+
+; restores game statuses
+room_init_statuses:
+			lda game_status_fart
+			CPI_WITH_ZERO(0)
+			cnz fart_init
 			ret
 
 ; redraw room after dialog shown

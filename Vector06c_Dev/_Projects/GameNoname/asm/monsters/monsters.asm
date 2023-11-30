@@ -6,7 +6,7 @@
 .include "asm\\monsters\\burner.asm"
 .include "asm\\monsters\\burner_quest.asm"
 .include "asm\\monsters\\knight.asm"
-.include "asm\\monsters\\knight_quest.asm"
+.include "asm\\monsters\\knight_heavy.asm"
 .include "asm\\monsters\\firepool.asm"
 
 monsters_init:

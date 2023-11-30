@@ -1,27 +1,31 @@
 ;=========================================================
 ; This is a quest bullet
-; init: it gives a hero ITEM_ID_FART
+; init: it gives a hero game_status_fart
 ; it lasts some certain time, then destroys itself
-; when dies: it sets its status ITEM_STATUS_USED
+; when dies: it sets its status GAME_STATUS_USED
 ; when it's alive, it constantly spawns puff vfx
-; the quest to scary away knight_quest monster
+; the quest to scary away knight_heavy monster
 ;=========================================================
 
 ; statuses.
 FART_STATUS_LIFE		= 0
 FART_STATUS_LIFE_TIME	= 20
 
-; Init for non-preshifted VFX (x coord aligned to 8 pixels )
-; in:
-; bc - vfx screen addr
+; init for non-preshifted VFX (x coord aligned to 8 pixels )
 fart_init:
-			BULLET_INIT(fart_update, vfx_draw, FART_STATUS_LIFE, FART_STATUS_LIFE_TIME, vfx_puff_loop, fart_init_pos)
+			lxi h, hero_erase_scr_addr 
+			mov c, m
+			inx h
+			mov b, m
+
+			BULLET_INIT(fart_update, vfx_draw, FART_STATUS_LIFE, FART_STATUS_LIFE_TIME, vfx_puff_loop, fart_init_post)
+			ret			
 
 ; vfx_draw func used for this fart bullet requires a specific pos_y and pos_x format
 ; this function provides it
 ; in:
 ; de - ptr to bullet_speed_x
-fart_init_pos:
+fart_init_post:
 			LXI_H_TO_DIFF(bullet_speed_x, bullet_pos_x + 1)
 			dad d
 			; hl - ptr to bullet_pos_x + 1
@@ -34,18 +38,21 @@ fart_init_pos:
 			; advance hl to bullet_pos_y
 			inx h
 			mvi m, 2 ; anim ptr offset. used in the vfx_draw func
+			; a hero got fart
+			mvi a, GAME_STATUS_ACQUIRED
+			sta game_status_fart
 			ret
 
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to bullet_update_ptr in the runtime data
+; de - ptr to bullet_update_ptr 
 fart_update:
 			; advance to bullet_status_timer
 			MVI_A_TO_DIFF(bullet_update_ptr, bullet_status_timer)
 			add e
 			mov e, a
 			xchg
-			; hl - ptr to bullet_update_ptr in the runtime data
+			; hl - ptr to bullet_update_ptr 
 @fraction_timer:
 			mvi a, 1
 			rlc
@@ -53,7 +60,7 @@ fart_update:
 			jnc @update_movement
 
 			dcr m
-			jz @die
+			jz @die ; time is over
 
 @update_movement:
 			; hl - ptr to bullet_status_timer
@@ -80,16 +87,10 @@ fart_update:
 			call actor_anim_update
 			ret
 @die:
-			; time is over, destroy fart vfx, if the fart hasn't been used yet (acquired), make it not_acquired
-			lxi d, global_items + ITEM_ID_FART - 1	; because the first item_id = 1
-			ldax d
-			cpi ITEM_STATUS_USED
-			jz @destroy
-			; remove ITEM_ID_FART
-			A_TO_ZERO(ITEM_STATUS_NOT_ACQUIRED)
-			stax d
-
-@destroy:
+			; make game_status_fart not_acquired
+			A_TO_ZERO(GAME_STATUS_NOT_ACQUIRED)
+			sta game_status_fart
+			; destroy fart vfx
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr + 1
 			MVI_A_TO_DIFF(bullet_status_timer, bullet_update_ptr + 1)

@@ -114,10 +114,9 @@ level_update:
 			jz @respawn
 			ret
 @room_load_draw:
-			call hero_room_init
 			; load a new room
 			call room_init
-			; reset level command
+			call hero_room_init
 			A_TO_ZERO(GLOBAL_REQ_NONE)
 			sta global_request
 			jmp reset_game_updates_required_counter
