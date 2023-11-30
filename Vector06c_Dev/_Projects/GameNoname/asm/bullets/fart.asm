@@ -84,16 +84,16 @@ fart_update:
 			lxi d, global_items + ITEM_ID_FART - 1	; because the first item_id = 1
 			ldax d
 			cpi ITEM_STATUS_USED
-			jz @actor_destroy
+			jz @destroy
 			; remove ITEM_ID_FART
 			A_TO_ZERO(ITEM_STATUS_NOT_ACQUIRED)
 			stax d
 
-@actor_destroy:
+@destroy:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr + 1
 			MVI_A_TO_DIFF(bullet_status_timer, bullet_update_ptr + 1)
 			add l
 			mov l, a
-
-			jmp actor_destroy
+			ACTOR_DESTROY()
+			ret

@@ -122,12 +122,14 @@ bomb_update:
 @die_after_damage:
 			; advance hl to bullet_update_ptr+1
 			HL_ADVANCE_BY_DIFF_BC(bullet_pos_y+1, bullet_update_ptr+1)
-			jmp actor_destroy
+			ACTOR_DESTROY()
+			ret
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
 			HL_ADVANCE_BY_DIFF_BC(bullet_status_timer, bullet_update_ptr+1)
-			jmp actor_destroy
+			ACTOR_DESTROY()
+			ret
 
 ; draw a sprite into a backbuffer
 ; in:

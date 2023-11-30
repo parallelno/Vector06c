@@ -9,7 +9,6 @@
 .include "asm\\bullets\\vfx.asm"
 .include "asm\\bullets\\cursor.asm"
 
-; mark erased the runtime bullet data
 bullets_init:
 			mvi a, <bullets_runtime_data
 			sta bullet_runtime_data_sorted
@@ -17,8 +16,8 @@ bullets_init:
 			mvi a, ACTOR_RUNTIME_DATA_END
 			sta bullets_runtime_data_end_marker + 1
 			; erase runtime_data
-			lxi h, bullet_update_ptr + 1
-			jmp actor_erase_runtime_data
+			ACTOR_ERASE_RUNTIME_DATA(bullet_update_ptr)
+			ret
 
 
 ; bullet initialization
@@ -271,7 +270,7 @@ bullet_copy_to_scr:
 bullet_erase:
 			; if a bullet is destroyed mark its data as empty
 			cpi ACTOR_RUNTIME_DATA_DESTR
-			jz actor_set_empty
+			jz @set_empty
 
 			; advance to bullet_status
 			HL_ADVANCE_BY_DIFF_DE(bullet_update_ptr+1, bullet_status)
@@ -303,4 +302,8 @@ bullet_erase:
 
 			jnz sprite_copy_to_back_buff_v ; restore a background
 			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
+			ret
+@set_empty:
+			; hl - ptr to bullet_update_ptr+1 in the runtime data
+			ACTOR_SET_EMPTY()
 			ret
