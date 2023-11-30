@@ -527,7 +527,7 @@ monster_impacted:
 			HL_ADVANCE_BY_DIFF_DE(monster_pos_y+1, monster_impacted_ptr+1)
 			dad d
 			mov e, m
-			mvi c, TILEDATA_FUNC_ID_MONSTERS
+			mvi a, TILEDATA_FUNC_ID_MONSTERS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score_text
 			pop h

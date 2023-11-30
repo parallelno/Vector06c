@@ -46,7 +46,7 @@ sword_func_container:
 
 			; add score points
 			; e - container_id
-			mvi c, TILEDATA_FUNC_ID_CONTAINERS
+			mvi a, TILEDATA_FUNC_ID_CONTAINERS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE | __RAM_DISK_M_TEXT_EX)
 			call game_ui_draw_score_text
 			pop h
@@ -83,7 +83,7 @@ sword_func_door:
 			; add score points
 			push b
 			mov e, b
-			mvi c, TILEDATA_FUNC_ID_DOORS
+			mvi a, TILEDATA_FUNC_ID_DOORS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score_text
 			pop b
@@ -128,7 +128,8 @@ sword_func_breakable:
 @not_cabbage:
 			; add score points
 			push b
-			mvi c, TILEDATA_FUNC_ID_BREAKABLES
+			; e - breakable_id			
+			mvi a, TILEDATA_FUNC_ID_BREAKABLES
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score_text
 			pop b
@@ -151,8 +152,8 @@ sword_func_breakable:
 ; c - tile_idx
 sword_func_triggers:
 			push psw
-			mvi c, TILEDATA_FUNC_ID_TRIGGERS
 			mov e, a
+			mvi a, TILEDATA_FUNC_ID_TRIGGERS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			pop psw
 			cpi TIMEDATA_TRIGGER_HOME_DOOR

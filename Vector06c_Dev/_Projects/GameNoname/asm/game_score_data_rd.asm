@@ -87,14 +87,14 @@ __game_score_lists_ptrs:
 ; game stats shown when the game is over
 __game_stats:
 			.word 0			; monsters
-			.word NULL_BYTE
-			.word NULL_BYTE
+			.word NULL_BYTE	; TODO: secret room
+			.word NULL_BYTE ; TODO: deaths
 			.word NULL_BYTE
 			.word NULL_BYTE
 			.word 0			; items
 			.word 0			; resource: coins
-			.word 0			; resource: a blue potion
-			.word 0			; resource: a red potion			
+			.word NULL_BYTE
+			.word NULL_BYTE
 			.word 0			; secrets (sometimes triggers)
 			.word 0			; containers
 			.word 0			; doors
@@ -104,23 +104,10 @@ __game_stats_end:
 ; add score points to hero_res_score
 ; call ex. CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 ; in:
-; c - func_id
+; a - func_id
 ; e - entity_id
 ; ex: to add score points of a dead vampire, a = 1, c = 1
 __game_score_add:
-			; check if it is a resource
-			mov a, c
-			cpi TILEDATA_FUNC_ID_RESOURCES
-			jnz @count_entity
-			; we're processing a resource.
-			; we have capacity to count the first three resources individually
-			; clamp the entity_id to 0-2
-			mov a, e
-			; TODO: replace a scalar constant "2" with a meaningful label
-			CLAMP_A(2)
-			add c
-
-@count_entity:
 			; get the ptr to the partucular entity
 			HL_TO_AX2_PLUS_INT16(__game_stats - WORD_LEN) ; because the list starts with func_id=1
 			; increase the entity counter

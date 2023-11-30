@@ -4,7 +4,7 @@ Retro Assembler V2022.1 -- Crafted by Peter Tihanyi with 8-Bit Love
 Pre-processing the source code file... 9308 lines of code loaded.
 Compiling, 1st pass... (Processing)
 Compiling, 2nd pass... (Finalizing)
-Success. Size: 19209 bytes ($4b09) in 1.217s
+Success. Size: 19209 bytes ($4b09) in 1.255s
 
 *******************
 * Labels & Values *
@@ -3307,9 +3307,9 @@ __game_score_lists_ptrs                        = $9e50
 __game_stats                                   = $9e6a
 __game_stats_end                               = $9e84
 __game_score_add                               = $9e84
-__game_stats_init                              = $9ebd
-__game_stats_get                               = $9ec6
-__game_score_data_rd_rd_data_end               = $9ed4
+__game_stats_init                              = $9eae
+__game_stats_get                               = $9eb7
+__game_score_data_rd_rd_data_end               = $9ec4
 sprite_get_scr_addr_hero_r                     = $0e89
 hero_r_preshifted_sprites                      = $456c
 hero_r_anims                                   = $456d
