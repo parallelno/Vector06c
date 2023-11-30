@@ -396,7 +396,6 @@ hero_attack_start:
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a cabbage to handle triggers
 
 @use_popsicle_pie:
-;TODO: make that dialog do not respawn breakables, then uncomment the code below
 			; check if a hero uses a popsicle pie the first time
 			lda game_status_use_pie
 			CPI_WITH_ZERO(0)
@@ -417,7 +416,6 @@ hero_attack_start:
 			jmp @use_sword ; TODO: revise that logic: ; use a sword after using a popsicle to handle triggers
 
 @use_clothes:
-;TODO: make that dialog do not respawn breakables, then uncomment the code below
 			; check if a hero uses clothes the first time
 			lda game_status_use_clothes
 			CPI_WITH_ZERO(0)

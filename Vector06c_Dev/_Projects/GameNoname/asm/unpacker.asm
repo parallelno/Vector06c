@@ -1,7 +1,7 @@
 .setting "Debug", true
 			.org	$100
 
-.include "asm\\globals\\macro.asm"
+.include "asm\\common\\macro.asm"
 .include "asm\\globals\\global_consts.asm"
 .include "generated\\code\\ram_disk_consts.asm"
 
@@ -67,7 +67,7 @@ copy_mem_ret:
 			.word MAIN_START
 copy_mem_end:
 
-.include "asm\\globals\\utils_unpacker.asm"	; TODO: think of not including that codeagain in the main programm
+.include "asm\\common\\utils_unpacker.asm"	; TODO: think of not including that code again in the main programm
 ram_disk_init_:
 .include "generated\\code\\ram_disk_init.asm"
 

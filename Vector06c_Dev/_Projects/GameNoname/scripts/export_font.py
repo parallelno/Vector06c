@@ -111,9 +111,7 @@ def export(source_j_path, asm_gfx_ptrs_path, asm_gfx_path, font_gfx_ptrs_rd = Fa
 		source_j = json.load(file)
 
 	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_FONT :
-		print(f'export_font ERROR: asset_type != "{build.ASSET_TYPE_FONT}", path: {source_j_path}')
-		print("Stop export")
-		exit(1)
+		build.exit_error(f'export_font ERROR: asset_type != "{build.ASSET_TYPE_FONT}", path: {source_j_path}')
 
 	path_png = source_dir + source_j["path_png"]
 	image = Image.open(path_png)

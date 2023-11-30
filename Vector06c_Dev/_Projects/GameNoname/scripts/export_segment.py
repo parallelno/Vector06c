@@ -21,17 +21,13 @@ import copy
 
 def check_segment_size(path, segment_addr):
 	if segment_addr != build.SEGMENT_0000_7F00_ADDR and segment_addr != build.SEGMENT_8000_0000_ADDR :
-		print("ERROR: Segment start addr has to be " + hex(build.SEGMENT_0000_7F00_SIZE_MAX) + " or " + hex(build.SEGMENT_8000_0000_SIZE_MAX))
-		print("Stop export")
-		exit(1)
+		build.exit_error("ERROR: Segment start addr has to be " + hex(build.SEGMENT_0000_7F00_SIZE_MAX) + " or " + hex(build.SEGMENT_8000_0000_SIZE_MAX))
 
 	segment_size = os.path.getsize(path)
 	segment_size_max = build.get_segment_size_max(segment_addr)
 
 	if segment_size > segment_size_max:
-			print(f"ERROR: {path} is bigger than {segment_size_max} bytes")
-			print("Stop export")
-			exit(1)
+		build.exit_error(f"ERROR: {path} is bigger than {segment_size_max} bytes")
  
 def export_chunks(segment_path, segment_labels_path, force_export):
 

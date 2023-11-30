@@ -66,7 +66,6 @@
 			call actor_anim_update
 @checkCollisionHero:
 			; hl points to bullet_anim_ptr
-			; TODO: check hero-bullet collision not every frame			
 			; advance hl to bullet_pos_x
 			HL_ADVANCE_BY_DIFF_BC(bullet_anim_ptr, bullet_pos_x+1)
 			; horizontal check

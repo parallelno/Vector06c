@@ -63,12 +63,12 @@ def bin_to_asm(path, out_path):
 
 def run_command(command, comment = "", check_path = ""):
 	if comment != "" : 
-		print(comment)
+		build.printc(comment, build.TextColor.CYAN)
+
 	if check_path == "" or os.path.isfile(check_path):
 		os.system(command)
 	else:
-		print(f"run_command ERROR: command: {command} is failed. file {check_path} doesn't exist")
-		exit(1)
+		build.exit_error(f"run_command ERROR: command: {command} is failed. file {check_path} doesn't exist")
 
 def delete_file(path):
 	if os.path.isfile(f"{path}"):

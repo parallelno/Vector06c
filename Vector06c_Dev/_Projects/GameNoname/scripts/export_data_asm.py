@@ -82,9 +82,7 @@ def	export_ram_disk_data(generated_code_dir, generated_bin_dir, segments_info):
 		addr_s_aligned = common.align_string(seg_info['addr_s'], 4)
 		
 		if seg_free_size < 0:
-			print(f"export_data_asm ERROR: bank{seg_info['bank_id']} addr{addr_s_aligned} free memory < 0. Check ram_disk_data.asm for details.")
-			print("Stop export")
-			exit(1)
+			build.exit_error(f"export_data_asm ERROR: bank{seg_info['bank_id']} addr{addr_s_aligned} free memory < 0. Check ram_disk_data.asm for details.")
 
 		asm += f"; bank{seg_info['bank_id']} addr{addr_s_aligned} [{segment_free_space_s_aligned} free] description: {seg_info['description']}\n"
 		

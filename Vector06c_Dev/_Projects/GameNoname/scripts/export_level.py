@@ -192,9 +192,7 @@ def export_gfx(source_j_path, export_gfx_path):
 	source_dir = str(Path(source_j_path).parent) + "\\"
 
 	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_LEVEL :
-		print(f'export_level ERROR: asset_type != "{build.ASSET_TYPE_LEVEL}", path: {source_j_path}')
-		print("Stop export")
-		exit(1)
+		build.exit_error(f'export_level ERROR: asset_type != "{build.ASSET_TYPE_LEVEL}", path: {source_j_path}')
 
 	path_png = source_dir + source_j["path_png"]
 	image = Image.open(path_png) 
@@ -250,9 +248,7 @@ def export_data(source_j_path, export_data_path):
 		os.mkdir(export_dir)
 
 	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_LEVEL :
-		print(f'export_level ERROR: asset_type != "{build.ASSET_TYPE_LEVEL}", path: {source_j_path}')
-		print("Stop export")
-		exit(1)
+		build.exit_error(f'export_level ERROR: asset_type != "{build.ASSET_TYPE_LEVEL}", path: {source_j_path}')
 
 	source_name = common.path_to_basename(source_j_path)
 	asm = ""
@@ -329,9 +325,7 @@ def export_data(source_j_path, export_data_path):
 			if TILEDATA_BREAKABLES <= tiledata < TILEDATA_BREAKABLES + BREAKABLES_UNIQUE_MAX:
 				breakables_count += 1	
 				if breakables_count > BREAKABLES_MAX:
-					print(f"ERROR: {source_j_path} has breakables amount > {BREAKABLES_MAX}")
-					print("Stop export")
-					exit(1)
+					build.exit_error(f"ERROR: {source_j_path} has breakables amount > {BREAKABLES_MAX}")
 		
 				
 	# make resources_inst_data_ptrs data
@@ -373,9 +367,7 @@ def export_data(source_j_path, export_data_path):
 
 			
 		if 	ptr + resources_inst_data_ptrs_len > 256:
-			print(f"ERROR: {source_j_path} has resource instance data > {RESOURCES_LEN} bytes")
-			print("Stop export")
-			exit(1)
+			build.exit_error(f"ERROR: {source_j_path} has resource instance data > {RESOURCES_LEN} bytes")
 
 	# make containers_inst_data_ptrs data 
 	asm += f"\n__{source_name}_containers_inst_data_ptrs:\n"
@@ -413,9 +405,7 @@ def export_data(source_j_path, export_data_path):
 				asm += "\n"
 			
 		if 	ptr + containers_inst_data_ptrs_len > 256:
-			print(f"ERROR: {source_j_path} has container instance data > {CONTAINERS_LEN} bytes")
-			print("Stop export")
-			exit(1)		
+			build.exit_error(f"ERROR: {source_j_path} has container instance data > {CONTAINERS_LEN} bytes")
 
 	with open(export_data_path, "w") as file:
 		file.write(asm)

@@ -1,5 +1,5 @@
-.include "asm\\globals\\rnd.asm"
-.include "asm\\globals\\utils_unpacker.asm"
+.include "asm\\common\\rnd.asm"
+.include "asm\\common\\utils_unpacker.asm"
 
 ; sharetable chunk of code to restore SP
 ; and dismount the ram-disk

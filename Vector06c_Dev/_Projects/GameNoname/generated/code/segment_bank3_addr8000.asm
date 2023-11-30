@@ -23,7 +23,7 @@ __draw_sprite_invis_rd_rd_data_start:
 .align 2
 __draw_sprite_invis_rd_rd_data_end:
 __utils_rd_rd_data_start:
-.include "asm\\globals\\utils_rd.asm"
+.include "asm\\common\\utils_rd.asm"
 .align 2
 __utils_rd_rd_data_end:
 __sprite_preshift_rd_rd_data_start:

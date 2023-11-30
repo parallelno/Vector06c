@@ -230,7 +230,7 @@
 					[
 						{
 							"asset_type" : "code",
-							"path": "asm\\globals\\sound_rd.asm"
+							"path": "asm\\sound\\sound_rd.asm"
 						},
 						{
 							"asset_type" : "music",
@@ -295,7 +295,7 @@
 						},
 						{
 							"asset_type" : "code",
-							"path" : "asm\\globals\\utils_rd.asm"
+							"path" : "asm\\common\\utils_rd.asm"
 						},
 						{
 							"asset_type" : "code",

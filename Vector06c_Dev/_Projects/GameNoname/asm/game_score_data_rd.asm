@@ -68,6 +68,7 @@ game_score_breakables:
 			.word 1		; breakable_id 			= 1 - a crate
 			.word 1		; BREAKABLE_ID_CABBAGE	= 2 - cabbage (tiledata = $d2)
 
+; pptr list to score points for each type of entity
 __game_score_lists_ptrs:
 			.word game_score_monsters
 			.word NULL_PTR
@@ -83,6 +84,7 @@ __game_score_lists_ptrs:
 			.word game_score_doors
 			.word game_score_breakables
 
+; game stats shown when the game is over
 __game_stats:
 			.word 0			; monsters
 			.word NULL_BYTE
@@ -155,23 +157,15 @@ __game_score_add:
 __game_stats_init:
 			lxi h, __game_stats
 			mvi a, <__game_stats_end
-			;call clear_mem
-			; TODO: think of repacing this duplication below with call clear_mem
-;clear_mem:
-			mvi c, 0
-@loop:
-			mov m, c
-			inx h
-			cmp l
-			jnz @loop
+			clear_mem_short()
 			ret
 
-; read game stats
+; read the game stats
 ; call ex. CALL_RAM_DISK_FUNC(__game_stats_get, __RAM_DISK_S_SCORE)
 ; in:
-; c - stats_id (offset in __game_stats)
+; c - stat_id (offset in __game_stats)
 ; out:
-; de - stats
+; de - the stat
 __game_stats_get:
 			mov a, c
 			; get the ptr to the partucular entity

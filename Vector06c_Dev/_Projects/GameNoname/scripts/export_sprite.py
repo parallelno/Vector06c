@@ -76,9 +76,7 @@ def anims_to_asm(label_prefix, source_j, source_j_path):
 	
 	if (preshifted_sprites != 1 and
 		preshifted_sprites != 4 and preshifted_sprites != 8):
-		print(f'export_sprite ERROR: preshifted_sprites can be only equal 1, 4, 8", path: {source_j_path}')
-		print("Stop export")
-		exit(1)
+		build.exit_error(f'export_sprite ERROR: preshifted_sprites can be only equal 1, 4, 8", path: {source_j_path}')
 
 	if preshifted_sprites == 4 or preshifted_sprites == 8:
 		asm += f"sprite_get_scr_addr_{label_prefix} = sprite_get_scr_addr{preshifted_sprites}\n\n"
@@ -153,9 +151,7 @@ def gfx_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 	
 	if (preshifted_sprites != 1 and
 		preshifted_sprites != 4 and preshifted_sprites != 8):
-		print(f'export_sprite ERROR: preshifted_sprites can be only equal 1, 4, 8", path: {source_j_path}')
-		print("Stop export")
-		exit(1)
+		build.exit_error(f'export_sprite ERROR: preshifted_sprites can be only equal 1, 4, 8", path: {source_j_path}')
 
 	for sprite in sprites_j:
 		sprite_name = sprite["name"]
@@ -315,9 +311,7 @@ def export(source_j_path, asmAnimPath, asmSpritePath):
 		source_j = json.load(file)
 
 	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_SPRITE :
-		print(f'export_sprite ERROR: asset_type != "{build.ASSET_TYPE_SPRITE}", path: {source_j_path}')
-		print("Stop export")
-		exit(1)
+		build.exit_error(f'export_sprite ERROR: asset_type != "{build.ASSET_TYPE_SPRITE}", path: {source_j_path}')
 
 	path_png = source_dir + source_j["path_png"]
 	has_mask = str(source_j["mask"])

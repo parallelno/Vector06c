@@ -197,9 +197,7 @@ def export_gfx(source_j_path, export_gfx_path):
 	source_dir = str(Path(source_j_path).parent) + "\\"
 
 	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_TILED_IMG:
-		print(f'export_tiled_img ERROR: asset_type != "{build.ASSET_TYPE_TILED_IMG}", path: {source_j_path}')
-		print("Stop export")
-		exit(1)
+		build.exit_error(f'export_tiled_img ERROR: asset_type != "{build.ASSET_TYPE_TILED_IMG}", path: {source_j_path}')
 
 	path_png = source_dir + source_j["path_png"]
 	image = Image.open(path_png)
@@ -223,9 +221,7 @@ def export_gfx(source_j_path, export_gfx_path):
 	remap_idxs = remap_indices(tiled_file_j)
 
 	if len(remap_idxs) > TILED_IMG_GFX_IDX_MAX:
-		print(f'export_tiled_img ERROR: gfx_idxs > "{TILED_IMG_GFX_IDX_MAX}", path: {source_j_path}')
-		print("Stop export")
-		exit(1)	
+		build.exit_error(f'export_tiled_img ERROR: gfx_idxs > "{TILED_IMG_GFX_IDX_MAX}", path: {source_j_path}')
 
 	# list of tiles addreses
 	png_name = common.path_to_basename(path_png)
@@ -256,9 +252,7 @@ def export_data(source_j_path, export_data_path):
 		os.mkdir(export_dir)
 
 	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_TILED_IMG:
-		print(f'export_tiled_img ERROR: asset_type != "{build.ASSET_TYPE_TILED_IMG}", path: {source_j_path}')
-		print("Stop export")
-		exit(1)
+		build.exit_error(f'export_tiled_img ERROR: asset_type != "{build.ASSET_TYPE_TILED_IMG}", path: {source_j_path}')
 
 	# list of tiles addreses
 	path_png = source_dir + source_j["path_png"]	
@@ -343,9 +337,7 @@ def export_data(source_j_path, export_data_path):
 
 		# check if the length of the image fits the requirements
 		if tiled_img_len > TILED_IMG_IDXS_LEN_MAX:
-			print(f'export_tiled_img ERROR: tiled image {layer_name} > "{TILED_IMG_IDXS_LEN_MAX}", path: {source_j_path}')
-			print("Stop export")
-			exit(1)		
+			build.exit_error(f'export_tiled_img ERROR: tiled image {layer_name} > "{TILED_IMG_IDXS_LEN_MAX}", path: {source_j_path}')
 	 
 	with open(export_data_path, "w") as file:
 		file.write(asm)

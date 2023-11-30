@@ -1,7 +1,7 @@
 ;.setting "Debug", true
 .setting "ShowLocalLabelsAfterCompiling", true
 
-.include "asm\\globals\\macro.asm"
+.include "asm\\common\\macro.asm"
 .include "asm\\globals\\global_consts.asm"
 ; main_init must be the first code inclusion
 
@@ -11,7 +11,7 @@
 
 .include "asm\\levels\\room_consts.asm" ; moved from a game.asm over here because of sone compilers issues. it was not able to find some consts
 
-.include "asm\\globals\\utils.asm"
+.include "asm\\common\\utils.asm"
 .include "asm\\globals\\controls.asm"
 .include "asm\\globals\\interruptions.asm"
 .include "asm\\game_utils.asm"

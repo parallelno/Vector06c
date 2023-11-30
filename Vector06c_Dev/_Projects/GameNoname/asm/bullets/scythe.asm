@@ -59,7 +59,7 @@ SCYTHE_COLLISION_HEIGHT	= 12
 
 ; in:
 ; bc - caster pos
-; a - direction (BULLET_DIR_*) ; TODO: move dir calc over this func. use A reg for a bullet_id
+; a - direction (BULLET_DIR_*)
 scythe_init:
 			sta scythe_init_speed + 1 ; 
 			BULLET_INIT(scythe_update, scythe_draw, SCYTHE_STATUS_MOVE_THROW, SCYTHE_STATUS_MOVE_TIME, scythe_run, scythe_init_speed)

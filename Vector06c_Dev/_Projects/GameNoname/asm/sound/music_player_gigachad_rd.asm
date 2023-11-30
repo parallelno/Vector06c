@@ -1,4 +1,4 @@
-.include "asm\\globals\\ay_consts.asm"
+.include "asm\\sound\\ay_consts.asm"
 
 ; gigachad16 music player
 ; info/credits:

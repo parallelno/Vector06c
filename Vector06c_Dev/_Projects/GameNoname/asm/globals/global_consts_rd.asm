@@ -1,6 +1,6 @@
 			;
 ; includes for a code library
-.include "asm\\globals\\macro.asm"
+.include "asm\\common\\macro.asm"
 .include "asm\\game_consts.asm"
 
 .include "asm\\globals\\actor_consts.asm"

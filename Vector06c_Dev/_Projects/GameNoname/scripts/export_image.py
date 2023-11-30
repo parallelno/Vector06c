@@ -316,9 +316,7 @@ def convert_to_asm(image, label_prefix, source_j_path, tile_size = 2, n_clusters
 	width, height = image.size
 	tiles_count = (width // tile_size) * (height // tile_size)
 	if n_clusters > tiles_count:
-		print(f'export_image ERROR: n_clusters is to high for this image resolution. It has to be <= "{tiles_count}", path: {source_j_path}')
-		print("Stop export")
-		exit(1)	
+		build.exit_error(f'export_image ERROR: n_clusters is to high for this image resolution. It has to be <= "{tiles_count}", path: {source_j_path}')
 
 	compressed_indices, codebook = vector_quantization_compression(image = image, n_clusters = n_clusters, tile_size = tile_size, random_state = random_state, n_init = n_init)
 
@@ -361,9 +359,7 @@ def export(source_j_path, asmSpritePath):
 		source_j = json.load(file)
 
 	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_IMAGE :
-		print(f'export_image ERROR: asset_type != "{build.ASSET_TYPE_IMAGE}", path: {source_j_path}')
-		print("Stop export")
-		exit(1)
+		build.exit_error(f'export_image ERROR: asset_type != "{build.ASSET_TYPE_IMAGE}", path: {source_j_path}')
 
 	asm = "; " + source_j_path + "\n"
 	asm += f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S" + "\n"

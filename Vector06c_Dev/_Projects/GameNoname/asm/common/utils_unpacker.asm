@@ -1,5 +1,5 @@
 ; this is a subset of utills required only for unpacker
-.include "asm\\globals\\zx0.asm"
+.include "asm\\common\\zx0.asm"
 
 ;========================================
 ; copy a buffer into the ram-disk

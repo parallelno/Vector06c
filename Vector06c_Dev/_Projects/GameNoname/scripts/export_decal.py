@@ -209,9 +209,7 @@ def export(source_j_path, asmSpritePath):
 		source_j = json.load(file)
 
 	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_DECAL :
-		print(f'export_sprite ERROR: asset_type != "{build.ASSET_TYPE_DECAL}", path: {source_j_path}')
-		print("Stop export")
-		exit(1)
+		build.exit_error(f'export_sprite ERROR: asset_type != "{build.ASSET_TYPE_DECAL}", path: {source_j_path}')
 
 	path_png = source_dir + source_j["path_png"]
 	image = Image.open(path_png)

@@ -108,8 +108,6 @@ vfx_init:
 			inx h 
 			mvi m, >vfx_draw
 
-			; advance hl to bullet_id
-			inx h
 			; advance hl to bullet_status
 			inx h
 			mvi m, VFX_STATUS_DEFAULT

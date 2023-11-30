@@ -4,7 +4,7 @@ RAM_DISK_S = RAM_DISK_S2
 RAM_DISK_M = RAM_DISK_M2
 
 __sound_rd_rd_data_start:
-.include "asm\\globals\\sound_rd.asm"
+.include "asm\\sound\\sound_rd.asm"
 .align 2
 __sound_rd_rd_data_end:
 __song01_rd_data_start:

@@ -131,6 +131,6 @@ bomb_update:
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to bullet_draw_ptr in the runtime data
 bomb_draw:
+; de - ptr to bullet_draw_ptr in the runtime data
 			BULLET_DRAW(sprite_get_scr_addr_bomb, __RAM_DISK_S_BOMB)

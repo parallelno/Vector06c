@@ -22,9 +22,9 @@ bullets_init:
 
 
 ; bullet initialization
+; ex. BULLET_INIT(snowflake_update, snowflake_draw, ACTOR_STATUS_BIT_INVIS, SNOWFLAKE_STATUS_INVIS_TIME, snowflake_run, snowflake_init_speed)
 ; in:
 ; bc - caster pos
-; ex. TODO: add an example
 .macro BULLET_INIT(BULLET_UPDATE_PTR, BULLET_DRAW_PTR, BULLET_STATUS, BULLET_STATUS_TIMER, BULLET_ANIM_PTR, BULLET_SPEED_INIT)
 			lxi d, @init_data
 			jmp bullet_init
@@ -72,8 +72,6 @@ bullet_init:
 			mov m, c
 			inx h
 			mov m, b
-			; advance hl to bullet_id
-			inx h ; TODO: think of excluding bullet_id from the bullet_data
 			; advance hl to bullet_status
 			inx h
 			pop b

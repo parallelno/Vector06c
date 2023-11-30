@@ -79,6 +79,30 @@ packer_bin_ext	= ""
 
 BIN_DIR = "bin\\"
 
+# ANSI escape codes for text color
+class TextColor:
+    BLACK = '\033[30m'
+    RED = '\033[31m'
+    GREEN = '\033[32m'
+    YELLOW = '\033[33m'
+    BLUE = '\033[34m'
+    MAGENTA = '\033[35m'
+    CYAN = '\033[36m'
+    WHITE = '\033[37m'
+    RESET = '\033[0m'  # Reset to default color
+    GRAY = '\033[90m'
+    GRAY_LIGHT = '\033[37m'	
+
+def printc(text, color = TextColor.WHITE):
+	print(color + text + TextColor.RESET)
+
+def exit_error(text, comment = ""):
+	printc(text, TextColor.RED)
+	printc("Stop export", TextColor.RED)
+	if comment != "":
+		printc(f"additional details: {comment}", TextColor.GRAY)
+	exit(1)
+
 def set_assembler_path(path):
 	global assembler_path
 	assembler_path = path
@@ -262,36 +286,34 @@ def find_backbuffers_bank_ids(source_j, source_j_path):
 					continue
 
 	if bank_id_backbuffer < 0:
-		print(f"export_ram_disk_init ERROR: no chunk is reserved for bank_id_backbuffer. path: {source_j_path}\n")
-		exit(1)
+		exit_error(f"export_ram_disk_init ERROR: no chunk is reserved for bank_id_backbuffer. path: {source_j_path}\n")
 	if bank_id_backbuffer2 < 0:
-		print(f"export_ram_disk_init ERROR: no chunk is reserved for bank_id_backbuffer2. path: {source_j_path}\n")
-		exit(1)
+		exit_error(f"export_ram_disk_init ERROR: no chunk is reserved for bank_id_backbuffer2. path: {source_j_path}\n")
 		
 	return bank_id_backbuffer, bank_id_backbuffer2
 
 
 def compile_asm(source_path, bin_path, labels_path = ""):
 	print(f"\n;===========================================================================")
+	print(TextColor.YELLOW)
 	print(f"build: Compilation {source_path} to {bin_path}")
 
 	if len(labels_path) > 0:
 		common.run_command(f"{assembler_path} {assembler_labels_cmd} {source_path} {bin_path} >{labels_path}")	
+		print(TextColor.RESET)
 
 		if not os.path.exists(bin_path):
-			print(f'ERROR: compilation error, path: {source_path}')
-			print("Stop export")
 			with open(labels_path, "r") as file:
-				print(file.read()) 
-			exit(1)
+				labels = file.read()
+				comment = "COMPILATION OUTPUT:" + labels
+			exit_error(f'ERROR: compilation error, path: {source_path}', comment)
+
 		else:
 			size = os.path.getsize(bin_path)
-			print(f"Success. Size: {size} bytes (${size:X})")
+			printc(f"Success. Size: {size} bytes (${size:X})", TextColor.GREEN)
 			print("\n")
 
 	else:
 		common.run_command(f"{assembler_path} {source_path} {bin_path}")
 		if not os.path.exists(bin_path):
-			print(f'ERROR: compilation error, path: {source_path}')
-			print("Stop export")
-			exit(1)
+			exit_error(f'ERROR: compilation error, path: {source_path}')

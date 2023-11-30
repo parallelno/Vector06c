@@ -27,9 +27,7 @@ def export(source_j_path):
 		source_j = json.load(file)
 
 	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_DATA :
-		print(f'export_back ERROR: asset_type != "{build.ASSET_TYPE_DATA}", path: {source_j_path}')
-		print("Stop export")
-		exit(1)
+		build.exit_error(f'export_back ERROR: asset_type != "{build.ASSET_TYPE_DATA}", path: {source_j_path}')
 
 	# set the global build_db_path
 	build.build_db_init(source_j["build_db_path"])
@@ -113,9 +111,12 @@ def export(source_j_path):
 	
 	common.run_command(f"ren {bin_path} {rom_name + build.EXT_ROM}")    
 
-	print(f"\n;===========================================================================")
-	print(f"ram-disk data export: Success.")
-	print(f"start the game: {rom_path}")
+	build.printc(f";===========================================================================", build.TextColor.GREEN)
+	build.printc(f";", build.TextColor.GREEN)
+	build.printc(f"; ram-disk data export: Success.", build.TextColor.GREEN)
+	build.printc(f"; start the game: {rom_path}", build.TextColor.GREEN)
+	build.printc(f";", build.TextColor.GREEN)
+	build.printc(f";===========================================================================", build.TextColor.GREEN)
 
 	common.run_command(f"{build.emulator_path} {rom_path}", "", rom_path)
 

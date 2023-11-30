@@ -104,9 +104,7 @@ def rus_text_to_data(text, source_j_path):
 	result = []
 	for char_ in text:
 		if char_ not in rus_charset:
-			print(f'export_text ERROR: unsupported char: "{char_}" в тексте: "{text}", path: {source_j_path}')
-			print("Stop export")
-			exit(1)
+			build.exit_error(f'export_text ERROR: unsupported char: "{char_}" в тексте: "{text}", path: {source_j_path}')
 
 		result.append(rus_charset[char_])
 
@@ -147,9 +145,7 @@ def export_data(source_j_path, export_path, localization_id = build.LOCAL_ENG):
 		os.mkdir(export_dir)
 
 	if "asset_type" not in source_j or source_j["asset_type"] != build.ASSET_TYPE_TEXT :
-		print(f'export_text ERROR: asset_type != "{build.ASSET_TYPE_TEXT}", path: {source_j_path}')
-		print("Stop export")
-		exit(1) 
+		build.exit_error(f'export_text ERROR: asset_type != "{build.ASSET_TYPE_TEXT}", path: {source_j_path}')
 
 	source_name = common.path_to_basename(source_j_path)
 	asm = ""
@@ -167,9 +163,7 @@ def export_data(source_j_path, export_path, localization_id = build.LOCAL_ENG):
 			
 			asm += f"{label}:\n"
 			if localization_id not in labels_text[label]:
-				print(f'export_text ERROR: label {label} does not contain localization_id = {localization_id}.", path: {source_j_path}')
-				print("Stop export")
-				exit(1)
+				build.exit_error(f'export_text ERROR: label {label} does not contain localization_id = {localization_id}.", path: {source_j_path}')
 
 			text_lines = labels_text[label][localization_id]
 			
