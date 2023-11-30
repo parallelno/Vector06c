@@ -1,6 +1,6 @@
 			.org	$100
 main_init:
-			/* it is done in the unpacker
+			/* it is done in the main_unpacker
 			di
 			RAM_DISK_OFF()
 			mvi a, OPCODE_JMP

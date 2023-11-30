@@ -1,4 +1,4 @@
-; this is a subset of utills required only for unpacker
+; this is a subset of utills required only for main_unpacker
 .include "asm\\common\\zx0.asm"
 
 ;========================================
