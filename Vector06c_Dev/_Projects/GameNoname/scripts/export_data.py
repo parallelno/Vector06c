@@ -74,7 +74,7 @@ def export(source_j_path):
 		# generate ram_disk_init.asm. it copies and preprocess the ram-disk data
 		export_data_init.export(source_j, source_j_path, generated_code_dir, segments_info)
 
-	# export main.asm
+	# processing main.asm
 	source_path = source_j["main_asm_path"]
 
 	rom_name = "main_asm"
@@ -89,8 +89,8 @@ def export(source_j_path):
 	zx0_path = bin_path + build.packer_ext
 	common.compress(bin_path, zx0_path)
 
-	# export unpacker.asm
-	source_path = source_j["unpacker_path"]
+	# processing main_unpacker.asm
+	source_path = source_j["main_unpacker_path"]
 	rom_dir = "rom\\"
 	
 	rom_name = os.path.basename(os.getcwd())

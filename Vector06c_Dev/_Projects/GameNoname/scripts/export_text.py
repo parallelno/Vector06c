@@ -122,10 +122,13 @@ def bytes_to_asm(data, command):
 def export_if_updated(source_path, generated_dir, force_export, localization_id = build.LOCAL_ENG):
 	source_name = common.path_to_basename(source_path)
 
-	export_paths = {"ram_disk" : generated_dir + source_name + "_data" + build.EXT_ASM }
+	export_path = generated_dir + source_name + "_data" + build.EXT_ASM
+	export_paths = {}
+	#export_paths["ram"] = export_path
+	#export_paths["ram_disk"] = export_path
 
 	if force_export or is_source_updated(source_path):
-		export_data( source_path, export_paths["ram_disk"], localization_id)
+		export_data( source_path, export_path, localization_id)
 			
 		print(f"export_level: {source_path} got exported.")		
 		return True, export_paths
@@ -150,9 +153,9 @@ def export_data(source_j_path, export_path, localization_id = build.LOCAL_ENG):
 	source_name = common.path_to_basename(source_j_path)
 	asm = ""
 
-	asm = f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S\n"
-	asm += f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M\n"
-	asm += "\n"
+	# asm = f"__RAM_DISK_S_{source_name.upper()} = RAM_DISK_S\n"
+	# asm += f"__RAM_DISK_M_{source_name.upper()} = RAM_DISK_M\n"
+	#  asm += "\n"
 
 	for comment in source_j["text"]:
 		labels_text = source_j["text"][comment]

@@ -3,7 +3,7 @@ ram_disk_init:
 	;===============================================
 	;		bank_id 3, addr $8000, chunk_id 0
 	;===============================================
-			; ['global_consts_rd', 'sprite_rd', 'draw_sprite_rd', 'draw_sprite_hit_rd', 'draw_sprite_invis_rd', 'utils_rd', 'sprite_preshift_rd', 'text_rd_data', 'text_ex_rd', 'game_score_data_rd']
+			; ['global_consts_rd', 'sprite_rd', 'draw_sprite_rd', 'draw_sprite_hit_rd', 'draw_sprite_invis_rd', 'utils_rd', 'sprite_preshift_rd', 'text_ex_rd', 'game_score_data_rd']
 			; unpack the chunk into the ram-disk
 			lxi d, chunk_bank3_addr8000_0
 			lxi b, __global_consts_rd_rd_data_start

@@ -44,7 +44,7 @@
 		]
 	},
 	"main_asm_path" : "asm\\main.asm",
-	"unpacker_path" : "asm\\unpacker.asm",
+	"main_unpacker_path" : "asm\\main_unpacker.asm",
 
 	"localization" : {
 		"id" : "1",

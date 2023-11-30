@@ -30,10 +30,6 @@ __sprite_preshift_rd_rd_data_start:
 .include "asm\\render\\sprite_preshift_rd.asm"
 .align 2
 __sprite_preshift_rd_rd_data_end:
-__text_rd_data_rd_data_start:
-.include "generated\\text\\text_rd_data.asm"
-.align 2
-__text_rd_data_rd_data_end:
 __text_ex_rd_rd_data_start:
 .include "asm\\render\\text_ex_rd.asm"
 .align 2

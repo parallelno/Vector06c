@@ -211,21 +211,7 @@ def gfx_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 
 		# TODO: make runtime sprite mirroring feature
 		# it saves: 2256 bytes (hero_l, and monsters)
-		'''
-		Success. Size: 54468 bytes ($d4c4) in 1.750s
 
-		monster runtime data moved over buffers
-		Success. Size: 53954 bytes ($d2c2) in 1.057s
-		gain -514
-
-		Success. Size: 53212 bytes ($cfdc) in 1.144s
-		gain -742
-
-		all monsters
-		Success. Size: 51698 bytes ($c9f2) in 1.075s
-		gain -1514
-		total gain -2256
-		'''
 		if mirrored:
 			l = len(bytes1)
 			bytes1 = [0] * l

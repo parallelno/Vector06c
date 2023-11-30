@@ -23,6 +23,7 @@
 .include "asm\\screens\\stats.asm"
 .include "asm\\game.asm"
 .include "asm\\main_data.asm"
+.include "generated\\text\\text_rd_data.asm"
 
 main_start:
 			CALL_RAM_DISK_FUNC(__sound_init, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
