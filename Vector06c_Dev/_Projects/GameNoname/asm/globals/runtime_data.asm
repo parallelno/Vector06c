@@ -257,8 +257,9 @@ game_status_use_pie:			= game_status + 3	; show dialog when the hero used a pie 
 game_status_use_clothes:		= game_status + 4	; show dialog when the hero used a clothes the first time
 game_status_use_spoon:			= game_status + 5	; show dialog when the hero used a spoon the first time
 game_status_first_freeze:		= game_status + 6	; show dialog when the hero freeze the monster the first time
-game_status_fart				= game_status + 7	; status when a hero eats many cabbage
-game_status_end:				= game_status + 8
+game_status_fart:				= game_status + 7	; a status acquired for eating cabbage
+game_status_burner_quest_room:	= game_status + 8	; a status contains an index for burner_quest_room_ids array
+game_status_end:				= game_status + 9
 
 ;=============================================================================
 ;

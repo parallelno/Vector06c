@@ -29,10 +29,10 @@ burner_quest_room_ids_len: = burner_quest_room_ids_end - burner_quest_room_ids
 burner_quest_init:
 			mov b, a ; temp
 
-			; item_id_burner contains an index for burner_quest_room_ids array.
+			; game_status_burner_quest_room contains an index for burner_quest_room_ids array.
 			; That array contains room_ids in a proper sequence where a player will see it.
 			; when a burner shows up in a room, item_id_burner offsets to the next room_id
-			lda global_items + ITEM_ID_BURNER_QUEST - 1; because the first item_id = 1
+			lda game_status_burner_quest_room
 			HL_TO_A_PLUS_INT16(burner_quest_room_ids)
 			lda room_id
 			cmp m
@@ -40,7 +40,7 @@ burner_quest_init:
 
 			; it is a dedicated room,
 			; advance the index to the next dedicated room in a sequence
-			lxi h, global_items + ITEM_ID_BURNER_QUEST - 1; because the first item_id = 1
+			lxi h, game_status_burner_quest_room
 			inr m
 
 			mov a, b

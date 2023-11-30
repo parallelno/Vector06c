@@ -34,9 +34,7 @@
 ;		item_id = 4 - key 3
 ;		item_id = 5 - key 4
 ;		item_id = 6 - key 5
-; TODO: think of moving quest items into the game status table
 		ITEM_ID_UI_MAX			= 8		; items with item_id >= ITEM_ID_UI_MAX do not show up on the ui panel
-		ITEM_ID_BURNER_QUEST	= 15	; reserved for burner_quest
 
 ; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. res_id = d. see runtime_data.asm->resources_inst_data for details
 ;		res_id 				= 0 ; a coin (increases the game score when picked up) ; (tiledata = 7*16+0 = 160)
