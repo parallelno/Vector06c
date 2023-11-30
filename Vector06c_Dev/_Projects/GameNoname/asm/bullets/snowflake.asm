@@ -66,7 +66,7 @@ snowflake_init_speed:
 
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to bullet_update_ptr in the runtime data
+; de - ptr to bullet_update_ptr 
 snowflake_update:
 			; advance to bullet_status
 			LXI_H_TO_DIFF(bullet_update_ptr, bullet_status)
@@ -161,6 +161,6 @@ snowflake_update:
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to bullet_draw_ptr in the runtime data
+; de - ptr to bullet_draw_ptr 
 snowflake_draw:
 			BULLET_DRAW(sprite_get_scr_addr_snowflake, __RAM_DISK_S_SNOWFLAKE)

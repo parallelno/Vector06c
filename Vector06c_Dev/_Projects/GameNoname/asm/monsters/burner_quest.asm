@@ -51,7 +51,7 @@ burner_quest_init:
 ;========================================================
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to monster_update_ptr in the runtime data
+; de - ptr to monster_update_ptr 
 burner_quest_update:
 			; store de
 			push d

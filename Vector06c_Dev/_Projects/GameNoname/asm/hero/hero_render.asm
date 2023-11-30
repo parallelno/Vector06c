@@ -106,7 +106,7 @@ hero_copy_to_scr:
 
 hero_erase:
 
-			; TODO: optimize. erase only that is outside of the updated hero region
+			; TODO: optimize. erase only if that is outside of the updated hero region
 			lhld hero_erase_scr_addr
 			xchg
 			lhld hero_erase_wh

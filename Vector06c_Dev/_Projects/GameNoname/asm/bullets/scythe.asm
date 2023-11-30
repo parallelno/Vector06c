@@ -121,7 +121,7 @@ scythe_init_speed:
 			
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to bullet_update_ptr in the runtime data
+; de - ptr to bullet_update_ptr 
 scythe_update:
 			; advance to bullet_status_timer
 			LXI_H_TO_DIFF(bullet_update_ptr, bullet_status_timer)
@@ -192,6 +192,6 @@ scythe_update:
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to bullet_draw_ptr in the runtime data
+; de - ptr to bullet_draw_ptr 
 scythe_draw:
 			BULLET_DRAW(sprite_get_scr_addr_scythe, __RAM_DISK_S_SCYTHE)

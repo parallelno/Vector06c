@@ -268,7 +268,7 @@
 
 .macro CPI_WITH_ZERO(int8_const = 0)
 		.if int8_const != 0
-			.error "CPI_WITH_ZERO macros is used with a non-zero constant, val = ", int8_const
+			.error "CPI_WITH_ZERO macros is used with a non-zero constant, const = ", int8_const
 		.endif
 		ora a
 .endmacro

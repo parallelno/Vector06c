@@ -171,7 +171,7 @@ vfx_init:
 
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to bullet_update_ptr in the runtime data
+; de - ptr to bullet_update_ptr 
 vfx_update:
 			LXI_H_TO_DIFF(bullet_update_ptr, bullet_anim_timer)
 			dad d
@@ -203,12 +203,12 @@ sprite_get_scr_addr_vfx:
 
 ; draw a non-preshifted sprite into a backbuffer
 ; in:
-; de - ptr to bullet_draw_ptr in the runtime data
+; de - ptr to bullet_draw_ptr 
 vfx_draw:
 			BULLET_DRAW(sprite_get_scr_addr_vfx, __RAM_DISK_S_VFX, false)
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to bullet_draw_ptr in the runtime data
+; de - ptr to bullet_draw_ptr 
 vfx_draw4:
 			BULLET_DRAW(sprite_get_scr_addr_vfx4, __RAM_DISK_S_VFX4, false)

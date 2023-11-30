@@ -96,7 +96,7 @@ sword_check_tiledata:
 
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to bullet_update_ptr in the runtime data
+; de - ptr to bullet_update_ptr 
 sword_update:
 			; advance to bullet_status
 			LXI_H_TO_DIFF(bullet_update_ptr, bullet_status)
@@ -204,6 +204,6 @@ sword_update:
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to bullet_draw_ptr in the runtime data
+; de - ptr to bullet_draw_ptr 
 sword_draw:
 			BULLET_DRAW(sprite_get_scr_addr_sword, __RAM_DISK_S_SWORD)

@@ -40,7 +40,7 @@ firepool_init:
 ;========================================================
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to monster_update_ptr in the runtime data
+; de - ptr to monster_update_ptr 
 firepool_update:
 			; advance hl to monster_anim_timer
 			LXI_H_TO_DIFF(monster_update_ptr, monster_anim_timer)
@@ -88,6 +88,6 @@ firepool_impacted:
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to monster_draw_ptr in the runtime data
+; de - ptr to monster_draw_ptr 
 firepool_draw:
 			MONSTER_DRAW(sprite_get_scr_addr1, __RAM_DISK_S_VFX)

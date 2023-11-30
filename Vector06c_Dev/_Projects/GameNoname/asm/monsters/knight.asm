@@ -54,6 +54,7 @@ KNIGHT_STATUS_DEFENCE_INIT		= 2
 KNIGHT_STATUS_DEFENCE			= 3
 KNIGHT_STATUS_MOVE_INIT			= 4
 KNIGHT_STATUS_MOVE				= 5
+KNIGHT_STATUS_PANIC				= 6
 
 ; status duration in updates.
 KNIGHT_STATUS_DETECT_HERO_TIME	= 100
@@ -93,7 +94,7 @@ knight_init:
 ;========================================================
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to monster_update_ptr in the runtime data
+; de - ptr to monster_update_ptr 
 knight_update:
 			; advance hl to monster_status
 			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
@@ -411,6 +412,6 @@ knight_update_anim_check_collision_hero:
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to monster_draw_ptr in the runtime data
+; de - ptr to monster_draw_ptr 
 knight_draw:
 			MONSTER_DRAW(sprite_get_scr_addr_knight, __RAM_DISK_S_KNIGHT)

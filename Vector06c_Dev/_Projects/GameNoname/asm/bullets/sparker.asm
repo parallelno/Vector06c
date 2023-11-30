@@ -112,7 +112,7 @@ sparker_init_speed:
 			
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to bullet_update_ptr in the runtime data
+; de - ptr to bullet_update_ptr 
 sparker_update:
 			; advance to bullet_status_timer
 			LXI_H_TO_DIFF(bullet_update_ptr, bullet_status_timer)

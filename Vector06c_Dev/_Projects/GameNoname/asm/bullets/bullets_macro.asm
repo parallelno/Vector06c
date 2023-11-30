@@ -1,7 +1,7 @@
 ; draw a bullet sprite into a backbuffer
 ; ex. BULLET_DRAW(sprite_get_scr_addr_scythe, __RAM_DISK_S_SCYTHE)
 ; in:
-; de - ptr to bullet_draw_ptr in the runtime data
+; de - ptr to bullet_draw_ptr 
 ; TODO: try to convert it into a function
 .macro BULLET_DRAW(sprite_get_scr_addr_bullet, __ram_disk_s, check_invis = true)
         .if check_invis
@@ -12,12 +12,13 @@
 			ani ACTOR_STATUS_BIT_INVIS
 			rnz
 
-			LXI_D_TO_DIFF(bullet_status, bullet_pos_x+1)
+			HL_ADVANCE_BY_DIFF_DE(bullet_status, bullet_pos_x+1)
 		.endif 
 		.if check_invis == false
 			LXI_H_TO_DIFF(bullet_draw_ptr, bullet_pos_x+1)
-		.endif
 			dad d
+		.endif
+			; hl - ptr to bullet_pos_x+1
 			call sprite_get_scr_addr_bullet
 			; de - sprite screen addr
 			; c - preshifted sprite idx*2 offset based on pos_x then +2

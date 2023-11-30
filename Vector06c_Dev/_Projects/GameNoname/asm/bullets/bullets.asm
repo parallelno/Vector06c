@@ -168,7 +168,7 @@ bullets_erase:
 
 ; copy sprites from a backbuffer to a scr
 ; in:
-; hl - ptr to bullet_update_ptr+1 in the runtime data
+; hl - ptr to bullet_update_ptr+1 
 bullet_copy_to_scr:
 			; advance to bullet_status
 			HL_ADVANCE_BY_DIFF_DE(bullet_update_ptr+1, bullet_status)
@@ -266,7 +266,7 @@ bullet_copy_to_scr:
 
 ; erase a sprite or restore the background behind a sprite
 ; in:
-; hl - ptr to bullet_update_ptr+1 in the runtime data
+; hl - ptr to bullet_update_ptr+1 
 ; a - BULLET_RUNTIME_DATA_* status
 bullet_erase:
 			; if a bullet is destroyed mark its data as empty
@@ -305,6 +305,6 @@ bullet_erase:
 			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 			ret
 @set_empty:
-			; hl - ptr to bullet_update_ptr+1 in the runtime data
+			; hl - ptr to bullet_update_ptr+1 
 			ACTOR_EMPTY()
 			ret

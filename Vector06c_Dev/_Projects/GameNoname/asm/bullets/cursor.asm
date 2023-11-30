@@ -20,7 +20,7 @@ cursor_init:
 			
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to bullet_update_ptr in the runtime data
+; de - ptr to bullet_update_ptr 
 cursor_update:
 			; de - ptr to bullet_update_ptr
 			; advance hl to bullet_pos_y+1

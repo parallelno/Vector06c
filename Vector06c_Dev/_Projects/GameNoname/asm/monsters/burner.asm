@@ -109,7 +109,7 @@ burner_init:
 ; uppdate for BURNER_ID
 ; anim and a gameplay logic update
 ; in:
-; de - ptr to monster_update_ptr in the runtime data
+; de - ptr to monster_update_ptr 
 burner_update:
 			; advance hl to monster_status
 			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
@@ -446,6 +446,6 @@ burner_update_anim_check_collision_hero:
 
 ; draw a sprite into a backbuffer
 ; in:
-; de - ptr to monster_draw_ptr in the runtime data
+; de - ptr to monster_draw_ptr 
 burner_draw:
 			MONSTER_DRAW(sprite_get_scr_addr_burner, __RAM_DISK_S_BURNER)

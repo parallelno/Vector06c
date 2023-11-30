@@ -2,7 +2,7 @@
 ; draw a monster sprite into a backbuffer
 ; ex. MONSTER_DRAW(sprite_get_scr_addr_skeleton, __RAM_DISK_S_SKELETON)
 ; in:
-; de - ptr to monster_draw_ptr in the runtime data
+; de - ptr to monster_draw_ptr 
 ; TODO: think of converting it into a function it will save 50*4 = 200 bytes
 .macro MONSTER_DRAW(sprite_get_scr_addr_monster, __RAM_DISK_S_MONSTER)
 			LXI_H_TO_DIFF(monster_draw_ptr, monster_pos_x+1)

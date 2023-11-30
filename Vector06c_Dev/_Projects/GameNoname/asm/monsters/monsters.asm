@@ -280,7 +280,7 @@ monsters_erase:
 
 ; copy sprites from a backbuffer to a scr
 ; in:
-; hl - ptr to monster_update_ptr+1 in the runtime data
+; hl - ptr to monster_update_ptr+1 
 monster_copy_to_scr:
 			; advance to monster_status
 			HL_ADVANCE_BY_DIFF_DE(monster_update_ptr+1, monster_status)
@@ -379,7 +379,7 @@ monster_copy_to_scr:
 ; TODO: think of using one instead of monster_erase and bullet_erase
 ; erase a sprite or restore the background behind a sprite
 ; in:
-; hl - ptr to monster_update_ptr+1 in the runtime data
+; hl - ptr to monster_update_ptr+1 
 ; a - MONSTER_RUNTIME_DATA_* status
 monster_erase:
 			; if a monster is destroyed mark its data as empty
@@ -418,7 +418,7 @@ monster_erase:
 			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 			ret
 @set_empty:
-			; hl - ptr to monster_update_ptr+1 in the runtime data
+			; hl - ptr to monster_update_ptr+1 
 			ACTOR_EMPTY()
 			ret
 
