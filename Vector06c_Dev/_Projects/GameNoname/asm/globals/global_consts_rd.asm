@@ -8,6 +8,6 @@
 .include "asm\\levels\\backs_consts.asm"
 .include "asm\\monsters\\monsters_consts.asm"
 .include "asm\\bullets\\bullets_consts.asm"
-.include "asm\\globals\\buffers.asm"
+.include "asm\\globals\\runtime_data.asm"
 .include "asm\\bullets\\vfx_consts.asm"
 .include "asm\\globals\\controls_consts.asm"

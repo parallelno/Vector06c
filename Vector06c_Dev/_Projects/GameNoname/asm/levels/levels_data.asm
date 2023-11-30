@@ -26,7 +26,7 @@
 ; ffff = 4, teleport to 32-47 room_id, room_id = d+32
 ; ffff = 5, teleport to 48-63 room_id, room_id = d+48
 
-; ffff == 6, a global item. a hero interacts with it when he steps on it. item_id = d. see buffers.asm->global_items for details
+; ffff == 6, a global item. a hero interacts with it when he steps on it. item_id = d. see runtime_data.asm->global_items for details
 ;		item_id = 0 - storytelling - an invisible tiledata to open a dialog window
 		ITEM_ID_KEY_0			= 1	; 	key 0
 ;		item_id = 2 - key 1
@@ -39,7 +39,7 @@
 		ITEM_ID_FART			= 14	; reserved for a quest to scare away knight_quest
 		ITEM_ID_BURNER_QUEST	= 15	; reserved for burner_quest
 
-; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. res_id = d. see buffers.asm->resources_inst_data for details
+; ffff == 7, a resource. a hero interacts with it when he steps on it. max instances in all rooms = RESOURCES_LEN/2-RESOURCES_UNIQUE_MAX. res_id = d. see runtime_data.asm->resources_inst_data for details
 ;		res_id 				= 0 ; a coin (increases the game score when picked up) ; (tiledata = 7*16+0 = 160)
 ;		res_id 				= 1 ; a health crystal (increases health immedietly when picked up)
 		RES_ID_SWORD		= 2 ; a sword (the main weapon)

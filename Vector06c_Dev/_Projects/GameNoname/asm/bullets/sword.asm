@@ -121,7 +121,8 @@ sword_update:
 
 @die:
 			HL_ADVANCE_BY_DIFF_DE(bullet_status_timer, bullet_update_ptr+1)
-			jmp actor_destroy
+			ACTOR_DESTROY()
+			ret
 
 @delay_update:
 			; hl - ptr to bullet_status

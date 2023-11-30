@@ -3,6 +3,7 @@
 ; bc - vfx pos_xy
 ; de - vfx_anim_ptr (ex. vfx_puff)
 ; it utilizes bullet runtime data
+; cc 496
 vfx_init4:
 ; TODO: think of using BULLET_INIT instead of the code below
 			xchg
@@ -86,6 +87,7 @@ vfx_init4:
 ; bc - vfx screen addr
 ; de - vfx_anim_ptr (ex. vfx_puff)
 ; it utilizes bullet runtime data
+; cc 568
 vfx_init:
 ; TODO: think of using BULLET_INIT instead of the code below
 			xchg

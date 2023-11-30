@@ -50,7 +50,7 @@
 ; if a collision: hl points to actor_pos_x 
 ; uses:
 ; bc, de, hl, a
-; TODO: think of converting it into a func. each macro takes 492 bytes
+; TODO: it is 492 bytes long. think of converting it into a func. it can ponetially save +3.5K bytes
 .macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actor_status_timer, actor_pos_x, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, collision_handler) 
 			HL_ADVANCE_BY_DIFF_BC(actor_status_timer, actor_pos_x)
 			push h ; (stack) <- pos_x ptr, to restore it in @apply_new_pos

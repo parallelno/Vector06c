@@ -1,12 +1,12 @@
 
-; TODO: optimization. try to use faster rnd.
-
 ; 16-bit xorshift pseudorandom number generator
 ; http://www.retroprogramming.com/2017/07/xorshift-pseudorandom-numbers-in-z80.html?m=1
 
 ; out:   
 ; hl - 16-bit pseudo-random number
 ; a = h
+; cc - 116
+; TODO: optimization. try to use faster rnd.
 random:
 			lxi h, 1       ; seed must not be 0
 			mov a, h
@@ -23,7 +23,7 @@ random:
 			mov l, a
 			xra h
 			mov h, a
-			shld random+1		; 116
+			shld random+1
 			ret
 
 /*
@@ -32,6 +32,7 @@ random:
 ; hl
 ; out:
 ; a - random number
+; cc - 84
 random:
 @mainCodeAddr:
 			lxi h, $100
@@ -42,7 +43,7 @@ random:
 			inr l
 			sbb m
 			shld @mainCodeAddr+1
-			sta @rnd+1				; 84
+			sta @rnd+1
 			ret
 */
 
@@ -53,7 +54,7 @@ random:
 ; S = R - 1
 ; an 8-bit unsigned integer. 256 period
 ; http://www.z80.info/pseudo-random.txt
-
+; cc - 60
 RndVal		.byte 34
 random:
 			lxi	h, RndVal
@@ -64,7 +65,7 @@ random:
 			xri $1f
 			add m
 			sbi 255
-			mov m, a		; 60
+			mov m, a
 			ret
 */
 /*
@@ -73,7 +74,7 @@ random:
 ; I: -
 ; O: A=RND
 ; M: HL, AF
-
+; cc - 52
 RndVal		.byte 1
 random:
 			lxi	h, RndVal
@@ -82,6 +83,6 @@ random:
 			add	a
 			add	m
 			adi	7
-			mov	m, a					; 52
+			mov	m, a
 			ret            
 */

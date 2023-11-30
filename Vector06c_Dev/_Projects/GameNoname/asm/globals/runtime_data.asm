@@ -1,6 +1,5 @@
 	; this line for VSCode proper formating
 ; TODO: move all global vars here
-; TODO: rename buffers.asm to vars.asm
 ;=============================================================================
 ; contains statuss of breakables. should be reseted every game start and after hero respawns
 ; this structure can contain statuses for 1016 breakables across off levels
@@ -49,8 +48,7 @@ monster_runtime_data_sorted:	= $7512 ; .word monster_update_ptr
 
 ; a list of monster runtime data structs.
 ; TODO: optimization. consider using JMP_4 instead of func ptrs like monster_update_ptr
-; TODO: move it over the buffers.asm
-; TODO: write a script to convert .byte into label and an address
+; TODO: write a script that generates this file
 monsters_runtime_data:		= $7514	; $7712 - $1fe (512)(MONSTER_RUNTIME_DATA_LEN * MONSTERS_MAX)
 monster_update_ptr:			= $7514	; .word TEMP_ADDR
 monster_draw_ptr:			= $7516 ; .word TEMP_ADDR
