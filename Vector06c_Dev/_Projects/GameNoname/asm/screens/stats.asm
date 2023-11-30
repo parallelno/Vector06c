@@ -83,7 +83,7 @@ stats_screen_text_draw:
 			lxi b, STATS_NUMBERS_SCR_ADDR - END_GAME_LINE_SPACING * 5
 			call draw_text_int16
 
-			; TODO: add stats of secret rooms entered
+			; TODO: add stats of the secret rooms entered
 
 			; draw total stats
 			lxi h, game_ui_score_txt

@@ -106,7 +106,7 @@ vampire_update:
 			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
 			dad d
 			mov a, m
-			; TODO: optimization. think of using a call table
+			; a - monster_status
 			cpi VAMPIRE_STATUS_MOVE
 			jz vampire_update_move
 			cpi VAMPIRE_STATUS_DETECT_HERO

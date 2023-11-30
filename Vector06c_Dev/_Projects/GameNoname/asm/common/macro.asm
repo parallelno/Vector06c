@@ -206,7 +206,7 @@
 .endmacro
 
 ; hl = a + int16_const
-; 36 cpuc
+; 36 cc
 .macro HL_TO_A_PLUS_INT16(int16_const)
 			adi <int16_const
 			mov l, a
@@ -216,7 +216,7 @@
 .endmacro
 
 ; bc = a + int16_const
-; 36 cpuc
+; 36 cc
 .macro BC_TO_A_PLUS_INT16(int16_const)
 			adi <int16_const
 			mov c, a
@@ -226,7 +226,7 @@
 .endmacro
 
 ; bc = a * 2 + int16_const
-; cpuc = 40
+; cc = 40
 .macro BC_TO_AX2_PLUS_INT16(int16_const)
 			add a
 			adi <int16_const
@@ -236,7 +236,7 @@
 			mov b, a
 .endmacro
 ; de = a * 2 + int16_const
-; cpuc = 40
+; cc = 40
 .macro DE_TO_AX2_PLUS_INT16(int16_const)
 			add a
 			adi <int16_const
@@ -246,7 +246,7 @@
 			mov d, a
 .endmacro
 ; hl = a * 2 + int16_const
-; cpuc = 40
+; cc = 40
 .macro HL_TO_AX2_PLUS_INT16(int16_const)
 			add a
 			adi <int16_const
@@ -256,7 +256,7 @@
 			mov h, a
 .endmacro
 
-; cpuc = 44 
+; cc = 44 
 .macro HL_TO_AX4_PLUS_INT16(int16_const)
 			ADD_A(2)
 			adi <int16_const

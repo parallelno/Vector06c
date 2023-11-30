@@ -176,7 +176,6 @@ dialog_storytelling:
 dialog_callback_room_redraw:
 			mvi a, GAME_REQ_ROOM_DRAW
 			sta global_request
-			; TODO: restore breakables the same configuraton they were created
 			; reset key data
 			lxi h, CONTROL_CODE_NO
 			shld action_code

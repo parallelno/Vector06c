@@ -105,7 +105,7 @@ skeleton_update:
 			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
 			dad d
 			mov a, m
-			; TODO: optimization. think of using a call table
+			; NOT TODO: call table is not faster than properly sorted cpi/jz
 			cpi SKELETON_STATUS_MOVE
 			jz skeleton_update_move
 			cpi SKELETON_STATUS_DETECT_HERO

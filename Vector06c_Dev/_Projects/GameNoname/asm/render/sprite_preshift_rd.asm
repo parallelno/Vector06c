@@ -6,8 +6,6 @@ SPRITE_BACKWARD_ORDER = false
 COLOR_BYTE_LEN = 1
 MASK_BYTE_COLOR_BYTE_LEN = 2
 
-; TODO: calculate mirrored sprites.
-
 ; Calculate preshifted sprites
 ; a preshifting is done with 3 steps
 ; 1: copy to __sprite_tmp_buff buffer. sprites W=8 ocuppy the middle column, W16 sprites take second and the last third column

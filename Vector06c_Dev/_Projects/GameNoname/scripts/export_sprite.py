@@ -209,7 +209,7 @@ def gfx_to_asm(label_prefix, source_j, image, has_mask, source_j_path):
 
 			mask_bytes = common.combine_bits_to_bytes(mask_img)
 
-		# TODO: make runtime sprite mirroring feature
+		# TODO: make preshift with mirroring sprites
 		# it saves: 2256 bytes (hero_l, and monsters)
 
 		if mirrored:
