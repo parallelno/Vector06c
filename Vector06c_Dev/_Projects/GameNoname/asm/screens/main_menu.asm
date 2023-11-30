@@ -257,5 +257,5 @@ main_menu_init:
 			; c - tile_idx in the room_tiledata array.
 			call backs_spawn
 
-			call reset_game_updates_counter
+			call reset_game_updates_required_counter
 			ret

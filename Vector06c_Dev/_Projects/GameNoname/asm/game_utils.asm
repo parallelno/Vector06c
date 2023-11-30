@@ -45,9 +45,9 @@ fill_buff_black:
 			lxi d, SCR_BUFF_LEN / 32 - 1
 			jmp fill_mem_sp
 
-reset_game_updates_counter:
+reset_game_updates_required_counter:
 			A_TO_ZERO(NULL_BYTE)
-			sta game_updates_counter
+			sta game_updates_required
 			ret
 
 ; pause the main programm

@@ -1,5 +1,4 @@
 	; this line for VSCode proper formating
-; TODO: move all global vars here
 ;=============================================================================
 ; contains statuss of breakables. should be reseted every game start and after hero respawns
 ; this structure can contain statuses for 1016 breakables across off levels
@@ -258,9 +257,27 @@ game_status_end:				= game_status + 7
 
 ;=============================================================================
 ;
-;	free space [$7beb - $7bff]
+;	free space [$7bea - $7bf6]
 ;
 
+;=============================================================================
+;
+; global states 2
+;
+global_states_2:		= $7bf7
+border_color_idx:		= global_states_2 + 0 ; .byte
+scr_offset_y:			= global_states_2 + 1 ; .byte
+
+; it is used to check how many updates needs to happened to sync with interruptions
+game_updates_required:	= global_states_2 + 2 ; .byte
+
+; a lopped counter increased every game update
+game_update_counter:	= global_states_2 + 3 ; .byte
+
+; used for the movement
+char_temp_x:			= global_states_2 + 4 ; .word ; temporal X
+char_temp_y:			= global_states_2 + 6 ; .word ; temporal Y
+global_states_2_end:	= global_states_2 + 8
 ;=============================================================================
 ;
 ; hero resources

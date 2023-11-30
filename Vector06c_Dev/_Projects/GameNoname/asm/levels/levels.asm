@@ -36,10 +36,12 @@ level_init:
 			lxi b, LEVEL_INIT_TBL_LEN
 			call copy_mem
 
-			; copy a palette from the ram-disk, then request for using it
+			; init the screen
 			call level_init_palette
 			mvi a, 1
 			sta border_color_idx
+			mvi a, SCR_VERTICAL_OFFSET_DEFAULT
+			sta scr_offset_y
 
 			; erase rooms spawn data
 			lxi h, rooms_spawn_rates
@@ -118,12 +120,12 @@ level_update:
 			; reset level command
 			A_TO_ZERO(GLOBAL_REQ_NONE)
 			sta global_request
-			jmp reset_game_updates_counter
+			jmp reset_game_updates_required_counter
 @room_draw:
 			call room_redraw
 			A_TO_ZERO(GLOBAL_REQ_NONE)
 			sta global_request
-			jmp reset_game_updates_counter
+			jmp reset_game_updates_required_counter
 @level_load:
 			call level_init
 			jmp game_ui_draw

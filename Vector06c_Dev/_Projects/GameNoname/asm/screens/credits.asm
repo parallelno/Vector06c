@@ -39,5 +39,5 @@ credits_screen_init:
 
 			call credits_screen_text_draw
 
-			call reset_game_updates_counter
+			call reset_game_updates_required_counter
 			ret

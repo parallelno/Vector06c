@@ -418,9 +418,9 @@
 			mov m, a
 .endmacro
 
-.macro CHECK_GAME_UPDATE_COUNTER(@game_updates_counter)
+.macro CHECK_GAME_UPDATE_COUNTER(@game_updates_required)
 			; check if an interuption happened
-			lxi h, @game_updates_counter
+			lxi h, @game_updates_required
 			mov a, m
 			ora a
 			rz

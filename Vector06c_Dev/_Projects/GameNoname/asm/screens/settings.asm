@@ -84,7 +84,7 @@ settings_screen_init:
 			call settings_screen_text_draw
 			call settings_screen_cursor_init
 
-			call reset_game_updates_counter
+			call reset_game_updates_required_counter
 			ret
 
 settings_screen_text_draw:

@@ -6,7 +6,6 @@
 ; main_init must be the first code inclusion
 
 .include "asm\\globals\\main_init.asm"
-.include "asm\\globals\\global_vars.asm"
 .include "generated\\code\\ram_disk_consts.asm"
 
 .include "asm\\levels\\room_consts.asm" ; moved from a game.asm over here because of sone compilers issues. it was not able to find some consts

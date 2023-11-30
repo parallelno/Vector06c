@@ -8,7 +8,7 @@
 .include "asm\\monsters\\monsters_consts.asm"
 .include "asm\\bullets\\bullets_consts.asm"
 
-.include "asm\\globals\\buffers.asm"
+.include "asm\\globals\\runtime_data.asm"
 
 .include "asm\\render\\draw_tile.asm"
 .include "asm\\render\\draw_back.asm"
@@ -29,7 +29,7 @@
 
 main_game:
 			call game_init
-			call reset_game_updates_counter
+			call reset_game_updates_required_counter
 @loop:
 			call game_update
 			call game_draw
@@ -48,7 +48,7 @@ game_update:
 			inr m
 
 @loop:
-			CHECK_GAME_UPDATE_COUNTER(game_updates_counter)
+			CHECK_GAME_UPDATE_COUNTER(game_updates_required)
 
 			; check the pause
 			lda global_request

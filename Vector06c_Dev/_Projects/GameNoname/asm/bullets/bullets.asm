@@ -42,6 +42,7 @@ bullets_init:
 ; when it calls BULLET_SPEED_INIT code
 ; in:
 ; de - ptr to bullet_speed_x
+; cc 876
 bullet_init:
 			lxi h, 0
 			dad	sp

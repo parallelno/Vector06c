@@ -68,7 +68,7 @@ screen_simple_update:
 			inr m
 
 @loop:
-			CHECK_GAME_UPDATE_COUNTER(game_updates_counter)
+			CHECK_GAME_UPDATE_COUNTER(game_updates_required)
 
 @spec_update_func:
 			call TEMP_ADDR
