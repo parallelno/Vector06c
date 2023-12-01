@@ -275,8 +275,8 @@ actor_erase:
 			inx h
 			mov h, m
 			mov l, a
-			; hl - bullet_erase_wh
-			; de - bullet_erase_scr_addr
+			; hl - actor_erase_wh
+			; de - actor_erase_scr_addr
 
 			; check if it needs to restore the background
 			push h
@@ -289,6 +289,109 @@ actor_erase:
 			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
 			ret
 @set_empty:
-			; hl - ptr to bullet_update_ptr+1 
+			; hl - ptr to actor_update_ptr+1 
 			ACTOR_EMPTY()
 			ret
+
+
+; copy sprites from a backbuffer to a scr
+; requires (bullet_status - bullet_erase_scr_addr) == (monster_status - monster_erase_scr_addr)
+; in:
+; hl - ptr to actor_update_ptr+1 
+; de - LXI_D_TO_DIFF(actor_update_ptr+1, actor_status)
+actor_copy_to_scr:
+			; validation
+		.if (bullet_status - bullet_erase_scr_addr) != (monster_status - monster_erase_scr_addr)
+			.error "actor_erase func fails because (bullet_status - bullet_erase_scr_addr) != (monster_status - monster_erase_scr_addr)"
+		.endif
+		
+			; if it is invisible, return
+			mov a, m
+			ani ACTOR_STATUS_BIT_INVIS
+			rnz
+
+			; advance to monster_erase_scr_addr
+			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_erase_scr_addr)
+			; read monster_erase_scr_addr
+			mov c, m
+			inx h
+			mov b, m
+			inx h
+			; read monster_erase_scr_addr_old
+			mov e, m
+			inx h
+			mov d, m
+			; store monster_erase_scr_addr temp
+			xchg
+			shld @old_top_right_corner+1
+			xchg
+			; store monster_erase_scr_addr to monster_erase_scr_addr_old
+			mov m, b
+			dcx h
+			mov m, c
+			; bc - hero_erase_scr_addr
+			; de - hero_erase_scr_addr_old
+			; hl - ptr to monster_erase_scr_addr_old
+			; get min(b, d), min(c, e)
+			mov a, d
+			cmp b
+			jc @keep_old_x
+			mov d, b
+@keep_old_x:
+			mov a, e
+			cmp c
+			jc @keep_old_y
+			mov e, c
+@keep_old_y:
+			; tmp store a scr addr to copy
+			push d
+			; bc - monster_erase_scr_addr
+			; calc top-right corner addr (hero_erase_scr_addr + monster_erase_wh)
+			INX_H(2)
+			mov d, b
+			mov e, c
+			; bc - monster_erase_wh
+			mov c, m
+			inx h
+			mov b, m
+			inx h
+			xchg
+			dad b
+			xchg
+			; bc - monster_erase_wh_old
+			; store monster_erase_wh to monster_erase_wh_old
+			mov a, m
+			mov m, c
+			mov c, a
+			inx h
+			mov a, m
+			mov m, b
+			mov b, a
+			; calc old top-right corner addr (hero_erase_scr_addr_old + monster_erase_wh_old)
+@old_top_right_corner:
+			lxi h, TEMP_WORD
+			dad b
+			; hl - hero_erase_scr_addr_old + monster_erase_wh_old
+			; de - hero_erase_scr_addr + monster_erase_wh
+			; get max(h, d), max(l, e)
+			mov a, h
+			cmp d
+			jnc @keep_old_tr_x
+			mov h, d
+@keep_old_tr_x:
+			mov a, l
+			cmp e
+			jnc @keep_old_tr_y
+			mov l, e
+@keep_old_tr_y:
+			; hl - top-right corner scr addr to copy
+			; de - a scr addr to copy
+			pop d
+			; calc bc (width, height)
+			mov a, h
+			sub d
+			mov b, a
+			mov a, l
+			sub e
+			mov c, a
+			jmp sprite_copy_to_scr_v

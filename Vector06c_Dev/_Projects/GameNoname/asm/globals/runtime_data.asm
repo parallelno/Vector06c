@@ -363,9 +363,11 @@ room_tiledata:		= $7e00
 room_tiledata_end:	= room_tiledata + ROOM_TILEDATA_LEN
 
 ;=============================================================================
-; buffer overlapping checker
 ;
+; validation
 
+
+; buffer overlapping checker
 BUFFERS_START_ADDR	= room_tiledata_backup
 BUFFERS_END_ADDR	= room_tiledata_end
 
