@@ -381,47 +381,11 @@ monster_copy_to_scr:
 ; in:
 ; hl - ptr to monster_update_ptr+1 
 ; a - MONSTER_RUNTIME_DATA_* status
+; cc ~ 3480 if it is mostly restore a background
 monster_erase:
-			; if a monster is destroyed mark its data as empty
-			cpi ACTOR_RUNTIME_DATA_DESTR
-			jz @set_empty
-
-			; advance to monster_status
-			HL_ADVANCE_BY_DIFF_DE(monster_update_ptr+1, monster_status)
-			; if it is invisible, return
-			mov a, m
-			ani ACTOR_STATUS_BIT_INVIS
-			rnz
-
-			; advance to monster_erase_scr_addr
-			HL_ADVANCE_BY_DIFF_DE(monster_status, monster_erase_scr_addr)
-			mov e, m
-			inx h
-			mov d, m
-
-			HL_ADVANCE_BY_DIFF_BC(monster_erase_scr_addr+1, monster_erase_wh)
-			mov a, m
-			inx h
-			mov h, m
-			mov l, a
-			; hl - monster_erase_wh
-			; de - monster_erase_scr_addr
-
-			; check if it needs to restore the background
-			push h
-			push d
-			call room_check_tiledata_restorable
-			pop d
-			pop h
-
-			jnz sprite_copy_to_back_buff_v ; restore a background
-			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
-			ret
-@set_empty:
-			; hl - ptr to monster_update_ptr+1 
-			ACTOR_EMPTY()
-			ret
-
+			LXI_D_TO_DIFF(monster_update_ptr+1, monster_status)
+			jmp actor_erase
+			
 ; in:
 ; de - ptr to monster_impacted_ptr + 1
 ; c - hero_weapon_id

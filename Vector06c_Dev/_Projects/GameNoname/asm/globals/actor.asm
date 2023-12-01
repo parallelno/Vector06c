@@ -234,3 +234,61 @@ actors_call_if_alive:
 			dad d
 			jmp @loop
 			ret
+
+; erase a sprite or restore the background behind a sprite
+; requires (bullet_status - bullet_erase_scr_addr) == (monster_status - monster_erase_scr_addr)
+; requires (bullet_erase_scr_addr+1 - bullet_erase_wh) == (monster_erase_scr_addr+1 - monster_erase_wh)
+; in:
+; hl - ptr to actor_update_ptr+1 
+; de - LXI_D_TO_DIFF(actor_update_ptr+1, actor_status)
+; a - ACTOR_RUNTIME_DATA_* status
+actor_erase:
+			; validation
+		.if (bullet_status - bullet_erase_scr_addr) != (monster_status - monster_erase_scr_addr)
+			.error "actor_erase func fails because (bullet_status - bullet_erase_scr_addr) != (monster_status - monster_erase_scr_addr)"
+		.endif
+		.if (bullet_erase_scr_addr+1 - bullet_erase_wh) != (monster_erase_scr_addr+1 - monster_erase_wh)
+			.error "actor_erase func fails because (bullet_erase_scr_addr+1 - bullet_erase_wh) != (monster_erase_scr_addr+1 - monster_erase_wh)"
+		.endif
+
+			; if an actor is destroyed mark its data as empty
+			cpi ACTOR_RUNTIME_DATA_DESTR
+			jz @set_empty
+
+			; de - LXI_D_TO_DIFF(actor_update_ptr+1, actor_status)
+			; advance to actor_status
+			dad d
+
+			; if it is invisible, return
+			mov a, m
+			ani ACTOR_STATUS_BIT_INVIS
+			rnz
+
+			; advance to actor_erase_scr_addr
+			HL_ADVANCE_BY_DIFF_DE(bullet_status, bullet_erase_scr_addr)
+			mov e, m
+			inx h
+			mov d, m
+
+			HL_ADVANCE_BY_DIFF_BC(bullet_erase_scr_addr+1, bullet_erase_wh)
+			mov a, m
+			inx h
+			mov h, m
+			mov l, a
+			; hl - bullet_erase_wh
+			; de - bullet_erase_scr_addr
+
+			; check if it needs to restore the background
+			push h
+			push d
+			call room_check_tiledata_restorable
+			pop d
+			pop h
+
+			jnz sprite_copy_to_back_buff_v ; restore a background
+			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
+			ret
+@set_empty:
+			; hl - ptr to bullet_update_ptr+1 
+			ACTOR_EMPTY()
+			ret

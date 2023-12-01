@@ -263,48 +263,10 @@ bullet_copy_to_scr:
 			mov c, a
 			jmp sprite_copy_to_scr_v
 
-
 ; erase a sprite or restore the background behind a sprite
 ; in:
-; hl - ptr to bullet_update_ptr+1 
+; hl - ptr to bullet_update_ptr+1
 ; a - BULLET_RUNTIME_DATA_* status
 bullet_erase:
-			; if a bullet is destroyed mark its data as empty
-			cpi ACTOR_RUNTIME_DATA_DESTR
-			jz @set_empty
-
-			; advance to bullet_status
-			HL_ADVANCE_BY_DIFF_DE(bullet_update_ptr+1, bullet_status)
-			; if it is invisible, return
-			mov a, m
-			ani ACTOR_STATUS_BIT_INVIS
-			rnz
-
-			; advance to bullet_erase_scr_addr
-			HL_ADVANCE_BY_DIFF_DE(bullet_status, bullet_erase_scr_addr)
-			mov e, m
-			inx h
-			mov d, m
-
-			HL_ADVANCE_BY_DIFF_BC(bullet_erase_scr_addr+1, bullet_erase_wh)
-			mov a, m
-			inx h
-			mov h, m
-			mov l, a
-			; hl - bullet_erase_wh
-			; de - bullet_erase_scr_addr
-
-			; check if it needs to restore the background
-			push h
-			push d
-			call room_check_tiledata_restorable
-			pop d
-			pop h
-
-			jnz sprite_copy_to_back_buff_v ; restore a background
-			CALL_RAM_DISK_FUNC(__erase_sprite, __RAM_DISK_S_BACKBUFF | __RAM_DISK_M_ERASE_SPRITE | RAM_DISK_M_8F)
-			ret
-@set_empty:
-			; hl - ptr to bullet_update_ptr+1 
-			ACTOR_EMPTY()
-			ret
+			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_status)
+			jmp actor_erase
