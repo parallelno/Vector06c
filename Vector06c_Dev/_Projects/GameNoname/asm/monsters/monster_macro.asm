@@ -83,3 +83,51 @@
 			mvi c, MONSTER_DAMAGE
 			jmp hero_impacted
 .endmacro
+
+; in:
+; hl - ptr to monster_status
+.macro MONSTER_UPDATE_DETECT_HERO(distance, hero_detected_status, hero_detected_status_time, hero_detected_anim, detect_anim_speed, anim_check_collision_hero, next_status, next_status_time)
+			; hl - ptr to monster_status
+			; advance hl to monster_status_timer
+			inx h
+			dcr m
+			jz @set_move_init
+			
+			; check a hero-to-monster distance
+			; advance hl to monster_pos_x+1
+			HL_ADVANCE_BY_DIFF_DE(monster_status_timer, monster_pos_x+1)
+			mvi c, distance
+			call actor_to_hero_distance
+			jnc @anim_check_collision_hero
+
+			; hero detected
+			; hl - ptr to monster_pos_x+1
+			; advance hl to monster_status
+			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_status)
+			mvi m, hero_detected_status
+
+		.if hero_detected_status_time != NULL
+			inx h
+			mvi m, hero_detected_status_time
+			; advance hl to monster_anim_ptr
+			HL_ADVANCE_BY_DIFF_BC(monster_status_timer, monster_anim_ptr)
+			mvi m, <hero_detected_anim
+			inx h
+			mvi m, >hero_detected_anim
+		.endif
+			ret
+
+@anim_check_collision_hero:
+			HL_ADVANCE_BY_DIFF_DE(monster_pos_x+1, monster_anim_timer)
+			mvi a, detect_anim_speed
+			jmp anim_check_collision_hero
+
+
+@set_move_init:
+ 			; hl - ptr to monster_status_timer
+			mvi m, next_status_time ; TODO: use a rnd number instead of a const
+			; advance hl to monster_status
+			dcx h
+			mvi m, next_status
+			ret
+.endmacro

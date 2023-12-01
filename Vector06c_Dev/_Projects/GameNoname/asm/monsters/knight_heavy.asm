@@ -72,27 +72,9 @@ knight_heavy_check_panic:
 			; advance hl to monster_pos_x+1
 			HL_ADVANCE_BY_DIFF_DE(monster_update_ptr, monster_pos_x+1)
 			; hl - ptr to monster_pos_x+1
-
-			; check hero-monster pos_x diff
 			mvi c, KNIGHT_QUEST_DETECT_HERO_DISTANCE
-
-			lda hero_pos_x+1
-			sub m
-			jnc @check_pos_x_diff
-			cma
-@check_pos_x_diff:
-			cpi KNIGHT_QUEST_DETECT_HERO_DISTANCE
-			rnc ; return if a pos_x diff too big
-
-			; advance hl to monster_pos_y+1
-			INX_H(2) 
-			lda hero_pos_y+1
-			sub m
-			jnc @check_pos_y_diff
-			cma
-@check_pos_y_diff:
-			cpi KNIGHT_QUEST_DETECT_HERO_DISTANCE
-			rnc ; return if a pos_x diff too big
+			call actor_to_hero_distance
+			rnc ; return if it's too distanced
 			
 			; set the panic state
 @restore_hl:

@@ -35,16 +35,17 @@ STACK_MAIN_PROGRAM_ADDR	= $8000-2 ; because erase funcs can let the interruption
 STACK_INTERRUPTION_ADDR	= $7F80 ; it is used for iterruption2 func
 STACK_TMP_MAIN_PROGRAM_ADDR = $100
 
-BYTE_LEN                = 1
-WORD_LEN                = 2
-ADDR_LEN                = 2
-JMP_4_LEN               = 4
+BYTE_LEN	= 1
+WORD_LEN	= 2
+ADDR_LEN	= 2
+JMP_4_LEN	= 4
 
-TEMP_BYTE				= $00
-TEMP_WORD				= $0000
-TEMP_ADDR				= $0000
-NULL_PTR				= $0
-NULL_BYTE				= $0
+TEMP_BYTE	= $00
+TEMP_WORD	= $0000
+TEMP_ADDR	= $0000
+NULL_PTR	= $0
+NULL_BYTE	= $0
+NULL		= 0
 
 ; levels
 TILE_WIDTH		= 16

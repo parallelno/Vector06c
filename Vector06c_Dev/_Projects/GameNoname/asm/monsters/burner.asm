@@ -134,11 +134,14 @@ burner_update:
 			ret
 
 ; burner is immune to freeze
+; in:
+; hl - ptr to monster_status
 burner_update_freeze:
-			; hl = monster_status
 			mvi m, MONSTER_STATUS_INIT
 			ret
 
+; in:
+; hl - ptr to monster_status
 burner_update_detect_hero_init:
 			; hl = monster_status
 			mvi m, BURNER_STATUS_DETECT_HERO
@@ -150,75 +153,14 @@ burner_update_detect_hero_init:
 			mvi m, >burner_idle
 			ret
 
+; in:
+; hl - ptr to monster_status
 burner_update_detect_hero:
-			; hl = monster_status
-			; advance hl to monster_status_timer
-			inx h
-			dcr m
-			jz @set_move_init
-@check_mob_hero_distance:
-			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_BC(monster_status_timer, monster_pos_x+1)
-			; check hero-monster pos_x diff
-			lda hero_pos_x+1
-			sub m
-			jc @check_neg_pos_x_diff
-			cpi BURNER_DETECT_HERO_DISTANCE
-			jc @check_pos_y_diff
-			jmp @update_anim_hero_detect_x
-@check_neg_pos_x_diff:
-			cpi -BURNER_DETECT_HERO_DISTANCE
-			jnc @check_pos_y_diff
-			jmp @update_anim_hero_detect_x
-@check_pos_y_diff:
-			; advance hl to monster_pos_y+1
-			INX_H(2)
-			; check hero-monster pos_y diff
-			lda hero_pos_y+1
-			sub m
-			jc @check_neg_pos_y_diff
-			cpi BURNER_DETECT_HERO_DISTANCE
-			jc @hero_detected
-			jmp @update_anim_hero_detect_y
-@check_neg_pos_y_diff:
-			cpi -BURNER_DETECT_HERO_DISTANCE
-			jnc @hero_detected
-			jmp @update_anim_hero_detect_y
-@hero_detected:
-			; hl = monster_pos_y+1
-			; advance hl to monster_status
-			HL_ADVANCE_BY_DIFF_BC(monster_pos_y+1, monster_status)
-			mvi m, BURNER_STATUS_DASH_PREP
-			inx h
-			mvi m, BURNER_STATUS_DASH_PREP_TIME
-			; advance hl to monster_anim_ptr
-			HL_ADVANCE_BY_DIFF_BC(monster_status_timer, monster_anim_ptr)
-			mvi m, <burner_dash
-			inx h
-			mvi m, >burner_dash
-			ret
-			
-@update_anim_hero_detect_x:
-			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_anim_timer)
-			mvi a, BURNER_ANIM_SPEED_DETECT_HERO
-			jmp burner_update_anim_check_collision_hero
-@update_anim_hero_detect_y:
-			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_BC(monster_pos_y+1, monster_anim_timer)
-			mvi a, BURNER_ANIM_SPEED_DETECT_HERO
-			jmp burner_update_anim_check_collision_hero
+			MONSTER_UPDATE_DETECT_HERO(BURNER_DETECT_HERO_DISTANCE, BURNER_STATUS_DASH_PREP, BURNER_STATUS_DASH_PREP_TIME, burner_dash, BURNER_ANIM_SPEED_DETECT_HERO, burner_update_anim_check_collision_hero, BURNER_STATUS_MOVE_INIT, BURNER_STATUS_MOVE_TIME)
 
-@set_move_init:
- 			; hl - ptr to monster_status_timer
-			mvi m, BURNER_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
-			; advance hl to monster_status
-			dcx h
-			mvi m, BURNER_STATUS_MOVE_INIT
-			ret
-
+; in:
+; hl - ptr to monster_status
 burner_update_move_init:
-			; hl = monster_status
 			mvi m, BURNER_STATUS_MOVE
 
 			xchg
@@ -286,8 +228,9 @@ burner_update_move_init:
 			mvi m, >burner_run_r
             ret
 
+; in:
+; hl - ptr to monster_status
 burner_update_move:
-			; hl = monster_status
 			; advance hl to monster_status_timer
 			inx h
 			dcr m
@@ -316,6 +259,8 @@ burner_update_move:
 			mvi m, BURNER_STATUS_DETECT_HERO_INIT
 			ret
 
+; in:
+; hl - ptr to monster_status
 burner_update_relax:
 			; hl = monster_status
 			; advance hl to monster_status_timer
@@ -334,6 +279,8 @@ burner_update_relax:
 			mvi m, BURNER_STATUS_MOVE_INIT
 			ret
 
+; in:
+; hl - ptr to monster_status
 burner_update_dash_prep:
 			; hl = monster_status
 			; advance hl to monster_status_timer
@@ -415,6 +362,8 @@ burner_update_dash_prep:
 			mov m, d
 			ret
 
+; in:
+; hl - ptr to monster_status
 burner_update_dash:
 			; hl = monster_status
 			; advance hl to monster_status_timer

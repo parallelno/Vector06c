@@ -117,6 +117,8 @@ knight_update:
 			jz monster_update_freeze
 			ret
 
+; in:
+; hl - ptr to monster_status
 knight_update_detect_hero_init:
 			; hl = monster_status
 			mvi m, KNIGHT_STATUS_DETECT_HERO
@@ -128,66 +130,13 @@ knight_update_detect_hero_init:
 			mvi m, >knight_idle
 			ret
 
+; in:
+; hl - ptr to monster_status
 knight_update_detect_hero:
-			; hl = monster_status
-			; advance hl to monster_status_timer
-			inx h
-			dcr m
-			jz @set_move_init
-@check_mob_hero_distance:
-			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_BC(monster_status_timer, monster_pos_x+1)
-			; check hero-monster pos_x diff
-			lda hero_pos_x+1
-			sub m
-			jc @check_neg_pos_x_diff
-			cpi KNIGHT_DETECT_HERO_DISTANCE
-			jc @check_pos_y_diff
-			jmp @update_anim_hero_detect_x
-@check_neg_pos_x_diff:
-			cpi -KNIGHT_DETECT_HERO_DISTANCE
-			jnc @check_pos_y_diff
-			jmp @update_anim_hero_detect_x
-@check_pos_y_diff:
-			; advance hl to monster_pos_y+1
-			INX_H(2)
-			; check hero-monster pos_y diff
-			lda hero_pos_y+1
-			sub m
-			jc @check_neg_pos_y_diff
-			cpi KNIGHT_DETECT_HERO_DISTANCE
-			jc @hero_detected
-			jmp @update_anim_hero_detect_y
-@check_neg_pos_y_diff:
-			cpi -KNIGHT_DETECT_HERO_DISTANCE
-			jnc @hero_detected
-			jmp @update_anim_hero_detect_y
-@hero_detected:
-			; hl = monster_pos_y+1
-			; advance hl to monster_status
-			HL_ADVANCE_BY_DIFF_BC(monster_pos_y+1, monster_status)
-			mvi m, KNIGHT_STATUS_DEFENCE_INIT
-			ret
+			MONSTER_UPDATE_DETECT_HERO( KNIGHT_DETECT_HERO_DISTANCE, KNIGHT_STATUS_DEFENCE_INIT, NULL, NULL, KNIGHT_ANIM_SPEED_DETECT_HERO, knight_update_anim_check_collision_hero, KNIGHT_STATUS_MOVE_INIT, KNIGHT_STATUS_MOVE_TIME)
 
-@update_anim_hero_detect_x:
-			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_BC(monster_pos_x+1, monster_anim_timer)
-			mvi a, KNIGHT_ANIM_SPEED_DETECT_HERO
-			jmp knight_update_anim_check_collision_hero
-@update_anim_hero_detect_y:
-			; advance hl to monster_anim_timer
-			HL_ADVANCE_BY_DIFF_BC(monster_pos_y+1, monster_anim_timer)
-			mvi a, KNIGHT_ANIM_SPEED_DETECT_HERO
-			jmp knight_update_anim_check_collision_hero
-
-@set_move_init:
- 			; hl - ptr to monster_status_timer
-			mvi m, KNIGHT_STATUS_MOVE_TIME ; TODO: use a rnd number instead of a const
-			; advance hl to monster_status
-			dcx h
-			mvi m, KNIGHT_STATUS_MOVE_INIT
-			ret
-
+; in:
+; hl - ptr to monster_status
 knight_update_speedup_init:
 			; hl - ptr to monster_status
 			mvi m, KNIGHT_STATUS_DEFENCE
@@ -261,6 +210,8 @@ knight_update_speedup_init:
 			mov m, d
 			ret
 
+; in:
+; hl - ptr to monster_status
 knight_update_speedup:
 			; hl = monster_status
 			; advance hl to monster_status_timer
@@ -294,6 +245,8 @@ knight_update_speedup:
 			mvi a, KNIGHT_ANIM_SPEED_DEFENCE
 			jmp knight_update_anim_check_collision_hero			
 
+; in:
+; hl - ptr to monster_status
 knight_update_move_init:
 			; hl = monster_status
 			mvi m, KNIGHT_STATUS_MOVE
@@ -373,6 +326,8 @@ knight_update_move_init:
 			mvi m, >knight_run_r
             ret
 
+; in:
+; hl - ptr to monster_status
 knight_update_move:
 			; hl = monster_status
 			; advance hl to monster_status_timer

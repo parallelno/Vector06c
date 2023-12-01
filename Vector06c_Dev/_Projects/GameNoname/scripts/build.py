@@ -305,8 +305,7 @@ def compile_asm(source_path, bin_path, labels_path = ""):
 		if not os.path.exists(bin_path):
 			with open(labels_path, "r") as file:
 				labels = file.read()
-				comment = "COMPILATION OUTPUT:" + labels
-			exit_error(f'ERROR: compilation error, path: {source_path}', comment)
+			exit_error(f'ERROR: compilation error, path: {source_path}', labels)
 
 		else:
 			size = os.path.getsize(bin_path)

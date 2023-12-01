@@ -304,7 +304,7 @@ actor_copy_to_scr:
 		.if (bullet_status - bullet_erase_scr_addr) != (monster_status - monster_erase_scr_addr)
 			.error "actor_erase func fails because (bullet_status - bullet_erase_scr_addr) != (monster_status - monster_erase_scr_addr)"
 		.endif
-		
+
 			; if it is invisible, return
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
@@ -395,3 +395,31 @@ actor_copy_to_scr:
 			sub e
 			mov c, a
 			jmp sprite_copy_to_scr_v
+
+; check a hero-to-actor distance
+; in:
+; hl - ptr to actor_pos_x+1
+; c - distance
+; out:
+; hl - ptr to actor_pos_x+1
+; c flag is 0 if it's too far
+actor_to_hero_distance:
+			lda hero_pos_x+1
+			sub m
+			jnc @check_pos_x_diff
+			cma
+@check_pos_x_diff:
+			cmp c
+			rnc ; return if a pos_x diff too big
+			; advance hl to monster_pos_y+1
+			INX_H(2)
+			lda hero_pos_y+1
+			sub m
+			jnc @check_pos_y_diff
+			cma
+@check_pos_y_diff:
+			DCX_H(2)
+			cmp c
+			rnc ; return if a pos_x diff too big
+			; hero is in distance
+			ret
