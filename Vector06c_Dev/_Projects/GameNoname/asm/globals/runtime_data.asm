@@ -2,6 +2,12 @@
 ; TODO: write a script that generates this file
 
 ;=============================================================================
+;
+; for validation
+; TODO: keep updated
+BUFFERS_START_ADDR	= $7300
+
+;=============================================================================
 ; contains statuss of breakables. should be reseted every game start and after hero respawns
 ; this structure can contain statuses for 1016 breakables across off levels
 ; each room can contain variable amount of breakables
@@ -388,20 +394,10 @@ room_tiledata_end:	= room_tiledata + ROOM_TILEDATA_LEN
 
 ;=============================================================================
 ;
-; validation
+;	free space [$7ef0 - $7eff]
+;
 
-
-; buffer overlapping checker
-BUFFERS_START_ADDR	= room_tiledata_backup
-BUFFERS_END_ADDR	= room_tiledata_end
-
-
-; TODO: update checkers after finalizing buffers layout
-.if room_tiles_gfx_ptrs_end > room_tiledata
-	.error "room_tiles_gfx_ptrs_end and room_tiledata overlap"
-.endif
-
-.if STACK_MIN_ADDR < BUFFERS_END_ADDR
-	.error "game temp buffers and stack overlap"
-.endif
+;=============================================================================
+;
+; STACK_MIN_ADDR = $7f00
 

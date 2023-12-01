@@ -195,7 +195,7 @@
 ; to replace xra a with a meaningful macro
 .macro A_TO_ZERO(int8_const, useXRA = true)
 		.if int8_const != 0
-			.error "A_TO_ZERO macros is used for a non-zero constant assignment, val = ", int8_const
+			.error "A_TO_ZERO macros was used with a non-zero constant = ", int8_const
 		.endif
 		.if useXRA
 			xra a
@@ -268,7 +268,7 @@
 
 .macro CPI_WITH_ZERO(int8_const = 0)
 		.if int8_const != 0
-			.error "CPI_WITH_ZERO macros is used with a non-zero constant, const = ", int8_const
+			.error "CPI_WITH_ZERO macros was used with a non-zero constant = ", int8_const
 		.endif
 		ora a
 .endmacro

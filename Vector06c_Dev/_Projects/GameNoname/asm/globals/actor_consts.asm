@@ -11,5 +11,5 @@ ACTOR_RUNTIME_DATA_END	  = $ff ; the end of the actor's runtime data
 ; for ex. to skip rendering making the actor invisible, or make it blink every second frame
 ACTOR_STATUS_BIT_INVIS			= %1000_0000
 ACTOR_STATUS_BIT_BLINK			= %0100_0000
-ACTOR_STATUS_BIT_NON_GAMEPLAY	= %0010_0000 ; non gameplay statuses can be combined with ACTOR_STATUS_BIT_CINEMATIC to make the status checking faster
+ACTOR_STATUS_BIT_NON_GAMEPLAY	= %0010_0000 ; non gameplay statuses can be combined with ACTOR_STATUS_BIT_NON_GAMEPLAY to make the status checking faster
 ACTOR_STATUS_NO_UPDATE			= %1110_0000

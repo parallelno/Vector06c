@@ -343,8 +343,8 @@ copy_to_ram_disk32:
 ; Copy data (max 510) from the ram-disk to ram w/o blocking interruptions
 ; this macro is for checking if the length fits the range 1-510
 .macro COPY_FROM_RAM_DISK(length)
-		.if length > 255*2
-			.error "The length is bigger than supported (510)"
+		.if length > 510
+			.error "The length (" length ") is bigger than required (510)"
 		.endif
 		.if length > 0
 			mvi l, length/2
