@@ -69,7 +69,7 @@ hero_runtime_data_end:		= hero_runtime_data + 33
 
 ;=============================================================================
 ;
-;	free space [$7511 - $7511]
+;	free space [$7511]
 ;	
 
 ;=============================================================================
@@ -214,12 +214,9 @@ rooms_spawn_rate_monsters:		= rooms_spawn_rates 					; 0 means 100% chance to sp
 rooms_spawn_rates_end:			= rooms_spawn_rate_monsters + ROOMS_MAX ; $7b80
 
 ;=============================================================================
-; hero global statuses
-; >0 - will NOT be rendered, copied to the screen, and erased in the back buffer
-; 0 - the opposite
-; TODO: use only a bit, then combine it with other hero global statuses.
-hero_global_status_no_render: = $7b80 ; byte
-
+;
+;	free space [$7b80]
+;
 ;=============================================================================
 ;
 ; global states

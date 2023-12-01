@@ -130,20 +130,11 @@ hero_dead_fade_r:
 			;advance hl to hero_status_timer
 			inx h
 			mvi m, HERO_STATUS_DEATH_WAIT_SPARKER_DURATION
-			; stop drawing a hero
-			mvi a, HERO_RENDER_STATUS_FALSE
-			sta hero_global_status_no_render
 
 			; fill all visual buffs with thedarkers color in the current palette
 			call fill_all_black
 
-			; fill up the tile_data_buff with tiledata = 1 
-			; (walkable tile, restore back, no decal)
-			;lxi h, room_tiledata
-			;mvi a, <room_tiledata_end
-			;mvi c, 1
-			;call fill_mem_short
-			mvi c, 1
+			mvi c, TILEDATA_RESTORE_TILE
 			call room_fill_tiledata
 
 			; copy a palette from the ram-disk, then request for using it

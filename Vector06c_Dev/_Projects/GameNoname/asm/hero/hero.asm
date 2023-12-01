@@ -38,7 +38,7 @@ hero_respawn:
 			sta hero_pos_x+1
 			mov a, c
 			sta hero_pos_y+1
-			jmp hero_room_init
+			ret
 
 hero_room_init:
 			call hero_idle_start
@@ -54,6 +54,4 @@ hero_room_init:
 			; 16x15 size
 			lxi h, SPRITE_W_PACKED_MIN<<8 | SPRITE_H_MIN
 			shld hero_erase_wh_old
-			A_TO_ZERO(HERO_RENDER_STATUS_TRUE)
-			sta hero_global_status_no_render
 			ret
