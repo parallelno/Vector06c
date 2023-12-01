@@ -24,7 +24,7 @@ hero_update:
 			cz hero_impacted_update
 			cpi HERO_STATUS_INVINCIBLE
 			cz hero_invincible_update
-			ani ACTOR_STATUS_BIT_NON_GAMEPLAY ; TODO: bug???->> A reg has a broken status value now
+			ani ACTOR_STATUS_BIT_NON_GAMEPLAY
 			jnz hero_dead
 
 			; check if an attack key is pressed
