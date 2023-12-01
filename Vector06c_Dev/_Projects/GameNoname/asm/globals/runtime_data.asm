@@ -1,4 +1,6 @@
 	; this line for VSCode proper formating
+; TODO: write a script that generates this file
+
 ;=============================================================================
 ; contains statuss of breakables. should be reseted every game start and after hero respawns
 ; this structure can contain statuses for 1016 breakables across off levels
@@ -36,8 +38,32 @@ room_tiledata_backup:				= $7400
 room_tiledata_backup_end:			= $7400 + ROOM_TILEDATA_BACKUP_LEN
 
 ;=============================================================================
+; hero runtime data
+hero_runtime_data:			= $74f0
+hero_update_ptr:			= hero_runtime_data + 0		; .word hero_update
+hero_draw_ptr:				= hero_runtime_data + 2		; .word hero_draw
+hero_impacted_ptr:			= hero_runtime_data + 4		; .word hero_impacted ; called by a monster's bullet, a monster, etc. to affect a hero
+hero_type:					= hero_runtime_data + 6		; .byte MONSTER_TYPE_ALLY
+hero_status:				= hero_runtime_data + 7		; .byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
+hero_status_timer:			= hero_runtime_data + 8		; .byte 0	; a duration of the status. ticks every update
+hero_anim_timer:			= hero_runtime_data + 9		; .byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
+hero_anim_addr:				= hero_runtime_data + 10	; .word TEMP_ADDR ; holds the current frame ptr
+hero_dir:					= hero_runtime_data + 12	; .byte 1			; VDHD, V: vertical dir, H: horiz dir, D: 0 - neg dir, 1 - positive dir
+hero_erase_scr_addr:		= hero_runtime_data + 13	; .word TEMP_ADDR	; screen addr for erasing
+hero_erase_scr_addr_old:	= hero_runtime_data + 15	; .word TEMP_ADDR	; screen addr for erasing last frame 
+hero_erase_wh:				= hero_runtime_data + 17	; .word TEMP_WORD	; width, height
+hero_erase_wh_old:			= hero_runtime_data + 19	; .word TEMP_WORD	; width, height last frame
+hero_pos_x:					= hero_runtime_data + 21	; .word TEMP_WORD ; first byte is a sub-pixel coord
+hero_pos_y:					= hero_runtime_data + 23	; .word TEMP_WORD ; first byte is a sub-pixel coord
+hero_speed_x:				= hero_runtime_data + 25	; .word TEMP_WORD ; first byte is a sub-pixel coord speed
+hero_speed_y:				= hero_runtime_data + 27	; .word TEMP_WORD ; first byte is a sub-pixel coord speed
+hero_data_prev_pptr:		= hero_runtime_data + 29	; .word TEMP_ADDR
+hero_data_next_pptr:		= hero_runtime_data + 31	; .word TEMP_ADDR
+hero_runtime_data_end:		= hero_runtime_data + 33
+
+;=============================================================================
 ;
-;	free space [$74f0 - $7511]
+;	free space [$7511 - $7511]
 ;	
 
 ;=============================================================================
@@ -46,8 +72,6 @@ room_tiledata_backup_end:			= $7400 + ROOM_TILEDATA_BACKUP_LEN
 monster_runtime_data_sorted:	= $7512 ; .word monster_update_ptr
 
 ; a list of monster runtime data structs.
-; TODO: optimization. consider using JMP_4 instead of func ptrs like monster_update_ptr
-; TODO: write a script that generates this file
 monsters_runtime_data:		= $7514	; $7712 - $1fe (512)(MONSTER_RUNTIME_DATA_LEN * MONSTERS_MAX)
 monster_update_ptr:			= $7514	; .word TEMP_ADDR
 monster_draw_ptr:			= $7516 ; .word TEMP_ADDR
@@ -263,7 +287,7 @@ game_status_end:				= game_status + 9
 
 ;=============================================================================
 ;
-;	free space [$7bea - $7bf6]
+;	free space [$7bec - $7bf6]
 ;
 
 ;=============================================================================

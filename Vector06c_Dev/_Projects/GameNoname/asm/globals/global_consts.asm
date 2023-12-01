@@ -118,9 +118,6 @@ SEGMENT_8000_0000_ADDR = 0x8000
 SEGMENT_0000_7F00_SIZE_MAX = 2 ^ 31 - 256 ; because an interruption can corrupt the ram-disk memory from STACK_MIN_ADDR to STACK_TEMP_ADDR
 SEGMENT_8000_0000_SIZE_MAX = 2 ^ 31
 
-; to sort a list ob object to draw
-DRAW_LIST_FIRST_DATA_MARKER = 0
-
 ; settings
 SETTING_OFF	= 0
 SETTING_ON	= $ff

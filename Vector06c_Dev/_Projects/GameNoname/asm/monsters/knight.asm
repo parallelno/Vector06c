@@ -100,7 +100,6 @@ knight_update:
 			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
 			dad d
 			mov a, m
-			; TODO: optimization. think of using a call table
 			cpi KNIGHT_STATUS_MOVE
 			jz knight_update_move
 			cpi KNIGHT_STATUS_DETECT_HERO

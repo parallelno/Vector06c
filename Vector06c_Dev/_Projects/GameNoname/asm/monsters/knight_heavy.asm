@@ -33,7 +33,6 @@ knight_heavy_update:
 			; advance hl to monster_status
 			HL_ADVANCE_BY_DIFF_DE(monster_update_ptr, monster_status)
 			mov a, m
-			; TODO: optimization. think of using a call table
 			cpi KNIGHT_STATUS_MOVE
 			jz knight_update_move
 			cpi KNIGHT_STATUS_DETECT_HERO

@@ -1,3 +1,4 @@
+; a visual sequence when a hero lost all his life points
 hero_dead:
 			lda hero_status
 			cpi HERO_STATUS_DEATH_FADE_INIT_GB

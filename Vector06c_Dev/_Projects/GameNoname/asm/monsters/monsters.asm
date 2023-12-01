@@ -10,7 +10,7 @@
 .include "asm\\monsters\\firepool.asm"
 
 monsters_init:
-			lxi h, monsters_runtime_data
+			lxi h, NULL ; marker the end and the start of the list
 			shld monster_runtime_data_sorted
 
 			; set the last marker byte of runtime_data

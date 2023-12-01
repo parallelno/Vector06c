@@ -439,7 +439,6 @@ hero_attack_start:
 			CLAMP_A(RES_SNOWFLAKES_MAX)
 			mov m, a
 
-;TODO: make that dialog do not respawn breakables, then uncomment the code below
 			; check if a hero uses a spoon the first time
 			lda game_status_use_spoon
 			CPI_WITH_ZERO(0)

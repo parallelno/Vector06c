@@ -6,6 +6,17 @@
 
 
 hero_game_init:
+			; erase hero runtime data
+			lxi h, hero_runtime_data
+			mvi a, <hero_runtime_data_end
+			call clear_mem_short
+			lxi h, hero_update
+			shld hero_update_ptr
+			lxi h, hero_draw
+			shld hero_draw_ptr
+			lxi h, hero_impacted
+			shld hero_impacted_ptr
+						
 			; erase hero resources buffs
 			lxi h, hero_resources
 			mvi a, <hero_resources_end

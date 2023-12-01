@@ -1,25 +1,3 @@
-; hero runtime data
-; this's a struct. do not change the layout
-hero_update_ptr:			.word hero_update
-hero_draw_ptr:				.word hero_draw
-hero_impacted_ptr:			.word hero_impacted ; called by a monster's bullet, a monster, etc. to affect a hero
-hero_type:					.byte MONSTER_TYPE_ALLY
-hero_status:				.byte HERO_STATUS_IDLE ; a status describes what set of animations and behavior is active
-hero_status_timer:			.byte 0	; a duration of the status. ticks every update
-hero_anim_timer:			.byte TEMP_BYTE ; it triggers an anim frame switching when it overflows
-hero_anim_addr:				.word TEMP_ADDR ; holds the current frame ptr
-hero_dir:					.byte 1 		; VDHD, V: vertical dir, H: horiz dir, D: 0 - neg dir, 1 - positive dir
-hero_erase_scr_addr:		.word TEMP_ADDR	; screen addr for erasing
-hero_erase_scr_addr_old:	.word TEMP_ADDR	; screen addr for erasing last frame 
-hero_erase_wh:				.word TEMP_WORD	; width, height
-hero_erase_wh_old:			.word TEMP_WORD	; width, height last frame
-hero_pos_x:					.word TEMP_WORD ; first byte is a sub-pixel coord
-hero_pos_y:					.word TEMP_WORD ; first byte is a sub-pixel coord
-hero_speed_x:				.word TEMP_WORD ; first byte is a sub-pixel coord speed
-hero_speed_y:				.word TEMP_WORD ; first byte is a sub-pixel coord speed
-hero_data_prev_pptr:		.word DRAW_LIST_FIRST_DATA_MARKER
-hero_data_next_pptr:		.word monster_data_next_pptr
-;
 hero_collision_func_table:
 			; bit layout:
 			; 0, 0, (bottom-left), (bottom-right), (top_right), (top-left), 0, 0
