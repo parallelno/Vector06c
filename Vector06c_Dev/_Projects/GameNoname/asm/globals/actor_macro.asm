@@ -194,7 +194,7 @@
 			ani ACTOR_STATUS_BIT_INVIS
 			rnz
 
-			HL_FROM_TO_BY_DE(bullet_status, bullet_pos_x+1)
+			HL_ADVANCE(bullet_status, bullet_pos_x+1, REG_DE)
 		.endif 
 		.if check_invis == false
 			LXI_H_TO_DIFF(bullet_draw_ptr, bullet_pos_x+1)

@@ -184,6 +184,7 @@
 		.endif					
 .endmacro
 */
+/*
 .macro HL_FROM_TO_BY_DE(offset_from, offset_to)
 		offset_addr = offset_to - offset_from
 
@@ -194,7 +195,7 @@
 			.error "HL_FROM_TO_BY_DE(" offset_from ", " offset_to") has too small diff (" offset_addr "). Use HL_FROM_TO instead."
 		.endif			
 .endmacro
-
+*/
 
 ; it advances HL by the diff equals to (addr_to - addr_from)
 ; if reg_pair is provided, it uses dad h, overvise it uses inx h/dcx h

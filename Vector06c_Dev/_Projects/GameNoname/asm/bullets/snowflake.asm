@@ -134,12 +134,12 @@ snowflake_update:
 			lxi h, TEMP_ADDR
 @die_over_time:
 			; hl - ptr to bullet_status_timer
-			HL_FROM_TO_BY_DE(bullet_status_timer, bullet_update_ptr+1)
+			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, REG_DE)
 			ACTOR_DESTROY()
 			ret
 @die:
 			; hl - ptr to bullet_pos_x
-			HL_FROM_TO_BY_DE(bullet_pos_x, bullet_update_ptr+1)
+			HL_ADVANCE(bullet_pos_x, bullet_update_ptr+1, REG_DE)
 			ACTOR_DESTROY()
 			ret
 

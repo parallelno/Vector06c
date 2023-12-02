@@ -252,7 +252,7 @@ knight_update_move_init:
 			; advance hl to monster_status_timer
 
 			; advance hl to monster_id
-			HL_FROM_TO_BY_DE(monster_status, monster_id)
+			HL_ADVANCE(monster_status, monster_id, REG_DE)
 			mov a, m
 			cpi KNIGHT_VERT_ID
 			lxi b, (%10000000)<<8 ; tmp c = 0 

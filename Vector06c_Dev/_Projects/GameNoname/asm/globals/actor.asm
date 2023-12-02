@@ -241,7 +241,7 @@ actor_erase:
 			rnz
 
 			; advance to actor_erase_scr_addr
-			HL_FROM_TO_BY_DE(bullet_status, bullet_erase_scr_addr)
+			HL_ADVANCE(bullet_status, bullet_erase_scr_addr, REG_DE)
 			mov e, m
 			inx h
 			mov d, m

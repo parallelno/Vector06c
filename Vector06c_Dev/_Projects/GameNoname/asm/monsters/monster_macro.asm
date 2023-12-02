@@ -96,7 +96,7 @@
 			
 			; check a hero-to-monster distance
 			; advance hl to monster_pos_x+1
-			HL_FROM_TO_BY_DE(monster_status_timer, monster_pos_x+1)
+			HL_ADVANCE(monster_status_timer, monster_pos_x+1, REG_DE)
 			mvi c, distance
 			call actor_to_hero_distance
 			jnc @anim_check_collision_hero
@@ -119,7 +119,7 @@
 			ret
 
 @anim_check_collision_hero:
-			HL_FROM_TO_BY_DE(monster_pos_x+1, monster_anim_timer)
+			HL_ADVANCE(monster_pos_x+1, monster_anim_timer, REG_DE)
 			mvi a, detect_anim_speed
 			jmp anim_check_collision_hero
 

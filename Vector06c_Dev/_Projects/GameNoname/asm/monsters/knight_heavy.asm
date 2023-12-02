@@ -31,7 +31,7 @@ knight_heavy_update:
 			; hl - ptr to monster_update_ptr
 
 			; advance hl to monster_status
-			HL_FROM_TO_BY_DE(monster_update_ptr, monster_status)
+			HL_ADVANCE(monster_update_ptr, monster_status, REG_DE)
 			mov a, m
 			cpi KNIGHT_STATUS_MOVE
 			jz knight_update_move
@@ -69,7 +69,7 @@ knight_heavy_check_panic:
 			
 			; check a hero-to-monster distance
 			; advance hl to monster_pos_x+1
-			HL_FROM_TO_BY_DE(monster_update_ptr, monster_pos_x+1)
+			HL_ADVANCE(monster_update_ptr, monster_pos_x+1, REG_DE)
 			; hl - ptr to monster_pos_x+1
 			mvi c, KNIGHT_QUEST_DETECT_HERO_DISTANCE
 			call actor_to_hero_distance
@@ -80,7 +80,7 @@ knight_heavy_check_panic:
 			lxi h, TEMP_ADDR
 			; hl - ptr to monster_update_ptr
 			; advance hl to monster_status
-			HL_FROM_TO_BY_DE(monster_update_ptr, monster_status)
+			HL_ADVANCE(monster_update_ptr, monster_status, REG_DE)
 			mvi m, KNIGHT_STATUS_PANIC
 			ret
 
@@ -89,7 +89,7 @@ knight_heavy_check_panic:
 knight_update_panic:
 			; this monster goes up to the edge of the screen, then dies
 			; advance hl to monster_speed_y + 1
-			HL_FROM_TO_BY_DE(monster_status, monster_pos_y + 1)
+			HL_ADVANCE(monster_status, monster_pos_y + 1, REG_DE)
 			; hl - ptr to monster_pos_y + 1
 
 			; increase pos_y
@@ -108,7 +108,7 @@ knight_update_panic:
 @death:
 			; hl points to monster_pos_y + 1
 			; advance hl to monster_update_ptr + 1
-			HL_FROM_TO_BY_DE(monster_pos_y + 1, monster_update_ptr + 1)
+			HL_ADVANCE(monster_pos_y + 1, monster_update_ptr + 1, REG_DE)
 			; mark this monster dead death
 			ACTOR_DESTROY()
 			ret

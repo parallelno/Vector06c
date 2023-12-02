@@ -120,7 +120,7 @@ sword_update:
 			jmp actor_anim_update
 
 @die:
-			HL_FROM_TO_BY_DE(bullet_status_timer, bullet_update_ptr+1)
+			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, REG_DE)
 			ACTOR_DESTROY()
 			ret
 

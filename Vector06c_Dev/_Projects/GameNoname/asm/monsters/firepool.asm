@@ -82,7 +82,7 @@ firepool_impacted:
 
 			; mark this monster dead
 			; advance hl to monster_update_ptr+1
-			HL_FROM_TO_BY_DE(monster_pos_x+1, monster_update_ptr+1)
+			HL_ADVANCE(monster_pos_x+1, monster_update_ptr+1, REG_DE)
 			ACTOR_DESTROY()
 			ret
 
