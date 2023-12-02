@@ -122,7 +122,7 @@ monster_init:
 			mov m, b
 
 			; advance hl to monster_anim_ptr
-			HL_ADVANCE_BY_DIFF_DE(monster_status, monster_anim_ptr)
+			HL_FROM_TO_BY_DE(monster_status, monster_anim_ptr)
 
 			mov e, a
 			; e - tile_idx
@@ -221,13 +221,13 @@ monsters_get_first_collided:
 @check_collision:
 			push h
 			; advance hl to monster_type
-			HL_ADVANCE_BY_DIFF_BC(monster_update_ptr+1, monster_type)
+			HL_ADVANCE(monster_update_ptr+1, monster_type, REG_BC)
 			mov a, m
 			cpi MONSTER_TYPE_ALLY
 			jz @no_collision
 
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE_BY_DIFF_BC(monster_type, monster_pos_x+1)
+			HL_ADVANCE(monster_type, monster_pos_x+1, REG_BC)
 			; horizontal check
 			mov c, m 	; monster pos_x
 @collider_pos_x:
@@ -283,7 +283,7 @@ monsters_erase:
 ; hl - ptr to monster_update_ptr+1 
 monster_copy_to_scr:
 			; advance to monster_status
-			HL_ADVANCE_BY_DIFF_DE(monster_update_ptr+1, monster_status)
+			HL_FROM_TO_BY_DE(monster_update_ptr+1, monster_status)
 			jmp actor_copy_to_scr
 
 ; erase a sprite or restore the background behind a sprite
@@ -320,14 +320,14 @@ monster_impacted:
 			pop h
 
 			; decrease monster's health
-			HL_ADVANCE_BY_DIFF_DE(monster_pos_y+1, monster_health)
+			HL_FROM_TO_BY_DE(monster_pos_y+1, monster_health)
 			dcr m
 			rnz
 
 			; add score points
 			push h
 			; advance hl to monster_impacted_ptr+1
-			HL_ADVANCE_BY_DIFF_DE(monster_pos_y+1, monster_impacted_ptr+1)
+			HL_FROM_TO_BY_DE(monster_pos_y+1, monster_impacted_ptr+1)
 			dad d
 			mov e, m
 			mvi a, TILEDATA_FUNC_ID_MONSTERS
@@ -337,7 +337,7 @@ monster_impacted:
 
 			; mark this monster dead
 			; advance hl to monster_update_ptr+1
-			HL_ADVANCE_BY_DIFF_DE(monster_health, monster_update_ptr+1)
+			HL_FROM_TO_BY_DE(monster_health, monster_update_ptr+1)
 			ACTOR_DESTROY()
 			ret
 

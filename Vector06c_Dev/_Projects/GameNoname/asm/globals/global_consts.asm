@@ -47,6 +47,23 @@ NULL_PTR	= $0
 NULL_BYTE	= $0
 NULL		= 0
 
+REG_NONE	= 0
+REG_A		= 1
+REG_B		= 2
+REG_C		= 3
+REG_D		= 4
+REG_E		= 5
+REG_H		= 6
+REG_L		= 7
+REG_BC		= 8
+REG_DE		= 9
+REG_HL		= 10
+REG_PSW		= 11
+REG_PC		= 12
+REG_SP		= 13
+REG_HL_DAD_D= 14
+REG_HL_DAD_B= 15
+
 ; levels
 TILE_WIDTH		= 16
 TILE_WIDTH_B	= 2

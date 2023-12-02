@@ -172,17 +172,81 @@
 			lxi h, $ffff + offset_addr + 1
 		.endif
 .endmacro
+/*
+.macro HL_FROM_TO_BY_BC(offset_from, offset_to)
+		offset_addr = offset_to - offset_from
 
-.macro HL_ADVANCE_BY_DIFF_BC(offset_from, offset_to)
 		LXI_B_TO_DIFF(offset_from, offset_to)
 		dad b
-.endmacro
 
-.macro HL_ADVANCE_BY_DIFF_DE(offset_from, offset_to)
+		.if (offset_addr >= -2) && (offset_addr <= 2)
+			;.error "HL_ADVANCE(" offset_from ", " offset_to") has too small diff (" offset_addr "). Use BC_FROM_TO instead."
+		.endif					
+.endmacro
+*/
+.macro HL_FROM_TO_BY_DE(offset_from, offset_to)
+		offset_addr = offset_to - offset_from
+
 		LXI_D_TO_DIFF(offset_from, offset_to)
 		dad d
+
+		.if (offset_addr >= -2) && (offset_addr <= 2)
+			.error "HL_FROM_TO_BY_DE(" offset_from ", " offset_to") has too small diff (" offset_addr "). Use HL_FROM_TO instead."
+		.endif			
 .endmacro
 
+
+; it advances HL by the diff equals to (addr_to - addr_from)
+; if reg_pair is provided, it uses dad h, overvise it uses inx h/dcx h
+; it validates the diff suggesting improvements
+; supports only: REG_BC, REG_DE, REG_HL_DAD_B, REG_HL_DAD_D
+.macro HL_ADVANCE(addr_from, addr_to, reg_pair = REG_NONE)
+		diff_addr = addr_to - addr_from
+		
+	.if reg_pair == REG_NONE
+		.if diff_addr > 0 && diff_addr <= 2
+			.loop diff_addr
+				inx h
+			.endloop
+		.endif
+		.if diff_addr >= -2 && diff_addr < 0
+			.loop -diff_addr
+				dcx h
+			.endloop
+		.endif
+	.endif
+	.if diff_addr < -2 || diff_addr > 2
+		.if reg_pair == REG_BC
+				LXI_B_TO_DIFF(addr_from, addr_to)
+				dad b
+		.endif
+		.if reg_pair == REG_DE
+				LXI_D_TO_DIFF(addr_from, addr_to)
+				dad d
+		.endif
+		.if reg_pair == REG_HL_DAD_B
+				LXI_H_TO_DIFF(addr_from, addr_to)
+				dad b
+		.endif
+		.if reg_pair == REG_HL_DAD_D
+				LXI_H_TO_DIFF(addr_from, addr_to)
+				dad d
+		.endif		
+	.endif
+		; validations
+		.if reg_pair == REG_NONE && (diff_addr < -2 || diff_addr > 2)
+			.error "HL_ADVANCE(" addr_from ", " addr_to") with diff (" diff_addr ") is outside of the required range of [-2, 2]. Use REG_BC, REG_DE, REG_HL_DAD_D as the third argument."
+		.endif		
+		.if (reg_pair == REG_BC || reg_pair == REG_DE || reg_pair == REG_HL_DAD_B || reg_pair == REG_HL_DAD_D )  && diff_addr >= -2 && diff_addr <= 2
+			.error "HL_ADVANCE(" addr_from ", " addr_to") with diff (" diff_addr ") is in too short range [-2, 2]. Keep the third argument as REG_NONE or undefined."
+		.endif
+		.if diff_addr == 0
+			.error "HL_ADVANCE(" addr_from ", " addr_to") with diff (" diff_addr ") is detected. It's redundant operation."
+		.endif	
+		.if reg_pair == REG_A || reg_pair == REG_B || reg_pair == REG_C || reg_pair == REG_D || reg_pair == REG_E || reg_pair == REG_H || reg_pair == REG_L || reg_pair == REG_HL || reg_pair == REG_PSW || reg_pair == REG_PC || reg_pair == REG_SP
+			.error "HL_ADVANCE() with unsupported regs is detected"
+		.endif				
+.endmacro
 
 .macro LXI_H_NEG(val)
 		lxi h, $ffff - val + 1

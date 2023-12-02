@@ -110,30 +110,6 @@ actor_get_empty_data_ptr:
 			dad d
 			jmp @loop
 
-; replaces the actor runtime data with a marker 
-; indicating that there is no actor runtime data here and beyond
-; used mostly for erasing all runtime data
-.macro ACTOR_ERASE_RUNTIME_DATA(actor_update_ptr)
-			lxi h, actor_update_ptr + 1
-			mvi m, ACTOR_RUNTIME_DATA_LAST
-.endmacro
-
-; marks the actor's runtime data as it's going to be destroyed
-; in:
-; hl - update_ptr+1 ptr
-; TODO: optimize. fill up lastRemovedBulletRuntimeDataPtr
-.macro ACTOR_DESTROY()
-			mvi m, ACTOR_RUNTIME_DATA_DESTR
-.endmacro
-
-
-; marks the actor runtime data as empty
-; in:
-; hl - update_ptr+1 ptr
-; TODO: optimize. fiil up lastRemovedBulletRuntimeDataPtr
-.macro ACTOR_EMPTY()
-			mvi m, ACTOR_RUNTIME_DATA_EMPTY
-.endmacro
 
 ; calls a provided func for each actor with a status ACTOR_RUNTIME_DATA_ALIVE
 ; a ptr of a provided func has to be stored in the runtime data
@@ -244,11 +220,11 @@ actors_call_if_alive:
 ; a - ACTOR_RUNTIME_DATA_* status
 actor_erase:
 			; validation
-		.if (bullet_status - bullet_erase_scr_addr) != (monster_status - monster_erase_scr_addr)
-			.error "actor_erase func fails because (bullet_status - bullet_erase_scr_addr) != (monster_status - monster_erase_scr_addr)"
+		.if ~((bullet_status - bullet_erase_scr_addr) == (monster_status - monster_erase_scr_addr))
+			.error "actor_erase func fails because !((bullet_status - bullet_erase_scr_addr) == (monster_status - monster_erase_scr_addr))"
 		.endif
-		.if (bullet_erase_scr_addr+1 - bullet_erase_wh) != (monster_erase_scr_addr+1 - monster_erase_wh)
-			.error "actor_erase func fails because (bullet_erase_scr_addr+1 - bullet_erase_wh) != (monster_erase_scr_addr+1 - monster_erase_wh)"
+		.if ~((bullet_erase_scr_addr+1 - bullet_erase_wh) == (monster_erase_scr_addr+1 - monster_erase_wh))
+			.error "actor_erase func fails because !((bullet_erase_scr_addr+1 - bullet_erase_wh) == (monster_erase_scr_addr+1 - monster_erase_wh))"
 		.endif
 
 			; if an actor is destroyed mark its data as empty
@@ -265,12 +241,12 @@ actor_erase:
 			rnz
 
 			; advance to actor_erase_scr_addr
-			HL_ADVANCE_BY_DIFF_DE(bullet_status, bullet_erase_scr_addr)
+			HL_FROM_TO_BY_DE(bullet_status, bullet_erase_scr_addr)
 			mov e, m
 			inx h
 			mov d, m
 
-			HL_ADVANCE_BY_DIFF_BC(bullet_erase_scr_addr+1, bullet_erase_wh)
+			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh, REG_BC)
 			mov a, m
 			inx h
 			mov h, m
@@ -311,7 +287,7 @@ actor_copy_to_scr:
 			rnz
 
 			; advance to monster_erase_scr_addr
-			HL_ADVANCE_BY_DIFF_BC(monster_status, monster_erase_scr_addr)
+			HL_ADVANCE(monster_status, monster_erase_scr_addr, REG_BC)
 			; read monster_erase_scr_addr
 			mov c, m
 			inx h
