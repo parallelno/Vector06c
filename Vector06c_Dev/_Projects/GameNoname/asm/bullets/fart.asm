@@ -26,8 +26,7 @@ fart_init:
 ; in:
 ; de - ptr to bullet_speed_x
 fart_init_post:
-			LXI_H_TO_DIFF(bullet_speed_x, bullet_pos_x + 1)
-			dad d
+			HL_ADVANCE(bullet_speed_x, bullet_pos_x + 1, BY_HL_FROM_D)
 			; hl - ptr to bullet_pos_x + 1
 			mov a, m
 			; a - pos_x

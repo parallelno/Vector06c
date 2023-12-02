@@ -115,8 +115,7 @@ sparker_init_speed:
 ; de - ptr to bullet_update_ptr 
 sparker_update:
 			; advance to bullet_status_timer
-			LXI_H_TO_DIFF(bullet_update_ptr, bullet_status_timer)
-			dad d
+			HL_ADVANCE(bullet_update_ptr, bullet_status_timer, BY_HL_FROM_D)
 			dcr m
 			jz @die
 @update_movement:
@@ -126,7 +125,7 @@ sparker_update:
 			shld @sparker_pos_ptr+1
 			; hl points to bullet_pos_x+1
 			; advance hl to bullet_anim_timer
-			HL_ADVANCE(bullet_pos_x+1, bullet_anim_timer, REG_BC)
+			HL_ADVANCE(bullet_pos_x+1, bullet_anim_timer, BY_BC)
 			mvi a, SPARKER_ANIM_SPEED_MOVE
 			call actor_anim_update
 
@@ -165,7 +164,7 @@ sparker_update:
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, REG_BC)
+			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, BY_BC)
 			ACTOR_DESTROY()
 			ret
 @vfx_spawn_rate:

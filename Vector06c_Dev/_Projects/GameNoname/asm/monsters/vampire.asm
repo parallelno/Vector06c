@@ -103,8 +103,7 @@ vampire_init:
 ; de - ptr to monster_update_ptr 
 vampire_update:
 			; advance hl to monster_status
-			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
-			dad d
+			HL_ADVANCE(monster_update_ptr, monster_status, BY_HL_FROM_D)
 			mov a, m
 			; a - monster_status
 			cpi VAMPIRE_STATUS_MOVE
@@ -149,8 +148,7 @@ vampire_update_move_init:
 			xchg
 			call random
 			; advance hl to monster_speed_x
-			LXI_H_TO_DIFF(monster_status, monster_speed_x)
-			dad d
+			HL_ADVANCE(monster_status, monster_speed_x, BY_HL_FROM_D)
 
 			mvi c, 0 ; tmp c=0
 			cpi $40
@@ -195,7 +193,7 @@ vampire_update_move_init:
 			inx h
 			mov m, c
 @set_anim:
-			HL_ADVANCE(monster_speed_y+1, monster_anim_ptr, REG_BC)
+			HL_ADVANCE(monster_speed_y+1, monster_anim_ptr, BY_BC)
 			; a = rnd
 			CPI_WITH_ZERO(0)
 			; if rnd is positive (up or right movement), then play vampire_run_r anim
@@ -224,14 +222,14 @@ vampire_update_move:
 			
 			; hl points to monster_pos_y+1
 			; advance hl to monster_anim_timer
-			HL_ADVANCE(monster_pos_y+1, monster_anim_timer, REG_BC)
+			HL_ADVANCE(monster_pos_y+1, monster_anim_timer, BY_BC)
 			mvi a, VAMPIRE_ANIM_SPEED_MOVE
 			jmp vampire_update_anim_check_collision_hero
 
 @set_move_init:
 			; hl points to monster_pos_x
 			; advance hl to monster_status
-			HL_ADVANCE(monster_pos_x, monster_status, REG_BC)
+			HL_ADVANCE(monster_pos_x, monster_status, BY_BC)
 			mvi m, VAMPIRE_STATUS_MOVE_INIT
 			inx h
 			mvi m, VAMPIRE_STATUS_MOVE_TIME
@@ -293,7 +291,7 @@ vampire_update_shoot:
 			mvi m, VAMPIRE_STATUS_RELAX_TIME
 
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE(monster_status_timer, monster_pos_x+1, REG_BC)
+			HL_ADVANCE(monster_status_timer, monster_pos_x+1, BY_BC)
 			mov b, m
 			HL_ADVANCE(monster_pos_x+1, monster_pos_y+1)
 			mov c, m

@@ -56,15 +56,14 @@ burner_quest_update:
 			; store de
 			push d
 			; advance hl to monster_id
-			LXI_H_TO_DIFF(monster_update_ptr, monster_id)
-			dad d
+			HL_ADVANCE(monster_update_ptr, monster_id, BY_HL_FROM_D)
 			; check what burner it is
 			mov a, m
 			cpi BURNER_RIGHT_ID
 			jz @burner_right
 @burner_up:			
 			; advance hl to monster_speed_y + 1
-			HL_ADVANCE(monster_id, monster_pos_y + 1, REG_BC)
+			HL_ADVANCE(monster_id, monster_pos_y + 1, BY_BC)
 			; hl - ptr to monster_pos_y + 1
 			; increase pos_y
 			mov a, m
@@ -81,7 +80,7 @@ burner_quest_update:
 
 @burner_right:
 			; advance hl to monster_pos_x + 1
-			HL_ADVANCE(monster_id, monster_pos_x + 1, REG_BC)
+			HL_ADVANCE(monster_id, monster_pos_x + 1, BY_BC)
 			; hl - ptr to monster_pos_x + 1
 			; increase pos_x
 			mov a, m
@@ -97,7 +96,7 @@ burner_quest_update:
 @update_anim:
 			; hl points to monster_update_ptr
 			; advance hl to monster_anim_timer
-			HL_ADVANCE(monster_update_ptr, monster_anim_timer, REG_BC)
+			HL_ADVANCE(monster_update_ptr, monster_anim_timer, BY_BC)
 
 			mvi a, BURNER_ANIM_SPEED_MOVE
 			jmp burner_update_anim_check_collision_hero

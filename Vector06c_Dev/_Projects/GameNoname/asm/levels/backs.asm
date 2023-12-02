@@ -164,7 +164,7 @@ back_runtime_data_ptr_update: = backs_update+1
 			MVI_A_TO_DIFF(back_anim_timer, back_anim_ptr + 1 + BACK_RUNTIME_DATA_LEN)
 @advance_and_save_ptr:
 			add l
-			mov l, a			
+			mov l, a
 @save_ptr:	sta back_runtime_data_ptr_update			
 			ret
 

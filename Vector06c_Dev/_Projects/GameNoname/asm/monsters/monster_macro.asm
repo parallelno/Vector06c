@@ -5,8 +5,7 @@
 ; de - ptr to monster_draw_ptr 
 ; TODO: think of converting it into a function it will save 50*4 = 200 bytes
 .macro MONSTER_DRAW(sprite_get_scr_addr_monster, __ram_disk_s)
-			LXI_H_TO_DIFF(monster_draw_ptr, monster_pos_x+1)
-			dad d
+			HL_ADVANCE(monster_draw_ptr, monster_pos_x+1, BY_HL_FROM_D)
 
 			call sprite_get_scr_addr_monster
 			; hl - ptr to monster_pos_y+1
@@ -14,7 +13,7 @@
 			mov a, c
 
 			; advance hl to monster_anim_ptr
-			HL_ADVANCE(monster_pos_y+1, monster_anim_ptr, REG_BC)
+			HL_ADVANCE(monster_pos_y+1, monster_anim_ptr, BY_BC)
 			mov b, m
 			inx h
 			push h
@@ -34,7 +33,7 @@
 			inx h
 			mov m, b
 			; advance hl to monster_erase_wh
-			HL_ADVANCE(monster_erase_scr_addr+1, monster_erase_wh, REG_BC)
+			HL_ADVANCE(monster_erase_scr_addr+1, monster_erase_wh, BY_BC)
 			; store a width and a height into monster_erase_wh
 			mov m, e
 			inx h
@@ -53,7 +52,7 @@
 .macro MONSTER_CHECK_COLLISION_HERO(MONSTER_COLLISION_WIDTH, MONSTER_COLLISION_HEIGHT, MONSTER_DAMAGE)
 			; hl points to monster_anim_ptr
 			; advance hl to monster_pos_x
-			HL_ADVANCE(monster_anim_ptr, monster_pos_x+1, REG_BC)
+			HL_ADVANCE(monster_anim_ptr, monster_pos_x+1, BY_BC)
 			; horizontal check
 			mov c, m ; pos_x
 			lda hero_pos_x+1
@@ -96,7 +95,7 @@
 			
 			; check a hero-to-monster distance
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE(monster_status_timer, monster_pos_x+1, REG_DE)
+			HL_ADVANCE(monster_status_timer, monster_pos_x+1, BY_DE)
 			mvi c, distance
 			call actor_to_hero_distance
 			jnc @anim_check_collision_hero
@@ -104,7 +103,7 @@
 			; hero detected
 			; hl - ptr to monster_pos_x+1
 			; advance hl to monster_status
-			HL_ADVANCE(monster_pos_x+1, monster_status, REG_BC)
+			HL_ADVANCE(monster_pos_x+1, monster_status, BY_BC)
 			mvi m, hero_detected_status
 
 		.if hero_detected_status_time != NULL
@@ -119,7 +118,7 @@
 			ret
 
 @anim_check_collision_hero:
-			HL_ADVANCE(monster_pos_x+1, monster_anim_timer, REG_DE)
+			HL_ADVANCE(monster_pos_x+1, monster_anim_timer, BY_DE)
 			mvi a, detect_anim_speed
 			jmp anim_check_collision_hero
 

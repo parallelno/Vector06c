@@ -24,8 +24,7 @@ cursor_init:
 cursor_update:
 			; de - ptr to bullet_update_ptr
 			; advance hl to bullet_pos_y+1
-			LXI_H_TO_DIFF(bullet_update_ptr, bullet_pos_y+1)
-			dad d
+			HL_ADVANCE(bullet_update_ptr, bullet_pos_y+1, BY_HL_FROM_D)
 			; calc a bullet velocity which is = (hero_pos_y - bullet_pos_y) / 4
 			lda hero_pos_y+1
 			sub m
@@ -56,14 +55,14 @@ cursor_update:
 
 			; hl points to bullet_pos_y+1
 			; advance hl to bullet_anim_timer
-			HL_ADVANCE(bullet_pos_y+1, bullet_anim_timer, REG_BC)
+			HL_ADVANCE(bullet_pos_y+1, bullet_anim_timer, BY_BC)
 			mvi a, CURSOR_ANIM_SPEED_MOVE
 			call actor_anim_update
 			ret
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, REG_BC)
+			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, BY_BC)
 			ACTOR_DESTROY()
 			ret
 @vfx_spawn_rate:

@@ -124,8 +124,7 @@ scythe_init_speed:
 ; de - ptr to bullet_update_ptr 
 scythe_update:
 			; advance to bullet_status_timer
-			LXI_H_TO_DIFF(bullet_update_ptr, bullet_status_timer)
-			dad d
+			HL_ADVANCE(bullet_update_ptr, bullet_status_timer, BY_HL_FROM_D)
 			dcr m
 			jz @die
 @update_movement:
@@ -133,25 +132,25 @@ scythe_update:
 			
 			; hl points to bullet_pos_y+1
 			; advance hl to bullet_anim_timer
-			HL_ADVANCE(bullet_pos_y+1, bullet_anim_timer, REG_BC)
+			HL_ADVANCE(bullet_pos_y+1, bullet_anim_timer, BY_BC)
 			mvi a, SCYTHE_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(SCYTHE_COLLISION_WIDTH, SCYTHE_COLLISION_HEIGHT, SCYTHE_DAMAGE)	
 @die_after_damage:
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE(bullet_pos_y+1, bullet_update_ptr+1, REG_BC)
+			HL_ADVANCE(bullet_pos_y+1, bullet_update_ptr+1, BY_BC)
 			ACTOR_DESTROY()
 			ret
 @set_bounce_after_tile_collision:
 			; hl points to pos_x
 			; advance hl to bullet_status_timer
-			HL_ADVANCE(bullet_pos_x, bullet_status_timer, REG_BC)
+			HL_ADVANCE(bullet_pos_x, bullet_status_timer, BY_BC)
 @set_bounce:
 			; hl - ptr to bullet_status_timer
 			; advance hl to bullet_status
 			dcx h
 			mvi m, SCYTHE_STATUS_MOVE_BOUNCE
 			; advance hl to bullet_speed_x
-			HL_ADVANCE(bullet_status, bullet_speed_x, REG_BC)
+			HL_ADVANCE(bullet_status, bullet_speed_x, BY_BC)
 			mov a, m
 			inx h
 			ora m
@@ -186,7 +185,7 @@ scythe_update:
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, REG_BC)
+			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, BY_BC)
 			ACTOR_DESTROY()
 			ret
 

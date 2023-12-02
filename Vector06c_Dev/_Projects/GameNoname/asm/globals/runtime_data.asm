@@ -74,6 +74,7 @@ hero_runtime_data_end:		= hero_runtime_data + 33
 
 ;=============================================================================
 ; monsters runtime data
+;
 ; ptr to the first monster data in the sorted list
 monster_runtime_data_sorted:	= $7512 ; .word monster_update_ptr
 
@@ -119,8 +120,10 @@ tiled_img_idxs:	= $7714
 TILED_IMG_IDXS_LEN = $100
 
 ;=============================================================================
+; bullets runtime data
+; must fit inside $100 block
+;
 ; ptr to the first bullet data in the sorted list
-
 ; TODO: implement or remove it
 bullet_runtime_data_sorted:	= $7814 ; .byte <bullet_update_ptr
 
@@ -234,7 +237,8 @@ ITEM_VISIBLE_NONE			= 0
 game_ui_item_visible_addr:	= $7b84		; .byte TEMP_BYTE ; currently shown item on the panel. range [0, ITEMS_MAX-1]
 
 ;=============================================================================
-; a list of back runtime data structs.
+; back runtime data
+; must fit inside one $100 block
 backs_runtime_data:		= $7b85
 back_anim_ptr:			= backs_runtime_data 			;.word TEMP_ADDR ; also (back_anim_ptr+1) stores a marker of end of the data like ACTOR_RUNTIME_DATA_LAST
 back_scr_addr:			= back_anim_ptr + ADDR_LEN		;.word TEMP_WORD

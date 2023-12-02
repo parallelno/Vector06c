@@ -108,26 +108,25 @@ bomb_init_speed:
 ; de - ptr to bullet_update_ptr 
 bomb_update:
 			; advance to bullet_status_timer
-			LXI_H_TO_DIFF(bullet_update_ptr, bullet_status_timer)
-			dad d
+			HL_ADVANCE(bullet_update_ptr, bullet_status_timer, BY_HL_FROM_D)
 			dcr m
 			jz @die
 @update_movement:
 			ACTOR_UPDATE_MOVEMENT(bullet_status_timer, bullet_speed_y)
 			; hl - ptr to bullet_pos_x+1
 			; advance hl to bullet_anim_timer
-			HL_ADVANCE(bullet_pos_x+1, bullet_anim_timer, REG_BC)
+			HL_ADVANCE(bullet_pos_x+1, bullet_anim_timer, BY_BC)
 			mvi a, BOMB_ANIM_SPEED_MOVE
 			BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BOMB_COLLISION_WIDTH, BOMB_COLLISION_HEIGHT, BOMB_DAMAGE)
 @die_after_damage:
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE(bullet_pos_y+1, bullet_update_ptr+1, REG_BC)
+			HL_ADVANCE(bullet_pos_y+1, bullet_update_ptr+1, BY_BC)
 			ACTOR_DESTROY()
 			ret
 @die:
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, REG_BC)
+			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, BY_BC)
 			ACTOR_DESTROY()
 			ret
 

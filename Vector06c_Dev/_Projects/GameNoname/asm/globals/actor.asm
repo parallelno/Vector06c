@@ -215,8 +215,7 @@ actors_call_if_alive:
 ; requires (bullet_status - bullet_erase_scr_addr) == (monster_status - monster_erase_scr_addr)
 ; requires (bullet_erase_scr_addr+1 - bullet_erase_wh) == (monster_erase_scr_addr+1 - monster_erase_wh)
 ; in:
-; hl - ptr to actor_update_ptr+1 
-; de - LXI_D_TO_DIFF(actor_update_ptr+1, actor_status)
+; hl - actor_status
 ; a - ACTOR_RUNTIME_DATA_* status
 actor_erase:
 			; validation
@@ -231,22 +230,18 @@ actor_erase:
 			cpi ACTOR_RUNTIME_DATA_DESTR
 			jz @set_empty
 
-			; de - LXI_D_TO_DIFF(actor_update_ptr+1, actor_status)
-			; advance to actor_status
-			dad d
-
 			; if it is invisible, return
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
 			rnz
 
 			; advance to actor_erase_scr_addr
-			HL_ADVANCE(bullet_status, bullet_erase_scr_addr, REG_DE)
+			HL_ADVANCE(bullet_status, bullet_erase_scr_addr, BY_DE)
 			mov e, m
 			inx h
 			mov d, m
 
-			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh, REG_BC)
+			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh, BY_BC)
 			mov a, m
 			inx h
 			mov h, m
@@ -273,8 +268,7 @@ actor_erase:
 ; copy sprites from a backbuffer to a scr
 ; requires (bullet_status - bullet_erase_scr_addr) == (monster_status - monster_erase_scr_addr)
 ; in:
-; hl - ptr to actor_update_ptr+1 
-; de - LXI_D_TO_DIFF(actor_update_ptr+1, actor_status)
+; hl - ptr to actor_status 
 actor_copy_to_scr:
 			; validation
 		.if (bullet_status - bullet_erase_scr_addr) != (monster_status - monster_erase_scr_addr)
@@ -287,7 +281,7 @@ actor_copy_to_scr:
 			rnz
 
 			; advance to monster_erase_scr_addr
-			HL_ADVANCE(monster_status, monster_erase_scr_addr, REG_BC)
+			HL_ADVANCE(monster_status, monster_erase_scr_addr, BY_BC)
 			; read monster_erase_scr_addr
 			mov c, m
 			inx h

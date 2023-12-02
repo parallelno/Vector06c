@@ -6,17 +6,15 @@
 .macro BULLET_DRAW(sprite_get_scr_addr_bullet, __ram_disk_s, check_invis = true)
         .if check_invis
 			; advance to bullet_status
-			LXI_H_TO_DIFF(bullet_draw_ptr, bullet_status)
-			dad d
+			HL_ADVANCE(bullet_draw_ptr, bullet_status, BY_HL_FROM_D)
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
 			rnz
 
-			HL_ADVANCE(bullet_status, bullet_pos_x+1, REG_DE)
+			HL_ADVANCE(bullet_status, bullet_pos_x+1, BY_DE)
 		.endif 
 		.if check_invis == false
-			LXI_H_TO_DIFF(bullet_draw_ptr, bullet_pos_x+1)
-			dad d
+			HL_ADVANCE(bullet_draw_ptr, bullet_pos_x+1, BY_HL_FROM_D)
 		.endif
 			; hl - ptr to bullet_pos_x+1
 			call sprite_get_scr_addr_bullet
@@ -25,7 +23,7 @@
 			; hl - ptr to pos_y+1
 			mov a, c ; temp
 			; advance to bullet_anim_ptr
-			HL_ADVANCE(bullet_pos_y+1, bullet_anim_ptr, REG_BC)
+			HL_ADVANCE(bullet_pos_y+1, bullet_anim_ptr, BY_BC)
 			mov b, m
 			inx h
 			push h
@@ -45,7 +43,7 @@
 			inx h
 			mov m, b
 			; advance to bullet_erase_wh
-			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh, REG_BC)
+			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh, BY_BC)
 			; store a width and a height into bullet_erase_wh
 			mov m, e
 			inx h
@@ -68,7 +66,7 @@
 @checkCollisionHero:
 			; hl points to bullet_anim_ptr
 			; advance hl to bullet_pos_x
-			HL_ADVANCE(bullet_anim_ptr, bullet_pos_x+1, REG_BC)
+			HL_ADVANCE(bullet_anim_ptr, bullet_pos_x+1, BY_BC)
 			; horizontal check
 			mov c, m ; pos_x
 			lda hero_pos_x+1

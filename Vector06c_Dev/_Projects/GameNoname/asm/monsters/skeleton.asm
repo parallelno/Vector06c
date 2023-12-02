@@ -102,8 +102,7 @@ skeleton_init:
 ; de - ptr to monster_update_ptr 
 skeleton_update:
 			; advance hl to monster_status
-			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
-			dad d
+			HL_ADVANCE(monster_update_ptr, monster_status, BY_HL_FROM_D)
 			mov a, m
 			; NOT TODO: call table is not faster than properly sorted cpi/jz
 			cpi SKELETON_STATUS_MOVE
@@ -150,8 +149,7 @@ skeleton_update_move_init:
 			xchg
 			call random
 			; advance hl to monster_speed_x
-			LXI_H_TO_DIFF(monster_status, monster_speed_x)
-			dad d
+			HL_ADVANCE(monster_status, monster_speed_x, BY_HL_FROM_D)
 
 			mvi c, 0 ; tmp c=0
 			cpi $40
@@ -196,7 +194,7 @@ skeleton_update_move_init:
 			inx h
 			mov m, c
 @set_anim:
-			HL_ADVANCE(monster_speed_y+1, monster_anim_ptr, REG_BC)
+			HL_ADVANCE(monster_speed_y+1, monster_anim_ptr, BY_BC)
 			; a = rnd
 			CPI_WITH_ZERO(0)
 			; if rnd is positive (up or right movement), then play skeleton_run_r anim
@@ -225,14 +223,14 @@ skeleton_update_move:
 			
 			; hl points to monster_pos_y+1
 			; advance hl to monster_anim_timer
-			HL_ADVANCE(monster_pos_y+1, monster_anim_timer, REG_BC)
+			HL_ADVANCE(monster_pos_y+1, monster_anim_timer, BY_BC)
 			mvi a, SKELETON_ANIM_SPEED_MOVE
 			jmp skeleton_update_anim_check_collision_hero
 
 @set_move_init:
 			; hl points to monster_pos_x
 			; advance hl to monster_status
-			HL_ADVANCE(monster_pos_x, monster_status, REG_BC)
+			HL_ADVANCE(monster_pos_x, monster_status, BY_BC)
 			mvi m, SKELETON_STATUS_MOVE_INIT
 			inx h
 			mvi m, SKELETON_STATUS_MOVE_TIME
@@ -293,7 +291,7 @@ skeleton_update_shoot:
 			inx h
 			mvi m, SKELETON_STATUS_RELAX_TIME
 
-			HL_ADVANCE(monster_status_timer, monster_speed_x, REG_BC)
+			HL_ADVANCE(monster_status_timer, monster_speed_x, BY_BC)
 			mov a, m
 			inx h
 			ora m
@@ -305,7 +303,7 @@ skeleton_update_shoot:
 @shoot_left:
 			mvi a, BULLET_DIR_L
 @shoot_right:
-			LXI_B_TO_DIFF(monster_speed_x+1, monster_pos_x+1)
+			HL_ADVANCE(monster_speed_x+1, monster_pos_x+1, BY_BC)
 			jmp @set_bullet_pos
 @shoot_vert:
 			; advance hl to monster_speed_y+1
@@ -317,9 +315,8 @@ skeleton_update_shoot:
 @shoot_down:
 			mvi a, BULLET_DIR_D
 @shoot_up:
-			LXI_B_TO_DIFF(monster_speed_y+1, monster_pos_x+1)
+			HL_ADVANCE(monster_speed_y+1, monster_pos_x+1, BY_BC)
 @set_bullet_pos:
-			dad b
 			mov b, m
 			INX_H(2)
 			mov c, m

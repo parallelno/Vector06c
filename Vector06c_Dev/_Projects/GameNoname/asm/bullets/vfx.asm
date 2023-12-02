@@ -173,15 +173,14 @@ vfx_init:
 ; in:
 ; de - ptr to bullet_update_ptr 
 vfx_update:
-			LXI_H_TO_DIFF(bullet_update_ptr, bullet_anim_timer)
-			dad d
+			HL_ADVANCE(bullet_update_ptr, bullet_anim_timer, BY_HL_FROM_D)
 			mvi a, VFX_ANIM_SPEED
 			call actor_anim_update
 			rnc
 @die:
 			; hl points to bullet_anim_ptr
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE(bullet_anim_ptr, bullet_update_ptr+1, REG_DE)
+			HL_ADVANCE(bullet_anim_ptr, bullet_update_ptr+1, BY_DE)
 			ACTOR_DESTROY()
 			ret
 
