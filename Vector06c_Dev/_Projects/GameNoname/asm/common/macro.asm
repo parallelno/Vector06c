@@ -142,7 +142,7 @@
 			mvi a, <($ffff + offset_addr + 1)
 		.endif
 .endmacro
-
+/*
 .macro LXI_B_TO_DIFF(offset_from, offset_to)
 		offset_addr .var offset_to - offset_from
 		.if offset_addr < 0
@@ -166,7 +166,7 @@
 		.endif
 		lxi h, offset_addr
 .endmacro
-
+*/
 ; it advances HL by the diff equals to (addr_to - addr_from)
 ; if reg_pair is not provided, it uses inx h/dcx h
 ; if reg_pair = BY_BC/BY_DE, it uses lxi, dad
@@ -195,20 +195,24 @@ BY_HL_FROM_D	= 4
 		.endif
 	.endif
 	.if diff_addr < -2 || diff_addr > 2
+		lxi_val .var diff_addr
+		.if lxi_val < 0
+			lxi_val = $ffff + lxi_val + 1
+		.endif
 		.if reg_pair == BY_BC
-				LXI_B_TO_DIFF(addr_from, addr_to)
+				lxi b, lxi_val
 				dad b
 		.endif
 		.if reg_pair == BY_DE
-				LXI_D_TO_DIFF(addr_from, addr_to)
+				lxi d, lxi_val
 				dad d
 		.endif
 		.if reg_pair == BY_HL_FROM_B
-				LXI_H_TO_DIFF(addr_from, addr_to)
+				lxi h, lxi_val
 				dad b
 		.endif
 		.if reg_pair == BY_HL_FROM_D
-				LXI_H_TO_DIFF(addr_from, addr_to)
+				lxi h, lxi_val
 				dad d
 		.endif		
 	.endif
