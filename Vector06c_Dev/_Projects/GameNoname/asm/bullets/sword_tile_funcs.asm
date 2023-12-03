@@ -142,7 +142,7 @@ sword_func_breakable:
 			; c - tile_idx
 			call draw_tile_16x16_buffs
 			; draw vfx
-			; bc - tile screen addr			
+			; bc - tile screen addr
 			lxi d, vfx_puff
 			call vfx_init
 			jmp game_ui_draw_res

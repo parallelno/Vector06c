@@ -235,56 +235,48 @@ BY_HL_FROM_BC	= 3
 BY_HL_FROM_DE	= 4
 .macro HL_ADVANCE(addr_from, addr_to, reg_pair = NULL)
 		diff_addr = addr_to - addr_from
-		lxi_val .var diff_addr
-
-	.if reg_pair == NULL
-		.if diff_addr > 0 && diff_addr <= 2
-			.loop diff_addr
-				inx h
-			.endloop
-		.endif
-		.if diff_addr >= -2 && diff_addr < 0
-			.loop -diff_addr
-				dcx h
-			.endloop
-		.endif
-	.endif
-	.if diff_addr < -2 || diff_addr > 2
+		lxi_val .var diff_addr		
 		.if lxi_val < 0
 			lxi_val = $ffff + lxi_val + 1
 		.endif
-		.if reg_pair == BY_BC
+
+		.if reg_pair == NULL
+			.if diff_addr > 0 && diff_addr <= 2
+				INX_H(diff_addr)
+			.endif
+			.if diff_addr >= -2 && diff_addr < 0
+				DCX_H(-diff_addr)
+			.endif
+		.endif
+		.if diff_addr < -2 || diff_addr > 2
+			.if reg_pair == BY_BC
 				lxi b, lxi_val
 				dad b
-		.endif
-		.if reg_pair == BY_DE
+			.endif
+			.if reg_pair == BY_DE
 				lxi d, lxi_val
 				dad d
-		.endif
-		.if reg_pair == BY_HL_FROM_BC
+			.endif
+			.if reg_pair == BY_HL_FROM_BC
 				lxi h, lxi_val
 				dad b
-		.endif
-		.if reg_pair == BY_HL_FROM_DE
+			.endif
+			.if reg_pair == BY_HL_FROM_DE
 				lxi h, lxi_val
 				dad d
+			.endif
 		.endif
-	.endif
 
-	.if reg_pair == BY_HL_FROM_DE
-		.if diff_addr > 0 && diff_addr <= 2
+		.if reg_pair == BY_HL_FROM_DE
+			.if diff_addr > 0 && diff_addr <= 2
 				xchg
-			.loop diff_addr
-				inx h
-			.endloop
-		.endif
-		.if diff_addr >= -2 && diff_addr < 0
+				INX_H(diff_addr)
+			.endif
+			.if diff_addr >= -2 && diff_addr < 0
 				xchg
-			.loop -diff_addr
-				dcx h
-			.endloop
+				DCX_H(-diff_addr)
+			.endif
 		.endif
-	.endif
 		; validations
 		.if reg_pair == NULL && (diff_addr < -2 || diff_addr > 2)
 			.error "HL_ADVANCE(" addr_from ", " addr_to") with diff (" diff_addr ") is outside of the required range of [-2, 2]. Use BY_BC, BY_DE, BY_HL_FROM_BC or BY_HL_FROM_DE as the third argument."
