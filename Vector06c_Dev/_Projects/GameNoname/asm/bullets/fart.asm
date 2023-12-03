@@ -46,10 +46,11 @@ fart_init_post:
 ; in:
 ; de - ptr to bullet_update_ptr 
 fart_update:
-			xchg
-			; hl - ptr to bullet_update_ptr 
 			; advance to bullet_status_timer
-			L_ADVANCE_BY_A(bullet_update_ptr, bullet_status_timer)
+			MVI_A_TO_DIFF(bullet_update_ptr, bullet_status_timer)
+			add e
+			mov e, a
+			xchg
 			; hl - ptr to bullet_update_ptr 
 @fraction_timer:
 			mvi a, 1

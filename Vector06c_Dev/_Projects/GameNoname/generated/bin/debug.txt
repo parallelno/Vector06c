@@ -1,14 +1,14 @@
 Retro Assembler V2022.1 -- Crafted by Peter Tihanyi with 8-Bit Love
 (C) 2017-2023 Engine Designs in West Virginia, USA
 
-Pre-processing the source code file... 9145 lines of code loaded.
+Pre-processing the source code file... 9149 lines of code loaded.
 Compiling, 1st pass... (Processing)
 Compiling, 2nd pass... (Finalizing)
 [296] HL_ADVANCE($7817, $7819, BY_HL_FROM_DE) with diff ($02) is in too short range [-2, 2]. Replaced with xchg and INX_H( $02 )/DCX_H( $02 ).
 [296] HL_ADVANCE($7817, $7819, BY_HL_FROM_DE) with diff ($02) is in too short range [-2, 2]. Replaced with xchg and INX_H( $02 )/DCX_H( $02 ).
 [296] HL_ADVANCE($7817, $7819, BY_HL_FROM_DE) with diff ($02) is in too short range [-2, 2]. Replaced with xchg and INX_H( $02 )/DCX_H( $02 ).
 [296] HL_ADVANCE($7817, $7819, BY_HL_FROM_DE) with diff ($02) is in too short range [-2, 2]. Replaced with xchg and INX_H( $02 )/DCX_H( $02 ).
-Success. Size: 23664 bytes ($5c70) in 1.421s
+Success. Size: 23664 bytes ($5c70) in 1.385s
 
 *******************
 * Labels & Values *
@@ -1967,20 +1967,18 @@ fart_init_post                                 = $3616
 HL_ADVANCE_165.diff_addr                       = -$03 ($fd)
 HL_ADVANCE_165.lxi_val                         = $fffd
 fart_update                                    = $3629
-L_ADVANCE_BY_A.diff_addr                       = $05
-L_ADVANCE_BY_A.mvi_val                         = $05
+MVI_A_TO_DIFF.offset_addr                      = $05
 @fraction_timer                                = $362e
 @update_movement_10                            = $363b
-MVI_A_TO_DIFF.offset_addr                      = $0d
-MVI_A_TO_DIFF_2.offset_addr                    = -$0e ($f2)
+MVI_A_TO_DIFF_2.offset_addr                    = $0d
+MVI_A_TO_DIFF_3.offset_addr                    = -$0e ($f2)
 @die_6                                         = $3652
-MVI_A_TO_DIFF_3.offset_addr                    = -$04 ($fc)
+MVI_A_TO_DIFF_4.offset_addr                    = -$04 ($fc)
 vfx_init4                                      = $365d
-MVI_A_TO_DIFF_4.offset_addr                    = $04
+MVI_A_TO_DIFF_5.offset_addr                    = $04
 @anim_ptr                                      = $367a
 vfx_init                                       = $36a5
-L_ADVANCE_BY_A_2.diff_addr                     = $03
-L_ADVANCE_BY_A_2.mvi_val                       = $03
+MVI_A_TO_DIFF_6.offset_addr                    = $03
 @anim_ptr_2                                    = $36c5
 vfx_update                                     = $36ef
 HL_ADVANCE_166.diff_addr                       = $06
@@ -2141,13 +2139,13 @@ backs_spawn                                    = $3e0e
 backs_update                                   = $3e54
 back_runtime_data_ptr_update                   = $3e55
 @update_anim_2                                 = $3e62
-MVI_A_TO_DIFF_5.offset_addr                    = $04
+MVI_A_TO_DIFF_7.offset_addr                    = $04
 @set_draw_ptr                                  = $3e6d
-MVI_A_TO_DIFF_6.offset_addr                    = -$03 ($fd)
-MVI_A_TO_DIFF_7.offset_addr                    = $06
+MVI_A_TO_DIFF_8.offset_addr                    = -$03 ($fd)
+MVI_A_TO_DIFF_9.offset_addr                    = $06
 @set_first_back                                = $3e8a
 @set_next_back                                 = $3e8f
-MVI_A_TO_DIFF_8.offset_addr                    = $03
+MVI_A_TO_DIFF_10.offset_addr                   = $03
 @advance_and_save_ptr                          = $3e91
 @save_ptr                                      = $3e93
 backs_draw                                     = $3e97

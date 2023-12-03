@@ -115,7 +115,9 @@ vfx_init:
 			mvi m, VFX_STATUS_DEFAULT
 
 			; advance hl to bullet_anim_ptr
-			L_ADVANCE_BY_A(bullet_status, bullet_anim_ptr)
+			MVI_A_TO_DIFF(bullet_status, bullet_anim_ptr)
+			add l
+			mov l, a
 			
 @anim_ptr:  ; store anim ptr
 			lxi d, TEMP_ADDR
