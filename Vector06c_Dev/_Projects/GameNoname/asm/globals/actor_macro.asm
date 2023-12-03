@@ -4,7 +4,7 @@
 .macro ACTOR_UPDATE_MOVEMENT(actor_status_timer, actor_speed_y)
  			; hl - ptr to actor_status_timer
 			; advance hl to actor_speed_y+1
-			HL_ADVANCE(actor_status_timer, actor_speed_y+1, REG_BC)
+			HL_ADVANCE(actor_status_timer, actor_speed_y+1, BY_BC)
 			; bc <- speed_y
 			mov b, m
 			dcx h
@@ -52,7 +52,7 @@
 ; bc, de, hl, a
 ; TODO: it is 492 bytes long. think of converting it into a func. it can ponetially save +3.5K bytes
 .macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actor_status_timer, actor_pos_x, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, collision_handler) 
-			HL_ADVANCE(actor_status_timer, actor_pos_x, REG_BC)
+			HL_ADVANCE(actor_status_timer, actor_pos_x, BY_BC)
 			push h ; (stack) <- pos_x ptr, to restore it in @apply_new_pos
 			mov c, m
 			inx h
@@ -188,17 +188,15 @@
 
         .if check_invis
 			; advance to bullet_status
-			LXI_H_TO_DIFF(bullet_draw_ptr, bullet_status)
-			dad d
+			HL_ADVANCE(bullet_draw_ptr, bullet_status)
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
 			rnz
 
-			HL_ADVANCE(bullet_status, bullet_pos_x+1, REG_DE)
+			HL_ADVANCE(bullet_status, bullet_pos_x+1, BY_DE)
 		.endif 
 		.if check_invis == false
-			LXI_H_TO_DIFF(bullet_draw_ptr, bullet_pos_x+1)
-			dad d
+			HL_ADVANCE(bullet_draw_ptr, bullet_pos_x+1, BY_HL_FROM_D)
 		.endif
 			; hl - ptr to bullet_pos_x+1
 			call sprite_get_scr_addr_actor
@@ -207,7 +205,7 @@
 			; hl - ptr to pos_y+1
 			mov a, c ; temp
 			; advance to bullet_anim_ptr
-			HL_ADVANCE(bullet_pos_y+1, bullet_anim_ptr, REG_BC)
+			HL_ADVANCE(bullet_pos_y+1, bullet_anim_ptr, BY_BC)
 			mov b, m
 			inx h
 			push h
@@ -227,7 +225,7 @@
 			inx h
 			mov m, b
 			; advance to bullet_erase_wh
-			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh, REG_BC)
+			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh, BY_BC)
 			; store a width and a height into bullet_erase_wh
 			mov m, e
 			inx h

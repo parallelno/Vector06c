@@ -212,7 +212,7 @@ burner_update_move_init:
 			inx h
 			mov m, c
 @set_anim:
-			HL_ADVANCE(monster_speed_y+1, monster_anim_ptr, REG_BC)
+			HL_ADVANCE(monster_speed_y+1, monster_anim_ptr, BY_BC)
 			; a = rnd
 			CPI_WITH_ZERO(0)
 			; if rnd is positive (up or right movement), then play burner_run_r anim
@@ -240,14 +240,14 @@ burner_update_move:
 			
 			; hl points to monster_pos_y+1
 			; advance hl to monster_anim_timer
-			HL_ADVANCE(monster_pos_y+1, monster_anim_timer, REG_BC)
+			HL_ADVANCE(monster_pos_y+1, monster_anim_timer, BY_BC)
 			mvi a, BURNER_ANIM_SPEED_MOVE
 			jmp burner_update_anim_check_collision_hero
 
 @set_move_init:
 			; hl points to monster_pos_x
 			; advance hl to monster_status
-			HL_ADVANCE(monster_pos_x, monster_status, REG_BC)
+			HL_ADVANCE(monster_pos_x, monster_status, BY_BC)
 			mvi m, BURNER_STATUS_MOVE_INIT
 			inx h
 			mvi m, BURNER_STATUS_MOVE_TIME
@@ -298,7 +298,7 @@ burner_update_dash_prep:
 			dcx h
 			mvi m, BURNER_STATUS_DASH
 			; advance hl to monster_pos_x
-			HL_ADVANCE(monster_status, monster_pos_x, REG_BC)
+			HL_ADVANCE(monster_status, monster_pos_x, BY_BC)
 			; reset sub pixel pos_x
 			mvi m, 0
 			; advance hl to pos_x+1
@@ -374,7 +374,7 @@ burner_update_dash:
 			ACTOR_UPDATE_MOVEMENT(monster_status_timer, monster_speed_y)
 			; hl - ptr to monster_pos_x+1
 			; advance hl to monster_anim_timer
-			HL_ADVANCE(monster_pos_x+1, monster_anim_timer, REG_BC)
+			HL_ADVANCE(monster_pos_x+1, monster_anim_timer, BY_BC)
 			mvi a, BURNER_ANIM_SPEED_DASH
 			jmp actor_anim_update
 @set_move_init:

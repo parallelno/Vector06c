@@ -196,7 +196,7 @@ skeleton_update_move_init:
 			inx h
 			mov m, c
 @set_anim:
-			HL_ADVANCE(monster_speed_y+1, monster_anim_ptr, REG_BC)
+			HL_ADVANCE(monster_speed_y+1, monster_anim_ptr, BY_BC)
 			; a = rnd
 			CPI_WITH_ZERO(0)
 			; if rnd is positive (up or right movement), then play skeleton_run_r anim
@@ -225,14 +225,14 @@ skeleton_update_move:
 			
 			; hl points to monster_pos_y+1
 			; advance hl to monster_anim_timer
-			HL_ADVANCE(monster_pos_y+1, monster_anim_timer, REG_BC)
+			HL_ADVANCE(monster_pos_y+1, monster_anim_timer, BY_BC)
 			mvi a, SKELETON_ANIM_SPEED_MOVE
 			jmp skeleton_update_anim_check_collision_hero
 
 @set_move_init:
 			; hl points to monster_pos_x
 			; advance hl to monster_status
-			HL_ADVANCE(monster_pos_x, monster_status, REG_BC)
+			HL_ADVANCE(monster_pos_x, monster_status, BY_BC)
 			mvi m, SKELETON_STATUS_MOVE_INIT
 			inx h
 			mvi m, SKELETON_STATUS_MOVE_TIME
@@ -293,7 +293,7 @@ skeleton_update_shoot:
 			inx h
 			mvi m, SKELETON_STATUS_RELAX_TIME
 
-			HL_ADVANCE(monster_status_timer, monster_speed_x, REG_BC)
+			HL_ADVANCE(monster_status_timer, monster_speed_x, BY_BC)
 			mov a, m
 			inx h
 			ora m

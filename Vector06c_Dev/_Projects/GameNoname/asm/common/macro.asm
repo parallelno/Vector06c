@@ -198,13 +198,21 @@
 */
 
 ; it advances HL by the diff equals to (addr_to - addr_from)
-; if reg_pair is provided, it uses dad h, overvise it uses inx h/dcx h
+; if reg_pair is not provided, it uses inx h/dcx h
+; if reg_pair = BY_BC/BY_DE, it uses lxi, dad
+; if reg_pair = BY_HL_FROM_D, 
+;	if a diff is in [-2, 2] it uses xchg and INX H(2)
+;	if a diff is outside of [-2, 2] it uses lxi h, dad d
 ; it validates the diff suggesting improvements
-; supports only: REG_BC, REG_DE, REG_HL_DAD_B, REG_HL_DAD_D
-.macro HL_ADVANCE(addr_from, addr_to, reg_pair = REG_NONE)
+; reg_pair:
+BY_BC			= 1
+BY_DE			= 2
+BY_HL_FROM_B	= 3
+BY_HL_FROM_D	= 4
+.macro HL_ADVANCE(addr_from, addr_to, reg_pair = NULL)
 		diff_addr = addr_to - addr_from
 		
-	.if reg_pair == REG_NONE
+	.if reg_pair == NULL
 		.if diff_addr > 0 && diff_addr <= 2
 			.loop diff_addr
 				inx h
@@ -217,36 +225,36 @@
 		.endif
 	.endif
 	.if diff_addr < -2 || diff_addr > 2
-		.if reg_pair == REG_BC
+		.if reg_pair == BY_BC
 				LXI_B_TO_DIFF(addr_from, addr_to)
 				dad b
 		.endif
-		.if reg_pair == REG_DE
+		.if reg_pair == BY_DE
 				LXI_D_TO_DIFF(addr_from, addr_to)
 				dad d
 		.endif
-		.if reg_pair == REG_HL_DAD_B
+		.if reg_pair == BY_HL_FROM_B
 				LXI_H_TO_DIFF(addr_from, addr_to)
 				dad b
 		.endif
-		.if reg_pair == REG_HL_DAD_D
+		.if reg_pair == BY_HL_FROM_D
 				LXI_H_TO_DIFF(addr_from, addr_to)
 				dad d
 		.endif		
 	.endif
 		; validations
-		.if reg_pair == REG_NONE && (diff_addr < -2 || diff_addr > 2)
-			.error "HL_ADVANCE(" addr_from ", " addr_to") with diff (" diff_addr ") is outside of the required range of [-2, 2]. Use REG_BC, REG_DE, REG_HL_DAD_D as the third argument."
+		.if reg_pair == NULL && (diff_addr < -2 || diff_addr > 2)
+			.error "HL_ADVANCE(" addr_from ", " addr_to") with diff (" diff_addr ") is outside of the required range of [-2, 2]. Use BY_BC, BY_DE, BY_HL_FROM_B or BY_HL_FROM_D as the third argument."
 		.endif		
-		.if (reg_pair == REG_BC || reg_pair == REG_DE || reg_pair == REG_HL_DAD_B || reg_pair == REG_HL_DAD_D )  && diff_addr >= -2 && diff_addr <= 2
-			.error "HL_ADVANCE(" addr_from ", " addr_to") with diff (" diff_addr ") is in too short range [-2, 2]. Keep the third argument as REG_NONE or undefined."
+		.if (reg_pair == BY_BC || reg_pair == BY_DE || reg_pair == BY_HL_FROM_B )  && diff_addr >= -2 && diff_addr <= 2
+			.error "HL_ADVANCE(" addr_from ", " addr_to", BY_BC/BY_DE/BY_HL_FROM_B) with diff (" diff_addr ") is in too short range [-2, 2]. Keep the third argument undefined."
 		.endif
+		.if (reg_pair == BY_HL_FROM_D )  && diff_addr >= -2 && diff_addr <= 2
+			.print "HL_ADVANCE(" addr_from ", " addr_to", BY_HL_FROM_D) with diff (" diff_addr ") is in too short range [-2, 2]. Replaced with xchg and INX_H(2)/DCX_H(2)."
+		.endif		
 		.if diff_addr == 0
 			.error "HL_ADVANCE(" addr_from ", " addr_to") with diff (" diff_addr ") is detected. It's redundant operation."
-		.endif	
-		.if reg_pair == REG_A || reg_pair == REG_B || reg_pair == REG_C || reg_pair == REG_D || reg_pair == REG_E || reg_pair == REG_H || reg_pair == REG_L || reg_pair == REG_HL || reg_pair == REG_PSW || reg_pair == REG_PC || reg_pair == REG_SP
-			.error "HL_ADVANCE() with unsupported regs is detected"
-		.endif				
+		.endif
 .endmacro
 
 .macro LXI_H_NEG(val)

@@ -120,7 +120,7 @@ sword_update:
 			jmp actor_anim_update
 
 @die:
-			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, REG_DE)
+			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, BY_DE)
 			ACTOR_DESTROY()
 			ret
 
@@ -154,7 +154,7 @@ sword_update:
 			; check enemies-attk01 sprite collision
 			; hl - ptr to bullet_anim_ptr+1
 			; advance hl to bullet_pos_x+1
-			HL_ADVANCE(bullet_anim_ptr+1, bullet_pos_x+1, REG_BC)
+			HL_ADVANCE(bullet_anim_ptr+1, bullet_pos_x+1, BY_BC)
 			; add a collision offset
 			mov d, m
 			INX_H(2)
@@ -171,7 +171,7 @@ sword_update:
 			; check enemies-attk01 sprite collision
 			; hl - ptr to bullet_anim_ptr+1
 			; advance hl to bullet_pos_x+1
-			HL_ADVANCE(bullet_anim_ptr+1, bullet_pos_x+1, REG_BC)
+			HL_ADVANCE(bullet_anim_ptr+1, bullet_pos_x+1, BY_BC)
 			; add a collision offset
 			mov d, m
 			INX_H(2)
@@ -193,7 +193,7 @@ sword_update:
 
 			; impact the monster
 			; advance hl to monster_impacted_ptr
-			HL_ADVANCE(monster_update_ptr+1, monster_impacted_ptr, REG_BC)
+			HL_ADVANCE(monster_update_ptr+1, monster_impacted_ptr, BY_BC)
 			mov e, m
 			inx h
 			mov d, m

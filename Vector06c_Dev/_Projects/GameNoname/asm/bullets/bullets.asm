@@ -171,7 +171,7 @@ bullets_erase:
 ; hl - ptr to bullet_update_ptr+1 
 bullet_copy_to_scr:
 			; advance to bullet_status
-			HL_ADVANCE(bullet_update_ptr+1, bullet_status, REG_DE)
+			HL_ADVANCE(bullet_update_ptr+1, bullet_status, BY_DE)
 			jmp actor_copy_to_scr
 			
 ; erase a sprite or restore the background behind a sprite
