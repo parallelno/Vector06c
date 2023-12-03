@@ -173,7 +173,8 @@ vfx_init:
 ; in:
 ; de - ptr to bullet_update_ptr 
 vfx_update:
-			HL_ADVANCE(bullet_update_ptr, bullet_anim_timer, BY_HL_FROM_DE)
+			LXI_H_TO_DIFF(bullet_update_ptr, bullet_anim_timer)
+			dad d
 			mvi a, VFX_ANIM_SPEED
 			call actor_anim_update
 			rnc

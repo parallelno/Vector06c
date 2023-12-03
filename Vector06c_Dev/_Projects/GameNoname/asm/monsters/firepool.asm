@@ -43,7 +43,8 @@ firepool_init:
 ; de - ptr to monster_update_ptr 
 firepool_update:
 			; advance hl to monster_anim_timer
-			HL_ADVANCE(monster_update_ptr, monster_anim_timer, BY_HL_FROM_DE)
+			LXI_H_TO_DIFF(monster_update_ptr, monster_anim_timer)
+			dad d
 			mvi a, FIREPOOL_ANIM_SPEED_IDLE
 			; hl - monster_anim_timer
 			; a - anim speed
@@ -66,7 +67,8 @@ firepool_impacted:
 
 			; die
 			; advance hl to monster_pos_x+1			
-			HL_ADVANCE(monster_impacted_ptr+1, monster_pos_x+1, BY_HL_FROM_DE)
+			LXI_H_TO_DIFF(monster_impacted_ptr+1, monster_pos_x+1)
+			dad d
 			push h
 			; play a hit vfx
 			mov b, m

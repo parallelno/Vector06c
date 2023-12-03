@@ -6,7 +6,8 @@
 .macro BULLET_DRAW(sprite_get_scr_addr_bullet, __ram_disk_s, check_invis = true)
         .if check_invis
 			; advance to bullet_status
-			HL_ADVANCE(bullet_draw_ptr, bullet_status, BY_HL_FROM_DE)
+			LXI_H_TO_DIFF(bullet_draw_ptr, bullet_status)
+			dad d
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
 			rnz
@@ -14,7 +15,8 @@
 			HL_ADVANCE(bullet_status, bullet_pos_x+1, BY_DE)
 		.endif 
 		.if check_invis == false
-			HL_ADVANCE(bullet_draw_ptr, bullet_pos_x+1, BY_HL_FROM_DE)
+			LXI_H_TO_DIFF(bullet_draw_ptr, bullet_pos_x+1)
+			dad d
 		.endif
 			; hl - ptr to bullet_pos_x+1
 			call sprite_get_scr_addr_bullet

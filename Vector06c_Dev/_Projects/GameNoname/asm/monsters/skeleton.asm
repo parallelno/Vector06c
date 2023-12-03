@@ -102,7 +102,8 @@ skeleton_init:
 ; de - ptr to monster_update_ptr 
 skeleton_update:
 			; advance hl to monster_status
-			HL_ADVANCE(monster_update_ptr, monster_status, BY_HL_FROM_DE)
+			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
+			dad d
 			mov a, m
 			; NOT TODO: call table is not faster than properly sorted cpi/jz
 			cpi SKELETON_STATUS_MOVE
@@ -149,7 +150,8 @@ skeleton_update_move_init:
 			xchg
 			call random
 			; advance hl to monster_speed_x
-			HL_ADVANCE(monster_status, monster_speed_x, BY_HL_FROM_DE)
+			LXI_H_TO_DIFF(monster_status, monster_speed_x)
+			dad d
 
 			mvi c, 0 ; tmp c=0
 			cpi $40
@@ -303,7 +305,7 @@ skeleton_update_shoot:
 @shoot_left:
 			mvi a, BULLET_DIR_L
 @shoot_right:
-			HL_ADVANCE(monster_speed_x+1, monster_pos_x+1, BY_BC)
+			LXI_B_TO_DIFF(monster_speed_x+1, monster_pos_x+1)
 			jmp @set_bullet_pos
 @shoot_vert:
 			; advance hl to monster_speed_y+1
@@ -315,8 +317,9 @@ skeleton_update_shoot:
 @shoot_down:
 			mvi a, BULLET_DIR_D
 @shoot_up:
-			HL_ADVANCE(monster_speed_y+1, monster_pos_x+1, BY_BC)
+			LXI_B_TO_DIFF(monster_speed_y+1, monster_pos_x+1)
 @set_bullet_pos:
+			dad b
 			mov b, m
 			INX_H(2)
 			mov c, m

@@ -179,5 +179,5 @@ bullet_copy_to_scr:
 ; hl - ptr to bullet_update_ptr+1
 ; a - BULLET_RUNTIME_DATA_* status
 bullet_erase:
-			HL_ADVANCE(bullet_update_ptr+1, bullet_status, BY_DE)
+			LXI_D_TO_DIFF(bullet_update_ptr+1, bullet_status)
 			jmp actor_erase

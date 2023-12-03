@@ -292,8 +292,7 @@ monster_copy_to_scr:
 ; a - MONSTER_RUNTIME_DATA_* status
 ; cc ~ 3480 if it mostly restores a background
 monster_erase:
-			; advance to actor_status
-			HL_ADVANCE(monster_update_ptr+1, monster_status, BY_DE)
+			LXI_D_TO_DIFF(monster_update_ptr+1, monster_status)
 			jmp actor_erase
 			
 ; in:
@@ -309,7 +308,8 @@ monster_impacted:
 
 			; play a hit vfx
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE(monster_impacted_ptr+1, monster_pos_x+1, BY_HL_FROM_DE)
+			LXI_H_TO_DIFF(monster_impacted_ptr+1, monster_pos_x+1)
+			dad d
 			mov b, m
 			; advance hl to monster_pos_y+1
 			INX_H(2)
@@ -344,7 +344,8 @@ monster_impacted:
 @set_state_freeze:
 			; de - ptr to monster_impacted_ptr+1
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE(monster_impacted_ptr+1, monster_status, BY_HL_FROM_DE)
+			LXI_H_TO_DIFF(monster_impacted_ptr+1, monster_status)
+			dad d
 			mvi m, MONSTER_STATUS_FREEZE
 			; advance hl to monster_status_timer
 			inx h

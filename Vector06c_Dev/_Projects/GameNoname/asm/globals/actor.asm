@@ -230,6 +230,10 @@ actor_erase:
 			cpi ACTOR_RUNTIME_DATA_DESTR
 			jz @set_empty
 
+			; de - LXI_D_TO_DIFF(actor_update_ptr+1, actor_status)
+			; advance to actor_status
+			dad d
+
 			; if it is invisible, return
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
