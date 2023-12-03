@@ -115,9 +115,7 @@ vfx_init:
 			mvi m, VFX_STATUS_DEFAULT
 
 			; advance hl to bullet_anim_ptr
-			MVI_A_TO_DIFF(bullet_status, bullet_anim_ptr)
-			add l
-			mov l, a
+			L_ADVANCE_BY_A(bullet_status, bullet_anim_ptr)
 			
 @anim_ptr:  ; store anim ptr
 			lxi d, TEMP_ADDR
@@ -173,7 +171,7 @@ vfx_init:
 ; in:
 ; de - ptr to bullet_update_ptr 
 vfx_update:
-			HL_ADVANCE(bullet_update_ptr, bullet_anim_timer, BY_HL_FROM_D)
+			HL_ADVANCE(bullet_update_ptr, bullet_anim_timer, BY_HL_FROM_DE)
 			mvi a, VFX_ANIM_SPEED
 			call actor_anim_update
 			rnc

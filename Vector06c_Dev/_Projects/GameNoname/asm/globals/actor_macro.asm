@@ -196,7 +196,7 @@
 			HL_ADVANCE(bullet_status, bullet_pos_x+1, BY_DE)
 		.endif 
 		.if check_invis == false
-			HL_ADVANCE(bullet_draw_ptr, bullet_pos_x+1, BY_HL_FROM_D)
+			HL_ADVANCE(bullet_draw_ptr, bullet_pos_x+1, BY_HL_FROM_DE)
 		.endif
 			; hl - ptr to bullet_pos_x+1
 			call sprite_get_scr_addr_actor

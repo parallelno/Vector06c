@@ -108,7 +108,7 @@ bomb_init_speed:
 ; de - ptr to bullet_update_ptr 
 bomb_update:
 			; advance to bullet_status_timer
-			HL_ADVANCE(bullet_update_ptr, bullet_status_timer, BY_HL_FROM_D)
+			HL_ADVANCE(bullet_update_ptr, bullet_status_timer, BY_HL_FROM_DE)
 			dcr m
 			jz @die
 @update_movement:

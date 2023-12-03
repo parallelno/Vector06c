@@ -309,7 +309,7 @@ monster_impacted:
 
 			; play a hit vfx
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE(monster_impacted_ptr+1, monster_pos_x+1, BY_HL_FROM_D)
+			HL_ADVANCE(monster_impacted_ptr+1, monster_pos_x+1, BY_HL_FROM_DE)
 			mov b, m
 			; advance hl to monster_pos_y+1
 			INX_H(2)
@@ -344,7 +344,7 @@ monster_impacted:
 @set_state_freeze:
 			; de - ptr to monster_impacted_ptr+1
 			; advance hl to monster_pos_x+1
-			HL_ADVANCE(monster_impacted_ptr+1, monster_status, BY_HL_FROM_D)
+			HL_ADVANCE(monster_impacted_ptr+1, monster_status, BY_HL_FROM_DE)
 			mvi m, MONSTER_STATUS_FREEZE
 			; advance hl to monster_status_timer
 			inx h

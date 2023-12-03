@@ -5,7 +5,7 @@
 ; de - ptr to monster_draw_ptr 
 ; TODO: think of converting it into a function it will save 50*4 = 200 bytes
 .macro MONSTER_DRAW(sprite_get_scr_addr_monster, __ram_disk_s)
-			HL_ADVANCE(monster_draw_ptr, monster_pos_x+1, BY_HL_FROM_D)
+			HL_ADVANCE(monster_draw_ptr, monster_pos_x+1, BY_HL_FROM_DE)
 
 			call sprite_get_scr_addr_monster
 			; hl - ptr to monster_pos_y+1

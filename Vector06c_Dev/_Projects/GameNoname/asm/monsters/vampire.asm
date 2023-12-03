@@ -103,7 +103,7 @@ vampire_init:
 ; de - ptr to monster_update_ptr 
 vampire_update:
 			; advance hl to monster_status
-			HL_ADVANCE(monster_update_ptr, monster_status, BY_HL_FROM_D)
+			HL_ADVANCE(monster_update_ptr, monster_status, BY_HL_FROM_DE)
 			mov a, m
 			; a - monster_status
 			cpi VAMPIRE_STATUS_MOVE
@@ -148,7 +148,7 @@ vampire_update_move_init:
 			xchg
 			call random
 			; advance hl to monster_speed_x
-			HL_ADVANCE(monster_status, monster_speed_x, BY_HL_FROM_D)
+			HL_ADVANCE(monster_status, monster_speed_x, BY_HL_FROM_DE)
 
 			mvi c, 0 ; tmp c=0
 			cpi $40

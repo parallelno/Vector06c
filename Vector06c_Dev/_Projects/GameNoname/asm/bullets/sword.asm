@@ -99,7 +99,7 @@ sword_check_tiledata:
 ; de - ptr to bullet_update_ptr 
 sword_update:
 			; advance to bullet_status
-			HL_ADVANCE(bullet_update_ptr, bullet_status, BY_HL_FROM_D)
+			HL_ADVANCE(bullet_update_ptr, bullet_status, BY_HL_FROM_DE)
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
 			jnz @delay_update

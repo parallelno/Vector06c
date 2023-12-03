@@ -56,7 +56,7 @@ burner_quest_update:
 			; store de
 			push d
 			; advance hl to monster_id
-			HL_ADVANCE(monster_update_ptr, monster_id, BY_HL_FROM_D)
+			HL_ADVANCE(monster_update_ptr, monster_id, BY_HL_FROM_DE)
 			; check what burner it is
 			mov a, m
 			cpi BURNER_RIGHT_ID
