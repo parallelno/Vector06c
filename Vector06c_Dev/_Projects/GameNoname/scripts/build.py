@@ -217,6 +217,8 @@ def export_labels(path, externals_only = False, save_output = True):
 		lines = file.readlines()
 
 	get_all_next_lines = False
+	get_comments_lines = False
+	comments = ""
 	labels = ""
 	label_pairs = {}
 	for line_b in lines:
@@ -243,13 +245,21 @@ def export_labels(path, externals_only = False, save_output = True):
 
 			continue
 
+		if get_comments_lines:
+			comments += line
+
 		if line.find("Segment: Code") != -1:
 			get_all_next_lines = True
+			get_comments_lines = False
+		if line.find("Engine Designs") != -1:
+			get_comments_lines = True
+		if line.find("*******************") != -1:
+			get_comments_lines = False
 	if save_output:
 		with open(path, "w") as file:
 			file.write(labels)
 	
-	return label_pairs
+	return label_pairs, comments
 
 def get_segment_size_max(segment_addr):
 	if segment_addr == SEGMENT_0000_7F00_ADDR:
