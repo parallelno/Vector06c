@@ -164,10 +164,12 @@
 .macro ACTOR_EMPTY()
 			mvi m, ACTOR_RUNTIME_DATA_EMPTY
 .endmacro
-/*
+
 ; draw an actor sprite into a backbuffer
 ; ex. ACTOR_DRAW(sprite_get_scr_addr_scythe, __RAM_DISK_S_SCYTHE)
+; requires  ((bullet_draw_ptr - bullet_status) == (monster_draw_ptr - monster_status))
 ; requires  (bullet_status - bullet_pos_x+1) == (monster_status - monster_pos_x+1)
+; requires  ((bullet_draw_ptr - bullet_pos_x+1) == (monster_draw_ptr - monster_pos_x+1))
 ; requires (bullet_pos_y+1 - bullet_anim_ptr) == (monster_pos_y+1 - monster_anim_ptr)
 ; requires (bullet_erase_scr_addr+1 - bullet_erase_wh) == (monster_erase_scr_addr+1 - monster_erase_wh)
 ; in:
@@ -175,20 +177,25 @@
 ; TODO: try to convert it into a function
 .macro ACTOR_DRAW(sprite_get_scr_addr_actor, __ram_disk_s, check_invis = true)
 			; validation
-
-		.if !((bullet_status - bullet_pos_x+1) == (monster_status - monster_pos_x+1))
+		.if ~((bullet_draw_ptr - bullet_status) == (monster_draw_ptr - monster_status))
+			.error "actor_erase func fails because !((bullet_draw_ptr - bullet_status) == (monster_draw_ptr - monster_status))"
+		.endif			
+		.if ~((bullet_status - bullet_pos_x+1) == (monster_status - monster_pos_x+1))
 			.error "actor_erase func fails because !((bullet_status - bullet_pos_x+1) == (monster_status - monster_pos_x+1))"
 		.endif
-		.if !((bullet_pos_y+1 - bullet_anim_ptr) == (monster_pos_y+1 - monster_anim_ptr))
+		.if ~((bullet_draw_ptr - bullet_pos_x+1) == (monster_draw_ptr - monster_pos_x+1))
+			.error "actor_erase func fails because !((bullet_draw_ptr - bullet_pos_x+1) == (monster_draw_ptr - monster_pos_x+1))"
+		.endif		
+		.if ~((bullet_pos_y+1 - bullet_anim_ptr) == (monster_pos_y+1 - monster_anim_ptr))
 			.error "actor_erase func fails because !((bullet_pos_y+1 - bullet_anim_ptr) == (monster_pos_y+1 - monster_anim_ptr))"
 		.endif
-		.if !((bullet_erase_scr_addr+1 - bullet_erase_wh) == (monster_erase_scr_addr+1 - monster_erase_wh))
+		.if ~((bullet_erase_scr_addr+1 - bullet_erase_wh) == (monster_erase_scr_addr+1 - monster_erase_wh))
 			.error "actor_erase func fails because !((bullet_erase_scr_addr+1 - bullet_erase_wh) == (monster_erase_scr_addr+1 - monster_erase_wh))"
 		.endif
 
         .if check_invis
 			; advance to bullet_status
-			HL_ADVANCE(bullet_draw_ptr, bullet_status)
+			HL_ADVANCE(bullet_draw_ptr, bullet_status, BY_HL_FROM_DE)
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
 			rnz
@@ -217,16 +224,15 @@
 			call sprite_get_addr
 			
 			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __ram_disk_s | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
-			pop h
+			pop h			
 			inx h
-			; hl - ptr to bullet_erase_scr_addr
 			; d - width
 			;		00 - 8pxs,
 			;		01 - 16pxs,
 			;		10 - 24pxs,
 			;		11 - 32pxs,
 			; e - height
-			; bc - sprite screen addr + offset			
+			; bc - sprite screen addr + offset
 			; hl - ptr to bullet_erase_scr_addr
 			; store the current scr addr, into bullet_erase_scr_addr
 			mov m, c
@@ -240,4 +246,3 @@
 			mov m, d
 			ret
 .endmacro
-*/

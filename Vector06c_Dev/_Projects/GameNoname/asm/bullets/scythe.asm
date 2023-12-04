@@ -193,4 +193,4 @@ scythe_update:
 ; in:
 ; de - ptr to bullet_draw_ptr 
 scythe_draw:
-			BULLET_DRAW(sprite_get_scr_addr_scythe, __RAM_DISK_S_SCYTHE)
+			ACTOR_DRAW(sprite_get_scr_addr_scythe, __RAM_DISK_S_SCYTHE, false)

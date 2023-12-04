@@ -88,4 +88,4 @@ firepool_impacted:
 ; in:
 ; de - ptr to monster_draw_ptr 
 firepool_draw:
-			MONSTER_DRAW(sprite_get_scr_addr1, __RAM_DISK_S_VFX)
+			ACTOR_DRAW(sprite_get_scr_addr1, __RAM_DISK_S_VFX, false)

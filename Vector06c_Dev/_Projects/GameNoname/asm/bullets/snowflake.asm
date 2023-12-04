@@ -162,4 +162,4 @@ snowflake_update:
 ; in:
 ; de - ptr to bullet_draw_ptr 
 snowflake_draw:
-			BULLET_DRAW(sprite_get_scr_addr_snowflake, __RAM_DISK_S_SNOWFLAKE)
+			ACTOR_DRAW(sprite_get_scr_addr_snowflake, __RAM_DISK_S_SNOWFLAKE)

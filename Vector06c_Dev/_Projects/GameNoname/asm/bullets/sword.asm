@@ -205,4 +205,4 @@ sword_update:
 ; in:
 ; de - ptr to bullet_draw_ptr 
 sword_draw:
-			BULLET_DRAW(sprite_get_scr_addr_sword, __RAM_DISK_S_SWORD)
+			ACTOR_DRAW(sprite_get_scr_addr_sword, __RAM_DISK_S_SWORD)

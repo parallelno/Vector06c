@@ -395,4 +395,4 @@ burner_update_anim_check_collision_hero:
 ; in:
 ; de - ptr to monster_draw_ptr 
 burner_draw:
-			MONSTER_DRAW(sprite_get_scr_addr_burner, __RAM_DISK_S_BURNER)
+			ACTOR_DRAW(sprite_get_scr_addr_burner, __RAM_DISK_S_BURNER, false)

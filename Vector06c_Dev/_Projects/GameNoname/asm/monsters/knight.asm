@@ -366,4 +366,4 @@ knight_update_anim_check_collision_hero:
 ; in:
 ; de - ptr to monster_draw_ptr 
 knight_draw:
-			MONSTER_DRAW(sprite_get_scr_addr_knight, __RAM_DISK_S_KNIGHT)
+			ACTOR_DRAW(sprite_get_scr_addr_knight, __RAM_DISK_S_KNIGHT, false)
