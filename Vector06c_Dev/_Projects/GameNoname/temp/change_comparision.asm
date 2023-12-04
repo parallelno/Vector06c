@@ -33,9 +33,6 @@ total
 Success. Size: 47989 bytes ($BB75)
 
 
-bug
-sp 7ff6
-
 
 ; ram-disk data layout
 ; bank0 addr0    [ 4336 free] description: 
