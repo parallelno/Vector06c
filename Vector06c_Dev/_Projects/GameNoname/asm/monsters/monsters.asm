@@ -94,11 +94,6 @@ monster_init:
 			inx h
 			mov m, b
 
-			; advance hl to monster_id
-			inx h
-@monster_id:
-			mvi m, TEMP_BYTE
-
 			; advance hl to monster_type
 			inx h
 			mvi m, MONSTER_TYPE_ENEMY
@@ -174,7 +169,7 @@ monster_init:
 			mov m, e
 			inx h
 			mov m, a
-@monster_impacted_ptr:
+
 			; advance hl to monster_impacted_ptr
 			HL_ADVANCE(monster_pos_y + 1, monster_impacted_ptr, BY_DE)
 			pop b
@@ -182,6 +177,11 @@ monster_init:
 			mov m, c
 			inx h
 			mov m, b
+
+			; advance hl to monster_id
+			inx h
+@monster_id:
+			mvi m, TEMP_BYTE			
 
 @restore_sp:
 			lxi sp, TEMP_ADDR
