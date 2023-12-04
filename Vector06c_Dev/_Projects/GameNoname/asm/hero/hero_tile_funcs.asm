@@ -31,7 +31,7 @@ hero_tile_func_item:
 
 			; add score points
 			push b
-			mvi a, TILEDATA_FUNC_ID_ITEMS
+			mvi d, TILEDATA_FUNC_ID_ITEMS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score_text
 			pop b
@@ -81,7 +81,7 @@ hero_tile_func_resource:
 			; add score points
 			push psw
 			mov e, a
-			mvi a, TILEDATA_FUNC_ID_RESOURCES
+			mvi d, TILEDATA_FUNC_ID_RESOURCES
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score_text
 			pop psw
@@ -199,8 +199,7 @@ hero_cont_func_chest_spoon:
 			mvi m, RES_SPOON_MAX
 			call game_ui_res_select_and_draw
 	
-			mvi a, TILEDATA_FUNC_ID_RESOURCES
-			mvi e, RES_ID_SPOON
+			lxi d, TILEDATA_FUNC_ID_RESOURCES<<8 | RES_ID_SPOON
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score_text
 

@@ -38,8 +38,13 @@ game_score_resources:
 			.word 5		; res_id = 9 - a spoon			
 
 ; func_id = 10
+; TODO: it was previosly triggered by triggers, it caused a bug
+; because the fiends door can be accessed multiple times. 
+; so it dissabled and not used now
+; think of using it only for secret places/rooms
 __game_score_secrets:
-			.word 1000	; entity_id = 0 - a home door trigger
+			.word 10	; entity_id = 0 - a home door trigger
+			.word 20	; entity_id = 0 - a home door trigger
 
 ; func_id = 11
 __game_score_containers:
@@ -52,7 +57,7 @@ __game_score_containers:
 			.word 50	; container_id = 6 - a crate with a teleport under it to a unique location
 
 ; func_id = 12
-game_score_doors:
+__game_score_doors:
 			.word 1		; door_id = 0 - a door 1a
 			.word 1		; door_id = 1 - a door 1b
 			.word 3		; door_id = 2 - a door 2a
@@ -81,7 +86,7 @@ __game_score_lists_ptrs:
 			.word NULL_PTR
 			.word __game_score_secrets
 			.word __game_score_containers
-			.word game_score_doors
+			.word __game_score_doors
 			.word game_score_breakables
 
 ; game stats shown when the game is over
@@ -95,7 +100,7 @@ __game_stats:
 			.word 0			; resource: coins
 			.word NULL_BYTE
 			.word NULL_BYTE
-			.word 0			; secrets (sometimes triggers)
+			.word 0			; TODO: check secrets above
 			.word 0			; containers
 			.word 0			; doors
 			.word 0			; breakables
@@ -104,10 +109,11 @@ __game_stats_end:
 ; add score points to hero_res_score
 ; call ex. CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 ; in:
-; a - func_id
+; d - func_id
 ; e - entity_id
 ; ex: to add score points of a dead vampire, a = 1, c = 1
 __game_score_add:
+			mov a, d
 			; get the ptr to the partucular entity
 			HL_TO_AX2_PLUS_INT16(__game_stats - WORD_LEN) ; because the list starts with func_id=1
 			; increase the entity counter
@@ -116,7 +122,7 @@ __game_score_add:
 			inx h
 			inr m
 @score_add:
-			mov a, c
+			mov a, d
 			; get the ptr to the scores of partucular entity
 			HL_TO_AX2_PLUS_INT16(__game_score_lists_ptrs - WORD_LEN) ; because the list starts with func_id=1
 			; get a score list ptr

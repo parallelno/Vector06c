@@ -57,8 +57,7 @@ trigger_hero_knocks_his_friend_door:
 			; if a key_0 isn't acquired, set key_0 status = ITEM_STATUS_ACQUIRED
 			mvi m, ITEM_STATUS_ACQUIRED
 			
-			mvi a, TILEDATA_FUNC_ID_ITEMS
-			mvi e, ITEM_ID_KEY_0
+			lxi d, TILEDATA_FUNC_ID_ITEMS<<8 | ITEM_ID_KEY_0
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score_text
 
@@ -92,8 +91,7 @@ trigger_hero_knocks_his_friend_door:
 			lxi h, hero_res_sword
 			call game_ui_res_select_and_draw
 
-			mvi a, TILEDATA_FUNC_ID_RESOURCES
-			mvi e, RES_ID_PIE
+			lxi d, TILEDATA_FUNC_ID_RESOURCES<<8 | RES_ID_PIE
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score_text
 

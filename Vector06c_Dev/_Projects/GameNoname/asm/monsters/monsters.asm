@@ -329,7 +329,7 @@ monster_impacted:
 			; advance hl to monster_id
 			HL_ADVANCE(monster_health, monster_id, BY_DE)
 			mov e, m
-			mvi a, TILEDATA_FUNC_ID_MONSTERS
+			mvi d, TILEDATA_FUNC_ID_MONSTERS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
 			call game_ui_draw_score_text
 			pop h

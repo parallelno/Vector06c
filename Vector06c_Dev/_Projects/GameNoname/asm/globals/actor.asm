@@ -215,7 +215,8 @@ actors_call_if_alive:
 ; requires (bullet_status - bullet_erase_scr_addr) == (monster_status - monster_erase_scr_addr)
 ; requires (bullet_erase_scr_addr+1 - bullet_erase_wh) == (monster_erase_scr_addr+1 - monster_erase_wh)
 ; in:
-; hl - actor_status
+; hl - ptr to actor_update_ptr+1
+; de - LXI_D_TO_DIFF(actor_update_ptr+1, actor_status)
 ; a - ACTOR_RUNTIME_DATA_* status
 actor_erase:
 			; validation
@@ -230,6 +231,7 @@ actor_erase:
 			cpi ACTOR_RUNTIME_DATA_DESTR
 			jz @set_empty
 
+			; hl - ptr to actor_update_ptr+1
 			; de - LXI_D_TO_DIFF(actor_update_ptr+1, actor_status)
 			; advance to actor_status
 			dad d
