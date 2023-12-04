@@ -102,8 +102,7 @@ skeleton_init:
 ; de - ptr to monster_update_ptr 
 skeleton_update:
 			; advance hl to monster_status
-			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
-			dad d
+			HL_ADVANCE(monster_update_ptr, monster_status, BY_HL_FROM_DE)
 			mov a, m
 			; NOT TODO: call table is not faster than properly sorted cpi/jz
 			cpi SKELETON_STATUS_MOVE
@@ -150,9 +149,7 @@ skeleton_update_move_init:
 			xchg
 			call random
 			; advance hl to monster_speed_x
-			LXI_H_TO_DIFF(monster_status, monster_speed_x)
-			dad d
-
+			HL_ADVANCE(monster_status, monster_speed_x, BY_HL_FROM_DE)
 			mvi c, 0 ; tmp c=0
 			cpi $40
 			jc @speed_x_positive

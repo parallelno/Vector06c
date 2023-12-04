@@ -304,12 +304,12 @@ monster_impacted:
 			cmp c
 			jz @set_state_freeze
 			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_monsters, MONSTER_SPAWN_RATE_DELTA, MONSTER_SPAWN_RATE_MAX)
-			; de - ptr to monster_impacted_ptr+1
 
 			; play a hit vfx
+			; de - ptr to monster_impacted_ptr + 1			
 			; advance hl to monster_pos_x+1
-			LXI_H_TO_DIFF(monster_impacted_ptr+1, monster_pos_x+1)
-			dad d
+			HL_ADVANCE(monster_impacted_ptr+1, monster_pos_x+1, BY_HL_FROM_DE)
+
 			mov b, m
 			; advance hl to monster_pos_y+1
 			INX_H(2)
