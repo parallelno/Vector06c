@@ -97,8 +97,7 @@ knight_init:
 ; de - ptr to monster_update_ptr 
 knight_update:
 			; advance hl to monster_status
-			LXI_H_TO_DIFF(monster_update_ptr, monster_status)
-			dad d
+			HL_ADVANCE(monster_update_ptr, monster_status, BY_HL_FROM_DE)
 			mov a, m
 			cpi KNIGHT_STATUS_MOVE
 			jz knight_update_move
@@ -264,8 +263,7 @@ knight_update_move_init:
 			ani %01111111 ; to clear the last bit
 			ora b
 			; advance hl to monster_speed_x
-			LXI_H_TO_DIFF(monster_id, monster_speed_x)
-			dad d
+			HL_ADVANCE(monster_id, monster_speed_x, BY_HL_FROM_DE)
 
 			cpi $40
 			jc @speed_x_positive
