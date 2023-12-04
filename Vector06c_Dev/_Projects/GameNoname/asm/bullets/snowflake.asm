@@ -69,8 +69,7 @@ snowflake_init_speed:
 ; de - ptr to bullet_update_ptr 
 snowflake_update:
 			; advance to bullet_status
-			LXI_H_TO_DIFF(bullet_update_ptr, bullet_status)
-			dad d
+			HL_ADVANCE(bullet_update_ptr, bullet_status, BY_HL_FROM_DE)
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
 			jnz @delay_update

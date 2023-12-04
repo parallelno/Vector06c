@@ -326,9 +326,8 @@ monster_impacted:
 
 			; add score points
 			push h
-			; advance hl to monster_impacted_ptr+1
-			HL_ADVANCE(monster_pos_y+1, monster_impacted_ptr+1, BY_DE)
-			dad d
+			; advance hl to monster_id
+			HL_ADVANCE(monster_health, monster_id, BY_DE)
 			mov e, m
 			mvi a, TILEDATA_FUNC_ID_MONSTERS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)
@@ -344,8 +343,7 @@ monster_impacted:
 @set_state_freeze:
 			; de - ptr to monster_impacted_ptr+1
 			; advance hl to monster_pos_x+1
-			LXI_H_TO_DIFF(monster_impacted_ptr+1, monster_status)
-			dad d
+			HL_ADVANCE(monster_impacted_ptr+1, monster_status, BY_HL_FROM_DE)
 			mvi m, MONSTER_STATUS_FREEZE
 			; advance hl to monster_status_timer
 			inx h
