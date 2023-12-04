@@ -75,6 +75,7 @@ hero_runtime_data_end:		= hero_runtime_data + 33
 ;=============================================================================
 ; monsters runtime data
 ;
+MONSTERS_MAX = 15 ; max monsters in the room
 ; ptr to the first monster data in the sorted list
 monsters_runtime_data_sorted:	= $7512 ; .word monster_update_ptr
 
@@ -82,22 +83,22 @@ monsters_runtime_data_sorted:	= $7512 ; .word monster_update_ptr
 monsters_runtime_data:		= $7514	; $7712 - $1fe (512)(MONSTER_RUNTIME_DATA_LEN * MONSTERS_MAX)
 monster_update_ptr:			= monsters_runtime_data + 0		; .word TEMP_ADDR
 monster_draw_ptr:			= monsters_runtime_data + 2		; .word TEMP_ADDR
-monster_type:				= monsters_runtime_data + 4		; .byte TEMP_BYTE
-monster_health:				= monsters_runtime_data + 5		; .byte TEMP_BYTE
-monster_status:				= monsters_runtime_data + 6		; .byte TEMP_BYTE
-monster_status_timer:		= monsters_runtime_data + 7		; .byte TEMP_BYTE
-monster_anim_timer:			= monsters_runtime_data + 8		; .byte TEMP_BYTE
-monster_anim_ptr:			= monsters_runtime_data + 9		; .word TEMP_ADDR
-monster_erase_scr_addr:		= monsters_runtime_data + 11	; .word TEMP_WORD
-monster_erase_scr_addr_old:	= monsters_runtime_data + 13	; .word TEMP_ADDR
-monster_erase_wh:			= monsters_runtime_data + 15	; .word TEMP_WORD
-monster_erase_wh_old:		= monsters_runtime_data + 17	; .word TEMP_WORD
-monster_pos_x:				= monsters_runtime_data + 19	; .word TEMP_WORD
-monster_pos_y:				= monsters_runtime_data + 21	; .word TEMP_WORD
-monster_speed_x:			= monsters_runtime_data + 23	; .word TEMP_WORD
-monster_speed_y:			= monsters_runtime_data + 25	; .word TEMP_WORD
-monster_impacted_ptr:		= monsters_runtime_data + 27	; .word TEMP_WORD ; called by a hero's bullet, another monster, etc. to affect this monster
-monster_id:					= monsters_runtime_data + 29	; .byte TEMP_BYTE
+monster_health:				= monsters_runtime_data + 4		; .byte TEMP_BYTE
+monster_status:				= monsters_runtime_data + 5		; .byte TEMP_BYTE
+monster_status_timer:		= monsters_runtime_data + 6		; .byte TEMP_BYTE
+monster_anim_timer:			= monsters_runtime_data + 7		; .byte TEMP_BYTE
+monster_anim_ptr:			= monsters_runtime_data + 8		; .word TEMP_ADDR
+monster_erase_scr_addr:		= monsters_runtime_data + 10	; .word TEMP_WORD
+monster_erase_scr_addr_old:	= monsters_runtime_data + 12	; .word TEMP_ADDR
+monster_erase_wh:			= monsters_runtime_data + 14	; .word TEMP_WORD
+monster_erase_wh_old:		= monsters_runtime_data + 16	; .word TEMP_WORD
+monster_pos_x:				= monsters_runtime_data + 18	; .word TEMP_WORD
+monster_pos_y:				= monsters_runtime_data + 20	; .word TEMP_WORD
+monster_speed_x:			= monsters_runtime_data + 22	; .word TEMP_WORD
+monster_speed_y:			= monsters_runtime_data + 24	; .word TEMP_WORD
+monster_impacted_ptr:		= monsters_runtime_data + 26	; .word TEMP_WORD ; called by a hero's bullet, another monster, etc. to affect this monster
+monster_id:					= monsters_runtime_data + 28	; .byte TEMP_BYTE
+monster_type:				= monsters_runtime_data + 29	; .byte TEMP_BYTE
 monster_data_prev_pptr:		= monsters_runtime_data + 30	; .word TEMP_WORD
 monster_data_next_pptr:		= monsters_runtime_data + 32	; .word TEMP_WORD
 @end_data:					= monsters_runtime_data + 34
@@ -105,9 +106,9 @@ monster_data_next_pptr:		= monsters_runtime_data + 32	; .word TEMP_WORD
 MONSTER_RUNTIME_DATA_LEN = @end_data - monsters_runtime_data
 
 ; the same structs for the rest of the monsters
-monsters_runtime_data_end_marker:	= $7712		; .word ACTOR_RUNTIME_DATA_END << 8
-monsters_runtime_data_end:			= $7714		; monsters_runtime_data_end_marker + WORD_LEN
-MONSTERS_RUNTIME_DATA_LEN = monsters_runtime_data_end - monsters_runtime_data_sorted
+monsters_runtime_data_end_marker:	= monsters_runtime_data + MONSTER_RUNTIME_DATA_LEN * MONSTERS_MAX	; .word ACTOR_RUNTIME_DATA_END << 8
+monsters_runtime_data_end:			= monsters_runtime_data_end_marker + ADDR_LEN
+MONSTERS_RUNTIME_DATA_LEN			= monsters_runtime_data_end - monsters_runtime_data_sorted
 
 ;=============================================================================
 ; tiled image indices buffer
@@ -142,9 +143,9 @@ bullet_speed_y:				= bullets_runtime_data + 23		;.word TEMP_WORD
 BULLET_RUNTIME_DATA_LEN = @data_end - bullets_runtime_data ; $1a; bullet_runtime_data_end_addr-bullets_runtime_data
 
 ; the same structs for the rest of the bullets
-bullets_runtime_data_end_marker: = bullets_runtime_data + BULLET_RUNTIME_DATA_LEN * BULLETS_MAX ; $78ff ; :		.word ACTOR_RUNTIME_DATA_END << 8
-bullets_runtime_data_end: = bullets_runtime_data_end_marker + WORD_LEN
-BULLETS_RUNTIME_DATA_LEN = bullets_runtime_data_end - bullets_runtime_data
+bullets_runtime_data_end_marker:	= bullets_runtime_data + BULLET_RUNTIME_DATA_LEN * BULLETS_MAX ; $78ff ; :		.word ACTOR_RUNTIME_DATA_END << 8
+bullets_runtime_data_end:			= bullets_runtime_data_end_marker + ADDR_LEN
+BULLETS_RUNTIME_DATA_LEN			= bullets_runtime_data_end - bullets_runtime_data
 ;=============================================================================
 ; statuses of container instances.
 ; this data is aligned to $100, the length is <= $100

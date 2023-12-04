@@ -94,9 +94,6 @@ monster_init:
 			inx h
 			mov m, b
 
-			; advance hl to monster_type
-			inx h
-			mvi m, MONSTER_TYPE_ENEMY
 			; advance hl to monster_health
 			inx h
 			pop b
@@ -181,7 +178,10 @@ monster_init:
 			; advance hl to monster_id
 			inx h
 @monster_id:
-			mvi m, TEMP_BYTE			
+			mvi m, TEMP_BYTE
+			; advance hl to monster_type
+			inx h
+			mvi m, MONSTER_TYPE_ENEMY
 
 @restore_sp:
 			lxi sp, TEMP_ADDR
