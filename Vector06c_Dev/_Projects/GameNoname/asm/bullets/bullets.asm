@@ -55,7 +55,7 @@ bullet_init:
 			lxi h, bullet_update_ptr+1
 			mvi e, BULLET_RUNTIME_DATA_LEN
 			call actor_get_empty_data_ptr
-			rnz ; return when it's too many objects
+			jnz @restore_sp ; return when it's too many objects
 
 			; hl - ptr to bullet_update_ptr+1
 			; advance hl to bullet_update_ptr
