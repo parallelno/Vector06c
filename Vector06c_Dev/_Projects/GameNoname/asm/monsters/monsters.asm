@@ -94,21 +94,21 @@ monster_init:
 			inx h
 			mov m, b
 
-			; advance hl to monster_health
+			; a - tile_idx in the room_tiledata array
+			mov e, a
+			; e - tile_idx
+						
+			; advance hl to monster_status
 			inx h
 			pop b
 			; b - MONSTER_STATUS
-			; c - MONSTER_HEALTH
-			mov m, c
-			; advance hl to monster_status
-			inx h
 			mov m, b
+			mov a, c
+			; a - MONSTER_HEALTH
+			sta @health + 1
 
 			; advance hl to monster_anim_ptr
-			HL_ADVANCE(monster_status, monster_anim_ptr, BY_DE)
-
-			mov e, a
-			; e - tile_idx
+			HL_ADVANCE(monster_status, monster_anim_ptr)
 
 			pop b
 			; bc - monster_anim_ptr
@@ -182,6 +182,10 @@ monster_init:
 			; advance hl to monster_type
 			inx h
 			mvi m, MONSTER_TYPE_ENEMY
+			; advance hl to monster_health
+			inx h
+@health:
+			mvi m, TEMP_BYTE
 
 @restore_sp:
 			lxi sp, TEMP_ADDR
@@ -279,7 +283,7 @@ monsters_erase:
 
 ; copy sprites from a backbuffer to a scr
 ; in:
-; hl - ptr to monster_update_ptr+1 
+; hl - ptr to monster_update_ptr+1
 monster_copy_to_scr:
 			; advance to monster_status
 			HL_ADVANCE(monster_update_ptr+1, monster_status, BY_DE)
@@ -287,13 +291,13 @@ monster_copy_to_scr:
 
 ; erase a sprite or restore the background behind a sprite
 ; in:
-; hl - ptr to monster_update_ptr+1 
+; hl - ptr to monster_update_ptr+1
 ; a - MONSTER_RUNTIME_DATA_* status
 ; cc ~ 3480 if it mostly restores a background
 monster_erase:
 			LXI_D_TO_DIFF(monster_update_ptr+1, monster_status)
 			jmp actor_erase
-			
+
 ; in:
 ; de - ptr to monster_impacted_ptr + 1
 ; c - hero_weapon_id
@@ -305,7 +309,7 @@ monster_impacted:
 			ROOM_SPAWN_RATE_UPDATE(rooms_spawn_rate_monsters, MONSTER_SPAWN_RATE_DELTA, MONSTER_SPAWN_RATE_MAX)
 
 			; play a hit vfx
-			; de - ptr to monster_impacted_ptr + 1			
+			; de - ptr to monster_impacted_ptr + 1
 			; advance hl to monster_pos_x+1
 			HL_ADVANCE(monster_impacted_ptr+1, monster_pos_x+1, BY_HL_FROM_DE)
 
@@ -363,7 +367,7 @@ monster_impacted:
 
 ; common freeze update func.
 ; it does nothing except counting down the status time
-; in: 
+; in:
 ; hl = monster_status
 monster_update_freeze:
 			; hl = monster_status
@@ -375,4 +379,4 @@ monster_update_freeze:
 			dcx h
 			mvi m, MONSTER_STATUS_INIT
 			ret
-			
+
