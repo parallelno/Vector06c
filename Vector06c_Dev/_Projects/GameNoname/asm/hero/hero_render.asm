@@ -24,6 +24,13 @@ hero_draw:
 			mov a, l
 			; TODO: optimize. consider using unrolled loops in DrawSpriteVM for sprites 15 pxs tall
 			CALL_RAM_DISK_FUNC_BANK(__draw_sprite_vm)
+			; d - width
+			;		00 - 8pxs,
+			;		01 - 16pxs,
+			;		10 - 24pxs,
+			;		11 - 32pxs,
+			; e - height
+			; bc - sprite screen addr + offset			
 
 @save_params:
 			; store an old scr addr, width, and height

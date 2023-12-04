@@ -46,7 +46,7 @@
 			jmp @loop
 .endmacro
 
-; check a spawn_rate which address is rate_ptr + room_id
+; check a spawn_rate which addr is rate_ptr + room_id
 ; use:
 ; hl, e, a
 ; TODO: an issue that this macro does not check the level. 

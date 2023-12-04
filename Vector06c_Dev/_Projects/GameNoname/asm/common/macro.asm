@@ -202,6 +202,9 @@
 		.endif
 .endmacro
 
+; TODO: think of replacing HL_ADVANCE and LXI_TO_DIFF with C_ADVANCE_BY_A
+; TODO: think how to validate the case BY_HL_FROM_DE and BY_HL_FROM_BC when offset [-3, 3]
+; inx/dcx do not work here. it has to move data from de/bc to hl
 
 ; it advances HL by the diff equals to (addr_to - addr_from)
 ; if reg_pair is not provided, it uses INX_H(N)/DCX_H(N). 8-16cc
@@ -253,12 +256,12 @@ BY_HL_FROM_DE	= 4
 		.if reg_pair == NULL && (diff_addr < -3 || diff_addr > 3)
 			.error "HL_ADVANCE(" addr_from ", " addr_to") with diff (" diff_addr ") is outside of the required range of [-3, 3]. Use BY_BC, BY_DE, BY_HL_FROM_BC or BY_HL_FROM_DE as the third argument."
 		.endif		
-		;.if (reg_pair == BY_BC || reg_pair == BY_DE || reg_pair == BY_HL_FROM_DE || reg_pair == BY_HL_FROM_BC )  && diff_addr >= -3 && diff_addr <= 3
-		;	.error "HL_ADVANCE(" addr_from ", " addr_to", BY_BC/BY_DE/BY_HL_FROM_BC) with diff (" diff_addr ") is in too short range [-3, 3]. Keep the third argument undefined."
-		;.endif
-		;.if (reg_pair == BY_HL_FROM_DE )  && diff_addr >= -3 && diff_addr <= 3
+		.if (reg_pair == BY_BC || reg_pair == BY_DE )  && diff_addr >= -3 && diff_addr <= 3
+			.error "HL_ADVANCE(" addr_from ", " addr_to", BY_BC/BY_DE) with diff (" diff_addr ") is in too short range [-3, 3]. Keep the third argument undefined."
+		.endif
+		;.if (reg_pair == BY_HL_FROM_DE ) && diff_addr >= -3 && diff_addr <= 3
 		;	.print "HL_ADVANCE(" addr_from ", " addr_to", BY_HL_FROM_DE) with diff (" diff_addr ") is in too short range [-3, 3]. Replaced with xchg and INX_H(3)/DCX_H(3)."
-		;.endif		
+		;.endif
 		.if diff_addr == 0
 			.error "HL_ADVANCE(" addr_from ", " addr_to") with diff (" diff_addr ") is detected. It's redundant operation."
 		.endif

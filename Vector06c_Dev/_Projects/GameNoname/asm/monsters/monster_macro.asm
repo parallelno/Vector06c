@@ -27,13 +27,20 @@
 			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __ram_disk_s | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
 			pop h
 			inx h
+			; d - width
+			;		00 - 8pxs,
+			;		01 - 16pxs,
+			;		10 - 24pxs,
+			;		11 - 32pxs,
+			; e - height
+			; bc - sprite screen addr + offset			
 			; hl - ptr to monster_erase_scr_addr
 			; store a current scr addr, into monster_erase_scr_addr
 			mov m, c
 			inx h
 			mov m, b
 			; advance hl to monster_erase_wh
-			HL_ADVANCE(monster_erase_scr_addr+1, monster_erase_wh, BY_BC)
+			HL_ADVANCE(monster_erase_scr_addr+1, monster_erase_wh)
 			; store a width and a height into monster_erase_wh
 			mov m, e
 			inx h

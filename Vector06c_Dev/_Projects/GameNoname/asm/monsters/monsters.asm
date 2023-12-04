@@ -97,7 +97,7 @@ monster_init:
 			; a - tile_idx in the room_tiledata array
 			mov e, a
 			; e - tile_idx
-						
+
 			; advance hl to monster_status
 			inx h
 			pop b
@@ -286,7 +286,7 @@ monsters_erase:
 ; hl - ptr to monster_update_ptr+1
 monster_copy_to_scr:
 			; advance to monster_status
-			HL_ADVANCE(monster_update_ptr+1, monster_status, BY_DE)
+			HL_ADVANCE(monster_update_ptr+1, monster_status)
 			jmp actor_copy_to_scr
 
 ; erase a sprite or restore the background behind a sprite
@@ -330,7 +330,7 @@ monster_impacted:
 			; add score points
 			push h
 			; advance hl to monster_id
-			HL_ADVANCE(monster_health, monster_id, BY_DE)
+			HL_ADVANCE(monster_health, monster_id)
 			mov e, m
 			mvi d, TILEDATA_FUNC_ID_MONSTERS
 			CALL_RAM_DISK_FUNC(__game_score_add, __RAM_DISK_S_SCORE)

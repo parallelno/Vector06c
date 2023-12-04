@@ -7,7 +7,7 @@ __RAM_DISK_M_CLEAR_MEM = RAM_DISK_M
 ; the buffer length is <= $100
 ; input:
 ; hl - the buff addr
-; a - a low byte of an address the next after the buffer
+; a - a low byte of an addr the next after the buffer
 ; use:
 ; a, c
 .function clear_mem_short()

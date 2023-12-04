@@ -59,7 +59,7 @@ room_redraw:
 room_unpack:
 			; convert a room_id into the room gfx tile_idx buffer addr like __level01_room00 or __level01_room01, etc
 			lda room_id
-			; double the room index to get an address offset in the level01_rooms_addr array
+			; double the room index to get an addr offset in the level01_rooms_addr array
 			rlc
 			; double it again because there are two safety bytes in front of every room pointer
 			rlc

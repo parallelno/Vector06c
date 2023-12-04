@@ -247,7 +247,7 @@ actor_erase:
 			inx h
 			mov d, m
 
-			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh, BY_BC)
+			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh)
 			mov a, m
 			inx h
 			mov h, m

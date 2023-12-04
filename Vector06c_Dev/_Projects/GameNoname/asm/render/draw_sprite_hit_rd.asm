@@ -9,7 +9,7 @@
 ; ex. CALL_RAM_DISK_FUNC(__draw_sprite_hit_vm, __RAM_DISK_S_HERO_ATTACK01 | __RAM_DISK_M_DRAW_SPRITE_HIT_VM | RAM_DISK_M_8F)
 ; input:
 ; bc	sprite data
-; de	screen address
+; de	screen addr
 ; use: a, hl, sp
 
 ; data format:
@@ -63,7 +63,7 @@ __draw_sprite_hit_vm:
 			pop b
 			dad b
 			; store a sprite screen addr to return it from this func
-			shld drawSpriteScrAddr_ramDisk__+1
+			shld draw_sprite_scr_addr_ram_disk__+1
 
 			; store sprite width and height
 			; b - width, c - height

@@ -286,6 +286,13 @@ game_ui_draw_res:
 			; draw selection frame on a resouce
 			lxi b, __vfx_selection_0
 			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_VFX | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_89)
+			; d - width
+			;		00 - 8pxs,
+			;		01 - 16pxs,
+			;		10 - 24pxs,
+			;		11 - 32pxs,
+			; e - height
+			; bc - sprite screen addr + offset				
 			ret
 
 @tiled_img_ptrs:

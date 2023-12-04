@@ -35,15 +35,23 @@
 			call sprite_get_addr
 			
 			CALL_RAM_DISK_FUNC(__draw_sprite_vm, __ram_disk_s | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
-			pop h
+			pop h			
 			inx h
 			; hl - ptr to bullet_erase_scr_addr
+			; d - width
+			;		00 - 8pxs,
+			;		01 - 16pxs,
+			;		10 - 24pxs,
+			;		11 - 32pxs,
+			; e - height
+			; bc - sprite screen addr + offset
+
 			; store the current scr addr, into bullet_erase_scr_addr
 			mov m, c
 			inx h
 			mov m, b
 			; advance to bullet_erase_wh
-			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh, BY_BC)
+			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh)
 			; store a width and a height into bullet_erase_wh
 			mov m, e
 			inx h

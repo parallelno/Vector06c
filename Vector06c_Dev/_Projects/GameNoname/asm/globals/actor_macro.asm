@@ -220,12 +220,20 @@
 			pop h
 			inx h
 			; hl - ptr to bullet_erase_scr_addr
+			; d - width
+			;		00 - 8pxs,
+			;		01 - 16pxs,
+			;		10 - 24pxs,
+			;		11 - 32pxs,
+			; e - height
+			; bc - sprite screen addr + offset			
+			; hl - ptr to bullet_erase_scr_addr
 			; store the current scr addr, into bullet_erase_scr_addr
 			mov m, c
 			inx h
 			mov m, b
 			; advance to bullet_erase_wh
-			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh, BY_BC)
+			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh)
 			; store a width and a height into bullet_erase_wh
 			mov m, e
 			inx h

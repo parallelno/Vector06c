@@ -3,7 +3,7 @@
 draw_sprite_ret_ram_disk__:
 draw_sprite_restore_sp_ram_disk__:
 			lxi sp, TEMP_ADDR
-drawSpriteScrAddr_ramDisk__:
+draw_sprite_scr_addr_ram_disk__:
 			lxi b, TEMP_ADDR
 draw_sprite_width_height_ram_disk__:
 ; d - width
@@ -25,9 +25,17 @@ draw_sprite_width_height_ram_disk__:
 ; offset_y in pixels
 ; it uses sp to read the sprite data
 
-; input:
-; bc	sprite data
-; de	screen address
+; in:
+; bc - sprite data
+; de - screen addr
+; out:
+; d - width
+;		00 - 8pxs,
+;		01 - 16pxs,
+;		10 - 24pxs,
+;		11 - 32pxs,
+; e - height
+; bc - sprite screen addr + offset
 ; use: a, hl, sp
 
 ; the sprite format:
@@ -68,7 +76,7 @@ __DrawSpriteV:
 			pop b
 			dad b
 			; store a sprite screen addr to return it from this func
-			shld drawSpriteScrAddr_ramDisk__+1
+			shld draw_sprite_scr_addr_ram_disk__+1
 
 			; store sprite width and height
 			; b - width, c - height
@@ -237,9 +245,17 @@ __DrawSpriteV:
 ; offset_y in pixels
 ; it uses sp to read the sprite data
 ; ex. CALL_RAM_DISK_FUNC(__draw_sprite_vm, __RAM_DISK_S_HERO_ATTACK01 | __RAM_DISK_M_DRAW_SPRITE_VM | RAM_DISK_M_8F)
-; input:
-; bc	sprite data
-; de	screen address
+; in:
+; bc - sprite data
+; de - screen addr
+; out:
+; d - width
+;		00 - 8pxs,
+;		01 - 16pxs,
+;		10 - 24pxs,
+;		11 - 32pxs,
+; e - height
+; bc - sprite screen addr + offset
 ; use: a, hl, sp
 
 ; data format:
@@ -287,7 +303,7 @@ __draw_sprite_vm:
 			; c - offset_y			
 			dad b
 			; store a sprite screen addr to return it from this func
-			shld drawSpriteScrAddr_ramDisk__+1
+			shld draw_sprite_scr_addr_ram_disk__+1
 
 			; store sprite width and height
 			pop b			

@@ -206,8 +206,8 @@ GCPlayerSchedulerRestoreSp:
 ; unpacks 16 bytes of reg_data for the current task
 ; this function is called during an interruption
 ; Parameters (forward):
-; DE: source address (compressed data)
-; BC: destination address (decompressing)
+; DE: source addr (compressed data)
+; BC: destination addr (decompressing)
 ; unpack every 16 bytes into a current task circular buffer, 
 ; then call gcplayer_scheduler_store_task_context
 gcplayer_unpack:
