@@ -32,7 +32,7 @@ screen_simple_init:
 			call backs_init
 
 			; erase bullets buffs
-			lxi h, bullet_runtime_data_sorted
+			lxi h, bullets_runtime_data
 			mvi a, <bullets_runtime_data_end
 			call clear_mem_short
 			; setup bullets runtime data

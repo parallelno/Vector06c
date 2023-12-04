@@ -53,16 +53,13 @@ level_init:
 			mvi a, <backs_runtime_data_end
 			call clear_mem_short
 
-; TODO: look up bullet_runtime_data_sorted
-; it seems bullets_runtime_data and possibly others like monster_runtime_data_sorted
-; got created twice. once here, and once in their init funcs
 			; erase bullets buffs
-			lxi h, bullet_runtime_data_sorted
+			lxi h, bullets_runtime_data
 			mvi a, <bullets_runtime_data_end
 			call clear_mem_short
 
 			; erase monsters buffs
-			lxi h, monster_runtime_data_sorted
+			lxi h, monsters_runtime_data_sorted
 			lxi b, MONSTERS_RUNTIME_DATA_LEN
 			call clear_mem
 

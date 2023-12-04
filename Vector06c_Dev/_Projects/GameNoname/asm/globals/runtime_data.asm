@@ -76,40 +76,38 @@ hero_runtime_data_end:		= hero_runtime_data + 33
 ; monsters runtime data
 ;
 ; ptr to the first monster data in the sorted list
-monster_runtime_data_sorted:	= $7512 ; .word monster_update_ptr
+monsters_runtime_data_sorted:	= $7512 ; .word monster_update_ptr
 
 ; a list of monster runtime data structs.
 monsters_runtime_data:		= $7514	; $7712 - $1fe (512)(MONSTER_RUNTIME_DATA_LEN * MONSTERS_MAX)
-monster_update_ptr:			= $7514	; .word TEMP_ADDR
-monster_draw_ptr:			= $7516 ; .word TEMP_ADDR
-monster_impacted_ptr:		= $7518 ; .word TEMP_WORD ; called by a hero's bullet, another monster, etc. to affect this monster
-monster_id:					= $751a ; .byte TEMP_BYTE
-monster_type:				= $751b ; .byte TEMP_BYTE
-monster_health:				= $751c ; .byte TEMP_BYTE
-monster_status:				= $751d ; .byte TEMP_BYTE
-monster_status_timer:		= $751e ; .byte TEMP_BYTE
-monster_anim_timer:			= $751f ; .byte TEMP_BYTE
-monster_anim_ptr:			= $7520 ; .word TEMP_ADDR
-monster_erase_scr_addr:		= $7522 ; .word TEMP_WORD
-monster_erase_scr_addr_old:	= $7524 ; .word TEMP_ADDR
-monster_erase_wh:			= $7526 ; .word TEMP_WORD
-monster_erase_wh_old:		= $7528 ; .word TEMP_WORD
-monster_pos_x:				= $752a ; .word TEMP_WORD
-monster_pos_y:				= $752c ; .word TEMP_WORD
-monster_speed_x:			= $752e ; .word TEMP_WORD
-monster_speed_y:			= $7530 ; .word TEMP_WORD
-monster_data_prev_pptr:		= $7532 ; .word TEMP_WORD
-monster_data_next_pptr:		= $7534 ; .word TEMP_WORD
-;@end_data:
+monster_update_ptr:			= monsters_runtime_data + 0		; .word TEMP_ADDR
+monster_draw_ptr:			= monsters_runtime_data + 2		; .word TEMP_ADDR
+monster_id:					= monsters_runtime_data + 4		; .byte TEMP_BYTE
+monster_type:				= monsters_runtime_data + 5		; .byte TEMP_BYTE
+monster_health:				= monsters_runtime_data + 6		; .byte TEMP_BYTE
+monster_status:				= monsters_runtime_data + 7		; .byte TEMP_BYTE
+monster_status_timer:		= monsters_runtime_data + 8		; .byte TEMP_BYTE
+monster_anim_timer:			= monsters_runtime_data + 9		; .byte TEMP_BYTE
+monster_anim_ptr:			= monsters_runtime_data + 10	; .word TEMP_ADDR
+monster_erase_scr_addr:		= monsters_runtime_data + 12	; .word TEMP_WORD
+monster_erase_scr_addr_old:	= monsters_runtime_data + 14	; .word TEMP_ADDR
+monster_erase_wh:			= monsters_runtime_data + 16	; .word TEMP_WORD
+monster_erase_wh_old:		= monsters_runtime_data + 18	; .word TEMP_WORD
+monster_pos_x:				= monsters_runtime_data + 20	; .word TEMP_WORD
+monster_pos_y:				= monsters_runtime_data + 22	; .word TEMP_WORD
+monster_speed_x:			= monsters_runtime_data + 24	; .word TEMP_WORD
+monster_speed_y:			= monsters_runtime_data + 26	; .word TEMP_WORD
+monster_impacted_ptr:		= monsters_runtime_data + 28	; .word TEMP_WORD ; called by a hero's bullet, another monster, etc. to affect this monster
+monster_data_prev_pptr:		= monsters_runtime_data + 30	; .word TEMP_WORD
+monster_data_next_pptr:		= monsters_runtime_data + 32	; .word TEMP_WORD
+@end_data:					= monsters_runtime_data + 34
 
-MONSTER_RUNTIME_DATA_LEN = $22 ; @end_data - monsters_runtime_data
+MONSTER_RUNTIME_DATA_LEN = @end_data - monsters_runtime_data
 
 ; the same structs for the rest of the monsters
-;.storage MONSTER_RUNTIME_DATA_LEN * (MONSTERS_MAX-1), 0
-
 monsters_runtime_data_end_marker:	= $7712		; .word ACTOR_RUNTIME_DATA_END << 8
 monsters_runtime_data_end:			= $7714		; monsters_runtime_data_end_marker + WORD_LEN
-MONSTERS_RUNTIME_DATA_LEN = monsters_runtime_data_end - monster_runtime_data_sorted
+MONSTERS_RUNTIME_DATA_LEN = monsters_runtime_data_end - monsters_runtime_data_sorted
 
 ;=============================================================================
 ; tiled image indices buffer
@@ -122,28 +120,24 @@ TILED_IMG_IDXS_LEN = $100
 ;=============================================================================
 ; bullets runtime data
 ; must fit inside $100 block
-;
-; ptr to the first bullet data in the sorted list
-; TODO: implement or remove it
-bullet_runtime_data_sorted:	= $7814 ; .byte <bullet_update_ptr
 
 ; a list of bullet runtime data structs.
 bullets_runtime_data:		= $7815
-bullet_update_ptr:			= bullets_runtime_data 					;.word TEMP_ADDR
-bullet_draw_ptr:			= bullet_update_ptr + WORD_LEN			;.word TEMP_ADDR
-bullet_status:				= bullet_draw_ptr + WORD_LEN			;.byte TEMP_BYTE
-bullet_status_timer:		= bullet_status + BYTE_LEN 				;.byte TEMP_BYTE
-bullet_anim_timer:			= bullet_status_timer + BYTE_LEN		;.byte TEMP_BYTE
-bullet_anim_ptr:			= bullet_anim_timer + BYTE_LEN			;.word TEMP_ADDR
-bullet_erase_scr_addr:		= bullet_anim_ptr + WORD_LEN			;.word TEMP_WORD
-bullet_erase_scr_addr_old:	= bullet_erase_scr_addr + WORD_LEN		;.word TEMP_ADDR
-bullet_erase_wh:			= bullet_erase_scr_addr_old + WORD_LEN	;.word TEMP_WORD
-bullet_erase_wh_old:		= bullet_erase_wh + WORD_LEN			;.word TEMP_WORD
-bullet_pos_x:				= bullet_erase_wh_old + WORD_LEN		;.word TEMP_WORD
-bullet_pos_y:				= bullet_pos_x + WORD_LEN				;.word TEMP_WORD
-bullet_speed_x:				= bullet_pos_y + WORD_LEN				;.word TEMP_WORD
-bullet_speed_y:				= bullet_speed_x + WORD_LEN				;.word TEMP_WORD
-@data_end:					= bullet_speed_y + WORD_LEN
+bullet_update_ptr:			= bullets_runtime_data + 0		;.word TEMP_ADDR
+bullet_draw_ptr:			= bullets_runtime_data + 2		;.word TEMP_ADDR
+bullet_status:				= bullets_runtime_data + 4		;.byte TEMP_BYTE
+bullet_status_timer:		= bullets_runtime_data + 5		;.byte TEMP_BYTE
+bullet_anim_timer:			= bullets_runtime_data + 6		;.byte TEMP_BYTE
+bullet_anim_ptr:			= bullets_runtime_data + 7		;.word TEMP_ADDR
+bullet_erase_scr_addr:		= bullets_runtime_data + 9		;.word TEMP_WORD
+bullet_erase_scr_addr_old:	= bullets_runtime_data + 11		;.word TEMP_ADDR
+bullet_erase_wh:			= bullets_runtime_data + 13		;.word TEMP_WORD
+bullet_erase_wh_old:		= bullets_runtime_data + 15		;.word TEMP_WORD
+bullet_pos_x:				= bullets_runtime_data + 17		;.word TEMP_WORD
+bullet_pos_y:				= bullets_runtime_data + 19		;.word TEMP_WORD
+bullet_speed_x:				= bullets_runtime_data + 21		;.word TEMP_WORD
+bullet_speed_y:				= bullets_runtime_data + 23		;.word TEMP_WORD
+@data_end:					= bullets_runtime_data + 25
 
 BULLET_RUNTIME_DATA_LEN = @data_end - bullets_runtime_data ; $1a; bullet_runtime_data_end_addr-bullets_runtime_data
 

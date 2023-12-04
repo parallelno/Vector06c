@@ -10,9 +10,7 @@
 .include "asm\\monsters\\firepool.asm"
 
 monsters_init:
-			lxi h, NULL ; marker the end and the start of the list
-			shld monster_runtime_data_sorted
-
+			; monsters_runtime_data_sorted got inited in level_init with NULL
 			; set the last marker byte of runtime_data
 			mvi a, ACTOR_RUNTIME_DATA_END
 			sta monsters_runtime_data_end_marker + 1
@@ -42,12 +40,12 @@ monsters_init:
 			.word TEMP_WORD  ; safety word because "call actor_get_empty_data_ptr"
 			.word TEMP_WORD  ; safety word because an interruption can call
 @init_data:
-			.word MONSTER_UPDATE_PTR, MONSTER_DRAW_PTR, MONSTER_IMPACT_PTR, MONSTER_STATUS<<8 | MONSTER_HEALTH, MONSTER_ANIM_PTR
+			.word MONSTER_UPDATE_PTR, MONSTER_DRAW_PTR, MONSTER_STATUS<<8 | MONSTER_HEALTH, MONSTER_ANIM_PTR, MONSTER_IMPACT_PTR
 .endmacro
 
 ; monster initialization
 ; in:
-; de - ptr to monster_data: .word MONSTER_UPDATE_PTR, MONSTER_DRAW_PTR, MONSTER_IMPACT_PTR, MONSTER_STATUS<<8 | MONSTER_HEALTH, MONSTER_ANIM_PTR
+; de - ptr to monster_data: .word MONSTER_UPDATE_PTR, MONSTER_DRAW_PTR, MONSTER_STATUS<<8 | MONSTER_HEALTH, MONSTER_ANIM_PTR, MONSTER_IMPACT_PTR
 ; c - tile_idx in the room_tiledata array.
 ; b - spawn_rate_check
 ;		1 - yes
@@ -92,13 +90,6 @@ monster_init:
 			inx h
 			pop b
 			; bc - ptr to monster_draw_ptr
-			mov m, c
-			inx h
-			mov m, b
-			; advance hl to monster_impacted_ptr
-			inx h
-			pop b
-			; bc - ptr to monster_impacted_ptr
 			mov m, c
 			inx h
 			mov m, b
@@ -183,6 +174,14 @@ monster_init:
 			mov m, e
 			inx h
 			mov m, a
+@monster_impacted_ptr:
+			; advance hl to monster_impacted_ptr
+			HL_ADVANCE(monster_pos_y + 1, monster_impacted_ptr, BY_DE)
+			pop b
+			; bc - ptr to monster_impacted_ptr
+			mov m, c
+			inx h
+			mov m, b
 
 @restore_sp:
 			lxi sp, TEMP_ADDR

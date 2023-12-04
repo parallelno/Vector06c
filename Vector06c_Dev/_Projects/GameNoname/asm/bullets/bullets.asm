@@ -10,8 +10,6 @@
 .include "asm\\bullets\\cursor.asm"
 
 bullets_init:
-			mvi a, <bullets_runtime_data
-			sta bullet_runtime_data_sorted
 			; set the last marker byte of runtime_data
 			mvi a, ACTOR_RUNTIME_DATA_END
 			sta bullets_runtime_data_end_marker + 1
