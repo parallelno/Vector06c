@@ -1,0 +1,50 @@
+install python
+https://www.python.org/downloads/
+
+add system env var to python/scripts/script/
+
+install vs code
+https://code.visualstudio.com/
+
+create git acc
+???create git repo
+git clone https://github.com/parallelno/Vector06c.git
+
+install git
+https://git-scm.com/downloads
+
+git config --global user.name "New Name"
+git config --global user.email "newemail@example.com"
+git clone 
+make a test update
+git status
+git add *
+git status
+git commit -m "comment"
+git push
+
+run vs code:
+install python vs code support package
+if you have python installed, check the pip upgrade: python -m pip intall --upgrade pip
+install packages:
+pip install Pillow
+pip install numpy
+
+install visual studio build tool: 
+https://visualstudio.microsoft.com/visual-cpp-build-tools/
+select Desktop dev with C++
+
+pip install lhafile
+
+install .NET 6.0
+https://dotnet.microsoft.com/en-us/download
+
+install retroassembler VS Code extention:
+click on the Extensions icon on the left side, or choose View -> Extensions. Enter Retro Assembler into the search field and install the extension from the marketplace. Choose one of the offered color themes for the assembler.
+
+retroassembler settings
+On the retroassembler extension page click on the gear icon to open the extention settings
+Specify the full path to the retrassembler stored in the repo. In my case it is in the dir "C:\Work\Programming\_Dev\Vector06c_Dev\retroassembler\retroassembler.exe".
+
+install tiled
+associate the ROM file extension with v06x emulator
