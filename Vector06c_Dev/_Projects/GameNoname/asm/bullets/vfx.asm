@@ -27,9 +27,7 @@ vfx_init4:
 			mvi m, >vfx_draw4
 
 			; advance hl to bullet_anim_ptr
-			MVI_A_TO_DIFF(bullet_draw_ptr + 1, bullet_anim_ptr)
-			add l
-			mov l, a
+			L_ADVANCE(bullet_draw_ptr + 1, bullet_anim_ptr, BY_A)
 			
 @anim_ptr:  ; store anim ptr
 			lxi d, TEMP_ADDR
@@ -115,9 +113,7 @@ vfx_init:
 			mvi m, VFX_STATUS_DEFAULT
 
 			; advance hl to bullet_anim_ptr
-			MVI_A_TO_DIFF(bullet_status, bullet_anim_ptr)
-			add l
-			mov l, a
+			L_ADVANCE(bullet_status, bullet_anim_ptr, BY_A)
 			
 @anim_ptr:  ; store anim ptr
 			lxi d, TEMP_ADDR

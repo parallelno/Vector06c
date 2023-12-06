@@ -9,11 +9,11 @@ backs_init:
 			; set the last marker byte of runtime_data
 			mvi a, ACTOR_RUNTIME_DATA_END
 			sta backs_runtime_data_end_marker + 1
-			
+
 			; set the first back in the runtime data to be updated and drawn
-			lxi h, backs_runtime_data + 1
+			lxi h, back_anim_ptr + 1
 			shld back_runtime_data_ptr_update
-			
+
 			; disable drawing
 			mvi a, BACK_DRAW_DISABLED
 			sta backs_draw
@@ -54,7 +54,7 @@ backs_spawn:
 			xchg
 @next_frame:
 			; load an offset to the next frame
-			mov e, m 
+			mov e, m
 			inx h
 			mov d, m
 			; advance back_anim_ptr to the next frame
@@ -96,23 +96,21 @@ backs_spawn:
 			; if you do not store unique back_anim_timer_speed for every back
 			; then you save one dcx h per frame and one byte per back. small improvements. that's why it is here.
 			mvi m, BACK_ANIM_TIMER_SPEED
-			mvi a, TILEDATA_COLLISION	
+			mvi a, TILEDATA_COLLISION
 			ret
 
 backs_update:
 back_runtime_data_ptr_update: = backs_update+1
-			lxi h, backs_runtime_data + 1
+			lxi h, back_anim_ptr + 1
 			mov a, m
 			cpi ACTOR_RUNTIME_DATA_EMPTY
-			jz @set_next_back
+			jz @set_next_back ; TODO: seems it does not get a proper offset down below the @set_next_back
 			cpi ACTOR_RUNTIME_DATA_LAST
 			jz @set_first_back
 
 @update_anim:
 			; advance hl to back_anim_timer_speed
-			MVI_A_TO_DIFF(back_anim_ptr+1, back_anim_timer_speed)
-			add l
-			mov l, a
+			L_ADVANCE(back_anim_ptr+1, back_anim_timer_speed, BY_A)
 
 			mov a, m
 			; advance hl to back_anim_timer
@@ -121,31 +119,29 @@ back_runtime_data_ptr_update: = backs_update+1
 			add m
 			mov m, a
 			jnc @set_next_back ; if back_anim_timer is not overloaded, set the next back for the next update
-			
+
 @set_draw_ptr:
-			; back_anim_timer got overloaded, so it needs to be drawn			
-			MVI_A_TO_DIFF(back_anim_timer, back_anim_ptr + 1)
-			add l
-			mov l, a
+			; back_anim_timer got overloaded, so it needs to be drawn
+			L_ADVANCE(back_anim_timer, back_anim_ptr + 1, BY_A)
 
 			; go to the next frame
 			; load back_anim_ptr
 			mov d, m
 			; advance hl to back_anim_ptr
-			dcx h 
+			dcx h
 			mov e, m
-			
+
 			; store ptr to back_anim_ptr into back_runtime_data_ptr_draw
 			shld back_runtime_data_ptr_draw
 			; enable drawing
 			mvi a, BACK_DRAW_ENABLED
 			sta backs_draw
-			
+
 			xchg
 			; load an offset to the next frame
 			mov c, m
-			inx h 
-			mov b, m 
+			inx h
+			mov b, m
 			; advance back_anim_ptr to the next frame
 			dad b
 			xchg
@@ -155,23 +151,25 @@ back_runtime_data_ptr_update: = backs_update+1
 			inx h
 			mov m, d
 			MVI_A_TO_DIFF(back_anim_ptr+1, back_anim_ptr + 1 + BACK_RUNTIME_DATA_LEN)
-			jmp @advance_and_save_ptr
-@set_first_back:
-			mvi a, <backs_runtime_data + 1
-			jmp @save_ptr
-@set_next_back:
-			; back_anim_timer is not overloaded, set the next back for the next update
-			MVI_A_TO_DIFF(back_anim_timer, back_anim_ptr + 1 + BACK_RUNTIME_DATA_LEN)
 @advance_and_save_ptr:
 			add l
 			mov l, a
-@save_ptr:	sta back_runtime_data_ptr_update			
+			sta back_runtime_data_ptr_update
 			ret
 
+@set_first_back:
+			mvi a, <back_anim_ptr + 1
+			sta back_runtime_data_ptr_update
+			ret
+
+@set_next_back: ; TODO: seems not quiet right offset back_anim_timer, back_anim_ptr + 1 + BACK_RUNTIME_DATA_LEN
+			; back_anim_timer is not overloaded, set the next back for the next update
+			MVI_A_TO_DIFF(back_anim_timer, back_anim_ptr + 1 + BACK_RUNTIME_DATA_LEN)
+			jmp @advance_and_save_ptr
+
 backs_draw:
-back_runtime_data_ptr_draw: = backs_draw + 1
-			lxi h, backs_runtime_data ; this can be replaced with OPCODE_RET is no draw needed
-			mvi a, BACK_DRAW_ENABLED ; disable to not draw until it needs
+			lxi h, backs_runtime_data ; this can be replaced with OPCODE_RET meaning no draw needed
+			mvi a, BACK_DRAW_ENABLED ; disable to not draw until it needs ; TODO: was it disabled?
 			sta backs_draw
 			; hl - ptr to back_anim_ptr
 			; load back_anim_ptr
@@ -195,4 +193,4 @@ back_runtime_data_ptr_draw: = backs_draw + 1
 			mov d, m
 			CALL_RAM_DISK_FUNC(draw_back_v, __RAM_DISK_S_BACKS)
 			ret
-
+back_runtime_data_ptr_draw: = backs_draw + 1

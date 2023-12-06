@@ -47,9 +47,7 @@ fart_init_post:
 ; de - ptr to bullet_update_ptr 
 fart_update:
 			; advance to bullet_status_timer
-			MVI_A_TO_DIFF(bullet_update_ptr, bullet_status_timer)
-			add e
-			mov e, a
+			E_ADVANCE(bullet_update_ptr, bullet_status_timer, BY_A)
 			xchg
 			; hl - ptr to bullet_update_ptr 
 @fraction_timer:
@@ -64,9 +62,7 @@ fart_update:
 @update_movement:
 			; hl - ptr to bullet_status_timer
 			; advance hl to bullet_speed_y + 1
-			MVI_A_TO_DIFF(bullet_status_timer, bullet_pos_x + 1)
-			add l
-			mov l, a
+			L_ADVANCE(bullet_status_timer, bullet_pos_x + 1, BY_A)
 
 			; update pos
 			xchg
@@ -78,9 +74,7 @@ fart_update:
 			INX_H(2)
 			mov m, e
 
-			MVI_A_TO_DIFF(bullet_pos_y + 1, bullet_anim_timer)
-			add l
-			mov l, a
+			L_ADVANCE(bullet_pos_y + 1, bullet_anim_timer, BY_A)
 			; update_anim
 			mvi a, SPARKER_ANIM_SPEED_MOVE
 			call actor_anim_update
@@ -92,8 +86,6 @@ fart_update:
 			; destroy fart vfx
 			; hl points to bullet_status_timer
 			; advance hl to bullet_update_ptr + 1
-			MVI_A_TO_DIFF(bullet_status_timer, bullet_update_ptr + 1)
-			add l
-			mov l, a
+			L_ADVANCE(bullet_status_timer, bullet_update_ptr+1, BY_A)
 			ACTOR_DESTROY()
 			ret

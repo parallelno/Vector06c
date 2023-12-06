@@ -13,7 +13,7 @@
 @checkCollisionHero:
 			; hl points to bullet_anim_ptr
 			; advance hl to bullet_pos_x
-			HL_ADVANCE(bullet_anim_ptr, bullet_pos_x+1, BY_BC)
+			L_ADVANCE(bullet_anim_ptr, bullet_pos_x+1, BY_A)
 			; horizontal check
 			mov c, m ; pos_x
 			lda hero_pos_x+1

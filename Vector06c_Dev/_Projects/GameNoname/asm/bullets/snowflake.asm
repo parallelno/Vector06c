@@ -86,7 +86,7 @@ snowflake_update:
 
 			; hl points to bullet_pos_y+1
 			; advance hl to bullet_anim_timer
-			HL_ADVANCE(bullet_pos_y+1, bullet_anim_timer, BY_BC)
+			L_ADVANCE(bullet_pos_y+1, bullet_anim_timer, BY_A)
 			mvi a, SNOWFLAKE_ANIM_SPEED_ATTACK
 			call actor_anim_update
 			; hl points to bullet_anim_ptr
@@ -94,7 +94,7 @@ snowflake_update:
 			; check sprite collision
 			; hl - ptr to bullet_anim_ptr
 			; advance hl to bullet_pos_x+1
-			HL_ADVANCE(bullet_anim_ptr, bullet_pos_x+1, BY_BC)
+			L_ADVANCE(bullet_anim_ptr, bullet_pos_x+1, BY_A)
 			; add a collision offset
 			mov d, m
 			INX_H(2)
@@ -133,12 +133,12 @@ snowflake_update:
 			lxi h, TEMP_ADDR
 @die_over_time:
 			; hl - ptr to bullet_status_timer
-			HL_ADVANCE(bullet_status_timer, bullet_update_ptr+1, BY_DE)
+			L_ADVANCE(bullet_status_timer, bullet_update_ptr+1, BY_A)
 			ACTOR_DESTROY()
 			ret
 @die:
 			; hl - ptr to bullet_pos_x
-			HL_ADVANCE(bullet_pos_x, bullet_update_ptr+1, BY_DE)
+			L_ADVANCE(bullet_pos_x, bullet_update_ptr+1, BY_A)
 			ACTOR_DESTROY()
 			ret
 

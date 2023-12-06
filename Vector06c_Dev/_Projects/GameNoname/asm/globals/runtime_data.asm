@@ -101,9 +101,9 @@ monster_type:				= monsters_runtime_data + 28	; .byte TEMP_BYTE
 monster_health:				= monsters_runtime_data + 29	; .byte TEMP_BYTE
 monster_data_prev_pptr:		= monsters_runtime_data + 30	; .word TEMP_WORD
 monster_data_next_pptr:		= monsters_runtime_data + 32	; .word TEMP_WORD
-@end_data:					= monsters_runtime_data + 34
+@data_end:					= monsters_runtime_data + 34
 
-MONSTER_RUNTIME_DATA_LEN = @end_data - monsters_runtime_data
+MONSTER_RUNTIME_DATA_LEN = @data_end - monsters_runtime_data
 
 ; the same structs for the rest of the monsters
 monsters_runtime_data_end_marker:	= monsters_runtime_data + MONSTER_RUNTIME_DATA_LEN * MONSTERS_MAX	; .word ACTOR_RUNTIME_DATA_END << 8
@@ -235,16 +235,16 @@ game_ui_item_visible_addr:	= $7b84		; .byte TEMP_BYTE ; currently shown item on 
 ; back runtime data
 ; must fit inside one $100 block
 backs_runtime_data:		= $7b85
-back_anim_ptr:			= backs_runtime_data 			;.word TEMP_ADDR ; also (back_anim_ptr+1) stores a marker of end of the data like ACTOR_RUNTIME_DATA_LAST
-back_scr_addr:			= back_anim_ptr + ADDR_LEN		;.word TEMP_WORD
-back_anim_timer:		= back_scr_addr + WORD_LEN		;.byte TEMP_BYTE
-back_anim_timer_speed:	= back_anim_timer + BYTE_LEN	;.byte TEMP_BYTE
-back_runtime_data_end:	= back_anim_timer_speed + BYTE_LEN
+back_anim_ptr:			= backs_runtime_data + 0	;.word TEMP_ADDR ; also (back_anim_ptr+1) stores a marker of end of the data like ACTOR_RUNTIME_DATA_LAST
+back_scr_addr:			= backs_runtime_data + 2	;.word TEMP_WORD
+back_anim_timer:		= backs_runtime_data + 4	;.byte TEMP_BYTE
+back_anim_timer_speed:	= backs_runtime_data + 5	;.byte TEMP_BYTE
+@data_end:				= backs_runtime_data + 6
 
-BACK_RUNTIME_DATA_LEN = back_runtime_data_end - backs_runtime_data
+BACK_RUNTIME_DATA_LEN = @data_end - backs_runtime_data
 
 ; the same structs for the rest of the backs
-backs_runtime_data_end_marker:	= back_runtime_data_end + BACK_RUNTIME_DATA_LEN * (BACKS_MAX-1) ;.word ACTOR_RUNTIME_DATA_END << 8
+backs_runtime_data_end_marker:	= backs_runtime_data + BACK_RUNTIME_DATA_LEN * BACKS_MAX ;.word ACTOR_RUNTIME_DATA_END << 8
 backs_runtime_data_end:			= backs_runtime_data_end_marker + WORD_LEN
 BACKS_RUNTIME_DATA_LEN = backs_runtime_data_end - backs_runtime_data
 
@@ -261,8 +261,8 @@ level_containers_inst_data_pptr:	= level_init_tbl + 8	; .word __level00_containe
 level_start_pos_ptr:				= level_init_tbl + 10	; .word __level00_start_pos
 level_rooms_pptr:					= level_init_tbl + 12	; .word __level00_rooms_addr
 level_tiles_pptr:					= level_init_tbl + 14	; .word __level00_tiles_addr
-@end:					= level_init_tbl + 16	
-LEVEL_INIT_TBL_LEN = @end - level_init_tbl
+@data_end:							= level_init_tbl + 16	
+LEVEL_INIT_TBL_LEN = @data_end - level_init_tbl
 ;=============================================================================
 ;
 ; palette
