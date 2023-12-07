@@ -2,45 +2,88 @@
 ; out:
 ; hl - ptr to actor_pos_x+1
 .macro ACTOR_UPDATE_MOVEMENT(actor_status_timer, actor_speed_y)
- 			; hl - ptr to actor_status_timer
-			; advance hl to actor_speed_y+1
-			HL_ADVANCE(actor_status_timer, actor_speed_y+1, BY_BC)
-			; bc <- speed_y
+			; old cc = 268
+			HL_ADVANCE(monster_status_timer, monster_speed_y+1, BY_BC)
+			mov d, m
+			dcx h
+			mov a, m
+			dcx h
+			; d - speed_y_h
+			; a - speed_y_l
+			; hl - ptr to speed_x+1
 			mov b, m
 			dcx h
 			mov c, m
 			dcx h
-			; stack <- speed_x
-			mov d, m
+			; bc - speed_x
+			; hl - ptr to pos_y+1
 			dcx h
-			mov e, m
+			; hl - ptr to pos_y
+			add m
+			mov m, a
+			inx h
+			; hl = ptr to pos_y+1
+			mov a, m
+			adc d
+			mov m, a
+
+			HL_ADVANCE(monster_pos_y+1, monster_pos_x)
+			mov a, m
+			add c
+			mov m, a
+			inx h
+			; hl - ptr to pos_x+1
+			mov a, m
+			adc b
+			mov m, a
+			; cc = 212
+			; 26.4% faster!
+
+			/*
+			; TODO: if the pos_xy data layout is like below
+			; this procedure can be faster
+			actor_speed_x_l:
+			.byte speed_x_l
+			.byte pos_x_l
+			.byte speed_x_h
+			.byte pos_x_h
+
+			.byte pos_y_h
+			.byte speed_y_h
+			.byte pos_y_l
+			actor_speed_y_l:
+			.byte speed_y_l
+
+			HL_ADVANCE(pos_??, actor_speed_x_l, BY_BC)
+			; new_pos_x = pos_x + speed_x
+			mov a, m
+			inx h
+			add m
+			mov m, a ; store pos_x_l
+			inx h
+			; cy flag
+			mov a, m
+			inx h
+			adc m
+			; a - new pos_x_h
+			mov m, a ; store new pos_x_h
+
+			HL_ADVANCE(actor_pos_x_h, actor_speed_y_l, BY_BC)
+			; new_pos_y = pos_y + speed_y
+			mov a, m
 			dcx h
-			push d
-			; de <- pos_y
-			mov d, m
+			add m
+			mov m, a ; store pos_y_l
 			dcx h
-			mov e, m
-			; (pos_y) <- pos_y + speed_y
-			xchg
-			dad b
-			xchg
-			mov m, e
-			inx h 
-			mov m, d
-			DCX_H(2)
-			; hl points to speed_x+1
-			; de <- pos_x
-			mov d, m
+			; cy flag
+			mov a, m
 			dcx h
-			mov e, m
-			; (pos_x) <- pos_x + speed_x
-			xchg
-			pop b
-			dad b
-			xchg
-			mov m, e
-			inx h 
-			mov m, d
+			adc m
+			; a - new pos_y_h
+			mov m, a ; store new pos_y_h
+			; cc = 192
+			; 39.6% faster!
+			*/			
 .endmacro
 
 ; in:
@@ -51,53 +94,119 @@
 ; uses:
 ; bc, de, hl, a
 ; TODO: it is 492 bytes long. think of converting it into a func. it can ponetially save +3.5K bytes
-.macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actor_status_timer, actor_pos_x, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, collision_handler) 
-			HL_ADVANCE(actor_status_timer, actor_pos_x, BY_BC)
-			push h ; (stack) <- pos_x ptr, to restore it in @apply_new_pos
-			mov c, m
-			inx h
+.macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actor_status_timer, actor_pos_x, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, _collision_handler) 
+			; old cc = 390
+
+			HL_ADVANCE(monster_status_timer, monster_speed_y+1, BY_BC)
+			mov d, m
+			dcx h
+			mov e, m
+			dcx h
+			; de - speed_y
+			; hl - ptr to speed_x+1
 			mov b, m
+			dcx h
+			mov c, m
+			dcx h
+			; bc - speed_x
+			; hl - ptr to pos_y+1
+			push h
+			dcx h
+			; hl - ptr to pos_y
+			mov a, m
+			sta @old_pos_y_l+1
+			add e
+			mov m, a
 			inx h
-			; bc = pos_x
-			mov e, m
-			inx h
-			mov d, m
-			inx h
-			push d
-			; stack <- pos_y			
-			mov e, m
-			inx h
-			mov d, m
-			inx h
-			; de = speed_x
-			xchg
-			dad b
-			shld @new_pos_x + 1 ; temp store new_pos_x
-			mov a, h 
-			; a - >new_pos_x for checking a collision
-			xchg
-			; hl points to speed_y
-			mov e, m
-			inx h
-			mov d, m
-			; de <- speed_y			
-			xchg
-			pop b
-			; bc - pos_y
-			dad b
-			shld @new_pos_y + 1 ; temp store new_pos_y
-			; a - >new_pos_x for checking a collision
-			; hl - new_pos_y
-			; de - ptr to speed_y+1
+			; hl = ptr to pos_y+1
+			mov a, m
+			sta @old_pos_y_h+1
+			adc d
+			mov m, a
+			mov e, a
 
-			; check the collision tiles
+			HL_ADVANCE(monster_pos_y+1, monster_pos_x)
+			mov a, m
+			sta @old_pos_x_l+1
+			add c
+			mov m, a
+			inx h
+			; hl - ptr to pos_x+1
+			mov a, m
+			sta @old_pos_x_h+1
+			adc b
+			mov m, a
 			mov d, a
-			mov e, h
-			; a - >new_pos_x
-			; d - >new_pos_x
-			; e - >new_pos_y
+			; cc = 312
+			; cc = 312+12=324 with pop h
+			; 17.3% faster!			
 
-			; check the collision with a border of the screen
+			/*
+			; TODO: if the pos_xy data layout is like below
+			; this procedure can be faster
+			; and the access of reading/storing pos_xy is faster as well
+			; to make it 100%, the @collided branch should restore the old pos,
+			; the @no_collision branch should do only little, like pop h
+			actor_speed_x_l:
+			.byte speed_x_l
+			.byte pos_x_l
+			.byte speed_x_h
+			.byte pos_x_h
+
+			.byte pos_y_h
+			.byte speed_y_h
+			.byte pos_y_l
+			actor_speed_y_l:
+			.byte speed_y_l
+
+			HL_ADVANCE(actor_???, actor_speed_y_l, BY_BC)
+			; new_pos_y = pos_y + speed_y
+			mov a, m
+			dcx h
+			add m
+			sta @new_pos_y_l+1
+			dcx h
+			; cy flag
+			mov a, m
+			dcx h
+			adc m
+			sta @new_pos_y_h+1
+			mov e, a ; new_pos_y_h
+
+			HL_ADVANCE(actor_speed_y_h, actor_speed_x_l, BY_BC)
+			; new_pos_x = pos_x + speed_x
+			mov a, m
+			inx h
+			add m
+			sta @new_pos_x_l+1
+			inx h
+			; cy flag
+			mov a, m
+			inx h
+			adc m
+			sta @new_pos_x_h+1
+			mov d, a
+			push h
+			; de - new pos_xy
+			; a - new pos_x_h
+			; hl - ptr to actor_pos_x_h
+			; cc = 256
+
+			; store a new pos_x
+			pop h
+			mvi m, TEMP_BYTE
+			inx h
+			mvi m, TEMP_BYTE
+			inx h
+			; store a new pos_y
+			mvi m, TEMP_BYTE
+			inx h
+			mvi m, TEMP_BYTE
+			; cc = 256+84=340
+			; 11.8% faster!
+*/
+
+			; check the collision against a border of the screen
 			; check the X coord
 			cpi TILE_WIDTH
 			jc @collided
@@ -111,32 +220,36 @@
 			jnc @collided
 
 
-			; check the collision with a collidable tiles
+			; check the collision against a collidable tiles
 			lxi b, (ACTOR_COLLISION_WIDTH-1)<<8 | ACTOR_COLLISION_HEIGHT-1
-			; de - pos_xy
+			; de - new_pos_xy
 			; bc - width, height
 			call room_get_collision_tiledata
 			ani TILEDATA_COLLIDABLE
-			jz @apply_new_pos
+			jz @no_collision
 
-@collided:	pop h
-			; hl points to pos_x
-			jmp collision_handler
-
-@apply_new_pos:
+@collided:
 			pop h
-			; hl points to pos_x
-@new_pos_x:	lxi d, TEMP_WORD
-@new_pos_y:	lxi b, TEMP_WORD
-			; store a new pos_x
-			mov m, e
-			inx h
-			mov m, d
-			inx h
+			; hl points to pos_y+1
+			; store a old pos_x
+@old_pos_y_h:
+			mvi m, TEMP_BYTE
+			dcx h
+@old_pos_y_l:
+			mvi m, TEMP_BYTE
+			dcx h
 			; store a new pos_y
-			mov m, c
-			inx h
-			mov m, b
+@old_pos_x_h:
+			mvi m, TEMP_BYTE
+			dcx h			
+@old_pos_x_l:
+			mvi m, TEMP_BYTE	
+			; hl points to pos_x
+			jmp _collision_handler
+
+@no_collision:
+			pop h
+			; hl points to pos_y+1
 .endmacro
 
 
