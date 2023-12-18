@@ -159,7 +159,7 @@ knight_heavy_update_defence_init:
 			mov m, d
 			; advance hl to monster_speed_y
 			inx h
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 			mov m, a
 			inx h
 			mov m, a
@@ -176,7 +176,7 @@ knight_heavy_update_defence_init:
 @speed_y_neg:
 			; advance hl to monster_speed_x
 			inx h
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 			mov m, a
 			inx h
 			mov m, a

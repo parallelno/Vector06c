@@ -1,4 +1,4 @@
-; update anim, check collision with a hero
+; update anim, check collision against the hero
 ; in:
 ; hl - bullet_anim_timer
 ; a - anim speed
@@ -8,36 +8,45 @@
 ; if it collides:
 ;	no returns
 ;	hl - bullet_pos_y+1
+; rev 1 168cc
+; rev 2 144cc
 .macro BULLET_UPDATE_ANIM_CHECK_COLLISION_HERO(BULLET_COLLISION_WIDTH, BULLET_COLLISION_HEIGHT, BULLET_DAMAGE)
 			call actor_anim_update
-@checkCollisionHero:
+@check_collision:
 			; hl points to bullet_anim_ptr
 			; advance hl to bullet_pos_x
 			L_ADVANCE(bullet_anim_ptr, bullet_pos_x+1, BY_A)
+
+			; rough collision check. it assumes the biggest bullet collision dimention <= the biggest hero dimension
+			HERO_COLLISION_SIZE .var HERO_COLLISION_WIDTH
+			.if HERO_COLLISION_WIDTH < BULLET_COLLISION_HEIGHT
+				HERO_COLLISION_SIZE = BULLET_COLLISION_HEIGHT
+			.endif
+
+			; precise collision check
 			; horizontal check
-			mov c, m ; pos_x
 			lda hero_pos_x+1
-			mov b, a ; tmp
-			adi HERO_COLLISION_WIDTH-1
-			cmp c
-			rc
-			mvi a, BULLET_COLLISION_WIDTH-1
-			add c
-			cmp b
-			rc
-			; vertical check
+			adi HERO_COLLISION_WIDTH
+			cmp m
+			rc ; 48cc
+			sui HERO_COLLISION_WIDTH + BULLET_COLLISION_WIDTH
+			cmp m
+			rnc ; 72cc
+			; 64cc
+
 			; advance hl to bullet_pos_y+1
 			INX_H(2)
-			mov c, m ; pos_y
+
+			; vertical check
 			lda hero_pos_y+1
-			mov b, a
-			adi HERO_COLLISION_HEIGHT-1
-			cmp c
+			adi HERO_COLLISION_HEIGHT
+			cmp m
 			rc
-			mvi a, BULLET_COLLISION_HEIGHT-1
-			add c
-			cmp b
-			rc
+			sui HERO_COLLISION_HEIGHT + BULLET_COLLISION_HEIGHT
+			cmp m
+			rnc
+			; cc = 144
+			
 @collides_hero:
 			; hero collides
 			; hl points to bullet_pos_y+1

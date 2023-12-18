@@ -72,7 +72,7 @@ text_ex_rd_draw:
 			; get a char code
 			mov e, m
 			; return if its code 0
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 			ora e
 			rz
 			inx h
@@ -144,7 +144,7 @@ text_ex_rd_draw:
 			; shift a pair of gfx bytes
 			pop b
 			; check if it is the end of the char gfx
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 			ora b
 			jnz @advance_pos
 			mov l, c

@@ -112,7 +112,7 @@ draw_text:
 			; get a char
 			mov e, m
 			; return if its code 0
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 			cmp e
 			rz
 			inx h

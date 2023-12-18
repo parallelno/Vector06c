@@ -36,14 +36,14 @@ actor_kill_all:
 ; use:
 ; de, bc, hl
 ; out:
-; hl points to *_anim_ptr
+; hl points to actor_anim_ptr
 ; C flag = 1 means the animation reached the last frame
 actor_anim_update:
-			; update monster_anim_timer
+			; update actor_anim_timer
 			add m
 			mov m, a
-			; advance hl to monster_anim_ptr
-			inx h ; to make hl point to monster_anim_ptr when it returns
+			; advance hl to actor_anim_ptr
+			inx h ; to make hl point to actor_anim_ptr when it returns
 			rnc
 			; read the ptr to a current frame
 			mov e, m
@@ -59,8 +59,8 @@ actor_anim_update:
 			dad b
 			xchg
 			; de - the next frame ptr
-			; hl points to monster_anim_ptr+1
-			; store de into the monster_anim_ptr
+			; hl points to actor_anim_ptr+1
+			; store de into the actor_anim_ptr
 			mov m, d
 			dcx h
 			mov m, e
@@ -68,7 +68,7 @@ actor_anim_update:
 
 ; look up an empty spot in the actor (monster, bullet, back, fx) runtime data
 ; in:
-; hl - ptr to runtime_data+1, ex monster_update_ptr+1
+; hl - ptr to actor_runtime_data+1, ex monster_update_ptr+1
 ; e - RUNTIME_DATA_LEN
 ; return:
 ; hl - a ptr to an empty actor runtime_data+1
@@ -86,15 +86,15 @@ actor_get_empty_data_ptr:
 			jc @next_data
 			cpi ACTOR_RUNTIME_DATA_LAST
 			rnz ; too many objects
-			; hl points to a vacant monster_data
+			; hl points to a vacant actor_runtime_data
 
-			; if (hl + monster_data_len) points to ACTOR_RUNTIME_DATA_END, just return hl
-			; in other case store ACTOR_RUNTIME_DATA_LAST marker to (hl + monster_data_len)
-			; to mark this monster data the last element in monste runtime data array
+			; if (hl + actor_rundata_len) points to ACTOR_RUNTIME_DATA_END, just return hl
+			; in other case store ACTOR_RUNTIME_DATA_LAST marker to (hl + actor_runtimedata_len)
+			; to mark this actor runtime data the last element in monste runtime data array
 
 			xchg
 			dad d
-			; hl - ptr to a marker after the vacant monster runtme data
+			; hl - ptr to a marker after the vacant actor runtme data
 			mov a, m
 			cpi ACTOR_RUNTIME_DATA_END
 			xchg

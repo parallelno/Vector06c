@@ -111,7 +111,7 @@ draw_tiled_img_pos_offset:
 			mov c, m
 			inx h
 			; skip if tile_idx = 0
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 			ora c
 			jz @skip
 			cpi REPEATER_CODE
@@ -127,7 +127,7 @@ draw_tiled_img_pos_offset:
 			inx h
 
 			; skip if tile_idx = 0
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 			ora c
 			jnz @get_gfx_ptr
 			; tile_idx = 0,

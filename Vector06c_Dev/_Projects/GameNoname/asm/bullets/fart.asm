@@ -47,8 +47,8 @@ fart_init_post:
 ; de - ptr to bullet_update_ptr 
 fart_update:
 			; advance to bullet_status_timer
-			E_ADVANCE(bullet_update_ptr, bullet_status_timer, BY_A)
 			xchg
+			L_ADVANCE(bullet_update_ptr, bullet_status_timer, BY_A)
 			; hl - ptr to bullet_update_ptr 
 @fraction_timer:
 			mvi a, 1

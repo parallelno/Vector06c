@@ -61,7 +61,7 @@ sword_init:
 			INX_H(2)
 			mov c, m
 			; bc - hero_pos
-			BULLET_INIT(sword_update, sword_draw, ACTOR_STATUS_BIT_INVIS, SWORD_STATUS_INVIS_TIME, NULL_BYTE, empty_func)
+			BULLET_INIT(sword_update, sword_draw, ACTOR_STATUS_BIT_INVIS, SWORD_STATUS_INVIS_TIME, NULL, empty_func)
 
 ; check the tiledata under a sword
 sword_check_tiledata:

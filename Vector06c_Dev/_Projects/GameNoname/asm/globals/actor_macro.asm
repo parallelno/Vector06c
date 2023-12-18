@@ -1,6 +1,8 @@
 ; hl - ptr to actor_status_timer
 ; out:
 ; hl - ptr to actor_pos_x+1
+; rev 1 268cc
+; rev 2 212cc (26.4% faster!)
 .macro ACTOR_UPDATE_MOVEMENT(actor_status_timer, actor_speed_y)
 			; old cc = 268
 			HL_ADVANCE(monster_status_timer, monster_speed_y+1, BY_BC)
@@ -93,10 +95,10 @@
 ; if a collision: hl points to actor_pos_x 
 ; uses:
 ; bc, de, hl, a
-; TODO: it is 492 bytes long. think of converting it into a func. it can ponetially save +3.5K bytes
+; TODO: it is 93 bytes used 7 times = 651 bytes total
+; rev 1 380cc
+; rev 2 324cc (17.3% faster!)
 .macro ACTOR_UPDATE_MOVEMENT_CHECK_TILE_COLLISION(actor_status_timer, actor_pos_x, ACTOR_COLLISION_WIDTH, ACTOR_COLLISION_HEIGHT, _collision_handler) 
-			; old cc = 390
-
 			HL_ADVANCE(monster_status_timer, monster_speed_y+1, BY_BC)
 			mov d, m
 			dcx h
@@ -205,7 +207,6 @@
 			; cc = 256+84=340
 			; 11.8% faster!
 */
-
 			; check the collision against a border of the screen
 			; check the X coord
 			cpi TILE_WIDTH
@@ -218,8 +219,10 @@
 			jc @collided
 			cpi ROOM_HEIGHT * TILE_HEIGHT - TILE_HEIGHT - ACTOR_COLLISION_HEIGHT
 			jnc @collided
+			; 88cc
 
 
+@check_tile_collision
 			; check the collision against a collidable tiles
 			lxi b, (ACTOR_COLLISION_WIDTH-1)<<8 | ACTOR_COLLISION_HEIGHT-1
 			; de - new_pos_xy
@@ -307,25 +310,25 @@
 		.endif
 
         .if check_invis
-			; advance to bullet_status
-			HL_ADVANCE(bullet_draw_ptr, bullet_status, BY_HL_FROM_DE)
+			; advance to monster_status
+			HL_ADVANCE(monster_draw_ptr, monster_status, BY_HL_FROM_DE)
 			mov a, m
 			ani ACTOR_STATUS_BIT_INVIS
 			rnz
 
-			HL_ADVANCE(bullet_status, bullet_pos_x+1, BY_DE)
+			HL_ADVANCE(monster_status, monster_pos_x+1, BY_DE)
 		.endif 
 		.if check_invis == false
-			HL_ADVANCE(bullet_draw_ptr, bullet_pos_x+1, BY_HL_FROM_DE)
+			HL_ADVANCE(monster_draw_ptr, monster_pos_x+1, BY_HL_FROM_DE)
 		.endif
-			; hl - ptr to bullet_pos_x+1
+			; hl - ptr to monster_pos_x+1
 			call sprite_get_scr_addr_actor
 			; de - sprite screen addr
 			; c - preshifted sprite idx*2 offset based on pos_x then +2
 			; hl - ptr to pos_y+1
 			mov a, c ; temp
-			; advance to bullet_anim_ptr
-			HL_ADVANCE(bullet_pos_y+1, bullet_anim_ptr, BY_BC)
+			; advance to monster_anim_ptr
+			HL_ADVANCE(monster_pos_y+1, monster_anim_ptr, BY_BC)
 			mov b, m
 			inx h
 			push h
@@ -346,14 +349,14 @@
 			;		11 - 32pxs,
 			; e - height
 			; bc - sprite screen addr + offset
-			; hl - ptr to bullet_erase_scr_addr
-			; store the current scr addr, into bullet_erase_scr_addr
+			; hl - ptr to monster_erase_scr_addr
+			; store the current scr addr, into monster_erase_scr_addr
 			mov m, c
 			inx h
 			mov m, b
-			; advance to bullet_erase_wh
-			HL_ADVANCE(bullet_erase_scr_addr+1, bullet_erase_wh)
-			; store a width and a height into bullet_erase_wh
+			; advance to monster_erase_wh
+			HL_ADVANCE(monster_erase_scr_addr+1, monster_erase_wh)
+			; store a width and a height into monster_erase_wh
 			mov m, e
 			inx h
 			mov m, d

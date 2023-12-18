@@ -91,19 +91,19 @@ __game_score_lists_ptrs:
 
 ; game stats shown when the game is over
 __game_stats:
-			.word 0			; monsters
-			.word NULL_BYTE	; TODO: secret room
-			.word NULL_BYTE ; TODO: deaths
-			.word NULL_BYTE
-			.word NULL_BYTE
-			.word 0			; items
-			.word 0			; resource: coins
-			.word NULL_BYTE
-			.word NULL_BYTE
-			.word 0			; TODO: check secrets above
-			.word 0			; containers
-			.word 0			; doors
-			.word 0			; breakables
+			.word 0		; monsters
+			.word NULL	; TODO: secret room
+			.word NULL	; TODO: deaths
+			.word NULL
+			.word NULL
+			.word 0		; items
+			.word 0		; resource: coins
+			.word NULL
+			.word NULL
+			.word 0		; TODO: check secrets above
+			.word 0		; containers
+			.word 0		; doors
+			.word 0		; breakables
 __game_stats_end:
 
 ; add score points to hero_res_score

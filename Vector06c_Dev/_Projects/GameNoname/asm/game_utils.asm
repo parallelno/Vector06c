@@ -46,7 +46,7 @@ fill_buff_black:
 			jmp fill_mem_sp
 
 reset_game_updates_required_counter:
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 			sta game_updates_required
 			ret
 

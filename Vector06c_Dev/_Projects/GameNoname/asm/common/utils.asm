@@ -18,7 +18,7 @@ restore_sp:
 ; a
 clear_mem:
 @loop:
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 			mov m, a
 			inx h
 			dcx b

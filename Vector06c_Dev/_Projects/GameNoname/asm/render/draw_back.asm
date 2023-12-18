@@ -44,7 +44,7 @@ draw_back_v:
 			pop b
 
 			mov d, c
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 			cmp b
 			jnz @drawWidth16
 @drawWidth8:			

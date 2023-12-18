@@ -19,7 +19,7 @@ BREAKABLES_UNIQUE_MAX = 16
 BREAKABLES_MAX = 1016
 
 WORD_LEN			= 2
-NULL_PTR			= "NULL_PTR"
+NULL			= "NULL"
 
 def get_room_data_label(room_path, source_dir = ""):
 	asm = ""

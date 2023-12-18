@@ -1,4 +1,4 @@
-; check the monster collision with a hero
+; check the monster collision against a hero
 ; ex MONSTER_CHECK_COLLISION_HERO(VAMPIRE_COLLISION_WIDTH, VAMPIRE_COLLISION_HEIGHT, VAMPIRE_DAMAGE)
 ; in:
 ; hl points to monster_anim_ptr

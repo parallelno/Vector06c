@@ -300,7 +300,7 @@ hero_attack_start:
 			mvi m, HERO_STATUS_ATTACK_DURATION
 
 			; reset anim timer
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 			sta hero_anim_timer
 
 			; speed = 0
@@ -484,7 +484,7 @@ hero_idle_start:
 			mvi a, HERO_STATUS_IDLE
 			sta hero_status
 			; reset the anim timer
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 			sta hero_anim_timer
 
 			; speed = 0

@@ -176,7 +176,7 @@ vfx_update:
 @die:
 			; hl points to bullet_anim_ptr
 			; advance hl to bullet_update_ptr+1
-			HL_ADVANCE(bullet_anim_ptr, bullet_update_ptr+1, BY_DE)
+			L_ADVANCE(bullet_anim_ptr, bullet_update_ptr+1, BY_A)
 			ACTOR_DESTROY()
 			ret
 

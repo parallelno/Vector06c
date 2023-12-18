@@ -89,7 +89,7 @@ draw_tile_16x16_end:
 .endmacro
 
 .macro DRAWTILE16x16_ERASE_BUF()
-			A_TO_ZERO(NULL_BYTE)
+			A_TO_ZERO(NULL)
 		.loop 15
 			mov m, a
 			inr l

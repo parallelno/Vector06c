@@ -77,6 +77,7 @@ main_asm:
 ; TODO: try to remove these fake labels
 sprite_get_scr_addr8:
 sprite_get_scr_addr4:
+
 ; TODO end
 
 
@@ -84,7 +85,7 @@ sprite_get_scr_addr4:
 ; that means if it is stored at the end of the program, everything that goes
 ; to the ram-disk can overlap the screen addrs.
 .include "generated\\code\\ram_disk_data_labels.asm"
-.include "generated\\code\\ram_data.asm"
+.include "generated\\code\\ram_data.asm" ; TODO: this data is included twice, here and in the main program. Think of not doing it. The reason is that, because it needs for preshifting here, and in the main program for animation.
 .include "generated\\code\\ram_disk_data.asm"
 
 .end
