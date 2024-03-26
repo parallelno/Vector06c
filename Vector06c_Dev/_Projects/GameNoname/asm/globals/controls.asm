@@ -15,19 +15,19 @@ controls_keys_check:
 			mvi a, PORT0_OUT_IN
 			out 0
 			; line 0
-			mvi a, KEY_CODE_LINE_0
+			mvi a, KEY_CODE_ROW_0
 			out 3
 			in 2
 			mov c, a
 
 			; line 7
-			mvi a, KEY_CODE_LINE_7
+			mvi a, KEY_CODE_ROW_7
 			out 3
 			in 2
 
 			ral 								; extract KEY_CODE_SPACE
 			mov a, c
-			ral 								; add KEY_CODE_SPACE to the key line 0
+			ral 								; add KEY_CODE_SPACE to the key row 0
 			ani %111 ; bits: alt, tab, space, but inverset
 			HL_TO_A_PLUS_INT16(keys_to_controls_alt_tab_space)
 
@@ -85,12 +85,12 @@ controls_joy_check:
 			mvi a, PORT0_OUT_IN
 			out 0
 			; line 0
-			mvi a, KEY_CODE_LINE_0
+			mvi a, KEY_CODE_ROW_0
 			out 3
 			in 2
 			mov c, a
 			; line 7
-			mvi a, KEY_CODE_LINE_7
+			mvi a, KEY_CODE_ROW_7
 			out 3
 			in 2
 			mov b, a
