@@ -156,7 +156,7 @@ def export(bank_id, seg_id, segment_j, includes,
 
 	asm = f'.org ${addr_s}\n'
 	for include in includes:
-		asm += f'.include "{common.double_slashes(include)}"\n'
+		asm += f'.include "{common.add_double_slashes(include)}"\n'
 
 	asm += f'RAM_DISK_S = RAM_DISK_S{bank_id}\n'
 	asm += f'RAM_DISK_M = RAM_DISK_M{bank_id}\n\n'
@@ -269,7 +269,7 @@ def export(bank_id, seg_id, segment_j, includes,
 
 		# to calc the asset size later on
 		asm += f'__{common.path_to_basename(segment_include_path)}{build.LABEL_POSTFIX_ASSET_START}:\n'
-		asm += f'.include "{common.double_slashes(segment_include_path)}"\n'
+		asm += f'.include "{common.add_double_slashes(segment_include_path)}"\n'
 		if segment_include_path.find("consts") == -1:
 			asm += f'.align 2\n'
 		

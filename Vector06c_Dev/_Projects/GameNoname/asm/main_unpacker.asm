@@ -5,20 +5,18 @@
 .include "asm\\globals\\global_consts.asm"
 .include "generated\\code\\ram_disk_consts.asm"
 
+MAIN_START		= $100
+MAIN_LEN_MAX	= 32 * 1024
+
 			di
 			RAM_DISK_OFF()
 			mvi a, OPCODE_JMP
 			sta RESTART_ADDR
 			sta INT_ADDR
-			lxi h, main_start
+			lxi h, unpacker_start
 			shld RESTART_ADDR + 1
-			lxi sp, STACK_TMP_MAIN_PROGRAM_ADDR			
-			jmp main_start
-
-MAIN_START		= $100
-MAIN_LEN_MAX	= 32 * 1024
-
-main_start:
+			lxi sp, STACK_TMP_MAIN_PROGRAM_ADDR
+unpacker_start:
 			; preshift and copy data to the ram-disk
 			call ram_disk_init
 

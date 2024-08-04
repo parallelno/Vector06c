@@ -154,7 +154,7 @@ def is_asm_updated(asm_path):
 
 		if inc_idx != -1 and line[0] != ";":
 			path = line[inc_idx + len(inc_str)+1:]
-			path = common.remove_double_slashes(path)
+			path = common.remove_duplicate_slashes(path)
 			path_end_q1 = path.find('"')
 			path_end_q2 = path.find("'")
 			if path_end_q1 != -1:

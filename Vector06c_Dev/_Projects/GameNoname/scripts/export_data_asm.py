@@ -8,7 +8,7 @@ def export_ram_disk_data_labels(generated_code_dir, segments_info):
 
 	for seg_info in segments_info:
 		labels_path = seg_info["labels_path"]
-		asm += f'.include "{common.double_slashes(labels_path)}"\n'
+		asm += f'.include "{common.add_double_slashes(labels_path)}"\n'
 	asm += "\n"
 
 	path = f"{generated_code_dir}ram_disk_data_labels{build.EXT_ASM}"
@@ -36,7 +36,7 @@ def export_ram_data(generated_code_dir, segments_info):
 		ram_data_paths = seg_info["ram_include_paths"] 
 		for ram_data_path in ram_data_paths:
 			if len(ram_data_path) != 0:
-				asm += f'.include "{common.double_slashes(ram_data_path)}"\n'
+				asm += f'.include "{common.add_double_slashes(ram_data_path)}"\n'
 	asm += "\n" 
 
 	path = f"{generated_code_dir}ram_data{build.EXT_ASM}"
@@ -54,7 +54,7 @@ def	export_ram_disk_data(generated_code_dir, generated_bin_dir, segments_info):
 			chunk_name = build.get_chunk_name(seg_info["bank_id"], seg_info["addr_s"], chunk_id)
 			chunk_path = generated_bin_dir + chunk_name + build.packer_bin_ext
 			asm += f"{chunk_name}:\n"
-			asm += f'.incbin "{common.double_slashes(chunk_path)}"\n'
+			asm += f'.incbin "{common.add_double_slashes(chunk_path)}"\n'
 
 	asm += "\n"
 

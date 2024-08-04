@@ -79,28 +79,11 @@ def load_json(source_j_path):
 		source_j = json.load(file)
 	return source_j
 
-def remove_double_slashes(path):
-	res = ""
-	doubled_slashe = False
-	for char in path:
-		if char != '\\':
-			res += char
-			doubled_slashe = False
-		else:
-			if doubled_slashe == False:
-				res += char
-				doubled_slashe = True
-			else:
-				doubled_slashe = False
-	return res
+def remove_duplicate_slashes(path):
+    return path.replace('\\\\', '\\')
 
-def double_slashes(path):
-	res = ""
-	for char in path:
-		res += char
-		if char == '\\':
-			res += char
-	return res
+def add_double_slashes(path: str) -> str:
+    return path.replace('\\', '\\\\')
 
 def get_addr_wo_prefix(hex_string):
 	hex_string_without_prefix = hex_string.replace("$", "")
