@@ -40,15 +40,17 @@ main_start:
 			xchg
 			pchl
 
+code_seg_end:
+
 .include "generated\\code\\ram_disk_data_labels.asm"
 .include "generated\\code\\ram_data.asm"
-code_seg_end:
+rom_seg_end:
 
 ;=============================================================================
 ;
 ; validation
-.if code_seg_end >= BUFFERS_START_ADDR
-	.error "main.asm code segment (" code_seg_end ") overlaps first buffer  (" BUFFERS_START_ADDR ") in runtime_data.asm"
+.if rom_seg_end >= BUFFERS_START_ADDR
+	.error "main.asm rom segment ends at (" rom_seg_end ") addr. It overlaps with runtime_data.asm segment starting at (" BUFFERS_START_ADDR ")"
 .endif
 
 .end

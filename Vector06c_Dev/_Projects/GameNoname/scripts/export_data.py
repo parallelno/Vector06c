@@ -82,9 +82,9 @@ def export(source_j_path):
 	common.delete_file(bin_path)
 
 	# compile the main.asm
-	labels_path = generated_bin_dir + build.DEBUG_FILE_NAME
-	build.compile_asm(source_path, bin_path, labels_path)
-	main_asm_labels, comments = build.export_labels(labels_path, False, False)
+	main_asm_labels_path = generated_bin_dir + "main_asm_labels.txt"
+	build.compile_asm(source_path, bin_path, main_asm_labels_path)
+	main_asm_labels, comments = build.export_labels(main_asm_labels_path, False, True)
 
 	build.printc(comments, build.TextColor.YELLOW)
 
