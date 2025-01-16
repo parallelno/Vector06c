@@ -37,10 +37,6 @@
 	"includes" : {
 		"segment" : [
 			"asm\\globals\\global_consts.asm"
-		],
-		"data_init" : [
-			"asm\\globals\\global_consts.asm",
-			"asm\\globals\\global_bufffers.asm"
 		]
 	},
 	"main_asm_path" : "asm\\main.asm",

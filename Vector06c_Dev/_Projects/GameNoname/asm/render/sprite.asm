@@ -214,6 +214,11 @@ sprite_copy_to_scr_v:
 			mov b, m
 			dcr l
 			mov c, m
+			// TODO: optimization: instead executing extra code to prevent data corruption by the interruption break, 
+			// we can nexh:
+			// when a draw func starts, send the interruption return addr that leads to a start the this draw func.
+			// if the interraption ends, it returns back to the start of the the draw func and it executes code 
+			// again with a guaranty that the data is not corrupted this time.
 			RAM_DISK_ON(__RAM_DISK_S_BACKBUFF)
 
 			mov m, c
