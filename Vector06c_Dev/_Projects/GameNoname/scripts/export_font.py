@@ -78,7 +78,7 @@ def gfx_ptrs_to_asm(label_prefix, source_j, font_gfx_ptrs_rd = False, gfx_ptrs =
 
 	# if font_gfx_ptrs_rd == True, then add list of labels with relatives addresses
 	if font_gfx_ptrs_rd:
-		asm += "; relative label addresses. to global addr add __font_rus_gfx\n"
+		asm += "; relative label addresses. to global addr add __font_gfx\n"
 		for char_name in gfx_ptrs:
 			adjusted_char = get_char_label_postfix(char_name) 
 			asm += f"{label_prefix}_{adjusted_char} = {gfx_ptrs[char_name]}\n"
