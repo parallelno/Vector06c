@@ -23,7 +23,7 @@
 .include "asm\\screens\\stats.asm"
 .include "asm\\game.asm"
 .include "asm\\main_data.asm"
-.include "generated\\text\\text_rd_data.asm"
+
 
 main_start:
 			CALL_RAM_DISK_FUNC(__sound_init, __RAM_DISK_M_GCPLAYER | RAM_DISK_M_8F)
@@ -44,6 +44,8 @@ code_seg_end:
 
 .include "generated\\code\\ram_disk_data_labels.asm"
 .include "generated\\code\\ram_data.asm"
+text_seg:
+.include "generated\\text\\text_rd_data.asm"
 rom_seg_end:
 
 ;=============================================================================
