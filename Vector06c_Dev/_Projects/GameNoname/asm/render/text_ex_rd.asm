@@ -7,7 +7,7 @@ PARAG_SPACING_DEFAULT = -24
 ; convert local labels into global
 ; call ex. CALL_RAM_DISK_FUNC(__text_ex_rd_init, __RAM_DISK_S_FONT | __RAM_DISK_M_TEXT_EX)
 ; in:
-; bc - __font_rus_gfx addr
+; bc - __font_gfx addr
 __text_ex_rd_init:
 			mvi a, GFX_PTRS_LEN
 			lxi h, font_gfx_ptrs
