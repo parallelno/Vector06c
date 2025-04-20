@@ -39,7 +39,7 @@ window.customScreenFormat = 1.111
 window.squarePixels = yes
 
 
-	
+    
 ######## Platform ########
 
 platform.helpFile = @HELP_FILE
@@ -57,22 +57,49 @@ Ram ram0 = 0xF000
 Ram ram1 = 0xF000
 Ram ram2 = 0xF000
 Ram ram3 = 0xF000
+
+ifdef RAM_512K
+  Ram ram4 = 0xF000
+  Ram ram5 = 0xF000
+  Ram ram6 = 0xF000
+  Ram ram7 = 0xF000
+endif
+
 Ram sysRam = 0x400
 
-AddrSpaceMapper ram = 4
+ifndef RAM_512K
+  AddrSpaceMapper ram = 4
+else
+  AddrSpaceMapper ram = 8
+endif
+
 ram.page = 0, &ram0
 ram.page = 1, &ram1
 ram.page = 2, &ram2
 ram.page = 3, &ram3
 
+ifdef RAM_512K
+  ram.page = 4, &ram4
+  ram.page = 5, &ram5
+  ram.page = 6, &ram6
+  ram.page = 7, &ram7
+endif
+
 Rom rom = @ROM, 0x800
 
 Ppi8255 ppi1
 Ppi8255 ppi2
+Ppi8255 ppi3
 
 OrionColorModeSelector colorModeSelector
 OrionMemPageSelector pageSelector
 pageSelector.mapper = &ram
+
+ifndef RAM_512K
+  pageSelector.bits = 2
+else
+  pageSelector.bits = 3
+endif
 
 OrionScreenSelector screenSelector
 
@@ -89,6 +116,29 @@ fddReg08.type = spdos
 OrionFddQueryRegister fddQReg
 fddQReg.fdc = &fdc
 
+ifdef HDD
+  DiskImage hdd
+  hdd.label = HDD
+  hdd.filter = "Образы HDD DSDOS (*.ohi,*.hdd;*.img)|*.ohi,*.OHI,*.hdd;*.HDD;*.img;*.IMG|Все файлы (*.*)|*"
+
+  ifdef HDD_IMAGE
+    hdd.fileName = @HDD_IMAGE
+  endif
+
+  AtaDrive ataDrive
+  ataDrive.geometry = lba
+  ataDrive.diskImage = &hdd
+
+  PpiAtaAdapter ataAdapter
+  ataAdapter.ataDrive = &ataDrive
+  ppi3.circuit = &ataAdapter
+endif
+
+ifdef EXT_ROMDISK
+  RomDiskPageSelector romDiskPageSelector
+  romDiskPageSelector.bits = 4
+endif  
+
 AddrSpace fddSpace
 fddSpace.range = &fdc, 0x00, 0x03
 fddSpace.range = &fddQReg, 0x04, 0x04
@@ -102,11 +152,16 @@ addrSpace.range = &ram, 0x0000, 0xEFFF
 addrSpace.range = &sysRam, 0xF000, 0xF3FF
 addrSpace.range = &ppi1, 0xF400, 0xF4FF
 addrSpace.range = &ppi2, 0xF500, 0xF5FF
+addrSpace.range = &ppi3, 0xF600, 0xF6FF
 addrSpace.range = &fddSpace, 0xF700, 0xF7FF
 addrSpace.writeRange = &colorModeSelector, 0xF800, 0xF8FF
 addrSpace.writeRange = &pageSelector, 0xF900, 0xF9FF
 addrSpace.writeRange = &screenSelector, 0xFA00, 0xFAFF
 addrSpace.readRange = &rom, 0xF800, 0xFFFF
+
+ifdef EXT_ROMDISK
+  addrSpace.writeRange = &romDiskPageSelector, 0xFE00, 0xFEFF
+endif  
 
 OrionRenderer crtRenderer
 crtRenderer.screenMemory = &ram0
@@ -144,8 +199,17 @@ ppiCircuit.tapeSoundSource = &tapeSoundSource
 
 ppi1.circuit = &ppiCircuit
 
-RkRomDisk romDisk = @ROM_DISK
+ifndef EXT_ROMDISK
+  RkRomDisk romDisk = @ROM_DISK
+else
+  ExtRkRomDisk romDisk = @ROM_DISK
+endif
+
 ppi2.circuit = &romDisk
+
+ifdef EXT_ROMDISK
+  romDiskPageSelector.romDisk = &romDisk
+endif
 
 
 
@@ -154,7 +218,7 @@ ppi2.circuit = &romDisk
 OrionFileLoader loader
 loader.addrSpace = &ram0
 loader.ramDiskAddrSpace = &ram1
-loader.filter = "Файлы Ориона (*.rko, *.bru, *.ord)|*.rko;*.bru;*.ord;*.RKO;*.BRU;*.ORD|Все файлы (*.*)|*"
+loader.filter = "Файлы Ориона (*.rko, *.bru, *.ord, *.ori)|*.rko;*.bru;*.ord;*.RKO;*.BRU;*.ORD;*.ORI|Все файлы (*.*)|*"
 
 ifdef USE_TAPE
   TapeRedirector tapeInFile

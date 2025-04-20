@@ -363,7 +363,7 @@ BY_HL_FROM_DE	= 4
 .endmacro
 
 ; hl = a + int16_const
-; 36 cc
+; 9*4=36 cc
 .macro HL_TO_A_PLUS_INT16(int16_const)
 			adi <int16_const
 			mov l, a

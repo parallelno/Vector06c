@@ -50,11 +50,11 @@ def gfx_to_asm(label_prefix, source_j, image):
 		asm += f"			.byte {offset_y}, {offset_x} ; offset_y, offset_x\n"
 		
 		asm += common.words_to_asm(data)
-		asm += f"			.byte 0, {width + spacing} ; next_char_offset\n"
+		asm += f"			.byte 0, {width + spacing} ; 0, next_char_pos_x_offset\n"
 
 		char_addr_offset += 2 # safety pair of bytes for reading by POP B
 		gfx_ptrs[char_name] = char_addr_offset
-		char_addr_offset += 2 + len(data)*2 + 2 # offset_y, offset_x + data_len + next_char_offset
+		char_addr_offset += 2 + len(data)*2 + 2 # len(offset_y) + len(offset_x) + data_len + len(next_char_pos_x_offset)
 
 	return asm, gfx_ptrs
  
@@ -78,7 +78,7 @@ def gfx_ptrs_to_asm(label_prefix, source_j, font_gfx_ptrs_rd = False, gfx_ptrs =
 
 	# if font_gfx_ptrs_rd == True, then add list of labels with relatives addresses
 	if font_gfx_ptrs_rd:
-		asm += "; relative label addresses. to global addr add __font_gfx\n"
+		asm += "; relative label addresses. to make it global addr add __font_gfx\n"
 		for char_name in gfx_ptrs:
 			adjusted_char = get_char_label_postfix(char_name) 
 			asm += f"{label_prefix}_{adjusted_char} = {gfx_ptrs[char_name]}\n"

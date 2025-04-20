@@ -4,7 +4,6 @@
 sword_func_container:
 			sta @restore_container_id+1
 			push b ; store tile_idx
-			mov m, c
 
 			; find a container
 			lxi h, room_id

@@ -207,9 +207,7 @@ def export(bank_id, seg_id, segment_j, includes,
 			segment_include_path = export_paths["ram_disk"]
 		
 		elif asset_j["asset_type"] == build.ASSET_TYPE_FONT or asset_j["asset_type"] == build.ASSET_TYPE_FONT_RD:
-			font_gfx_ptrs_rd = False
-			if asset_j["asset_type"] == build.ASSET_TYPE_FONT_RD:
-				font_gfx_ptrs_rd = True
+			font_gfx_ptrs_rd = asset_j["asset_type"] == build.ASSET_TYPE_FONT_RD
 			exported, export_paths = export_font.export_if_updated(asset_j["path"], asset_j["export_dir"], asset_types_force_export["font"], font_gfx_ptrs_rd)
 			segment_force_export |= exported
 			if asset_j["asset_type"] == build.ASSET_TYPE_FONT:
